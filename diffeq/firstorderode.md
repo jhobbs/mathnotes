@@ -32,17 +32,19 @@ To test if $f(x,y)$ is a solution of a differential equation $F(x, y, y',\cdots,
 ***Definition 3.6 - Implicit Solution***
 A relation $f(x,y) = 0$ will be called an implicit solution of the differential equation
 
-(3.61) $$F(x,y,y',\codts,y^{(n)}) = 0$$
+(3.61) $$F(x,y,y',\cdots,y^{(n)}) = 0$$
 
 on the interval $I: a < x < b$, if
 
 1. it defines $y$ as an implict function of $x$ on $I$, i.e. if there exists a function $g(x)$ defined on $I$ such that $f[x,g(x)] = 0$ for *every* $x$ in $I$, and if
 2. $g(x)$ satisfies 3.61, i.e. if
 
-$$F[x,g(x),g'(x),\cdots,g^{(n)}(x)] = 0
+$$F[x,g(x),g'(x),\cdots,g^{(n)}(x)] = 0$$
 
 for *every* $x$ in $I$.
 
 In more plain english, the relation (not function) $f(x,y)$ is an implicit solution if there is some $g(x)$ that can be chosen to make a function $f(x,g(x)) = 0$ from $f(x)$. That is, we can chose a branch of $f(x,y)$ to make a function rather than just a relation, and if that function and its derivatives satisfy 3.61 then $f(x,y)$ is considered an implicit solution of the differential equation.
 
-Note that here was have $f(x,y)$ where for an explicit 
+Note that here was have $f(x,y)$ where for an explicit solution we have just $f(x)$.
+
+To test an implicit solution, pick a branch of $f(x,y)$, first pick a branch of $f(x,y)$ that defines a function, and then follow the same procedure as testing an explicit solution. Note that depending on the branch chosen, the resulting function or its derivatives may not be defined on some points in $I$, and so may be solutions for smaller intervals than $I$, or for $I$ excluding some points.
