@@ -1,7 +1,3 @@
-Notes are from *Ordinary Differential Equations* by Tenenbaum and Pollard
-
-# Ordinary Differential Equations
-
 ## Lesson 3 - The Differential Equation
 
 ***Definition 3.1 - Ordinary Differential Equation***
