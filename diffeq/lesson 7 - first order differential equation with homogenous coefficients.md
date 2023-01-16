@@ -38,7 +38,7 @@ The following substitution in (7.3) will always lead to a differential equation 
 $$ y = ux, dy = udx + xdu \tag{7.31} $$
 
 ***Theorem 7.32***
-*If the coeffecients in (7.3) are each homogenous functions of order n, then the substition in it of (7.31) will lead to an equation in which the variables are separable.
+*If the coeffecients in (7.3) are each homogenous functions of order n, then the substition in it of (7.31) will lead to an equation in which the variables are separable.*
 
 Proof: see the book.
 
