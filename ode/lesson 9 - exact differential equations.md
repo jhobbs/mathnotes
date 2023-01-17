@@ -72,3 +72,70 @@ $$ \tag{9.31} P(x,y)dx + Q(x,y)dx = 0 $$
 $$ \tag{9.32} \frac{\partial}{\partial y}P(x,y) = \frac{\partial}{\partial x}Q(x,y) $$
 
 *where the functions defined by P(x,y) and Q(x,y), the partial derivatives in (9.32) and* $\partial P(x,y)/\partial x, \partial Q(x,y)/\partial y$ *exist and are continuous in a simply connected region R*.
+
+***Proof of necessary condition*** To summarize an already brief proof, recall from Calculus 3 that the order of partial derivatives doesn't matter, i.e. that $F_xy(x,y) == F_yx(x,y)$. Thus, if such a function $f(x,y)$ whose partial derivatives with respect to $x$ and $y$ are $P(x,y)$ and $Q(x,y)$, respectively, then the second partial derivatives of those functions with respect to $y$ and $x$ must also be equal.
+
+***Solution from proof of sufficient condition*** This proof takes several pages in the book and I won't reproduce it here. It does give a method of finding the function which is a solution, and I'll instead talk about how to find that function.
+
+Following the proof in the book we find we can take either of two functions as solutions.
+
+$$ \tag{9.45} f(x,y) = \int_{x_0}^x P(x,y)dx + \int_{y_0}^yQ(x_0,y)dy = c $$
+
+or
+
+$$ \tag{9.47} f(x,y) = \int_{x_0}^x Q(x,y)dy + \int_{y_0}^yP(x,y_0)dy = c $$
+
+where $(x_0,y_0)$ is a point in $R$ and the rectangle determined by the lines joining the points $(x_0,y_0)$, $(x,y_0)$, $(x_0,y_0)$, and $(x_0,y)$ lies entirely in $R$.
+
+We can pick which function to used based on which is easier to compute with, which may require some experimentation. One handy effect is picking $0$ for $x_0$ and taking the first function with $Q(x_0,y)$ causes all terms of $x$ in $Q$ to vanish, and similarly taking $y_0$ as $0$ when we use the second function.
+
+Using this formulaic approach, we setup the integral, integrate, and have our solution.
+
+***Solution from Definition***
+
+An alternative approach, and one preferred by the authors (and by me), is to instead construct a solution from definition.
+
+*jmh: what follows is my own and has some weird notation I made up and maybe some shakey ideas. The book
+didn't do this; it used an specific function, and that may be more useful to look at.*
+
+Given a differential equation of the form:
+
+$$ P(x,y)dx + Q(x,y)dy = 0 $$
+
+first test for exactness. If it's exact, we know by definition (9.27) there is a $f(x,y)$ where:
+
+$$ \frac{\partial}{\partial x} f(x,y) = P(x,y). $$
+
+Then, by integration, we have:
+
+$$ f(x,y) = P_{-x}(x,y) + R(y) $$
+
+*jmh: * $P_{-1}$ here is my notation for the antiderivative of* $P(x,y)$ * with respect to x without any constant of integration, since that's what* $R(Y)$ *is. Not sure what the convention is here. The book shows this by example rather than abstractly.*
+
+where $R(y)$ is the arbitrary constant of integration (in this case an unknown function of $y$ since we integrated with respect to $x$)
+
+we can then differentiate with respect to y to obtain
+
+$$ \tag{a} \frac{\partial}{\partial y} f(x,y) = \frac{\partial}{\partial y}( P_{-x}(x,y) + R(y)) = P_{-x,y}(x,y) + R'(y) $$ 
+
+where $P_{-x,y}$ is the antiderivative of $P$ with respect to $x$ subsequently partially differentiated by $y$.
+
+but by definition (9.27) we also have
+
+$$ \tag{b} \frac{\partial}{\partial y} f(x,y) = Q(x,y) $$
+
+Setting the right-most expression of (a) equal to the right-most expression of (b) we get:
+
+$$  P_{-x,y}(x,y) + R'(y) = Q(x,y) $$
+
+$P_{-x,y}$ and $Q(x,y)$ will be almost equivalent, with just some constant of function of $y$ left between them, let's call that $W(y)$ - but be clear that $W(y)$ is a *known* function where $R'(y)$ is unknown still.
+
+To find $R(y)$ integrate to get
+
+$$ R(Y) = \int R'(y) dy = \int W(y) dy $$
+
+Then we have
+
+$$ f(x,y) = P_{-x}(x,y) + \int W(y) dy $$
+
+which is the function we seek.
