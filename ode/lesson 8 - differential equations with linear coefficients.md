@@ -53,3 +53,7 @@ We can use this to solve a equation of this type $((a_1x + b_1y + c_1)dx + (a_2x
 3. Convert the equation to homogenous form by omitting the constants $c_1$ and $c_2$ and place bars over $x$ and $y$ to obtain $(a_1\bar{x} + b_1\bar{y})d\bar{x} + (a_2\bar{x} + b_2\bar{y})d\bar{y} = 0$, which is a homogenous first order ordinary differential equation.
 4. Solve the equation from step 3 following the method given in Lesson 7 (let $\bar{y} = u\bar{x}$ or $\bar{x} = u\bar{y}$).
 5. In the solution from step 4, replace $\bar{x}$ and $\bar{y}$ with their definitions from step 2 to get the final solution.
+
+## Geometric Interpretations of Solutions of First Order Ordinary Differential Equations with Linear Coefficients
+*jmh - my material*
+The solutons to this family of ODEs covers a lot of common shapes in the plane - lines, circles, ellipses, parabolas, hyperbolas, and spirals, at least. I've written more about that, and have code for generating visual representations of these solutions in my [processing-stuff repository](https://github.com/jhobbs/processing-stuff/blob/master/notes.md).
