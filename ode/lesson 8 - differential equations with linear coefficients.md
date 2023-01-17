@@ -56,7 +56,7 @@ We can use this to solve a equation of this type $((a_1x + b_1y + c_1)dx + (a_2x
 
 ## A second method of solving a Differential Equation in Which the Coefficients of $dx$ and $dy$ are Linear, Nonhomogenous, and when Equated to Zero Represent Nonparallel Lines
 
-*jmh - I didn't really use this method when solving problems in the book, but here it is anyhow*
+*jmh - I didn't really use this method when solving problems in the book, but here it is anyhow. It's interesting that both methods involve getting rid of the constants; one by translation of axes and the other by differentiation, and they both involve solving a system of 2 equations and 2 unknowns.*
 
 In (8.2), let
 
