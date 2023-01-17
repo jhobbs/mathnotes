@@ -18,7 +18,7 @@ $$ \bar{x} = x - h,\quad \bar{y} = y - k \tag{8.12} $$
 
 These are the equations of translation. In analytic geometry, they're useful for changing complicated second degree equations into simpler ones by eliminating the first degree terms. They're also useful for solving differential equations with linear coefficients.
 
-## Solution of a Differential Equation in Which the Coefficients of $dx$ and $dy$ are Linear, Nonhomogenous, and when Equated to Zero Represent Nonparallel Lines
+## Solution of a Differential Equation in Which the Coefficients of $dx$ and $dy$ are Linear, Nonhomogenous, and when Equated to Zero Represent Nonparallel Lines (Lesson 8B)
 
 Consider the differential equation
 
@@ -71,6 +71,14 @@ $$ du = a_1dx + b_1dy, \tag{8.31} $$
 $$ dv = a_2dx + b_2dy. $$
 
 Solve (8.31) for $dx$ and $dy$. The substitution in (8.2) of (8.3) and these values of $dx$ and $dy$ will also lead to a differential equation with homogenous coefficients solvable by the method of Lesson 7.
+
+## Solution of a Differential Equation in Which the Coefficients of $dx$ and $dy$ Define Parallel or Coincident Lines
+If the lines defined by the coefficients of $dx$ and $dy$ in (8.2) are not parallel, the method of Lesson 8B given above will not work, because it depends on the two lines having a point of intersection, which parallel lines do not have.
+
+When these lines are parallel but not coincident, we can substitute a new variable for the coefficient of $dx$ or $dy$ to transform the equation into one which is separable.
+
+TBC.
+
 
 ## Geometric Interpretations of Solutions of First Order Ordinary Differential Equations with Linear Coefficients
 *jmh - my material*
