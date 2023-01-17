@@ -128,7 +128,7 @@ Setting the right-most expression of (a) equal to the right-most expression of (
 
 $$  P_{-x,y}(x,y) + R'(y) = Q(x,y) $$
 
-$P_{-x,y}$ and $Q(x,y)$ will be almost equivalent, with just some constant of function of $y$ left between them, let's call that $W(y)$ - but be clear that $W(y)$ is a *known* function where $R'(y)$ is unknown still.
+$P_{-x,y}$ and $Q(x,y)$ will be almost equivalent, with just some constant or function of $y$ left between them, let's call that $W(y)$ - but be clear that $W(y)$ is a *known* function (because both $P_{-x,y}(x,y)$ and $Q(x,y)$ are known, so is their difference where $R'(y)$ is unknown still (as it's the derivative of an unknown arbitrary constant of integration).
 
 To find $R(y)$ integrate to get
 
