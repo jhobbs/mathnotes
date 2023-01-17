@@ -67,7 +67,8 @@ $$ v = a_2x + b_2y + c_2 $$
 Therefore
 
 $$ du = a_1dx + b_1dy, \tag{8.31} $$
-$$ dv = a_2dx + b2_dy. $$
+
+$$ dv = a_2dx + b_2dy. $$
 
 Solve (8.31) for $dx$ and $dy$. The substitution in (8.2) of (8.3) and these values of $dx$ and $dy$ will also lead to a differential equation with homogenous coefficients solvable by the method of Lesson 7.
 
