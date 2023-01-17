@@ -2,7 +2,7 @@
 
 A linear equation has the form $ax + by + c = 0$ and represents a straight line in a plane. *Note: the presence of the constant* $c$ *in the linear equation prevents it from being homogenous*.
 
-**Paralell Lines** If the coefficients of $x$ and $y$ in one linear equation are proportional to the $x$ and $y$ coefficients in anorther, the two lines they represent aree parallel.
+**Paralell Lines**. If the coefficients of $x$ and $y$ in one linear equation are proportional to the $x$ and $y$ coefficients in anorther, the two lines they represent aree parallel.
 
 If all three coefficients are proportional, then the two lines coincide (i.e. multiplying one by a constant results in the other - they are the same line).
 
