@@ -56,8 +56,6 @@ We can use this to solve a equation of this type $((a_1x + b_1y + c_1)dx + (a_2x
 
 ## A second method of solving a Differential Equation in Which the Coefficients of $dx$ and $dy$ are Linear, Nonhomogenous, and when Equated to Zero Represent Nonparallel Lines
 
-*jmh - I didn't really use this method when solving problems in the book, but here it is anyhow. It's interesting that both methods involve getting rid of the constants; one by translation of axes and the other by differentiation. They also both involve solving a system of 2 equations and 2 unknowns - no getting away from that.*
-
 In (8.2), let
 
 $$ u = a_1x + b_1y + c_1 \tag{8.3} $$
@@ -72,14 +70,42 @@ $$ dv = a_2dx + b_2dy. $$
 
 Solve (8.31) for $dx$ and $dy$. The substitution in (8.2) of (8.3) and these values of $dx$ and $dy$ will also lead to a differential equation with homogenous coefficients solvable by the method of Lesson 7.
 
+*jmh - I didn't really use this method when solving problems in the book, but here it is anyhow. It's interesting that both methods involve getting rid of the constants; one by translation of axes and the other by differentiation. They also both involve solving a system of 2 equations and 2 unknowns - no getting away from that.*
+
 ## Solution of a Differential Equation in Which the Coefficients of $dx$ and $dy$ Define Parallel or Coincident Lines
 If the lines defined by the coefficients of $dx$ and $dy$ in (8.2) are not parallel, the method of Lesson 8B given above will not work, because it depends on the two lines having a point of intersection, which parallel lines do not have.
 
 When these lines are parallel but not coincident, we can substitute a new variable for the coefficient of $dx$ or $dy$ to transform the equation into one which is separable.
 
-TBC.
+***Example 8.4***
+Find a 1-parameter family of solutions of
+
+$$ (4x +3y -1)dx + (4x + 6y +2)dy = 0 \tag{a} $$
+
+also any particular solution not obtainable from the family.
+
+Let
+
+$$ u = 2x + 3y - 1, \quad du = 2dx +3dy, \quad dx = \frac{du -3dy}{2} \tag{b} $$
+
+Then by (b)
+
+$$ \tag{c} 2u + 4 = 4x +6y + 2 $$
+
+Substituting (b) and (c) in (a), we obtain
+
+$$ \tag{d} u(\frac{du - 3dy}{2}) + (2u + 4)dy = 0, $$
+
+which simplifies to
+
+$$ \tag{e} udu + (u+8)dy = 0, $$
+
+an equation whose variables are separable. If $u \neq -8$, (e) can be written as
+
+$$ \tag{f} \frac{u}{u+8}du + dy = 0, u \neq -8 $$
+
 
 
 ## Geometric Interpretations of Solutions of First Order Ordinary Differential Equations with Linear Coefficients
-*jmh - my material*
+*jmh*
 The solutons to this family of ODEs covers a lot of common shapes in the plane - lines, circles, ellipses, parabolas, hyperbolas, and spirals, at least. I've written more about that, and have code for generating visual representations of these solutions in my [processing-stuff repository](https://github.com/jhobbs/processing-stuff/blob/master/notes.md).
