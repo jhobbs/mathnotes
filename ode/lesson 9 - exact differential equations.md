@@ -100,15 +100,15 @@ didn't do this; it used an specific function, and that may be more useful to loo
 
 Given a differential equation of the form:
 
-$$ P(x,y)dx + Q(x,y)dy = 0 $$
+$$ \tag{s.1} P(x,y)dx + Q(x,y)dy = 0 $$
 
 first test for exactness. If it's exact, we know by definition (9.27) there is a $f(x,y)$ where:
 
-$$ \frac{\partial}{\partial x} f(x,y) = P(x,y). $$
+$$ \tag{s.2} \frac{\partial}{\partial x} f(x,y) = P(x,y). $$
 
 Then, by integration, we have:
 
-$$ f(x,y) = P_{-x}(x,y) + R(y) $$
+$$ \tag{s.3} f(x,y) = P_{-x}(x,y) + R(y) $$
 
 *jmh: * $P_{-1}$ here is my notation for the antiderivative of* $P(x,y)$ * with respect to x without any constant of integration, since that's what* $R(Y)$ *is. Not sure what the convention is here. The book shows this by example rather than abstractly.*
 
@@ -116,26 +116,26 @@ where $R(y)$ is the arbitrary constant of integration (in this case an unknown f
 
 we can then differentiate with respect to y to obtain
 
-$$ \tag{a} \frac{\partial}{\partial y} f(x,y) = \frac{\partial}{\partial y}( P_{-x}(x,y) + R(y)) = P_{-x,y}(x,y) + R'(y) $$ 
+$$ \tag{s.4} \frac{\partial}{\partial y} f(x,y) = \frac{\partial}{\partial y}( P_{-x}(x,y) + R(y)) = P_{-x,y}(x,y) + R'(y) $$ 
 
 where $P_{-x,y}$ is the antiderivative of $P$ with respect to $x$ subsequently partially differentiated by $y$.
 
 but by definition (9.27) we also have
 
-$$ \tag{b} \frac{\partial}{\partial y} f(x,y) = Q(x,y) $$
+$$ \tag{s.5} \frac{\partial}{\partial y} f(x,y) = Q(x,y) $$
 
-Setting the right-most expression of (a) equal to the right-most expression of (b) we get:
+Setting the right-most expression of (s.4) equal to the right-most expression of (s.5) we get:
 
-$$  P_{-x,y}(x,y) + R'(y) = Q(x,y) $$
+$$ \tag{s.6} P_{-x,y}(x,y) + R'(y) = Q(x,y) $$
 
 $P_{-x,y}$ and $Q(x,y)$ will be almost equivalent, with just some constant or function of $y$ left between them, let's call that $W(y)$ - but be clear that $W(y)$ is a *known* function (because both $P_{-x,y}(x,y)$ and $Q(x,y)$ are known, so is their difference where $R'(y)$ is unknown still (as it's the derivative of an unknown arbitrary constant of integration).
 
 To find $R(y)$ integrate to get
 
-$$ R(Y) = \int R'(y) dy = \int W(y) dy $$
+$$ \tag{s.7} R(Y) = \int R'(y) dy = \int W(y) dy $$
 
-Then we have
+Then substituting (s.7) into (s.3) we get
 
-$$ f(x,y) = P_{-x}(x,y) + \int W(y) dy $$
+$$ \tag{s.8} f(x,y) = P_{-x}(x,y) + \int W(y) dy $$
 
 which is the function we seek.
