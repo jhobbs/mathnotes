@@ -17,3 +17,26 @@ Hence, by (8.11)
 $$ \bar{x} = x - h,\quad \bar{y} = y - k \tag{8.12} $$
 
 These are the equations of translation. In analytic geometry, they're useful for changing complicated second degree equations into simpler ones by eliminating the first degree terms. They're also useful for solving differential equations with linear coefficients.
+
+## Solution of a Differential Equation in Which the Coefficients of $dx$ and $dy$ are Linear, Nonhomogenous, and when Equated to Zero Represent Nonparallel Lines
+
+Consider the differential equation
+
+$$ (a_1x + b_1y + c_1)dx + (a_2x + b_2y + c_2)dy = 0 \tag{8.2} $$
+
+in which the coefficients of $dx$ and $dy$ are linear and when equated to zero represent nonparallel lines. We assume also that both $c_1$ and $c_2$ are non-zero, for if they were, then (8.2) would be a homogenous equation solvable through the method described in lesson 7).
+
+Since the coefficients in (8.2) are assumed to define nonparallel lines, the pair of equations
+
+$$ a_1x + b_1y + c_1 = 0, \tag{8.21} $$
+
+$$ a_2x + b_2y + c_2 = 0 $$
+
+formed with them, havea unique point of intersection and therefore a unique solution for $x$ and $y$. Let us call this point $(h,k)$. If we now translate the origin to $(h,k)$, then by (8.11), (8.2) becomes, with respect to this new origin $(\bar{0},\bar{0})$,
+
+$$ [a_1(\bar{x} + h) + b_1(\bar{y} + k) + c_1]d\bar{x} + [a_2(\bar{x} + h) + b_2(\bar{y} + k) + c_2]d\bar{y} = 0 \tag{8.23} $$
+
+which simplifies to
+
+$$ [a_1\bar{x} + b_1\bar{y} + (a_1h + b_1k + c_1)]d\bar{x} + [a_2\bar{x} + b_2\bar{y} + (a_2h + b_2k + c_2)]d\bar{y} = 0 \tag{8.23} $$
+
