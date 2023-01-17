@@ -1,6 +1,6 @@
 ## A Review of Some Plane Analytic Geometry
 
-A linear equation has the form $ax + by + c = 0$ and represents a straight line in a plane. *Note: the presence of the constant $c$ in the linear equation prevents it from being homogenous*.
+A linear equation has the form $ax + by + c = 0$ and represents a straight line in a plane. *Note: the presence of the constant* $c$ *in the linear equation prevents it from being homogenous*.
 
 **Paralell Lines** If the coefficients of $x$ and $y$ in one linear equation are proportional to the $x$ and $y$ coefficients in anorther, the two lines they represent aree parallel.
 
