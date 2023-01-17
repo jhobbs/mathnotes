@@ -49,8 +49,26 @@ is called an **exact differential** if it is the total differential of a functio
 
 $$ \tag{9.241} P(x,y) = \frac{\partial}{\partial x}f(x,y) \quad \text{and} \quad Q(x,y) = \frac{\partial}{\partial y}f(x,y). $$
 
+***Definition 9.27*** The differential equation
 
+$$ \tag{9.28} P(x,y)dx + Q(x,y)dy = 0 $$
+
+is called **exact** if there exists a function $f(x,y)$ such that its partial derivative with respect to $x$ is $P(x,y)$ and its partial derivative with respect to $y$ is $Q(x,y)$. In symbolic notation, the definition says that (9.28) is an **exact differential equation** if there exists a function $f(x,y)$ such that:
+
+$$ \tag{9.29} \frac{\partial}{\partial x}f(x,y) = P(x,y), \frac{\partial}{\partial y}f(x,y) = Q(x,y) $$
+
+A 1-parameter family of solutions of the exact differential equation (9.28) is then
+
+$$ \tag{9.291} f(x,y) = c $$
 
 ## Necessary and Sufficient Condition for Exactness and Method of Solving an Exact Differential Equation
 
+***Theorem 9.3*** *A necessary and sufficient condition that the differential equation*
 
+$$ \tag{9.31} P(x,y)dx + Q(x,y)dx = 0 $$
+
+*be exact is that*
+
+$$ \tag{9.32} \frac{\partial}{\partial y}P(x,y) = \frac{\partial}{\partial x}Q(x,y) $$
+
+*where the functions defined by P(x,y) and Q(x,y), the partial derivatives in (9.32) and* $\partial P(x,y)/\partial x, \partial Q(x,y)/\partial y$ *exist and are continuous in a simply connected region R*.
