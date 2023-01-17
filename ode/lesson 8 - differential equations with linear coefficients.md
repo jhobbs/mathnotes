@@ -40,3 +40,16 @@ which simplifies to
 
 $$ [a_1\bar{x} + b_1\bar{y} + (a_1h + b_1k + c_1)]d\bar{x} + [a_2\bar{x} + b_2\bar{y} + (a_2h + b_2k + c_2)]d\bar{y} = 0 \tag{8.23} $$
 
+Since $(h,k)$ is the point of intersection of the two lines in (8.21), it lies on both lines and therefore the term in the parentheses in each bracket of (8.23) is zero. This equation therefore reduces to 
+
+$$ (a_1\bar{x} + b_1\bar{y})d\bar{x} + (a_2\bar{x} + b_2\bar{y})d\bar{y} = 0, \tag{8.24} $$
+
+which is now a homogenous type solvable for $\bar{x}$ and $\bar{y}$ by the method of lesson 7. By (8.11) we can then find solutions in terms of $x$ and $y$.
+
+We can use this to solve a equation of this type $((a_1x + b_1y + c_1)dx + (a_2x + b_2y + c_2)dy = 0)$ in these steps:
+
+1. Set the coefficients of $dx$ and $dy$ equal to each other and solve for $x$ and $y$, setting the results to $h$ and $k$ respectively.
+2. Let $\bar{x} = x - h,~\bar{y} = y - k$. Remember this for later.
+3. Convert the equation to homogenous form by omitting the constants $c_1$ and $c_2$ and place bars over $x$ and $y$ to obtain $(a_1\bar{x} + b_1\bar{y})d\bar{x} + (a_2\bar{x} + b_2\bar{y})d\bar{y} = 0$, which is a homogenous first order ordinary differential equation.
+4. Solve the equation from step 3 following the method given in Lesson 7 (let $\bar{y} = u\bar{x}$ or $\bar{x} = u\bar{y}$).
+5. In the solution from step 4, replace $\bar{x}$ and $\bar{y}$ with their definitions from step 2 to get the final solution.
