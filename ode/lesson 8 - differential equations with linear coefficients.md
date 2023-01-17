@@ -112,7 +112,7 @@ Finally, replace in (g) the value of $u$ as given in (b), noting at the same tim
 
 $$ \tag{h} 2x +3y -1 -8\ln{|2x+3y+7|}+y=c,~2x+3y+7\neq0, $$
 
-which is a 1-parameter family of solutions of (a). The functon defined by
+which is a 1-parameter family of solutions of (a). The function defined by
 
 $$ \tag{i} 2x + 3y + 7 = 0 $$
 
