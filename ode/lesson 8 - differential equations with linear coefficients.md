@@ -102,9 +102,21 @@ $$ \tag{e} udu + (u+8)dy = 0, $$
 
 an equation whose variables are separable. If $u \neq -8$, (e) can be written as
 
-$$ \tag{f} \frac{u}{u+8}du + dy = 0, u \neq -8 $$
+$$ \tag{f} \frac{u}{u+8}du + dy = 0,~u \neq -8 $$
 
+Integration of (f) gives
 
+$$ \tag{g} u - 8\ln{|u+8|}+y=c,~u \neq 8 $$
+
+Finally, replace in (g) the value of $u$ as given in (b), noting at the same time that the exclusion of $u=-8$ implies the exclusion of the line $2x+3y+7=0$. Hence (g) becomes
+
+$$ \tag{h} 2x +3y -1 -8\ln{|2x+3y+7|}+y=c,~2x+3y+7\neq0, $$
+
+which is a 1-parameter family of solutions of (a). The functon defined by
+
+$$ \tag{i} 2x + 3y + 7 = 0 $$
+
+which had to be excluded in obtaining (h) also satisfies (a). It is a particular solution not obtainable from the family (h).
 
 ## Geometric Interpretations of Solutions of First Order Ordinary Differential Equations with Linear Coefficients
 *jmh*
