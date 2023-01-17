@@ -54,6 +54,23 @@ We can use this to solve a equation of this type $((a_1x + b_1y + c_1)dx + (a_2x
 4. Solve the equation from step 3 following the method given in Lesson 7 (let $\bar{y} = u\bar{x}$ or $\bar{x} = u\bar{y}$).
 5. In the solution from step 4, replace $\bar{x}$ and $\bar{y}$ with their definitions from step 2 to get the final solution.
 
+## A second method of solving a Differential Equation in Which the Coefficients of $dx$ and $dy$ are Linear, Nonhomogenous, and when Equated to Zero Represent Nonparallel Lines
+
+*jmh - I didn't really use this method when solving problems in the book, but here it is anyhow*
+
+In (8.2), let
+
+$$ u = a_1x + b_1y + c_1 \tag{8.3} $$
+
+$$ v = a_2x + b_2y + c_2 $$
+
+Therefore
+
+$$ du = a_1dx + b_1dy, \tag{8.31} $$
+$$ dv = a_2dx + b2_dy. $$
+
+Solve (8.31) for $dx$ and $dy$. The substitution in (8.2) of (8.3) and these values of $dx$ and $dy$ will also lead to a differential equation with homogenous coefficients solvable by the method of Lesson 7.
+
 ## Geometric Interpretations of Solutions of First Order Ordinary Differential Equations with Linear Coefficients
 *jmh - my material*
 The solutons to this family of ODEs covers a lot of common shapes in the plane - lines, circles, ellipses, parabolas, hyperbolas, and spirals, at least. I've written more about that, and have code for generating visual representations of these solutions in my [processing-stuff repository](https://github.com/jhobbs/processing-stuff/blob/master/notes.md).
