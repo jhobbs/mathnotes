@@ -32,18 +32,56 @@ is exact. It therefore follows, by Theorem 9.3, that
 
 $$ \tag{10.62} \frac{\partial}{\partial y}[hP(x,y)] = \frac{\partial}{\partial x}[hQ(x,y)] $$
 
-We consider five possibilities. *jmh* The book goes into deriving these $h$ functions but I'm not going to do that here.
+We consider six possibilities. *jmh: For the first five, the book goes into deriving these $h$ functions but I'm not going to do that here.*
 
-**1. h is a function only of x, i.e. $h = h(x)$**
+**1. h is a function only of $x$, i.e. $h = h(x)$**
 
 $$ \tag{10.65} F(x) = \frac{\frac{\partial}{\partial y}P(x,y) - \frac{\partial}{\partial x}Q(x,y)}{Q(x,y)} $$
 
 $$ \tag{10.66} h(x) = e^{\int F(x)dx} $$
 
-**2. h is a function only of y, i.e. $h = h(y)$**
+**2. h is a function only of $y$, i.e. $h = h(y)$**
 
 $$ \tag{10.65} G(y) = \frac{\frac{\partial}{\partial x}Q(x,y) - \frac{\partial}{\partial y}P(x,y)}{P(x,y)} $$
 
 $$ \tag{10.66} h(y) = e^{\int G(y)dy} $$
+
+**3. h is a function of $xy$, i.e. $h = h(u)$, where $u = xy$**
+
+$$ \tag{10.65} F(u) = \frac{\frac{\partial}{\partial y}P(x,y) - \frac{\partial}{\partial x}Q(x,y)}{yQ(x,y) - xP(x,y)} $$
+
+$$ \tag{10.66} h(u) = e^{\int F(u)du} $$
+
+where $u = xy$.
+
+**4. h is a function of $x/y$, i.e. $h = h(u)$, where $u = x/y$**
+
+$$ \tag{10.65} G(u) = \frac{y^2[\frac{\partial}{\partial y}P(x,y) - \frac{\partial}{\partial x}Q(x,y)]}{xP(x,y) + yQ(x,y)} $$
+
+$$ \tag{10.66} h(u) = e^{\int G(u)du} $$
+
+where $u = x/y$.
+
+**5. h is a function of $y/x$, i.e. $h = h(u)$, where $u = y/x$**
+
+$$ \tag{10.65} K(u) = \frac{x^2[\frac{\partial}{\partial x}Q(x,y) - \frac{\partial}{\partial y}P(x,y)]}{xP(x,y) + yQ(x,y)} $$
+
+$$ \tag{10.66} h(u) = e^{\int K(u)du} $$
+
+where $u = y/x$.
+
+**6. Special form with matching exponents**
+
+*jmh: The book doesn't give this form a name and doesn't consider it as one of the "5 methods." It may be that it ends up working out via the above methods but is a different approach; I'm not sure.*
+
+If a differential equation can be put in the special form
+
+$$ \tag{10.82} y(Ax^py^q+Bx^ry^s)dx + x(Cx^py^q + Dx^ry^s)dy = 0 $$
+
+where $A, B, C, D$ are constants, then it can be shown that an integrating factor of (10.82) has the form $x^ay^b$ where $a$ and $b$ are suitably chosen constants.
+
+*jmh: Note that in (10.82), the exponents of* $x$ *and* $y$ *must be the same in both coefficients and that* $dx$*'s coefficient must have a factor of* $y$ *and* $dy$*'s coefficient must have a factor of* $x$*.*
+
+
 
 
