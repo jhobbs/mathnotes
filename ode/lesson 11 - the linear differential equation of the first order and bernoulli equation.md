@@ -15,9 +15,9 @@ The integrating factor of a linear differential equation in the form of (11.11) 
 
 $$ \tag{11.12} e^{\int P(x)dx} $$
 
-Once we have the integrating factor - let's call it $\Psi(x,y)$, we can rewrite the differential equation as:
+Once we have the integrating factor - let's call it $\Psi(x)$, we can rewrite the differential equation as:
 
-$$ \tag{11.21} y\Psi(x,y) = \int\Psi(x,y)Q(x)dx + c $$
+$$ \tag{11.21} y\Psi(x) = \int\Psi(x)Q(x)dx + c $$
 
 # Bernoulli Equation
 A special type of first order differential equation, named for hte swiss mathematician James Bernoulli, is the following:
