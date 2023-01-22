@@ -84,7 +84,7 @@ where $A, B, C, D$ are constants, then it can be shown that an integrating facto
 
 We'll show this by example. Given the differential equation:
 
-$$ \tag{a} y(2x^2y^3 +3)dx + x(x^2y^3 - 1)dy = 0$
+$$ \tag{a} y(2x^2y^3 +3)dx + x(x^2y^3 - 1)dy = 0$$
 
 We have an equation of the form (10.82).
 
