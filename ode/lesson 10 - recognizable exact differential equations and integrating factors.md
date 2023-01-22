@@ -82,6 +82,33 @@ where $A, B, C, D$ are constants, then it can be shown that an integrating facto
 
 *jmh: Note that in (10.82), the exponents of* $x$ *and* $y$ *must be the same in both coefficients and that* $dx$*'s coefficient must have a factor of* $y$ *and* $dy$*'s coefficient must have a factor of* $x$*.*
 
+We'll show this by example. Given the differential equation:
 
+$$ \tag{a} y(2x^2y^3 +3)dx + x(x^2y^3 - 1)dy = 0$
 
+We have an equation of the form (10.82).
+
+Multiplying (a) by $x^ay^b$ we get:
+
+$$ \tag{d} (2x^{a+2}y^{b+4}+3x^ay^{b+1})dx + (x^{a+3}y^{b+3} - x^{a+1}y^b)dy = 0 $$
+
+By Theorem 9.3, (d) will be exact if
+
+$$ \tag{e} 2(b+4)x^{a+2}y^{b+3} + (b+1)3x^ay^b = (a+3)x^{a+2}y^{b+3} - (a+1)x^ay^b $$
+
+*jmh: that, is if* $\frac{\partial}{\partial y}P(x,y) = \frac{\partial}{\partial x}Q(x,y)$.
+
+Multiplying (e) by $1/x^ay^b$ we obtain
+
+$$ \tag{f} (2b+8)x^2y^3 +3b + 3 = (a+3)x^2y^3 - (a+1) $$
+
+Equation (f) will be an equality if we choose $a$ and $b$ so that
+
+$$ \tag{g} 2b + 8 = a + 3,\quad 3b + 3 = -a - 1 $$
+
+Solving (g) for $a$ and $b$, we find:
+
+$$ \tag{h} a = \frac{7}{5},\quad b=-\frac{9}{5} $$
+
+Hence, $x^{\frac{7}{5}}y^{-\frac{9}{5}}$ is an integrating factor of (a).
 
