@@ -112,3 +112,9 @@ $$ \tag{h} a = \frac{7}{5},\quad b=-\frac{9}{5} $$
 
 Hence, $x^{\frac{7}{5}}y^{-\frac{9}{5}}$ is an integrating factor of (a).
 
+## Note on finding integrating factors in the exercises
+*jmh* A few of the excercises have solutions that don't seem to fit in to any of the forms above. Googling, I've found that ways to find these types of integrating factors exist, but again don't match the methods in this lesson.
+
+For example, the integrating factor of $(x^2 - y^2 - y)dx - (x^2 - y^2 -x)dy = 0$ is given as $1/(x^2 - y^2)$, but that integrating factor does not match the pattern of any of the types of integrating factors described in the chapter.
+
+Other material, such as Paul's Notes, doesn't seem to cover finding integrating factors for non-linear first order ODE's, so I'm assuming this isn't very important for now, and that if I keep pursuing ODE's, I'll get back around to the methods I found when googling, if they are indeed important or of interest.
