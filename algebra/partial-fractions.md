@@ -10,8 +10,12 @@ If the degree of $P(x)$ is greater than or equal to the degree of $Q(x)$, perfor
 
 # Steps to Apply
 
-First, factor the denominator as completely as possible. Then, we'll pick terms for each factor in the denominator.
+First, factor the denominator as completely as possible.
+
+Let $x - r$ be a linear factor of $Q(x)$. Suppose that $(x - r)^m$ is the highest power of $x - r$ that divides $Q(x)$.
+
 
 # References
-(Paul's Notes)[https://tutorial.math.lamar.edu/classes/calcii/partialfractions.aspx]
+[Paul's Notes](https://tutorial.math.lamar.edu/classes/calcii/partialfractions.aspx)
+
 *Calculus* by Thomas & Finney, 9th edition, pp 569-573 
