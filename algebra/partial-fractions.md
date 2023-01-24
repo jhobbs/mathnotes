@@ -14,6 +14,11 @@ First, factor the denominator as completely as possible.
 
 Let $x - r$ be a linear factor of $Q(x)$. Suppose that $(x - r)^m$ is the highest power of $x - r$ that divides $Q(x)$.
 
+This factor will translate to $m$ partial fractions, as follows:
+
+$$ \frac{A_1}{x-r} + \frac{A_2}{(x-r)^2} + \cdots + \frac{A_m}{(x - r}^m}. $$
+
+Repeat this for each distinct linear factor of $Q(x)$.
 
 # References
 [Paul's Notes](https://tutorial.math.lamar.edu/classes/calcii/partialfractions.aspx)
