@@ -8,7 +8,7 @@ where both $P(x)$ and $Q(x)$ are polynomials and the degree of $P(x)$ is strictl
 
 If the degree of $P(x)$ is greater than or equal to the degree of $Q(x)$, perform long division first and work with the remainder term.
 
-# Proper Fraction Decomposition
+# Proper Partial Fraction Decomposition
 
 This approach always works as long as the conditions above are satisfied, but there are other ways; see below.
 
