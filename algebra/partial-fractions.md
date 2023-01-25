@@ -105,7 +105,7 @@ Solving these simulataneously we get $A=2, B=2, C=1$
 
 Substituting these values into (e) we get:
 
-$$ \tag{e} \frac{3(1+x)}{(1-x)(x^2+x+1)} = \frac{2}{1-x} + \frac{2x + 1}{x^2+x+1} $$
+$$ \tag{k} \frac{3(1+x)}{(1-x)(x^2+x+1)} = \frac{2}{1-x} + \frac{2x + 1}{x^2+x+1} $$
 
 which is the desired sum of partial fractions.
 
