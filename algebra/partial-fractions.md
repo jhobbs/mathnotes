@@ -53,6 +53,8 @@ $$ \frac{P(x)}{Q(x)} = \frac{A_1}{x-r} + \frac{A_2}{(x-r)^2} + \cdots + \frac{A_
 
 ## Example
 
+*jmh: my material*.
+
 Express
 
 $$ \tag{a} \frac{3(1+x)}{1-x^3} $$
