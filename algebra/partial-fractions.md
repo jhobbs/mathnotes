@@ -59,6 +59,8 @@ $$ \tag{a} \frac{3(1+x)}{1-x^3} $$
 
 as a sum of partial fractions.
 
+Note that the degree of the numerator is 1 while the degree of the denominator is 3, so we satisfy the conditions for performing partial fraction decomposition and may proceed.
+
 First, factor the denominator (recognizing that it's a sum of cubes):
 
 $$ \tag{b} \frac{3(1+x)}{(1-x)(x^2+x+1)} $$
