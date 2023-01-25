@@ -41,7 +41,7 @@ Repeat this for each distinct irreducible quadratic factor of $Q(x)$.
 
 4. Set the original fraction $\frac{P(x)}{Q(x)}$ equal to the sum of all the partial fractions from steps 2 and 3.
 
-5. Clear the fractions by multiplying by $Q(x)$. Arrange the terms in decreasing powers of $x$.
+5. Clear the fractions by multiplying by $Q(x)$. Distribute. Arrange the terms in decreasing powers of $x$. Group coefficients of the same power of $x$ by factoring out that power of $x$.
 
 6. Equate the coefficients of corresponding powers of $x$ and solve the resulting equations for the undetermined coefficients.
 
@@ -50,6 +50,62 @@ Repeat this for each distinct irreducible quadratic factor of $Q(x)$.
 $$ \frac{P(x)}{Q(x)} = \frac{A_1}{x-r} + \frac{A_2}{(x-r)^2} + \cdots + \frac{A_m}{(x - r)^m} + \frac{B_1 x + C_1}{x^2+px+q} + \frac{B_2 x + C_2}{(x^2+px+q)^2} + \cdots + \frac{B_n x + C_n}{(x^2+px+q)^n} $$
 
 *note*: why can we only deal with linear and irreducible quadratics? Can we always factor higher degree polynomials into terms that are either linear or quadratic?
+
+## Example
+
+Express
+
+$$ \tag{a} \frac{3(1+x)}{1-x^3} $$
+
+as a sum of partial fractions.
+
+First, factor the denominator (recognizing that it's a sum of cubes):
+
+$$ \tag{b} \frac{3(1+x)}{(1-x)(x^2+x+1)} $$
+
+The denominator is now composed of one linear factor in $x$ - $1+x$ - and one irreducible quadratic factor in $x$ - $x^2+x+1$. Both are raised on the first power.
+
+Write the partial fraction with an undetermined coefficient for the linear factor as:
+
+$$ \tag{c} \frac{A}{1-x} $$
+
+Write the partial fraction with undetermined coefficients for the irreducible quadratic factor as:
+
+$$ \tag{d} \frac{Bx + C}{x^2+x+1} $$
+
+Sum (c) and (d) and set it equal to (b):
+
+$$ \tag{e} \frac{3(1+x)}{(1-x)(x^2+x+1)} = \frac{A}{1-x} + \frac{Bx + C}{x^2+x+1} $$
+
+Clear the fractions by multiplying both sides by the denominator of the left hand side:
+
+$$ \tag{f} 3(1+x) = A(x^2+x+1) + (Bx+C)(1-x) $$
+
+Distribute
+
+$$ \tag{g} 3 + 3x = Ax^2 + Ax + A + Bx - Bx^2 +C - Cx $$
+
+Sort by descending powers of $x$:
+
+$$ \tag{h} 3x + 3 = Ax^2 - Bx^2 + Ax + Bx - Cx + A + C $$
+
+Group coefficients of like powers of $x$ by factoring out the common power of $x$:
+
+$$ \tag{i} 3x + 3 = x^2(A-B) + x(A+B-C) + (A+C) $$
+
+The equation will be an identity when the coefficients of respective powers of $x$ on both sides are equal. Set them up and solve for them.
+
+$$ \tag{j} \text{Coefficients of} x^2: 0 = A - B $$
+$$ \text{Coefficients of} x^1: 3 = (A+B-C) $$
+$$ \text{Coefficients of} x^0: 3 = (A+C) $$
+
+Solving these simulataneously we get $A=2, B=2, C=1$
+
+Substituting these values into (e) we get:
+
+$$ \tag{e} \frac{3(1+x)}{(1-x)(x^2+x+1)} = \frac{2}{1-x} + \frac{2x + 1}{x^2+x+1} $$
+
+which is the desired sum of partial fractions.
 
 # The Heaviside Cover-up Method
 
