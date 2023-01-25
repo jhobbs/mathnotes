@@ -11,7 +11,7 @@ where both $P(x)$ and $Q(x)$ are polynomials and the degree of $P(x)$ is strictl
 
 If the degree of $P(x)$ is greater than or equal to the degree of $Q(x)$, perform long division first and work with the remainder term.
 
-# Proper Partial Fraction Decomposition
+# General Approach to Partial Fraction Decomposition
 
 This approach always works as long as the conditions above are satisfied, but there are other ways; see below.
 
@@ -65,7 +65,7 @@ First, factor the denominator (recognizing that it's a sum of cubes):
 
 $$ \tag{b} \frac{3(1+x)}{(1-x)(x^2+x+1)} $$
 
-The denominator is now composed of one linear factor in $x$ - $1+x$ - and one irreducible quadratic factor in $x$ - $x^2+x+1$. Both are raised on the first power.
+The denominator is now composed of one linear factor in $x$: $1+x$, and one irreducible quadratic factor in $x$:  $x^2+x+1$. Both are raised on the first power.
 
 Write the partial fraction with an undetermined coefficient for the linear factor as:
 
