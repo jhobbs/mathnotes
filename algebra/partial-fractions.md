@@ -96,7 +96,9 @@ $$ \tag{i} 3x + 3 = x^2(A-B) + x(A+B-C) + (A+C) $$
 The equation will be an identity when the coefficients of respective powers of $x$ on both sides are equal. Set them up and solve for them.
 
 $$ \tag{j} \text{Coefficients of} x^2: 0 = A - B $$
+
 $$ \text{Coefficients of} x^1: 3 = (A+B-C) $$
+
 $$ \text{Coefficients of} x^0: 3 = (A+C) $$
 
 Solving these simulataneously we get $A=2, B=2, C=1$
