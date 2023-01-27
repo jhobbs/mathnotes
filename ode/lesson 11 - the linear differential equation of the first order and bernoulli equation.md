@@ -122,3 +122,53 @@ When solving, remember that $u = \frac{1}{y-y_1}$.
 First, determine ${y_1}'$, which is $\frac{d}{dx}y_1$.
 
 Then perform the substitution from (11.61).
+
+### Example
+
+Solve
+
+$$ y' = 2\tan{x}\sec{x}-y^2\sin{x}, \quad {y_1}(x) = \sec{x} $$
+
+First, find ${y_1}'$:
+
+$$ {y_1}' = \frac{d}{dx}{y_1}(x) = \frac{d}{dx}\sec{x} = \sec{x}\tan{x} $$
+
+Now make the substitution from (11.61):
+
+$$ \sec{x}\tan{x} - \frac{1}{u^2}u' = 2\tan{x}\sec{x}-(\sec{x} + \frac{1}{u})^2\sin{x}, \quad {y_1}(x) = \sec{x} $$
+
+Combine like terms and distribute:
+
+$$ -\frac{1}{u^2}u' = \sec{x}\tan{x} -(\sec^2{x} + \frac{2\sec{x}}{u} + \frac{1}{u^2})sinx $$
+
+Distribute again and simplify:
+
+$$ -\frac{1}{u^2}u' = -\frac{2\tan{x}}{u} - \frac{\sin{x}}{u^2} $$
+
+Multiply by $-\frac{1}{u^2}$:
+
+$$ u' = 2u\tan{x} + \sin{x} $$
+
+Rearrange the terms to make a first order linear differential equation:
+
+$$ u' - 2u\tan{x} = \sin{x} $$
+
+Now we have $P(x) = -2\tan{x}$, $Q(x) = \sin{x}$ and $\Psi(x) = e^{\int{-2\{tan}x}dx} = \cos^2{x} $, so we can write:
+
+$ u\cos^2{x} = \int{\cos^{x}\sin{x}dx} + c $$
+
+Integration (use a u-sub) gives:
+
+$$ u\cos^2{x} = -\frac{\cos^3{x}}{3}+c $$
+
+Solving for $u$ gives:
+
+$$ u = -\frac{cos^3(x) + c}{3cos^2{x}} $$
+
+Substituting $u = \frac{1}{y-y_1}$ gives:
+
+$$ \frac{1}{y-y_1} = -\frac{cos^3(x) + c}{3cos^2{x}} $$
+
+Solving for $y$ we get:
+
+$$ y = \frac{3cos^{x}}{cos^3{x} + c} + \frac{1}{\cos{x}} $$
