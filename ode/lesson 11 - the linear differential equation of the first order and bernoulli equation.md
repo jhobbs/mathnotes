@@ -117,4 +117,4 @@ Which is a linear first order differential equation. Remember that $y_1$ is a $y
 
 ## Solving
 
-When solving, remember that $y = \frac{1}{y-y_1}$.
+When solving, remember that $u = \frac{1}{y-y_1}$.
