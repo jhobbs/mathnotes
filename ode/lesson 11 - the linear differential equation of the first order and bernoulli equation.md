@@ -118,3 +118,7 @@ Which is a linear first order differential equation. Remember that $y_1$ is a $y
 ## Solving
 
 When solving, remember that $u = \frac{1}{y-y_1}$.
+
+First, determine ${y_1}'$, which is $\frac{d}{dx}y_1$.
+
+Then perform the substitution from (11.61).
