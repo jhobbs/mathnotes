@@ -75,7 +75,7 @@ $$ \tag{g} y^4 = 1 + ce^{-2x^2} $$
 
 is the required solution.
 
-## Ricatti Equation
+# Ricatti Equation
 
 $$ \tag{11.6} y' = f_0(x) + f_1(x)y + f_2(x)y^2, f_2(x) \neq 0 $$
 
