@@ -125,6 +125,8 @@ Then perform the substitution from (11.61).
 
 ### Example
 
+*jmh: this is my solution to excercise 11.27*
+
 Solve
 
 $$ y' = 2\tan{x}\sec{x}-y^2\sin{x}, \quad {y_1}(x) = \sec{x} $$
@@ -155,9 +157,9 @@ $$ u' - 2u\tan{x} = \sin{x} $$
 
 Now we have $P(x) = -2\tan{x}$, $Q(x) = \sin{x}$ and $\Psi(x) = e^{\int{-2\{tan}x}dx} = \cos^2{x} $, so we can write:
 
-$ u\cos^2{x} = \int{\cos^{x}\sin{x}dx} + c $$
+$$ u\cos^2{x} = \int{\cos^{x}\sin{x}dx} + c $$
 
-Integration (use a u-sub) gives:
+Integration (use a $u$-sub) gives:
 
 $$ u\cos^2{x} = -\frac{\cos^3{x}}{3}+c $$
 
@@ -167,8 +169,8 @@ $$ u = -\frac{cos^3(x) + c}{3cos^2{x}} $$
 
 Substituting $u = \frac{1}{y-y_1}$ gives:
 
-$$ \frac{1}{y-y_1} = -\frac{cos^3(x) + c}{3cos^2{x}} $$
+$$ \frac{1}{y-\sec{x}} = -\frac{\cos^3{x} + c}{3cos^2{x}} $$
 
 Solving for $y$ we get:
 
-$$ y = \frac{3cos^{x}}{cos^3{x} + c} + \frac{1}{\cos{x}} $$
+$$ y = \frac{3\cos^2{x}}{c - \cos^3{x}} + \frac{1}{\cos{x}} $$
