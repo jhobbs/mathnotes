@@ -74,3 +74,43 @@ Therefore
 $$ \tag{g} y^4 = 1 + ce^{-2x^2} $$
 
 is the required solution.
+
+## Ricatti Equation
+
+$$ \tag{11.6} y' = f_0(x) + f_1(x)y + f_2(x)y^2, f_2(x) \neq 0 $$
+
+is calleda **Ricatti equation**. If $y_1(x)$ is a particular solution of this equation, the substitution
+
+$$ \tag{11.61} y = y_1 + \frac{1}{u}, \quad y' = {y_1}' - \frac{1}{u^2}u', $$
+
+will transform the equation into the first order linear equation
+
+$$ \tag{11.62} u' + [f_1(x) + 2f_2(x)y_1]u = -f_2(x). $$
+
+*Proof:*
+
+*jmh: my proof, which is the answer to exercise 7.25*.
+
+First, substitute (11.61) into (11.6):
+
+$$ {y_1}' - \frac{1}{u^2}u' = f_0(x) + f_1(x)(y_1 + \frac{1}{u}) + f_2(x)(y_1 + \frac{1}{u})^2 $$
+
+Recognize that since $y_1$ is a particular solution of (11.6), ${y_1}' = f_0(x) + f_1(x)y_1 + f_2(x){y_1}^2$.
+
+Make this substitution, and distribute on the right side of the equation:
+
+$$ f_0(x) + f_1(x)y_1 + f_2(x){y_1}^2 - \frac{1}{u^2}u' = f_0(x) + f_1(x)y_1 + \frac{f_1(x)}{u} + f_2(x){y_1}^2 + \frac{2f_2(x)y_1}{u} + \frac{f_2(x)}{u^2} $$
+
+Cancel like terms from both sides:
+
+$$ - \frac{1}{u^2}u' = \frac{f_1(x)}{u} + \frac{2f_2(x)y_1}{u} + \frac{f_2(x)}{u^2} $$
+
+Multiply by $-u^2$:
+
+$$ u' = -uf_1(x)-2uf_2(x)y_1 - f_2(x) $$
+
+Rearrange terms and factor out the common $u$:
+
+$$ u' + [f_1(x) + 2f2(x)y_1]u = -f_2(x) $$
+
+Which is a linear first order differential equation. Remember that $y_1$ is a $y_1(x)$ - a function of x.
