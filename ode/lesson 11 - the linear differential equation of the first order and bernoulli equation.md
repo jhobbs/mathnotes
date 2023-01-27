@@ -87,7 +87,7 @@ will transform the equation into the first order linear equation
 
 $$ \tag{11.62} u' + [f_1(x) + 2f_2(x)y_1]u = -f_2(x). $$
 
-*Proof:*
+## Proof that this substitution works
 
 *jmh: my proof, which is the answer to exercise 7.25*.
 
@@ -114,3 +114,7 @@ Rearrange terms and factor out the common $u$:
 $$ u' + [f_1(x) + 2f2(x)y_1]u = -f_2(x) $$
 
 Which is a linear first order differential equation. Remember that $y_1$ is a $y_1(x)$ - a function of x.
+
+## Solving
+
+When solving, remember that $y = \frac{1}{y-y_1}$.
