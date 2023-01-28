@@ -7,7 +7,7 @@ Some differential equations can be solved by more than one method. It's up to yo
 
 $$ \tag{a} xdy - ydx = y^2dx $$
 
-Multiplication by $-y^2, ~ y \neq 0 $ will make (a) exact, allowing it to be solved either by recognition or by means of Lesson 9b. Alternatively, we could divide (a) by $x, ~ x \neq 0$, and the equation becomes:
+Multiplication by $-y^2, ~ y \neq 0$ will make (a) exact, allowing it to be solved either by recognition or by means of Lesson 9b. Alternatively, we could divide (a) by $x, ~ x \neq 0$, and the equation becomes:
 
 $$ \tag{b} y' - \frac{y}{x} = \frac{y^2}{x}, \quad x \neq 0 $$
 
