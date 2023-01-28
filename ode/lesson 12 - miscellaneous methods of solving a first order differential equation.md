@@ -34,3 +34,33 @@ $$ \tag{c} \frac{d}{dx} (\sin^2{y}) + (\sin^2{y}) = x^2, ~ y \neq 0$$
 An equation which is now linear in the variable $\sin^2{y}$ and can be solved by means of Lesson 11.
 
 *jmh* the trick here was to multiply by a trig function that turned the first term (with $y'$) into the derivative of the second term, making a linear first order ode.
+
+**Example 12.22**
+
+Solve
+
+$$ \tag{a} y' + 2x = 2(x^2 + y - 1)^{\frac{2}{3}} $$
+
+Similar to making a $u$-substitution to simplify an integrand, we can make a substiution here:
+
+$$ \tag{b} u = x^2 + y - 1 $$
+
+Differentiating (b) we obtain:
+
+$$ \tag{c} \frac{du}{dx} = 2x + \frac{dy}{dx}; ~ \frac{dy}{dx} = \frac{du}{dx} - 2x $$
+
+We can now substitute (b) and (c) in (a):
+
+$$ \tag{d} \frac{du}{dx} = 2u^{\frac{2}{3}}, ~ u^{-\frac{2}{3}}du = 2dx, ~ u \neq 0 $$
+
+which is a first order ODE with separated variables. Integrating, we obtain:
+
+$$ \tag{e} 3u^{\frac{1}{3}} = 2x + c, ~ u \neq 0 $$
+
+Replacing $u$ by its value in (b) and cubing, we have
+
+$$ \tag{f} x^2 + y - 1 = \frac{1}{27}(2x+c)^3, ~ x^2 + y - 1 \neq 0 $$
+
+Therefore a solution of (a) is:
+
+$$ \tag{g} y = 1 - x^2 + \frac{(2x+c)^3}{27}, ~ x^2 + y - 1 \neq 0 $$
