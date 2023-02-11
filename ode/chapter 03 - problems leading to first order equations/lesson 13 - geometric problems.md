@@ -15,4 +15,4 @@ $$ (\frac{x_1+x_2}{2},\frac{y_1 + y_2}{2}) $$
 
 A projection of $\vec{a}$ onto $\vec{b}$ is a new vector $\vec{c}$ in the direction of $\vec{b}$ representing the portion of $\vec{a}$ that's in the direction of $\vec{b}$. Geometrically, we can find $\vec{b}$ by drawing a line perpindicular to $\vec{b}$ passing through the end of $\vec{a}$. Where this line intersects $\vec{b}$ will be the end of $\vec{c}$
 
-
+![Projection](projection.jpg)
