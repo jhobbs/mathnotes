@@ -24,3 +24,9 @@ The normal line is the line perpindicular to the tangent line at the point of ta
 
 ![Normal and Tangent](normal%20and%20tangent.jpg)
 
+**Radius Vector**
+A radius vector is a vector from the origin to a point on a curve. It is $r$ in the picture above.
+
+The angle $\beta$ between the radius vector and the tangent line at point P is given by:
+
+$$ \tan{\beta} = r\frac{d0}{dr} $$
