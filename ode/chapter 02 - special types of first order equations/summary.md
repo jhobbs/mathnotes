@@ -35,7 +35,9 @@ First, see if it's separable. If it is, just integrate and you're done. To find 
 
 Linear is almost as easy, so one thing to do is to try to put it into the linear form and see if that works. If not, you may be able to put it into the Bernoulli form which, is just one step away from being linear, or into the Ricatti form, which is a couple of steps from being linear.
 
-If linear doesn't work out, put it in the form of $(a)$ above. See if it's exact; think if there is some function $f(x,y)$ that's partial derivatives match $P(x,y)$ and $Q(x,y)$, or use the test for exactness. If you do the test, you can use the results to find an integrating factor sometimes.
+If linear doesn't work out, put it in the form of $(a)$ above.
+
+See if it's exact; think if there is some function $f(x,y)$ that's partial derivatives match $P(x,y)$ and $Q(x,y)$, or use the test for exactness. If you do the test, you can use the results to find an integrating factor sometimes. You might also recognize some integrable combinations which can be used to reduce the remaining part of the differential equation into separable parts.
 
 If it's not exact, see if it has linear coefficients or if it's homogenous. Neither of these two methods is fun - they're laborious and have many steps to solve, but sometimes there is no other choice.
 
