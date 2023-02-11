@@ -1,5 +1,7 @@
 This chapter explores some special types of first order differential equations. It covers how to identify them and how to solve them.
 
+
+# Types 
 One general form that comes up a lot is:
 
 $$ \tag{a} P(x,y)dx + Q(x,y)dy = 0 $$
@@ -23,3 +25,15 @@ $$ \tag{b} \frac{dy}{dx} + P(x)y = Q(x) $$
 
 There are other types of first order differential equations that can be solved, but they don't really fit into classifications nicely.
 
+# General Approach to Solving
+Many first order differential equations can be solved by more than one method.
+
+First, see if it's separable. If it is, just integrate and you're done. To find if it's separable, put it in the form of $(a)$. You might have to play with some algebra to get this done.
+
+Linear is almost as easy, so one thing to do is to try to put it into the linear form and see if that works. If not, you may be able to put it into the Bernoulli form which, is just one step away from being linear, or into the Ricatti form, which is a couple of steps from being linear.
+
+If linear doesn't work out, put it in the form of $(a)$ above. See if it's exact; think if there is some function $f(x,y)$ that's partial derivatives match $P(x,y)$ and $Q(x,y)$, or use the test for exactness. If you do the test, you can use the results to find an integrating factor sometimes.
+
+If it's not exact, see if it has linear coefficients or if it's homogenous. Neither of these two methods is fun - they're laborious and have many steps to solve, but sometimes there is no other choice.
+
+If none of those approaches work out, you might be out of luck. You can try some substitutions, etc, but you could spend forever and not find a solution. Probably best to use a computer at this point.
