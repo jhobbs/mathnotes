@@ -25,6 +25,9 @@ $$ \tag{b} \frac{dy}{dx} + P(x)y = Q(x) $$
 
 There are other types of first order differential equations that can be solved, but they don't really fit into classifications nicely.
 
+## A note on substitutions
+Several of the methods of solution above involve making substitutions. Keep in mind that when you substitute $y$ for a new value, you must also substitute $dy$ for a new value. For example, if we let $y = ux$, then $dy = udx + xdu$ (via the product rule).
+
 # General Approach to Solving
 Many first order differential equations can be solved by more than one method.
 
