@@ -1,6 +1,9 @@
 *jmh: my notes*
 
+# Problems Relating to the Tangent Lines to an Unknown Family of Curves
 This lesson starts by discussing a few problems for finding families of curves with some property relating to tangets to points on the curve. Differential equations arise here because the slope of the tangent line in these cases is $y'$.
+
+## Background
 
 We need some stuff from algebra, Calculus 3 and linear algebra here.
 
@@ -30,3 +33,14 @@ A radius vector is a vector from the origin to a point on a curve. It is $r$ in 
 The angle $\beta$ between the radius vector and the tangent line at point P is given by:
 
 $$ \tan{\beta} = r\frac{d0}{dr} $$
+
+## Method of Solution
+
+The problems are started in the form "find the family of curves" meeting some requirements related to tangent lines of the family of curves. Since we have to find *the* family, not just *a* family, we must show that the family we find meets the requirements (sufficient) and than any curve meeting the requirements will be in the family we find (necessary).
+
+### Proof of Necessesity
+The tangent line in the problem will have a slope given by $y'$ - the derivative of the curve. We can use that, along with the other requirements in the problem, to setup and solve a differental equation relating $y'$ to $y$ and $x$. This gives an equation that defines the function $y(x)$, and shows that any family of curves that meet the requirements of the problem will satisfy that equation.
+
+### Proof of Sufficiency
+To show that the family of curves found will satisfy our requirements, we can pick a point $P(x_0, y_0)$ on the curve, then find the derivative of the function at that point which gives the slope of the tangent line at the point. We can then reason further to show that the tangent line meets whatever requirements the problem set forth to show that family of curves satisfies the requirements of the problem.
+
