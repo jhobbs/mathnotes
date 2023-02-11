@@ -1,4 +1,4 @@
-This chapter explores some special types of first order differential equations. It covers how to identify them and how to solve them.
+This chapter explores some special types of first order differential equations. It covers how to identify them and how to solve them. These are my (jmh) notes summarizing it.
 
 
 # Types 
