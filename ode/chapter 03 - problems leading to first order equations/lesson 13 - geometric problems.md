@@ -22,4 +22,5 @@ The tangent line (or simply tangent) to a plane curve at a given point is the st
 
 The normal line is the line perpindicular to the tangent line at the point of tangency.
 
+![Normal and Tangent](normal%20and%20tangent.jpg)
 
