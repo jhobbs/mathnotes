@@ -21,11 +21,17 @@ A projection of $\vec{a}$ onto $\vec{b}$ is a new vector $\vec{c}$ in the direct
 ![Projection](projection.jpg)
 
 **Tangent Line and Normal Line**
-The tangent line (or simply tangent) to a plane curve at a given point is the straight line that "just touches" the curve at that point.
+The tangent line (or simply tangent) to a plane curve at a given point is the straight line that "just touches" the curve at that point. Its slope is $y'$.
 
-The normal line is the line perpindicular to the tangent line at the point of tangency.
+The normal line is the line perpindicular to the tangent line at the point of tangency. Its slope is $-\frac{1}{y'}$.
 
 ![Normal and Tangent](normal%20and%20tangent.jpg)
+
+**Subtangent**
+The subtangent is the length of the projection of the tangent line on the $x$-axis, i.e., the distance from the $x$-intercept of the tangent line and $x$. Its value is $|\frac{y}{y'}|$.
+
+**Subnormal**
+The subnormal is the length of the projection of the normal line on the $x$-axis, i.e., the distance from the $x$-intercept of the normal line and $x$. Its value is $|yy'|$.
 
 **Radius Vector**
 A radius vector is a vector from the origin to a point on a curve. It is $r$ in the picture above.
@@ -42,5 +48,5 @@ The problems are started in the form "find the family of curves" meeting some re
 The tangent line in the problem will have a slope given by $y'$ - the derivative of the curve. We can use that, along with the other requirements in the problem, to setup and solve a differental equation relating $y'$ to $y$ and $x$. This gives an equation that defines the function $y(x)$, and shows that any family of curves that meet the requirements of the problem will satisfy that equation.
 
 ### Proof of Sufficiency
-To show that the family of curves found will satisfy our requirements, we can pick a point $P(x_0, y_0)$ on the curve, then find the derivative of the function at that point which gives the slope of the tangent line at the point. We can then reason further to show that the tangent line meets whatever requirements the problem set forth to show that family of curves satisfies the requirements of the problem.
+To show that the family of curves found will satisfy our requirements, we can pick a point $P(x_0, y_0)$ on the curve, then find the derivative of the function at that point (first find/isolate $y_0$ at that point, then differentiate both sides with respect to $x$) which gives the slope of the tangent line at the point. We can then reason further to show that the tangent line meets whatever requirements the problem set forth to show that family of curves satisfies the requirements of the problem.
 
