@@ -40,6 +40,9 @@ The angle $\beta$ between the radius vector and the tangent line at point P is g
 
 $$ \tan{\beta} = r\frac{d0}{dr} $$
 
+**Abscissa**
+The $x$ value of a point. Aka the straight line distance from the $y$-axis to the point.
+
 ## Method of Solution
 
 The problems are started in the form "find the family of curves" meeting some requirements related to tangent lines of the family of curves. Since we have to find *the* family, not just *a* family, we must show that the family we find meets the requirements (sufficient) and than any curve meeting the requirements will be in the family we find (necessary).
