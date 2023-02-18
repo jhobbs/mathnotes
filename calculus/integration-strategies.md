@@ -1,3 +1,7 @@
 # Trig Sub
 
-For $\sqrt{bx^2 -a}$ substitute $x= \frac{\sqrt{a}}{\sqrt{b}}\sec{u}$
+For $\sqrt{b^2x^2 - a^2}$ substitute $x= \frac{a}{b}\sec{\theta}$
+
+For $\sqrt{a^2 - b^2x^2}$ substitute $x= \frac{a}{b}\sin{\theta}$
+
+For $\sqrt{a^2 + b^2x^2}$ substitute $x= \frac{a}{b}\tan{\theta}$
