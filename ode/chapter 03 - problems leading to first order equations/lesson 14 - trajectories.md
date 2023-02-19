@@ -21,3 +21,7 @@ $$ \tag{14.13} \tan{\alpha} = \frac{{y_1}' - y'}{1+y' {y_1}'} $$
 Let ${y_1}'$ be the slope of a give nfamily and let $y'$ be the slope of an orthogonal family. Then, by a theorem in analytic geometry:
 
 $$ \tag{14.21} {y_1}' y' = -1,~y' = - \frac{1}{{y_1}'} $$
+
+## Orthogonal Trajectories in Polar Coordinates
+
+![Orthogonal Trajectories in Polar Coordinates](orthogonal%20trajectories%20in%20polar%20coordinates.jpg)
