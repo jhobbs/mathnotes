@@ -41,3 +41,5 @@ $$ \tag{14.32} \tan{\phi_2} = r\frac{d\theta}{dr} $$
 Therefore (14.31) becomes:
 
 $$ \tag{14.33} \tan{\phi_1} = - \frac{dr}{rd\theta} $$
+
+Comparing (14.32) with (14.33) we see that if two curves are orthogonal, then $r\frac{d\theta}{dr}$ of one is the negative reciprocal of $r\frac{d\theta}{dr}$ of the other. Conversely, if one of two curves satisfies (14.32) and the other satisfies (14.33), then the curves are orthogonal.
