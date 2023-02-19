@@ -33,3 +33,11 @@ $$ \phi_1 = \phi_2 + \frac{\pi}{2} $$
 Therefore
 
 $$ \tag{14.31} \tan{\phi_1} = \tan{\phi_2 + \frac{\pi}{2}} = - \frac{1}{\tan{\phi_2}} $$ 
+
+As remarked previously in Example 13.3, in polar coordinates:
+
+$$ \tag{14.32} \tan{\phi_2} = r\frac{d\theta}{dr} $$
+
+Therefore (14.31) becomes:
+
+$$ \tag{14.33} \tan{\phi_1} = - \frac{dr}{rd\theta} $$
