@@ -43,3 +43,9 @@ Therefore (14.31) becomes:
 $$ \tag{14.33} \tan{\phi_1} = - \frac{dr}{rd\theta} $$
 
 Comparing (14.32) with (14.33) we see that if two curves are orthogonal, then $r\frac{d\theta}{dr}$ of one is the negative reciprocal of $r\frac{d\theta}{dr}$ of the other. Conversely, if one of two curves satisfies (14.32) and the other satisfies (14.33), then the curves are orthogonal.
+
+Hence, to find an orthogonal family of a given family, we proceed as follows:
+
+1. Calculate $r\frac{d\theta}{dr}$ of the given family.
+2. Replace $r\frac{d\theta}{dr}$ by its negative reciprocal $- \frac{dr}{rd\theta}$
+3. The family of solutions of this new resulting differential equation is orthogonal to the given family.
