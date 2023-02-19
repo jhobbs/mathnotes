@@ -29,3 +29,7 @@ $$ \tag{14.21} {y_1}' y' = -1,~y' = - \frac{1}{{y_1}'} $$
 In the above figure, call $P(r,\theta)$ the point of intersection in polar coordinates of two curves $c_1,c_2$, which are orthogonal trajectories of each other. Call $\phi_1$ and $\phi_2$ the respective angle the tangent to each curve $c_1$ and $c_2$ makes with the radius vector $r$ (measured from the radius vector counterclockwise to the tangent). Since the two tangents are orthogonal, it is evient form the figure that:
 
 $$ \phi_1 = \phi_2 + \frac{\pi}{2} $$
+
+Therefore
+
+$$ \tag{14.31} \tan{\phi_1} = \tan{\phi_2 + \frac{\pi}{2}} = - \frac{1}{\tan{\phi_2}} $$ 
