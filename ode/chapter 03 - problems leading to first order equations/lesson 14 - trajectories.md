@@ -16,7 +16,7 @@ $$ \tag{14.13} \tan{\alpha} = \frac{{y_1}' - y'}{1+y' {y_1}'} $$
 
 # Orthogonal Trajectories
 
-**Definition 14.2** A curve which cuts eery member ofa given 1-parameter family of curves in a $90\degree$ angle is called an **orthogonal trajectory** of the family.
+**Definition 14.2** A curve which cuts every member of a given 1-parameter family of curves in a $90\degree$ angle is called an **orthogonal trajectory** of the family.
 
 Let ${y_1}'$ be the slope of a give nfamily and let $y'$ be the slope of an orthogonal family. Then, by a theorem in analytic geometry:
 
