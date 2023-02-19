@@ -19,3 +19,5 @@ $$ A = \int_{\alpha}^{\beta} \frac{1}{2} r^2 d\theta $$
 ## Arc Length for Polar Curves
 
 $$ s = \int_{\alpha}^{\beta} \sqrt{r^2 + (\frac{dr}{d\theta})^2}d\theta $$
+
+See https://web.ma.utexas.edu/users/m408s/m408d/CurrentWeb/LM10-4-4.php for more good notes
