@@ -49,3 +49,9 @@ Hence, to find an orthogonal family of a given family, we proceed as follows:
 1. Calculate $r\frac{d\theta}{dr}$ of the given family.
 2. Replace $r\frac{d\theta}{dr}$ by its negative reciprocal $- \frac{dr}{rd\theta}$
 3. The family of solutions of this new resulting differential equation is orthogonal to the given family.
+
+## Some cool examples
+
+Orthogonal Families of Hyperbolae https://www.desmos.com/calculator/9jcfrvjdr3
+
+Apollonian Circles https://www.desmos.com/calculator/vmgdkbri74
