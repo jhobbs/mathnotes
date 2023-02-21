@@ -55,3 +55,5 @@ Hence, to find an orthogonal family of a given family, we proceed as follows:
 Orthogonal Families of Hyperbolae https://www.desmos.com/calculator/9jcfrvjdr3
 
 Apollonian Circles https://www.desmos.com/calculator/vmgdkbri74
+
+The Cover of the Book https://www.desmos.com/calculator/qwtybju4hl
