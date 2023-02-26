@@ -37,8 +37,8 @@ Here, $\Delta x$ is an abitrarily small change in the mass of the solute, and $\
 
 We have the inflow mass rate but we don't know the outflow mass rate yet. We know the outflow volume rate and we need to know the solution conentration at any given point of time. The solution concentration will be the mass of the solute at time $t$ divided by the solution volume at time $t$.
 
-The instantaneous solution volume will the starting solution volume plus the sum of the inflow volume rate and the outflow volume rate times the amount of time that's passed, i.e.:
-  
+The instantaneous solution volume will the starting solution volume plus the net flow rate times the amount of time that's passed. The net flow rate is the sum of the inflow volume rate and the outflow volume rate.
+
 $$instantaneousSolutionVolume = startingSolutionVolume + (inflowVolumeRate + outflowVolumeRate)t $$
 
 Keep in mind that $outflowVolumeRate$ will be a negative quantity.
@@ -67,6 +67,8 @@ One approach that always works is to solve the differntial equation to find a fa
 $$ x = F(t, c) $$
 
 We can use this to find an unknown mass $x$ at time $t$ or to find how much time $t$ must pass to reach a particular mass $x$.
+
+*Note: I've seen these differential equations be either separable or linear. I believe, but haven't proven, that they are linear whenever both* $inflowConcentration \neq 0$ *and* $netFlowRate \neq 0.$ *and are separable otherwise*.  
 
 Another approach that works if the differential equation is separable is to use initial and final conditions as limits of integration. I.e. if we can write the equation as:
 
