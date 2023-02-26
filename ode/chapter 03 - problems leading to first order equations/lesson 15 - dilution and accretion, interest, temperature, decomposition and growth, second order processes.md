@@ -120,3 +120,6 @@ which can be rewritten as a separated first order differntial equation:
 
 $$ \frac{dx}{a+\frac{bx}{v}} = dt $$
 
+Whose solution is:
+
+$$ x = ke^{\frac{bt}{v}}-\frac{av}{b}, \quad b \neq 0, v \neq 0 $$
