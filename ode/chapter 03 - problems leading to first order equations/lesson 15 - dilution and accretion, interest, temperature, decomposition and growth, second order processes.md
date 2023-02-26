@@ -68,8 +68,6 @@ $$ x = F(t, c) $$
 
 We can use this to find an unknown mass $x$ at time $t$ or to find how much time $t$ must pass to reach a particular mass $x$.
 
-*Note: I've seen these differential equations be either separable or linear. I believe, but haven't proven, that they are linear whenever both* $inflowConcentration \neq 0$ *and* $netFlowRate \neq 0,$ *and are separable otherwise*.  
-
 Another approach that works if the differential equation is separable is to use initial and final conditions as limits of integration. I.e. if we can write the equation as:
 
 $$ P(x)dx = Q(t)dt $$
@@ -81,3 +79,29 @@ $$ \int_{x=startingSoluteMass}^x{P(x) dx} = \int_{t=0}^{t=endTime}{Q(t) dt} $$
 And to find an unknown time $t$ at which we will reach $endMass$ we can setup an equation of this form:
 
 $$ \int_{x=startingSoluteMass}^{x=endMass}{P(x) dx} = \int_{t=0}^{t}{Q(t) dt} $$
+
+### Forms of the Solution
+
+I've seen these differential equations be either separable or linear.
+
+I believe that they are linear whenever both $inflowConcentration \neq 0$ and $netFlowRate \neq 0,$ and are separable otherwise.
+
+Here is a proof that when $inflowConcentration \neq 0$ and $netFlowRate \neq 0,$, we get a linear first order differential equation.
+
+Given some initial conditions:
+
+$$ let~ a = inflowMassRate,~b = outflowVolumeRate,~c = netFlowRate, v= startingSolutionVolume, ~c\neq0, a\neq0 $$
+
+We can setup a differential equation:
+
+$$ dx = dt(a + \frac{bx}{v+ct}) $$
+
+Rearranging this, we can get a linear first order differential equation:
+
+$$ \frac{dx}{dt} - \frac{bx}{v+ct} = a $$
+
+Whose solution is:
+
+$$ x = \frac{a(v+ct)}{c-b} + k(v+ct)^{b/c} $$
+
+where $k$ is the constant of integration. To find $k$, set $x = startingSoluteMass$, $t = 0$ and solve for $k$.
