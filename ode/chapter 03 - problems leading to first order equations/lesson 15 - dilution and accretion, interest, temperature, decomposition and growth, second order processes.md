@@ -62,7 +62,7 @@ $$ \frac{dx}{dt} = inflowVolumeRate * inflowConcentration - \frac{x}{startingSol
 ## Solving the Differential Equation
 When setting up the differential equation above, we didn't use all the information given us. Specifically, we didn't use the starting solute mass or starting solute concentration. We'll need that information to find a particular solution for the differential equation.
 
-One approach that always works is to solve the differntial equation to find a family of solutions with a constant $c$. Then, solve for $c$ by using the initial conditions  - $x = startingSoluteMass$, $t = 0$. We now have a particular solution in the form:
+One approach that always works is to solve the differntial equation to find a family of solutions with a constant $c$. Then, solve for $c$ by using the initial conditions: $x = startingSoluteMass$, $t = 0$. We now have a particular solution in the form:
 
 $$ x = F(t, c) $$
 
