@@ -123,3 +123,5 @@ $$ \frac{dx}{a+\frac{bx}{v}} = dt $$
 Whose solution is:
 
 $$ x = ke^{\frac{bt}{v}}-\frac{av}{b}, \quad b \neq 0, v \neq 0 $$
+
+Here's [a wolfram link](https://www.wolframalpha.com/input?i2d=true&i=x%3Dk*%5C%2840%29Power%5Be%2CDivide%5Bb*t%2Cv%5D%5D%5C%2841%29-Divide%5Ba*v%2Cb%5D%5C%2844%29+a%3D4%5C%2844%29b%3D-2%5C%2844%29v%3D200%5C%2844%29t%3D0%5C%2844%29x%3D200) for finding $k$, which can then easily be modified to find $x$ or $t$.
