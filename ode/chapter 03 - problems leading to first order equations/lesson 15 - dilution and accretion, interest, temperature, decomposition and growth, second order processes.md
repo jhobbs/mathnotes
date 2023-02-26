@@ -68,7 +68,7 @@ $$ x = F(t, c) $$
 
 We can use this to find an unknown mass $x$ at time $t$ or to find how much time $t$ must pass to reach a particular mass $x$.
 
-*Note: I've seen these differential equations be either separable or linear. I believe, but haven't proven, that they are linear whenever both* $inflowConcentration \neq 0$ *and* $netFlowRate \neq 0.$ *and are separable otherwise*.  
+*Note: I've seen these differential equations be either separable or linear. I believe, but haven't proven, that they are linear whenever both* $inflowConcentration \neq 0$ *and* $netFlowRate \neq 0,$ *and are separable otherwise*.  
 
 Another approach that works if the differential equation is separable is to use initial and final conditions as limits of integration. I.e. if we can write the equation as:
 
