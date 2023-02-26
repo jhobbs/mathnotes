@@ -135,3 +135,19 @@ $$ dx = 0,~x+k =0,~x = k $$
 which means the concentration is constant - whatever it started as.
 
 Now let's consider the case where $a = 0$.
+
+We can setup a differential equation by substituting into (15.1j):
+
+$$ dx = dt (\frac{bx}{v}) $$
+
+Which can be written as the separate first order differential equation:
+
+$$ \frac{vdx}{bx} = dt $$
+
+Whose solution is:
+
+$$ x = ke^{\frac{b(t+c)}{v}} $$
+
+*Note*: When we assume at least one of $a \neq 0$ or $c \neq 0$ is true, and $b \neq 0$, $v \neq 0$, we can write a general form of the solution as:
+
+$$ x = ke^{\frac{b(t+c)}{v}} - \frac{av}{b} $$
