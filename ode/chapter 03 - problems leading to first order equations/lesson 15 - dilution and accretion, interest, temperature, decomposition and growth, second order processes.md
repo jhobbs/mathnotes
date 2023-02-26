@@ -86,7 +86,7 @@ I've seen these differential equations be either separable or linear.
 
 I believe that they are linear whenever both $inflowConcentration \neq 0$ and $netFlowRate \neq 0,$ and are separable otherwise.
 
-Here is a proof that when $inflowConcentration \neq 0$ and $netFlowRate \neq 0,$, we get a linear first order differential equation.
+Here is a proof that when $inflowConcentration \neq 0$ and $netFlowRate \neq 0,$ we get a linear first order differential equation.
 
 Given some initial conditions:
 
@@ -105,3 +105,5 @@ Whose solution is:
 $$ x = \frac{a(v+ct)}{c-b} + k(v+ct)^{b/c} $$
 
 where $k$ is the constant of integration. To find $k$, set $x = startingSoluteMass$, $t = 0$ and solve for $k$.
+
+Here's [a link](https://www.wolframalpha.com/input?i2d=true&i=x%3DDivide%5Ba*%5C%2840%29v%2Bc*t%5C%2841%29%2Cc-b%5D%2Bk*Power%5B%5C%2840%29v%2Bc*t%5C%2841%29%2CDivide%5Bb%2Cc%5D%5D%5C%2844%29+a%3D6%5C%2844%29+b%3D-2%5C%2844%29+c%3D1%5C%2844%29+v%3D100%5C%2844%29++t%3D0%5C%2844%29x%3D50) to a formula in wolfram alpha for finding $k$; you can easily modify it to find $x$ afterwards.
