@@ -51,13 +51,13 @@ The outflow mass rate will be the instantaneous solution concentration times the
   
 $$ outflowMassRate = instantaneousSolutionConcentration * outflowVolumeRate $$
   
-Putting it all together, we get:
+Putting it all together and using differentials, we get:
 
-$$ \Delta x = \Delta T (inflowVolumeRate * inflowConcentration - \frac{x}{startingSolutionVolume + t(inflowVolumeRate + outflowVolumeRate)}) $$
+$$ \tag{15.1j} dx = dt (inflowVolumeRate * inflowConcentration - \frac{x}{startingSolutionVolume + t(inflowVolumeRate + outflowVolumeRate)}) $$
 
 Writing this as a differential equation, we get:
 
-$$ \frac{dx}{dt} = inflowVolumeRate * inflowConcentration - \frac{x}{startingSolutionVolume + t(inflowVolumeRate + outflowVolumeRate)} $$
+$$ \tag{15.2j} \frac{dx}{dt} = inflowVolumeRate * inflowConcentration - \frac{x}{startingSolutionVolume + t(inflowVolumeRate + outflowVolumeRate)} $$
 
 ## Solving the Differential Equation
 When setting up the differential equation above, we didn't use all the information given us. Specifically, we didn't use the starting solute mass or starting solute concentration. We'll need that information to find a particular solution for the differential equation.
@@ -84,15 +84,15 @@ $$ \int_{x=startingSoluteMass}^{x=endMass}{P(x) dx} = \int_{t=0}^{t}{Q(t) dt} $$
 
 I've seen these differential equations be either separable or linear.
 
-I believe that they are linear whenever both $inflowConcentration \neq 0$ and $netFlowRate \neq 0,$ and are separable otherwise.
+*Conjecture*:
+Let
+$$  a = inflowMassRate,~b = outflowVolumeRate,~c = netFlowRate, v= startingSolutionVolume, ~c\neq0, a\neq0 $$
 
-Here is a proof that when $inflowConcentration \neq 0$ and $netFlowRate \neq 0,$ we get a linear first order differential equation.
+When both $a \neq 0$ and $c \neq 0$, a linear first order differential equation results. Otherwise, a separable first order differential equation results.
 
-Given some initial conditions:
+Here is a proof that when $a \neq 0$ and $c \neq 0,$ we get a linear first order differential equation, and a resulting formula for easily solving problems of this form.
 
-$$ let~ a = inflowMassRate,~b = outflowVolumeRate,~c = netFlowRate, v= startingSolutionVolume, ~c\neq0, a\neq0 $$
-
-We can setup a differential equation:
+We can setup a differential equation by substituting these values into (15.1j):
 
 $$ dx = dt(a + \frac{bx}{v+ct}) $$
 
@@ -107,3 +107,16 @@ $$ x = \frac{a(v+ct)}{c-b} + k(v+ct)^{b/c} $$
 where $k$ is the constant of integration. To find $k$, set $x = startingSoluteMass$, $t = 0$ and solve for $k$.
 
 Here's [a link](https://www.wolframalpha.com/input?i2d=true&i=x%3DDivide%5Ba*%5C%2840%29v%2Bc*t%5C%2841%29%2Cc-b%5D%2Bk*Power%5B%5C%2840%29v%2Bc*t%5C%2841%29%2CDivide%5Bb%2Cc%5D%5D%5C%2844%29+a%3D6%5C%2844%29+b%3D-2%5C%2844%29+c%3D1%5C%2844%29+v%3D100%5C%2844%29++t%3D0%5C%2844%29x%3D50) to a formula in wolfram alpha for finding $k$; you can easily modify it to find $x$ afterwards.
+
+We now have to address the cases we excluded above, namely, whenever $a = 0$ and/or $c = 0$.
+
+Let's assume $c = 0$.
+
+Substituting our values into (15.1j) we get:
+
+$$ dx = dt(a+\frac{bx}{v}) $$
+
+which can be rewritten as a separated first order differntial equation:
+
+$$ \frac{dx}{a+\frac{bx}{v}} = dt $$
+
