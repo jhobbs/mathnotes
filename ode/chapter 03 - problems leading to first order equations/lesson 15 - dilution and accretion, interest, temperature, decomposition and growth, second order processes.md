@@ -1,6 +1,8 @@
 # Dilution and Accretion
 (*jmh* my notes)
 
+## Setting up the Differential Equation
+
 We can use the idea of a tank of water with some amount of brine in it, some amount flowing out and some amount flowing in. The amount flowing out and flowing in are held constant in these problems, though I suspect with more advanced differential equations that doesn't have to be true.
 
 Here's what we have to start with then, for initial conditions:
@@ -52,3 +54,28 @@ $$ outflowMassRate = instantaneousSolutionConcentration * outflowVolumeRate $$
 Putting it all together, we get:
 
 $$ \Delta x = \Delta T (inflowVolumeRate * inflowConcentration - \frac{x}{startingSolutionVolume + t(inflowVolumeRate + outflowVolumeRate)}) $$
+
+Writing this as a differential equation, we get:
+
+$$ \frac{dx}{dt} = inflowVolumeRate * inflowConcentration - \frac{x}{startingSolutionVolume + t(inflowVolumeRate + outflowVolumeRate)} $$
+
+## Solving the Differential Equation
+When setting up the differential equation above, we didn't use all the information given us. Specifically, we didn't use the starting solute mass or starting solute concentration. We'll need that information to find a particular solution for the differential equation.
+
+One approach that always works is to solve the differntial equation to find a family of solutions with a constant $c$. Then, solve for $c$ by using the initial conditions  - $x = startingSoluteMass$, $t = 0$. We now have a particular solution in the form:
+
+$$ x = F(t, c) $$
+
+We can use this to find an unknown mass $x$ at time $t$ or to find how much time $t$ must pass to reach a particular mass $x$.
+
+Another approach that works if the differential equation is separable is to use initial and final conditions as limits of integration. I.e. if we can write the equation as:
+
+$$ P(x)dx = Q(t)dt $$
+
+Then, to find an unknown mass $x$ at time $t = endTime$ we can setup and equation of this form:
+
+$$ \int_{x=startingSoluteMass}^x{P(x) dx} = \int_{t=0}^{t=endTime}{Q(t) dt} $$
+
+And to find an unknown time $t$ at which we will reach $endMass$ we can setup an equation of this form:
+
+$$ \int_{x=startingSoluteMass}^{x=endMass}{P(x) dx} = \int_{t=0}^{t}{Q(t) dt} $$
