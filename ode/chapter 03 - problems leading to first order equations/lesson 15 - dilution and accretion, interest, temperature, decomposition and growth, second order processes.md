@@ -7,7 +7,7 @@ Here's what we have to start with then, for initial conditions:
 
 **Solution Starting Concentration**: mass/volume, i.e. lbs/gal
 
-**Solution Starting**: volume, i.e. gal
+**Solution Starting Volume**: volume, i.e. gal
 
 From this we can find the starting mass of the solute:
 
@@ -17,12 +17,33 @@ Sometimes we're given the starting mass and starting volume and we can find the 
 
 We'll also be given some information about inflows and outflows.
 
-**Inflow Rate**: volume/time, i.e. gals/min
+**Inflow Volume Rate**: volume/time, i.e. gals/min
 
 **Inflow Concentration**: mass/volume, i.e. lbs/gal.
 
-**Outflow Rate**: volume/time, i.e. gals/min
+**Outflow Volume Rate**: volume/time, i.e. gals/min - this quantity will be negative.
 
-Given the above information, we can setup a differential equation to model the mass of solute present in the solution - $x$ after a given amount of time - $t$ has passed.
+We can also find the **Inflow Mass Rate**, which is in mass/time and is the inflow volume rate multiplied by the inflow concentration.
+
+Given the above information, we can setup a differential equation to model the mass of solute present in the solution - $x$ after a given amount of time - $t$ has passed. We can then say $x$ is the **Instantaneous Solute Mass**.
 
 We need to account for two things - how much solute has been added by time $t$ through inflows and how much solute has been removed by time $t$ by outflows.
+
+$$ \Delta x = (inflowMassRate - outflowMassRate)\Delta t $$
+  
+Here, $\Delta x$ is an abitrarily small change in the mass of the solute, and $\Delta t$ is an arbitrary small change in time.
+
+We have the inflow mass rate but we don't know the outflow mass rate yet. We know the outflow volume rate and we need to know the solution conentration at any given point of time. The solution concentration will be the mass of the solute at time $t$ divided by the solution volume at time $t$.
+
+The instantaneous solution volume will the starting solution volume plus the sum of the inflow volume rate and the outflow volume rate times the amount of time that's passed, i.e.:
+  
+$$instantaneousSolutionVolume = startingSolutionVolume> + (inflowVolumeRate + outflowVolumeRate)t $$
+
+Now, the instantaneous solution concentration will be the instantaneous solution mass divided by the instantaneous solution volume:
+
+$$ instantaneousSolutionConcentration = \frac{x}{instantaneousSolutionVolume} $$
+  
+The outflow mass rate will be the instantaneous solution concentration times the outflow volume rate:
+  
+$$ outflowMassRate = instantaneousSolutionConcentration * outflowVolumeRate $$
+  
