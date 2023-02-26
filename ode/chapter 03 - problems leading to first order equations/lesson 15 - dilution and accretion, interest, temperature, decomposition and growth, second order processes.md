@@ -133,3 +133,5 @@ Note that we had to exclude two cases here:
 $$ dx = 0,~x+k =0,~x = k $$
 
 which means the concentration is constant - whatever it started as.
+
+Now let's consider the case where $a = 0$.
