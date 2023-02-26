@@ -130,6 +130,6 @@ Note that we had to exclude two cases here:
 * where the initial solution volume is zero, which makes sense. If there is no net flow and no starting solution volume, there is no volume, and so the concentration of solute is undefined)
 * where the outflow rate is 0. This also makes sense with a little thought - if the outflow rate is 0 and the net flow rate is zero, the the inflow rate must also be 0 and we get:
 
-$$ dx = dt(0),~x = k $$
+$$ dx = 0,~x+k =0,~x = k $$
 
 which means the concentration is constant - whatever it started as.
