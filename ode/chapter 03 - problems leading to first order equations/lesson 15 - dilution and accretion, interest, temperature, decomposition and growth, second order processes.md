@@ -125,3 +125,11 @@ Whose solution is:
 $$ x = ke^{\frac{bt}{v}}-\frac{av}{b}, \quad b \neq 0, v \neq 0 $$
 
 Here's [a wolfram link](https://www.wolframalpha.com/input?i2d=true&i=x%3Dk*%5C%2840%29Power%5Be%2CDivide%5Bb*t%2Cv%5D%5D%5C%2841%29-Divide%5Ba*v%2Cb%5D%5C%2844%29+a%3D4%5C%2844%29b%3D-2%5C%2844%29v%3D200%5C%2844%29t%3D0%5C%2844%29x%3D200) for finding $k$, which can then easily be modified to find $x$ or $t$.
+
+Note that we had to exclude two cases here:
+* where the initial solution volume is zero, which makes sense. If there is no net flow and no starting solution volume, there is no volume, and so the concentration of solute is undefined)
+* where the outflow rate is 0. This also makes sense with a little thought - if the outflow rate is 0 and the net flow rate is zero, the the inflow rate must also be 0 and we get:
+
+$$ dx = dt(0),~x = k $$
+
+which means the concentration is constant - whatever it started as.
