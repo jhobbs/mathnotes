@@ -88,7 +88,7 @@ I've seen these differential equations be either separable or linear.
 Let
 $$  a = inflowMassRate,~b = outflowVolumeRate,~c = netFlowRate, v= startingSolutionVolume, ~c\neq0, a\neq0 $$
 
-When both $a \neq 0$ and $c \neq 0$, a linear first order differential equation results. Otherwise, a separable first order differential equation results.
+When both $a \neq 0$ and $c \neq 0$, a linear first order differential equation results. Otherwise, a separable first order differential equation results, as long as either $v \neq 0$ or $a \neq 0$.
 
 Here is a proof that when $a \neq 0$ and $c \neq 0,$ we get a linear first order differential equation, and a resulting formula for easily solving problems of this form.
 
@@ -124,8 +124,6 @@ Whose solution is:
 
 $$ x = ke^{\frac{bt}{v}}-\frac{av}{b}, \quad b \neq 0, v \neq 0 $$
 
-Here's [a wolfram link](https://www.wolframalpha.com/input?i2d=true&i=x%3Dk*%5C%2840%29Power%5Be%2CDivide%5Bb*t%2Cv%5D%5D%5C%2841%29-Divide%5Ba*v%2Cb%5D%5C%2844%29+a%3D4%5C%2844%29b%3D-2%5C%2844%29v%3D200%5C%2844%29t%3D0%5C%2844%29x%3D200) for finding $k$, which can then easily be modified to find $x$ or $t$.
-
 Note that we had to exclude two cases here:
 * where the initial solution volume is zero, which makes sense. If there is no net flow and no starting solution volume, there is no volume, and so the concentration of solute is undefined)
 * where the outflow rate is 0. This also makes sense with a little thought - if the outflow rate is 0 and the net flow rate is zero, the the inflow rate must also be 0 and we get:
@@ -148,6 +146,10 @@ Whose solution is:
 
 $$ x = ke^{\frac{b(t+c)}{v}} $$
 
+QED.
+
 *Note*: When we assume at least one of $a \neq 0$ or $c \neq 0$ is true, and $b \neq 0$, $v \neq 0$, we can write a general form of the solution as:
 
 $$ x = ke^{\frac{b(t+c)}{v}} - \frac{av}{b} $$
+
+Here's a [wolfram link](https://www.wolframalpha.com/input?i2d=true&i=x%3Dk*%5C%2840%29Power%5Be%2CDivide%5Bb*%5C%2840%29t%2Bc%5C%2841%29%2Cv%5D%5D%5C%2841%29-Divide%5Ba*v%2Cb%5D%5C%2844%29+a%3D4%5C%2844%29b%3D-2%5C%2844%29v%3D200%5C%2844%29c%3D5%5C%2844%29t%3D0%5C%2844%29x%3D200) to this general solution form.
