@@ -86,6 +86,7 @@ I've seen these differential equations be either separable or linear.
 
 *Conjecture*:
 Let
+
 $$  a = inflowMassRate,~b = outflowVolumeRate,~c = netFlowRate, v= startingSolutionVolume, ~c\neq0, a\neq0 $$
 
 When both $a \neq 0$ and $c \neq 0$, a linear first order differential equation results. Otherwise, a separable first order differential equation results, as long as either $v \neq 0$ or $a \neq 0$.
