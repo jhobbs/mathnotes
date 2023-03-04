@@ -113,7 +113,7 @@ We now have to address the 3 cases we excluded above, namely, whenever $a = 0$, 
 
 Let's assume $netFlowRate = c = 0,~inflowMassRate = a \neq 0$.
 
-Taking $c = 0,~a \neq 0$ in (15.3j) we get:
+Taking $c = 0$ (and $a$ can take any value) in (15.3j) we get:
 
 $$ dx = dt(a+\frac{bx}{v}) $$
 
@@ -126,7 +126,7 @@ Whose solution is:
 $$ x = ke^{\frac{bt}{v}}-\frac{av}{b}, \quad b \neq 0, v \neq 0 $$
 
 Note that we had to exclude two cases here:
-* where the initial solution volume is zero, which makes sense. If there is no net flow and no starting solution volume, there is no volume, and so the concentration of solute is undefined)
+* where the initial solution volume ($v$) is zero, which makes sense. If there is no net flow and no starting solution volume, there is no volume, and so the concentration of solute is undefined)
 * where the outflow rate is 0. This also makes sense with a little thought - if the outflow rate is 0 and the net flow rate is zero, the the inflow rate must also be 0 and we get:
 
 $$ dx = 0,~x+k =0,~x = k $$
@@ -146,20 +146,5 @@ $$ \frac{dx}{bx} = \frac{dt}{v+ct} $$
 Whose solution is:
 
 $$ x = k(ct+v)^{\frac{b}{c}} $$
-
-
-Finally, let's consider the case where $a = 0,~c = 0$.
-
-We can setup a differential equation by setting $a = 0,~c = 0$ in (15.3j):
-
-$$ dx = dt (\frac{bx}{v}) $$
-
-Which can be written as the separate first order differential equation:
-
-$$ \frac{vdx}{bx} = dt $$
-
-Whose solution is:
-
-$$ x = e^{\frac{b(t+k)}{v}} $$
 
 QED.
