@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dilution Calculator</title>
+    <script src="dilution.js"></script>
+</head>
+<body>
+<h1>Setup</h1>
+<form>
+    Solution Starting Volume: <input id="solutionStartingVolume" type="text"/></br>
+    Solution Starting Mass: <input id="solutionStartingMass" type="text"/></br>
+    Inflow Volume Rate: <input id="inflowVolumeRate" type="text"/></br>
+    Inflow Concentration: <input id="inflowConcentration" type="text"/></br>
+    Outflow Volume Rate: <input id="outflowVolumeRate" type="text"/></br>
+    <button type="button" id="Calculate" onclick="calculate();">Calculate</button>
+</form>
+<h1>Results</h1>
+    Net Flow Rate: <a id="netflowRate">Uncalculated</a><br/>
+    In Flow Mass Rate: <a id="inflowMassRate">Uncalculated</a><br/>
+    Method: <a id="method">Uncalculated</a><br/>
+</body>
+</html>
