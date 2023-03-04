@@ -145,7 +145,7 @@ $$ \frac{vdx}{bx} = dt $$
 
 Whose solution is:
 
-$$ x = ke^{\frac{b(t+c)}{v}} $$
+$$ x = e^{\frac{b(t+k)}{v}} $$
 
 QED.
 
