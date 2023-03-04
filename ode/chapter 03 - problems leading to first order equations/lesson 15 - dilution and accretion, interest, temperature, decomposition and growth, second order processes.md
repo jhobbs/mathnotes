@@ -127,7 +127,7 @@ $$ x = ke^{\frac{bt}{v}}-\frac{av}{b}, \quad b \neq 0, v \neq 0 $$
 
 Note that we had to exclude two cases here:
 * where the initial solution volume ($v$) is zero, which makes sense. If there is no net flow and no starting solution volume, there is no volume, and so the concentration of solute is undefined)
-* where the outflow rate is 0. This also makes sense with a little thought - if the outflow rate is 0 and the net flow rate is zero, the the inflow rate must also be 0 and we get:
+* where the outflow rate ($b$) is 0. This also makes sense with a little thought - if the outflow rate is 0 and the net flow rate is zero, the the inflow rate must also be 0 and we get:
 
 $$ dx = 0,~x+k =0,~x = k $$
 
