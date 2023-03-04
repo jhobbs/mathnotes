@@ -39,30 +39,40 @@ function getParameters() {
 function calculateResults(parameters) {
     const results = {};
 
-    if ((parameters["desiredMass"] == 0 && parameters["desiredTime"] == 0) || (parameters["desiredMass"] != 0 && parameters["desiredTime"] != 0)) {
+    const desiredMass = parameters["desiredMass"];
+    const desiredTime = parameters["desiredTime"];
+    const inflowVolumeRate = parameters["inflowVolumeRate"];
+    const outflowVolumeRate = parameters["outflowVolumeRate"];
+    const inflowConcentration = parameters["inflowConcentration"];
+    const solutionStartingMass = parameters["solutionStartingMass"];
+    const solutionStartingVolume = parameters["solutionStartingVolume"];
+
+    if ((desiredMass == 0 && desiredTime == 0) || (desiredMass != 0 && desiredTime != 0)) {
         alert("Must specify either desiredMass or desiredTime, but not both!");
         return results;
     }
 
-    results["netflowRate"] = parameters["inflowVolumeRate"] - parameters["outflowVolumeRate"];
-    results["inflowMassRate"] = parameters["inflowVolumeRate"] * parameters["inflowConcentration"];
+    const netflowRate = results["netflowRate"] = inflowVolumeRate - outflowVolumeRate;
+    const inflowMassRate = results["inflowMassRate"] = inflowVolumeRate * inflowConcentration;
 
     if (results.inflowMassRate == 0 && results.netflowRate == 0) {
         results["method"] = "separable";
-        const k = (parameters["solutionStartingVolume"] / -parameters["outflowVolumeRate"]) * Math.log(parameters["solutionStartingMass"]);
+        const k = solutionStartingMass;
         results["k"] = k;
 
-        if (parameters["desiredTime"] != 0) {
-            results["resultingMass"] = Math.exp((parameters["desiredTime"] + k) * (-parameters["outflowVolumeRate"]/parameters["solutionStartingVolume"]));
+        if (desiredTime != 0) {
+            results["resultingMass"] = k * Math.exp((-outflowVolumeRate*desiredTime)/solutionStartingVolume);
         } else {
-            results["requiredTime"] = (parameters["solutionStartingVolume"] / -parameters["outflowVolumeRate"]) * Math.log(parameters["desiredMass"]) - k;
+            results["requiredTime"] = (solutionStartingVolume * Math.log(desiredMass/k))/-outflowVolumeRate;
         }
     } else if (results.inflowMassRate == 0 && results.netFlowRate != 0) {
         results["method"] = "separable";
-        const k = parameters["solutionStartingMass"] * Math.pow(parameters["solutionStartingVolume"], parameters["outflowVolumeRate"]/results["netflowRate"]);
+        const k = solutionStartingMass * Math.pow(solutionStartingVolume, outflowVolumeRate/netflowRate);
         results["k"] = k;
-        if (parameters["desiredTime"] != 0) {
-            results["resultingMass"] = k * Math.pow(results["netflowRate"] * parameters["desiredTime"] + parameters["solutionStartingVolume"], -parameters["outflowVolumeRate"]/results["netflowRate"]);
+        if (desiredTime != 0) {
+            results["resultingMass"] = k * Math.pow(netflowRate * desiredTime + solutionStartingVolume, -outflowVolumeRate/netflowRate);
+        } else {
+            results["requiredTime"] = (Math.pow(desiredMass/k, netflowRate/-outflowVolumeRate) - solutionStartingVolume)/netflowRate;
         }
     } else {
         alert("Can't compute this case yet!");
@@ -88,7 +98,7 @@ function calculate() {
         if (typeof(value) == 'string') {
             resultA.text = value;
         } else {
-            resultA.text = value.toFixed(2);
+            resultA.text = value.toFixed(6);
         }
         resultP.appendChild(resultA);
         resultsP.appendChild(resultP);
