@@ -163,5 +163,3 @@ Whose solution is:
 $$ x = e^{\frac{b(t+k)}{v}} $$
 
 QED.
-
-TODO: the last case is just a special case - we don't need to exclude a == 0 in the first separable case; go back and patch that up
