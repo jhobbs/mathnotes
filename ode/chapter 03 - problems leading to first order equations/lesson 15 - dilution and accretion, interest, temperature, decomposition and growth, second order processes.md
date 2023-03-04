@@ -91,11 +91,11 @@ $$  a = inflowMassRate,~b = outflowVolumeRate,~c = netFlowRate, v= startingSolut
 
 When both $a \neq 0$ and $c \neq 0$, a linear first order differential equation results. Otherwise, a separable first order differential equation results, as long as either $v \neq 0$ or $a \neq 0$.
 
+We can setup a differential equation by substituting these values into (15.1j) - we'll use this for the proof:
+
+$$ \tag{15.3j} dx = dt(a + \frac{bx}{v+ct}) $$
+
 Here is a proof that when $a \neq 0$ and $c \neq 0,$ we get a linear first order differential equation, and a resulting formula for easily solving problems of this form.
-
-We can setup a differential equation by substituting these values into (15.1j):
-
-$$ dx = dt(a + \frac{bx}{v+ct}) $$
 
 Rearranging this, we can get a linear first order differential equation:
 
@@ -109,15 +109,15 @@ where $k$ is the constant of integration. To find $k$, set $x = startingSoluteMa
 
 Here's [a link](https://www.wolframalpha.com/input?i2d=true&i=x%3DDivide%5Ba*%5C%2840%29v%2Bc*t%5C%2841%29%2Cc-b%5D%2Bk*Power%5B%5C%2840%29v%2Bc*t%5C%2841%29%2CDivide%5Bb%2Cc%5D%5D%5C%2844%29+a%3D6%5C%2844%29+b%3D-2%5C%2844%29+c%3D1%5C%2844%29+v%3D100%5C%2844%29++t%3D0%5C%2844%29x%3D50) to a formula in wolfram alpha for finding $k$; you can easily modify it to find $x$ afterwards.
 
-We now have to address the cases we excluded above, namely, whenever $a = 0$ and/or $c = 0$.
+We now have to address the 3 cases we excluded above, namely, whenever $a = 0$, $c = 0$ or both $a$ and $c$ are $0$.
 
-Let's assume $c = 0$.
+Let's assume $netFlowRate = c = 0,~inflowMassRate = a \neq 0$.
 
-Substituting our values into (15.1j) we get:
+Taking $c = 0,~a \neq 0$ in (15.3j) we get:
 
 $$ dx = dt(a+\frac{bx}{v}) $$
 
-which can be rewritten as a separated first order differntial equation:
+which can be rewritten as a separated first order differential equation:
 
 $$ \frac{dx}{a+\frac{bx}{v}} = dt $$
 
@@ -133,9 +133,24 @@ $$ dx = 0,~x+k =0,~x = k $$
 
 which means the concentration is constant - whatever it started as.
 
-Now let's consider the case where $a = 0$.
+Now let's consider the case where $inflowMassRate = a = 0,~netFlowRate = c \neq 0$.
 
-We can setup a differential equation by substituting into (15.1j):
+We can setup a differential equation by taking $a = 0,~c \neq 0$ in (15.3j):
+
+$$ dx = dt (\frac{bx}{v+ct}) $$
+
+Which can be written as the separate first order differential equation:
+
+$$ \frac{dx}{bx} = \frac{dt}{v+ct} $$
+
+Whose solution is:
+
+$$ x = k(ct+v)^{\frac{b}{c}} $$
+
+
+Finally, let's consider the case where $a = 0,~c = 0$.
+
+We can setup a differential equation by setting $a = 0,~c = 0$ in (15.3j):
 
 $$ dx = dt (\frac{bx}{v}) $$
 
@@ -145,12 +160,6 @@ $$ \frac{vdx}{bx} = dt $$
 
 Whose solution is:
 
-$$ x = e^{\frac{b(t+k)}{v}} $$
+$$ x = ke^{\frac{b(t+c)}{v}} $$
 
 QED.
-
-*Note*: When we assume at least one of $a \neq 0$ or $c \neq 0$ is true, and $b \neq 0$, $v \neq 0$, we can write a general form of the solution as:
-
-$$ x = ke^{\frac{b(t+c)}{v}} - \frac{av}{b} $$
-
-Here's a [wolfram link](https://www.wolframalpha.com/input?i2d=true&i=x%3Dk*%5C%2840%29Power%5Be%2CDivide%5Bb*%5C%2840%29t%2Bc%5C%2841%29%2Cv%5D%5D%5C%2841%29-Divide%5Ba*v%2Cb%5D%5C%2844%29+a%3D4%5C%2844%29b%3D-2%5C%2844%29v%3D200%5C%2844%29c%3D5%5C%2844%29t%3D0%5C%2844%29x%3D200) to this general solution form.
