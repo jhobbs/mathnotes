@@ -55,15 +55,15 @@ function calculateResults(parameters) {
     const netflowRate = results["netflowRate"] = inflowVolumeRate - outflowVolumeRate;
     const inflowMassRate = results["inflowMassRate"] = inflowVolumeRate * inflowConcentration;
 
-    if (results.inflowMassRate == 0 && results.netflowRate == 0) {
+    if (netflowRate == 0 && outflowVolumeRate != 0) {
         results["method"] = "separable";
-        const k = solutionStartingMass;
+        const k = (solutionStartingMass + (solutionStartingVolume * inflowMassRate)/-outflowVolumeRate);
         results["k"] = k;
 
         if (desiredTime != 0) {
-            results["resultingMass"] = k * Math.exp((-outflowVolumeRate*desiredTime)/solutionStartingVolume);
+            results["resultingMass"] = k * Math.exp((-outflowVolumeRate*desiredTime)/solutionStartingVolume) - (solutionStartingVolume * inflowMassRate)/-outflowVolumeRate;
         } else {
-            results["requiredTime"] = (solutionStartingVolume * Math.log(desiredMass/k))/-outflowVolumeRate;
+            results["requiredTime"] = (solutionStartingVolume/-outflowVolumeRate) * Math.log((1/k) * (desiredMass + (solutionStartingVolume*inflowMassRate)/-outflowVolumeRate))
         }
     } else if (results.inflowMassRate == 0 && results.netFlowRate != 0) {
         results["method"] = "separable";
