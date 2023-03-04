@@ -89,7 +89,7 @@ Let
 
 $$  a = inflowMassRate,~b = outflowVolumeRate,~c = netFlowRate, v= startingSolutionVolume, ~c\neq0, a\neq0 $$
 
-When both $a \neq 0$ and $c \neq 0$, a linear first order differential equation results. Otherwise, a separable first order differential equation results, as long as either $v \neq 0$ or $a \neq 0$.
+When both $a \neq 0$ and $c \neq 0$, an unseparable linear first order differential equation results. Otherwise, a separable linear first order differential equation results, as long as either $v \neq 0$ or $a \neq 0$.
 
 We can setup a differential equation by substituting these values into (15.1j) - we'll use this for the proof:
 
