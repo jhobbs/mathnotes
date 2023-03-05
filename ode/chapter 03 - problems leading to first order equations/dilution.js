@@ -83,6 +83,13 @@ function calculateResults(parameters) {
             alert("Can't compute this case yet!");
             return results;
         }
+    } else if (solutionStartingVolume == 0 && inflowMassRate == 0) {
+        results["method"] = "constant";
+        if (desiredTime != 0) {
+            results["resultingMass"] = 0;
+        } else {
+            results["requiredTime"] = "infinity";
+        }
     } else {
         alert("Can't compute this case yet!");
         return results;
