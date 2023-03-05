@@ -105,11 +105,13 @@ Whose solution is:
 
 $$ x = \frac{a(v+ct)}{c-b} + k(v+ct)^{b/c} $$
 
-where $k$ is the constant of integration. To find $k$, set $x = startingSoluteMass$, $t = 0$ and solve for $k$.
+where $k$ is the constant of integration. To find $k$, set $x = startingSoluteMass$, $t = 0$ and solve for $k$:
 
-Here's [a link](https://www.wolframalpha.com/input?i2d=true&i=x%3DDivide%5Ba*%5C%2840%29v%2Bc*t%5C%2841%29%2Cc-b%5D%2Bk*Power%5B%5C%2840%29v%2Bc*t%5C%2841%29%2CDivide%5Bb%2Cc%5D%5D%5C%2844%29+a%3D6%5C%2844%29+b%3D-2%5C%2844%29+c%3D1%5C%2844%29+v%3D100%5C%2844%29++t%3D0%5C%2844%29x%3D50) to a formula in wolfram alpha for finding $k$; you can easily modify it to find $x$ afterwards.
+$$ k = v^{\frac{-b}{c}}(x - \frac{av}{c-b}) $$
 
-We now have to address the 3 cases we excluded above, namely, whenever $a = 0$, $c = 0$ or both $a$ and $c$ are $0$.
+*Note: unlike the other cases, it doesn't seem possible to solve for t here, meaning it's not possible to exactly determine when the solution will reach a certain mass of solute.*
+
+We now have to address the cases we excluded above, namely, whenever $a = 0$ or $c = 0$.
 
 Let's assume $netFlowRate = c = 0,~inflowMassRate = a \neq 0$.
 
@@ -124,6 +126,14 @@ $$ \frac{dx}{a+\frac{bx}{v}} = dt $$
 Whose solution is:
 
 $$ x = ke^{\frac{bt}{v}}-\frac{av}{b}, \quad b \neq 0, v \neq 0 $$
+
+To find $k$, set $t = 0$ and $x = solutionStartingMass$ and solve for $k$:
+
+$$ k = e^{\frac{-bt}{v}}(x + \frac{va}{b}) $$
+
+To find the time it takes to reach a given solute mass, solve for $t$:
+
+$$ t = \frac{v}{b}\ln({\frac{1}{k}(x+va)}) $$
 
 Note that we had to exclude two cases here:
 * where the initial solution volume ($v$) is zero, which makes sense. If there is no net flow and no starting solution volume, there is no volume, and so the concentration of solute is undefined)
@@ -146,5 +156,13 @@ $$ \frac{dx}{bx} = \frac{dt}{v+ct} $$
 Whose solution is:
 
 $$ x = k(ct+v)^{\frac{b}{c}} $$
+
+To find $k$, set $t = 0$, $x = solutionStartingMass$ and solve for $k$:
+
+$$ k = xv^{\frac{-b}{c}} $$
+
+To find the time it takes to reach a solute mass $x$, solve for $t$:
+
+$$ t = \frac{\frac{x}{k}^{\frac{c}{b}}-v}{c} $$
 
 QED.
