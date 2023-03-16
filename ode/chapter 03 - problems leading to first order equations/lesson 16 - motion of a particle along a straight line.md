@@ -62,11 +62,18 @@ Since $G$, $M$, and $R$ are constants, we may replace $GM/R^2$ by a new constant
 
 $$ \tag{16.17} m\frac{d^2y}{dt^2} = -gm,\quad m\frac{dv}{dt} = -gm $$
 
+where $v = dy/dt$
+
 Simplifying (16.17) we have:
 
 $$ \tag{16.18} m\frac{d^2y}{dt^2} = -gm $$
 
 The constant $g$ is thus the acceleration of a body due to the earth's **force of gravity**. Its value varies slightly for different locations on earth and for different heights, but for convenience we'll use the value $32 ft/sec^2$.
 
+Integration of (16.18) gives the velocity equation:
 
-where $v = dy/dt$
+$$ \tag{16.19} v(=\frac{dy}{dt}) = -gt + c_1 $$
+
+And integration of (16.19) gives the distance equation:
+
+$$ \tag{16.2} y = - \frac{gt^2}{2} + c_1t + c_2 $$
