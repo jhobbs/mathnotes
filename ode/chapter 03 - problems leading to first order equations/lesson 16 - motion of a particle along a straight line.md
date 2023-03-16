@@ -50,6 +50,8 @@ $$ \tag{16.14} F = -G \frac{Mm}{(R+y)^2} $$
 
 The proportionality constant $G$ is called the **gravitational constant**. We use the negative sign because the resultant force is downward towards the earth's surface, and here we're considering our positive direction to be upward.
 
+## Vertical Motion with no Air Resistance and Close to the Surface of the Earth
+
 If $y$ is relatively small compared to the radius of the earth, then we can accurately approximate (16.14) as:
 
 $$ \tag{16.15} F = -\frac{GMm}{R^2} $$
