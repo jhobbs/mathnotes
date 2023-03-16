@@ -79,3 +79,7 @@ $$ \tag{16.19} v(=\frac{dy}{dt}) = -gt + c_1 $$
 And integration of (16.19) gives the distance equation:
 
 $$ \tag{16.2} y = - \frac{gt^2}{2} + c_1t + c_2 $$
+
+## With Air Resistance
+
+Above, we didn't consider air resistance. It's complicated in reality - air resistance varies with, among other things, the air density and the object's speed. Air density itself varies with height and with time. Here we will make simplifying assumptions that we have a constant atmosphere and an air resistance that is dependent only on the speed of the object. We'll also futher assume that air resistance is proportional to an integer power of the object's speed. The most important thing is that simplified assumptions or not, *air resistance always acts in a direction to oppose motion*. 
