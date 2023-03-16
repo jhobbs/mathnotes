@@ -93,3 +93,5 @@ If instead we assume that air resistance is proportional to second power of the 
 $$ m \frac{dv}{dt} = gm - kv^2 $$
 
 Integrating once gives us the velocity equation, and integrating twice gives us the positon equation. Given initial conditons of mass, time, and velocity we can then solve for velocity, position or time.
+
+*Note* a body falling in water obeys the same rules as a body falling in air; there will just be a different proportionality constant. 
