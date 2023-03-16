@@ -94,4 +94,20 @@ $$ m \frac{dv}{dt} = gm - kv^2 $$
 
 Integrating once gives us the velocity equation, and integrating twice gives us the positon equation. Given initial conditons of mass, time, and velocity we can then solve for velocity, position or time.
 
-*Note* a body falling in water obeys the same rules as a body falling in air; there will just be a different proportionality constant. 
+*Note* a body falling in water (for low velocities) obeys the same rules as a body falling in air; there will just be a different proportionality constant. 
+
+## Far from the Surface of the Earth
+
+Above, we assumed that the force of gravity is constant with respect to the distance from the surface of the earth. However, if an object is very far above the surface of the earth, we can't make that assumption, and must account for the force of gravity varying with position. In this case, (16.14) becomes:
+
+$$ \tag{16.32} F = -G\frac{Mm}{r^2} $$
+
+Replacing in (16.32) the value of $F$ as given in (16.1), we obtain:
+
+$$ \tag{16.34} m\frac{dv}{dt} = -G\frac{Mm}{r^2},\quad \frac{dv}{dt} = -\frac{GM}{r^2} $$
+
+Since $G$ and $M$ are constants, we can replace $GM$ by a new constant $k$, resulting in:
+
+$$ \tag{16.35} \frac{dv}{dt} = -\frac{k}{r^2},\quad \frac{d^2r}{dt^2} = - \frac{k}{r^2} $$
+
+where $v = dr/dt$.
