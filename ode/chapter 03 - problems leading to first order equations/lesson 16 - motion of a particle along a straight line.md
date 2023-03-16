@@ -33,3 +33,40 @@ $$ \tag{16.12} F = k\frac{m_1 m_2}{r^2} $$
 where $k > 0$ is a proportionality constant.
 
 # Vertical Motion
+
+Let:
+
+$M$ = mass of the earth, assumed to be a sphere
+
+$m$ = mass of a body in the earth's gravitational field
+
+$R$ = the radius of the earth
+
+$y$ = the distance of the body above the earth's surface
+
+By (16.12) the force of attraction between earth and body is (assuming their masses are concentrated at their respective centers):
+
+$$ \tag{16.14} F = -G \frac{Mm}{(R+y)^2} $$
+
+The proportionality constant $G$ is called the **gravitational constant**. We use the negative sign because the resultant force is downward towards the earth's surface, and here we're considering our positive direction to be upward.
+
+If $y$ is relatively small compared to the radius of the earth, then we can accurately approximate (16.14) as:
+
+$$ \tag{16.15} F = -\frac{GMm}{R^2} $$
+
+By (16.1) with $y$ replacing $s$, we can write (16.15) as:
+
+$$ \tag{16.16} m\frac{d^2y}{dt^2} = - \frac{GMm}{R^2} $$
+
+Since $G$, $M$, and $R$ are constants, we may replace $GM/R^2$ by a new constant $g$. We thus finally obtain for the differential equation of motion of a falling body in the gravitational field of the earth:
+
+$$ \tag{16.17} m\frac{d^2y}{dt^2} = -gm,\quad m\frac{dv}{dt} = -gm $$
+
+Simplifying (16.17) we have:
+
+$$ \tag{16.18} m\frac{d^2y}{dt^2} = -gm $$
+
+The constant $g$ is thus the acceleration of a body due to the earth's **force of gravity**. Its value varies slightly for different locations on earth and for different heights, but for convenience we'll use the value $32 ft/sec^2$.
+
+
+where $v = dy/dt$
