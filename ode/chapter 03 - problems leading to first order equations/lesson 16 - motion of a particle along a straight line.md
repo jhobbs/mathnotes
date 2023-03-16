@@ -94,7 +94,25 @@ $$ m \frac{dv}{dt} = gm - kv^2 $$
 
 Integrating once gives us the velocity equation, and integrating twice gives us the positon equation. Given initial conditons of mass, time, and velocity we can then solve for velocity, position or time.
 
-*Note* a body falling in water (for low velocities) obeys the same rules as a body falling in air; there will just be a different proportionality constant. 
+*Note* a body falling in water (for low velocities) obeys the same rules as a body falling in air; there will just be a different proportionality constant. Apparently, typically we consider resistance in air to be proportional to the square of the velocity and resistance in water to be proportional to the velocity.
+
+### Terminal Velocity
+
+Assume the air resistance of a falling object is proportional to its velocity, with the proportionality constant being $km$ - that is, some $k$ times the object's constant mass.
+
+Then, the differential equation for the object's motion, taking the downward direction to be positive, is:
+
+$$ m\frac{dv}{dt} = gm - kmv $$
+
+which simplifies to: 
+
+$$ \frac{dv}{dt} = g - kv $$
+
+Solving this differential equation for $v$ gives:
+
+$$ v = \frac{g}{k} + ce^{-kt} $$
+
+Note that as $t$ increases towards infinity, $v$ approachs $g/k$. We call the value $g/k$ the **terminal velocity** of the object. Note that it does not depend on the initial velocity of the object nor its starting position.
 
 ## Far from the Surface of the Earth
 
