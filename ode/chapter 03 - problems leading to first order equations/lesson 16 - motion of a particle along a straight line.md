@@ -20,7 +20,7 @@ and recognize that $v = ds/dt$, then (b) becomes:
 
 $$ \tag{16.11} \frac{dv}{dt} = v\frac{dv}{ds} $$
 
-Hence we cna also write (16.1) as:
+Hence we can also write (16.1) as:
 
 $$ \tag{16.111} F = mv\frac{dv}{ds} $$
 
@@ -98,21 +98,23 @@ Integrating once gives us the velocity equation, and integrating twice gives us 
 
 ### Terminal Velocity
 
-Assume the air resistance of a falling object is proportional to its velocity, with the proportionality constant being $km$ - that is, some $k$ times the object's constant mass.
+*jmh: my notes*
+
+Assume the air resistance of a falling object is proportional to its velocity.
 
 Then, the differential equation for the object's motion, taking the downward direction to be positive, is:
 
-$$ m\frac{dv}{dt} = gm - kmv $$
+$$ m\frac{dv}{dt} = gm - kv $$
 
 which simplifies to: 
 
-$$ \frac{dv}{dt} = g - kv $$
+$$ \frac{dv}{dt} = g - \frac{kv}{m} $$
 
 Solving this differential equation for $v$ gives:
 
-$$ v = \frac{g}{k} + ce^{-kt} $$
+$$ v = \frac{mg}{k} + ce^{-\frac{k}{m}t} $$
 
-Note that as $t$ increases towards infinity, $v$ approachs $g/k$. We call the value $g/k$ the **terminal velocity** of the object. Note that it does not depend on the initial velocity of the object nor its starting position.
+Note that as $t$ increases towards infinity, $v$ approachs $mg/k$. We call the value $mg/k$ the **terminal velocity** of the object. Note that it does not depend on the initial velocity of the object nor its starting position, but does depend on the object's mass. This makes sense intuitively - given a balloon and a bowling ball of the same shape, we know the bowling ball will reach a much higher terminal velocity than the balloon. We also know the balloon will quickly reach its terminal velocity regardless of its initial height (top of a sky scraper vs top of a house makes no difference) and that the velocity added by throwing a balloon downwards is quickly lost.
 
 ## Far from the Surface of the Earth
 
