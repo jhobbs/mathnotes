@@ -112,7 +112,7 @@ $$ \frac{dv}{dt} = g - \frac{kv}{m} $$
 
 Solving this differential equation for $v$ gives:
 
-$$ v = \frac{mg}{k} + ce^{-\frac{k}{m}t} $$
+$$ v = \frac{gm}{k} + ce^{-\frac{k}{m}t} $$
 
 Note that as $t$ increases towards infinity, $v$ approachs $mg/k$. We call the value $mg/k$ the **terminal velocity** of the object. Note that it does not depend on the initial velocity of the object nor its starting position, but does depend on the object's mass. This makes sense intuitively - given a balloon and a bowling ball of the same shape, we know the bowling ball will reach a much higher terminal velocity than the balloon. We also know the balloon will quickly reach its terminal velocity regardless of its initial height (top of a sky scraper vs top of a house makes no difference) and that the velocity added by throwing a balloon downwards is quickly lost.
 
