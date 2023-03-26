@@ -44,4 +44,4 @@ Note that instead of using $u$-sub, we could have used partial fraction decompos
 
 $$ \tag{g} \frac{-m}{k} \int{\frac{dv}{(v-\frac{gm}{k})(v+\frac{gm}{k})}} $$
 
-This would lead to a solution in terms of natural logarithms instead of $\tanh^{-1}$. 
+This would lead to a solution in terms of natural logarithm instead of $\tanh^{-1}$. 
