@@ -13,3 +13,29 @@ See https://tutorial.math.lamar.edu/classes/calcii/TrigSubstitutions.aspx
 $$ \int{\sec^n{x}dx} = \frac{\sec^{n-1}{x}\sin{x}}{n-1} + \frac{n-2}{n-1}\int{\sec^{n-2}{x}}dx $$
 
 See more here: https://en.wikipedia.org/wiki/Integration_by_reduction_formulae
+
+# u-sub
+
+Here's an interesting integral from Tenenbaum and Pollard's ODE book that can be solved via u-sub:
+
+$$ \tag{a} \int{\frac{dv}{g-\frac{kv^2}{m}}} $$
+
+Our strategy will be to use:
+
+$$ \tag{b} \int{\frac{dv}{1-x^2}} = \tanh^{-1}x + c$$
+
+First factor out $g$ from the denominator and then factor the constant out of the integral:
+
+$$ \tag{c} \int{\frac{dv}{g-\frac{kv^2}{m}}} = \int{\frac{dv}{g(1-\frac{kv^2}{mg})}} = \frac{1}{g}\int{\frac{dv}{1-\frac{kv^2}{mg}}} $$
+
+Now we can use a u-sub to get the form we want. Let:
+
+$$ \tag{d} u = \frac{ v\sqrt{k}}{\sqrt{mg} },~du = \sqrt{\frac{k}{mg}}dv $$
+
+Then:
+
+$$ \tag{e} \frac{1}{g}\int{\frac{dv}{1-\frac{kv^2}{mg}}} = \frac{\sqrt{m}}{\sqrt{kg}}\int{\frac{1}{1-\frac{kv^2}{mg}} * \sqrt{\frac{k}{mg}} dv} = \frac{\sqrt{m}}{\sqrt{kg}}\int{\frac{du}{1-u^2}} $$
+
+Now we can use the integral given in (a) and substitute back for $u$:
+
+$$ \frac{\sqrt{m}}{\sqrt{kg}}\int{\frac{du}{1-u^2}} = \frac{\sqrt{m}}{\sqrt{kg}}(\tanh^{-1}{u} + c) = \frac{\sqrt{m}}{\sqrt{kg}}\tanh^{-1}{(\frac{ v\sqrt{k}}{\sqrt{mg} })} + c $$
