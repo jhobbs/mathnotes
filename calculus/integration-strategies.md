@@ -34,8 +34,8 @@ $$ \tag{d} u = \frac{ v\sqrt{k}}{\sqrt{mg} },~du = \sqrt{\frac{k}{mg}}dv $$
 
 Then:
 
-$$ \tag{e} \frac{1}{g}\int{\frac{dv}{1-\frac{kv^2}{mg}}} = \frac{\sqrt{m}}{\sqrt{kg}}\int{\frac{1}{1-\frac{kv^2}{mg}} * \sqrt{\frac{k}{mg}} dv} = \frac{\sqrt{m}}{\sqrt{kg}}\int{\frac{du}{1-u^2}} $$
+$$ \tag{e} \frac{1}{g}\int{\frac{dv}{1-\frac{kv^2}{mg}}} = \sqrt{\frac{m}{kg}}\int{\frac{1}{1-\frac{kv^2}{mg}} * \sqrt{\frac{k}{mg}} dv} = \sqrt{\frac{m}{kg}}\int{\frac{du}{1-u^2}} $$
 
 Now we can use the integral given in (a) and substitute back for $u$:
 
-$$ \frac{\sqrt{m}}{\sqrt{kg}}\int{\frac{du}{1-u^2}} = \frac{\sqrt{m}}{\sqrt{kg}}(\tanh^{-1}{u} + c) = \frac{\sqrt{m}}{\sqrt{kg}}\tanh^{-1}{(\frac{ v\sqrt{k}}{\sqrt{mg} })} + c $$
+$$ \sqrt{\frac{m}{kg}}\int{\frac{du}{1-u^2}} = \sqrt{\frac{m}{kg}}(\tanh^{-1}{u} + c) = \sqrt{\frac{m}{kg}}\tanh^{-1}{(\frac{ v\sqrt{k}}{\sqrt{mg} })} + c $$
