@@ -84,6 +84,8 @@ $$ \tag{16.2} y = - \frac{gt^2}{2} + c_1t + c_2 $$
 
 Above, we didn't consider air resistance. It's complicated in reality - air resistance varies with, among other things, the air density and the object's speed. Air density itself varies with height and with time. Here we will make simplifying assumptions that we have a constant atmosphere and an air resistance that is dependent only on the speed of the object. We'll also futher assume that air resistance is proportional to an integer power of the object's speed. The most important thing is that simplified assumptions or not, *air resistance always acts in a direction to oppose motion*. 
 
+### Air Resistance Proportional to the First Power of Velocity
+
 Let's assume that the positive direction is downward, and that air resistance is proportional to the first power of the object's speed. The resultant differential equation is then:
 
 $$ m \frac{dv}{dt} = gm - kv $$
@@ -96,7 +98,7 @@ Integrating once gives us the velocity equation, and integrating twice gives us 
 
 *Note* a body falling in water (for low velocities) obeys the same rules as a body falling in air; there will just be a different proportionality constant. Apparently, typically we consider resistance in air to be proportional to the square of the velocity and resistance in water to be proportional to the velocity.
 
-### Terminal Velocity
+#### Terminal Velocity
 
 *jmh: my notes*
 
@@ -115,6 +117,10 @@ Solving this differential equation for $v$ gives:
 $$ v = \frac{gm}{k} + ce^{-\frac{k}{m}t} $$
 
 Note that as $t$ increases towards infinity, $v$ approachs $gm/k$. We call the value $gm/k$ the **terminal velocity** of the object. Note that it does not depend on the initial velocity of the object nor its starting position, but does depend on the object's mass. This makes sense intuitively - given a balloon and a bowling ball of the same shape, we know the bowling ball will reach a much higher terminal velocity than the balloon. We also know the balloon will quickly reach its terminal velocity regardless of its initial height (top of a sky scraper vs top of a house makes no difference) and that the velocity added by throwing a balloon downwards is quickly lost.
+
+### Air Resistance Proportional to the Square of Velocity
+
+Here are some good notes https://philosophicalmath.wordpress.com/2017/10/21/terminal-velocity-derivation/
 
 ## Far from the Surface of the Earth
 
