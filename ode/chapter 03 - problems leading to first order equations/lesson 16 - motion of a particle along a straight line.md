@@ -120,7 +120,31 @@ Note that as $t$ increases towards infinity, $v$ approachs $gm/k$. We call the v
 
 ### Air Resistance Proportional to the Square of Velocity
 
-Here are some good notes https://philosophicalmath.wordpress.com/2017/10/21/terminal-velocity-derivation/
+Here are some good notes on finding the velocity and position as functions of time. https://philosophicalmath.wordpress.com/2017/10/21/terminal-velocity-derivation/
+
+(*jmh: my notes*) One interesting thing from the book that isn't covered in the blog post above is finding velocity as a function of position.
+
+To do this, we need to use the facts that $\frac{dv}{dt} = \frac{dv}{dy}\frac{dy}{dt}$ (the change in velocity with respect to time equals the change in velocity with respect to height times the change in height with respect to time) and $v = \frac{ds}{dt}$ (velocity equals the change in height with respect to the change in time) to get:
+
+$$ \frac{dv}{dt} = v\frac{dv}{dy} $$
+
+Now we can write the differential equation for the motion of a body falling with air resistance porportional the the square of velocity, taking the downard direction as positive, as:
+
+$$ mv\frac{dv}{dy} = mg - kv^2 $$
+
+Rearranging and adding initial conditions as bounds of integration (let $v_0$ be the starting velocity in the downward direction):
+
+$$ \int_{v=v_0}^{v}\frac{vdv}{mg-kv^2} = \int_{y=0}^{y}\frac{dy}{m} $$
+
+Finding the integrals and simplifying leads to:
+
+$$ v^2 = \frac{mg}{k}(1-e^{\frac{-2ky}{m}})+{v_0}^2e^{\frac{-2ky}{m}} $$
+
+Since the positive direction is downard we'd take the positive square roots above to find $v$.
+
+You can use this approach to find velocity as a function of time too, but the result is messier than when you just integrate and then solve for the constant using initial conditions. However, if you want velocity a function of position (which is probably quite useful for finding the force something falling impacts the ground with), the blog post's method gets really messy because you have to find time as a function of position, then substitute that result for $t$ in the velocity function.
+
+This is interesting because it's a different approach than what the blog post above takes - it uses the bounds of integration method that the book uses in the other applied chapters too. It's a very powerful technique, but it's not always the right technique.
 
 ## Far from the Surface of the Earth
 
