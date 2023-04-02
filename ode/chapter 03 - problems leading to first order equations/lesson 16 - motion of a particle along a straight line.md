@@ -161,3 +161,36 @@ Since $G$ and $M$ are constants, we can replace $GM$ by a new constant $k$, resu
 $$ \tag{16.35} \frac{dv}{dt} = -\frac{k}{r^2},\quad \frac{d^2r}{dt^2} = - \frac{k}{r^2} $$
 
 where $v = dr/dt$.
+
+### Velocity as a Function of Distance
+
+Velocity of a function of distance is interesting for at least two cases:
+
+* For falling objects, finding the velocity when $r = 0$, i.e. maximum impact velocity, setting air resistance aside.
+* For rising objects, setting velocity to $0$ finds the maximum distance an object will travel from the surface.
+
+From above, we have:
+
+$$ \tag{a} a = \frac{dv}{dt} = -\frac{k}{r^2} $$
+
+Call $R$ the radius of the earth, substitute initial conditions $r=R$, $a=-g$ to find $k=gR^2$
+
+Then (a) becomes:
+
+$$ \tag{b} \frac{dv}{dt} = -\frac{gR^2}{r^2} $$
+
+Since we're interested in velocity as a function of distance $r$, replace $dv/dt$ by its equivalent from (16.11):
+
+$$ \tag{c} v\frac{dv}{dr} = \frac{-gR^2}{r^2}, ~quad vdv = -\frac{gR^2}{r^2}dr $$
+
+Integration of (c) and initial conditions of $v = v_0$, $r = R$ gives:
+
+$$ \tag{d} \int_{v=v_0}^{v} vdv = -gR^2 \int_{r=R}^{r} \frac{dr}{r^2} $$
+
+Whose solution is
+
+$$ \tag{e} v^2 = {v_0}^2 + 2gR(\frac{R}{r} - 1) $$
+
+Taking the positive square root for rising objects and the negative for falling we have:
+
+$$ \tag{f} v = \pm \sqrt{{v_0}^2 + 2gR(\frac{R}{r} - 1)} $$ 
