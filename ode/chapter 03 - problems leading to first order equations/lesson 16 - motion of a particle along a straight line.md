@@ -213,3 +213,18 @@ $$ m\frac{dv}{dt} = F - \mu mg, \quad v\frac{dv}{dx} = \frac{F}{m} - \mu g $$
 In practice we usually have to deal with wind or water resistance too, which will just be another force in the negative direction on the right hand side of the equation.
 
 *jmh*: Horizontal motion is pretty easy and boring compared to vertical motion.
+
+# Inclined Motion
+
+*jmh: my notes*
+
+For an object with weight $\omega$ moving down an incline at angle $\alpha$ we have a couple of forces to consider:
+
+1. The acceleration due to gravity. This is equal to $\omega\sin{\alpha}$ - that is, the vertical component of the slope multiplied times the weight of the object. This make sense - consider the case where $\alpha$ is $90\degree$; $\sin{90\degree} = 1$ so we get the full weight ($m\times g$) of the object.
+2. The drag due to friction. Letting $\mu$ be the coefficient of friction, and the downward direction as positive, this is equal to $-\mu\omega\cos{\alpha}$; that is, the horizontal component of the slope multipled times the weight of the object and the coefficient of friction. For intuition, consider when $\alpha = 0\degree$. $\cos{0\degree} = 1$ so we get the full force of friction. As the angle increase, the friction decreases, which is why if you tip a table over, eventually the stuff sitting on it will slide off.
+
+Thus, our equation of motion for an inclined object is:
+
+$$ m\frac{dv}{dt} = \omega\sin{\alpha} - \mu\omega\cos{\alpha} $$
+
+In practice, we usually have air resistance to deal with - another negative force on the right hand side of the equation.
