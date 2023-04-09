@@ -181,7 +181,7 @@ $$ \tag{b} \frac{dv}{dt} = -\frac{gR^2}{r^2} $$
 
 Since we're interested in velocity as a function of distance $r$, replace $dv/dt$ by its equivalent from (16.11):
 
-$$ \tag{c} v\frac{dv}{dr} = \frac{-gR^2}{r^2}, ~quad vdv = -\frac{gR^2}{r^2}dr $$
+$$ \tag{c} v\frac{dv}{dr} = \frac{-gR^2}{r^2}, \quad vdv = -\frac{gR^2}{r^2}dr $$
 
 Integration of (c) and initial conditions of $v = v_0$, $r = R$ gives:
 
@@ -194,3 +194,22 @@ $$ \tag{e} v^2 = {v_0}^2 + 2gR(\frac{R}{r} - 1) $$
 Taking the positive square root for rising objects and the negative for falling we have:
 
 $$ \tag{f} v = \pm \sqrt{{v_0}^2 + 2gR(\frac{R}{r} - 1)} $$ 
+
+# Horizontal Motion
+
+In horizontal motion, we have friction between a moving object and the surface it's moving on. We call this **sliding friction** to distinguish it from the friction a stationary object has (*static friction*).
+
+The amount of sliding friction for a given object moving on a given surface is determined by two factors:
+
+1. The gravitational force pressing the object into the surface ($mg$).
+2. The smoothness/roughness particular the object and surface and is given as the constant $\mu$ called the **coefficient of friction**.
+
+Any force pushing the object must also be considered - let's call that $F$.
+
+Recalling that mass $\times$ acceleration = net force acting on a body, we have the following equivalent equations of motion:
+
+$$ m\frac{dv}{dt} = F - \mu mg, \quad v\frac{dv}{dx} = \frac{F}{m} - \mu g $$
+
+In practice we usually have to deal with wind or water resistance too, which will just be another force in the negative direction on the right hand side of the equation.
+
+*jmh*: Horizontal motion is pretty easy and boring compared to vertical motion.
