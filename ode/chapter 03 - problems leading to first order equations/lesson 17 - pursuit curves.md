@@ -24,6 +24,6 @@ https://www.desmos.com/calculator/rwnpkeivcf
 
 I find the math to be a bit easier with polar coordinates here.
 
-Path taken by a bug crawling across record with radius 100 spinning on a turn table. $a$ is the angular velocity, $v$ is the bug's velocity towards the center:
+Path taken by a bug crawling across record with radius 100 spinning on a turn table. $k$ is the ratio of the bug's velocity towards the center to the angular velocity of the record:
 
-https://www.desmos.com/calculator/f4xyfus4hd
+https://www.desmos.com/calculator/y50fx79ykn
