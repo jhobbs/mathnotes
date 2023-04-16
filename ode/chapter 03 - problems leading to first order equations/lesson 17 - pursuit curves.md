@@ -17,3 +17,9 @@ $$ \lim_{x\to0}  xsinh{(k \ln{\frac{100}{x}})} = 50 $$
 i.e., 50 units to the north of the target.
 
 This is interesting to me and the book doesn't explain this - you just have to figure it out on your own. I think it makes sense to some degree if you consider that for some wind speeds the plane will never reach the $y$ axis, and that if it were to land at the origin it wouldn't be moving anymore, so the function really isn't intended to be defined at origin, just as we approach the $y$ axis.
+
+You can also solve the problem above with polar coordinates, which gives this equation and graph:
+
+https://www.desmos.com/calculator/rwnpkeivcf
+
+I find the math to be a bit easier with polar coordinates here.
