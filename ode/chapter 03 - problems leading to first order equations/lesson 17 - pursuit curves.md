@@ -23,3 +23,7 @@ You can also solve the problem above with polar coordinates, which gives this eq
 https://www.desmos.com/calculator/rwnpkeivcf
 
 I find the math to be a bit easier with polar coordinates here.
+
+Path taken by a bug crawling across record with radius 100 spinning on a turn table. $a$ is the angular velocity, $v$ is the bug's velocity towards the center:
+
+https://www.desmos.com/calculator/f4xyfus4hd
