@@ -193,7 +193,7 @@ $$ \tag{e} v^2 = {v_0}^2 + 2gR(\frac{R}{r} - 1) $$
 
 Taking the positive square root for rising objects and the negative for falling we have:
 
-$$ \tag{f} v = \pm \sqrt{{v_0}^2 + 2gR(\frac{R}{r} - 1)} $$ 
+$$ \tag{f} v = \pm \sqrt{ {v_0}^2 + 2gR(\frac{R}{r} - 1)} $$ 
 
 # Horizontal Motion
 
