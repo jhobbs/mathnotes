@@ -18,9 +18,12 @@ function setup() {
 
   translate(TABLE_SIZE/2, TABLE_SIZE/2);
   bug_r = RECORD_RADIUS;
-  bug_theta = 0;
+  bug_theta = random(0, 2 * PI);
   center = createVector(0, 0);
   circle(0,0,RECORD_RADIUS *2);
+  imageMode(CENTER);
+  img = loadImage('record2.jpg');
+  record_theta = 0;
 }
 
 function drawBug() {
@@ -35,16 +38,17 @@ function redo() {
     clear();
     circle(0,0,RECORD_RADIUS *2);
     bug_r = RECORD_RADIUS;
-    bug_theta = 0;
+    bug_theta = random(0, 2 * PI);
 }
 
 function moveBug() {
 
-    if (bug_r < 10) {
+    if (bug_r < 5) {
         redo();
     }
 
-    new_theta = bug_theta + recordSlider.value() / 255;
+    /*
+    new_theta = bug_theta; //; + recordSlider.value() / 255;
     new_r = bug_r - bugSlider.value() / 255;
 
     current_position = createVector(bug_r * cos(bug_theta), bug_r * sin(bug_theta));
@@ -54,16 +58,19 @@ function moveBug() {
     steps = (int)((bug_change / BUG_SIZE) * 2) + 1;
 
     for (i = 0; i < steps; i++) {
-        bug_theta += (recordSlider.value() / 255) / steps;
         bug_r -= (bugSlider.value() / 255) / steps;
         drawBug();
-    }
+    }*/
 
+    bug_r = bug_r - bugSlider.value() / 255;
+    drawBug();
 }
 
 function draw() {
   //clear();
   translate(TABLE_SIZE/2, TABLE_SIZE/2);
-  //drawBug();
+  rotate(record_theta);
+  record_theta += (recordSlider.value() / 255);
+  image(img, 0, 0);
   moveBug();
 }
