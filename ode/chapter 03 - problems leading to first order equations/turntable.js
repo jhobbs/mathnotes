@@ -24,6 +24,8 @@ function setup() {
   imageMode(CENTER);
   img = loadImage('record2.jpg');
   record_theta = 0;
+  bugHistory = [];
+  i = 0;
 }
 
 function drawBug() {
@@ -34,11 +36,23 @@ function drawBug() {
     stroke(0);
 }
 
+function drawHistory() {
+    fill(255, 204, 0);
+    stroke(255, 204, 0);
+    bugHistory.forEach(historical_r => {
+        circle(historical_r * cos(bug_theta), historical_r * sin(bug_theta), BUG_SIZE);
+    });
+    fill(255);
+    stroke(0);
+}
+
 function redo() {
     clear();
     circle(0,0,RECORD_RADIUS *2);
     bug_r = RECORD_RADIUS;
     bug_theta = random(0, 2 * PI);
+    bugHistory = [];
+    i = 0;
 }
 
 function moveBug() {
@@ -62,8 +76,15 @@ function moveBug() {
         drawBug();
     }*/
 
+    i++;
+
+    if (i % 25 == 0) {
+        bugHistory.push(bug_r);
+    }
+
     bug_r = bug_r - bugSlider.value() / 255;
     drawBug();
+    drawHistory();
 }
 
 function draw() {
