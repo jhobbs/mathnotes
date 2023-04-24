@@ -12,7 +12,7 @@ $$ \tag{14.11} \tan{\alpha} = \frac{m_2 - m_1}{1+m_1 m_2}; \quad \tan{\beta} = \
 
 If we call ${y_1}'$ the slope of a curve of a given 1-parameter family, $y'$ the slope of an isogonal trajectory of the family, and $\alpha$ their angle of intersection measured from the tangent line with slope ${y_1}'$ to the tangent line with slope ${y_1}'$, then by (14.11):
 
-$$ \tag{14.13} \tan{\alpha} = \frac{{y_1}' - y'}{1+y' {y_1}'} $$
+$$ \tag{14.13} \tan{\alpha} = \frac{ {y_1}' - y'}{1+y' {y_1}'} $$
 
 # Orthogonal Trajectories
 
