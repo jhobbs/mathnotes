@@ -1,4 +1,6 @@
-# Definition of a Linear Differential Equation of the First Order
+# The Linear Differential Equation
+
+## Definition of a Linear Differential Equation of the First Order
 
 This is a special type of first order differential equation in wich both the *dependent variable and its derivative are of the first degree*.
 
@@ -9,7 +11,7 @@ $$ \tag{11.11} \frac{dy}{dx} + P(x)y = Q(x) $$
 
 where $P(x)$ and $Q(x)$ are continuous functions of $x$ over the intervals for which solutions are sought. (Note that $y$ and its derivative both have the exponent one).
 
-# Solving a Linear Differential Equation (11B)
+## Solving a Linear Differential Equation (11B)
 
 The integrating factor of a linear differential equation in the form of (11.11) is:
 
@@ -19,7 +21,7 @@ Once we have the integrating factor - let's call it $\Psi(x)$, we can rewrite th
 
 $$ \tag{11.21} y\Psi(x) = \int\Psi(x)Q(x)dx + c $$
 
-# Bernoulli Equation
+## Bernoulli Equation
 A special type of first order differential equation, named for hte swiss mathematician James Bernoulli, is the following:
 
 $$ \tag{11.5} \frac{dy}{dx} + P(x)y = Q(x)y^n $$
@@ -75,7 +77,7 @@ $$ \tag{g} y^4 = 1 + ce^{-2x^2} $$
 
 is the required solution.
 
-# Ricatti Equation
+## Ricatti Equation
 
 $$ \tag{11.6} y' = f_0(x) + f_1(x)y + f_2(x)y^2, f_2(x) \neq 0 $$
 
@@ -87,7 +89,7 @@ will transform the equation into the first order linear equation
 
 $$ \tag{11.62} u' + [f_1(x) + 2f_2(x)y_1]u = -f_2(x). $$
 
-## Proof that this substitution works
+### Proof that this substitution works
 
 *jmh: my proof, which is the answer to exercise 7.25*.
 
@@ -115,7 +117,7 @@ $$ u' + [f_1(x) + 2f2(x)y_1]u = -f_2(x) $$
 
 Which is a linear first order differential equation. Remember that $y_1$ is a $y_1(x)$ - a function of x.
 
-## Solving
+### Solving
 
 When solving, remember that $u = \frac{1}{y-y_1}$.
 
@@ -123,7 +125,7 @@ First, determine ${y_1}'$, which is $\frac{d}{dx}y_1$.
 
 Then perform the substitution from (11.61).
 
-### Example
+#### Example
 
 *jmh: this is my solution to excercise 11.27*
 
