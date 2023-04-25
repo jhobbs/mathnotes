@@ -1,7 +1,7 @@
-# Goal
+# Partial Fraction Decomposition
 The goal of partial fraction composition is to be able to rewrite a rational expression as a sum of simpler fractions.
 
-# Conditions for application
+## Conditions for application
 
 Partial fraction decomposition works when we have a rational expression of the form:
 
@@ -11,7 +11,7 @@ where both $P(x)$ and $Q(x)$ are polynomials and the degree of $P(x)$ is strictl
 
 If the degree of $P(x)$ is greater than or equal to the degree of $Q(x)$, perform long division first and work with the remainder term.
 
-# General Approach to Partial Fraction Decomposition
+## General Approach to Partial Fraction Decomposition
 
 This approach always works as long as the conditions above are satisfied, but there are other ways; see below.
 
@@ -51,7 +51,7 @@ $$ \frac{P(x)}{Q(x)} = \frac{A_1}{x-r} + \frac{A_2}{(x-r)^2} + \cdots + \frac{A_
 
 *note*: why can we only deal with linear and irreducible quadratics? Can we always factor higher degree polynomials into terms that are either linear or quadratic?
 
-## Example
+### Example
 
 *jmh: my material*.
 
@@ -113,7 +113,7 @@ $$ \tag{k} \frac{3(1+x)}{(1-x)(x^2+x+1)} = \frac{2}{1-x} + \frac{2x + 1}{x^2+x+1
 
 which is the desired sum of partial fractions.
 
-# The Heaviside Cover-up Method
+## The Heaviside Cover-up Method
 
 This method only applies when the factor of $Q(x)$ are:
 
@@ -137,13 +137,13 @@ $$ A_n = \frac{P(r_1)}{\cancel{(x-r_1)}(r_1-r_2)\cdots(r_1-r_n)} $$
 
 $$ \frac{P(x)}{Q(x)} = \frac{A_1}{x-r_1} + \frac{A_2}{x-r_2} + \cdots + \frac{A_n}{x-r_n} $$
 
-# Other Methods
+## Other Methods
 Thomas and Finney cover a couple of other methods of determining the coefficients:
 
 * Differentiating
 * Assigning small values to $x$ such as $x=0,\pm1,\pm2$ to get equations in $A$, $B$, and $C$.
 
-# References
+## References
 [Paul's Notes](https://tutorial.math.lamar.edu/classes/calcii/partialfractions.aspx)
 
 *Calculus* by Thomas & Finney, 9th edition, pp 569-573 
