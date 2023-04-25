@@ -5,3 +5,4 @@ They are, in large, copied verbatim or nearly so from that book. In some places 
 In the first few lessons, I made absolutely no effort to distinguish between my thoughts and the material from the source book. These notes are for my own use only, to summarize thoughts from the book. Eventually I started marking my notes with *jmh* or such. 
 
 To make referrring to the book easier, I've reused the books' numbering system for lessons, definitions, etc, so the numbers here match the numbers in the book.
+
