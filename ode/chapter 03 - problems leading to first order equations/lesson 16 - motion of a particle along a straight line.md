@@ -1,4 +1,6 @@
-# Preliminaries 
+# Motion of a Particle Along a Straight Line
+
+## Preliminaries 
 
 Newton's second law says the rate of a change of the momentum of a body (momentum = mass x velocity) is proportional to the resultant external force $F$ acting upon it:
 
@@ -32,7 +34,7 @@ $$ \tag{16.12} F = k\frac{m_1 m_2}{r^2} $$
 
 where $k > 0$ is a proportionality constant.
 
-# Vertical Motion
+## Vertical Motion
 
 Let:
 
@@ -50,7 +52,7 @@ $$ \tag{16.14} F = -G \frac{Mm}{(R+y)^2} $$
 
 The proportionality constant $G$ is called the **gravitational constant**. We use the negative sign because the resultant force is downward towards the earth's surface, and here we're considering our positive direction to be upward.
 
-## Vertical Motion with no Air Resistance and Close to the Surface of the Earth
+### Vertical Motion with no Air Resistance and Close to the Surface of the Earth
 
 If $y$ is relatively small compared to the radius of the earth, then we can accurately approximate (16.14) as:
 
@@ -80,11 +82,11 @@ And integration of (16.19) gives the distance equation:
 
 $$ \tag{16.2} y = - \frac{gt^2}{2} + c_1t + c_2 $$
 
-## With Air Resistance
+### With Air Resistance
 
 Above, we didn't consider air resistance. It's complicated in reality - air resistance varies with, among other things, the air density and the object's speed. Air density itself varies with height and with time. Here we will make simplifying assumptions that we have a constant atmosphere and an air resistance that is dependent only on the speed of the object. We'll also futher assume that air resistance is proportional to an integer power of the object's speed. The most important thing is that simplified assumptions or not, *air resistance always acts in a direction to oppose motion*. 
 
-### Air Resistance Proportional to the First Power of Velocity
+#### Air Resistance Proportional to the First Power of Velocity
 
 Let's assume that the positive direction is downward, and that air resistance is proportional to the first power of the object's speed. The resultant differential equation is then:
 
@@ -98,7 +100,7 @@ Integrating once gives us the velocity equation, and integrating twice gives us 
 
 *Note* a body falling in water (for low velocities) obeys the same rules as a body falling in air; there will just be a different proportionality constant. Apparently, typically we consider resistance in air to be proportional to the square of the velocity and resistance in water to be proportional to the velocity.
 
-#### Terminal Velocity
+##### Terminal Velocity
 
 *jmh: my notes*
 
@@ -118,7 +120,7 @@ $$ v = \frac{gm}{k} + ce^{-\frac{k}{m}t} $$
 
 Note that as $t$ increases towards infinity, $v$ approachs $gm/k$. We call the value $gm/k$ the **terminal velocity** of the object. Note that it does not depend on the initial velocity of the object nor its starting position, but does depend on the object's mass. This makes sense intuitively - given a balloon and a bowling ball of the same shape, we know the bowling ball will reach a much higher terminal velocity than the balloon. We also know the balloon will quickly reach its terminal velocity regardless of its initial height (top of a sky scraper vs top of a house makes no difference) and that the velocity added by throwing a balloon downwards is quickly lost.
 
-### Air Resistance Proportional to the Square of Velocity
+#### Air Resistance Proportional to the Square of Velocity
 
 Here are some good notes on finding the velocity and position as functions of time. https://philosophicalmath.wordpress.com/2017/10/21/terminal-velocity-derivation/
 
@@ -146,7 +148,7 @@ You can use this approach to find velocity as a function of time too, but the re
 
 This is interesting because it's a different approach than what the blog post above takes - it uses the bounds of integration method that the book uses in the other applied chapters too. It's a very powerful technique, but it's not always the right technique.
 
-## Far from the Surface of the Earth
+### Far from the Surface of the Earth
 
 Above, we assumed that the force of gravity is constant with respect to the distance from the surface of the earth. However, if an object is very far above the surface of the earth, we can't make that assumption, and must account for the force of gravity varying with position. In this case, (16.14) becomes:
 
@@ -162,7 +164,7 @@ $$ \tag{16.35} \frac{dv}{dt} = -\frac{k}{r^2},\quad \frac{d^2r}{dt^2} = - \frac{
 
 where $v = dr/dt$.
 
-### Velocity as a Function of Distance
+#### Velocity as a Function of Distance
 
 Velocity of a function of distance is interesting for at least two cases:
 
@@ -195,7 +197,7 @@ Taking the positive square root for rising objects and the negative for falling 
 
 $$ \tag{f} v = \pm \sqrt{ {v_0}^2 + 2gR(\frac{R}{r} - 1)} $$ 
 
-# Horizontal Motion
+## Horizontal Motion
 
 In horizontal motion, we have friction between a moving object and the surface it's moving on. We call this **sliding friction** to distinguish it from the friction a stationary object has (*static friction*).
 
@@ -214,7 +216,7 @@ In practice we usually have to deal with wind or water resistance too, which wil
 
 *jmh*: Horizontal motion is pretty easy and boring compared to vertical motion.
 
-# Inclined Motion
+## Inclined Motion
 
 *jmh: my notes*
 
