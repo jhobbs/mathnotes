@@ -1,4 +1,4 @@
-# Lesson 4 - The General Solution of a Differential Equation
+# The General Solution of a Differential Equation
 
 ## Multiplicity of Solutions of a Differential Equation
 
