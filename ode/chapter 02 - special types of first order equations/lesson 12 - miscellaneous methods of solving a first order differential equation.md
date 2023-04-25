@@ -13,7 +13,7 @@ $$ \tag{b} y' - \frac{y}{x} = \frac{y^2}{x}, \quad x \neq 0 $$
 
 which is a Bernoulli equation. The easiest approach here is to recognize the solution (through 10.30).
 
-# Solution by Substitution and Other Means
+## Solution by Substitution and Other Means
 
 There are plenty of first order differential equations that aren't solvable by any of the means discussed so far. It is possible in some cases to solve a differential equation by means of a *shrewd substitution*, or by discovering an integrating factor, or by some other ingenious method. Beware though, that you can spend days trying these approaches and not find any solutions in terms of elementary functions, because most differential equations don't have such solutions.
 
