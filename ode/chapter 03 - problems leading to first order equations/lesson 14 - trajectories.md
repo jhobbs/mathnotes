@@ -1,4 +1,6 @@
-# Isogonal Trajectories
+# Trajectories
+
+## Isogonal Trajectories
 
 When two curves intersect in a plane, the angle between them is defined to be the angle made by their respective tangents drawn at their point of intersection.
 
@@ -14,7 +16,7 @@ If we call ${y_1}'$ the slope of a curve of a given 1-parameter family, $y'$ the
 
 $$ \tag{14.13} \tan{\alpha} = \frac{ {y_1}' - y'}{1+y' {y_1}'} $$
 
-# Orthogonal Trajectories
+## Orthogonal Trajectories
 
 **Definition 14.2** A curve which cuts every member of a given 1-parameter family of curves in a $90\degree$ angle is called an **orthogonal trajectory** of the family.
 
@@ -22,7 +24,7 @@ Let ${y_1}'$ be the slope of a give nfamily and let $y'$ be the slope of an orth
 
 $$ \tag{14.21} {y_1}' y' = -1,~y' = - \frac{1}{ {y_1}'} $$
 
-## Orthogonal Trajectories in Polar Coordinates
+### Orthogonal Trajectories in Polar Coordinates
 
 ![Orthogonal Trajectories in Polar Coordinates](orthogonal%20trajectories%20in%20polar%20coordinates.jpg)
 
@@ -50,7 +52,7 @@ Hence, to find an orthogonal family of a given family, we proceed as follows:
 2. Replace $r\frac{d\theta}{dr}$ by its negative reciprocal $- \frac{dr}{rd\theta}$
 3. The family of solutions of this new resulting differential equation is orthogonal to the given family.
 
-## Some cool examples
+### Some cool examples
 
 Orthogonal Families of Hyperbolae https://www.desmos.com/calculator/9jcfrvjdr3
 
