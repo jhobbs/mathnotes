@@ -1,3 +1,5 @@
+# Meaning of the Differential
+
 ## Differential of a Function of One Independent Variable
 
 *Note: Assume all functions in the lesson are differentiable on an interval.*
