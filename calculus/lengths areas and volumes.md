@@ -1,4 +1,6 @@
-# Volumes of Solids of Revolution
+# Lengths, Areas and Volumes
+
+## Volumes of Solids of Revolution
 
 Volume of a function of $x$ rotated about the $x$-axis
 
@@ -8,7 +10,7 @@ Volume of a function of $y$ rotated about the $y$-axis
 
 $$ V = \int_a^b{\pi x^2}dy $$
 
-# Polar Curves
+## Polar Curves
 
 ## Volume Enclosed by Polar Curve
 
@@ -16,7 +18,7 @@ Let $r = f(\theta)$ define the function $f(\theta)$ using polar coordinates. The
 
 $$ A = \int_{\alpha}^{\beta} \frac{1}{2} r^2 d\theta $$
 
-## Arc Length for Polar Curves
+### Arc Length for Polar Curves
 
 $$ s = \int_{\alpha}^{\beta} \sqrt{r^2 + (\frac{dr}{d\theta})^2}d\theta $$
 
