@@ -1,3 +1,5 @@
+# Exact Differential Equations
+
 ## Review of Integration Theory
 
 1. Let $f(x)$ be a function of $x$ defined on an interval $I: a \leq x \leq b$. Let $I$ be divided into $n$ subintervals and call $\Delta x_k$ the width of the $k$ th subinterval. Then if
