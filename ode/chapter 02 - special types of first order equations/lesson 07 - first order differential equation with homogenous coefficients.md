@@ -1,4 +1,6 @@
-# Definition of a Homogenous Function
+# First Order Differential Equation with Homogenous Coefficients
+
+## Definition of a Homogenous Function
 
 *Note (jhobbs): Homogenous functions are not specific to differential equations. They have an algebraic definition that can apply to any functions, but it is the first place I've encountered them.*
 
@@ -22,7 +24,7 @@ where $t > 0$ and $n$ is a constant.
 
 *Note (jhobbs):* Homogenous equations are generally not separated/separable.
 
-## Solution of a Differential Equation in Which the Coeffecients of $dx$ and $dy$ Are Each Homogenous Functions of the Same Order
+### Solution of a Differential Equation in Which the Coeffecients of $dx$ and $dy$ Are Each Homogenous Functions of the Same Order
 
 ***Definition 7.2***
 The differential equation
