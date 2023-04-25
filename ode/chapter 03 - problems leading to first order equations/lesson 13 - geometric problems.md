@@ -1,6 +1,8 @@
+# Geometric Problems
+
 *jmh: my notes*
 
-# Problems Relating to the Tangent Lines to an Unknown Family of Curves
+## Problems Relating to the Tangent Lines to an Unknown Family of Curves
 This lesson starts by discussing a few problems for finding families of curves with some property relating to tangets to points on the curve. Differential equations arise here because the slope of the tangent line in these cases is $y'$. Generally, we'll know we want some family of functions who's derivative has some proprety, and we use that property to find the family of functions.
 
 ## Background
