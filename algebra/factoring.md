@@ -1,6 +1,8 @@
-# Factoring cubics
+# Factoring
 
-## Sum and Difference of Cubes
+## Factoring cubics
+
+### Sum and Difference of Cubes
 
 Sum of cubes:
 
