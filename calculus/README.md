@@ -1,5 +1,5 @@
 # Calculus
 
-[Integration Strategies](calculus/integration-strategies.md)
+[Integration Strategies](integration-strategies.md)
 
-[Lengths, Areas and Volumes](calculus/lengths%20areas%20and%20volumes.md)
+[Lengths, Areas and Volumes](lengths%20areas%20and%20volumes.md)
