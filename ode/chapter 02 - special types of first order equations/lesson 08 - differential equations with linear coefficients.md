@@ -1,3 +1,5 @@
+# Differential Equations with Linear Coefficients
+
 ## A Review of Some Plane Analytic Geometry
 
 A linear equation has the form $ax + by + c = 0$ and represents a straight line in a plane. *Note: the presence of the constant* $c$ *in the linear equation prevents it from being homogenous*.
