@@ -168,20 +168,4 @@ $$ t = \frac{\frac{x}{k}^{\frac{c}{b}}-v}{c} $$
 QED.
 
 ## Dilution Calculator
-
-<html lang="en">
-<head>
-<script src="dilution.js"></script>
-</head>
-<body onload="setupParameters()">
-<h1>Setup</h1>
-<form>
-<p id="parameters">
-</p>
-<button type="button" id="Calculate" onclick="calculate();">Calculate</button>
-</form>
-<h1>Results</h1>
-<p id="results">
-</p>
-</body>
-</html>
+{% include dilution.html %}
