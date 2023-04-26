@@ -169,22 +169,19 @@ QED.
 
 ## Dilution Calculator
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Dilution Calculator</title>
-    <script src="dilution.js"></script>
+<script src="dilution.js"></script>
 </head>
 <body onload="setupParameters()">
 <h1>Setup</h1>
 <form>
-    <p id="parameters">
-    </p>
-    <button type="button" id="Calculate" onclick="calculate();">Calculate</button>
+<p id="parameters">
+</p>
+<button type="button" id="Calculate" onclick="calculate();">Calculate</button>
 </form>
 <h1>Results</h1>
-    <p id="results">
-    </p>
+<p id="results">
+</p>
 </body>
 </html>
