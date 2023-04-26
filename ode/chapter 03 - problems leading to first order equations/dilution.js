@@ -10,7 +10,7 @@ const INPUT_FIELDS = [
     "desiredTime"
 ];
 
-unction setupParameters() {
+function setupParameters() {
     const parametersP = document.getElementById("parameters");
 
     parametersP.replaceChildren();
