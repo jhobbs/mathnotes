@@ -78,11 +78,11 @@ $$ y = xy' + (y')^2 \tag{4.6} $$
 
 has for a solution the 1-parameter family
 
-$$ y = cx + c^2 $$ \tag{4.61}
+$$ y = cx + c^2 \tag{4.61} $$
 
 Some sources might call this a general solution, but it does not include all particular solutions, for example, the function
 
-$$ y = - \frac{x^2}{4} \tag{4.62}
+$$ y = - \frac{x^2}{4} \tag{4.62} $$
 
 is also a solution of 4.6 but is not included in 4.61.
 
