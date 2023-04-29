@@ -29,3 +29,9 @@ I find the math to be a bit easier with polar coordinates here.
 Path taken by a bug crawling across record with radius 100 spinning on a turn table. $k$ is the ratio of the bug's velocity towards the center to the angular velocity of the record:
 
 https://www.desmos.com/calculator/y50fx79ykn
+
+## Turntable problems
+
+converting a system of rectangular differential equations to polar coordinates:
+
+http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf
