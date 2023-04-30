@@ -7,17 +7,17 @@ const BUG_SIZE = 5;
 let center;
 
 function setup() {
-  createCanvas(TABLE_SIZE, TABLE_SIZE);
+  let canvas = createCanvas(TABLE_SIZE, TABLE_SIZE);
   bugSlider = createSlider(0, 1,0,0);
-  bugSlider.position(10, 10);
+  bugSlider.position(canvas.position().x, canvas.position().y);
   bugSlider.style('width', '80px');
 
   recordSlider = createSlider(0, 10,0,0);
-  recordSlider.position(10, 30);
+  recordSlider.position(canvas.position().x, canvas.position().y + 20);
   recordSlider.style('width', '80px');
 
   rhoSlider = createSlider(0, 2*PI,0, PI/32);
-  rhoSlider.position(10, 50);
+  rhoSlider.position(canvas.position().x, canvas.position().y + 40);
   rhoSlider.style('width', '80px');
 
   translate(TABLE_SIZE/2, -(TABLE_SIZE/2));
