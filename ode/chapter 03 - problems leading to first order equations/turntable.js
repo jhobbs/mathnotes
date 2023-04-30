@@ -133,7 +133,7 @@ function getBugTheta() {
 
 function moveBug() {
 
-    if (i > 1000
+    if (i > 10000
         || (modeRadio.value() == MODE_PARALLEL && getBugR() > RECORD_RADIUS * 1.5)
         || (modeRadio.value() == MODE_TO_CENTER && getBugR() < BUG_SIZE / 2)
         || (modeRadio.value() == MODE_TO_LIGHT && getBug().dist(getEndPoint()) < BUG_SIZE / 2)) {
@@ -198,6 +198,12 @@ function drawEndpoints() {
     fill(255, 0, 0);
     stroke(255, 0, 0);
     circle(endPoint.x, endPoint.y, BUG_SIZE * 5);
+}
+
+function keyPressed() {
+    if (keyCode == 90) { //z
+        redo();
+    }
 }
 
 function draw() {
