@@ -98,7 +98,7 @@ function moveBug() {
         bug_x += -bugSlider.value()/iterations * cos(rhoSlider.value());
         bug_y += -bugSlider.value()/iterations * sin(rhoSlider.value());
 
-        if (approxR <= RECORD_RADIUS) {
+        if (approxR  <= RECORD_RADIUS + BUG_SIZE) {
             bug_x += linearRadialSpeed/iterations * cos(bugDirection);
             bug_y += linearRadialSpeed/iterations * sin(bugDirection);
         }
