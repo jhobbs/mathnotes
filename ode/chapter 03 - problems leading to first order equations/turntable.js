@@ -5,8 +5,11 @@ const BUG_VELOCITY = 0.3;
 const BUG_SIZE = 5;
 const ARROW_SCALAR = 15;
 
-function setup() {
-    let canvas = createCanvas(TABLE_SIZE, TABLE_SIZE);
+const MODE_TO_CENTER = 'CENTER';
+const MODE_PARALLEL = 'PARALLEL';
+
+
+function setupSliders(canvas) {
     locomotiveSlider = createSlider(0, 3, 0, 0);
     locomotiveSlider.position(canvas.position().x, canvas.position().y);
     locomotiveSlider.style('width', '80px');
@@ -18,7 +21,21 @@ function setup() {
     rhoSlider = createSlider(0, 2 * PI, 0, PI / 32);
     rhoSlider.position(canvas.position().x, canvas.position().y + 40);
     rhoSlider.style('width', '80px');
+}
 
+function setupRadio(canvas) {
+    modeRadio = createRadio()
+    modeRadio.option(MODE_TO_CENTER, "To Center");
+    modeRadio.option(MODE_PARALLEL, "Parallel to Start");
+    modeRadio.selected(MODE_PARALLEL);
+    modeRadio.position(250, 10);
+}
+
+
+function setup() {
+    let canvas = createCanvas(TABLE_SIZE, TABLE_SIZE);
+    setupSliders(canvas);
+    setupRadio(canvas);
     redo();
 }
 
@@ -77,7 +94,14 @@ function drawCombinedArrow() {
 }
 
 function getLocomotiveMotionVector() {
-    return createVector(-locomotiveSlider.value() * cos(rhoSlider.value()), -locomotiveSlider.value() * sin(rhoSlider.value()));
+    let locomotionDirection;
+    if (modeRadio.value() == MODE_PARALLEL) {
+        locomotionDirection = rhoSlider.value();
+    } else if (modeRadio.value() == MODE_TO_CENTER) {
+        locomotionDirection = getBugTheta();
+    }
+
+    return createVector(-locomotiveSlider.value() * cos(locomotionDirection), -locomotiveSlider.value() * sin(locomotionDirection));
 }
 
 function getRotationalMotionVector() {
@@ -85,7 +109,7 @@ function getRotationalMotionVector() {
         return createVector(0, 0);
     }
 
-    let motionDirection = atan2(bug_y, bug_x) + PI / 2;
+    let motionDirection = getBugTheta() + PI / 2;
     let linearRadialSpeed = angularVelocitySlider.value() * (getBugR() / RECORD_RADIUS);
     return createVector(linearRadialSpeed * cos(motionDirection), linearRadialSpeed * sin(motionDirection));
 }
@@ -94,9 +118,15 @@ function getBugR() {
     return sqrt(bug_x ** 2 + bug_y ** 2);
 }
 
+function getBugTheta() {
+    return atan2(bug_y, bug_x);
+}
+
 function moveBug() {
 
-    if (i > 1000 || getBugR() > RECORD_RADIUS * 1.5) {
+    if (i > 1000
+        || (modeRadio.value() == MODE_PARALLEL && getBugR() > RECORD_RADIUS * 1.5)
+        || (modeRadio.value() == MODE_TO_CENTER && getBugR() < BUG_SIZE / 2)) {
         redo();
     }
 
@@ -118,7 +148,6 @@ function moveBug() {
         bug_x += combinedMotionVector.x;
         bug_y += combinedMotionVector.y;
     }
-
 }
 
 function drawLabels() {
