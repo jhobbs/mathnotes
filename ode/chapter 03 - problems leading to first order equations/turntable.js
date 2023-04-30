@@ -3,16 +3,17 @@ const RECORD_RADIUS = 200;
 const ANGULAR_VELOCITY = 0.03;
 const BUG_VELOCITY = 0.3;
 const BUG_SIZE = 5;
+const ARROW_SCALAR = 15;
 
 function setup() {
   let canvas = createCanvas(TABLE_SIZE, TABLE_SIZE);
-  bugSlider = createSlider(0, 1,0,0);
-  bugSlider.position(canvas.position().x, canvas.position().y);
-  bugSlider.style('width', '80px');
+  locomotiveSlider = createSlider(0, 3,0,0);
+  locomotiveSlider.position(canvas.position().x, canvas.position().y);
+  locomotiveSlider.style('width', '80px');
 
-  rotationSlider = createSlider(0, 10,0,0);
-  rotationSlider.position(canvas.position().x, canvas.position().y + 20);
-  rotationSlider.style('width', '80px');
+  angularVelocitySlider = createSlider(0, 10,0,0);
+  angularVelocitySlider.position(canvas.position().x, canvas.position().y + 20);
+  angularVelocitySlider.style('width', '80px');
 
   rhoSlider = createSlider(0, 2*PI,0, PI/32);
   rhoSlider.position(canvas.position().x, canvas.position().y + 40);
@@ -44,38 +45,50 @@ function drawHistory() {
 function redo() {
     clear();
     circle(0,0,RECORD_RADIUS *2);
-    bug_r = RECORD_RADIUS;
     bug_theta = rhoSlider.value();
     bugHistory = [];
     i = 0;
 
-    bug_x = bug_r * cos(bug_theta);
-    bug_y = bug_r * sin(bug_theta);
+    bug_x = RECORD_RADIUS * cos(bug_theta);
+    bug_y = RECORD_RADIUS * sin(bug_theta);
 }
 
-function drawBugArrow(arrow_x, arrow_y, arrowDirection) {
-    const arrowLength = 25;
+function drawBugArrow() {
+    const arrowLength = locomotiveSlider.value() * ARROW_SCALAR;
 
-    let delta_x = -arrowLength * cos(arrowDirection)
-    let delta_y = -arrowLength * sin(arrowDirection)
+    let locomotiveMotionVector = getLocomotiveMotionVector(-arrowLength);
+
     stroke(0,0,255);
-    line(arrow_x, arrow_y, arrow_x + delta_x, arrow_y + delta_y);
+    line(bug_x, bug_y, bug_x + locomotiveMotionVector.x, bug_y + locomotiveMotionVector.y);
 }
 
-function drawRotationArrow(arrow_x, arrow_y, bugAngle) {
-    const arrowLength = 25;
-    let arrowDirection = atan2(arrow_y, arrow_x) + PI/2;
-
-    let delta_x = arrowLength * cos(arrowDirection)
-    let delta_y = arrowLength * sin(arrowDirection)
+function drawRotationArrow() {
+    let rotationalMotionVector = getRotationalMotionVector().mult(ARROW_SCALAR);
     stroke(255,0,0);
-    line(arrow_x, arrow_y, arrow_x + delta_x, arrow_y + delta_y);
+    line(bug_x, bug_y, bug_x + rotationalMotionVector.x, bug_y + rotationalMotionVector.y);
+}
+
+function getLocomotiveMotionVector(locomotiveSpeed) {
+    return createVector(locomotiveSpeed * cos(rhoSlider.value()), locomotiveSpeed * sin(rhoSlider.value()));
+}
+
+function getRotationalMotionVector() {
+    if (getBugR() > RECORD_RADIUS + BUG_SIZE/2) {
+        return createVector(0, 0);
+    }
+
+    let motionDirection = atan2(bug_y, bug_x) + PI/2;
+    let linearRadialSpeed = angularVelocitySlider.value() * (getBugR()/RECORD_RADIUS);
+    return createVector(linearRadialSpeed * cos(motionDirection), linearRadialSpeed * sin(motionDirection));
+}
+
+function getBugR() {
+    return sqrt(bug_x**2 + bug_y**2);
 }
 
 function moveBug() {
 
-    let approxR = sqrt(bug_x**2 + bug_y**2);
-    if (i > 1000 || approxR > RECORD_RADIUS*1.5) {
+    if (i > 1000 || getBugR() > RECORD_RADIUS*1.5) {
         redo();
     }
 
@@ -93,23 +106,20 @@ function moveBug() {
     const iterations = 500;
 
     for (let j = 0; j < iterations; j++) {
-        let bugDirection = atan2(bug_y, bug_x) + PI/2;
-        approxR = sqrt(bug_x**2 + bug_y**2);
-        let linearRadialSpeed = rotationSlider.value() * (approxR/RECORD_RADIUS);
-        bug_x += -bugSlider.value()/iterations * cos(rhoSlider.value());
-        bug_y += -bugSlider.value()/iterations * sin(rhoSlider.value());
+        let locomotiveMotionVector = getLocomotiveMotionVector(-locomotiveSlider.value()/iterations);
+        bug_x += locomotiveMotionVector.x;
+        bug_y += locomotiveMotionVector.y;
 
-        if (approxR  <= RECORD_RADIUS + BUG_SIZE/2) {
-            bug_x += linearRadialSpeed/iterations * cos(bugDirection);
-            bug_y += linearRadialSpeed/iterations * sin(bugDirection);
-        }
+        let rotationalMotionVector = getRotationalMotionVector().div(iterations);
+        bug_x += rotationalMotionVector.x;
+        bug_y += rotationalMotionVector.y;
     }
 
 }
 
 function drawLabels() {
-  text('bug speed', bugSlider.width + 5, 13);
-  text('rotation speed', rotationSlider.width + 5, 33);
+  text('bug locomotive speed', locomotiveSlider.width + 5, 13);
+  text('record angular velocity', angularVelocitySlider.width + 5, 33);
   text('start position', rhoSlider.width + 5, 53);
 }
 
@@ -123,7 +133,7 @@ function handleBug() {
   moveBug();
   drawBug();
   drawHistory();
-  drawBugArrow(bug_x, bug_y, rhoSlider.value());
+  drawBugArrow();
   drawRotationArrow(bug_x, bug_y);
 }
 
@@ -141,7 +151,7 @@ function draw() {
   translate(TABLE_SIZE/2, TABLE_SIZE/2);
   scale(1, -1);
   drawRecord();
-  handleBug();
   drawEndpoints();
+  handleBug();
   pop();
 }
