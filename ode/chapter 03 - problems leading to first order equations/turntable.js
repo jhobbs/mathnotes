@@ -7,6 +7,7 @@ const ARROW_SCALAR = 15;
 
 const MODE_TO_CENTER = 'CENTER';
 const MODE_PARALLEL = 'PARALLEL';
+const MODE_TO_LIGHT = 'LIGHT';
 
 
 function setupSliders(canvas) {
@@ -27,6 +28,7 @@ function setupRadio(canvas) {
     modeRadio = createRadio()
     modeRadio.option(MODE_TO_CENTER, "To Center");
     modeRadio.option(MODE_PARALLEL, "Parallel to Start");
+    modeRadio.option(MODE_TO_LIGHT, "To Light");
     modeRadio.selected(MODE_PARALLEL);
     modeRadio.position(250, 10);
 }
@@ -99,13 +101,16 @@ function getLocomotiveMotionVector() {
         locomotionDirection = rhoSlider.value();
     } else if (modeRadio.value() == MODE_TO_CENTER) {
         locomotionDirection = getBugTheta();
+    } else if (modeRadio.value() == MODE_TO_LIGHT) {
+        let endPoint = getEndPoint();
+        locomotionDirection = atan2(bug_y - endPoint.y, bug_x - endPoint.x);
     }
 
     return createVector(-locomotiveSlider.value() * cos(locomotionDirection), -locomotiveSlider.value() * sin(locomotionDirection));
 }
 
 function getRotationalMotionVector() {
-    if (getBugR() > RECORD_RADIUS + BUG_SIZE / 2) {
+    if (getBugR() > RECORD_RADIUS + 0.1) {
         return createVector(0, 0);
     }
 
@@ -118,6 +123,10 @@ function getBugR() {
     return sqrt(bug_x ** 2 + bug_y ** 2);
 }
 
+function getBug() {
+    return createVector(bug_x, bug_y);
+}
+
 function getBugTheta() {
     return atan2(bug_y, bug_x);
 }
@@ -126,7 +135,8 @@ function moveBug() {
 
     if (i > 1000
         || (modeRadio.value() == MODE_PARALLEL && getBugR() > RECORD_RADIUS * 1.5)
-        || (modeRadio.value() == MODE_TO_CENTER && getBugR() < BUG_SIZE / 2)) {
+        || (modeRadio.value() == MODE_TO_CENTER && getBugR() < BUG_SIZE / 2)
+        || (modeRadio.value() == MODE_TO_LIGHT && getBug().dist(getEndPoint()) < BUG_SIZE / 2)) {
         redo();
     }
 
@@ -171,10 +181,23 @@ function handleBug() {
     drawCombinedArrow();
 }
 
+function getStartPoint() {
+    return createVector(RECORD_RADIUS * cos(rhoSlider.value()), RECORD_RADIUS * sin(rhoSlider.value()));
+}
+
+function getEndPoint() {
+    return createVector(RECORD_RADIUS * cos(rhoSlider.value() + PI), RECORD_RADIUS * sin(rhoSlider.value() + PI));
+}
+
 function drawEndpoints() {
+    let startPoint = getStartPoint();
+    let endPoint = getEndPoint();
     fill(0, 255, 0);
     stroke(0, 255, 0);
-    circle(RECORD_RADIUS * cos(rhoSlider.value()), RECORD_RADIUS * sin(rhoSlider.value()), BUG_SIZE * 5);
+    circle(startPoint.x, startPoint.y, BUG_SIZE * 5);
+    fill(255, 0, 0);
+    stroke(255, 0, 0);
+    circle(endPoint.x, endPoint.y, BUG_SIZE * 5);
 }
 
 function draw() {
