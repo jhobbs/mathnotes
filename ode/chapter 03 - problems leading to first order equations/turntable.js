@@ -54,9 +54,7 @@ function redo() {
 }
 
 function drawBugArrow() {
-    const arrowLength = locomotiveSlider.value() * ARROW_SCALAR;
-
-    let locomotiveMotionVector = getLocomotiveMotionVector(-arrowLength);
+    let locomotiveMotionVector = getLocomotiveMotionVector().mult(ARROW_SCALAR);
 
     stroke(0,0,255);
     line(bug_x, bug_y, bug_x + locomotiveMotionVector.x, bug_y + locomotiveMotionVector.y);
@@ -68,8 +66,8 @@ function drawRotationArrow() {
     line(bug_x, bug_y, bug_x + rotationalMotionVector.x, bug_y + rotationalMotionVector.y);
 }
 
-function getLocomotiveMotionVector(locomotiveSpeed) {
-    return createVector(locomotiveSpeed * cos(rhoSlider.value()), locomotiveSpeed * sin(rhoSlider.value()));
+function getLocomotiveMotionVector() {
+    return createVector(-locomotiveSlider.value() * cos(rhoSlider.value()), -locomotiveSlider.value() * sin(rhoSlider.value()));
 }
 
 function getRotationalMotionVector() {
@@ -106,7 +104,7 @@ function moveBug() {
     const iterations = 500;
 
     for (let j = 0; j < iterations; j++) {
-        let locomotiveMotionVector = getLocomotiveMotionVector(-locomotiveSlider.value()/iterations);
+        let locomotiveMotionVector = getLocomotiveMotionVector().div(iterations);
         bug_x += locomotiveMotionVector.x;
         bug_y += locomotiveMotionVector.y;
 
