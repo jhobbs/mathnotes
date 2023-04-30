@@ -6,20 +6,20 @@ const BUG_SIZE = 5;
 const ARROW_SCALAR = 15;
 
 function setup() {
-  let canvas = createCanvas(TABLE_SIZE, TABLE_SIZE);
-  locomotiveSlider = createSlider(0, 3,0,0);
-  locomotiveSlider.position(canvas.position().x, canvas.position().y);
-  locomotiveSlider.style('width', '80px');
+    let canvas = createCanvas(TABLE_SIZE, TABLE_SIZE);
+    locomotiveSlider = createSlider(0, 3, 0, 0);
+    locomotiveSlider.position(canvas.position().x, canvas.position().y);
+    locomotiveSlider.style('width', '80px');
 
-  angularVelocitySlider = createSlider(0, 10,0,0);
-  angularVelocitySlider.position(canvas.position().x, canvas.position().y + 20);
-  angularVelocitySlider.style('width', '80px');
+    angularVelocitySlider = createSlider(0, 10, 0, 0);
+    angularVelocitySlider.position(canvas.position().x, canvas.position().y + 20);
+    angularVelocitySlider.style('width', '80px');
 
-  rhoSlider = createSlider(0, 2*PI,0, PI/32);
-  rhoSlider.position(canvas.position().x, canvas.position().y + 40);
-  rhoSlider.style('width', '80px');
+    rhoSlider = createSlider(0, 2 * PI, 0, PI / 32);
+    rhoSlider.position(canvas.position().x, canvas.position().y + 40);
+    rhoSlider.style('width', '80px');
 
-  redo();
+    redo();
 }
 
 function drawBug() {
@@ -44,7 +44,7 @@ function drawHistory() {
 
 function redo() {
     clear();
-    circle(0,0,RECORD_RADIUS *2);
+    circle(0, 0, RECORD_RADIUS * 2);
     bug_theta = rhoSlider.value();
     bugHistory = [];
     i = 0;
@@ -56,13 +56,13 @@ function redo() {
 function drawBugArrow() {
     let locomotiveMotionVector = getLocomotiveMotionVector().mult(ARROW_SCALAR);
 
-    stroke(0,0,255);
+    stroke(0, 0, 255);
     line(bug_x, bug_y, bug_x + locomotiveMotionVector.x, bug_y + locomotiveMotionVector.y);
 }
 
 function drawRotationArrow() {
     let rotationalMotionVector = getRotationalMotionVector().mult(ARROW_SCALAR);
-    stroke(255,0,0);
+    stroke(255, 0, 0);
     line(bug_x, bug_y, bug_x + rotationalMotionVector.x, bug_y + rotationalMotionVector.y);
 }
 
@@ -71,22 +71,22 @@ function getLocomotiveMotionVector() {
 }
 
 function getRotationalMotionVector() {
-    if (getBugR() > RECORD_RADIUS + BUG_SIZE/2) {
+    if (getBugR() > RECORD_RADIUS + BUG_SIZE / 2) {
         return createVector(0, 0);
     }
 
-    let motionDirection = atan2(bug_y, bug_x) + PI/2;
-    let linearRadialSpeed = angularVelocitySlider.value() * (getBugR()/RECORD_RADIUS);
+    let motionDirection = atan2(bug_y, bug_x) + PI / 2;
+    let linearRadialSpeed = angularVelocitySlider.value() * (getBugR() / RECORD_RADIUS);
     return createVector(linearRadialSpeed * cos(motionDirection), linearRadialSpeed * sin(motionDirection));
 }
 
 function getBugR() {
-    return sqrt(bug_x**2 + bug_y**2);
+    return sqrt(bug_x ** 2 + bug_y ** 2);
 }
 
 function moveBug() {
 
-    if (i > 1000 || getBugR() > RECORD_RADIUS*1.5) {
+    if (i > 1000 || getBugR() > RECORD_RADIUS * 1.5) {
         redo();
     }
 
@@ -116,40 +116,40 @@ function moveBug() {
 }
 
 function drawLabels() {
-  text('bug locomotive speed', locomotiveSlider.width + 5, 13);
-  text('record angular velocity', angularVelocitySlider.width + 5, 33);
-  text('start position', rhoSlider.width + 5, 53);
+    text('bug locomotive speed', locomotiveSlider.width + 5, 13);
+    text('record angular velocity', angularVelocitySlider.width + 5, 33);
+    text('start position', rhoSlider.width + 5, 53);
 }
 
 function drawRecord() {
-  stroke(0);
-  fill(255);
-  circle(0,0,RECORD_RADIUS *2);
+    stroke(0);
+    fill(255);
+    circle(0, 0, RECORD_RADIUS * 2);
 }
 
 function handleBug() {
-  moveBug();
-  drawBug();
-  drawHistory();
-  drawBugArrow();
-  drawRotationArrow(bug_x, bug_y);
+    moveBug();
+    drawBug();
+    drawHistory();
+    drawBugArrow();
+    drawRotationArrow(bug_x, bug_y);
 }
 
 function drawEndpoints() {
-  fill(0,255,0);
-  stroke(0,255,0);
-  circle(RECORD_RADIUS * cos(rhoSlider.value()), RECORD_RADIUS * sin(rhoSlider.value()), BUG_SIZE*5);
+    fill(0, 255, 0);
+    stroke(0, 255, 0);
+    circle(RECORD_RADIUS * cos(rhoSlider.value()), RECORD_RADIUS * sin(rhoSlider.value()), BUG_SIZE * 5);
 }
 
 function draw() {
-  clear();
-  drawLabels();
-  push();
-  //use the center of the turntable as origin and orient the upward direction as positive y.
-  translate(TABLE_SIZE/2, TABLE_SIZE/2);
-  scale(1, -1);
-  drawRecord();
-  drawEndpoints();
-  handleBug();
-  pop();
+    clear();
+    drawLabels();
+    push();
+    //use the center of the turntable as origin and orient the upward direction as positive y.
+    translate(TABLE_SIZE / 2, TABLE_SIZE / 2);
+    scale(1, -1);
+    drawRecord();
+    drawEndpoints();
+    handleBug();
+    pop();
 }
