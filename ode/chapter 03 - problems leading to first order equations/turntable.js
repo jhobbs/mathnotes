@@ -66,8 +66,12 @@ function drawRotationArrow() {
     line(bug_x, bug_y, bug_x + rotationalMotionVector.x, bug_y + rotationalMotionVector.y);
 }
 
+function getCombinedMotionVector() {
+    return getLocomotiveMotionVector().add(getRotationalMotionVector());
+}
+
 function drawCombinedArrow() {
-    let combinedMotionVector = getLocomotiveMotionVector().add(getRotationalMotionVector()).mult(ARROW_SCALAR);
+    let combinedMotionVector = getCombinedMotionVector().mult(ARROW_SCALAR);
     stroke(255, 204, 0);
     line(bug_x, bug_y, bug_x + combinedMotionVector.x, bug_y + combinedMotionVector.y);
 }
@@ -110,13 +114,9 @@ function moveBug() {
     const iterations = 500;
 
     for (let j = 0; j < iterations; j++) {
-        let locomotiveMotionVector = getLocomotiveMotionVector().div(iterations);
-        bug_x += locomotiveMotionVector.x;
-        bug_y += locomotiveMotionVector.y;
-
-        let rotationalMotionVector = getRotationalMotionVector().div(iterations);
-        bug_x += rotationalMotionVector.x;
-        bug_y += rotationalMotionVector.y;
+        let combinedMotionVector = getCombinedMotionVector().div(iterations);
+        bug_x += combinedMotionVector.x;
+        bug_y += combinedMotionVector.y;
     }
 
 }
