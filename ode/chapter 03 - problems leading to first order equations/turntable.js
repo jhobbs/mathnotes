@@ -105,33 +105,43 @@ function moveBug() {
         }
     }
 
-    drawBug();
-    drawHistory();
+}
+
+function drawLabels() {
+  text('bug speed', bugSlider.width + 5, 13);
+  text('rotation speed', rotationSlider.width + 5, 33);
+  text('start position', rhoSlider.width + 5, 53);
+}
+
+function drawRecord() {
+  stroke(0);
+  fill(255);
+  circle(0,0,RECORD_RADIUS *2);
+}
+
+function handleBug() {
+  moveBug();
+  drawBug();
+  drawHistory();
+  drawBugArrow(bug_x, bug_y, rhoSlider.value());
+  drawRotationArrow(bug_x, bug_y);
+}
+
+function drawEndpoints() {
+  fill(0,255,0);
+  stroke(0,255,0);
+  circle(RECORD_RADIUS * cos(rhoSlider.value()), RECORD_RADIUS * sin(rhoSlider.value()), BUG_SIZE*5);
 }
 
 function draw() {
   clear();
-  /*
-  text('bug speed', bugSlider.x * 2 + bugSlider.width, bugSlider.y + 5);
-  text('rotation speed', rotationSlider.x * 2 + rotationSlider.width, rotationSlider.y + 5);
-  text('start position', rhoSlider.x * 2 + rhoSlider.width, rhoSlider.y + 5);
-  */
-  text('bug speed', bugSlider.width + 5, 13);
-  text('rotation speed', rotationSlider.width + 5, 33);
-  text('start position', rhoSlider.width + 5, 53);
+  drawLabels();
   push();
+  //use the center of the turntable as origin and orient the upward direction as positive y.
   translate(TABLE_SIZE/2, TABLE_SIZE/2);
   scale(1, -1);
-  stroke(0);
-  fill(255);
-  circle(0,0,RECORD_RADIUS *2);
-  moveBug();
-  fill(0,255,0);
-  stroke(0,255,0);
-  circle(RECORD_RADIUS * cos(rhoSlider.value()), RECORD_RADIUS * sin(rhoSlider.value()), BUG_SIZE*5);
-  fill(0,0,0);
-  stroke(0,0,0);
-  drawBugArrow(bug_x, bug_y, rhoSlider.value());
-  drawRotationArrow(bug_x, bug_y);
+  drawRecord();
+  handleBug();
+  drawEndpoints();
   pop();
 }
