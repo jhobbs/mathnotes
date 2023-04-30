@@ -74,7 +74,8 @@ function drawRotationArrow(arrow_x, arrow_y, bugAngle) {
 
 function moveBug() {
 
-    if (i > 1000) {
+    let approxR = sqrt(bug_x**2 + bug_y**2);
+    if (i > 1000 || approxR > RECORD_RADIUS*1.5) {
         redo();
     }
 
@@ -93,12 +94,12 @@ function moveBug() {
 
     for (let j = 0; j < iterations; j++) {
         let bugDirection = atan2(bug_y, bug_x) + PI/2;
-        let approxR = sqrt(bug_x**2 + bug_y**2);
+        approxR = sqrt(bug_x**2 + bug_y**2);
         let linearRadialSpeed = rotationSlider.value() * (approxR/RECORD_RADIUS);
         bug_x += -bugSlider.value()/iterations * cos(rhoSlider.value());
         bug_y += -bugSlider.value()/iterations * sin(rhoSlider.value());
 
-        if (approxR  <= RECORD_RADIUS + BUG_SIZE) {
+        if (approxR  <= RECORD_RADIUS + BUG_SIZE/2) {
             bug_x += linearRadialSpeed/iterations * cos(bugDirection);
             bug_y += linearRadialSpeed/iterations * sin(bugDirection);
         }
@@ -115,9 +116,9 @@ function draw() {
   text('rotation speed', rotationSlider.x * 2 + rotationSlider.width, rotationSlider.y + 5);
   text('start position', rhoSlider.x * 2 + rhoSlider.width, rhoSlider.y + 5);
   */
-  text('bug speed', bugSlider.x * 2 + bugSlider.width, 13);
-  text('rotation speed', rotationSlider.x * 2 + rotationSlider.width, 33);
-  text('start position', rhoSlider.x * 2 + rhoSlider.width, 53);
+  text('bug speed', bugSlider.width + 5, 13);
+  text('rotation speed', rotationSlider.width + 5, 33);
+  text('start position', rhoSlider.width + 5, 53);
   push();
   translate(TABLE_SIZE/2, TABLE_SIZE/2);
   scale(1, -1);
