@@ -110,9 +110,14 @@ function moveBug() {
 
 function draw() {
   clear();
+  /*
   text('bug speed', bugSlider.x * 2 + bugSlider.width, bugSlider.y + 5);
   text('rotation speed', rotationSlider.x * 2 + rotationSlider.width, rotationSlider.y + 5);
   text('start position', rhoSlider.x * 2 + rhoSlider.width, rhoSlider.y + 5);
+  */
+  text('bug speed', bugSlider.x * 2 + bugSlider.width, 13);
+  text('rotation speed', rotationSlider.x * 2 + rotationSlider.width, 33);
+  text('start position', rhoSlider.x * 2 + rhoSlider.width, 53);
   push();
   translate(TABLE_SIZE/2, TABLE_SIZE/2);
   scale(1, -1);
