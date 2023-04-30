@@ -66,6 +66,12 @@ function drawRotationArrow() {
     line(bug_x, bug_y, bug_x + rotationalMotionVector.x, bug_y + rotationalMotionVector.y);
 }
 
+function drawCombinedArrow() {
+    let combinedMotionVector = getLocomotiveMotionVector().add(getRotationalMotionVector()).mult(ARROW_SCALAR);
+    stroke(255, 204, 0);
+    line(bug_x, bug_y, bug_x + combinedMotionVector.x, bug_y + combinedMotionVector.y);
+}
+
 function getLocomotiveMotionVector() {
     return createVector(-locomotiveSlider.value() * cos(rhoSlider.value()), -locomotiveSlider.value() * sin(rhoSlider.value()));
 }
@@ -132,7 +138,8 @@ function handleBug() {
     drawBug();
     drawHistory();
     drawBugArrow();
-    drawRotationArrow(bug_x, bug_y);
+    drawRotationArrow();
+    drawCombinedArrow();
 }
 
 function drawEndpoints() {
