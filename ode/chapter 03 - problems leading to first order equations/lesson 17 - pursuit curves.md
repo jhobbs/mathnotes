@@ -98,14 +98,37 @@ We can find functions for change in radius and change in angle by starting with 
 
 Parameterizing to get $x = x(t)$ and $y = y(t)$ we have:
 
-$$ x = -t + c_1, ~y = c_2 \tag{a} $$
+$$ x = -v_0t + c_1, ~y = c_2 \tag{a} $$
 
 where $c_1$ and $c_2$ are arbitrary constant's allowing the bug's position to move around the turntable.
 
 Differentiating (a) with respect to $t$ gives:
 
-$$ x' = \frac{dx}{dt} = -1, ~ y' = \frac{dy}{dt} = 0 $$
+$$ x' = \frac{dx}{dt} = -v_0, ~ y' = \frac{dy}{dt} = 0 \tag{b} $$
 
+Using formulas from my polar coordinates notes (see the 'Derivatives' section here https://jhobbs.github.io/mathnotes/calculus/polar-coordinates.html) we can find $r'$ and $\theta'$:
+
+$$ \frac{dr}{dt} = -v_0\cos\theta, ~ \frac{d\theta}{dt} = v_0\frac{sin\theta}{r} \tag{c} $$
+
+Combining with the motion of the turntable rotating at speed $\alpha$ we get:
+
+$$ \frac{dr}{dt} = -v_0\cos\theta, \frac{d\theta}{dt} = \frac{v_0\sin\theta + r\alpha}{r} \tag{d} $$
+
+Dividing gives us $\frac{dr}{d\theta}$:
+
+$$ \frac{dr}{d\theta} = \frac{dr}{dt}\frac{dt}{d\theta} = \frac{-rv_0\cos\theta}{v_0sin\theta + r\alpha} \tag{e} $$
+
+We can rewrite this as:
+
+$$ (v_0\sin\theta + r\alpha)dr + (rv_0\cos\theta)d\theta = 0 \tag{f} $$
+
+Which is an exact differential equation with the solution:
+
+$$ 2v_0r\sin\theta + \alpha r^2 = c \tag{g} $$
+
+Setting initial conditions $r = a$, $\theta = 0$ gives $c = \alpha r^2$. Substituting into (g) and rearranging we get:
+
+$$ 2v_0r\sin\theta = \alpha (a^2 - r^2) \tag{h} $$
 
 
 I found the notes in this document on converting a system of rectangular differential equations to polar coordinates particularly helpful:
