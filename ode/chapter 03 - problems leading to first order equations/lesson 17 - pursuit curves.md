@@ -86,6 +86,8 @@ The book asks:
 
 (b) What kind of curve is it?"
 
+This is the "parallel to start" mode in the turntable widget at the bottom of the page.
+
 We'll make the same assumptions we made in 4, that the bug steps on to the table at $\theta = 0$ and that the turntable is rotating counter-clockwise.
 
 Here we have that the bug is not always walking towards the center but is walking across the turntable in a path parallel to the $x$-axis. If the turntable wasn't spinning, the bug would just walk right across the $x$-axis, but since it spins, it follows a different path. We need to figure out how much the radius and angle to the bug change as it walks from different positions.
@@ -130,6 +132,7 @@ Setting initial conditions $r = a$, $\theta = 0$ gives $c = \alpha r^2$. Substit
 
 $$ 2v_0r\sin\theta = \alpha (a^2 - r^2) \tag{h} $$
 
+which is the answer to 5.a. The path makes a circle (todo: show why by converting to rectangular coordinates or solving for $r$).
 
 I found the notes in this document on converting a system of rectangular differential equations to polar coordinates particularly helpful:
 http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf
