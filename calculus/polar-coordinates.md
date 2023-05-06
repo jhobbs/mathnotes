@@ -38,4 +38,12 @@ $$2rr' = 2xx' + 2yy', ~rr' = xx' + yy', ~ r' = \frac{xx' + yy'}{r} \tag{d}$$
 
 Rewriting the second equaton in (c) and then differentiating with respect to $t$ we get:
 
-$$ \theta = \tan^{-1}\frac{y}{x}, \theta' = \frac{1}{1 + {(\frac{y}{x}})^2} \cdot \frac{y'x-yx'}{x^2} = \frac{y'x-yx'}{x^2 + y^2} = \frac{y'x - yx'}{r} $$
+$$ \theta = \tan^{-1}\frac{y}{x}, \theta' = \frac{1}{1 + {(\frac{y}{x}})^2} \cdot \frac{y'x-yx'}{x^2} = \frac{y'x-yx'}{x^2 + y^2} = \frac{y'x - yx'}{r^2} \tag{e} $$
+
+Summarizing (d) and (e) we have:
+
+$$ \frac{dr}{dt} = r' = \frac{xx' + yy'}{r}, \frac{d\theta}{dt} = ~\theta' = \frac{y'x - yx'}{r^2} \tag{f} $$
+
+Therefore, the derivative of $r$ with respect to $\theta$ is:
+
+$$ \frac{\frac{dr}{dt}}{\frac{d\theta}{dt}} = \frac{dr}{d\theta} = $$
