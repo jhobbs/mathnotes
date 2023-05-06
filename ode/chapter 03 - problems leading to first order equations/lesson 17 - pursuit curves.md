@@ -74,7 +74,39 @@ The book then asks:
 
 That graph is given here: https://www.desmos.com/calculator/jascajj5wo
 
-The number of revolutions required is $1\frac{1}{4}$ which can be found by substituting the given values and solving for $\theta$. 
+The number of revolutions required is $1\frac{1}{4}$ which can be found by substituting the given values and solving for $\theta$.
+
+### 5. Bug Walking Parallel to the $x$-axis
+
+The book asks:
+
+"Assume in problem 4 that the insect always moves in a direction parallel to the diameter drawn through the point where he steps on the table.
+
+(a) Find the equation of its path relative to axes fixed in space.
+
+(b) What kind of curve is it?"
+
+We'll make the same assumptions we made in 4, that the bug steps on to the table at $\theta = 0$ and that the turntable is rotating counter-clockwise.
+
+Here we have that the bug is not always walking towards the center but is walking across the turntable in a path parallel to the $x$-axis. If the turntable wasn't spinning, the bug would just walk right across the $x$-axis, but since it spins, it follows a different path. We need to figure out how much the radius and angle to the bug change as it walks from different positions.
+
+Picking a few of positions, it's evident that the amount the radius changes from the bug walking depends on the angle to the bug. For example, if the bug is at $(a, 0)$ the bug's motion takes it purely in a direction towards the center, thus reducing the radius, but if the bug is at $(-a, 0)$ its motion takes it away from the center, growing the radius. Furthermore if the bug is at $(0, a)$, its motion won't change the radius at all (consider it moving from just to the right of the $y$-axis to an equal distance to the left of the $y$-axis - the radius will be unchanged.
+
+Similar arguments apply to the change in angle from the bug walking - the amount of change depends on the bugs' position.
+
+We can find functions for change in radius and change in angle by starting with rectangular coordinates, differentiating, and then converting to polar coordinates.
+
+Parameterizing to get $x = x(t)$ and $y = y(t)$ we have:
+
+$$ x = -t + c_1, ~y = c_2 \tag{a} $$
+
+where $c_1$ and $c_2$ are arbitrary constant's allowing the bug's position to move around the turntable.
+
+Differentiating (a) with respect to $t$ gives:
+
+$$ x' = \frac{dx}{dt} = -1, ~ y' = \frac{dy}{dt} = 0 $$
+
+
 
 I found the notes in this document on converting a system of rectangular differential equations to polar coordinates particularly helpful:
 http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf
