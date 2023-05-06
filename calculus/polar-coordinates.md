@@ -18,3 +18,8 @@ $$ x = r\cos\theta, \quad y = r\sin\theta $$
 
 $$ r = \sqrt{x^2 + y^2}, \quad \theta = \text{atan2}({y,x}) $$
 
+## Derivatives ##
+
+If we parameterize such that $x = x(t)$ and $y = y(t)$ and want to find $x'$ and $y'$ in polar coordinates, we have:
+
+$$ x' = (r\cos\theta)' = r'\cos\theta - r\sin\theta, \quad y' = (r\sin\theta)' = r'\sin\theta + r\cos\theta $$
