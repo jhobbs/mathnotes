@@ -30,10 +30,30 @@ Path taken by a bug crawling across record with radius 100 spinning on a turn ta
 
 https://www.desmos.com/calculator/y50fx79ykn
 
-## Turntable problems
+## Bug on a Turntable Problems
 
-converting a system of rectangular differential equations to polar coordinates:
+The book has a series of problems where the goal is the find the path of a bug that is walking on a turntable. I haven't found solutions to these elsewhere on the internet, and it took me weeks to solve them, so I'm going to detail them here. The quoted questions are from the book and the rest is my own work.
 
+### 4. Bug Walking Towards The Center ###
+
+"An insect steps on the edge of a turntable of radius $a$ that is rotating at a constant angular velocity $\alpha$. It moves straight toward the center of the table at a constant velocity $v_0$. Find the equation of its path in polar coordinates, relative to axes fixed in space."
+
+In the turntable graphic at the bottom of this page, this is the "To Center" mode.
+
+We'll assume that the bug steps on to the table at $\theta = 0$ and that the turntable is rotating counter-clockwise.
+
+We have two sources of motion for the bug to consider - its locomotive motion (walking) and the rotation caused by the turntable.
+
+The bug's locomotive motion takes it always towards the center of the turntable at speed $v_0$, reducing the radius, and doesn't change the angle to the bug relative to the $x$-axis. The following differential equations capture that motion:
+
+$$ \frac{dr}{dt} = -v_0,~\frac{d\theta}{dt} = 0 \tag{a} $$
+
+The motion of the turntable rotating always changes only the angle to the bug relative to the $x$-axis at speed $\alpha$ and never the distance of the bug from the center. The following differential equations capture that motion:
+
+$$ \frac{dr}{dt} = 0,~\frac{d\theta}{dt} = \alpha \tag{b}$$
+
+
+I found the notes in this document on converting a system of rectangular differential equations to polar coordinates particularly helpful:
 http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf
 
 {% include_relative turntable.html %}
