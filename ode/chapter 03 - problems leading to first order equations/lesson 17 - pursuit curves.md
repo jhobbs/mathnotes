@@ -68,6 +68,14 @@ Which gives:
 
 $$ r = a - \frac{v_0}{\alpha}\theta \tag{f} $$
 
+The book then asks:
+
+"Draw a graph of the equation if $a = 10$ ft, $\alpha = \frac{\pi}{4}$ radians/sec, $v_0 = 1$ ft/sec. How many revolutions will the table have made by the time the insect reaches the center?"
+
+That graph is given here: https://www.desmos.com/calculator/jascajj5wo
+
+The number of revolutions required is $1\frac{1}{4}$ which can be found by substituting the given values and solving for $\theta$. 
+
 I found the notes in this document on converting a system of rectangular differential equations to polar coordinates particularly helpful:
 http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf
 
