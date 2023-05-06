@@ -22,4 +22,20 @@ $$ r = \sqrt{x^2 + y^2}, \quad \theta = \text{atan2}({y,x}) $$
 
 If we parameterize such that $x = x(t)$ and $y = y(t)$ and want to find $x'$ and $y'$ in polar coordinates, we have:
 
-$$ x' = (r\cos\theta)' = r'\cos\theta - r\sin\theta, \quad y' = (r\sin\theta)' = r'\sin\theta + r\cos\theta $$
+$$ \frac{dx}{dt} = x(t)' = (r\cos\theta)' = r'\cos\theta - r\sin\theta, \quad \frac{dy}{dt} = y(t)' = (r\sin\theta)' = r'\sin\theta + r\cos\theta \tag{a} $$
+
+thus:
+
+$$ \frac{\frac{dy}{dt}}{\frac{dx}{dt}} = \frac{dy}{dx} = \frac{r'sin\theta + r\cos\theta}{r'\cos\theta - r\sin\theta} \tag{b} $$
+
+Coming from the other way, and considering $x=x(t), ~ y=y(t), ~r=r(t), ~\theta=\theta(t)$ we can start with:
+
+$$ r^2 = x^2 + y^2, \quad \tan\theta = \frac{y}{x} \tag{c} $$
+
+Differentiating the first equation in (c) with respect to $t$ we get:
+
+$$2rr' = 2xx' + 2yy', ~rr' = xx' + yy', ~ r' = \frac{xx' + yy'}{r} \tag{d}$$
+
+Rewriting the second equaton in (c) and then differentiating with respect to $t$ we get:
+
+$$ \theta = \tan^{-1}\frac{y}{x}, \theta' = \frac{1}{1 + {(\frac{y}{x}})^2} \cdot \frac{y'x-yx'}{x^2} = \frac{y'x-yx'}{x^2 + y^2} = \frac{y'x - yx'}{r} $$
