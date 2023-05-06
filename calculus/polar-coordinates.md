@@ -22,6 +22,8 @@ $$ r = \sqrt{x^2 + y^2}, \quad \theta = \text{atan2}({y,x}) $$
 
 If we parameterize such that $x = x(t)$ and $y = y(t)$ and want to find $x'$ and $y'$ in polar coordinates, we have:
 
+**FIXME** - I didn't properly apply the chain rule here on $r\cos\theta$ and $r\sin\theta$.
+
 $$ \frac{dx}{dt} = x(t)' = (r\cos\theta)' = r'\cos\theta - r\sin\theta, \quad \frac{dy}{dt} = y(t)' = (r\sin\theta)' = r'\sin\theta + r\cos\theta \tag{a} $$
 
 thus:
