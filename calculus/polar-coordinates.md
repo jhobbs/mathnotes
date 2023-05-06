@@ -8,6 +8,10 @@ Polar coordinates are a 2d orthogonal coordinate system where coordinates are gi
 
 The radius is the distance from the origin to $P$ and the angle is the angle formed with a line measured counter-clockwise from the positive $x$-axis to a line passing through $P$. 
 
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/2D_polar.svg/1024px-2D_polar.svg.png"  width="344" height="336">
+
+
 ## Converting Between Rectangular and Polar
 
 $$ x = r\cos\theta, \quad y = r\sin\theta $$
