@@ -52,6 +52,21 @@ The motion of the turntable rotating always changes only the angle to the bug re
 
 $$ \frac{dr}{dt} = 0,~\frac{d\theta}{dt} = \alpha \tag{b}$$
 
+Adding together the equations $\frac{dr}{dt}$ and $\frac{d\theta}{dt}$ respectively from (a) and (b) gives:
+
+$$ \frac{dr}{dt} = -v_0,~\frac{d\theta}{dt} = \alpha \tag{c} $$
+
+We can then divide to get $\frac{dr}{d\theta}$:
+
+$$ \frac{dr}{d\theta} = \frac{dr}{dt}\frac{dt}{d\theta} = \frac{-v_0}{\alpha}, \alpha \neq 0 \tag{d} $$
+
+To find the path of the equation we can rearrange and integrate with initial conditions $r = a$ and $\theta = 0$
+
+$$ \int_{r=a}^{r} dr = \int_{\theta=0}^{\theta}-\frac{v_0}{\alpha}d\theta \tag{e} $$
+
+Which gives:
+
+$$ r = a - \frac{v_0}{\alpha}\theta \tag{f} $$
 
 I found the notes in this document on converting a system of rectangular differential equations to polar coordinates particularly helpful:
 http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf
