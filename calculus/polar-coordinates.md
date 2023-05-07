@@ -28,7 +28,7 @@ thus:
 
 $$ \frac{\frac{dy}{dt}}{\frac{dx}{dt}} = \frac{dy}{dx} = \frac{r'sin\theta + \theta'r\cos\theta}{r'\cos\theta - \theta'r\sin\theta} \tag{b} $$
 
-Doing some tedious algebra from here, we can arrive at definitions of $r'$ and $\theta'$ in terms of $x, y, x', y' \text{and} r$, but it's easier if we start with the following (letting $x=x(t), ~ y=y(t), ~r=r(t), ~\theta=\theta(t)$):
+Doing some tedious algebra from here, we can arrive at definitions of $r'$ and $\theta'$ in terms of $x, y, x', y' ~\text{and}~r$, but it's easier if we start with the following, letting $x=x(t), ~ y=y(t), ~ r=r(t), ~\theta = \theta(t)$:
 
 
 $$ r^2 = x^2 + y^2, \quad \tan\theta = \frac{y}{x} \tag{c} $$
