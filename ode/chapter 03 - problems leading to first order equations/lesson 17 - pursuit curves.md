@@ -108,7 +108,7 @@ Differentiating (a) with respect to $t$ gives:
 
 $$ x' = \frac{dx}{dt} = -v_0, ~ y' = \frac{dy}{dt} = 0 \tag{b} $$
 
-Using formulas from my polar coordinates notes (see the 'Derivatives' section here https://jhobbs.github.io/mathnotes/calculus/polar-coordinates.html) we can find $r'$ and $\theta'$:
+Using formulas from my [polar coordinates notes](https://jhobbs.github.io/mathnotes/calculus/polar-coordinates.html) (see the 'Derivatives' section here ) we can find $r'$ and $\theta'$:
 
 $$ \frac{dr}{dt} = -v_0\cos\theta, ~ \frac{d\theta}{dt} = v_0\frac{sin\theta}{r} \tag{c} $$
 
@@ -132,9 +132,14 @@ Setting initial conditions $r = a$, $\theta = 0$ gives $c = \alpha r^2$. Substit
 
 $$ 2v_0r\sin\theta = \alpha (a^2 - r^2) \tag{h} $$
 
-which is the answer to 5.a. The path makes a circle (todo: show why by converting to rectangular coordinates or solving for $r$).
+which is the answer to 5.a. The path makes a circle. Converting to rectangular coordinates we have:
 
-I found the notes in this document on converting a system of rectangular differential equations to polar coordinates particularly helpful:
-http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf
+$$ x^2 + y^2 = a^2 - \frac{2v_0y}{\alpha} \tag{i} $$
+
+Which, by rearranging terms and completing the square, gives:
+
+$$ x^2 + (y + \frac{v_0}{\alpha})^2 = a^2 + \frac{{v_0}^2}{\alpha^2} \tag{j} $$
+
+This is a circle with center $(0, -\frac{v_0}{\alpha})$ and radius $\sqrt{a^2 + \frac{{v_0}^2}{\alpha^2}}$.
 
 {% include_relative turntable.html %}
