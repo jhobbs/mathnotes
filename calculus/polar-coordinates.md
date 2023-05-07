@@ -48,3 +48,6 @@ $$ \frac{dr}{dt} = r' = \frac{xx' + yy'}{r}, \frac{d\theta}{dt} = ~\theta' = \fr
 Therefore, the derivative of $r$ with respect to $\theta$ is:
 
 $$ \frac{\frac{dr}{dt}}{\frac{d\theta}{dt}} = \frac{dr}{d\theta} = \frac{xx' + yy'}{r} \cdot \frac{r^2}{y'x - yx'} = \frac{r(xx' + yy')}{y'x - yx'} $$
+
+## Other Notes
+I found the notes in [this document](http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf) on converting a system of rectangular differential equations to polar coordinates particularly helpful.
