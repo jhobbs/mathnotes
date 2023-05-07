@@ -22,15 +22,14 @@ $$ r = \sqrt{x^2 + y^2}, \quad \theta = \text{atan2}({y,x}) $$
 
 If we parameterize such that $x = x(t)$ and $y = y(t)$ and want to find $x'$ and $y'$ in polar coordinates, we have:
 
-**FIXME** - I didn't properly apply the chain rule here on $r\cos\theta$ and $r\sin\theta$.
-
-$$ \frac{dx}{dt} = x(t)' = (r\cos\theta)' = r'\cos\theta - r\sin\theta, \quad \frac{dy}{dt} = y(t)' = (r\sin\theta)' = r'\sin\theta + r\cos\theta \tag{a} $$
+$$ \frac{dx}{dt} = x(t)' = (r\cos\theta)' = r'\cos\theta - \theta'r\sin\theta, \quad \frac{dy}{dt} = y(t)' = (r\sin\theta)' = r'\sin\theta + \theta'r\cos\theta \tag{a} $$
 
 thus:
 
-$$ \frac{\frac{dy}{dt}}{\frac{dx}{dt}} = \frac{dy}{dx} = \frac{r'sin\theta + r\cos\theta}{r'\cos\theta - r\sin\theta} \tag{b} $$
+$$ \frac{\frac{dy}{dt}}{\frac{dx}{dt}} = \frac{dy}{dx} = \frac{r'sin\theta + \theta'r\cos\theta}{r'\cos\theta - \theta'r\sin\theta} \tag{b} $$
 
-Coming from the other way, and considering $x=x(t), ~ y=y(t), ~r=r(t), ~\theta=\theta(t)$ we can start with:
+Doing some tedious algebra from here, we can arrive at definitions of $r'$ and $\theta'$ in terms of $x, y, x', y' \text{and} r$, but it's easier if we start with the following (letting $x=x(t), ~ y=y(t), ~r=r(t), ~\theta=\theta(t)$):
+
 
 $$ r^2 = x^2 + y^2, \quad \tan\theta = \frac{y}{x} \tag{c} $$
 
