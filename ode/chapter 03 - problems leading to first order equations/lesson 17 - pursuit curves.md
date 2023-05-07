@@ -138,8 +138,8 @@ $$ x^2 + y^2 = a^2 - \frac{2v_0y}{\alpha} \tag{i} $$
 
 Which, by rearranging terms and completing the square, gives:
 
-$$ x^2 + (y + \frac{v_0}{\alpha})^2 = a^2 + \frac{{v_0}^2}{\alpha^2} \tag{j} $$
+$$ x^2 + (y + \frac{v_0}{\alpha})^2 = a^2 + \frac{ {v_0}^2 }{\alpha^2} \tag{j} $$
 
-This is a circle with center $(0, -\frac{v_0}{\alpha})$ and radius $\sqrt{a^2 + \frac{{v_0}^2}{\alpha^2}}$.
+This is a circle with center $(0, -\frac{v_0}{\alpha})$ and radius $\sqrt{a^2 + \frac{ {v_0}^2 }{\alpha^2}}$.
 
 {% include_relative turntable.html %}
