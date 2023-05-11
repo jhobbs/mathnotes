@@ -132,6 +132,27 @@ function getBugTheta() {
     return atan2(bug_y, bug_x);
 }
 
+/*
+ * Todo: Think about how to make the motion make sense with some real units, especially
+   RPM. I think we'd need to consider how much radial movement and how much transverse
+   movement we'd want per frame, according to our two movement vectors and our frame rate,
+   then break that down into a bunch of small steps per Euler's method.
+
+   For example, to keep it simple, let's say we're nominally rotating at 60 RPM.
+   Then for each second, we want to perform 2PI radians of revolution each second. If our
+   framerate is 60fps, we'd have 2PI/60 = PI/30 radians of rotation per frame. If our bug
+   is sitting on the very outside of the record, it will need to travel a distance of
+   PI/30 * RECORD_RADIUS pixels, in tiny, iterated steps in the transverse direction.
+
+   How many steps do we need to take? If we take steps of a fixed size x pixels we can
+   divide our desired distance of PI/30 * RECORD_RADIUS pixels by x pixels to get the
+   number of steps we need to take. Alternatively, if we take a fixed number of steps,
+   we can divide PI/30 * RECORD_RADIUS by the number of steps we want to take to find
+   the distance we should move each step.
+
+   Things will be more complicated when we also consider the bug's locomotive motion.
+
+   */
 function moveBug() {
 
     if (i > 10000
