@@ -30,7 +30,7 @@ function setupRadio(canvas) {
     modeRadio.option(MODE_PARALLEL, "Parallel to Start");
     modeRadio.option(MODE_TO_LIGHT, "To Light");
     modeRadio.selected(MODE_PARALLEL);
-    modeRadio.position(250, 10);
+    modeRadio.position(canvas.position().x + 250,  canvas.position().y + 10);
 }
 
 
