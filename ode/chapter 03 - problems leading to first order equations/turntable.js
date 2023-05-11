@@ -36,6 +36,7 @@ function setupRadio(canvas) {
 
 function setup() {
     let canvas = createCanvas(TABLE_SIZE, TABLE_SIZE);
+    canvas.parent("turntable");
     setupSliders(canvas);
     setupRadio(canvas);
     redo();
