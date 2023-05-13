@@ -150,9 +150,13 @@ The book asks:
 
 Here, we have that wherever the bug is on the turntable, it will be walking towards a light at a fixed point. Let's call that fixed point $L$. Then, at any given time, the bug is walking along a line between its position, $B$, and the position of the light, $L$. The angle of this line, relative to the $x$-axis, is given by $\text{atan2}(B_y - L_y, B_x - L_x)$. We'll call this angle $\rho$.
 
-Now, the motion of the bug at any point is $v_0$ along a line with the angle $\rho$, and $r\alpha$ in the direction of rotation.
+Now, the motion of the bug at any point is its locomotive motion at a rate of $v_0$ along a line with the angle $\rho$, and the turntable's rotation given as $r\alpha$ in the direction of rotation.
   
+Using formulas from my [polar coordinates notes](https://jhobbs.github.io/mathnotes/calculus/polar-coordinates.html) (see the 'Radial and Transverse Components of Motion' section here), we can find that the radial component of its locomotive motion is $v_0 \cos{(\theta - \rho)}$ and the transverse component is $v_0 \sin{(\theta - \rho)}$.
 
+Therefore, we have these differential equations capturing the locomotive motion of the bug:
+
+$$ \frac{dr}{dt} = v_0 \cos{\theta - \rho},\quad \frac{d\theta}{dt} = v_0\sin{(\theta - \rho)} $$
 
 
 {% include_relative turntable.html %}
