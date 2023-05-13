@@ -24,7 +24,8 @@ description: >- # this means to ignore newlines until "baseurl:"
   These are my notes on math. Some of them come from following books, others are just whatever
   I found interesting or useful.
 baseurl: "/mathnotes" # the subpath of your site, e.g. /blog
-url: "https://jhobbs.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+# url: "https://jhobbs.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "http://localhost:4000/mathnotes/"
 github_username:  jhobbs
 
 # Build settings
