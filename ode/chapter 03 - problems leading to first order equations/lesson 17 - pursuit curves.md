@@ -142,4 +142,17 @@ $$ x^2 + (y + \frac{v_0}{\alpha})^2 = a^2 + \frac{ {v_0}^2 }{\alpha^2} \tag{j} $
 
 This is a circle with center $(0, -\frac{v_0}{\alpha})$ and radius $\sqrt{a^2 + \frac{ {v_0}^2 }{\alpha^2}}$.
 
+### 12. Bug Walking Towards a Light
+
+The book asks:
+
+"Assume in problem 4 that the insect moves straight toward a light which is fixed in space directly above the end of the diameter drawn through the point where it steps on the table. Find the differential equation of its path in polar coordinates."
+
+Here, we have that wherever the bug is on the turntable, it will be walking towards a light at a fixed point. Let's call that fixed point $L$. Then, at any given time, the bug is walking along a line between its position, $B$, and the position of the light, $L$. The angle of this line, relative to the $x$-axis, is given by $\text{atan2}(B_y - L_y, B_x - L_x)$. We'll call this angle $\rho$.
+
+Now, the motion of the bug at any point is $v_0$ along a line with the angle $\rho$, and $r\alpha$ in the direction of rotation.
+  
+
+
+
 {% include_relative turntable.html %}
