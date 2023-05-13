@@ -63,6 +63,9 @@ Let's assume the particle at $B(r_1, \theta)$ is moving in the direction of poin
 
 Then, the component of $\vec{v}$ in the $R$ direction is the projection of $v$ onto $R$, given by $\vec{v_R} = v_0 \cos{(\theta - \rho)}$, and the component of $\vec{v}$ in the $T$ direction is the projection of $v$ onto $T$, given by $\vec{v_T} = v_0 \sin{(\theta - \rho)}$.
 
+![Radial and Transverse Components](radial-and-transverse-components.jpg "Radial and Transverse Components")
+
+
 
 ## Other Notes
 I found the notes in [this document](http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf) on converting a system of rectangular differential equations to polar coordinates particularly helpful.
