@@ -51,6 +51,8 @@ $$ \frac{\frac{dr}{dt}}{\frac{d\theta}{dt}} = \frac{dr}{d\theta} = \frac{xx' + y
 
 ## Radial and Transverse Components of Motion
 
+FIXME: this isn't correct yet. The angle between the particle point $B$ and the end point $L$ depends on the length of the radius to $B$?
+
 Given a particle at point $B(r,\theta)$ moving on a plane, we can define the radial and transverse components of the particle's motion.
 
 **Radial**: The particle's motion in the direction away from the origin, that is, in the direction that purely increases the $r$ coordinate of the particle's position.
