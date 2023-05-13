@@ -49,6 +49,21 @@ Therefore, the derivative of $r$ with respect to $\theta$ is:
 
 $$ \frac{\frac{dr}{dt}}{\frac{d\theta}{dt}} = \frac{dr}{d\theta} = \frac{xx' + yy'}{r} \cdot \frac{r^2}{y'x - yx'} = \frac{r(xx' + yy')}{y'x - yx'} $$
 
+## Radial and Transverse Components of Motion
+
+Given a particle at point $B(r,\theta)$ moving on a plane, we can define the radial and transverse components of the particle's motion.
+
+**Radial**: The particle's motion in the direction away from the origin, that is, in the direction that purely increases the $r$ coordinate of the particle's position.
+
+**Transverse**: The particle's motion in the direction tangential to its radius, that is, in the direction that purely increases the $\theta$ coordinate of the particle's position.
+
+Let's call the radial direction $R$ and the transverse direction $T$. Also recognize that the radial and transverse directions are orthogonal - moving in the radial direction doesn't change the transverse component and vice versa. 
+
+Let's assume the particle at $B(r_1, \theta)$ is moving in the direction of point $L(r_2, \rho)$, at velocity $v_0$. We can then say that the velocity vector for the particle is given as the vector $\vec{v} = \langle v_0, \theta - \rho \rangle$.
+
+Then, the component of $\vec{v}$ in the $R$ direction is the projection of $v$ onto $R$, given by $\vec{v_R} = v_0 \cos{(\theta - \rho)}$, and the component of $\vec{v}$ in the $T$ direction is the projection of $v$ onto $T$, given by $\vec{v_T} = v_0 \sin{(\theta - \rho)}$.
+
+
 ## Other Notes
 I found the notes in [this document](http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf) on converting a system of rectangular differential equations to polar coordinates particularly helpful.
 
