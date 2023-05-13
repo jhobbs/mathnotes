@@ -61,11 +61,11 @@ Let's call the radial direction $R$ and the transverse direction $T$. Also recog
 
 Let's assume the particle at $B(r_1, \theta)$ is moving in the direction of point $L(r_2, \rho)$, at velocity $v_0$. We can then say that the velocity vector for the particle is given as the vector $\vec{v} = \langle v_0, \theta - \rho \rangle$.
 
-Then, the component of $\vec{v}$ in the $R$ direction is the projection of $v$ onto $R$, given by $\vec{v_R} = v_0 \cos{(\theta - \rho)}$, and the component of $\vec{v}$ in the $T$ direction is the projection of $v$ onto $T$, given by $\vec{v_T} = v_0 \sin{(\theta - \rho)}$.
+Then, the component of $\vec{v}$ in the $R$ direction is the projection of $v$ onto $R$, given by $\vec{v_R} = v_0 \cos{(\theta - \rho)}$, and the component of $\vec{v}$ in the $T$ direction is the projection of $v$ onto $T$, given by $\vec{v_T} = v_0 \sin{(\theta - \rho)}$. The following image shows this geometrically:
 
 ![Radial and Transverse Components](radial-and-transverse-components.jpg "Radial and Transverse Components")
 
-
+Here, you can see that we can sort of think of the $R$ direction as the $x$-axis and the $T$ direction as the $y$-axis when thinking about how to find the amount of motion in the $R$ and $T$ directions. It's important to remember, though, that for a moving particle, its position is changing constantly, and so are the $R$ and $T$ directions, so they don't make good fixed references.
 
 ## Other Notes
 I found the notes in [this document](http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf) on converting a system of rectangular differential equations to polar coordinates particularly helpful.
