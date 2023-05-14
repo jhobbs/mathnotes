@@ -100,45 +100,45 @@ We can find functions for change in radius and change in angle by starting with 
 
 Parameterizing to get $x = x(t)$ and $y = y(t)$ we have:
 
-$$ x = -v_0t + c_1, ~y = c_2 \tag{a} $$
+$$ x = -v_0t + c_1, ~y = c_2 \tag{5.a} $$
 
 where $c_1$ and $c_2$ are arbitrary constant's allowing the bug's position to move around the turntable.
 
 Differentiating (a) with respect to $t$ gives:
 
-$$ x' = \frac{dx}{dt} = -v_0, ~ y' = \frac{dy}{dt} = 0 \tag{b} $$
+$$ x' = \frac{dx}{dt} = -v_0, ~ y' = \frac{dy}{dt} = 0 \tag{5.b} $$
 
 Using formulas from my [polar coordinates notes](https://jhobbs.github.io/mathnotes/calculus/polar-coordinates.html) (see the 'Derivatives' section here ) we can find $r'$ and $\theta'$:
 
-$$ \frac{dr}{dt} = -v_0\cos\theta, ~ \frac{d\theta}{dt} = v_0\frac{sin\theta}{r} \tag{c} $$
+$$ \frac{dr}{dt} = -v_0\cos\theta, ~ \frac{d\theta}{dt} = v_0\frac{sin\theta}{r} \tag{5.c} $$
 
 Combining with the motion of the turntable rotating at speed $\alpha$ we get:
 
-$$ \frac{dr}{dt} = -v_0\cos\theta, \frac{d\theta}{dt} = \frac{v_0\sin\theta + r\alpha}{r} \tag{d} $$
+$$ \frac{dr}{dt} = -v_0\cos\theta, \frac{d\theta}{dt} = \frac{v_0\sin\theta + r\alpha}{r} \tag{5.d} $$
 
 Dividing gives us $\frac{dr}{d\theta}$:
 
-$$ \frac{dr}{d\theta} = \frac{dr}{dt}\frac{dt}{d\theta} = \frac{-rv_0\cos\theta}{v_0sin\theta + r\alpha} \tag{e} $$
+$$ \frac{dr}{d\theta} = \frac{dr}{dt}\frac{dt}{d\theta} = \frac{-rv_0\cos\theta}{v_0sin\theta + r\alpha} \tag{5.e} $$
 
 We can rewrite this as:
 
-$$ (v_0\sin\theta + r\alpha)dr + (rv_0\cos\theta)d\theta = 0 \tag{f} $$
+$$ (v_0\sin\theta + r\alpha)dr + (rv_0\cos\theta)d\theta = 0 \tag{5.f} $$
 
 Which is an exact differential equation with the solution:
 
-$$ 2v_0r\sin\theta + \alpha r^2 = c \tag{g} $$
+$$ 2v_0r\sin\theta + \alpha r^2 = c \tag{5.g} $$
 
 Setting initial conditions $r = a$, $\theta = 0$ gives $c = \alpha r^2$. Substituting into (g) and rearranging we get:
 
-$$ 2v_0r\sin\theta = \alpha (a^2 - r^2) \tag{h} $$
+$$ 2v_0r\sin\theta = \alpha (a^2 - r^2) \tag{5.h} $$
 
 which is the answer to 5.a. The path makes a circle. Converting to rectangular coordinates we have:
 
-$$ x^2 + y^2 = a^2 - \frac{2v_0y}{\alpha} \tag{i} $$
+$$ x^2 + y^2 = a^2 - \frac{2v_0y}{\alpha} \tag{5.i} $$
 
 Which, by rearranging terms and completing the square, gives:
 
-$$ x^2 + (y + \frac{v_0}{\alpha})^2 = a^2 + \frac{ {v_0}^2 }{\alpha^2} \tag{j} $$
+$$ x^2 + (y + \frac{v_0}{\alpha})^2 = a^2 + \frac{ {v_0}^2 }{\alpha^2} \tag{5.j} $$
 
 This is a circle with center $(0, -\frac{v_0}{\alpha})$ and radius $\sqrt{a^2 + \frac{ {v_0}^2 }{\alpha^2}}$.
 
@@ -152,11 +152,16 @@ Here, we have that wherever the bug is on the turntable, it will be walking towa
 
 Now, the motion of the bug at any point is its locomotive motion at a rate of $v_0$ along a line with the angle $\rho$, and the turntable's rotation given as $r\alpha$ in the direction of rotation.
   
-Using formulas from my [polar coordinates notes](https://jhobbs.github.io/mathnotes/calculus/polar-coordinates.html) (see the 'Radial and Transverse Components of Motion' section here), we can find that the radial component of its locomotive motion is $-v_0 \cos{(\theta - \rho)}$ and the transverse component is $v_0 \sin{(\theta - \rho)}$.
+Using formulas from my [polar coordinates notes](https://jhobbs.github.io/mathnotes/calculus/polar-coordinates.html) (see the 'Radial and Transverse Components of Motion' section here), we can find that the differential equations capturing the locomotive motion of the bug are:
 
-Therefore, we have these differential equations capturing the locomotive motion of the bug:
+$$ \frac{dr}{dt} = -v_0 \cos{(\theta - \rho)},\quad \frac{rd\theta}{dt} = v_0\sin{(\theta - \rho)} \tag{12.a} $$
 
-$$ \frac{dr}{dt} = -v_0 \cos{(\theta - \rho)},\quad \frac{d\theta}{dt} = v_0\sin{(\theta - \rho)} $$
+Combined with the differential equation for the rotation of the turntable, $\frac{rd\theta}{dt} = r\alpha$, and dividing, we get the following differential equation describing the motion of the bug on the turntable:
 
+$$ \frac{dr}{d\theta} = \frac{-v_0 r \cos{(\theta - \rho)}}{r \alpha + v_0 \sin{(\theta - \rho)}} \tag{12.b} $$ 
+
+We can't solve this in this form though, because $\rho = \text{atan2}(B_y - L_y, B_x - L_x)$. I think we could find $\rho$ in polar terms, but its value would depend on both $r$ and $\theta$ and would thus lead to an inseperable differential equation.
+
+It's also worth pointing out that the approach used to solve this question could be used on question 5. above. There, $\rho$ is just fixed at 0 because the bug is moving parallel to the $x$-axis. Setting $\rho = 0$ in (12.b) leads directly to (5.e).
 
 {% include_relative turntable.html %}
