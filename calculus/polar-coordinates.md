@@ -70,7 +70,7 @@ Here, you can see that we can sort of think of the $R$ direction as the $x$-axis
 
 We must also point out that $\vec{v_R}$ is moving in the negative $R$ direction here and so is reducing the radius. In vector component form it would be given as $\langle -v_0 \cos{(\theta - \rho)}, \theta \rangle$ and the derivative of the radius with respect to time would be given by $\frac{dr}{dt} = -v_0 \cos{(\theta - \rho)}$.
 
-Also, while $\|\|\vec{v_T}\|\| = v_0 \sin{(\theta - \rho)}$, this doesn't tell us the change in $\theta$ with respect to time, it only tells us the amount of linear movement in the tangential direction. The change in angle also depends on the radius - the further from the origin we are, the less the angle will change. The derivative of the angle $\theta$ with respect to time is then given by $\frac{d\theta}{dt} = \frac{v_0 \sin{(\theta - \rho)}}{r}$.
+Also, while $\|\|\vec{v_T}\|\| = v_0 \sin{(\theta - \rho)}$, this doesn't tell us the change in $\theta$ with respect to time, it only tells us the amount of linear movement in the tangential direction. The change in angle also depends on the radius - the further from the origin we are, the less the angle will change. The derivative of the angle $\theta$ with respect to time is then given by $\frac{d\theta}{dt} = \frac{v_0 \sin{(\theta - \rho)}}{r}$. *Note*: The division by $r$ here needs better justification. It's intuitive that the bigger $r$, the less the change in angle, but it's not clear why it should be a linear factor.
 
 ## Other Notes
 I found the notes in [this document](http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf) on converting a system of rectangular differential equations to polar coordinates particularly helpful.
