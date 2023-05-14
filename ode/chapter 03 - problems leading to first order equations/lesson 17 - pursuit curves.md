@@ -152,11 +152,11 @@ Here, we have that wherever the bug is on the turntable, it will be walking towa
 
 Now, the motion of the bug at any point is its locomotive motion at a rate of $v_0$ along a line with the angle $\rho$, and the turntable's rotation given as $r\alpha$ in the direction of rotation.
   
-Using formulas from my [polar coordinates notes](https://jhobbs.github.io/mathnotes/calculus/polar-coordinates.html) (see the 'Radial and Transverse Components of Motion' section here), we can find that the radial component of its locomotive motion is $v_0 \cos{(\theta - \rho)}$ and the transverse component is $v_0 \sin{(\theta - \rho)}$.
+Using formulas from my [polar coordinates notes](https://jhobbs.github.io/mathnotes/calculus/polar-coordinates.html) (see the 'Radial and Transverse Components of Motion' section here), we can find that the radial component of its locomotive motion is $-v_0 \cos{(\theta - \rho)}$ and the transverse component is $v_0 \sin{(\theta - \rho)}$.
 
 Therefore, we have these differential equations capturing the locomotive motion of the bug:
 
-$$ \frac{dr}{dt} = v_0 \cos{\theta - \rho},\quad \frac{d\theta}{dt} = v_0\sin{(\theta - \rho)} $$
+$$ \frac{dr}{dt} = -v_0 \cos{(\theta - \rho)},\quad \frac{d\theta}{dt} = v_0\sin{(\theta - \rho)} $$
 
 
 {% include_relative turntable.html %}
