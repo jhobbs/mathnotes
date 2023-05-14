@@ -51,9 +51,8 @@ $$ \frac{\frac{dr}{dt}}{\frac{d\theta}{dt}} = \frac{dr}{d\theta} = \frac{xx' + y
 
 ## Radial and Transverse Components of Motion
 
-FIXME: this isn't correct yet. The angle between the particle point $B$ and the end point $L$ depends on the length of the radius to $B$?
 
-Given a particle at point $B(r,\theta)$ moving on a plane, we can define the radial and transverse components of the particle's motion.
+Given a particle at point $B(r,\theta)$ moving in a plane, we can define the radial and transverse components of the particle's motion.
 
 **Radial**: The particle's motion in the direction away from the origin, that is, in the direction that purely increases the $r$ coordinate of the particle's position.
 
@@ -61,9 +60,9 @@ Given a particle at point $B(r,\theta)$ moving on a plane, we can define the rad
 
 Let's call the radial direction $R$ and the transverse direction $T$. Also recognize that the radial and transverse directions are orthogonal - moving in the radial direction doesn't change the transverse component and vice versa. 
 
-Let's assume the particle at $B(r_1, \theta)$ is moving in the direction of point $L(r_2, \rho)$, at velocity $v_0$. We can then say that the velocity vector for the particle is given as the vector $\vec{v} = \langle v_0, \theta - \rho \rangle$.
+Let's assume the particle at $B(r_1, \theta_1)$ is moving in the direction of point $L(r_2, \theta_2)$, at velocity $v_0$. We can then say that the velocity vector for the particle is given as the vector $\vec{v} = \langle v_0, \theta - \rho \rangle$.
 
-Then, the component of $\vec{v}$ in the $R$ direction is the projection of $v$ onto $R$, given by $\vec{v_R} = v_0 \cos{(\theta - \rho)}$, and the component of $\vec{v}$ in the $T$ direction is the projection of $v$ onto $T$, given by $\vec{v_T} = v_0 \sin{(\theta - \rho)}$. The following image shows this geometrically:
+Then, the component of $\vec{v}$ in the $R$ direction is the projection of $\vec{v}$ onto $R$, whose magnitude is given by $\|\|\vec{v_R}\|\| = v_0 \cos{(\theta - \rho)}$, and the component of $\vec{v}$ in the $T$ direction is the projection of $\vec{v}$ onto $T$, whose magnitude is given by $\|\|\vec{v_T}\|\| = v_0 \sin{(\theta - \rho)}$. The following image shows this geometrically:
 
 ![Radial and Transverse Components](radial-and-transverse-components.jpg "Radial and Transverse Components")
 
