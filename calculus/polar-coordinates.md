@@ -68,7 +68,7 @@ Then, the component of $\vec{v}$ in the $R$ direction is the projection of $\vec
 
 Here, you can see that we can sort of think of the $R$ direction as the $x$-axis and the $T$ direction as the $y$-axis when thinking about how to find the amount of motion in the $R$ and $T$ directions. It's important to remember, though, that for a moving particle, its position is changing constantly, and so are the $R$ and $T$ directions, so they don't make good fixed references.
 
-We must also point out that $\vec{v_R}$ is moving in the negative $R$ direction here and so is reducing the radius. In vector component form it would be given as $\langle -v_0 \cos{(\theta - \rho)} \rangle, \theta \rangle$.
+We must also point out that $\vec{v_R}$ is moving in the negative $R$ direction here and so is reducing the radius. In vector component form it would be given as $\langle -v_0 \cos{(\theta - \rho)}, \theta \rangle$.
 
 ## Other Notes
 I found the notes in [this document](http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf) on converting a system of rectangular differential equations to polar coordinates particularly helpful.
