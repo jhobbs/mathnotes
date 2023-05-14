@@ -164,4 +164,21 @@ We can't solve this in this form though, because $\rho = \text{atan2}(B_y - L_y,
 
 It's also worth pointing out that the approach used to solve this question could be used on question 5. above. There, $\rho$ is just fixed at 0 because the bug is moving parallel to the $x$-axis. Setting $\rho = 0$ in (12.b) leads directly to (5.e).
 
+
+### Animation
+
+The animation below models paths given by the 3 problems above, with some limitations and modifications.
+
+* This uses Euler's method to estimate the paths rather than using exact solutions.
+* Instead of assuming the bug always enters the turntable at the $x$-axis, we allow the bug to start anywhere.
+* We're a little hazy with the units of speed and distance. Animation is hard. I'd like to improve this.
+
+We show a limited history of the bug's position to make the path more obvious. There are also 3 vectors drawn:
+
+* blue - the bug's locomotive velocity
+* red - the bug's linear velocity from the turntable's rotation
+* yellow - the bug's combined velocity from its locomotive motion and the turntable's rotation
+
 {% include_relative turntable.html %}
+
+It's interesting to me that the "always walk towards the light" approach can wind up with the bug never reaching the light, but instead getting stuck at some kind of equillibrium point where the bug's locomotive velocity and the linear velocity from the rotation of the turntable are equal in value and opposite in direction. I wonder how we find which initial conditions lead to the bug reaching the light and which don't? For those that don't, I wonder how we find the equillibrium point the bug will stop at.
