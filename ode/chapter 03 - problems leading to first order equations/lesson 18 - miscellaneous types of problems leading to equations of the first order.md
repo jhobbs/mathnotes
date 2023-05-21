@@ -12,7 +12,7 @@ We could rearrange it to say:
 
 $$ \frac{di}{dt} = \frac{E}{L} - \frac{Ri}{L} $$
 
-Which says that the change in current with respect to time is proportional to the current current (hiyo) plus the electromotive force divided by the inductance.
+Which says that the current changes over time by decreasing proportionally to the current current (hiyo) while growing by the electromotive force divided by the inductance. For constant $E$, $L$ and $R$, this leads to a steady state current when the current grows enough that current loss caused by resistance equals the current growth caused by emf. This is makes the steady state current a sort of "terminal current" just like terminal velocity is the steady state where acceleration from gravity equals deceleration from air resistance.
 
 This [desmos link](https://www.desmos.com/calculator/tzigt2uc7x) has graphs of the solutions when the emf is direct or alternating.
 
