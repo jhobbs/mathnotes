@@ -20,6 +20,6 @@ Some interesting things to note:
 
 * Increasing resistance reduces the peak current for both the DC and AC scenarios
 * Increasing inductance decreases the rate of change of current for both DC and AC scenarios.
-** For DC, this slows the ramp up/ramp down to the steady state current, which is $\frac{E}{R}$.
-** For the AC scenario, the slower current change that comes from increasing inductance has the effect of reducing the peak current. This makes sense since the current is changing more slowly, it has less time to change before the voltage alternates and starts pushing the current back in the other direction.
-** The lag in current change caused by the inductance brings the current out of phase with the emf. This is what results in the lower peak currents and is known as inductive reactance. Increasing inductance you can see that the current ends up being a quarter of a cycle ahead of the voltage. 
+    * For DC, this slows the ramp up/ramp down to the steady state current, which is $\frac{E}{R}$.
+    * For the AC scenario, the slower current change that comes from increasing inductance has the effect of reducing the peak current. This makes sense since the current is changing more slowly, it has less time to change before the voltage alternates and starts pushing the current back in the other direction.
+    * The lag in current change caused by the inductance brings the current out of phase with the emf. This is what results in the lower peak currents and is known as inductive reactance. Increasing inductance you can see that the current ends up being a quarter of a cycle ahead of the voltage. 
