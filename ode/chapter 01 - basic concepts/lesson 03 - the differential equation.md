@@ -1,3 +1,7 @@
+---
+layout: page
+title: The Differential Equation
+---
 # The Differential Equation
 
 ***Definition 3.1 - Ordinary Differential Equation***

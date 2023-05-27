@@ -1,3 +1,8 @@
+---
+layout: page
+title: Lengths, Areas and Volumes
+---
+
 # Lengths, Areas and Volumes
 
 ## Volumes of Solids of Revolution

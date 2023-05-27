@@ -1,3 +1,8 @@
+---
+layout: page
+title: Recognizable Exact Differential Equations
+---
+
 # Recognizable Exact Differential Equations
 
 Sometimes we can recognize exact differential equations. For example

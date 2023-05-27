@@ -1,3 +1,8 @@
+---
+layout: page
+title: Dilution and Accretion
+---
+
 # Dilution and Accretion
 (*jmh* my notes)
 

@@ -1,3 +1,8 @@
+---
+layout: page
+title: First Order Differential Equation with Homogenous Coefficients
+---
+
 # First Order Differential Equation with Homogenous Coefficients
 
 ## Definition of a Homogenous Function

@@ -1,3 +1,8 @@
+---
+layout: page
+title: Direction Field
+---
+
 # Direction Field
 
 ***Definition 5.12*** 

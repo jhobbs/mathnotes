@@ -1,3 +1,8 @@
+---
+layout: page
+title: Trajectories
+---
+
 # Trajectories
 
 ## Isogonal Trajectories

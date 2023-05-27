@@ -1,3 +1,7 @@
+---
+layout: page
+title: Trigonometric Identities
+---
 # Trigonometric Identities
 
 ## Sum and Difference Formulas

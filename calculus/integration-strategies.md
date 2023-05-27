@@ -1,3 +1,8 @@
+---
+layout: page
+title: Integration Strategies
+---
+
 # Integration Strategies
 
 ## Trig Sub

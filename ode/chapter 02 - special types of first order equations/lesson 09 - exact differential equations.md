@@ -1,3 +1,8 @@
+---
+layout: page
+title: Exact Differential Equations
+---
+
 # Exact Differential Equations
 
 ## Review of Integration Theory

@@ -1,3 +1,8 @@
+---
+layout: page
+title: Motion of a Particle Along a Straight Line
+---
+
 # Motion of a Particle Along a Straight Line
 
 ## Preliminaries 

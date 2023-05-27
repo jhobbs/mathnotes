@@ -1,3 +1,8 @@
+---
+layout: page
+title: Miscellaneous Types of Problems Leading to Equations of the First Order
+---
+
 # Miscellaneous Types of Problems Leading to Equations of the First Order
 
 ## First Order Linear Electric Circuit

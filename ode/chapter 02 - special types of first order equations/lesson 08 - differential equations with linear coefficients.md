@@ -1,3 +1,8 @@
+---
+layout: page
+title: Differential Equations with Linear Coefficients
+---
+
 # Differential Equations with Linear Coefficients
 
 ## A Review of Some Plane Analytic Geometry

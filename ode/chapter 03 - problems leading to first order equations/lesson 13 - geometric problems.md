@@ -1,3 +1,8 @@
+---
+layout: page
+title: Geometric Problems
+---
+
 # Geometric Problems
 
 *jmh: my notes*

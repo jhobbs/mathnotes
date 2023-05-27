@@ -1,3 +1,8 @@
+---
+layout: page
+title: The General Solution of a Differential Equation
+---
+
 # The General Solution of a Differential Equation
 
 ## Multiplicity of Solutions of a Differential Equation

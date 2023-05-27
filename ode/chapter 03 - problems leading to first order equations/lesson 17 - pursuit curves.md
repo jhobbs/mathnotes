@@ -1,3 +1,8 @@
+---
+layout: page
+title: Pursuit Curves
+---
+
 # Pursuit Curves
 
 (*jmh* my notes)

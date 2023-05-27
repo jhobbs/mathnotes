@@ -1,3 +1,8 @@
+---
+layout: page
+title: Meaning of the Differential
+---
+
 # Meaning of the Differential
 
 ## Differential of a Function of One Independent Variable

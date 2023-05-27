@@ -1,3 +1,7 @@
+---
+layout: page
+title: Equations Permitting a Choice of Method
+---
 
 # Equations Permitting a Choice of Method
 

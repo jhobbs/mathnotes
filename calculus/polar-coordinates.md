@@ -1,3 +1,8 @@
+---
+layout: page
+title: Polar Coordinates
+---
+
 # Polar Coordinates
 
 This isn't strictly a calculus topic but it comes up a lot with calculus so I'm sticking it here. I'm not really sure what "part" of math coordinate systems belong to; they are used all over the place and have geometric and algebraic interpretations.

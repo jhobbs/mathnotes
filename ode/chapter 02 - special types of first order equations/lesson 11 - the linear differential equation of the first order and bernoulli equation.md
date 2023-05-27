@@ -1,3 +1,8 @@
+---
+layout: page
+title: The Linear Differential Equation
+---
+
 # The Linear Differential Equation
 
 ## Definition of a Linear Differential Equation of the First Order

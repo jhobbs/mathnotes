@@ -1,3 +1,7 @@
+---
+layout: page
+title: Partial Fraction Decomposition
+---
 # Partial Fraction Decomposition
 The goal of partial fraction composition is to be able to rewrite a rational expression as a sum of simpler fractions.
 
