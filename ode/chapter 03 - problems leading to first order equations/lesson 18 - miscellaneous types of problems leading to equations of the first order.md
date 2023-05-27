@@ -79,4 +79,14 @@ Substituting initial conditions $v = 0, y = 2$ we get $c_1 = -\frac{32}{3}$ and:
 
 $$ v = -\sqrt{\frac{8}{3}y^2 - \frac{32}{3}} \tag{g} $$
 
-The chain will leave the support when $y=12$. Substituting that value in (g) we get $v = -\frac{4\sqrt{210}}{3} \approx -19.3 ft/s$. 
+The chain will leave the support when $y=12$. Substituting that value in (g) we get $v = -\frac{4\sqrt{210}}{3} \approx -19.3 ft/s$.
+
+To find the time it takes for the chain to leave the support, we substitute $v = \frac{dy}{dt}$ into (g) to get a new differential equation:
+
+$$ \frac{dy}{dt} = -\sqrt{\frac{8}{3}y^2 - \frac{32}{3}} \tag{h} $$
+
+Rearranging and using initial conditions $t = 0, y = 2$ we get:
+
+$$ \int_{y=2}^{y=12} \frac{dy}{\sqrt{\frac{8}{3}y^2-\frac{32}{3}}} = \int_{t=0}^{t} dt \tag{i} $$
+
+The left-hand integral can be solved exactly using trig sub, but using numeric integration we find the approximate value of $t$ to be $1.51$ seconds.
