@@ -1,3 +1,5 @@
+# Miscellaneous Types of Problems Leading to Equations of the First Order
+
 ## First Order Linear Electric Circuit
 
 Take a circuit where an applied electromotive force $E$, an inductor $L$ and a resistor are connected in series:
@@ -39,3 +41,32 @@ Some interesting things to note:
     * For the AC circuit, the slower current change that comes from increasing inductance has the effect of reducing the peak current. This makes sense since the current is changing more slowly, it has less time to change before the voltage alternates and starts pushing the current back in the other direction.
     * The lag in current change caused by the inductance brings the current out of phase with the emf. This is what results in the lower peak currents and is known as inductive reactance. Increasing inductance you can see that the current ends up being a quarter of a cycle behind the voltage. 
 * Decreasing inductance to near zero makes the DC circuit behave closer and closer to the ideal of Ohm's law: $i = \frac{E}{R}$
+
+## Chain Hung over Frictionless Support
+
+*jmh: my notes*
+
+Consider a chain hung over a frictionless support. When the amount of chain on both sides of the support is equal, the chain is in equilibrium and doesn't move. We can consider ends of the chain here to be hanging at $y = 0$, i.e. the $x$-axis. The chain doesn't move because the force pulling the right side down (the weight of the chain on the right side) is equal to the force pulling the right side up (the weight of the chain on the left side):
+
+$$ F = ChainWeight_{right} - ChainWeight_{left} \tag{a} $$
+
+If we say that the chain weights $\delta$ units per ft and the length is given in feet we have:
+
+$$ F = \delta(ChainLength_{right} - ChainLength_{left}) \tag{b} $$
+
+Assume that the chain is adjusted so the portion on the right side of the support hangs $y$ below the $x$-axis. This means the portion on the right side must be hanging at $y$ above the $x$-axis and we have the force as:
+
+$$ F = 2y\delta \tag{c} $$
+
+From Newton's law of motion we have $F = mv \frac{dv}{dy}$ and so we have:
+
+$$ mv \frac{dv}{dy} = 2y\delta \tag{d} $$
+
+Here, $m$ is the total mass of the chain, which is the weight of the chain ($\delta L$ for a chain $L$ feet long) divided by 32 (to get slugs as the unit).
+
+### Excercise 17.23 
+Assume we have a chain 24 feet long hanging on a frictionless support with 14 feet on the right side and 10 feet on the left side. How long after release and with what velocity will the chain leave the support?
+
+Using $(d)$ above, we have:
+
+$$ \frac{24}{32}\delta v\frac{dv}{dy} = 2y\delta \tag{e} $$
