@@ -63,6 +63,8 @@ Assume that the chain is adjusted so the portion on the right side of the suppor
 
 $$ F = 2y\delta \tag{c} $$
 
+![Chain force](chain-force.jpg)
+
 From Newton's law of motion we have $F = mv \frac{dv}{dy}$ and so we have:
 
 $$ mv \frac{dv}{dy} = 2y\delta \tag{d} $$
