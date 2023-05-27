@@ -69,4 +69,14 @@ Assume we have a chain 24 feet long hanging on a frictionless support with 14 fe
 
 Using $(d)$ above, we have:
 
-$$ \frac{24}{32}\delta v\frac{dv}{dy} = 2y\delta \tag{e} $$
+$$ \frac{24}{32}\delta v\frac{dv}{dy} = 2y\delta,~ vdv = \frac{8}{3}ydy \tag{e} $$
+
+Integrating and solving for $v$ (taking the negative value of the square root to indicate downward velocity) gives:
+
+$$ v = -\sqrt{\frac{8}{3}y^2 + c_1} \tag{f} $$
+
+Substituting initial conditions $v = 0, y = 2$ we get $c_1 = -\frac{32}{3}$ and:
+
+$$ v = -\sqrt{\frac{8}{3}y^2 - \frac{32}{3}} \tag{g} $$
+
+The chain will leave the support when $y=12$. Substituting that value in (g) we get $v = -\frac{4\sqrt{210}}{3} \approx -19.3 ft/s$. 
