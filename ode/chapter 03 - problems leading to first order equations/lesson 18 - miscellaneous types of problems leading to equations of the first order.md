@@ -97,3 +97,49 @@ Rearranging and using initial conditions $t = 0, y = 2$ we get:
 $$ \int_{y=2}^{y=12} \frac{dy}{\sqrt{\frac{8}{3}y^2-\frac{32}{3}}} = \int_{t=0}^{t} dt \tag{i} $$
 
 The left-hand integral can be solved exactly using trig sub, but using numeric integration we find the approximate value of $t$ to be $1.51$ seconds.
+
+## Variable Mass Rocket
+
+A rocket burns fuel to accelerate, causing its mass to be variable over time. To accomodate this, we need to make a small change to Newton's law of motion $m\frac{dv}{dt} = F$ to get:
+
+$$ m\frac{dv}{dt} = F + u\frac{dm}{dt} \tag{a} $$
+
+Here's what the values in this equation represent:
+
+* $m$ - mass of the rocket at time $t$
+* $v$ - velocity of the rocket at time $t$
+* $F$ - sum of all the forces acting on the rocket at time $t$; usually gravity and sometimes drag
+* $dm$ - mass leaving the rocket in time interval $dt$
+* $u$ - velocity of $dm$ at the moment it leaves the rocket, relative to the rocket
+
+The mass of the rocket at time $t$ can be given as $m = M + m_0 - kt$ where the values mean the following:
+
+* $M$ - the fixed mass of the structure of the rocket
+* $m_0$ - the initial mass of the fuel of the rocket
+* $kt$ - the mass of the fuel burned by time $t$
+
+Furthermore, differentiating $m$ with respect to $t$ gives $\frac{dm}{dt} = -kt$.
+
+Rewriting (a) with these values and letting $u = -A$ to indicate the ejected $dm$ is moving in the opposite direction of the rocket we get  get:
+
+$$ (M + m_0 -kt)\frac{dv}{dt} = -(M+m_0-kt)g + Ak \tag{b} $$
+
+Rearranging we get:
+
+$$ dv = (-g + \frac{Ak}{M+m_0-kt})dt \tag{c} $$
+
+Integrating with initial conditions $t = 0, v=0$ gives:
+
+$$ v = -gt -Aln(1-\frac{kt}{M+m_0}),~0 \leq t \leq \frac{M+m_0}{k} \tag{d} $$
+
+Which gives the velocity of the rocket at time $t$.
+
+To find the position of the rocket at time $t$, we rewrite $v$ as $\frac{dy}{dt}$:
+
+$$ \frac{dy}{dt} = -gt -Aln(1-\frac{kt}{M+m_0}) \tag{e} $$
+
+Rearranging and integrating with initial conditions $t = 0, y =0$ gives:
+
+$$ y = At - \frac{gt^2}{2} + \frac{A}{k}(M+m_0-kt)ln(1-\frac{kt}{M+m_0}), ~0 \leq t \leq \frac{M+m_0}{k} \tag{f} $$
+
+Which gives the position of the rocket at time $t$. 
