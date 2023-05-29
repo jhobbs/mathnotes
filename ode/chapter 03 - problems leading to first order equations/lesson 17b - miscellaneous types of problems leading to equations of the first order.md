@@ -100,6 +100,8 @@ The left-hand integral can be solved exactly using trig sub, but using numeric i
 
 ## Variable Mass Rocket
 
+*jmh: my notes*
+
 A rocket burns fuel to accelerate, causing its mass to be variable over time. To accomodate this, we need to make a small change to Newton's law of motion $m\frac{dv}{dt} = F$ to get:
 
 $$ m\frac{dv}{dt} = F + u\frac{dm}{dt} \tag{a} $$
@@ -142,4 +144,8 @@ Rearranging and integrating with initial conditions $t = 0, y =0$ gives:
 
 $$ y = At - \frac{gt^2}{2} + \frac{A}{k}(M+m_0-kt)ln(1-\frac{kt}{M+m_0}), ~0 \leq t \leq \frac{M+m_0}{k} \tag{f} $$
 
-Which gives the position of the rocket at time $t$. 
+Which gives the position of the rocket at time $t$.
+
+### More Reading
+
+MIT has a great [write up on the variable mass rocket equation](https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/98d19cb2b9983c14c6907052499e7a98_MIT16_07F09_Lec14.pdf).
