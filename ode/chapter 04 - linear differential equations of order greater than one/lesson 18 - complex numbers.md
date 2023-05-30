@@ -23,7 +23,7 @@ To form the conjugate of a complex number, simply change the sign of the coeffic
 
 If $z = a + bi$, then the **absolute value of z**, written as $\lvert z \rvert$, is $\lvert z \rvert = \sqrt{a^2 + b^2}$.
 
-In a rectangular coordinate system, we can label the $x$-axis as the real axis and the $y$-axis as the imaginary axis, allowing us to represent any complex number $z = a + bi$ graphically by plotting $a$ along the $x-axis$ and $b$ along the imaginary axis:
+In a rectangular coordinate system, we can label the $x$-axis as the real axis and the $y$-axis as the imaginary axis, allowing us to represent any complex number $z = a + bi$ graphically by plotting $a$ along the real ($x$) axis and $b$ along the imaginary ($y$) axis:
 
 ![Complex Plane](complex-plane.jpg)
 
