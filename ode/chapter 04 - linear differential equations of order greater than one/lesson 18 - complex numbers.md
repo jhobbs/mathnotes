@@ -49,3 +49,11 @@ and call it the **rectangular form of z**, we can replace $x$ and $y$ with their
 $$ z = r\cos\theta + ir\sin\theta = r(cos\theta + i\sin\theta) $$
 
 which is called the **polar form of z**.
+
+The polar angle $\theta$ in the figure above is called the **Argument of z**, written as $\text{Arg} z$, and is defined to be the smallest positive angle satisfying the two equalities:
+
+$$ \cos\theta = \frac{x}{\lvert z \rvert}, \quad \sin\theta = \frac{y}{\lvert z \rvert} $$
+
+Writing it as $\text{arg}z$ means that instead of taking the smallest or **principle value** of $\theta$, then:
+
+$$ \text{arg} z = \text{Arg}z \pm 2n\pi,~n = 1,2,3 $$
