@@ -54,6 +54,6 @@ The polar angle $\theta$ in the figure above is called the **Argument of z**, wr
 
 $$ \cos\theta = \frac{x}{\lvert z \rvert}, \quad \sin\theta = \frac{y}{\lvert z \rvert} $$
 
-Writing it as $\text{arg}z$ means that instead of taking the smallest or **principle value** of $\theta$, then:
+Writing it as $\text{arg}z$ means that instead of taking the smallest or **principal value** of $\theta$, then:
 
 $$ \text{arg} z = \text{Arg}z \pm 2n\pi,~n = 1,2,3 $$
