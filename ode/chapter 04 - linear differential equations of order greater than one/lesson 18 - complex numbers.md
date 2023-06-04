@@ -58,6 +58,19 @@ Writing it as $\text{arg}z$ means that instead of taking the smallest or **princ
 
 $$ \text{arg} z = \text{Arg}z \pm 2n\pi,~n = 1,2,3 $$
 
+## Algebra of Complex Numbers
+
+Here are the rules for performing addition, subtraction, multiplication and division with complex numbers. They follow the normal rules of algebra, with the number $i^2$ being replaced by its agreed upon value $-1$. If $z_1 = a + bi$ and $z_2 = c + di$ are two complex numbers, then by definition:
+
+$$ z_1 + z_2 = (a + bi) + (c + di) = (a + c) + (b + d)i \tag{18.6} $$
+
+$$ z_1 - z_2 = (a + bi) - (c + di) = (a - c) + (b - d)i \tag{18.61} $$ 
+
+$$ z_1z_2 = (a + bi)(c + di) = ac + adi + bci + bdi^2 = (ac - bd) + (ad + bc)i \tag{18.62} $$ 
+
+$$ \frac{z_1}{z_2} = \frac{a + bi}{c + di} \cdot \frac{c - di}{c - di} = \frac{(ac + bd) + (bc -ad)i}{c^2 + d^2} = \frac{ac + bd}{c^2 + d^2} +  \frac{bc - ad}{c^2 + d^2}i,\quad c^2 + d^2 \neq 0 \tag{18.63} $$
+
+
 ## Exponential, Trigonometric and Hyperbolic Functions of Complex Numbers
 
 Some Maclaurin series expansions for a complex valued $z$:
