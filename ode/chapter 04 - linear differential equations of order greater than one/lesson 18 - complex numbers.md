@@ -70,7 +70,6 @@ $$ z_1z_2 = (a + bi)(c + di) = ac + adi + bci + bdi^2 = (ac - bd) + (ad + bc)i \
 
 $$ \frac{z_1}{z_2} = \frac{a + bi}{c + di} \cdot \frac{c - di}{c - di} = \frac{(ac + bd) + (bc -ad)i}{c^2 + d^2} = \frac{ac + bd}{c^2 + d^2} +  \frac{bc - ad}{c^2 + d^2}i,\quad c^2 + d^2 \neq 0 \tag{18.63} $$
 
-
 ## Exponential, Trigonometric and Hyperbolic Functions of Complex Numbers
 
 Some Maclaurin series expansions for a complex valued $z$:
@@ -110,3 +109,55 @@ $$ \cosh{z} = \frac{e^z + e^{-z}}{2} \tag{18.91} $$
 $$ \tanh{z} = \frac{\sinh{z}}{\cosh{z}} = \frac{e^z - e^{-z}}{e^z + e^{-z}} \tag{18.92} $$ 
 
 and are called, respectively, the **hyperbolic sine**, **hyperbolic cosine**, and **hyperbolic tangent** of $z$.
+
+## Proof that imaginary roots of polynomials with real coefficients occur in pairs
+
+(*jmh* my notes, the answers to exercises 18.6 through 18.9.)
+
+First a couple of facts about adding and multiplying conjugates. Assume $z_1 = a + bi$ and $z_2 = c + di$.
+
+Then:
+
+$$ \bar{z}_1 + \bar{z}_2 = (a - bi) + (c - di) = (a + c) - (b + d)i = \overline{(a+c) + (b + d)i} = \overline{(a + bi) + (c + di)} = \overline{z_1 + z_2} \tag{z.1} $$
+
+and
+
+$$ \overline{z_1 z_2} = \overline{(a+bi)(c+di)} = \overline{(ac-bd) + (ad + bc)i} = (ac-bd) - (ad+bc)i = ac - bd - adi - bci = ac - bci - bd - adi = c(a-bi) - di(a - bi) = (a - bi)(c - di) = \bar{z}_1 \bar{z}_ 2 \tag{z.2} $$
+
+Now the main proof follows. Given that $r$ is a root of
+
+$$ a_nx^n + a_{n-1}x^{n-1} + \cdots + a_1x + a_0 = 0 \tag{a} $$
+
+i.e. that the following statement is true:
+
+$$ a_nr^n + a_{n-1}r^{n-1} + \cdots + a_1r + a_0 = 0 \tag{b} $$
+
+and that $a_n$, $a_{n-1}$, ..., $a_0$ are real numbers, we will show that $\bar{r}$ is also a root of (a), that is, that:
+
+$$ a_n\bar{r}^n + a_{n-1}\bar{r}^{n-1} + \cdots + a_1\bar{r} + a_0 = 0 \tag{c} $$
+
+Going back to (b) we can take the conjugate of both sides to get:
+
+$$ \overline{ a_nr^n + a_{n-1}r^{n-1} + \cdots + a_1r + a_0} = \bar{0} = 0 \tag{d} $$
+
+Using (z.1), we can rewrite (d) as:
+
+$$ \overline{ a_nr^n} + \overline{a_{n-1}r^{n-1}} + \cdots + \overline{a_1r} + \overline{a_0} = 0 \tag{e} $$
+
+Using (z.2), we can rewrite (e) as:
+
+$$ \overline{a_n} \cdot \overline{r^n} + \overline{a_{n-1}} \cdot \overline{r^{n-1}} + \cdots + \overline{a_1} \cdot \overline{r} + \overline{a_0} = 0 \tag{f} $$
+
+Again using (z.2) and the fact that $r^n = r \cdot r \cdot r ....$ repeated $n$ times, we can rewrite (f) as:
+
+$$ \bar{a}_n \bar{r}^n + \bar{a}_{n-1} \bar{r}^{n-1} + \cdots + \bar{a}_1 \bar{r} + \bar{a}_0 = 0 \tag{g} $$
+
+Note that since $a_n,~a_{n-1}$ are real numbers, they are complex numbers of the form $a_n + 0i,~a_{n-1} + 0i,...$, and since $a_n+0i = a_n - 0i$ we have:
+
+$$ a_n = \bar{a}_n, a_{n-1} = \bar{a}_{n-1}, ... \tag{g} $$
+
+And therefore we can rewrite (g) as:
+
+$$ a_n \bar{r}^n + a_{n-1} \bar{r}^{n-1} + \cdots + a_1 \bar{r} + a_0 = 0 \tag{h} $$
+
+Which is the statement we wished to prove (c). $\blacksquare$
