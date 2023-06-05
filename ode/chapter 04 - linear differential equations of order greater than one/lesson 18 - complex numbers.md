@@ -80,7 +80,7 @@ $$ \sin{z} = z - \frac{z^3}{3!} + \frac{z^5}{5!} + \cdots \tag{18.74} $$
 
 $$ \cos{z} = 1 - \frac{z^2}{2!} + \frac{z^4}{4!} + \cdots \tag{18.75} $$
 
-Interestingly, \cos{i} turns out to be a real number:
+Interestingly, $\cos{i}$ turns out to be a real number:
 
 $$ \cos{z} = 1 + \frac{1}{2!} + \frac{1}{4!} + \frac{1}{6!}\cdots $$
 
