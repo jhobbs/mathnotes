@@ -19,6 +19,8 @@ We know how to find $y_c(x)$ from the previous section, and here we will show ho
 See the book for more details, but there are several cases to handle.
 
 
+For all of these cases, start by finding $y_c$ of the related homogeneous form of the equation, following the method from Lessson 20.
+
 **Case 1.**  *No term of Q(x) in (21.1) is the same as a term of* $y_c$. In this case, a particular solution $y_p$ of (21.1) will be a linear combination of the terms in $Q(x)$ and *all* its linearly independent derivatives.
 
 Steps:
@@ -31,6 +33,4 @@ Steps:
 
 4. Solve for the unknown constants and substitute them back into $y_p$.
 
-5. Find $y_c$ of $(21.1)$ using the method described in lesson 20.
-
-6. Find the general solution: $y = y_c + y_p$
+5. Add $y_c$ to the result from the previous step: $y = y_c + y_p$
