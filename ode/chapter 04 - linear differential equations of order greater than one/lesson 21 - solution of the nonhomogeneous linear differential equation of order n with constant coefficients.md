@@ -54,6 +54,22 @@ B. $Q(x)$ contains a term, which, ignoring constant coefficients, is $x^k$ times
 
 ## Exercises
 
-1. Prove that any term which is in the complementary function $y_c$ need not be included in the trial solution $y_p$. (*Hint*: Show that the coefficients of this term will always add to zero.).
+Exercise 1. Prove that any term which is in the complementary function $y_c$ need not be included in the trial solution $y_p$. (*Hint*: Show that the coefficients of this term will always add to zero.).
 
 (*jmh*: my proof). Suppose that $y_c$ contains the term $c_1f(x)$ and the trial solution $y_p$ contains the term $Af(x)$, where $A$ is a constant. Then the general solution $y = y_c + y_p$ would contain the term $(c_1 + A)f(x)$, which can just be rewritten in terms of a new constant, $c_2f(x)$, i.e., the $Af(x)$ term is redundant because $c_1f(x)$ and $Af(x)$ are linearly dependent, and therefore we can leave $Af(x)$ out of $y_p$ without changing the general solution $\blacksquare$. (Note: this proof doesn't use the hint provided, so while it makes sense to me, it may not be the proof the book had in mind and may be missing something).
+
+Exercise 2. Prove that if $F(x)$ is a function with a finite number of linearly independent derivatives, i.e. if $F^{(n)}(x),F^{(n-1)}(x),\cdots,F'(x),F(x)$ are linearly independent functions, where $n$ isa finite number, then $F(x)$ consist only of such terms as $a, x^k, e^{ax}, \sin{ax}, \cos{ax}$, and combinations of such terms, where $a$ is a constant and $k$ is a positive integer.
+
+By hypothesis, these functions are linearly independent, i.e., we have that there exists a set of constants, not all zero, such that:
+
+$$ \tag{a} C_nF^{(n)}(x) + C_{n-1}F^{(n-1})(x) + \cdots + C_1 F'(x) + C_0 F(x) = 0 $$
+
+Now we have to show what forms the functions in $(a)$ can take. Following the method of lesson 20, that we have an $n$ degree characteristic equation for the ODE $(a)$, with $n$ roots. By the fundamental theorem of algebra, roots can follow only these three cases:
+
+1. Distinct real roots
+2. Repeated real roots
+3. Conjugate pairs of imaginary roots
+
+By lesson 20, distinct real roots result in solutions with terms in the form $ce^{ax}$, repeated real roots result in the form $cx^ke^{ax}$, which additionally includes terms of the forms $ac$ and $cx^k$. Conjugate pairs of imaginary roots result in terms of the form $c\sin{ax}$ and $c\cos{ax}$.
+
+We can thus see that solutions of $(a)$, i.e. possible values of $F(x)$, will only contain terms formed by combinations of $a, x^k, e^{ax}, \sin{ax}, \cos{ax}$ $\blacksquare$.
