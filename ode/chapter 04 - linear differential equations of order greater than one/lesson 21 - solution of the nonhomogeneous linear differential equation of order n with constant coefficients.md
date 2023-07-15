@@ -39,4 +39,14 @@ Steps:
 
 1. Find a trial solution. This will be a linear combination of $x^{k+1}u(x)$ and all its linearly indepenent derivatives (ignoring constant coefficients). If $Q(x)$ contains terms which belong to case 1, then the proper terms called for by this case must be included in $y_p$. Note that if a term of derivatives of $x^{k+1}u(x)$ appears in $y_c$, we can leave it and its derivatives out of $y_p$.
 
-Follow the rest of the steps from Case 1 - they are the same.
+2. Follow the rest of the steps from Case 1 - they are the same.
+
+**Case 3.** $Q(x)$ *This case is applicable only if both of the following conditions are fulfilled*
+
+A. The characteristic equation of the given differential equation $(21.1)$ has an $r$ multiple root.
+
+B. $Q(x)$ contains a term, which, ignoring constant coefficients, is $x^k$ times a term $u(x)$ in $y_c$, where $u(x)$ was obtained from the $r$ multiple root.
+
+1. Find a trial solution. This will be a linear combination of $x^{k+r}u(x)$ and all its linearly dependent derivatives, along with the proper terms called for by cases 1 and 2, if terms matching those cases are present in $Q(x)$.
+
+2. Follow the rest of the steps from Case 1 - they are the same.
