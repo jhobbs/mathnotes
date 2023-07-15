@@ -50,3 +50,10 @@ B. $Q(x)$ contains a term, which, ignoring constant coefficients, is $x^k$ times
 1. Find a trial solution. This will be a linear combination of $x^{k+r}u(x)$ and all its linearly dependent derivatives, along with the proper terms called for by cases 1 and 2, if terms matching those cases are present in $Q(x)$.
 
 2. Follow the rest of the steps from Case 1 - they are the same.
+
+
+## Exercises
+
+1. Prove that any term which is in the complementary function $y_c$ need not be included in the trial solution $y_p$. (*Hint*: Show that the coefficients of this term will always add to zero.).
+
+(*jmh*: my proof). Suppose that $y_c$ contains the term $c_1f(x)$ and the trial solution $y_p$ contains the term $Af(x)$, where $A$ is a constant. Then the general solution $y = y_c + y_p$ would contain the term $(c_1 + A)f(x)$, which can just be rewritten in terms of a new constant, $c_2f(x)$, i.e., the $Af(x)$ term is redundant because $c_1f(x)$ and $Af(x)$ are linearly dependent, and therefore we can leave $Af(x)$ out of $y_p$ without changing the general solution $\blacksquare$. (Note: this proof doesn't use the hint provided, so while it makes sense to me, it may not be the proof the book had in mind and may be missing something).
