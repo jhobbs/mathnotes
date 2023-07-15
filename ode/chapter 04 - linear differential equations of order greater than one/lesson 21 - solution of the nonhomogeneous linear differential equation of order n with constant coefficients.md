@@ -34,3 +34,9 @@ Steps:
 4. Solve for the unknown constants and substitute them back into $y_p$.
 
 5. Add $y_c$ to the result from the previous step: $y = y_c + y_p$
+
+**Case 2.** $Q(x)$ *in (21.1) contains a term which, ignoring constant coefficients, is* $x^k$ *times a term* $u(x)$ *of* $y_c$ *, where* $k$ *is zero or a positive integer*.
+
+1. Find a trial solution. This will be a linear combination of $x^{k+1}u(x)$ and all its linearly indepenent derivatives (ignoring constant coefficients). If $Q(x)$ contains terms which belong to case 1, then the proper terms called for by this case must be included in $y_p$. Note that if a term of derivatives of $x^{k+1}u(x)$ appears in $y_c$, we can leave it and its derivatives out of $y_p$.
+
+Follow the rest of the steps from Case 1 - they are the same.
