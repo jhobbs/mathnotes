@@ -51,6 +51,18 @@ B. $Q(x)$ contains a term, which, ignoring constant coefficients, is $x^k$ times
 
 2. Follow the rest of the steps from Case 1 - they are the same.
 
+## Solution by the use of Complex Variables
+
+If in:
+
+$$ \tag{21.5} a_ny^{(n)} + a_{(n-1)}y^{(n-1)} + \cdots + a_1y' + a_0y = Q(x), $$
+
+the $a$'s are real and $Q(x)$ is a complex-valued function and $y_p(x)$ is a solution of $(21.5)$, then,:
+
+1. The real part of $y_p$ is a solution of $(21.5)$ with $Q(x)$ replaced by its real part
+2. The imaginary part of $y_p$ is a solution of $(21.5)$ with $Q(x)$ replaced by its imaginary part
+
+(*jmh*) This means if $Q(x)$ is a real-valued function that is the imaginary part of a complex-valued function (i.e., $\sin{x}$ is the imaginary part of $e^{ix}$), we can find $y_p$ for the complex-valued function and then use the imaginary part of $y_p$ as the solution for our real valued function. The same holds for a real-valued function that is the real part of a complex-valued function (i.e., $\cos{x}$ is the real part of $e^{ix}$), except we'd use the real part of the complex-valued function's $y_p$.
 
 ## Exercises
 
