@@ -40,6 +40,8 @@ Let $y_2(x)$ be a second solution of (23.14) and assume that it will have the fo
 
 $$ \tag{23.2} y_2(x) = y_1(x) \int{u(x)dx} $$
 
+where $u(x)$ is an unknown function to be determined.
+
 (*jmh* why do we/why can we make this assumption? the book does not explain).
 
 We can then find ${y_2}'$ and ${y_2}''$ via differntiation and substitute them into $(23.14)$ and simplify, which will result in a first order differential equation of $u$. We can then solve for $u$ and substitute it back into $(23.2)$ to solve for $y_2$.
