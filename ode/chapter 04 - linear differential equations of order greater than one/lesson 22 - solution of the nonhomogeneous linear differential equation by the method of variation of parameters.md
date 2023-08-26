@@ -26,7 +26,7 @@ If two independent solutions, $y_1$ and $y_2$, of the related homogenous equatio
 
 $$ \tag{22.21} a_2y'' + a_1y' + a_0y = 0 $$
 
-are known then we can form te equation of a particular solution:
+are known then we can form the equation of a particular solution:
 
 $$ \tag{22.22} = y_p(x) = u_1(x)y_1(x) + u_2(x)y_2(x), $$
 
@@ -34,8 +34,12 @@ where $u_1$ and $u_2$ are unknown functions of $x$ which are to be determined.
 
 By taking the derivatives of $y_p$ and substituting them into $(22.2)$ and simplifying (see book for details) we arive at:
 
-$$ \tag{22.27} {u_1}'y_1 + {u_2}'y_2 = 0, \quad {u_1}'{y_1}' + {u_2}'{y_2}' = \frac{Q(x)}{a2} $$
+$$ \tag{22.27} {u_1}'y_1 + {u_2}'y_2 = 0, \quad {u_1}'{y_1}' + {u_2}'{y_2}' = \frac{Q(x)}{a_2} $$
 
 We can then solve for ${u_1}'$ and ${u_2}'$ using algebra, and then use integration to find $u_1$ and $u_2$. The general solution to $(22.2)$ will then be $y_c + y_p = y_c + u_1 y_1 + u_2 y_2$.
+
+Note that we can also use determinants to find ${u_1}'$ and ${u_2}'$:
+
+$$ {u_1}' = \frac{\begin{vmatrix} 0 & y_2 \\\ \frac{Q(x)}{a_2} & {y_2}' \end{vmatrix}}{\begin{vmatrix} y_1 & y_2 \\\ {y_1}' & {y_2}' \end{vmatrix}}, \quad {u_2}' = \frac{\begin{vmatrix} y_1 & 0 \\\ {y_1}' & \frac{Q(x)}{a_2} \end{vmatrix}}{\begin{vmatrix} y_1 & y_2 \\\ {y_1}' & {y_2}' \end{vmatrix}}  $$
 
 We can generalize this method to higher order equations - see the book for details. We can also use this method for equations where $Q(x)$ has finite linearly independent derivatives, although the method of undetermined coefficients is usually less effort to use in those cases (however, with the method of variation of parameters, we don't have to worry about the 3 different cases we have to handle in the method of undetermined coefficients, so it can still be easier). We can also use this method to find a particular solution when the coefficients in $(22.2)$ are continuous functions of $x$, provided we know two independent solutions of the related homogenous equation.
