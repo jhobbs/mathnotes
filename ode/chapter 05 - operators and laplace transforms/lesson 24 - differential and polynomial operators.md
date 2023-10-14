@@ -42,3 +42,14 @@ as
 
 $$ \tag{24.17} P(D)y = Q(x) $$
 
+where $P(D)$ is the polynomial operator $(24.12)$.
+
+**Theorem 24.2** *If* $P(D)$ *is the polynomial operator* $(24.12)$ *and* $y_1,~y_2$ *are two nth order differentiable functions, then*
+
+$$ \tag{24.21} P(D)(c_1 y_1 + c_2 y_2) = c_1 P(D) y_1 + c_2 P(D) y_2, $$
+
+*where* $c_1$ *and* $c_2$ *are constants.* 
+
+(*jmh*: See the book for proof, but it's just distributive property and the sum rule for derivatives.)
+
+An operator which has the property $(24.21)$ is called a **linear operator**. Hence the polynomial operator $(24.12)$ is **linear**.
