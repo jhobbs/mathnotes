@@ -44,6 +44,6 @@ $$ \tag{e} 1^2 + 2^2 + 3^2 + \cdots + k^2 + (k+1)^2 = \frac{(k+1)((k+1)+1)(2(k+1
 
 must be true, which is what we set out to show.
 
-Thus, since we have shown that $(a)$ is tue for $n = 1$,
+Thus, since we have shown that $(a)$ is true for $n = 1$,
 and that if it is true for $n = 1$ it must also be true for $n = 1 + 1 = 2$, then it must also be true for
 $n = 2$, and therefore also true for $n = 2 + 1 = 3$, and so on, ad infinitum $\blacksquare$.
