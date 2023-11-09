@@ -39,11 +39,11 @@ The book goes into a lot of detail here but to be brief and only capture the out
 
 When the root is real and distinct we use this form:
 
-$$ y_p = c_1 e^{m_1}x $$
+$$ y_p = c_1 e^{m_1 x} $$
 
 When the root is real and repeated $k$ times we use this form:
 
-$$ y_p = e^{m_1}x (c_1 + c_2 x + c_3x^2 + \cdots + c_4x^n) $$
+$$ y_p = e^{m_1 x} (c_1 + c_2 x + c_3x^2 + \cdots + c_4x^n) $$
 
 When the root is imaginary we can write it exactly the same as if it were real, but keep in mind that imaginary roots always come in conjucate pairs. Using that fact and some manipulation, we can write the solution from the root with the complex number $\alpha - i\beta$ as:
 
@@ -52,7 +52,7 @@ $$ y_p = e^{\alpha x}(c_1\cos\beta x + c_2\sin\beta x) $$
 
 For example, the general solution to a 5th degree homogeneous linear differential equation with 1 distinct real root, a repeated real root, and a conjugate pair of imaginary roots would look like:
 
-$$ y_c = c_1 e^{m_1}x + e^{m_2}x(c_2 + c_3x) + e^{\alpha x}(c_4\cos\beta x + c_5\sin\beta x) $$
+$$ y_c = c_1 e^{m_1 x} + e^{m_2 x}(c_2 + c_3x) + e^{\alpha x}(c_4\cos\beta x + c_5\sin\beta x) $$
 
 
 Finding that general solution involves taking the original differential equation, finding its characteristic equation, and then finding the roots of that characteristic equation. Keep in mind that algebraic equations of degrees greater than 2 can be very hard (or impossible?) to solve.
