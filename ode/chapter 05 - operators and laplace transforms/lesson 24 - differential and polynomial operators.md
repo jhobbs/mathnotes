@@ -53,3 +53,35 @@ $$ \tag{24.21} P(D)(c_1 y_1 + c_2 y_2) = c_1 P(D) y_1 + c_2 P(D) y_2, $$
 (*jmh*: See the book for proof, but it's just distributive property and the sum rule for derivatives.)
 
 An operator which has the property $(24.21)$ is called a **linear operator**. Hence the polynomial operator $(24.12)$ is **linear**.
+
+## Principle of Superposition
+
+In place of the linear differential equation:
+
+$$ \tag{a} P(D)y = Q_1 + Q_2 + \cdots + Q_n, $$
+
+let us write the $n$ equations:
+
+$$ \tag{b} P(D)y = Q_1, P(D)y = Q_2, \cdots, P(D)y = Q_n. $$
+
+Let $y_1 p, y_2 p, \cdots, y_{np}$ be respective particular solutions of the $n$ equations of $(b)$. Therefore:
+
+$$ \tag{c} P(D)y_{1p} = Q_1, P(D)y_{2p} = Q_2,\cdots, P(D)y_{np} = Q_n. $$
+
+Adding all the equations in $(c)$ and making use of the distributive property of polynomial operators, there results:
+
+$$ \tag{d} P(D)(y_{1p} + y_{2p} + \cdots + y_{np}) = Q_1 + Q_2 + \cdots + Q_n, $$
+
+which implies that
+
+$$ \tag{e} y_p = y_{1p} + y_{2p} + \cdots + y_{np} $$
+
+is a solution of $(a)$.
+
+(*jmh*: This means when finding particular solutions, we can split $Q(x)$ into small parts that may be more convenient to manipulate, find the particular solution for each of those parts, and then sum them to get a particular solution for the whole. In practice it's not clear how much advantage there is to this, and this seems mostly to be establishing that this is a valid thing to do so we can use that fact later.)
+
+## Solution of a Linear Differential Equation with Constant Coefficients by Means of Polynomial Operators
+
+
+
+
