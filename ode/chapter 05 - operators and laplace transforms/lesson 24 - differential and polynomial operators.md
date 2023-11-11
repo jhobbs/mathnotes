@@ -82,6 +82,50 @@ is a solution of $(a)$.
 
 ## Solution of a Linear Differential Equation with Constant Coefficients by Means of Polynomial Operators
 
+(*jmh*: You can use this method to find general solutions, but it's easier to find the complementary function by finding roots of the characteristic equation of the associated homogenous equation and then apply this method only for finding a partiuclar solution. To find the general solution with this method, don't ignore the arbitrary constants of integration like I've done here.)
 
+(*jmh: my notes - see the book for details*)
 
+We will find the general solution of the nonhomogenous linear differential equation:
 
+$$ \tag{a} y''' - 3y' + 2y = e^{-x} $$
+
+by finding the complentary function and a particular solution.
+
+We can solve the related non-homogenous differential equation to find the complementary function:
+
+$$ \tag{b} y_c (x) = (c_1 + c_2 x)e^x + c_3 e^{-2x} $$
+
+We can then rewrite $(a)$ in operator notation as:
+
+$$ \tag{c} (D-1)(D-1)(D+2)y_p = e^{-x} $$
+
+Now let:
+
+$$ \tag{d} u = (D-1)(D+2)y_p $$
+
+and substitute $u$ into $(c)$ to get:
+
+$$ \tag{e} (D-1)u = u' - u = e^{-x} $$
+
+This is a linear differential equation that can be solved for $u = \frac{-e^{-x}}{2}$ (ignoring the constant of integration since we're finding a particular solution). Substituting that into $(d)$ gives:
+
+$$ \tag{f} (D-1)(D+2)y_p = \frac{-e^{-x}}{2} $$
+
+Now we repeat the process. Let:
+
+$$ \tag{g} v = (D+2)y_p $$
+
+and substitute $v$ into $(f)$ to get:
+
+$$ \tag{h} (D-1)v = v' - v = \frac{-e^{-x}}{2} $$
+
+This is linear differential equation with a solution of $v = \frac{e^{-x}}{4}$ (again ignoring the arbitrary constant of integration). Substituting that into $(g)$ gives:
+
+$$ \tag{i} (D+2)y_p = y_p ' + 2y_p = \frac{e^{-x}}{4} $$
+
+This is a linear differential equation with a solution of $y_p = \frac{e^{-x}}{4}$ (again ignoring the arbitrary constant of integration).
+
+We now add $y_c$ and $y_p$ to get the general solution:
+
+$$ \tag{j} y = y_c + y_p = (c_1 + c_2 x)e^x + c_3 e^{-2x} +  \frac{e^{-x}}{4} $$
