@@ -77,3 +77,16 @@ Note that we can stop the series expansion at $D^k$ because we're differentiatin
 Also note that for the special case $k = 0$, we have:
 
 $$ \tag{d} y_p = \frac{b}{a_0} $$
+
+
+**If** $Q(x) = bx^k$ **and** $P(D) = a_n D^n + \cdots + a_1 D$:
+
+We have here that $D$ is a factor of $P(D)$d and can write $P(D) = D(a_n D^{n-1} + \cdots + a_2 D + a_1$, where $a_1 \neq 0$. We can also have higher powered factors of $D$ in $P(D)$. In general, let $D^r$ be a factor of $P(D)$. Then $P(D)y = bx^k$ can be written as:
+
+$$ \tag{a} P(D)y = D^r (a_n D^{n-r} + \cdots + a_{r+1} D + a_r)y = bx^k, \quad a_r \neq 0 $$
+
+Therefore, by Definition 25.2:
+
+$$ y_p = \frac{1}{D^r}(\frac{1}{a_n D^{n-r} + \cdots + a_{r+1} D + a_r}(bx^k)), \quad a_r \neq_0 $$ 
+
+From there, we first perform series expansion to get a non-inverse differential operator (see above from the first $bx^k$ recipe), apply differntiation, and then take $r$ successive integrals against the result, ignoring arbitrary constants of differentiation.
