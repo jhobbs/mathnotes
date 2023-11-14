@@ -70,7 +70,7 @@ $$ \tag{b} y_p = \frac{1}{D - a_0}(bx^k) = \frac{1}{-a_0(1-\frac{D}{a_0})}(bx^k)
 
 Which, via geometric series expansion can be written as:
 
-$$ \tag{c} -\frac{1}{a_0}(1 + \frac{D}{a_0} + \frac{D^2}{{a_0}^2} + \cdots + \frac{D^k}{{a_0}^k})(bx^k), \quad a_0 \neq 0 $$
+$$ \tag{c} -\frac{1}{a_0}(1 + \frac{D}{a_0} + \frac{D^2}{ {a_0}^2 } + \cdots + \frac{D^k}{ {a_0}^k })(bx^k), \quad a_0 \neq 0 $$
 
 Note that we can stop the series expansion at $D^k$ because we're differentiating a $k$th degree polynomial, and higher derivatives will just be $0$.
 
