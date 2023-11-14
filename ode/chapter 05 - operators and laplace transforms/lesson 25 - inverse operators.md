@@ -52,4 +52,28 @@ By Definition 25.2, we can conclude that:
 
 $$ \tag{25.25} D^{-n}Q(x) \equiv \text{integrating}~Q(x)~n~\text{times, ignoring constants of integration} $$ 
 
+## Solution by Means of Inverse Operators
 
+We shall consider each of the functions mentioned in Definition 25.2, case by case.
+
+(*jmh* Note that the book proves each scenario but I'll just capture the recipe for each scenario here.)
+
+**If** $Q(x) = bx^k$ **and** $P(D) = D - a_0$:
+
+Given:
+
+$$ \tag{a} (D - a_0)y = bx^k $$
+
+By definition 25.2 we have:
+
+$$ \tag{b} y_p = \frac{1}{D - a_0}(bx^k) = \frac{1}{-a_0(1-\frac{D}{a_0})}(bx^k) $$
+
+Which, via geometric series expansion can be written as:
+
+$$ \tag{c} -\frac{1}{a_0}(1 + \frac{D}{a_0} + \frac{D^2}{{a_0}^2} + \cdots + \frac{D^k}{{a_0}^k})(bx^k), \quad a_0 \neq 0 $$
+
+Note that we can stop the series expansion at $D^k$ because we're differentiating a $k$th degree polynomial, and higher derivatives will just be $0$.
+
+Also note that for the special case $k = 0$, we have:
+
+$$ \tag{d} y_p = \frac{b}{a_0} $$
