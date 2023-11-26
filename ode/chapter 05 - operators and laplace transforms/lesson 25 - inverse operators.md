@@ -90,3 +90,9 @@ Therefore, by Definition 25.2:
 $$ y_p = \frac{1}{D^r}(\frac{1}{a_n D^{n-r} + \cdots + a_{r+1} D + a_r}(bx^k)), \quad a_r \neq 0 $$ 
 
 From there, we first perform series expansion to get a non-inverse differential operator (see above from the first $bx^k$ recipe), apply differntiation, and then take $r$ successive integrals against the result, ignoring arbitrary constants of differentiation.
+
+**If** $Q(x) = be^{ax}$:
+
+Then a particular solution of this equation is:
+
+$$ \tag{a} y_p = \frac{1}{P(D)} be^{ax} = \frac{be^{ax}}{P(a)}, \quad P(a) \neq 0 $$
