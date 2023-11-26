@@ -96,3 +96,16 @@ From there, we first perform series expansion to get a non-inverse differential 
 Then a particular solution of this equation is:
 
 $$ \tag{a} y_p = \frac{1}{P(D)} be^{ax} = \frac{be^{ax}}{P(a)}, \quad P(a) \neq 0 $$
+
+**If** $Q(x) = b\sin{ax}$ or $b\cos{ax}$
+
+Here we can take advantage of the exponential form of these functions apply the method given for the exponential form above. Even easier, we can use
+the method given in 21.B.
+
+That is, for $P(D)y = b\sin{ax}$, we use the imaginary part of the particular solution of:
+
+$$ \tag{a} P(D)y = be^{ix} $$
+
+and for $P(D)y = b\cos{ax}$, we use the real part of the particular solution of $(a)$. In both cases, we use the method given above for $Q(x) = be^{ax}$.
+
+
