@@ -42,9 +42,9 @@ Recall that when we say $P(D)$ we mean the polynomial operator:
 
 $$ \tag{25.11} P(D) = a_n D^n + \cdots + a_1 D + a_0, \quad a_n \neq 0 $$
 
-***Definition 25.2*** Let $P(D)y = Q(x)$ where $P(D)$ is the polynomial operator $(25.11)$ and $Q(x)$ is the special function consisting only of such terms as $b, x^k, e^{ax}, \sin{ax}, \cos{ax}$, and a finite number of combinations of such terms, where $a, b$ are constants and $k$ is a positive integer. Then the **inverse operator** of $P(D)$, written as P^{-1}(D) or $1/P(D)$, is defined as an operator which, when operating on $Q(x)$, will give the particular solution $y_p$ of $(25.1)$ that contains no constant multiples of a term in the complementary function $y_c$, i.e.,
+***Definition 25.2*** Let $P(D)y = Q(x)$ where $P(D)$ is the polynomial operator $(25.11)$ and $Q(x)$ is the special function consisting only of such terms as $b, x^k, e^{ax}, \sin{ax}, \cos{ax}$, and a finite number of combinations of such terms, where $a, b$ are constants and $k$ is a positive integer. Then the **inverse operator** of $P(D)$, written as $P^{-1}(D)$ or $1/P(D)$, is defined as an operator which, when operating on $Q(x)$, will give the particular solution $y_p$ of $(25.1)$ that contains no constant multiples of a term in the complementary function $y_c$, i.e.,
 
-$$ \tag{25.21} P^{-1})(D)Q(x) = y_p \quad \text{or} \quad \frac{1}{P(D)}Q(x) = y_p, $$
+$$ \tag{25.21} P^{-1}(D)Q(x) = y_p \quad \text{or} \quad \frac{1}{P(D)}Q(x) = y_p, $$
 
 where $y_p$ is the particular solution of $P(D)y = Q(x)$ that containts no constant multiple of a term in $y_c$.
 
@@ -53,6 +53,14 @@ By Definition 25.2, we can conclude that:
 $$ \tag{25.25} D^{-n}Q(x) \equiv \text{integrating}~Q(x)~n~\text{times, ignoring constants of integration} $$ 
 
 ## Solution by Means of Inverse Operators
+
+As stated above, in general we can find $y_p$ by:
+
+$$ y_p = \frac{1}{P(D)}Q_x $$
+
+This is often a much easier method of finding $y_p$ than previous methods.
+
+We can find some formulas/shortcuts/rules to handle the possible cases.
 
 We shall consider each of the functions mentioned in Definition 25.2, case by case.
 
