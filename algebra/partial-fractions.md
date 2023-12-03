@@ -141,6 +141,25 @@ $$ A_n = \frac{P(r_1)}{\cancel{(x-r_1)}(r_1-r_2)\cdots(r_1-r_n)} $$
 
 $$ \frac{P(x)}{Q(x)} = \frac{A_1}{x-r_1} + \frac{A_2}{x-r_2} + \cdots + \frac{A_n}{x-r_n} $$
 
+## Differentiation
+Like the Heaviside cover up method, this method only works when the roots are distinct. This method comes from Morris and Tenenbaum's ODE book, lesson 26A.
+
+A fraction of the form $\frac{1}{f(x)}$ will have a partial fraction expansion of the form:
+
+$$ \tag{a} \frac{1}{f(x)} = \frac{A_1}{x - r_1} + \frac{A_2}{x - r_2} + \cdots + \frac{A_k}{x - r_k} + \cdots + \frac{A_n}{x - r_n } $$
+
+If we multiply $(a)$ by $(x - r_k)$. Since $f(r_k) = 0$, there results:
+
+$$ \tag{b} \frac{x - r_k}{f(x) - f(r_k)} = \frac{A_1(x - r_k)}{x - r_1} + \cdots + A_k + \cdots + \frac{A_n(x - r_n)}{x - r_n} $$
+
+Let $x \longrightarrow r_k$. The left side of $(b)$ will approach $\frac{1}{f'(r_k)}$ and its right side will approach $A_k$. Hence,
+
+$$ \tag{c} A_k = \frac{1}{f'(r_k)}, \quad k = 1,2,\cdots,n. $$
+
+Substituting $(c)$ in $(a)$ we get:
+
+$$ \tag{d} \frac{1}{f(x)} = \frac{1}{f'(r_1)(x - r_1)} + \frac{1}{f'(r_2)(x - r_2)} + \cdots + \frac{1}{f'(r_n)(x - r_n)}. $$
+
 ## Other Methods
 Thomas and Finney cover a couple of other methods of determining the coefficients:
 
