@@ -29,6 +29,23 @@ $$ L^{-1}[F] = f $$
 
 The inverse Laplace transform is also a linear operator.
 
+**Theorem 27.6**
+
+If
+
+$$ \tag{27.61} F(s) = L[f(x)] = \int_0^{\infty} e^{-sx}f(x)dx, s > s_0 $$
+
+then
+
+$$ \tag{27.62} F'(s) = -L[xf(x)] = - \int_0^{\infty} e^{-sx}xf(x)dx, s > s_0 $$
+
+$$  F''(s) = L[x^2 f(x)] = \int_0^{\infty} e^{-sx}x^2 f(x)dx, s > s_0 $$
+
+$$ F^{(n)}(s) = L[x^n f(x)] = (-1)^n \int_0^{\infty} e^{-sx}x^n f(x)dx, s > s_0 $$
+
+
+That is, if $F(s) = L[f(x)]$, then one can find the Laplace transform of $xf(x)$ by differentiating $-F(s);$ of $x^2 f(x)$ by differentiating $F(s)$ twice, etc.
+
 
 ## Table of Laplace Transforms
 
