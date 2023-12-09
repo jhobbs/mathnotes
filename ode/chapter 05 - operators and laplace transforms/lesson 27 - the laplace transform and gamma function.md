@@ -7,11 +7,11 @@ title: The Laplace Transform. Gamma Function.
 
 ## Definition of the Laplace Transform
 
-**Definition 27.13** Let $f(x)$ be defined on the interval $I: 0 \leq x \lt \infty$. Then the **Laplace Transform of** $f(x)$ is defined by
+**Definition 27.13** Let $f(x)$ be defined on the interval $I: 0 \leq x \lt \infty$. Then the **Laplace Transform of** $f(x)$, written as $L[f(x)]$, is defined as
 
 $$ \tag{27.14} L[f(x)] = F(s) = \int_0^{\infty} e^{-sx}f(x)dx $$
 
-where it is assumed that $f(x)$ is a functon for which the integral on the right exists for some value of $s$.
+where it is assumed that $f(x)$ is a function for which the integral on the right exists for some value of $s$.
 
 ## Properties of the Laplace Transform
 
