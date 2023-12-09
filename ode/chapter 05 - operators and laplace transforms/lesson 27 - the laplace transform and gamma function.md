@@ -47,12 +47,14 @@ $$ F^{(n)}(s) = L[x^n f(x)] = (-1)^n \int_0^{\infty} e^{-sx}x^n f(x)dx, s > s_0 
 That is, if $F(s) = L[f(x)]$, then one can find the Laplace transform of $xf(x)$ by differentiating $-F(s);$ of $x^2 f(x)$ by differentiating $F(s)$ twice, etc.
 
 
+
 ## Table of Laplace Transforms
 
 See Paul's notes for an excellent [Table of Laplace Transforms](https://tutorial.math.lamar.edu/classes/de/laplace_table.aspx)
 
 
 ## Solution by Means of a Laplace Transform
+
 
 Given a linear equation:
 
@@ -69,4 +71,20 @@ $$ \tag{27.41} \begin{aligned} (a_n s^n + a_{n-1}s^{n-1} \cdots a_2 s^2 + a_1 s 
 
 Evaluating this gives an equation of the form $L[y] = G(s)$. We can then use a table of Laplace Transforms to find a function who's Laplace transform is similar to $G(s)$, i.e., that can be obtained by some simple transformation to $G(s)$.
 
+**Method 2**
 
+Here's a useful fact (see $(27.3)$ in book for proof sketch):
+
+$$ \tag{a} L[y^{(n)}] = s^n L[y] - (y^{(n-1)}(0) + sy^{(n-2)}(0) + \cdots + s^{n-2}y'(0) + s^{n-1} y(0)) $$
+
+We'll use this fact to show this second method this by example.
+
+Given $y' + 2y = 0, ~y(0) = 2$, we can take the Laplace transform of both sides and use its linearity to get:
+
+$$ \tag{b} L[y' + 2y] = L[y'] + 2L[y] = L[0] $$
+
+Using $(a)$ we can rewrite this as:
+
+$$ \tag{c} sL[y] - y(0) + 2L[y] = (s+2)L[y] - 2, \quad L[y] = \frac{2}{s+2} $$
+
+we can see from a table of Laplace transforms that $L[y] = \frac{2}{s+2} = 2e^{-2x}$
