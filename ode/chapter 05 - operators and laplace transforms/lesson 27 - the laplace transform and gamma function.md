@@ -58,9 +58,9 @@ See Paul's notes for an excellent [Table of Laplace Transforms](https://tutorial
 
 Given a linear equation:
 
-$$ \tag{27.2} a_n y^{(n)} + \cdots + a_1 y' + a_0y $$
+$$ \tag{27.2} a_n y^{(n)} + \cdots + a_1 y' + a_0y = f(x)$$
 
-where $ a_n \neq 0$ and $a_0, a_1, \cdots, a_n$ are constants, we can use the **Laplace tranform method** to find a particular solution *satisfying given initial conditions*.
+where $ a_n \neq 0$ and $a_0, a_1, \cdots, a_n$ are constants, we can use the **Laplace transform method** to find a particular solution *satisfying given initial conditions*. This is what makes the Laplace transform method useful in compared to the other methods we've studied for solving linear differential equations.
 
 
 **Method 1**
