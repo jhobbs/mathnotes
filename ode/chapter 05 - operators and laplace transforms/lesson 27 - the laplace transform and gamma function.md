@@ -50,3 +50,23 @@ That is, if $F(s) = L[f(x)]$, then one can find the Laplace transform of $xf(x)$
 ## Table of Laplace Transforms
 
 See Paul's notes for an excellent [Table of Laplace Transforms](https://tutorial.math.lamar.edu/classes/de/laplace_table.aspx)
+
+
+## Solution by Means of a Laplace Transform
+
+Given a linear equation:
+
+$$ \tag{27.2} a_n y^{(n)} + \cdots + a_1 y' + a_0y $$
+
+where $ a_n \neq 0$ and $a_0, a_1, \cdots, a_n$ are constants, we can use the **Laplace tranform method** to find a particular solution *satisfying given initial conditions*.
+
+
+**Method 1**
+
+If we take the Laplace transform of both sides of $(27.2)$ (see book for proof) we end up with:
+
+$$ \tag{27.41} \begin{aligned} (a_n s^n + a_{n-1}s^{n-1} \cdots a_2 s^2 + a_1 s + a_0)L[y] \\ - (a_n s^{n-1} + a_{n-1}s^{n-2} + \cdots + a_2 s + a_1)y(0) \\ - (a_n s^{n-2} + a_{n-1}s^{n-3} + \cdots + a_3 s + a_2)y'(0) \\ \cdots \cdots \cdots \cdots \cdots \cdots \cdots \cdots \\ -(a_n s + a_{n-1})y^{(n-2)}(0) \\ - a_n y^{(n-1)}(0)  = L[f(x)]\end{aligned} $$
+
+Evaluating this gives an equation of the form $L[y] = G(s)$. We can then use a table of Laplace Transforms to find a function who's Laplace transform is similar to $G(s)$, i.e., that can be obtained by some simple transformation to $G(s)$.
+
+
