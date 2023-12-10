@@ -69,7 +69,7 @@ If we take the Laplace transform of both sides of $(27.2)$ (see book for proof) 
 
 $$ \tag{27.41} \begin{aligned} (a_n s^n + a_{n-1}s^{n-1} \cdots a_2 s^2 + a_1 s + a_0)L[y] \\ - (a_n s^{n-1} + a_{n-1}s^{n-2} + \cdots + a_2 s + a_1)y(0) \\ - (a_n s^{n-2} + a_{n-1}s^{n-3} + \cdots + a_3 s + a_2)y'(0) \\ \cdots \cdots \cdots \cdots \cdots \cdots \cdots \cdots \\ -(a_n s + a_{n-1})y^{(n-2)}(0) \\ - a_n y^{(n-1)}(0)  = L[f(x)]\end{aligned} $$
 
-Evaluating this gives an equation of the form $L[y] = G(s)$. We can then use a table of Laplace Transforms to find a function who's Laplace transform is similar to $G(s)$, i.e., that can be obtained by some simple transformation to $G(s)$.
+Evaluating this gives an equation of the form $L[y] = G(s)$. We can then use a table of Laplace Transforms to find a function who's Laplace transform is similar to $G(s)$, i.e., that can be obtained by some transformation to $G(s)$. Often these transformations involve spliting and rearranging fractions.
 
 **Method 2**
 
@@ -88,3 +88,26 @@ Using $(a)$ we can rewrite this as:
 $$ \tag{c} sL[y] - y(0) + 2L[y] = (s+2)L[y] - 2, \quad L[y] = \frac{2}{s+2} $$
 
 we can see from a table of Laplace transforms that $L[y] = \frac{2}{s+2} = 2e^{-2x}$
+
+## Gamma Function
+
+The Gamma function, written as $\Gamma (k)$ is useful here because it lets us expand some Laplace transforms involving factorials of integers into transforms that involve factorials of non-integers.
+
+Its definition is:
+
+$$ \Gamma (k) = \int_0^{\infty} x^{k-1} e^{-x} dx,~k > 0 $$
+
+A few properties that are useful:
+
+$$ \Gamma (k) = \frac{1}{k}\Gamma(k + 1), k > 0 $$
+
+
+$$ \Gamma(k + 1) = k \Gamma(k) $$
+
+We can use these properties along with a [table of Gamma function values](https://en.wikipedia.org/wiki/Particular_values_of_the_gamma_function) to find other values of Gamma quickly.
+
+Gamma is related to factorial this way, for positive $n$:
+
+$$ \Gamma(n + 1) = n! $$
+
+i.e. $\Gamma(\frac{7}{2}) = (\frac{5}{2})! $
