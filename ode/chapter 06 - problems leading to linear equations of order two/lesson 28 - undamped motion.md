@@ -16,8 +16,7 @@ $$ \tag{28.11} \frac{d^2 x}{dt^2} + {\omega_0}^2 x = 0 $$
 
 Where $\omega_0$ is a positive constant and $x$ gives the position of the particle as a function of time $t$.
 
-The solution of $(28.11)$ is (see [Solution of the Homogeneous Linear Differential Equation of Order n with Constant Coefficients
-](../chapter%2004%20-%20linear%20differential%20equations%20of%20order%20greater%20than%20one/lesson%2020%20-%20solution%20of%20the%20homogeneous%20linear%20differential%20equation%20of%20order%20n%20with%20constant%20coefficients.html)):
+The solution of $(28.11)$ is (see [Solution of the Homogeneous Linear Differential Equation of Order n with Constant Coefficients](../chapter%2004%20-%20linear%20differential%20equations%20of%20order%20greater%20than%20one/lesson%2020%20-%20solution%20of%20the%20homogeneous%20linear%20differential%20equation%20of%20order%20n%20with%20constant%20coefficients.html)):
 
 $$ \tag{28.12} x = c_1 \cos{\omega_0 t} + c_2 \sin{\omega_0 t} $$
 
