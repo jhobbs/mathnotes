@@ -66,9 +66,45 @@ $$ \tag{e} \frac{dx}{dt} = v = -c \omega_0 \sin{(\omega_0 t + \delta)} $$
 We can reuse $(d)$ and $(e)$ above to find the description of motion for any simple harmonic motion. Here are some important parameters from it (we'll use a particle as an example although not all problems will involve particles):
 
 
-- $\|c\|$ - the magnitude of motion, i.e., the maximum distance of the particle from the origin.
+- $\|c\|$ - the amplitude of motion, i.e., the maximum distance of the particle from the origin.
 - $\| c \omega_0 \|$ - the maximum velocity of the particle.
 - $x = 0$ - the equilibrium point, i.e. the center point of motion.
 - $T = \frac{2 \pi}{\omega_0}$ - the period of the motion, i.e. the amount of time it takes the particle to make one complete oscillation about its equilibrium point
 - $\frac{1}{T} = \frac{\omega_0}{2 \pi}$ - the natural (undamped) frequency of the motion. The number of complete revolutions or cycles made by the particle in a unit of time.
-- $\delta$ - the phase angle of $x$.From $(d)$ above, when $t = 0$, $x = c \cos{\omega_0}$, i.e. $c \cos{\omega_0}$ gives the starting position of the particle.
+- $\delta$ - the phase angle of $x$. From $(d)$ above, when $t = 0$, $x = c \cos{\delta}$, i.e. $c \cos{\delta}$ gives the starting position of the particle.
+
+### Examples of Simple Harmonic Motion
+
+#### The Motion of a Particle Attached to an Elastic Helical Spring. Hooke's Law
+
+Consider a helical spring, with natural unstretched length $l_0$ feet, attached to the ceiling on one and and with a weight of $w$ pounds attached to the other end. The weight will cause the spring to stretch an additional $l$ feet. This stretching will cause the spring to try to recoil to its natural length. Hooke's law says the force of this retraction is proportional to the length the spring has been stretched, hence:
+
+$$ \tag{26.81} \text{The upward force of the spring} = kl, $$
+
+where k is a proportionality constant called the *spring constant* or *stiffness coefficient* of the spring.
+
+If the spring is on the surface of the earth, then $w = mg$, where $m$ is the mass in slugs of the attached weight and $g$ is the acceleration due to gravity in feet per second per second. Since the weight is not moving, the spring is in equilibrium, and the upward force must equal the downward force. Hence,
+
+$$ \tag{28.62} kl = mg $$
+
+If we let $y = 0$ be the equilibrium point, and stretch the spring an additional $y$ feet, we now have the following forces acting on the spring:
+
+1. An upward force due to the tension o the spring, which by Hooke's law is $k(l + y)$.
+2. A downward force due to the weight, which is $mg$.
+
+By Newtown's second law of motion, the net force acting on a sytem is equal to the mass of the system times its acceleration. Hence, with the positive direction taken as downard,
+
+$$ \tag{28.621} F = m \frac{d^2 y}{dt^2} = mg - k(l +y) = mg - kl - ky $$
+
+Since $mg = kl$, we have:
+
+$$ \tag{28.63} m \frac{d^2 y}{dt^2} = -ky, \quad y'' + \frac{k}{m}y = 0 $$
+
+Which is the form of a differential equation of a particle exhibiting simple harmonic motion. In place of ${\omega_0}^2$ we have $\frac{k}{m}$, and we can let $c$ be the distance we stretch the spring past its equilibrium point.
+
+- Amplitude: $\|c\|$, because we stretch the spring $c$ beyond its equilibrium point.
+- Maximum velocity: $\|c \sqrt{\frac{k}{m}}\|$
+- Equilibrium point: $y = 0$
+- Period: Note that ${\omega_0}^2 = \frac{k}{m}$. The period is then $\frac{2 \pi}{\frac{k}{m}} = \frac{2 \sqrt{m}}{\pi \sqrt{k}}$.
+- Natural Frequency: $\frac{\pi \sqrt{k}}{2 \sqrt{m}}$
+- Phase Angle: Will be zero in the case the spring is simply released from the maximum distance, but in any case, can be found by solving $y = c \cos{\delta}$ at time $t = 0$.
