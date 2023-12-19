@@ -71,6 +71,40 @@ $$ \tag{27.41} \begin{aligned} (a_n s^n + a_{n-1}s^{n-1} \cdots a_2 s^2 + a_1 s 
 
 Evaluating this gives an equation of the form $L[y] = G(s)$. We can then use a table of Laplace Transforms to find a function who's Laplace transform is similar to $G(s)$, i.e., that can be obtained by some transformation to $G(s)$. Often these transformations involve spliting and rearranging fractions.
 
+*Example*
+
+Find the motion of equation of a weight attached to a helical spring with the following differential equation modeling its motion, when at $t = 0$, $y = y_0$ and $v = v_0$:
+
+$$ \tag{a} \frac{d^2 y}{dt^2} + \frac{k}{m}y = 0 $$
+
+Here we have initial conditions that $y(0) = y_0$, $y'(0) = v_0$, and have the constants $a_2 = 1$, $a_1 = 0$, $a_0 = \frac{k}{m}$. Given that $L[0] = 0$, we can setup the following equation by plugging values into $(27.41)$.
+
+$$ \tag{b} (s^2 + \frac{k}{m})L[y] - s y_0 - v_0 = 0 $$
+
+Rearranging to isolate $L[y]$ we get:
+
+$$ \tag{c} L[y] = \frac{s y_0 + v_0}{s^2 + \frac{k}{m} $$
+
+We can then split this up and factor as:
+
+$$ \tag{d} L[y] = y_0 \frac{s}{s^2 + \frac{k}{m}} + v_0 \frac{1}{s^2 + \frac{k}{m}} $$
+
+Now we can take the inverse Laplace transform of both sides (on the right hand side, recall that because the inverse Laplace transform is linear, $L_{-1}[a + b] = L_{-1}[a] + L_{-1}[b]$):
+
+$$ \tag{e} y = L_{-1}[y_0 \frac{s}{s^2 + \frac{k}{m}}] + L_{-1}[v_0 \frac{1}{s^2 + \frac{k}{m}}] $$
+
+Now we can look for similar transforms in a table. From [Table of Laplace Transforms](https://tutorial.math.lamar.edu/classes/de/laplace_table.aspx) we'll want to use these two identities:
+
+$$ \tag{f} L[\cos{at}] = \frac{s}{s^2 + a^2}, \quad  L[\sin{at}] = \frac{a}{s^2 + a^2} $$
+
+Again due to the linearity of $L_{-1}$ we can refactor into the forms from $(f)$
+
+$$ \tag{g} y = y_0 L_{-1}[\frac{s}{s^2 + \frac{k}{m}}] + v_0 \sqrt{\frac{m}{k}} L_{-1}[\frac{\sqrt{\frac{k}{m}}}{s^2 + \frac{k}{m}}] $$
+
+Now we apply the inverse Laplace transforms to get:
+
+$$ \tag{h} y = y_0 \cos{(\sqrt{\frac{k}{m}}t)} + v_0 \sqrt{\frac{m}{k}} \sin{(\sqrt{\frac{k}{m}}t)} $$
+
 **Method 2**
 
 Here's a useful fact (see $(27.3)$ in book for proof sketch):
@@ -78,6 +112,8 @@ Here's a useful fact (see $(27.3)$ in book for proof sketch):
 $$ \tag{a} L[y^{(n)}] = s^n L[y] - (y^{(n-1)}(0) + sy^{(n-2)}(0) + \cdots + s^{n-2}y'(0) + s^{n-1} y(0)) $$
 
 We'll use this fact to show this second method this by example.
+
+*Example*
 
 Given $y' + 2y = 0, ~y(0) = 2$, we can take the Laplace transform of both sides and use its linearity to get:
 
