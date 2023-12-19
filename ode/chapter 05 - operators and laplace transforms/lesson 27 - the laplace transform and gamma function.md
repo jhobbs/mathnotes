@@ -73,6 +73,8 @@ Evaluating this gives an equation of the form $L[y] = G(s)$. We can then use a t
 
 *Example*
 
+(*jmh* my notes, solution to 28c,3)
+
 Find the motion of equation of a weight attached to a helical spring with the following differential equation modeling its motion, when at $t = 0$, $y = y_0$ and $v = v_0$:
 
 $$ \tag{a} \frac{d^2 y}{dt^2} + \frac{k}{m}y = 0 $$
@@ -83,7 +85,7 @@ $$ \tag{b} (s^2 + \frac{k}{m})L[y] - s y_0 - v_0 = 0 $$
 
 Rearranging to isolate $L[y]$ we get:
 
-$$ \tag{c} L[y] = \frac{s y_0 + v_0}{s^2 + \frac{k}{m} $$
+$$ \tag{c} L[y] = \frac{s y_0 + v_0}{s^2 + \frac{k}{m}} $$
 
 We can then split this up and factor as:
 
