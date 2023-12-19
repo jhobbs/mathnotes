@@ -108,3 +108,17 @@ Which is the form of a differential equation of a particle exhibiting simple har
 - Period: Note that ${\omega_0}^2 = \frac{k}{m}$. The period is then $\frac{2 \pi}{\frac{k}{m}} = \frac{2 \sqrt{m}}{\pi \sqrt{k}}$.
 - Natural Frequency: $\frac{\pi \sqrt{k}}{2 \sqrt{m}}$
 - Phase Angle: Will be zero in the case the spring is simply released from the maximum distance, but in any case, can be found by solving $y = c \cos{\delta}$ at time $t = 0$.
+
+#### The Motion of a Simple Pendulum
+
+If we consider a simplified model of a pendulum, with a stiff arm of length $l$, we get this as its differential equation of motion:
+
+
+$$ \tag{28.74} l \frac{d^2 \theta}{dt^2} + g \sin{\theta} = 0 $$
+
+Where $\theta$ is the current angle with respect to vertical, positive when to the right of veritcal, negative when to the left, and $g$ is the gravitational constant. This is not in the form of simple harmonic motion, but it's close. If we take the series definiton of $\sin{\theta} = \theta - \theta^3 / 3! + \theta^5 / 5! \cdots$, and assuming we're working with a small angle, ignore the terms in $\theta^3$ and higher, we can rewrite $(28.74)$ as:
+
+
+$$ \tag{28.74} l \frac{d^2 \theta}{dt^2} + g\theta = 0, \quad \frac{d^2 \theta}{dt^2} + \frac{g}{l}\theta = 0$$
+
+which is in the form of simple harmonic motion.
