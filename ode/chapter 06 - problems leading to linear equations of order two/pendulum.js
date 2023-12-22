@@ -7,11 +7,7 @@ const BOB_RADIUS = 20;
 
 const PIXELS_PER_FOOT = 20;
 
-const GRAVITATIONAL_CONSTANT = 32;
-
-const MODE_TO_CENTER = 'CENTER';
-const MODE_PARALLEL = 'PARALLEL';
-const MODE_TO_LIGHT = 'LIGHT';
+const G = 32;
 
 
 function setupSliders(canvas) {
@@ -43,7 +39,8 @@ function getTime() {
 function redo() {
     clear();
     initial_bob_theta = bob_theta = rhoSlider.value();
-    wire_length = lengthSlider.value();	
+    wire_length = lengthSlider.value();
+    omega_naught = angularVelocitySlider.value();	
     i = 0;
     start_time = Date.now();
 }
@@ -55,9 +52,7 @@ function drawLabels() {
 }
 
 function getBobPosition() {
-    let bob_theta = (initial_bob_theta) * cos(sqrt(GRAVITATIONAL_CONSTANT/wire_length) * getTime());
-    console.log(bob_theta);
-    console.log(initial_bob_theta);
+    let bob_theta = sqrt(pow(initial_bob_theta, 2) + (wire_length/G) * pow(omega_naught, 2)) * cos(sqrt(G/wire_length) * getTime() - atan2(omega_naught * sqrt(wire_length/G), initial_bob_theta));
     let bob_x = PIVOT_X + wire_length * PIXELS_PER_FOOT * sin(bob_theta);
     let bob_y = PIVOT_Y - wire_length * PIXELS_PER_FOOT * cos(bob_theta);
     return createVector(bob_x, bob_y);
