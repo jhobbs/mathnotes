@@ -123,8 +123,45 @@ $$ \tag{28.74} l \frac{d^2 \theta}{dt^2} + g\theta = 0, \quad \frac{d^2 \theta}{
 
 which is in the form of simple harmonic motion.
 
+(*jmh* my notes)
+
 If a simple pendulum of length $l$ ft is given an angular velocity of $\omega_0$ rad/sec from the position $\theta = \theta_0$, we have:
 
 - Position of the bob as a function of time:
 
-$$ \theta{(t)} = \sqrt{ {\theta_0}^2 + \frac{l}{g}{ \omega_0}^2} \cos{(\sqrt{ \frac{g}{l}}\theta - \arctan2{( \frac{ \omega_0 \sqrt{\frac{l}{g}}}{ \theta_0})})} $$
+$$ \theta{(t)} = \sqrt{ {\theta_0}^2 + \frac{l}{g}{ \omega_0}^2} \cos{(\sqrt{ \frac{g}{l}}t - \arctan2{( \frac{ \omega_0 \sqrt{\frac{l}{g}}}{ \theta_0})})} ~ \text{rad} $$
+
+- Angular velocity of the bob as a function of time:
+
+$$ \frac{d\theta}{dt} = \omega{(t)} = - \sqrt{ \frac{g}{l} {\theta_0}^2 + { \omega_0}^2} \sin{(\sqrt{ \frac{g}{l}}t - \arctan2{( \frac{ \omega_0 \sqrt{\frac{l}{g}}}{ \theta_0})})} ~ \text{rad/sec} $$
+
+- Linear velocity of the bob as a function of time:
+
+$$ l \frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l {\theta_0}^2 + l^2 { \omega_0}^2} \sin{(\sqrt{ \frac{g}{l}}t - \arctan2{( \frac{ \omega_0 \sqrt{\frac{l}{g}}}{ \theta_0})})} ~ \text{ft/sec} $$
+
+- Amplitude: $A = \sqrt{ {\theta_0}^2 + \frac{l}{g}{ \omega_0}^2} $ ft
+- Period: $T = 2 \pi \sqrt{\frac{l}{g}}$ sec
+- Natural Frequency: $\nu = \frac{1}{2 \pi} \sqrt{gl} $ cps
+- Phase Angle: $\delta =  - \arctan2{( \frac{ \omega_0 \sqrt{\frac{l}{g}}}{ \theta_0})} $ rad
+
+Compare this to the motion of a pendulum of length $l$ ft released from the position $\theta = \theta_0$:
+
+- Position of the bob as a function of time:
+
+$$ \theta{(t)} = \theta_0 \cos{(\sqrt{\frac{g}{l}}t)} ~ \text{rad}  $$
+
+- Angular velocity of the bob as a function of time:
+
+$$ \frac{d\theta}{dt} = \omega{(t)} = - \sqrt{\frac{g}{l}} {\theta_0} \sin{(\sqrt{ \frac{g}{l}}t)} ~ \text{rad/sec}  $$
+
+- Linear velocity of the bob as a function of time:
+
+$$ l\frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l } {\theta_0} \sin{(\sqrt{ \frac{g}{l}}t)} ~ \text{ft/sec}  $$
+
+- Amplitude: $A = \omega_0 $ rad
+- Period: $T = 2 \pi \sqrt{\frac{l}{g}}$ sec
+- Natural Frequency: $\nu = \frac{1}{2 \pi} \sqrt{gl} $ cps
+- Phase Angle: $\delta =  0$ rad
+
+
+Note that for both the case where the pendulum is accelerated and where it is simply released, the period and natural frequency are the same. Note also that the period and natural frequency are independent of the initial angle. This means the pendulum will have the same period regardless of the initial angle and angular velocity! The period is dependent only on the length of the pendulum and the gravitational constant.
