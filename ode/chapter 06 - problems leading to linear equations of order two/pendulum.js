@@ -47,8 +47,11 @@ function redo() {
 
 function drawLabels() {
     text('wire length', lengthSlider.width + 5, 13);
-    text('record angular velocity', angularVelocitySlider.width + 5, 33);
+    text('starting angular velocity', angularVelocitySlider.width + 5, 33);
     text('starting angle', rhoSlider.width + 5, 53);
+ 
+    text('wire length: ' + wire_length + ' ft', TABLE_SIZE/2, 13)
+    text('period: ' + 2 * PI * sqrt(wire_length/G)  + ' sec', TABLE_SIZE/2, 33)
 }
 
 function getBobPosition() {
