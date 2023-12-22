@@ -14,14 +14,17 @@ function setupSliders(canvas) {
     lengthSlider = createSlider(0, 20, 5, 0);
     lengthSlider.position(canvas.position().x, canvas.position().y);
     lengthSlider.style('width', '80px');
+    lengthSlider.input(redo);
 
     angularVelocitySlider = createSlider(0, 10, 0, 0);
     angularVelocitySlider.position(canvas.position().x, canvas.position().y + 20);
     angularVelocitySlider.style('width', '80px');
+    angularVelocitySlider.input(redo);
 
     rhoSlider = createSlider(0, PI, PI / 4, PI / 32);
     rhoSlider.position(canvas.position().x, canvas.position().y + 40);
     rhoSlider.style('width', '80px');
+    rhoSlider.input(redo);
 }
 
 function setup() {
@@ -50,8 +53,8 @@ function drawLabels() {
     text('starting angular velocity', angularVelocitySlider.width + 5, 33);
     text('starting angle', rhoSlider.width + 5, 53);
  
-    text('wire length: ' + wire_length + ' ft', TABLE_SIZE/2, 13)
-    text('period: ' + 2 * PI * sqrt(wire_length/G)  + ' sec', TABLE_SIZE/2, 33)
+    text('wire length: ' + wire_length.toFixed(2) + ' ft', TABLE_SIZE/2, 13)
+    text('period: ' + (2 * PI * sqrt(wire_length/G)).toFixed(2)  + ' sec', TABLE_SIZE/2, 33)
 }
 
 function getBobPosition() {
