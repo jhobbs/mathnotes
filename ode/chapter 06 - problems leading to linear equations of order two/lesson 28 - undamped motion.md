@@ -70,7 +70,7 @@ We can reuse $(d)$ and $(e)$ above to find the description of motion for any sim
 - $\| c \omega_0 \|$ - the maximum velocity of the particle.
 - $x = 0$ - the equilibrium point, i.e. the center point of motion.
 - $T = \frac{2 \pi}{\omega_0}$ - the period of the motion, i.e. the amount of time it takes the particle to make one complete oscillation about its equilibrium point
-- $\frac{1}{T} = \frac{\omega_0}{2 \pi}$ - the natural (undamped) frequency of the motion. The number of complete revolutions or cycles made by the particle in a unit of time.
+- $\nu = \frac{1}{T} = \frac{\omega_0}{2 \pi}$ - the natural (undamped) frequency of the motion. The number of complete revolutions or cycles made by the particle in a unit of time.
 - $\delta$ - the phase angle of $x$. From $(d)$ above, when $t = 0$, $x = c \cos{\delta}$, i.e. $c \cos{\delta}$ gives the starting position of the particle.
 
 ### Examples of Simple Harmonic Motion
@@ -106,7 +106,7 @@ Which is the form of a differential equation of a particle exhibiting simple har
 - Maximum velocity: $\|c \sqrt{\frac{k}{m}}\|$
 - Equilibrium point: $y = 0$
 - Period: Note that ${\omega_0}^2 = \frac{k}{m}$. The period is then $\frac{2 \pi}{\frac{k}{m}} = \frac{2 \sqrt{m}}{\pi \sqrt{k}}$.
-- Natural Frequency: $\frac{\pi \sqrt{k}}{2 \sqrt{m}}$
+- Natural Frequency: $\nu = \frac{\pi \sqrt{k}}{2 \sqrt{m}} \text{cps}$
 - Phase Angle: Will be zero in the case the spring is simply released from the maximum distance, but in any case, can be found by solving $y = c \cos{\delta}$ at time $t = 0$.
 
 #### The Motion of a Simple Pendulum
@@ -122,3 +122,9 @@ Where $\theta$ is the current angle with respect to vertical, positive when to t
 $$ \tag{28.74} l \frac{d^2 \theta}{dt^2} + g\theta = 0, \quad \frac{d^2 \theta}{dt^2} + \frac{g}{l}\theta = 0$$
 
 which is in the form of simple harmonic motion.
+
+If a simple pendulum of length $l$ ft is given an angular velocity of $\omega_0$ rad/sec from the position $\theta = \theta_0$, we have:
+
+- Position of the bob as a function of time:
+
+$$ \theta{(t)} = \sqrt{ {\theta_0}^2 + \frac{l}{g}{ \omega_0}^2} \cos{(\sqrt{ \frac{g}{l}}\theta - \arctan2{( \frac{ \omega_0 \sqrt{\frac{l}{g}}}{ \theta_0})})} $$
