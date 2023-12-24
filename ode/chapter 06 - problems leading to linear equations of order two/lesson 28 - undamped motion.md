@@ -193,12 +193,26 @@ $$\tag{c} \left (\frac{d\theta}{dt} \right )^2 = \frac{2g}{l} \cos{\theta} + c $
 
 Taking the square root of both sides we get:
 
-$$ \tag{d} \frac{d\theta}{dt} = \sqrt{\frac{2g}{l}\cos{\theta}  + c } $$
+$$ \tag{d} \frac{d\theta}{dt} = \pm \sqrt{\frac{2g}{l}\cos{\theta}  + c } $$
 
 Plugging in initial conditions we get:
 
-$$ \tag{e} 0 = \sqrt{\frac{2g}{l}\cos{\theta_0}  + c }, \quad c = \frac{-2g}{l}\cos{\theta_0} $$
+$$ \tag{e} 0 = \pm \sqrt{\frac{2g}{l}\cos{\theta_0}  + c }, \quad c = \frac{-2g}{l}\cos{\theta_0} $$
 
 And so our equation for $\frac{d\theta}{dt}$ with the initial conditions becomes:
 
-$$ \tag{f} \frac{d\theta}{dt} = \sqrt{\frac{2g}{l}\left ( \cos{\theta} - \cos{\theta_0} \right )} $$
+$$ \tag{f} \frac{d\theta}{dt} = \pm \sqrt{\frac{2g}{l}\left ( \cos{\theta} - \cos{\theta_0} \right )} $$
+
+To find $t(\theta)$, we can rewrite $(f)$ to show $\theta$ as the independent variable (we'll also separate the constant term out of the radical):
+
+$$ \tag{g} \frac{dt}{d\theta} = \pm \frac{\sqrt{\frac{l}{2g}}}{\sqrt{\cos{\theta} - \cos{\theta_0}}} $$
+
+This is a separable differential equation that can be written as:
+
+$$ \tag{h} dt =  \pm \frac{\sqrt{\frac{l}{2g}} d\theta}{\sqrt{\cos{\theta} - \cos{\theta_0}}} $$
+
+Integrating both sides, with initial conditions to find the time it takes to reach position $\theta$, we get:
+
+$$ \tag{i} t(\theta) = \pm \sqrt{\frac{l}{2g}} \int_{\theta_0}^{\theta}{ \frac{du}{\sqrt{\cos u - \cos \theta_0}} }$$
+
+note that both sides are now a function of $\theta$. We use $u, ~du$ here because we're integrating from $\theta_0$ to $\theta$ and want to distinguish the variable we're integrating over from the bounds of integration.
