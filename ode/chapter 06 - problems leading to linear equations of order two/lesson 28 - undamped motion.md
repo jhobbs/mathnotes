@@ -116,10 +116,12 @@ If we consider a simplified model of a pendulum, with a stiff arm of length $l$,
 
 $$ \tag{28.74} l \frac{d^2 \theta}{dt^2} + g \sin{\theta} = 0 $$
 
+##### With Small Angle Approximation
+
 Where $\theta$ is the current angle with respect to vertical, positive when to the right of veritcal, negative when to the left, and $g$ is the gravitational constant. This is not in the form of simple harmonic motion, but it's close. If we take the series definiton of $\sin{\theta} = \theta - \theta^3 / 3! + \theta^5 / 5! \cdots$, and assuming we're working with a small angle, ignore the terms in $\theta^3$ and higher, we can rewrite $(28.74)$ as:
 
 
-$$ \tag{28.74} l \frac{d^2 \theta}{dt^2} + g\theta = 0, \quad \frac{d^2 \theta}{dt^2} + \frac{g}{l}\theta = 0$$
+$$ \tag{28.76} l \frac{d^2 \theta}{dt^2} + g\theta = 0, \quad \frac{d^2 \theta}{dt^2} + \frac{g}{l}\theta = 0$$
 
 which is in the form of simple harmonic motion.
 
@@ -129,15 +131,15 @@ If a simple pendulum of length $l$ ft is given an angular velocity of $\omega_0$
 
 - Position of the bob as a function of time:
 
-$$ \theta{(t)} = \sqrt{ {\theta_0}^2 + \frac{l}{g}{ \omega_0}^2} \cos{(\sqrt{ \frac{g}{l}}t - \arctan2{(\omega_0 \sqrt{\frac{l}{g}}, { \theta_0})})} ~ \text{rad} $$
+$$ \theta{(t)} = \sqrt{ {\theta_0}^2 + \frac{l}{g}{ \omega_0}^2} \cos{\left (\sqrt{ \frac{g}{l}}t - \arctan2{\left (\omega_0 \sqrt{\frac{l}{g}}, { \theta_0}\right )}\right)} ~ \text{rad} $$
 
 - Angular velocity of the bob as a function of time:
 
-$$ \frac{d\theta}{dt} = \omega{(t)} = - \sqrt{ \frac{g}{l} {\theta_0}^2 + { \omega_0}^2} \sin{(\sqrt{ \frac{g}{l}}t - \arctan2{( \omega_0 \sqrt{\frac{l}{g}}, { \theta_0})})} ~ \text{rad/sec} $$
+$$ \frac{d\theta}{dt} = \omega{(t)} = - \sqrt{ \frac{g}{l} {\theta_0}^2 + { \omega_0}^2} \sin{\left (\sqrt{ \frac{g}{l}}t - \arctan2{\left ( \omega_0 \sqrt{\frac{l}{g}}, { \theta_0}\right )} \right)} ~ \text{rad/sec} $$
 
 - Linear velocity of the bob as a function of time:
 
-$$ l \frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l {\theta_0}^2 + l^2 { \omega_0}^2} \sin{(\sqrt{ \frac{g}{l}}t - \arctan2{( \omega_0 \sqrt{\frac{l}{g}}, { \theta_0})})} ~ \text{ft/sec} $$
+$$ l \frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l {\theta_0}^2 + l^2 { \omega_0}^2} \sin{\left (\sqrt{ \frac{g}{l}}t - \arctan2{\left ( \omega_0 \sqrt{\frac{l}{g}}, { \theta_0}\right )} \right)} ~ \text{ft/sec} $$
 
 - Amplitude: $A = \sqrt{ {\theta_0}^2 + \frac{l}{g}{ \omega_0}^2} $ ft
 - Period: $T = 2 \pi \sqrt{\frac{l}{g}}$ sec
@@ -148,15 +150,15 @@ Compare this to the motion of a pendulum of length $l$ ft released from the posi
 
 - Position of the bob as a function of time:
 
-$$ \theta{(t)} = \theta_0 \cos{(\sqrt{\frac{g}{l}}t)} ~ \text{rad}  $$
+$$ \theta{(t)} = \theta_0 \cos{\left (\sqrt{\frac{g}{l}}t \right )} ~ \text{rad}  $$
 
 - Angular velocity of the bob as a function of time:
 
-$$ \frac{d\theta}{dt} = \omega{(t)} = - \sqrt{\frac{g}{l}} {\theta_0} \sin{(\sqrt{ \frac{g}{l}}t)} ~ \text{rad/sec}  $$
+$$ \frac{d\theta}{dt} = \omega{(t)} = - \sqrt{\frac{g}{l}} {\theta_0} \sin{\left (\sqrt{ \frac{g}{l}}t \right )} ~ \text{rad/sec}  $$
 
 - Linear velocity of the bob as a function of time:
 
-$$ l\frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l } {\theta_0} \sin{(\sqrt{ \frac{g}{l}}t)} ~ \text{ft/sec}  $$
+$$ l\frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l } {\theta_0} \sin{\left (\sqrt{ \frac{g}{l}}t \right )} ~ \text{ft/sec}  $$
 
 - Amplitude: $A = \omega_0 $ rad
 - Period: $T = 2 \pi \sqrt{\frac{l}{g}}$ sec
@@ -168,5 +170,35 @@ Note that for both the case where the pendulum is accelerated and where it is si
 
 {% include_relative pendulum.html %}
 
-This animation uses the small angle approximation for pendulum motion, so it may be off significantly at larger angles. However, it does a fine job showing that the period does not change with the starting angle or starting angular velocity.
+This animation uses the small angle approximation for pendulum motion, so it may be off significantly at larger angles. However, it does a fine job showing that the period does not change with the starting angle or starting angular velocity (for small angles).
 
+
+##### Without Small Angle Approximation
+
+(*jmh* my notes)
+
+Without the small angle approximation, we have a non-linear second order differential equation that can't be solved for a closed formula with elementary functions. We can, however, find a formula for angular velocity ($\omega = \frac{d\theta}{dt}$) when at $t = 0$ we have $\theta = \theta_0$ and $\omega = 0$.
+
+We can seperate/rearrange terms and then multiply both sides of $(28.74)$ by $\frac{2d\theta}{dt}$ to get:
+
+$$ \tag{a} 2 \left (\frac{d^2 \theta}{dt^2} \right ) \frac{d \theta}{dt} = -2\frac{g}{l}\sin{\theta} \frac{d\theta}{dt} $$
+
+Using the identity $2 \left (\frac{d^2 \theta}{dt^2} \right ) \frac{d \theta}{dt} = \frac{d}{dt} \left (\frac{d\theta}{dt} \right)^2$, we can rewrite $(a)$ to get:
+
+$$ \tag{b} \frac{d}{dt} \left (\frac{d\theta}{dt} \right )^2  = -2\frac{g}{l}\sin{\theta} \frac{d\theta}{dt} $$
+
+By integrating both sides of $(b)$ with respect to $dt$ we get:
+
+$$\tag{c} \left (\frac{d\theta}{dt} \right )^2 = \frac{2g}{l} \cos{\theta} + c $$
+
+Taking the square root of both sides we get:
+
+$$ \tag{d} \frac{d\theta}{dt} = \sqrt{\frac{2g}{l}\cos{\theta}  + c } $$
+
+Plugging in initial conditions we get:
+
+$$ \tag{e} 0 = \sqrt{\frac{2g}{l}\cos{\theta_0}  + c }, \quad c = \frac{-2g}{l}\cos{\theta_0} $$
+
+And so our equation for $\frac{d\theta}{dt}$ with the initial conditions becomes:
+
+$$ \tag{f} \frac{d\theta}{dt} = \sqrt{\frac{2g}{l}\left ( \cos{\theta} - \cos{\theta_0} \right )} $$
