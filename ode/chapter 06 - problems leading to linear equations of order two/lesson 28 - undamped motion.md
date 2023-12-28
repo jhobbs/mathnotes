@@ -221,7 +221,6 @@ note that both sides are now a function of $\theta$. We use $u, ~du$ here becaus
 
 In forced undamped motion, the motion of a particle of mass $m$ satisfies a differential equation of the form:
 
-
 $$ \tag{28.8} m \frac{d^2y}{dt^2} + m {\omega_0}^2 y = f(t), \quad \frac{d^2y}{dt^2} + {\omega_0}^2 y = \frac{1}{m} f(t) $$
 
 Here, $f(t)$ is called the **forcing function**.
@@ -244,7 +243,7 @@ $$ \tag{28.83} y_p = \frac{F}{ {\omega_0}^2 - \omega^2} \sin{(\omega t + \beta)}
 
 Hence, by $(28.82)$ and $(28.83)$ the general solution of $(28.81)$ is:
 
-$$ \tag{28.84}  y_c = c \sin{(\omega_0 t + \delta}) + \frac{F}{ {\omega_0}^2 - \omega^2} \sin{(\omega t + \beta)} $$
+$$ \tag{28.84}  y(t) = c \sin{(\omega_0 t + \delta}) + \frac{F}{ {\omega_0}^2 - \omega^2} \sin{(\omega t + \beta)} $$
 
 Here, the maximum displacement of this particle cannot exceed $\|c\| + \|F/({\omega_0}^2 - \omega^2)\|$.
 
@@ -264,8 +263,10 @@ $$ \tag{28.92} y_p = - \frac{F}{2 \omega_0} t \cos{(\omega_0 t + \beta)} $$
 
 And the general solution is:
 
-$$ \tag{28.93} y = c \sin{(\omega_0 t + \delta}) - \frac{F}{2 \omega_0} t \cos{(\omega_0 t + \beta)} $$
+$$ \tag{28.93} y(t) = c \sin{(\omega_0 t + \delta}) - \frac{F}{2 \omega_0} t \cos{(\omega_0 t + \beta)} $$
 
 Now we have that the maximum displacement of the particle is $\|c\| + \left \| \frac{F}{2 \omega_0} t \right \| $. The presence of the variable $t$ in the second term implies that the displacement due to this part of the motion increases with time. A motion in which the displacement increases beyond all bounds as time passes is called an **unstable motion**. In such cases, a mechanical breakdown of the system is bound to occur. This condition is known as **undamped resonance** and $\omega_0$ is called the **undamped resonant frequency**.
 
 Here is a [Desmos graph of this general solution](https://www.desmos.com/calculator/6a4rofhsfe).
+
+Note that in engineering circles, $f(t)$ in $(28.8)$ is called the **input** of the system and the solution $y(t)$ is called the **output** of the system.
