@@ -270,3 +270,9 @@ Now we have that the maximum displacement of the particle is $\|c\| + \left \| \
 Here is a [Desmos graph of this general solution](https://www.desmos.com/calculator/6a4rofhsfe).
 
 Note that in engineering circles, $f(t)$ in $(28.8)$ is called the **input** of the system and the solution $y(t)$ is called the **output** of the system.
+
+### Some Intresting Examples of Forced Undamped Motion
+
+The book talks some about intermittent force, where the force function $f(t)$ is a piecewise function with a different formula at different points in time. Related to this is unit impulse, impulse response, and the Direca Delta function. I won't get into those here but it covers cases where you might strike an object once and then it oscillates afterwards.
+
+Another interesting case is when $\omega$ differs from $\omega_0$ by a very small quantity $\epsilon$. In this case, we end up with **amplitude modulation** and **beats**. [Here is a Desmos graph of this](https://www.desmos.com/calculator/zvmf2gqoyc). One physical case where this happens is when an instrument is slightly out of tune compared to a tuning fork. The resulting sound will be of a consistent frequency but with varying amplitude, which shows up really clearly in the Desmos graph. These variation in amplitude as known as beats.
