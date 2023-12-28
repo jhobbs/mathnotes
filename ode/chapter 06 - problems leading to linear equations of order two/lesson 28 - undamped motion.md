@@ -216,3 +216,34 @@ Integrating both sides, with initial conditions to find the time it takes to rea
 $$ \tag{i} t(\theta) = \pm \sqrt{\frac{l}{2g}} \int_{\theta_0}^{\theta}{ \frac{du}{\sqrt{\cos u - \cos \theta_0}} }$$
 
 note that both sides are now a function of $\theta$. We use $u, ~du$ here because we're integrating from $\theta_0$ to $\theta$ and want to distinguish the variable we're integrating over from the bounds of integration.
+
+## Forced Undamped Motion
+
+In forced undamped motion, the motion of a particle of mass $m$ satisfies a differential equation of the form:
+
+
+$$ \tag{28.8} m \frac{d^2y}{dt^2} + m {\omega_0}^2 y = f(t), \quad \frac{d^2y}{dt^2} + {\omega_0}^2 y = \frac{1}{m} f(t) $$
+
+Here, $f(t)$ is called the **forcing function**.
+
+If we assume the forcing function $f(t) = mF\sin{(\omega t + \beta)}$ where $F$ is a constant, then $(28.8)$ becomes:
+
+$$ \tag{28.81}  \frac{d^2y}{dt^2} + {\omega_0}^2 y = F \sin{(\omega t + \beta)} $$
+
+The complementary function of $(28.81)$ is:
+
+$$ \tag{28.82}  y_c = c \sin{(\omega_0 t + \delta}) $$
+
+A particular solution $y_p$ of $(28.81)$ then depends on the relative values of the natraul (undamped) frequency $\omega_0$ of the system and the **impressed frequency** $\omega$ of the forcing function $mF\sin{(\omega t + \beta)}$.
+
+**Case 1:** $\omega \neq \omega_0$
+
+If $\omega \neq \omega_0$, then a particular solution of $(28.81)$ is
+
+$$ \tag{28.83} y_p = \frac{F}{ {\omega_0}^2 - \omega^2} \sin{(\omega t + \beta)} $$
+
+Hence, by $(28.82)$ and $(28.83)$ the general solution of $(28.81)$ is:
+
+$$ \tag{28.84}  y_c = c \sin{(\omega_0 t + \delta}) + \frac{F}{ {\omega_0}^2 - \omega^2} \sin{(\omega t + \beta)} $$
+
+Here, the maximum displacement of this particle cannot exceed $\|c\| + \|F/({\omega_0}^2 - \omega^2)\|$.
