@@ -7,10 +7,9 @@ title: Damped Motion
 
 ## Free Damped Motion (Damped Harmonic Motion)
 
-Damped harmonic motion is harmonic motion where the particle in motion is subject to a resistance or damping force.
+Damped harmonic motion is harmonic motion where the particle in motion is subject to a resistance or damping force. We shall assume in this lesson that the damping force is proportional to the first power of the velocity. Frequently this will not be the case, and methods beyond the scope of this text will be required to solve the resulting differential equation.
 
 ***Definition 29.1*** A particle will be said to execute **damped harmonic motion** if its equation of motion satisfies a differential equation of the form:
-
 
 $$ \tag{29.11} m\frac{d^2y}{dt^2} + 2mr \frac{dy}{dt} + m {\omega_0}^2 y = 0, \quad \frac{d^2y}{dt^2} + 2r \frac{dy}{dt} + {\omega_0}^2 y = 0 $$
 
