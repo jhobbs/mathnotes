@@ -40,3 +40,25 @@ $$ \tag{29.31} y = ce^{-rt} \sin{\left ( \sqrt{ {\omega_0}^2 - r^2}t + \delta \r
 The since term in the solution makes the motion oscillatory; this system is said to be **underdamped**.  The $ce^{-rt}$ term is called the **damped amplitude** and since $r > 0$, this factor approaches 0 with time, causing the amplitude of the oscillation to decrease over time.
 
 Note that the **damped period** $T = \frac{2 \pi}{\sqrt{ {\omega_0}^2 - r^2}}$ and **damped frequency** $\nu =  \sqrt{ {\omega_0}^2 - r^2}$ are constant.
+
+## Forced Motion with Damping
+
+The motion of a particle that satisfies the differential equation:
+
+$$ \tag{29.4} m\frac{d^2y}{dt^2} + 2mr \frac{dy}{dt} + m {\omega_0}^2 y = f(t), \quad \frac{d^2y}{dt^2} + 2r \frac{dy}{dt} + {\omega_0}^2 y = \frac{1}{m}f(t) $$
+
+is called **forced damped motion**.
+
+Assume the forcing function $f(t) = mF\sin{(\omega t + \beta)}$ where $F$ is a constant. Then $(29.4)$ becomes:
+
+$$ \tag{29.41} \frac{d^2y}{dt^2} + 2r \frac{dy}{dt} + {\omega_0}^2 y = F\sin{(\omega t + \beta)} $$
+
+The different possible complimentary functions $y_c$ for $(29.41)$ were covered already in the section above on Free Damped Motion and are the same here. The trial solution $y_p$ for all such solutions is:
+
+$$ \tag{29.42} y_p = A\sin{(\omega t + \beta)} + B\cos{(\omega t + \beta)} $$
+
+Hence the general solution of $(29.41)$ (see book for details) is:
+
+$$ \tag{29.47} y = y_c + \frac{F}{\sqrt{( {\omega_0}^2 - \omega^2)^2 + (2r\omega)^2}} \sin{(\omega t + \beta - \alpha)} $$
+
+As we saw above, for all cases, $y_c$ dies out with time. For this reason, this part of the motion is called the **transient motion**. The equation $(29.47)$ thus effectively simplifies entirely to the $y_p$ part of the motion after some time. This part of the motion is called the **steady state motion**.
