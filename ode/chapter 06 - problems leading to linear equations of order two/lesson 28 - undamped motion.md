@@ -72,6 +72,8 @@ We can reuse $(d)$ and $(e)$ above to find the description of motion for any sim
 - $T = \frac{2 \pi}{\omega_0}$ - the period of the motion, i.e. the amount of time it takes the particle to make one complete oscillation about its equilibrium point
 - $\nu = \frac{1}{T} = \frac{\omega_0}{2 \pi}$ - the natural (undamped) frequency of the motion. The number of complete revolutions or cycles made by the particle in a unit of time.
 - $\delta$ - the phase angle of $x$. From $(d)$ above, when $t = 0$, $x = c \cos{\delta}$, i.e. $c \cos{\delta}$ gives the starting position of the particle.
+- $\omega$ - the current angular frequency of the system
+- $\omega_0$ - the natural (undampned) frequency of the system
 
 ### Examples of Simple Harmonic Motion
 
