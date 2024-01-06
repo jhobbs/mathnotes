@@ -64,3 +64,40 @@ Hence the general solution of $(29.41)$ (see book for details) is:
 $$ \tag{29.47} y = y_c + \frac{F}{\sqrt{( {\omega_0}^2 - \omega^2)^2 + (2r\omega)^2}} \sin{(\omega t + \beta - \alpha)} $$
 
 As we saw above, for all cases, $y_c$ dies out with time. For this reason, this part of the motion is called the **transient motion**. The equation $(29.47)$ thus effectively simplifies entirely to the $y_p$ part of the motion after some time. This part of the motion is called the **steady state motion**.
+
+We can see from $(29.41)$ and $(29.47)$ that the steady state motion has the same frequency as the forcing function, namely $\omega$ rad/sec, but it is out of phase with it and that the amplitude of the steady state motion is:
+
+$$ \tag{29.5} A = \frac{F}{\sqrt{( {\omega_0}^2 - \omega^2)^2 + (2r\omega)^2}} $$
+
+if $\omega = \omega_0$ (the condition for undamped resonance), the amplitude reduces to the form:
+
+$$ \tag{29.51} A = \frac{F}{2r \omega_0} $$
+
+If $\omega \neq \omega_0$, then we can find the maximum of $(29.5)$ as a function of $\omega$ [that is, $A(\omega)$] by finding the roots of $A'(\omega)$. That gives us:
+
+$$ \tag{29.53} \omega = \sqrt{ {\omega_0}^2 - 2r^2}, \quad {\omega_0}^2 > 2r^2 $$
+
+Therefore, if a resisting force is present and if $\omega$ (the frequency of the forcing function) is not equal to $\omega_0$ (the natural undamped frequency of a system), then the amplitude $A$ of the steady state motion will be a maximum if $\omega = \sqrt{ {\omega_0}^2 - 2r^2}$ and the forcing function $f(t)$ is said to be in **resonance** with the system. Substituting this value into $(29.5)$ gives the maximum amplitude as:
+
+$$ \tag{29.531} A_\text{max} = \frac{F}{2r\sqrt{ {\omega_0}^2 - r^2}} $$
+
+If we assume that $2r$, the coefficient of resistance of a system per unit of mass, is small, then we commit a samll error if we emot the $r^2$ term in $(29.531)$ and obtain:
+
+$$ \tag{29.532} A_\text{max} \approx \frac{F}{2r\omega_0}, $$
+
+the same amplitude obtained in $(29.51)$ when $\omega = \omega_0$. Further, we know that if $r$ is small, the natural (damped) frequency of a system ($\sqrt{ {\omega_0}^2 - r^2}$) is close to the resonant frequency $\sqrt{ {\omega_0}^2 - 2r^2}$, that is, it is close to the frequency which will produce the maximum amplitude.
+
+We can therefore conclude that if a resisting force is present and the frequency of the forcing function ($\omega$) equals the natural (undamped) frequency of a system ($\omega_0$) or is close to the natural (damped) frequency of a system ($\sqrt{ {\omega_0}^2 - r^2}$), then the amplitude ($A$) of the system is inversely proportional to the damping or resisting factor $2r$. Hence, if $2r$ is small, $A$ will be large and tremendous vibrations may be produced. This can lead systems to fail, such as a bridge when the gait of pedestrians crosses it too closely matches the natural frequency of the bridge.
+
+
+The ratio
+
+$$ \tag{29.54} M = \frac{A}{F/{\omega_0}^2} $$
+
+where $A$ is the amplitude of $y_p$ as given in $(29.5)$ is called the **magnification ratio of the system** or the **amplification ratio of the system**. This is:
+
+$$ \tag{29.55} M = \frac{ {\omega_0}^2}{\sqrt{({\omega_0}^2 - \omega^2)^2 + (2r\omega)^2}} $$
+
+$$ = \frac{1}{\sqrt{\left [ 1 - \left ( \frac{\omega}{ {\omega_0}^2 } \right )^2 \right ]^2  + 4 \left ( \frac{r}{\omega_0} \right )^2 \left ( \frac{\omega}{\omega_0} \right )^2 }} $$
+
+Since $\omega_0$ is fixed, the amplification ratio of a syste mdepends on the frequency $\omega$ of the forcing function and the cofficient of resistance per unit of mass $2r$. In practical applications where $\omega$ is also fixed, the resistance $2r$ is made large if one wishes the magnifying response to be small, i.e. for shock absorbers to limit vibration in machinery, and $2r$ is made small if one wishes the response to be large, as, for example, in a radio receiver.
