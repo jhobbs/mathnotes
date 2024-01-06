@@ -63,6 +63,8 @@ $$ \tag{e} \frac{dx}{dt} = v = -c \omega_0 \sin{(\omega_0 t + \delta)} $$
 
 (*jmh* my notes)
 
+First, review my notes on [Frequency and Period](../../trigonometry/frequency.html).
+
 We can reuse $(d)$ and $(e)$ above to find the description of motion for any simple harmonic motion. Here are some important parameters from it (we'll use a particle as an example although not all problems will involve particles):
 
 
