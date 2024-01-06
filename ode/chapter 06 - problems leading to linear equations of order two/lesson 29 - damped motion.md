@@ -41,6 +41,8 @@ The since term in the solution makes the motion oscillatory; this system is said
 
 Note that the **damped period** $T = \frac{2 \pi}{\sqrt{ {\omega_0}^2 - r^2}}$ and **damped frequency** $\nu =  \sqrt{ {\omega_0}^2 - r^2}$ are constant.
 
+The exponential term $e^{-rt}$ is called the **damping factor**. This factor decreases with time, so the motion eventually dies down. Thwen $t = 1/r$, the damping factor is $1/e$. The time it takes the damping fator to reac this value $1/e$ is called the **time constant** and is donoted with $\tau$. Therefore, we have $\tau = 1/r$.
+
 ## Forced Motion with Damping
 
 The motion of a particle that satisfies the differential equation:
