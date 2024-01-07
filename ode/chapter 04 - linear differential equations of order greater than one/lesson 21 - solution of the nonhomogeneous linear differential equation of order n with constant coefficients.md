@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Solution of the Nonhomogeneous Linear Differential Equation of Order n with Constant Coefficients
+title: Solution of the Nonhomogeneous Linear Differential Equation of Order n with Constant Coefficients (Method of Undetermined Coefficients)
 ---
 
-# Solution of the Nonhomogeneous Linear Differential Equation of Order n with Constant Coefficients
+# Solution of the Nonhomogeneous Linear Differential Equation of Order n with Constant Coefficients (Method of Undetermined Coefficients)
 
 
 From 19.3 and 19.41 we have that the general solution of a nonhomogeneous linear differential equation of order n:
