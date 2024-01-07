@@ -52,3 +52,31 @@ The method of [Variation of Paramaters](../chapter%2004%20-%20linear%20different
 $$ a_ny^{(n)} + a_{(n-1)}y^{(n-1)} + \cdots + a_1y' + a_0y = Q(x) $$
 
 However, where the method of undetermined coefficients requires that $Q(x)$ has finitely many linearly independent derivatives, the method of variation of parameters does not. The book only covers this method for 2nd order linear differential equations, and points out that if $Q(x)$ does have finitely many linearly independent derivatives, that the method of undetermined coefficients is usually easier.
+
+#### Method of Reduction of Order
+
+For equations of the form
+
+$$ f_n(x)y^{(n)} + f_{(n-1)}(x)y^{(n-1)} + \cdots + f_1(x)y' + f_0(x)y = Q(x), $$
+
+where the coefficients and $Q(x)$ are continuous functions of $x$ on a common interval $I$ and $f_n(x) \neq 0$, we can use the method of [reduction of order](../chapter%2004%20-%20linear%20differential%20equations%20of%20order%20greater%20than%20one/lesson%2023%20-%20solution%20of%20the%20linear%20differential%20equation%20with%20nonconstant%20coefficients%20-%20reduction%20of%20order%20method.html).
+
+However, we we must know $n - 1$ independent solutions of the equation already, and there is no garauntee the solutions found will be expressible via elementary functions.
+
+#### Solution by Differential Operators
+
+We can solve differential equations of the form
+
+$$ a_ny^{(n)} + a_{(n-1)}y^{(n-1)} + \cdots + a_1y' + a_0y = Q(x) $$
+
+via [differential operators](../chapter%2005%20-%20operators%20and%20laplace%20transforms/lesson%2024%20-%20differential%20and%20polynomial%20operators.html). We can use this method on its own or after finding the complementary function by solving the characteristic equation.
+
+It's not really clear to me when this method is advantageous to use. I'm also not sure what restrictions apply to coefficients and to $Q(x)$ - the book isn't clear.
+
+#### Solution by Inverse Differential Operators
+
+todo
+
+#### Solution by Laplace Transforms
+
+todo
