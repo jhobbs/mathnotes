@@ -79,6 +79,12 @@ We can use [Inverse Differential Operators](../chapter%2005%20-%20operators%20an
 
 See also [Partial Fraction Decomposition of Inverse Operators](../chapter%2005%20-%20operators%20and%20laplace%20transforms/lesson%2026%20-%20solution%20of%20a%20linear%20differential%20equation%20by%20means%20of%20the%20partial%20fraction%20expansion%20of%20inverse%20operators.html).
 
+
+#### Note on shifted sin or cos in Q(x) 
+
+(*jmh*) I believe and have used this fact but haven't proven it. When $Q(x) = b\sin{(ax+\delta)}$, we can treat it like $b\sin{(ax)}$ and solve using methods like that and then add the $\delta$ term back into $\sin$ and $\cos$ functions in the solution. My reasoning is that $\delta$ is just a horizontal shift of the forcing function. The shift doesn't change the essential nature of its solutions, because each derivative of $Q(x)$ has the same shift, and the shift never comes out of the $\sin$ function to show up other places in the solution. The same thing applies for $b\cos{(ax+\delta)}$ in $Q(x)$.
+
+
 #### Solution by Laplace Transforms
 
 We can use [Laplace Transforms](../chapter%2005%20-%20operators%20and%20laplace%20transforms/lesson%2027%20-%20the%20laplace%20transform%20and%20gamma%20function.html) to solve differential equations given initial conditions.
