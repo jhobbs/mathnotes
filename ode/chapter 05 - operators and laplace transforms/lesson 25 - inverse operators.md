@@ -112,7 +112,7 @@ the method given in $(25.4)$.
 
 That is, for $P(D)y = b\sin{ax}$, we use the imaginary part of the particular solution of:
 
-$$ \tag{a} P(D)y = be^{ix} $$
+$$ \tag{a} P(D)y = be^{aix} $$
 
 and for $P(D)y = b\cos{ax}$, we use the real part of the particular solution of $(a)$. In both cases, we use the method given above for $Q(x) = be^{ax}$.
 
