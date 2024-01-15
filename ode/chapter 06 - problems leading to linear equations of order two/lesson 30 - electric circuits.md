@@ -37,7 +37,27 @@ If we assume $E(t) = F \sin{(\omega t + \beta)}$ then $(30.15)$ becomes:
 
 $$ \tag{30.17} L\frac{d^2 i}{dt^2} + R\frac{di}{dt} + \frac{1}{C}i = F \omega \cos{(\omega t + \beta)} $$
 
-$$ \frac{d^2 i}{dt^2} + \frac{R}{L}\frac{di}{dt} + \frac{1}{CL}i = \frac{F\omega}{L} \cos{(\omega t + \beta)} $$
+$$ \tag{30.17b} \frac{d^2 i}{dt^2} + \frac{R}{L}\frac{di}{dt} + \frac{1}{CL}i = \frac{F\omega}{L} \cos{(\omega t + \beta)} $$
 
 
+Its solution is:
 
+$$ \tag{30.21} i(t) = Ae^{-(R/2L)t} \sin{\left (\frac{\sqrt{4CL - R^2 C^2}}{2CL}t + \delta \right)} + \frac{F \omega C}{\sqrt{(R \omega C)^2 + (1 - CL \omega^2)^2}}\sin{(\omega t + \beta + \alpha)} $$
+
+where $\alpha = \sin^{-1}{\left ( \frac{1 - CL\omega^2}{R \omega C} \right )}$
+
+The first term on the right hand side is the transient current, and the second term is the steady-state current. You can see that the transient current will decay to $0$, and that the steady-state current has the same frequency as the input current but not necessarily the same amplitude and phase.
+
+Now we can use all our standard techniques for analyzing and solving linear differential equations. This system is analogous to the motion of a pendulum or helical spring that obeys Hooke's law if we replace position $y$ in the mechanical with charge $q$ in the electrical system.
+
+from $(30.17b)$ we see that the natural frequency of the system is $\frac{1}{\sqrt{CL}}$
+
+Note that solving the homogenous version of $(30.15)$ gives the transient current of the system and finding a particular solution gives the steady-state current of the system (see book for solution). The amplitude of the the steady-state will be:
+
+$$ \tag{30.22} A = \frac{F}{\sqrt{R^2 + \left ( \frac{1}{\omega C} - L \omega \right )^2}} $$
+
+The denominator is called the **impedance** of the system and is denoted as $Z$:
+
+$$ \tag{30.23} Z = \sqrt{R^2 + \left ( \frac{1}{\omega C} - L \omega \right )^2} $$
+
+Taking the derivative of $Z$ with respect to $\omega$ and finding its positive zero gives the value that minimizes impedance, $\omega = \sqrt{1/CL}$. When impedance is minimized, the driving $E(t)$ electromotive force is said to be in **resonance** with the system and the amplitude of the steady-state current will reach its maximum $A = \frac{F}{R}$.
