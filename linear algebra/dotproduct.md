@@ -15,6 +15,8 @@ Given two vectors in $R^n$, define their dot product as:
 
 $$ \vec{x} \cdot \vec{y} = (x_1, x_2, \cdots, x_n) \cdots (y_1, y_2, \cdots, y_n)  = x_1 y_1 + x_2 y_2 + \cdots + x_n y_n $$
 
+One geometric interpretation of the dot product of $\vec{u}$ and $\vec{v}$ is that it's the [component](projection.html) of $\vec{u}$ in the direction of $\vec{v}$ times the magnitude of $\vec{v}$. Thus, one $\vec{u}$ and $\vec{v}$ are pointing in generally the same direction it's positive, in generally opposite directions it's negative, and when they're perpindicular (orthogonal) it is $0$.
+
 ## Properties of Dot Product
 
 For these properties, let $x, y, z \in \mathbb{R}^n$ and $c \in \mathbb{R}.$
