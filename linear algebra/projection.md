@@ -23,3 +23,12 @@ The length of the projection of $\vec{u}$ in the direction of $\vec{v}$ is calle
 
 
 $$ \text{comp}_v u =  || \text{proj}_{\vec{v}} \vec{u} || = \frac{\vec{u} \cdot \vec{v}}{|| \vec{v} ||} $$
+
+
+## Orthogonal
+
+The orthogonal projection of $\vec{u}$ onto $\vec{v}$ is given as:
+
+$$ \text{orth}_\vec{v} \vec{u} = \vec{u} -  \text{proj}_{\vec{v}} \vec{u} $$
+
+This is the component of $\vec{u}$ that is orthogonal to $\vec{v}$.
