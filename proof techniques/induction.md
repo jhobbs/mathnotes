@@ -78,7 +78,7 @@ which is obviously true and shows that (a) is true for the base case where $n = 
 
 #### Induction Case
 
-Now we must show that if we assume (a) is true for some $n \geq 0$, that is also true for $n + 1$.
+Now we must show that if we assume (a) is true for some $n \geq 0$, that (a) is also true for $n + 1$.
 
 That is, we must show that if we assume
 
