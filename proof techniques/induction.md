@@ -102,7 +102,7 @@ $$ \tag{h} 3^0 + 3^1 + 3^2 + \cdots + 3^n + 3^{(n+1)} = \frac{3^{(n+1)+1} - 1}{2
 
 Now, the terms on the left-hand side of (h) are just
 
-$$ \tag{i} \left (\sum_{k=0}^n 3^k \right) + 3^{(n+1)} $$
+$$ \tag{i} \sum_{k=0}^n 3^k + 3^{(n+1)} $$
 
 so we have 
 
