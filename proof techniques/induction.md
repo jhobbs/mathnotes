@@ -112,7 +112,7 @@ Since we assumed that (e) is true, we can replace the summation on the left-hand
 
 $$ \tag{k} \frac{3^{(n+1)} - 1}{2} + 3^{(n+1)} = \frac{3^{(n+1)+1} - 1}{2}. $$
  
-Combing terms on the left-hand side gives
+Combining terms on the left-hand side gives
 
 $$ \tag{l} \frac{3(3^{(n+1)}) - 1}{2} = \frac{3^{(n+1)+1} - 1}{2}, $$
 
