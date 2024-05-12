@@ -41,9 +41,9 @@ When the root is real and distinct we use this form:
 
 $$ y = c_1 e^{m_1 x} $$
 
-When the root is real and repeated $k$ times we use this form:
+When the root is real and and occurs $k$ times we use this form:
 
-$$ y = e^{m_1 x} (c_1 + c_2 x + c_3x^2 + \cdots + c_4x^n) $$
+$$ y = e^{m_1 x} (c_1 + c_2 x + c_3x^2 + \cdots + c_4x^k) $$
 
 When the root is imaginary we can write it exactly the same as if it were real, but keep in mind that imaginary roots always come in conjucate pairs. Using that fact and some manipulation, we can write the solution from the root with the complex number $\alpha - i\beta$ as:
 
