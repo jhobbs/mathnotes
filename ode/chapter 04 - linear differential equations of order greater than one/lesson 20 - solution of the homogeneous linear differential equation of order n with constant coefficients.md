@@ -54,5 +54,8 @@ For example, the general solution to a 5th degree homogeneous linear differentia
 
 $$ y_c = c_1 e^{m_1 x} + e^{m_2 x}(c_2 + c_3x) + e^{\alpha x}(c_4\cos\beta x + c_5\sin\beta x) $$
 
+If the linear differential equation has a conjugate pair of repeated imaginary roots, i.e. if $\alpha + i \beta$ and $\alpha - i \beta$ each occurs twice as a root, then the same pattern for repeated roots applies and we end up with, as an example form:
+
+$$ y_c = e^{\alpha x} ((c_1 + c_2 x) \cos{\beta x} + (c_3 + c_4 x) \sin{\beta x}) $$
 
 Finding that general solution involves taking the original differential equation, finding its characteristic equation, and then finding the roots of that characteristic equation. Keep in mind that algebraic equations of degrees greater than 2 can be very hard (or impossible?) to solve.
