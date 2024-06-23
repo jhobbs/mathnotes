@@ -25,7 +25,7 @@ Hooke's law for springs. $F_s$ is the spring force (in newtons), $k$ is the spri
 
 $$ F_s = -kx $$
 
-Work to reach a given displacement comes from integrating this:
+Work to reach a given displacement from the unstretched position comes from integrating this:
 
 $$ W = -\frac{k}{2} x^2 $$
 
