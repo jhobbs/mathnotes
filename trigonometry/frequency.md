@@ -31,6 +31,8 @@ Taking the first equation in $(a)$ and the second in $(b)$, we see how to relate
 
 $$ \tag{c} \frac{1}{T} = \frac{\omega}{2 \pi}, \quad T = \frac{2 \pi}{\omega}, \quad \omega = \frac{2 \pi}{T} $$
 
+Note that angular speed - the rate of change of an angle with respect to time - has the same formula and units as angular frequency. They are basically the same thing but are used in different contexts.
+
 ## Applied to sin
 
 The period of $\sin{t}$ is $2 \pi$. If we assume the unit of time is seconds, that means when $t = 2 \pi$, i.e. after $2 \pi$ seconds have elapsed, $\sin{t}$ has completed one cycle and is beginning to repeat its behavior and we have:
