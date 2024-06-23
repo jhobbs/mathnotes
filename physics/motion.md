@@ -61,3 +61,31 @@ An object in motion across a surface experiences kinetic friction, given by
 $$ F_k = \mu_k F_n $$
 
 where $\mu_k$ is the cofficient of kinetic friction. Generally, kinetic friction is less than static friction. The force from kinetic friction applies in the direction parallel to the surface but opposite in direction of the motion of the object.
+
+## Rotational Motion
+
+Radial acceleration, also known as centripetal acceleration), is acceleration directed towards the center of the circle along which an object is moving.
+
+Its formula is:
+
+$$ a_r = \frac{v^2}{r} $$
+
+where $v$ is the speed of the object and $r$ is the radius of the circle along which it is moving.
+
+It can also be expressed in terms of angular speed ($\omega$) as:
+
+$$ a_r = r \omega^2 $$
+
+
+Tangential acceleration is acceleration along the path of the circle. If the speed of an object increases or decreases while moving along the circle, there is tangential acceleration.
+
+Its formula is:
+
+$$ a_t = r \alpha $$
+
+where $r$ is the radius of the circle and $\alpha$ is the angular acceleration (rate of change of angular speed). Alternatively, this is:
+
+
+$$ a_t = \frac{d|v|}{dt} $$
+
+where $\|v\|$ is the magnitude of the velocity of the object.
