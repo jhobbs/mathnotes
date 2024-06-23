@@ -38,7 +38,7 @@ $$ \vec{P} = m\vec{v} $$
 Momentum is conserved in collisions; For two objects, $a$ and $b$ colliding:
 
 
-$$ m_{a_1} \vec{v}_{a_1} + m_{b_1} \vec{v}_{b_1} = m_{a_2} \vec{v}_{a_2} + m_{b_2} \vec{v}_{b_2} $$
+$$ m_{a} \vec{v}_{a_1} + m_{b} \vec{v}_{b_1} = m_{a} \vec{v}_{a_2} + m_{b} \vec{v}_{b_2} $$
 
 ## Friction
 
