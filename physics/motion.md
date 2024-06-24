@@ -138,7 +138,11 @@ The direction of $\vec{\ell}$ is given by the right-hand rule.
 
 Net torque is related to angular momentum in the following way:
 
-
 $$ \tau_{net} = \frac{d\vec{\ell}}{dt} $$
 
 that is, net torque is the same thing as the change in angular momentum.
+
+
+Angular momentum of a fixed body about a ridig axis is the product of angular speed and the rotational inertia.
+
+$$ \ell = I\omega $$
