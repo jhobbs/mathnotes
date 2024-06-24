@@ -5,6 +5,17 @@ title: Determinants
 
 # Determinants
 
+The determinant of an upper triangular matrix is the product of its diagonal entries.
+
+We can find the determinant of a matrix through row reduction. We have to keep track of a multiplier for the determinant of the upper triangular matrix:
+
+* each time we swap a row, multiply the determinant by -1
+
+* each time we multiply a row by a scalar, multiply the determinant by that scalar
+
+* adding a multiple of one row to another doesn't change the determinant.
+
+
 ## Determinants and Cramer's rule
 
 For 2x2 matrices, $\begin{bmatrix} a & b \\\ c & d \end{bmatrix}$, the determinant is $ad - bc$.
