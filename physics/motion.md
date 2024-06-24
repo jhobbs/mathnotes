@@ -123,4 +123,22 @@ $$ \vec{\tau} = \vec{r} \times \vec{F} $$
 
 The direction of $\vec{\tau}$ is given by the right-hand rule for cross products.
 
+The angular momentum $\vec{\ell}$ of a particle with linear momentum $\vec{p}$, mass $m$, and linear velocity $\vec{v}$ is a vector quantity defined relative to a fixed point (usually the origin) as:
 
+
+$$ \vec{\ell} = \vec{r} \times \vec{p} = m (\vec{r} \times \vec{v}) $$
+
+The magnitude of $\vec{\ell}$ is given by
+
+$$ \ell = rmv \sin{\phi} $$
+
+where $\phi$ is the angle between $\vec{r}$ and $\vec{p}$.
+
+The direction of $\vec{\ell}$ is given by the right-hand rule.
+
+Net torque is related to angular momentum in the following way:
+
+
+$$ \tau_{net} = \frac{d\vec{\ell}}{dt} $$
+
+that is, net torque is the same thing as the change in angular momentum.
