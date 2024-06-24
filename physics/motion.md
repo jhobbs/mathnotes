@@ -103,11 +103,24 @@ The kinetic energy of rotation is given by the formula:
 
 $$ K = \frac{1}{2} I \omega^2 $$
 
+Torque is a turning or twisting action on a body about a rotation axis due to a force $\vec{F}$.
 
-Torque is a turning or twisting action on a body about a rotation axis due to a force $\vec{F}$. If $\vec{F}$ is a force exerted at point $\vec{r}$ relative to the axis of rotation, and $\phi$ is the angle between $\vec{r}$ and $\vec{F}$, then the magnitude of the toruqe is
+First, in two dimensions.
+
+If $\vec{F}$ is a force exerted at point $\vec{r}$ relative to the axis of rotation, and $\phi$ is the angle between $\vec{r}$ and $\vec{F}$, then the magnitude of the toruqe is
 
 $$ \tau = r F_t = r_\bot F =  r F \sin{\phi} $$
 
 Here, $r_\bot$ is the perpindicular distance between the axis and an extended line running through $\vec{F}$, and $F_t$ is the component of $\vec{F}$ perpendicular to $\vec{r}$.
 
 Torque describes the ability of $\vec{F}$ to rotate the body. If torque would cause counterclockwise motion, its sign is positive; negative for clockwise.
+
+In three dimensions, torque is a vector quantity defined relative to a fixed point (usually the origin):
+
+$$ \vec{\tau} = \vec{r} \times \vec{F} $$
+
+(where $\times$ is the cross product).
+
+The direction of $\vec{\tau}$ is given by the right-hand rule for cross products.
+
+
