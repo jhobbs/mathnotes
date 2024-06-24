@@ -89,3 +89,25 @@ where $r$ is the radius of the circle and $\alpha$ is the angular acceleration (
 $$ a_t = \frac{d|v|}{dt} $$
 
 where $\|v\|$ is the magnitude of the velocity of the object.
+
+Moment of inertia, or rotational inertia, is a measure of an object's resistance to change in its rotational motion.
+
+It is defined by the integral
+
+
+$$ I = \int r^2 dm $$
+
+where $r$ is the distance from the mass element $dm$ to the axis of rotation. This equation shows that the farther a mass element is from the axis, the more it contributes to the moment of inertia.
+
+The kinetic energy of rotation is given by the formula:
+
+$$ K = \frac{1}{2} I \omega^2 $$
+
+
+Torque is a turning or twisting action on a body about a rotation axis due to a force $\vec{F}$. If $\vec{F}$ is a force exerted at point $\vec{r}$ relative to the axis of rotation, and $\phi$ is the angle between $\vec{r}$ and $\vec{F}$, then the magnitude of the toruqe is
+
+$$ \tau = r F_t = r_\bot F =  r F \sin{\phi} $$
+
+Here, $r_\bot$ is the perpindicular distance between the axis and an extended line running through $\vec{F}$, and $F_t$ is the component of $\vec{F}$ perpendicular to $\vec{r}$.
+
+Torque describes the ability of $\vec{F}$ to rotate the body. If torque would cause counterclockwise motion, its sign is positive; negative for clockwise.
