@@ -5,14 +5,36 @@ title: Newtonian Motion
 
 # Newtonian Motion
 
+## Forces
+
+Newton's second law:
+
+$$ F = ma $$
+
+force = mass * acceleration.
+
+
+A force is **conservative** if the work done by the force on an object moving it from one point to another depends only on the initial and final positions of the object, and is not dependent on the path taken by the object.
+
+Gravity is an example of a conservative force, frictional force is an example of a nonconservative force.
+
+A force is conservative if the net work done by the force on an object moving around any closed path is zero.
+
+For any conservative force $\vec{F_c}$:
+
+
+$$ \Delta U = - W_c. $$
+
+That is, the change in potential energy is equal to the negative work done by the conservative force.
+
 ## Energy, Work, Momentum
+
 
 Kinetic Energy - scalar quantity, unit is joules. $v$ here is the magnitude of the velocity.
 
 $$ KE = \frac{1}{2} m v^2 $$
 
 kinetic energy is not conserved in inelastic collisions, but it is preserved in elastic collisions.
-
 
 Work in a straight line, unit is joules, $f(x)$ is a potentially displacement varying force in the direction of displacement.
 
@@ -31,12 +53,16 @@ Work to reach a given displacement from the unstretched position comes from inte
 
 $$ W = -\frac{k}{2} x^2 $$
 
+Work Energy Principle:
+
+$$ W_n = \Delta K + \Delta U = \Delta E $$
+
+
 Momentum - vector quantity, unit is $\frac{kg \cdot m}{s}$:
 
 $$ \vec{P} = m\vec{v} $$
 
 Momentum is conserved in collisions; For two objects, $a$ and $b$ colliding:
-
 
 $$ m_{a} \vec{v}_{a_1} + m_{b} \vec{v}_{b_1} = m_{a} \vec{v}_{a_2} + m_{b} \vec{v}_{b_2} $$
 
