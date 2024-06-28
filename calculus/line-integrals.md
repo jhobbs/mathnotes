@@ -17,7 +17,7 @@ If we think of a curve in a plane, we can think of the arc length differential $
 
 This makes
 
-$$ ds = \sqrt(dx^2 + dy^2) $$
+$$ ds = \sqrt{dx^2 + dy^2} $$
 
 and the differential formula for arc length is then:
 
