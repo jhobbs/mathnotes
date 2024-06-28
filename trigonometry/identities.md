@@ -4,6 +4,18 @@ title: Trigonometric Identities
 ---
 # Trigonometric Identities
 
+## Half Angle Identities
+
+$$ \cos{\frac{\theta}{2}} = \sqrt{\frac{1 + \cos{\theta}}{2}} $$
+
+$$ \sin{\frac{\theta}{2}} = \sqrt{\frac{1 - \cos{\theta}}{2}} $$
+
+therefore:
+
+$$ 2\cos^2{\frac{\theta}{2}} = 1 + \cos{\theta} $$
+
+$$ 2\sin^2{\frac{\theta}{2}} = 1 - \cos{\theta} $$
+
 ## Sum and Difference Formulas
 
 $$ \cos{(a + b)} = \cos{a}\cos{b}-\sin{a}\sin{b} $$
