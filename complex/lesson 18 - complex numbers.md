@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Complex Numbers
+title: Algebraic Properties
 ---
 
-# Complex Numbers
+# Algebraic Properties
 
 ## Complex Numbers - Basics
 
@@ -21,7 +21,7 @@ If $ z = a +bi$, then the **conjugate of z,** written as $\bar{z}$, is $\bar{z} 
 
 To form the conjugate of a complex number, simply change the sign of the coefficient of $i$.
 
-If $z = a + bi$, then the **absolute value of z**, written as $\lvert z \rvert$, is $\lvert z \rvert = \sqrt{a^2 + b^2}$.
+If $z = a + bi$, then the **absolute value of z** or **modulus of z**, written as $\lvert z \rvert$, is $\lvert z \rvert = \sqrt{a^2 + b^2}$.
 
 In a rectangular coordinate system, we can label the $x$-axis as the real axis and the $y$-axis as the imaginary axis, allowing us to represent any complex number $z = a + bi$ graphically by plotting $a$ along the real ($x$) axis and $b$ along the imaginary ($y$) axis:
 
@@ -69,6 +69,33 @@ $$ z_1 - z_2 = (a + bi) - (c + di) = (a - c) + (b - d)i \tag{18.61} $$
 $$ z_1z_2 = (a + bi)(c + di) = ac + adi + bci + bdi^2 = (ac - bd) + (ad + bc)i \tag{18.62} $$ 
 
 $$ \frac{z_1}{z_2} = \frac{a + bi}{c + di} \cdot \frac{c - di}{c - di} = \frac{(ac + bd) + (bc -ad)i}{c^2 + d^2} = \frac{ac + bd}{c^2 + d^2} +  \frac{bc - ad}{c^2 + d^2}i,\quad c^2 + d^2 \neq 0 \tag{18.63} $$
+
+## Square Root of Complex Numbers
+
+To find the square roots $z$ of a complex number $Z$ is to solve the following equation for $z$:
+
+$$ Z = z^2. $$
+
+If $X$ and $Y$ are the real and imaginary parts of $Z$ and we let $x$ and $y$ be the real and imaginary parts of $z$, then we have:
+
+$$ X + Yi = (x + yi) = x^2 +2xyi -y^2, $$
+
+from which we can form two equations by equating real and imaginary parts from both sides:
+
+$$ X = x^2 - y^2, \quad Y = 2xy $$
+
+Now we have two equations and two unknowns, and when they are solved, we will have the two square roots of $Z$.
+
+By definition, the **principal square root** of $Z$ is the square root with the nonnegative real part.
+
+## Complex Quadratrics
+
+We can use the quadratic formula to solve quadratics in a complex variable with complex coefficients, that is where
+
+$$ az^2 +bz +c = 0, $$
+
+where $a,$ $b,$ $c,$ and $z,$ are complex; it may require taking the square root of a complex number.
+
 
 ## Exponential, Trigonometric and Hyperbolic Functions of Complex Numbers
 

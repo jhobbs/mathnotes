@@ -34,7 +34,7 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
 
-included_sections: ["algebra", "calculus", "ode", "trigonometry", "proof techniques", "linear algebra", "physics"]
+included_sections: ["algebra", "calculus", "ode", "trigonometry", "proof techniques", "linear algebra", "physics", "complex"]
 
 # Exclude from processing.
 # The following items will not be processed, by default.
