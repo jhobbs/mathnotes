@@ -50,11 +50,15 @@ $$ z = r\cos\theta + ir\sin\theta = r(cos\theta + i\sin\theta) $$
 
 which is called the **polar form of z**.
 
-The polar angle $\theta$ in the figure above is called the **Argument of z**, written as $\text{Arg} z$, and is defined to be the smallest positive angle satisfying the two equalities:
+The polar angle $\theta$ in the figure above is called the **principal argument of z**, written as $\text{Arg} z$, and is defined to be an angle in $[-\pi, \pi]$ satisfying the two equalities:
 
 $$ \cos\theta = \frac{x}{\lvert z \rvert}, \quad \sin\theta = \frac{y}{\lvert z \rvert} $$
 
-Writing it as $\text{arg}z$ means that instead of taking the smallest or **principal value** of $\theta$, we have a multivalued function giving all possible angles satisfying those two equalities:
+or
+
+$$ tan{\theta} = \frac{y}{x} $$
+
+Writing it as $\text{arg}z$ means that instead of taking the **principal value** of $\theta$, we have a multivalued function giving all possible angles satisfying those two equalities:
 
 $$ \text{arg} z = \text{Arg}z \pm 2n\pi,~n = 1,2,3 $$
 
