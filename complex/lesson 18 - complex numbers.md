@@ -56,11 +56,21 @@ $$ \cos\theta = \frac{x}{\lvert z \rvert}, \quad \sin\theta = \frac{y}{\lvert z 
 
 or
 
-$$ tan{\theta} = \frac{y}{x} $$
+$$ tan{\theta} = \frac{y}{x}, $$
+
+as long as $x$ is non-zero.
+
+We can use $\text{Arctan}\frac{y}{x}$ to find the principal argument; if $z$ is in the first or fourth quadrants, it gives it directly. If $z$ is in the second quadrant, we must add $\pi$ to $\text{Arctan}\frac{y}{x}$, and if $z$ is in the third quadrant we must subtract $\pi$ from $\text{Arctan}\frac{y}{x}$.
 
 Writing it as $\text{arg}z$ means that instead of taking the **principal value** of $\theta$, we have a multivalued function giving all possible angles satisfying those two equalities:
 
 $$ \text{arg} z = \text{Arg}z \pm 2n\pi,~n = 1,2,3 $$
+
+Sometimes, $\text{arg}z$ is taken to mean any argument of $z,$ so that it's still single valued.
+
+When $z = 0$, no argument exists.
+
+When $z = x + yi$ and $x = 0$, the complex number lies on the imaginary axis and is either $\frac{\pi}{2}$ or $-\frac{\pi}{2}$.
 
 ## Algebra of Complex Numbers
 
@@ -73,6 +83,21 @@ $$ z_1 - z_2 = (a + bi) - (c + di) = (a - c) + (b - d)i \tag{18.61} $$
 $$ z_1z_2 = (a + bi)(c + di) = ac + adi + bci + bdi^2 = (ac - bd) + (ad + bc)i \tag{18.62} $$ 
 
 $$ \frac{z_1}{z_2} = \frac{a + bi}{c + di} \cdot \frac{c - di}{c - di} = \frac{(ac + bd) + (bc -ad)i}{c^2 + d^2} = \frac{ac + bd}{c^2 + d^2} +  \frac{bc - ad}{c^2 + d^2}i,\quad c^2 + d^2 \neq 0 \tag{18.63} $$
+
+We get some nice behavior when multiplying complex numbers in polar form due to the following property:
+
+
+$$ arg(z_1 z_2) = arg(z_1) + arg(z_2) $$
+
+That is, when we multiply numbers complex numbers, we can add their arguments (and multiply their moduli):
+
+$$ z_1 \cdot z_2 = r_1 r_2 (cos(\theta_1 + \theta_2) + isin(\theta_1 + \theta_2)) $$
+
+This can be interpreted geometrically that multiplying by a complex number causes rotation in the complex plane.
+
+We can use this proprety to easily compute powers of complex numbers, which is sometimes called **DeMoivre's theorem**:
+
+$$ z^n = r^n ( \cos{n\theta} + i \sin{n \theta} ) $$
 
 ## Square Root of Complex Numbers
 
