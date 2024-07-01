@@ -19,3 +19,6 @@ Acceleration due to gravity at any distance from earth is then given as:
 $$ a_g = \frac{GM_E}{r^2} $$
 
 where $M_E$ is the mass of earth, about $5.98 \times 10^{24} kg.$
+
+
+A uniform shell of matter exerts no net gravitational force on a particle located inside it.
