@@ -26,3 +26,5 @@ A set $S$ of complex numbers is said to be **bounded** if there exists a positiv
 A set $S$ is said to be **connected** if every pair of points in $S$ can be joined by a finite number of line segments joined end to end that lie entirely within $S$.
 
 A **domain** is an open connected set. Note that this is not the same as a domain of definition of a function.
+
+![Regions of the Complex Plane](regions.png)
