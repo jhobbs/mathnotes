@@ -27,4 +27,8 @@ A set $S$ is said to be **connected** if every pair of points in $S$ can be join
 
 A **domain** is an open connected set. Note that this is not the same as a domain of definition of a function.
 
+In the images below, a dashed line represents a boundary that is not included the in the set, while a solid line represents a boundary that is included in the set.
+
+Squiggly blue highlighter indicates the set goes on forever and the party never ends!
+
 ![Regions of the Complex Plane](regions.png)
