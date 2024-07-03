@@ -82,3 +82,8 @@ Suppose that $g(x,y) = 0$ is the equation of a curve $C$ in the $z$-plane.
 **Procedure 1:** If it is convenient to invert $w = f(z)$ and find $z$ in terms of $w$, $z = h(w)$, then we effectively have $x$ and $y$ in terms of $u$ and $v$. We can then substitute these values into $g(x,y) = 0$ to give the equation $g[x(u,v), y(u,v)] = 0$ for $C'$.
 
 **Procedure 2:** If it is inconvenient to find $z$ in terms of $w$, we can represent $C$ parametrically, $x = x(t)$ and $y = y(t)$. If we substitute these into $u = u(x,y)$ and $v = v(x,y)$, we obtain parametric equations $u = u[x(t), y(t)], v = v[x(t), y(t)]$ for $C'$.
+
+
+## The Point at Infinity ##
+
+There isn't just one point at infinity. In fact, if you go infinitely far away from the origin in any direction, you will arrive at "the point at infinity". Depending on the convention of a text, the complex plane can be considered to exclude the point at infinity by default, in which case the complex plane plus the point at infinity is called the **extended complex plane**, or the complex plane is considerd to include the point at infinity by default, in which case the complex plane without the point at infinity is referred to as the **finite complex plane**.
