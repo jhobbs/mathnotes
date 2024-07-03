@@ -62,3 +62,23 @@ Another important class of functions is called **bilinear** or **Mobius** mappin
 $$ w = \frac{az + b}{cz + d} $$
 
 where $a, b, c$ and $d$ are complex numbers for which $ad - bc \neq 0$, which ensures that the mapping is not a constant. Every bilinear transformation is a succession of rotations, magnifications, reciprocations, and/or translations. One property of bilinear transformations is that they map circles and straight lines to circles and straight lines; which one depends on whether the curve to be mapped passes through the point at which the bilinear mapping is undefined.
+
+## Real and Imaginary Parts of Complex Functions
+
+Complex functions can be represented as a pair of real-valued functions of two independent variables. For example, if
+
+$$ w = z^2 = (x+yi)^2 = (x^2 - y^2) + 2xyi $$
+
+then we can have $ w = u(x,y) + v(x,y)i $ with 
+
+$$ u(x,y) = x^2 - y^2, \quad v(x,y) = 2xy. $$
+
+## Finding the Image of a Curve
+
+The **image** in the $w$-plane of a curve $C$ in the $z$-plane is denoted $C'$ and can be found by two distinct procedures.
+
+Suppose that $g(x,y) = 0$ is the equation of a curve $C$ in the $z$-plane.
+
+**Procedure 1:** If it is convenient to invert $w = f(z)$ and find $z$ in terms of $w$, $z = h(w)$, then we effectively have $x$ and $y$ in terms of $u$ and $v$. We can then substitute these values into $g(x,y) = 0$ to give the equation $g[x(u,v), y(u,v)] = 0$ for $C'$.
+
+**Procedure 2:** If it is inconvenient to find $z$ in terms of $w$, we can represent $C$ parametrically, $x = x(t)$ and $y = y(t)$. If we substitute these into $u = u(x,y)$ and $v = v(x,y)$, we obtain parametric equations $u = u[x(t), y(t)], v = v[x(t), y(t)]$ for $C'$.
