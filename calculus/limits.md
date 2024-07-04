@@ -13,9 +13,18 @@ $$ \lim_{x \to a} f(x) = L, $$
 
 means that given any $\epsilon > 0$, there exists $\delta > 0$ such that for all $x \neq a$, if $\|x - a\| < \delta$, then $\|f(x) - L\| < \epsilon.$
 
-This means that when we pick any value of $\epsilon > 0$ first to make a range of $y$ values around $L$, that is, $[L - \epsilon, L + \epsilon]$, if we can always find a value of $\delta > 0$ around $a$ that makes $f(a \pm \delta) \in [L - \epsilon, L + \epsilon]$, then the limit as $x$ approaches $a$ is $L$.
+This means that when we pick any value of $\epsilon > 0$ first to make a range of $y$ values around $L$, that is, $\|y - L\| < \epsilon$, if we can always find a value of $\delta > 0$ around $a$ such that when $\|x - a\| < \delta$, $\|f(x) - L\| < \epsilon$, then the limit as $x$ approaches $a$ is $L$.
 
-To show this for any given $f(x)$, $a$, and $L$ we can say "given $\epsilon$, what value of $\delta$ ensures that $f(a \pm \delta) \in [L - \epsilon, L + \epsilon]$?" 
+
+### Example
+
+Prove
+
+$$ \lim_{x \to 1} \frac{3x(x-1)}{x-1} = 3. $$
+
+We need to show that given $\epsilon > 0$, there exists $\delta > 0$ such that
+
+$$  0 < |1 - a| < \delta \implies \left | \frac{3x(x-1)}{x-1} - 3 \right | < \epsilon  $$
 
 
 ## Tricks
