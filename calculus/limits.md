@@ -24,8 +24,15 @@ $$ \lim_{x \to 1} \frac{3x(x-1)}{x-1} = 3. $$
 
 We need to show that given $\epsilon > 0$, there exists $\delta > 0$ such that
 
-$$  0 < |1 - a| < \delta \implies \left | \frac{3x(x-1)}{x-1} - 3 \right | < \epsilon  $$
+$$  0 < |x - 1| < \delta \implies \left | \frac{3x(x-1)}{x-1} - 3 \right | < \epsilon  $$
 
+Basically, we need to find $\delta$ as a function of $\epsilon$ here to show that no matter what the value of $\epsilon$ is, we can find a satisfactory $\delta$.
+
+We can do this with some algebraic manipulation:
+
+$$ \left | \frac{3x(x-1)}{x-1} - 3 \right | < \epsilon \iff \left |3x - 3 \right | < \epsilon \iff |x -1| < \frac{\epsilon}{3} $$
+
+Now we've shown that as long as $\|\delta\| < \frac{\epsilon}{3}$, then $\|f(1 - \delta) - 3\| < \epsilon$.
 
 ## Tricks
 
