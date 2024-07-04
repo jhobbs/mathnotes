@@ -55,6 +55,8 @@ $$ w = f(z) = \frac{1}{re^{\theta i}} = \frac{1}{r} e^{-\theta i }. $$
 
 This shows that $f$ inverses the modulus of $z$, and changes the sign of its argument. This has some funky effects; points inside the circle $\|z\| = 1$ are mapped to points outside the circle $\|w\| = 1$, and points on the top half of the input circle are mapped to points on the bottom half of the output circle.
 
+Peter Francis has an amazing [tool for graphing complex functions](https://peterefrancis.com/complex-function-plot/index.html).
+
 ## Bilinear Mappings
 
 Another important class of functions is called **bilinear** or **Mobius** mappings. They are of the form
