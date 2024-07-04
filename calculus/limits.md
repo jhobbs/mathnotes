@@ -15,6 +15,7 @@ means that given any $\epsilon > 0$, there exists $\delta > 0$ such that for all
 
 This means that when we pick any value of $\epsilon > 0$ first to make a range of $y$ values around $L$, that is, $\|y - L\| < \epsilon$, if we can always find a value of $\delta > 0$ around $a$ such that when $\|x - a\| < \delta$, $\|f(x) - L\| < \epsilon$, then the limit as $x$ approaches $a$ is $L$.
 
+![Delta Epsilon Limit](2dlimit.png "two dimensional delta epsilon limit")
 
 ### Example
 
