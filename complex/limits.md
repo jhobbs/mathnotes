@@ -45,6 +45,6 @@ A discontinuity in a function $f$ at $z_0$ is said to be a **removable discontin
 
 A multi-valued function such as $\arg{z}$ can be made single valued by restricting its range. For example, if we restrict the range of $\arg{z}$ to be $0 \le \arg{z} < 2 \pi$, then it is single valued. $\arg{z}$ restricted in this manner will be discontinuous at $z = 0$ and along the positive real axis.
 
-We could similarly restrict the range to any other interval $[\phi, \phi + 2 pi)$ and call this fuction $\arg_{\phi}{z}$ and it will be discontinuous at $z = 0$ and along the half-line that forms the angle $\phi$ with the positive real axis.
+We could similarly restrict the range to any other interval $[\phi, \phi + 2 \pi)$ and call this fuction $\arg_{\phi}{z}$ and it will be discontinuous at $z = 0$ and along the half-line that forms the angle $\phi$ with the positive real axis.
 
 This restricted range version of $\arg{z}$ is said to be a **branch** of $\arg{z}$. The half-line along which it is discontinuous is called the **branch cut** of the branch, and the point $z = 0$ at which all branch cuts meet is called the **branch point** of the multi-valued function $\arg{z}$.
