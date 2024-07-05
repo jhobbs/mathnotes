@@ -72,6 +72,18 @@ When $z = 0$, no argument exists.
 
 When $z = x + yi$ and $x = 0$, the complex number lies on the imaginary axis and is either $\frac{\pi}{2}$ or $-\frac{\pi}{2}$.
 
+We can also write a complex number in **exponential form**, by taking advantage of Euler's formula:
+
+$$ e^{\theta i} = \cos\theta + i\sin\theta. $$
+
+This means we can write a complex number $z$ with $r = \|z\|, \theta = \arg{z}$ as
+
+$$ z = r(\cos\theta + i\sin\theta) = re^{\theta i}. $$
+
+This form makes it super obvious that arguments add and moduli multiply when multiplying complex numbers:
+
+$$ ae^{\theta i} + be^{\phi i} = abe^{(\theta + \phi) i} $$
+
 ## Algebra of Complex Numbers
 
 Here are the rules for performing addition, subtraction, multiplication and division with complex numbers. They follow the normal rules of algebra, with the number $i^2$ being replaced by its agreed upon value $-1$. If $z_1 = a + bi$ and $z_2 = c + di$ are two complex numbers, then by definition:
