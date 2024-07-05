@@ -50,7 +50,7 @@ $$ z = r\cos\theta + ir\sin\theta = r(cos\theta + i\sin\theta) $$
 
 which is called the **polar form of z**.
 
-The polar angle $\theta$ in the figure above is called the **principal argument of z**, written as $\text{Arg} z$, and is defined to be an angle in $[-\pi, \pi]$ satisfying the two equalities:
+The polar angle $\theta$ in the figure above is called the **principal argument of z**, written as $\text{Arg} z$, and is defined to be an angle in $(-\pi, \pi]$ satisfying the two equalities:
 
 $$ \cos\theta = \frac{x}{\lvert z \rvert}, \quad \sin\theta = \frac{y}{\lvert z \rvert} $$
 
