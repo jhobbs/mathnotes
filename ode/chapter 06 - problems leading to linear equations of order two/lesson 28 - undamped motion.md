@@ -109,7 +109,7 @@ Which is the form of a differential equation of a particle exhibiting simple har
 - Amplitude: $\|c\|$, because we stretch the spring $c$ beyond its equilibrium point.
 - Maximum velocity: $\|c \sqrt{\frac{k}{m}}\|$
 - Equilibrium point: $y = 0$
-- Period: Note that ${\omega_0}^2 = \frac{k}{m}$. The period is then $\frac{2 \pi}{\frac{k}{m}} = \frac{2 \sqrt{m}}{\pi \sqrt{k}}$.
+- Period: Note that ${\omega_0}^2 = \frac{k}{m}$. The period is then $\frac{2 \pi}{\frac{k}{m}} = 2 \pi \sqrt{\frac{m}{k}}$.
 - Natural Frequency: $\nu = \frac{\pi \sqrt{k}}{2 \sqrt{m}} \text{cps}$
 - Phase Angle: Will be zero in the case the spring is simply released from the maximum distance, but in any case, can be found by solving $y = c \cos{\delta}$ at time $t = 0$.
 
