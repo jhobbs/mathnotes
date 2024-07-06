@@ -7,7 +7,7 @@ title: Simple Harmonic Motion
 
 Note: I explore this topic in more mathematical detail in my Ordinary Differential Equations notes on [Undamped Motion](../ode/chapter 06 - problems leading to linear equations of order two/lesson 28 - undamped motion.html).
 
-Simple Harmonic Motion is sinusoidal periodic motion that repeats perfectly over and over. It is a simplified model of motion of objects like a box bouncing on a spring, ignoring dampening forces such as friction.
+Simple Harmonic Motion is sinusoidal periodic motion that repeats perfectly over and over. It is a simplified model of motion of objects like a box bouncing on a spring or a simple pendulum, ignoring dampening forces such as friction and making some other simplifying assumptions.
 
 Some basic formulas of a particle exhibiting simple harmonic motion follow.
 
@@ -30,3 +30,25 @@ $$ \tau = - \kappa \theta. $$
 Here $\kappa$ is called the **torsion constant**, and depends on the length, diameter, and material of the wire. The formula above is basically the angular version of Hooke's law. Replacing the spring constant $k$ with $\kappa$ and the mass $m$ with $I$, the rotational inertia of the oscillating mass, we get
 
 $$ T = 2 \pi \sqrt{\frac{I}{\kappa}} $$
+
+## Simple Pendulum
+
+A simple pendulum is a pendulum with the following simplifying assumptions made:
+
+* The pendulum bob is assumed to be a point mass.
+
+* The string/rod is massless
+
+* There is no air resistance
+
+* There is no friction
+
+* The angle of the pendulum relative to vertical is small
+
+* There are only two dimensions of motion
+
+* The pendulum has perfectly rigid suspension
+
+The total mechanical energy in a simple pendulum can easily be found by considering that $PE = mgh$, and that when the pendulum bob is at its maximum height, it is stationary and therefore $KE = 0$.
+
+Then, the total mechanical energy of a simple pendulum is $E = PE + KE = mgL(1-\cos{\theta_0})$, where $\theta_0$ is the maximum angular displacement of the pendulum.
