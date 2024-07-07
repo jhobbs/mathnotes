@@ -52,3 +52,13 @@ A simple pendulum is a pendulum with the following simplifying assumptions made:
 The total mechanical energy in a simple pendulum can easily be found by considering that $PE = mgh$, and that when the pendulum bob is at its maximum height, it is stationary and therefore $KE = 0$.
 
 Then, the total mechanical energy of a simple pendulum is $E = PE + KE = mgL(1-\cos{\theta_0})$, where $\theta_0$ is the maximum angular displacement of the pendulum.
+
+## Damped Simple Harmonic Motion
+
+If we have damping force that is proportional to the velocity of an object exhibiting simple harmonic motion ($F = -bv$), we now have damped simple harmonic motion. Here, $b$ is the damping constant.
+
+The equation of the displacement of the oscillating particle now becomes:
+
+$$ x(t) = x_m e^{-bt/2m} \cos{(\omega't + \phi)} $$
+
+where $\omega' = \sqrt{\frac{k}{m} - \frac{b^2}{4m^2}}$
