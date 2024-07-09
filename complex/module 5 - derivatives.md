@@ -35,4 +35,51 @@ Also, we might have a complex function defined in terms of its real and imginary
 
 Morever, it's not yet clear how to tell when a complex combination $u(x,y) + v(x,y)i$ of real functions $u(x,y)$ and $v(x,y)$ define a function $f(z)$ of $z = x + yi$.
 
+The following theorem is super important and helps clear all of that up. It may be the most important theorem in complex analysis.
+
+A function $f(z) = u(x,y) + v(x,y)i$ is analytic in an open set $S$ if and only if the first partial derivatives of $u(x,y)$ and $v(x,y)$ are continuous on $S$ and satisfy the Cauchy-Riemann equations therein
+
+$$ \frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}, \quad \frac{\partial v}{\partial x} = - \frac{\partial u}{\partial y}. \tag{c} $$
+
+From the proof of this theorem, we also get two fomulas for calculating $f'$ when $f$ is specified in terms of its real and imaginary parts. When $f(z) = u(x,y) + v(x,y)i$, and $f'(z)$ exists,
+
+$$ f'(z) = \frac{\partial u}{\partial x} + \frac{\partial v}{\partial x}i = \frac{\partial v}{\partial y} - \frac{\partial u}{\partial y}i.$$
+
+Now we know how to calculate a derivative of a function defined in terms of $z$ (use the derivative rules) or in terms of its real and imginary parts (use the formula above.)
+
+Theorem (c) also makes it very clear that the real and imaginary parts of a complex function are not independent; they must satisfy the Cauchy-Riemann equations in order to be analytic. This property is one of the main things that distinguishes the behavior of complex valued functions from general functions on $\mathbb{R}^2$.
+
+Some other potentially useful theorems:
+
+If $f'(z) = 0$ at every point of a domain $D$, then $f(z)$ must be constant in $D$.
+
+If $f(z) = u + vi$ is analytic in a domain $D$, and if either $u(x,y)$ or $v(x,y)$ is constant in $D$, then $f(z)$ is constant in $D$.
+
+Also, here are the Cauchy-Reimann equations in terms of the modulus $r$ and argument $\theta$ of a functon of $z$, $f(z) = u(r,\theta) + v(r,\theta)i$:
+
+$$ r \frac{\partial u}{\partial r} = \frac{\partial v}{\partial \theta}, \quad r\frac{\partial v}{\partial r} = -\frac{\partial u}{\partial \theta} $$
+
+And here are formulas to express the derivative function in such cases:
+
+
+$$ f'(z) = e^{-\theta i}\left ( \frac{\partial u}{\partial r} + \frac{\partial v}{\partial r}i \right ) $$
+
+or
+
+$$ f'(z) = e^{-\theta i}\left ( \frac{\partial v}{\partial \theta} - \frac{\partial u}{\partial \theta}i \right ) $$
+
+Given a complex function $f(z) = u(x,y) + v(x,y)i$, we can use a Jacobian matrix to represent the transformation from $(x,y)$ to $(u,v)$. The Jacobian matrix of $f$ is:
+
+$$ J_f = \begin{bmatrix} \frac{\partial u}{\partial x} & \frac{\partial u}{\partial y} \\\ \frac{\partial v}{\partial x} & \frac{\partial v}{\partial y} \end{bmatrix} $$
+
+and provides a linear transformation that represents the function's behavior locally around a given point.
+
+To satisfy the Cauchy-Riemann equations, this matrix must have the form:
+
+$$ J_f = \begin{bmatrix} a & -b \\\ b & a \end{bmatrix} $$
+
+where $a = \frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}$ and $b = \frac{\partial v}{\partial x} = -\frac{\partial u}{\partial y}$.
+
+The matrix form shows that the linear transformation corresponding to the derivative of $f$ (if $f$ is differentiable and satisfies the Cauchy-Riemann equations) is a rotation combined with a scaling. In fact, $\|J_f\| = \|f'(z)\|^2$ and gives the area magnification/scaling factor of $f$ at $z_0$ and $\text{atan2}(b,a)$ gives an argument of $f'(z)$, which is a measure of the rotational effect of $f$.
+
 
