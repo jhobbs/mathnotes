@@ -80,6 +80,6 @@ $$ J_f = \begin{bmatrix} a & -b \\\ b & a \end{bmatrix} $$
 
 where $a = \frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}$ and $b = \frac{\partial v}{\partial x} = -\frac{\partial u}{\partial y}$.
 
-The matrix form shows that the linear transformation corresponding to the derivative of $f$ (if $f$ is differentiable and satisfies the Cauchy-Riemann equations) is a rotation combined with a scaling. In fact, $\|J_f\| = \|f'(z)\|^2$ and gives the area magnification/scaling factor of $f$ at $z_0$ and $\text{atan2}(b,a)$ gives an argument of $f'(z)$, which is a measure of the rotational effect of $f$.
+The matrix form shows that the linear transformation corresponding to the derivative of $f$ (if $f$ is differentiable and satisfies the Cauchy-Riemann equations) is a rotation combined with a scaling. In fact, $\|J_f\| = \|f'(z)\|^2$ and gives the area magnification/scaling factor of $f$ at $z$ and $\text{atan2}(b,a)$ gives an argument of $f'(z)$, which is a measure of the rotational effect of $f$.
 
 
