@@ -35,3 +35,6 @@ The average power of, or average rate at which energy is transmitted by, a sinso
 
 $$ P_{\text{avg}} = \frac{1}{2} \mu v \omega^2 {y^2_m} $$ 
 
+Two sinusoidal waves on the same string exhibit interference, adding or canceling according to the principle of superposition. If the two are traveling in the same direction and have the same amplitude $y_m$ and frequency (hence the same wavelength), but differ in phase by a phase constant $\phi$, the result is a single wave with this same frequency:
+
+$$ y\prime (x,t) = \left [ 2y_m \cos{\frac{1}{2}\phi} \right ] \sin{\left ( kx -\omega t + \frac{1}{2} \phi \right)} $$
