@@ -25,5 +25,13 @@ $ \lambda = \frac{2\pi}{k}$ is the wavelength; the distance between crests
 
 $v = \frac{\omega}{k} = \frac{\lambda}{T} = \lambda f$ is the wave speed - the speed of the wave along the medium
 
-
 $\frac{\partial y}{\partial t}$ is the velocity in the transverse direction
+
+The speed of a wave on a stretched spring is set by properties of the string, not properties of the wave such as frequency or amplitude.
+
+The speed of a wave on a string with tension $\tau$ and linear density $\mu$ is $v = \sqrt{\frac{\tau}{\mu}}$
+
+The average power of, or average rate at which energy is transmitted by, a sinsoidal wave on a stretched string is given by:
+
+$$ P_{\text{avg}} = \frac{1}{2} \mu v \omega^2 {y^2_m} $$ 
+
