@@ -64,3 +64,9 @@ $$ s(x,t) = s_m \cos{(kx - \omega t)} $$
 The pressure variation in a longitudinal wave in air is given by
 
 $$ \Delta P(x,t) = \Delta P_m \sin{(kx - \omega t)} $$
+
+The phase difference of two waves traveling in the same direction from two distances, $L_1$ and $L_2$ (said to be $\Delta L = \left \| L_2 - L_1 \right \|$ units apart, is given as
+
+$$ \phi = \frac{\Delta L}{\lambda} 2 \pi. $$
+
+Fully constructive interference occurs when $\phi = 2 n \pi,~ n = 0, 1, 2, ...$, and fully destructive interference occurs when $\phi$ is an odd multiple of $\pi$, i.e. $\phi = (2n + 1)\pi, ~n = 0, 1, 2 ... $
