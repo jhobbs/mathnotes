@@ -40,3 +40,19 @@ Two sinusoidal waves on the same string exhibit interference, adding or cancelin
 $$ y\prime (x,t) = \left [ 2y_m \cos{\frac{1}{2}\phi} \right ] \sin{\left ( kx -\omega t + \frac{1}{2} \phi \right)} $$
 
 A standing wave on a string can only occur at resonant frequencies. These are given by $f = \frac{v}{\lambda} = n\frac{v}{2L}$ for $n = 1,2,3,...$. Here, $L$ is the length of the string.
+
+## Longitudinal Waves
+
+If the medium of a wave is air and the wave is longitudinal, the inertial property, corresponding to $\mu$ in a transverse wave long a string, is the volume density $\rho$ of air. The elastic property is then called the **bulk modulus** $B$ and determines the extent to which an element of a medium changes in volume when the pressure on it changes:
+
+$$ B = -V \frac{dP}{dV} $$
+
+where $P$ is pressure, $V$ is the initial volume, and $dP/dV$ denotes the derivative of pressure with respect to volume. Since the volume is inversely proportional to the density, it follows that
+
+$$ B = \rho \frac{dP}{d\rho} $$
+
+where $\rho$ is the initial density and $dP/d\rho$ denotes the derivative of pressure with respect to density. The inverse of bulk modulus gives a substance's compressibility.
+
+Sound is a longitudinal wave, and so the speed of sound in a medium is
+
+$$ v = \sqrt{\frac{B}{\rho}} $$ 
