@@ -56,3 +56,11 @@ where $\rho$ is the initial density and $dP/d\rho$ denotes the derivative of pre
 Sound is a longitudinal wave, and so the speed of sound in a medium is
 
 $$ v = \sqrt{\frac{B}{\rho}} $$ 
+
+Longitudinal waves have displacement along the direction of the wave. We use a similar equation to that for transverse waves to represent this:
+
+$$ s(x,t) = s_m \cos{(kx - \omega t)} $$
+
+The pressure variation in a longitudinal wave in air is given by
+
+$$ \Delta P(x,t) = \Delta P_m \sin{(kx - \omega t)} $$
