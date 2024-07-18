@@ -87,6 +87,12 @@ The intensity of sound from an isotropic point source decreases with the square 
 
 Decibels are a logarithmic scale for sound level, given by the relation
 
-$$ \beta = (10 \text{dB}) \log_10{(\frac{I}{I_0}} $$
+$$ \beta = (10 \text{dB}) \log_{10}{\left (\frac{I}{I_0} \right )} $$
 
 where $\beta$ is the sound level in decibels and $I_0$ is a reference intensity near the lower limit of human hearing, $10^{-12} ~ W/m^2.$
+
+The half-angle $\theta$ of the Mach cone is given by
+
+$$ \sin{\theta} = \frac{v}{v_s} $$
+
+where $v$ is the speed of sound and $v_s$ is the speed of the source. (I'm not sure why this is referred to as a half-angle.)
