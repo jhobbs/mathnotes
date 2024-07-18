@@ -70,3 +70,23 @@ The phase difference of two waves traveling in the same direction from two dista
 $$ \phi = \frac{\Delta L}{\lambda} 2 \pi. $$
 
 Fully constructive interference occurs when $\phi = 2 n \pi,~ n = 0, 1, 2, ...$, and fully destructive interference occurs when $\phi$ is an odd multiple of $\pi$, i.e. $\phi = (2n + 1)\pi, ~n = 0, 1, 2 ... $
+
+Two sound waves at similar frequences produce, via interference a beat frequencey: $f_{\text{beat}} = f_1 - f_2.$ 
+
+The intensity of a sound wave at a surface is the average rate per unit area at which energy is transferred by the wave through or onto the surface. This is
+
+$$ I = \frac{P}{A} $$
+
+where $P$ is the power of the sound wave and $A$ is the area of the surface intercepting the sound.
+
+The intensity is also related to the displacement amplitude $s_m$ of the sound wave by
+
+$$ I = \frac{1}{2} \rho v \omega^2 s^2_m $$
+
+The intensity of sound from an isotropic point source decreases with the square of the distance from the source.
+
+Decibels are a logarithmic scale for sound level, given by the relation
+
+$$ \beta = (10 \text{dB}) \log_10{(\frac{I}{I_0}} $$
+
+where $\beta$ is the sound level in decibels and $I_0$ is a reference intensity near the lower limit of human hearing, $10^{-12} ~ W/m^2.$
