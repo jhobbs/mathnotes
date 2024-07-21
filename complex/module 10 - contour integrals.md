@@ -38,7 +38,9 @@ $$ \left | \int_C f(z) dz \right | \le \int_C |f(z)||dz| \le ML $$
 
 where $M$ is the maximum value of $\|f(z)\|$ for $z$ on $C$, and $L$ is the length of $C$.
 
-Here's an example problem: evaluate $\oint_C e^z dz$ where $C$ is the closed (traingular) path from $0$ to $1$ ($C_1$) to $1 + i$ ($C_2$) back to $0$ ($C_3$).
+Here's an example problem: evaluate $\oint_C e^z dz$ where $C$ is the closed (traingular) path from $0$ to $1$ ($C_1$) to $1 + i$ ($C_2$) back to $0$ ($C_3$):
+
+![Curve Path](contour.png)
 
 $$ \oint_C e^z dz = \int_{C_1} e^z dz + \int_{C_2} e^z dz + \int_{C_3} e^z dz, $$
 
