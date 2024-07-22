@@ -19,6 +19,15 @@ $$ E  = \frac{1}{4 \pi \epsilon_0} \frac{|q|}{r^2} $$
 
 Electric fields follow the principle of superposition - if we have multiple particles, we find the net electric field by adding the electric fields from each particle.
 
+
+An electric dipole consists of two particles with charges of equal magnitude $q$ but opposite signs, separated by a small distance $d$.
+
+The electric dipole moment $\vec{p}$ had magnitude $qd$ and points from the negative charge to the positive charge.
+
+The magnitude of the electric field setup by an electric dipole at a distant point on the dipole axis (which runs through both bodies) can be written as
+
+$$ E = \frac{1}{2 \pi \epsilon_0} \frac{qd}{z^3} = \frac{1}{2 \pi \epsilon_0} \frac{p}{z^3}. $$
+
 The torque on a dipole in an electric field depends on the moment of the dipole and the electric field. Both of these are vector quantities. The magnitude of the moment of the dipole is given as the product $qd$, where $q$ is the magnitude of the charge of each pole of the dipole, and $d$ is the distance they are separated. The torque is given as
 
 $$ \tau = \vec{p} \times \vec{E} $$
