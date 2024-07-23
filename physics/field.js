@@ -8,14 +8,15 @@ var moveParticles = false;
 
 function setup() {
     noStroke()
-    createCanvas(windowWidth, windowHeight);
+    let canvas = createCanvas(windowWidth / 2, windowHeight / 1.5);
+    canvas.parent("field");
     background(51);
     frameRate(60);
 
 
     //particles.push(new Particle(width/2, height/2, 5))
     for (let i = 0; i < numParticles; i++) {
-        particles.push(new Particle(random(width), random(height), random(20)));
+        particles.push(new Particle(random(width), random(height), random(10)));
     }
 
     for (let i = width / numForces; i < width; i += width / numForces) {
@@ -43,7 +44,7 @@ function draw() {
             let particlePos = particles[i].p;
             let particleCharge = particles[i].m;
 
-            let electroStatic = getElectrostaticForce(particles, createVector(particlePos.x, particlePos.y))
+            let electroStatic = getElectrostaticForce(particles, createVector(particlePos.x, particlePos.y), particleCharge)
             particles[i].addPos(electroStatic)
 
 
@@ -62,15 +63,15 @@ function draw() {
 }
 
 
-function getElectrostaticForce(chargees, point) {
+function getElectrostaticForce(charges, point, charge) {
 
     resultingVector = createVector(0, 0)
 
-    for (let i = 0; i < chargees.length; i++) {
+    for (let i = 0; i < charges.length; i++) {
 
-        let mPos = chargees[i].p;
+        let mPos = charges[i].p;
         //console.log(mPos);
-        let mCharge = chargees[i].m;
+        let mCharge = charges[i].m * 100;
         let distance = dist(mPos.x, mPos.y, point.x, point.y);
 
         let cosI = sin(abs(mPos.x - point.x) / distance);
@@ -82,8 +83,8 @@ function getElectrostaticForce(chargees, point) {
             sinJ = -sinJ
 
         resultingVector.add(createVector(
-            (mCharge / (distance)) * cosI,
-            (mCharge / (distance)) * sinJ));
+            ((-charge * mCharge) / pow(distance, 2)) * cosI,
+            ((-charge * mCharge) / pow(distance, 2)) * sinJ));
 
     }
 
@@ -94,9 +95,9 @@ function getElectrostaticForce(chargees, point) {
 
 // Add particle on click
 function mouseClicked() {
-    let sgn = 1;
+    let sgn = -1;
     if (keyCode === DOWN_ARROW) {
-        sgn = -1;
+        sgn = 1;
     }
     particles.push(new Particle(mouseX, mouseY, sgn * 15))
 }
@@ -118,8 +119,8 @@ class Force {
         this.mag = createVector(0, 0)
     }
 
-    update(chargees) {
-        this.mag = getElectrostaticForce(chargees, this.pos)
+    update(charges) {
+        this.mag = getElectrostaticForce(charges, this.pos, -1)
         // ()
     }
     paint() {
@@ -128,7 +129,7 @@ class Force {
         stroke(map(distance, 0, 50, 150, 255), 255, 100)
         //strokeWeight(distance)
         //line(this.pos.x, this.pos.y, this.pos.x - this.mag.x * 50, this.pos.y - this.mag.y * 50)
-        arrow(this.pos.x, this.pos.y, this.pos.x - this.mag.x * 100, this.pos.y - this.mag.y * 100, 5);
+        arrow(this.pos.x, this.pos.y, this.pos.x - this.mag.x * 500, this.pos.y - this.mag.y * 500, 3);
     }
 }
 
@@ -146,7 +147,7 @@ class Particle {
         this.charge = charge;
 
         this.inertia = createVector(0, 0);
-        if (charge < 0) {
+        if (charge > 0) {
             this.color = color(255, 0, 0);
         } else {
             this.color = color(0, 0, 255);

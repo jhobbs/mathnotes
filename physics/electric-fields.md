@@ -37,3 +37,9 @@ and when the angle between the moment and the electric field is $\theta$, this r
 $$ \tau = -pE\sin{\theta} $$
 
 where $p$ and $E$ are the respective magnitudes of the dipole moment and electric field.
+
+Here's a terrible emulation of an electric field. Press the down arrow key to switch to making negatively charged particles, and spacebar sets them in motion.
+
+{% include_relative electric-field.html %}
+
+Because the force vectors near particles are so big, it can be hard to tell what's going on, especially in the case of negatively charged particles where they point from one side of the particle to the other and make it appear as though there are conflicting force vectors.
