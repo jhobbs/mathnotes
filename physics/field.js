@@ -1,5 +1,4 @@
 var particles = [];
-var numParticles = 0;
 
 var forces = [];
 var numForces = 30;
@@ -13,11 +12,6 @@ function setup() {
     background(51);
     frameRate(60);
 
-
-    //particles.push(new Particle(width/2, height/2, 5))
-    for (let i = 0; i < numParticles; i++) {
-        particles.push(new Particle(random(width), random(height), random(10)));
-    }
 
     for (let i = width / numForces; i < width; i += width / numForces) {
         for (let j = height / numForces; j < height; j += height / numForces) {
@@ -37,21 +31,14 @@ function draw() {
 
     if (moveParticles) {
 
-        //skipping first
         for (let i = 0; i < particles.length; i++) {
-
-
             let particlePos = particles[i].p;
             let particleCharge = particles[i].m;
 
             let electroStatic = getElectrostaticForce(particles, createVector(particlePos.x, particlePos.y), particleCharge)
             particles[i].addPos(electroStatic)
-
-
         }
     }
-
-
 
     stroke(250);
     strokeWeight(2);
@@ -70,7 +57,6 @@ function getElectrostaticForce(charges, point, charge) {
     for (let i = 0; i < charges.length; i++) {
 
         let mPos = charges[i].p;
-        //console.log(mPos);
         let mCharge = charges[i].m * 100;
         let distance = dist(mPos.x, mPos.y, point.x, point.y);
 
@@ -103,7 +89,6 @@ function mouseClicked() {
 }
 
 function arrow(x1, y1, x2, y2, offset) {
-    // this code is to make the arrow point
     line(x1,y1,x2,y2)
     push() //start new drawing state
     var angle = atan2(y1 - y2, x1 - x2); //gets the angle of the line
@@ -121,14 +106,11 @@ class Force {
 
     update(charges) {
         this.mag = getElectrostaticForce(charges, this.pos, -1)
-        // ()
     }
     paint() {
 
         let distance = dist(this.pos.x, this.pos.y, this.pos.x + this.mag.x * 100, this.pos.y + this.mag.y * 100)
         stroke(map(distance, 0, 50, 150, 255), 255, 100)
-        //strokeWeight(distance)
-        //line(this.pos.x, this.pos.y, this.pos.x - this.mag.x * 50, this.pos.y - this.mag.y * 50)
         arrow(this.pos.x, this.pos.y, this.pos.x - this.mag.x * 500, this.pos.y - this.mag.y * 500, 3);
     }
 }
@@ -141,7 +123,6 @@ function keyPressed() {
 
 
 class Particle {
-
     constructor(xPos, yPos, charge) {
         this.pos = createVector(xPos, yPos);
         this.charge = charge;
@@ -172,10 +153,7 @@ class Particle {
     }
 
     addPos(force) {
-
         this.inertia.add(force)
         this.pos.sub(this.inertia)
-
     }
-
 }
