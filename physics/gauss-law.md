@@ -5,7 +5,7 @@ title: Gauss's Law
 
 # Gauss's Law
 
-The electric flux $\Phi$ through a surface is the amount of electric field that pierces the surface.
+The electric flux $\Phi$ through a surface is the amount of electric field that pierces the surface. In this context, when we speak of a surface, especially a Gaussian surface, we are speaking of a conceptual surface, i.e. a connected set of points in space, not a physical surface (although a Gaussian surface can coincide with a physical surface.) 
 
 Electric flux through a surface is defined by the dot product of the electric field vector $\vec{E}$ and the area vector $\vec{A}$:
 
