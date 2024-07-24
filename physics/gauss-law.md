@@ -41,6 +41,17 @@ For a uniform field and a flat surface where the angle between the normal of the
 
 $$ \Phi = (E\cos\theta)A $$
 
+Gauss's law applies universally, but the math is made much simpler whenever we can exploit symmetry to simplify the situation.
+
+Some common types of symmetry are:
+
+* Spherical symmetry
+
+* Cylindrical symmetry
+
+* Planar symmetry
+
+
 The electric field at a point near an infinite line of charge (or charged rod) with uniform density $\lambda$ is perpendicular to the line and has magnitude
 
 
