@@ -51,9 +51,7 @@ Some common types of symmetry are:
 
 * Planar symmetry
 
-
 The electric field at a point near an infinite line of charge (or charged rod) with uniform density $\lambda$ is perpendicular to the line and has magnitude
-
 
 $$ E = \frac{\lambda}{2 \pi \epsilon_0 r} $$
 
