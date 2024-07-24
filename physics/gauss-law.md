@@ -51,12 +51,31 @@ Some common types of symmetry are:
 
 * Planar symmetry
 
+For example, we can use Gauss's law and spherical symmetry to derive Coulomb's law.
+
+Consider at point charge $Q$ located at a point in space. Assume a spherical Gaussian surface of radius $r$ is centered at the point charge. Symmetry ensures that the electric field $E$ at any point on the surface is radially directed and has the same magnitude everywhere on the surface.
+
+The total flux through the spherical surface is the product of the electric field and the area of the sphere:
+
+$$ \oint_s \vec{E} \cdot d\vec{A} = E \times 4 \pi r^2 $$
+
+According to Gauss's Law, $E \times 4 \pi r^2 = \frac{Q}{\epsilon_0} $$
+
+Solving for $E$ gives
+
+$$ E = \frac{Q}{4 \pi \epsilon_0 r^2} $$
+
+This is the magnitude of the electric field at distance $r$ from a point charge $Q$, directed radially. Adding direction and applying the electric field to a test charge $q_0$ we get
+
+$$ \vec{F} = \frac{1}{4\pi\epsilon_0} \frac{Qq_0}{r^2}\hat{r}, $$
+
+which is Coulomb's law.
+
 The electric field at a point near an infinite line of charge (or charged rod) with uniform density $\lambda$ is perpendicular to the line and has magnitude
 
 $$ E = \frac{\lambda}{2 \pi \epsilon_0 r} $$
 
 where $r$ is the perpendicular distance from the line to the point.
-
 
 The electric field due to an infinite nonconducting sheet with a uniform surface charge density $\sigma$ is perpendicular to the plane of the sheet and has a magnitude of
 
