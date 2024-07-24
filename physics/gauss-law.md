@@ -25,7 +25,7 @@ The net flux through a closed surface is given by:
 
 $$ \Phi = \oint_S \vec{E} \cdot d \vec{A} $$
 
-Gauss' law relates the electric field at points on a (closed) Gaussian surface to the net charge enclosed by that surface. An inward piercing field is negative flux. An outward piercing field is positive flux. A skimming field is zero flux.
+Gauss' law relates the electric field at points on a (closed) Gaussian surface to the net charge enclosed by that surface. It is one of Maxwell's equations. An inward piercing field is negative flux. An outward piercing field is positive flux. A skimming field is zero flux.
 
 Gauss' law relates the net flux $\Phi$ penetrating a closed surface to the net charge $q_{enc}$ enclosed by the surface:
 
