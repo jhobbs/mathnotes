@@ -47,3 +47,37 @@ If $f$ is a continuous function of two variables $x = x(t), y = y(t)$ whose doma
 
 $$ \int_C f(x,y) ds = \int_a^b f(x(t), y(t)) \sqrt{ \left ( \frac{dx}{dt} \right )^2 + \left ( \frac{dy}{dt} \right )^2} dt $$
 
+Line integrals in the $xy$-plane that correspond to integrals in the complex plane take the form
+
+$$ \int_{C} P(x,y)dx + Q(x,y)dy. $$
+
+
+When $P(x,y)$ and $Q(x,y)$ are continuous and $C$ is smooth, we can calculate the value of the line integral by expressing $P, Q, dx$ and $dy$ in terms of any parametric representation of $C$ and evaluating the resulting definite integral:
+
+$$ \int_{C} P(x,y)dx + Q(x,y)dy = \int_{\alpha}^{\beta} \left \{ P[x(t), y(t)]\frac{dx}{dt} + Q[x(t), y(t)]\frac{dy}{dt} \right \}dt. \tag{4.7} $$
+
+All parameterizations of the curve lead to the same value. 
+
+For some integrals, it does not matter what path is taken between two points; the value is always the same. Such line integrals are said to be independent of path.
+
+We say that line integral 4.7 is **independent of path** in a domain $D$ if for any two points $A$ and $B$ in $D$, the value of the line integral is the same for all piecewise smooth curves in $D$ from $A$ to $B$. There are two ways to ensure that a line integral is independent of path in a domain $D$:
+
+1. Show that $P\mathbf{\hat{i}} + Q\mathbf{\hat{j}}$ is the gradient of some function $\phi(x,y)$ at every point of $D$.
+
+2. If $D$ is simply-connected (every closed curve in $D$ contains in its interior only points of $D$), show that $\partial Q/\partial x = \partial P / \partial y$.
+
+When a line integral is known to be independent of path, and its value is required along some curve with initial point $A$ and final point $B$, we can either replace the given curve with a simpler curve, or, take the difference in the values of the function $\phi(x,y)$ at $B$ and $A$.
+
+
+$$ \int_{C} P(x,y)dx + Q(x,y)dy = \left \{ \phi(x,y) \right \}_{A}^{B} = \phi(x_B, y_B) - \phi(x_A, y_A). $$
+
+
+If a line integral is independent of path in a domain $D$, and $C$ is a closed, piecewise smooth curve in $D$ that contains only poitns of $D$ in its interior, its value is zero:
+
+$$ \oint_C Pdx + Qdy = 0 $$
+
+When a line integral is required around a closed curve, and the line integral is not independent of path, Green's theorem can sometimes be used. It is stated as follows:
+
+**Green's Theorem** Support $P(x,y)$ and $Q(x,y)$ have continuous first partial derivatives in a domain containing a simple, closed, piecewise smooth curve $C$ and its interior $R$. Then
+
+$$ \oint_C Pdx + Qdy = \iint_R \left ( \frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} \right ) dA. $$
