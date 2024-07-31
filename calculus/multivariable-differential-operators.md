@@ -37,6 +37,11 @@ $$ \text{div} \vec{F} = \nabla \cdot \vec{F} = \frac{\partial F_1}{\partial x} +
 
 Divergence gives a scalar value for each point, i.e., it is a scalar field. A positive value indicates a net flow away from the point, while a negative value indicates a net flow towards a point.
 
+An important theorem related to divergence is the Divergence Theorem (also known as Gauss's theorem) which connects the flux of a vector field through a closed surface to the divergence of the field inside the volume bounded by the surface:
+
+
+$$ \iiint_V (\nabla \cdot \vec{F}) dV = \oint_s \vec{F} \cdot d\vec{S} $$ 
+
 ## Directional Derivative
 
 ## Total Derivative
