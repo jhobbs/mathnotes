@@ -1,0 +1,46 @@
+---
+layout: page
+title: Multivariable Differential Operators
+---
+
+# Multivariable Differential Operators
+
+These are some differential operators that apply to multivariable and/or vector valued functions.
+
+## Gradient
+
+Given a scalar function $f : \mathbb{R}^n \to \mathbb{R}$, the gradient of $f$, denoted as $\nabla f$, is defined as the vector of its partial derivatives. Specifically, for a function $f(x_1, x_2, \cdots, x_n)$, the gradient is given by
+
+$$ \nabla f = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\  \frac{\partial f}{\partial x_2} \\\ \vdots \\\ \frac{\partial f}{\partial x_n} \end{bmatrix} $$
+
+The gradient points in the direction of steepest ascent of the function $f$ at any given point and its magnitude gives the rate of ascent.
+
+## Curl
+
+For a vector field $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimensional space $\mathbb{R}^3$, with each copmonent function $F_i$ depending on the variables $x$, $y$, and $z$, the curl of $\vec{F}$ is defined as
+
+$$ \text{curl} \vec{F} = \nabla \times \vec{F} = \left ( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z} \right ) \mathbf{\hat{i}} + \left ( \frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x} \right ) \mathbf{\hat{j}} + \left ( \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y} \right ) \mathbf{\hat{k}} $$
+
+The curl at a point in the field is represented by a vector whose length and direction denote the magnitude and axis of the maximum circulation. Circulation is the line integral of a vector field around a closed curve.
+
+More intuitively, curl measures the rotation of the vector field at a given point.
+
+Curl can also be expressed as the determinant of a 3x3 matrix invovling the unit vectors, partial derivatives, and the components of the vector field:
+
+$$ \nabla \times \vec{F} = \begin{vmatrix} \mathbf{\hat{i}} & \mathbf{\hat{j}} & \mathbf{\hat{k}}  \\\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\\ F_1 & F_2 & F_3  \end{vmatrix} $$
+
+
+
+## Divergence
+
+## Directional Derivative
+
+## Total Derivative
+
+## Exterior Derivative
+
+## Jacobian
+
+## Laplacian
+
+## Hessian
