@@ -29,9 +29,13 @@ Curl can also be expressed as the determinant of a 3x3 matrix invovling the unit
 
 $$ \nabla \times \vec{F} = \begin{vmatrix} \mathbf{\hat{i}} & \mathbf{\hat{j}} & \mathbf{\hat{k}}  \\\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\\ F_1 & F_2 & F_3  \end{vmatrix} $$
 
-
-
 ## Divergence
+
+The divergence of a vector field quantifies the extent to which the vector field behaves as a source or a sink at a given point. For a vector field $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimension space $\mathbb{R}^3$, the divergence is defined as
+
+$$ \text{div} \vec{F} = \nabla \cdot \vec{F} = \frac{\partial F_1}{\partial x} + \frac{\partial F_2}{\partial y} + \frac{\partial F_3}{\partial z}. $$
+
+Divergence gives a scalar value for each point, i.e., it is a scalar field. A positive value indicates a net flow away from the point, while a negative value indicates a net flow towards a point.
 
 ## Directional Derivative
 
