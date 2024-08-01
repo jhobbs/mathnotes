@@ -34,5 +34,10 @@ Since $f(z) = \frac{1}{z^2 - 1}$ has singularities at $-1$ and $1$ that are comp
 
 ![Curve Around Singularities](curve-around-singularities.png)
 
-
 Now we can find our contour integral by evaluating the contour integrals on paths around our singularities, as these paths are analytic everywhere outside them but inside $C$.
+
+A useful theorem to proceed from here is the following:
+
+If $C$ is a simple, closed, piecewise smooth curve and $z_0$ is interior to $C$, then:
+
+$$ \oint_C \frac{1}{z - z_0} dz = 2 \pi i. $$
