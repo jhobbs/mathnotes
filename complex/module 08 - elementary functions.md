@@ -115,12 +115,11 @@ Points on the negative real aixs and $z = 0$ are singularities of $\text{Log}{z}
 
 The deriviative of $\text{Log}{z}$ is
 
-
 $$ \frac{d}{dz} \text{Log}{z} = \frac{1}{z} $$
 
-We can choose other branches of $\arg{z}$ and get different branches. For example, if we choose $\arg_\phi{z}, we get
+We can choose other branches of $\arg{z}$ and get different branches. For example, if we choose $\arg_\phi{z}$, we get
 
-$$ \log_\phi{z} = \ln{z} + (\arg_\phi{z})i. $$
+$$ \log_\phi{z} = \ln{|z|} + (\arg_\phi{z})i. $$
 
 These branches are analytic on any domain that does not contain $z = 0$ (the branch point) or points on the branch cut (the half-line through $z=0$ making an angle of $\phi$ radians ith the positive real axis.)
 
