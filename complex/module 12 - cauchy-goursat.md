@@ -41,3 +41,7 @@ A useful theorem to proceed from here is the following:
 If $C$ is a simple, closed, piecewise smooth curve and $z_0$ is interior to $C$, then:
 
 $$ \oint_C \frac{1}{z - z_0} dz = 2 \pi i. $$
+
+Now, via partial fraction decomposition we have
+
+$$ \oint_C \frac{1}{z^2 - 1} = \frac{1}{2} \oint_C \frac{1}{z-1} - \frac{1}{z+1} dz = \frac{1}{2}\left ( \oint_C \frac{1}{z - 1} dz - \oint_C \frac{1}{z + 1}dz \right ) = \frac{1}{2} \left ( 2 \pi i - 2 \pi i \right ) = 0. $$ 
