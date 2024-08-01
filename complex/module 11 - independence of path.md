@@ -21,4 +21,4 @@ $$ \oint_c f(z) dz = 0. $$
 
 We have to be careful about branch cuts. Different antiderivatives of $1/z$ have different branch cuts, and we must pick one where the branch cut does not lie in $D$ in order for it to be a proper antiderivative. When $D$ contains all possible branch cuts of $\log_\phi$, $1/z$ has no antiderivative in $D$.
 
-We also have to be careful when a path encircles a singularity - in this case, the antiderivative may not be single-valued or consistent along the entire path.
+We also have to be careful when a path encircles a singularity - in this case, the antiderivative may not be single-valued or consistent along the entire path. In fact, when a closed path enircles a singularity, we can't really show whether or not the function has an antiderivative defined along that path without using the residue theorem.
