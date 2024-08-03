@@ -26,7 +26,7 @@ $$ f(z) = \sum_{n=0}^{\infty} \frac{f^{(n)}(0)}{n!} z^n $$
 
 is called the **Maclaurin series** of f.
 
-The circle $\z - z_0\| < $ in which the Taylor series converges to the function is called the **circle of convergence** for the Taylor series.
+The circle $\|z - z_0\| < $ in which the Taylor series converges to the function is called the **circle of convergence** for the Taylor series.
 
 Every power series representation of (or, Taylor series for) an entire function has an infinite radius of convergence.
 
