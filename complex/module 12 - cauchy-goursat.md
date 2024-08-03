@@ -45,3 +45,11 @@ $$ \oint_C \frac{1}{z - z_0} dz = 2 \pi i. $$
 Now, via partial fraction decomposition we have
 
 $$ \oint_C \frac{1}{z^2 - 1} = \frac{1}{2} \oint_C \frac{1}{z-1} - \frac{1}{z+1} dz = \frac{1}{2}\left ( \oint_C \frac{1}{z - 1} dz - \oint_C \frac{1}{z + 1}dz \right ) = \frac{1}{2} \left ( 2 \pi i - 2 \pi i \right ) = 0. $$ 
+
+The following theorems illustrate the nice properties of simply connected domains, where we don't have to deal with singularities or holes:
+
+When $f$ is analytic in a simply-connected domain $D$, the contour integral of $f$ around every closed, piecewise smooth curve in $D$ vanishes.
+
+When $f$ is analytic in a simply-connected domain $D$, the contour integral of $f$ is independent of path in $D$.
+
+When $f$ is analytic in a simply-connected domain $D$, it has an antiderivative therein.
