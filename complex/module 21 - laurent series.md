@@ -54,7 +54,7 @@ We need to use the two terms above to find geometric series in $(z-3)^n$ that co
 
 Starting with the first term, we have
 
-$$ \frac{2}{z-2} = \frac{2}{(z-3) + 1} = \frac{2}{(z - 3)(1 + \frac{1}{z - 3}} = \frac{2}{z-3} = \sum_{n=0}^{\infty} \frac{(-1)^n}{(z-3)^n} = \sum_{n=0}^{\infty} \frac{(-1)^n}{(z-3)^{n+1}}, $$
+$$ \frac{2}{z-2} = \frac{2}{(z-3) + 1} = \frac{2}{(z - 3)(1 + \frac{1}{z - 3})} = \frac{2}{z-3} = \sum_{n=0}^{\infty} \frac{(-1)^n}{(z-3)^n} = \sum_{n=0}^{\infty} \frac{(-1)^n}{(z-3)^{n+1}}, $$
 
 which converges for $\|z -3\| > 1$, which includes the region $\|z - 3\| > 2$. Note that this series involves negative integer powers of $(z -3)$ as the $(z - 3)$ term is in the denominator.
 
