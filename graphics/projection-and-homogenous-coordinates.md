@@ -21,9 +21,9 @@ is also a plane - the screen that is being used to display the camera's view.
 So, if we have a set of $n$ points in our plane, ${(x_1, y_1), (x_2, y_2), \dots (x_n, y_n)}$, we can pick a distance $z$ from the plane
 to the camera to put the points into 3d space as ${(x_1, y_1, z), (x_2, y_2, z), \dots (x_n, y_n, z)}.$ 
 
-Now, in order to use matrix multiplication to apply the types of transformations mentioned above, it would be nice if we were able to use
-linear transformations, because any number of successive linear transformations can be combined into a single linear transformation, and
-linear transformations can be applied with matrix multiplication, which is convenient and fast on computers.
+It would be nice if the transformations we want to apply to our image to represent perspective changes could be
+linear transformations, because any number of successive linear transformations can be combined into a single linear transformation, represented as
+a matrix, which can be applied to the points in our image with matrix multiplication, which is convenient and fast on computers.
 
 However, not all the translations mentioned are linear in 3d. Translation, for instance, is affine, and perspective projection is not even
 affine. To get around this, we can use [homogenous coordinates](https://en.wikipedia.org/wiki/Homogeneous_coordinates), which add another dimension
