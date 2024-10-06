@@ -6,21 +6,21 @@ function setup() {
 
   const sliderBaseHeight = canvas.position().y + height + 20
   // Create sliders to control the camera angles around the X, Y, and Z axes
-  cameraAngleXSlider = createSlider(0, TWO_PI, 0, 0.01);
+  cameraAngleXSlider = createSlider(-PI, PI, 0, 0.01);
   cameraAngleXSlider.position((width - 200) / 2, sliderBaseHeight + 20);
   cameraAngleXSlider.style('width', '200px');
   cameraAngleXSlider.input(redraw);
   cameraAngleXLabel = createDiv('Camera Angle (X-axis)');
   cameraAngleXLabel.position((width + 200) / 2 + 10, sliderBaseHeight + 20);
 
-  cameraAngleYSlider = createSlider(0, TWO_PI, 0, 0.01);
+  cameraAngleYSlider = createSlider(-PI, PI, 0, 0.01);
   cameraAngleYSlider.position((width - 200) / 2, sliderBaseHeight + 60);
   cameraAngleYSlider.style('width', '200px');
   cameraAngleYSlider.input(redraw);
   cameraAngleYLabel = createDiv('Camera Angle (Y-axis)');
   cameraAngleYLabel.position((width + 200) / 2 + 10, sliderBaseHeight + 60);
 
-  cameraAngleZSlider = createSlider(0, TWO_PI, 0, 0.01);
+  cameraAngleZSlider = createSlider(-PI, PI, 0, 0.01);
   cameraAngleZSlider.position((width - 200) / 2, sliderBaseHeight + 100);
   cameraAngleZSlider.style('width', '200px');
   cameraAngleZSlider.input(redraw);
