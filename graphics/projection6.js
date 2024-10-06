@@ -7,55 +7,55 @@ function setup() {
   const sliderBaseHeight = canvas.position().y + height + 20
   // Create sliders to control the camera angles around the X, Y, and Z axes
   cameraAngleXSlider = createSlider(0, TWO_PI, 0, 0.01);
-  cameraAngleXSlider.position(20, sliderBaseHeight + 20);
+  cameraAngleXSlider.position((width - 200) / 2, sliderBaseHeight + 20);
   cameraAngleXSlider.style('width', '200px');
   cameraAngleXSlider.input(redraw);
   cameraAngleXLabel = createDiv('Camera Angle (X-axis)');
-  cameraAngleXLabel.position(240, sliderBaseHeight + 20);
+  cameraAngleXLabel.position((width + 200) / 2 + 10, sliderBaseHeight + 20);
 
   cameraAngleYSlider = createSlider(0, TWO_PI, 0, 0.01);
-  cameraAngleYSlider.position(20, sliderBaseHeight + 60);
+  cameraAngleYSlider.position((width - 200) / 2, sliderBaseHeight + 60);
   cameraAngleYSlider.style('width', '200px');
   cameraAngleYSlider.input(redraw);
   cameraAngleYLabel = createDiv('Camera Angle (Y-axis)');
-  cameraAngleYLabel.position(240, sliderBaseHeight + 60);
+  cameraAngleYLabel.position((width + 200) / 2 + 10, sliderBaseHeight + 60);
 
   cameraAngleZSlider = createSlider(0, TWO_PI, 0, 0.01);
-  cameraAngleZSlider.position(20, sliderBaseHeight + 100);
+  cameraAngleZSlider.position((width - 200) / 2, sliderBaseHeight + 100);
   cameraAngleZSlider.style('width', '200px');
   cameraAngleZSlider.input(redraw);
   cameraAngleZLabel = createDiv('Camera Angle (Z-axis)');
-  cameraAngleZLabel.position(240, sliderBaseHeight + 100);
+  cameraAngleZLabel.position((width + 200) / 2 + 10, sliderBaseHeight + 100);
 
   // Create a slider to control the focal length
   focalSlider = createSlider(1, 30, 15, 0.1);
-  focalSlider.position(20, sliderBaseHeight + 140);
+  focalSlider.position((width - 200) / 2, sliderBaseHeight + 140);
   focalSlider.style('width', '200px');
   focalSlider.input(redraw);
   focalLabel = createDiv('Focal Length');
-  focalLabel.position(240, sliderBaseHeight + 140);
+  focalLabel.position((width + 200) / 2 + 10, sliderBaseHeight + 140);
 
   // Create sliders to control translation in X, Y, Z directions
   translateXSlider = createSlider(-200, 200, 0, 1);
-  translateXSlider.position(20, sliderBaseHeight + 180);
+  translateXSlider.position((width - 200) / 2, sliderBaseHeight + 180);
   translateXSlider.style('width', '200px');
   translateXSlider.input(redraw);
   translateXLabel = createDiv('Translate X');
-  translateXLabel.position(240, sliderBaseHeight + 180);
+  translateXLabel.position((width + 200) / 2 + 10, sliderBaseHeight + 180);
 
   translateYSlider = createSlider(-200, 200, 0, 1);
-  translateYSlider.position(20, sliderBaseHeight + 220);
+  translateYSlider.position((width - 200) / 2, sliderBaseHeight + 220);
   translateYSlider.style('width', '200px');
   translateYSlider.input(redraw);
   translateYLabel = createDiv('Translate Y');
-  translateYLabel.position(240, sliderBaseHeight + 220);
+  translateYLabel.position((width + 200) / 2 + 10, sliderBaseHeight + 220);
 
   translateZSlider = createSlider(-200, 200, 100, 1);
-  translateZSlider.position(20, sliderBaseHeight + 260);
+  translateZSlider.position((width - 200) / 2, sliderBaseHeight + 260);
   translateZSlider.style('width', '200px');
   translateZSlider.input(redraw);
   translateZLabel = createDiv('Translate Z');
-  translateZLabel.position(240, sliderBaseHeight + 260);
+  translateZLabel.position((width + 200) / 2 + 10, sliderBaseHeight + 260);
 
   noLoop();
 }
