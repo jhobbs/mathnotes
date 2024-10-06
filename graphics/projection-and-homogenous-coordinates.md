@@ -27,7 +27,7 @@ linear transformations can be applied with matrix multiplication, which is conve
 
 However, not all the translations mentioned are linear in 3d. Translation, for instance, is affine, and perspective projection is not even
 affine. To get around this, we can use [homogenous coordinates](https://en.wikipedia.org/wiki/Homogeneous_coordinates), which add another dimension
-(usually denoted as $w$) that acts as a scaling factor for coordinates.
+(usually denoted as $w$) that acts as a scaling factor for coordinates. This puts our coordinates into projective space, where all the transformations we want to perform are linear, and can thus be combined into a single matrix for application!
 
 We can just use the value of 1 for the new dimension for all of our points to start with. [This page](https://www.tomdalling.com/blog/modern-opengl/explaining-homogenous-coordinates-and-projective-geometry/) talks a bit more about homogenous coordiantes and why 1 makes a fine value.
 
@@ -114,11 +114,11 @@ $$
 
 and applies the same way the other transformation matrices mentioned above apply. Don't ask me to explain focal lenght - I don't know much about what's going on there yet, other than that this is pin-hole camera focal length, not lens camera focal length.
 
-These transformations can be combined by multiplying them, resulting in a single matrix that can then be applied, through matrix-vector multiplication, to the points in the image to find their new locations (which can also be done through matrix multiplication, by packing the vectors for all the point positions into a matrix and multiplying it by the final transformation matrix).
+Because these transformations are linear in projective space, they can be combined by multiplying them, resulting in a single matrix that can then be applied, through matrix-vector multiplication, to the points in the image to find their new locations (which can also be done through matrix multiplication, by packing the vectors for all the point positions into a matrix and multiplying it by the final transformation matrix).
 
-After applying the transformation to a vector in homogenous coordinates, the homogenous coordinates need to be converted back to normal coordinates by dividing the $x, y, z$ components by
-the resulting $w$ component.
+After applying the transformation to a vector in homogenous coordinates, the homogenous coordinates need to be converted back to 3d coordinates by dividing the $x, y, z$ components by
+the resulting $w$ component. Because we included the perspective projection transformation, we can also discard the $z$ component and just use the $(x/w, y/w)$ as our 2d coordinates for the image.
 
-The widget below puts some of this together using p5 in 2d mode. All of the '3d' stuff here is happening via [hardcoded matrix transformations done in JS](https://github.com/jhobbs/mathnotes/blob/main/graphics/projection6.js). There is definitely some weird stuff going on here when you rotate or translate far enough - I'm not sure what's going on there yet, but it works pretty well within a certain range.
+The widget below puts all of this together using p5 in 2d mode. All of the '3d' stuff here is happening via [hardcoded matrix transformations done in JS](https://github.com/jhobbs/mathnotes/blob/main/graphics/projection6.js). There is definitely some weird stuff going on here when you rotate or translate far enough - I'm not sure what's going on there yet, but it works pretty well within a certain range.
 
 {% include_relative projection.html %}
