@@ -126,5 +126,7 @@ The widget below puts all of this together using p5 in 2d mode. All of the '3d' 
 
 There is definitely some weird stuff going on here when you rotate or translate far enough - I'm not sure what's going on there yet, but it works pretty well within a certain range.
 
-Also, this demo uses the depth of the image set to $100$ to start with. By setting it to $0$ and using a larger focal length, it's possible to get other effects, where rotating the camera angle keeps the image fixed in the center of the screen, like a sheet of paper rotating at a distance. This effect seems more natural in some cases. As is, this isn't parameterized and takes code editing to get.
+It also seems like focal length and Translate Z are having the same effect - that may be a bug.
+
+Also, this demo uses the depth of the image set to $100$ to start with. By setting it to $0$ and using a larger focal length, it's possible to get other effects, where rotating the camera angle keeps the image fixed in the center of the screen, like a sheet of paper rotating at a distance. This effect seems more natural in some cases. As is, this isn't parameterized and takes code editing to get. This alternate mode feels more like the object rotating at a distance while the camera is stationary, whereas the mode displayed here feels like the camera rotating while the object is stationary.
 
