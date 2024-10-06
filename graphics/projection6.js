@@ -106,9 +106,9 @@ function draw() {
   ]);
 
   // Combine the camera rotation matrices and translation matrix
-  let rotationMatrix = math.multiply(cameraRotationXMatrix, cameraRotationYMatrix);
-  rotationMatrix = math.multiply(rotationMatrix, cameraRotationZMatrix);
-  let transformationMatrix = math.multiply(rotationMatrix, translationMatrix);
+  let rotationMatrix = math.multiply(
+    math.multiply(cameraRotationXMatrix, cameraRotationYMatrix),
+    cameraRotationZMatrix);
 
   // Focal length for perspective projection
   let focalLength = focalSlider.value();
@@ -122,8 +122,11 @@ function draw() {
   ]);
 
   // Combine the transformation matrix with the perspective projection matrix
-  transformationMatrix = math.multiply(perspectiveMatrix, transformationMatrix);
-
+  let transformationMatrix = math.multiply(
+    perspectiveMatrix,
+    math.multiply(rotationMatrix, translationMatrix)
+  );
+  
   // Define the points for a happy face in homogeneous coordinates
   let points = [
     math.matrix([-30, -30, 100, 1]), // Left eye

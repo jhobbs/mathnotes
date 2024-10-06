@@ -119,7 +119,6 @@ These transformations can be combined by multiplying them, resulting in a single
 After applying the transformation to a vector in homogenous coordinates, the homogenous coordinates need to be converted back to normal coordinates by dividing the $x, y, z$ components by
 the resulting $w$ component.
 
-The widget below puts some of this together. The source for it is available at
+The widget below puts some of this together using p5 in 2d mode. All of the '3d' stuff here is happening via [hardcoded matrix transformations done in JS](https://github.com/jhobbs/mathnotes/blob/main/graphics/projection6.js). There is definitely some weird stuff going on here when you rotate or translate far enough - I'm not sure what's going on there yet, but it works pretty well within a certain range.
 
 {% include_relative projection.html %}
-
