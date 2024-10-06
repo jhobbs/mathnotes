@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Projection
+title: Projective Transformations
 ---
 
-# Projection
+# Projective Transformations
 
 We want to take a set of points on a plane, making an image, and map them to new points to represent some change in perspective.
 
@@ -112,12 +112,14 @@ f & 0 & 0 & 0 \\
 \end{bmatrix}
 $$
 
-and applies the same way the other transformation matrices mentioned above apply. Don't ask me to explain focal lenght - I don't know much about what's going on there yet, other than that this is pin-hole camera focal length, not lens camera focal length.
+and applies the same way the other transformation matrices mentioned above apply. Focal length here is pinhole camera focal length.
 
 Because these transformations are linear in projective space, they can be combined by multiplying them, resulting in a single matrix that can then be applied, through matrix-vector multiplication, to the points in the image to find their new locations (which can also be done through matrix multiplication, by packing the vectors for all the point positions into a matrix and multiplying it by the final transformation matrix).
 
 After applying the transformation to a vector in homogenous coordinates, the homogenous coordinates need to be converted back to 3d coordinates by dividing the $x, y, z$ components by
 the resulting $w$ component. Because we included the perspective projection transformation, we can also discard the $z$ component and just use the $(x/w, y/w)$ as our 2d coordinates for the image.
+
+The end transformation is an example of a **projective transformation**, which are a generalizations of affine transformations to include operations that change perspective. Affine transformations are in turn generalizations of linear transformations to include translation. And, again, the transformation is a linear transformation in projective space (using homogenous coordinates) but not necessarily in Euclidean space. Projective transformations are also called collineations because they preserve collinearity of points. If three points are on a straight line in the input space, they will be on a straight line in the output space as well.
 
 The widget below puts all of this together using p5 in 2d mode. All of the '3d' stuff here is happening via [hardcoded matrix transformations done in JS](https://github.com/jhobbs/mathnotes/blob/main/graphics/projection6.js). There is definitely some weird stuff going on here when you rotate or translate far enough - I'm not sure what's going on there yet, but it works pretty well within a certain range.
 
