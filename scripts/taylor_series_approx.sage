@@ -18,5 +18,5 @@ def find_coeffs(x, y, rhs, initial_values, N):
     
 x = var('x')
 y = function('y')(x)
-df = 4*sin(y)+3*exp(x)
-find_coeffs(x, y, df, [0], 10)
+df = sin(x) - 20 * y**3
+find_coeffs(x, y, df, [0, 0], 10)
