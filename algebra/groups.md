@@ -114,3 +114,28 @@ Permutations can be "multiplied", which is just composition. So if we have two p
 Permutation multiplication of permutations of a set forms a group:
 
 **Theorem**: Let $A$ be a nonempty set, and $S_A$ be the collection of all permutations of $A$. Then $S_A$ is a group under permutation multiplication.
+
+## Orbits
+
+Let $\sigma$ be a permutationf $A$, the orbit of $\sigma$ containing $a \in A$ is the set
+
+$$ \{ \cdots, \sigma^{-2}(a), \sigma^{-1}(a), a, \sigma{(a)}, \sigma^{2}(a), \cdots \} = \{\sigma^n(a) | n \in \mathbb{Z}\}. $$
+
+So, $a,b \in A$ are in the same orbit of $\sigma$, written as $a \~ b$, if and only if $b = \sigma^n(a)$ for some $n \in \mathbb{Z}$.
+
+The relation "~" is an equivalent relation (reflexive, symmetric, transitive). This means $A$ can be partitioned into orbits of $\sigma$.
+
+**Definition**: Let $\sigma$ be a permutation of $A$. The equivalence classes in $A$ determined by the equivalence relation "~" are the **orbits** of $\sigma$.
+
+Example:
+
+Consider $\sigma = \begin{pmatrix} 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\\ 3 & 8 & 6 & 7 & 4 & 1 & 5 & 2 \end{pmatrix}$ in $S_8$. 
+rbit of $\sigma = \begin{pmatrix} 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\\ 3 & 8 & 6 & 7 & 4 & 1 & 5 & 2 \end{pmatrix}$ 
+
+* containing 1 is $\\{1,3,6\\}$ because $\sigma(1) = 3$, $\sigma(3) = 6$, and $\sigma(6) = 1$.
+
+* containing 2 is $\\{2,8\\}$.
+
+* containing 4 is $\\{4, 5, 7\\}$.
+
+So the orbits of $\sigma$ are $\\{1,3,6\\}, \\{2,8\\}, \\{4,5,7\\}$.
