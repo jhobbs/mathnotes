@@ -81,5 +81,20 @@ Since $a_0$ is left undetermined as an arbitrary constant, this is a general sol
 
 Also note that the radius of convergence is infinite, and that it converges to
 
-
 $$ y(x) = a_0 e^{-x^2}. $$
+
+## Existince of Analytic Solutions
+
+Given the equation
+
+$$ y''(x) + p(x)y'(x) +q(x)y(x) = 0, \tag{1} $$
+
+Suppose $x_0$ is an ordinary point for equation (1). Then (1) has two linearly independent analytic solutions of the form
+
+$$ y(x) = \sum_{n=0}^{\infty} a_n (x-x_0)^n. \tag{2} $$
+
+Moreover, the radius of convergance of any power series solution of the form given by (2) is at least as large as the distance from $x_0$ to the nearest singular point (real or complex-valued) of equation (1).
+
+## Translation
+
+It's generally a lot easier to compute with series that are centered at $x_0=0$ than at other points. We can make a substitution by saying $x_0 = a, t_0 = 0, x = t + a$. Then, we can follow the procedure outlined above, and in the final series, we can replace $t$ with $t = x - a$.
