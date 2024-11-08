@@ -86,3 +86,31 @@ This sounds really abstract, so here's an example of finding all of the subgroup
 ![Cyclic Subgroups of $Z_20$](subgroupsofZ_20.png)
 
 The diagram in this image is called a subgroup diagram or subgroup lattice. It represents containment - so a node being higher on the digram indicates than any nodes below it are subsets of it.
+
+## Permutations
+
+If we rearrange the ordered set $A = \\{1,2,3,4,5\\}$ to another order, say $\\{3,2,5,1,4\\}$, then we get a permutation of $A$.
+
+This rearrangement is a bijection from $A$ to $A$ that performs
+
+$$ \begin{align} 1 \to 3 \\ 2 \to 2 \\ 3 \to 5 \\ 4 \to 1 \\ 5 \to 4 \end{align} $$
+
+We can represent this permutation compactly using a matrix
+
+$$ \begin{pmatrix} 1 & 2 & 3 & 4 & 5 \\ 3 & 2 & 5 & 1 & 4 \end{pmatrix} $$
+
+Here, the top row is the input and the bottom row is the output, columnwise.
+
+More formally, a perumtation is a bijection $\phi : A \to A$, that is, a bijection from a set onto itself. Generally, we talk about permutations on finite sets, but this doesn't seem to be a hard and fast rule.
+
+The set of all permutations on the set $A$ is denoted by $S_A$:
+
+$$ S_A = \{ \phi : A \to A | \phi \text{ is a bijection} \} $$
+
+When $A$ is the finite set $\\{1, 2, 3, \cdots, n\\},$ the group of all permutations of $A$ is the symmetric group on $n$ letters, and is denoted by $S_n$. It has $n!$ elements.
+
+Permutations can be "multiplied", which is just composition. So if we have two permutations on $A$, called $\sigma$ and $\tau$, $\sigma \tau$ means their multiplication, and we apply from right to left, so $\tau$ applies first and then $\sigma$. The result will also be a permutation in $A$.
+
+Permutation multiplication of permutations of a set forms a group:
+
+**Theorem**: Let $A$ be a nonempty set, and $S_A$ be the collection of all permutations of $A$. Then $S_A$ is a group under permutation multiplication.
