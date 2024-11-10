@@ -115,7 +115,7 @@ Permutation multiplication of permutations of a set forms a group:
 
 **Theorem**: Let $A$ be a nonempty set, and $S_A$ be the collection of all permutations of $A$. Then $S_A$ is a group under permutation multiplication.
 
-## Orbits
+### Orbits
 
 Let $\sigma$ be a permutationf $A$, the orbit of $\sigma$ containing $a \in A$ is the set
 
@@ -139,3 +139,25 @@ rbit of $\sigma = \begin{pmatrix} 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\\ 3 & 8 & 6 & 
 * containing 4 is $\\{4, 5, 7\\}$.
 
 So the orbits of $\sigma$ are $\\{1,3,6\\}, \\{2,8\\}, \\{4,5,7\\}$.
+
+### Cycles
+
+A permutation $\sigma \in S_n$ is a **cycle** if it has at most one orbit containing more than one elements. The length of a cycle is the number of elements in its largest orbit.
+
+A cycle in $S_n$ may be written as $(a_1, a_2, \cdots, a_k)$ - this is called cyclic notation. It represents the permutation that sends $a_1 \to a_2 \to \cdots \to a_k \to a_1$. 
+
+Two or more than two cycles are **disjoint** if no element appears in more than one cycle.
+
+**Theorem**: every permutation $\sigma$ of a finite set is a product of disjoint cycles.
+
+### Even and Odd Permutations
+
+A cycle of length 2 is a **transposition**.
+
+A permutation of a finite set is **even** if it is the product of an even number of tanspositions. It is odd if it is the product of an odd number of transpositions.
+
+**Theorem**: A permutation in $S_n$ can be written as either a product of an odd number of transpositions or a product of an even number of transpositions, but not both.
+
+The subgroup of $S_n$ consisting of all even permutations of $n$ letters is the **alternating group** $A_n$ on $n$ letters. If $n \geq 2$, then this set forms a subgroup of $S_n$ of order $n!/2$.
+
+
