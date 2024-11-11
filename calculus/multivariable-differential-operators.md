@@ -39,8 +39,27 @@ Divergence gives a scalar value for each point, i.e., it is a scalar field. A po
 
 An important theorem related to divergence is the Divergence Theorem (also known as Gauss's theorem) which connects the flux of a vector field through a closed surface to the divergence of the field inside the volume bounded by the surface:
 
-
 $$ \iiint_V (\nabla \cdot \vec{F}) dV = \oint_s \vec{F} \cdot d\vec{S} $$ 
+
+## Laplacian
+The Laplace operator is a second-order differential operator in the $n$-dimensional Euclidean space, defined as the divergence $(\nabla \cdot)$ of the gradient $(\nabla f$). Thus, if $f$ is a twice-differentiable real-valued function, then the Laplacian of $f$ is the real-valued function defined by
+
+$$ \Delta f = \nabla^2 f = \nabla \cdot \nabla f. $$
+
+The Laplacian of $f$ is the sum of all the unmixed second partial derivatives in the Cartesian coordinates $x_i$:
+
+$$ \nabla^2 f = \sum_{i=1}^n \frac{\partial^2 f}{\partial x_i^2}. $$
+
+In two dimensions, using Cartesian coordinates, the Laplace operator is given by
+
+$$ \nabla^2 f = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2} $$
+
+and in three dimensions by
+
+$$ \nabla^2 f = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2} + \frac{\partial^2 f}{\partial z^2} $$
+
+Solutions to Laplace's equation $\nabla^2 f = 0$ are called [harmonic functions](../complex/module%2006%20-%20harmonic.html).
+
 
 ## Directional Derivative
 
@@ -50,6 +69,5 @@ $$ \iiint_V (\nabla \cdot \vec{F}) dV = \oint_s \vec{F} \cdot d\vec{S} $$
 
 ## Jacobian
 
-## Laplacian
 
 ## Hessian
