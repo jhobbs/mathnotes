@@ -134,7 +134,6 @@ The constants we require are $c_2 = 3$ and $c_5 = -6$. The solution to the heat 
 $$ \begin{align} u(x,t) = c_2e^{- \beta(2 \pi / L)^2t}\sin(2 \pi x/L) + c_5e^{- \beta(5 \pi / L)^2t}\sin(5 \pi x/L) \\ = 3e^{-28t}\sin{2x} - 6e^{-175t} \sin{5x}. \end{align} $$
 
 
-
 ### Complete Solution to Generic Problem
 
 It turns out that almost any function $f(x)$ likely to arise in applications can be expressed as a convergent series of eigenfunctions. For the sines we've been using, the **Fourier sine series** looks like:
@@ -146,3 +145,24 @@ and the complete solution to the generic problem given by (1)-(3) is
 $$ u(x,t) = \sum_{n=1}^{\infty} c_n e^{- \beta (n \pi/L)^2 t}\sin{\left ( \frac{n \pi x}{L}  \right )}, $$
 
 as long as this expansion and its first two derivatives converge.
+
+## Vibrating String Problem
+
+The equation of motion for a vibrating string of length $L$ with fixed ends, and a bunch of other simplifying factors, is governed by the following initial-boundary value problem:
+
+$$ \frac{\partial^2 u}{\partial t^2} = \alpha^2 \frac{\partial^2 u}{\partial x^2}, \quad 0 < x < L, \quad t > 0 \tag{16} $$
+
+$$ u(0,t) = u(L,t) = 0, \quad t \geq 0, \tag{17} $$
+
+$$ u(x,0) = f(x), \quad 0 \leq x \leq L, \tag{18}  $$
+
+$$ \frac{\partial u}{\partial t}(x, 0) = g(x), \quad 0 \leq x \leq L. \tag{19} $$
+
+Applying the method of separation of variables, we end up with
+
+
+$$ u(x,t) = \sum_{n=1}^{\infty} \left [ a_n \cos{\frac{n \pi \alpha}{L}t} + b_n \sin {\frac{n \pi \alpha}{L}t} \right ] \sin{\frac{n \pi x}{L}}. $$
+
+To find $a_n$ and $b_n$, we have
+
+$$ f(x) = \sum_{n=1}^{\infty} a_n \sin{\frac{n \pi x}{L}}, \quad g(x) = \sum_{n=1}^{\infty} \frac{n \pi \alpha}{L} b_n \sin{\frac{n \pi x}{L}}. $$
