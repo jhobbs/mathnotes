@@ -61,4 +61,6 @@ This model is an example of an **initial-boundary value problem**. Finding a fun
 
 One more thing to note. When the temperature reaches a steady state and $u$ does not depend on time, and there are no sources, then $\partial u / \partial t = 0$ and the temperature satisfies Laplace's equation
 
-$$ \nabla^2 u = 0. $$ 
+$$ \nabla^2 u = 0. $$
+
+To see how to solve the heat equation, see [Separation of Variables](./separation-of-variables.html).

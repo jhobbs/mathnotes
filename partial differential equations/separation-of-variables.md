@@ -97,7 +97,52 @@ Because c_1 = 0, the system reduces to solving $c_2 \sin{\sqrt{\lambda}}L = 0.$ 
 
 Now,  $\sin{\sqrt{\lambda}L} = 0$ only when $\sqrt{\lambda}L = n \pi$, where $n$ is an integer. Therefore, (7) has a nontrivial solution ($c_2 \neq 0$) when $\sqrt{\lambda}L = n \pi$ or $\lambda = (n \pi / L)^2$, $n = 1,2,3,...$. The nontrivial solutions (eigenfunctions) $X_n$ corresponding to the eigenvalue $\lambda = (n \pi/L)^2$ are given by
 
-$$ X_n(x) = a_n \sin{\left ( \frac{n \pi x}{L} \right ) }, $$
+$$ X_n(x) = a_n \sin{\left ( \frac{n \pi x}{L} \right ) }, \tag{9} $$
 
 where the $a_n$'s are arbitrary nonzero constants.
 
+Now that we've determined that $\lambda = (n \pi/L)^2$, for any positive integer $n$, we return our condition to the second equation in (5):
+
+$$ T'(t) + \beta \left ( \frac{n \pi}{L} \right )^2 T(t) = 0. $$
+
+For each $n = 1, 2, 3 \dots$, the general solution to this linear first-order equation is
+
+$$ T_n(t) = b_n e^{-\beta(n \pi/L)^2}. $$
+
+Combining this with equation (9), we obtain, for each $n = 1,2,3,\dots$, the functions
+
+$$ \begin{align} u_n(x_t) = X_n(x)T_n(t) = a_n\sin{(n \pi x / L)} b_n e^{-\beta (n \pi / L)^2 t} \\ = c_n  e^{-\beta (n \pi / L)^2 t} \sin{(n \pi x / L)}, \end{align} $$
+
+where $c_n$ is also an arbitrary constant.
+
+### Example
+
+Find the soluton to the heat flow problem
+
+$$ \frac{\partial u}{\partial t} = 7 \frac{\partial^2 u}{\partial x^2}, \quad 0 < x < \pi, \quad t > 0, \tag{11} $$
+
+$$ u(0, t) = u(\pi, t) = 0, \quad t>0, \tag{12} $$
+
+$$ u(x,0) = 3\sin{2x} - 6\sin{5x}, \quad 0 < x < \pi. \tag{13} $$
+
+Comparing (11) with (1), we have that $\beta = 7$ and $L = \pi$. Hence, we need only find a combination of terms like (10) that satisfies the initial condition (13):
+
+$$ u(x,0) = \sum c_n e^0 \sin{nx} =  3\sin{2x} - 6\sin{5x}, \quad 0 < x < \pi. $$
+
+The constants we require are $c_2 = 3$ and $c_5 = -6$. The solution to the heat flow problem (11)-(13) is:
+
+$$ \begin{align} u(x,t) = c_2e^{- \beta(2 \pi / L)^2t}\sin(2 \pi x/L) + c_5e^{- \beta(5 \pi / L)^2t}\sin(5 \pi x/L) \\ = 3e^{-28t}\sin{2x} - 6e^{-175t} \sin{5x}. \end{align} $$
+
+
+
+### Complete Solution to Generic Problem
+
+It turns out that almost any function $f(x)$ likely to arise in applications can be expressed as a convergent series of eigenfunctions. For the sines we've been using, the **Fourier sine series** looks like:
+
+$$ f(x) = \sum_{n=1}^{\infty} c_n \sin{\left ( \frac{n \pi x}{L} \right )}, \quad 0 < x < L. $$
+
+and the complete solution to the generic problem given by (1)-(3) is
+
+$$ u(x,t) = \sum_{n=1}^{\infty} c_n e^{- \beta (n \pi/L)^2 t}\sin{\left ( \frac{n \pi x}{L}  \right )}, $$
+
+as long as this expansion and its first two derivatives converge.
