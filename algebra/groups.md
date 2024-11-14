@@ -160,4 +160,20 @@ A permutation of a finite set is **even** if it is the product of an even number
 
 The subgroup of $S_n$ consisting of all even permutations of $n$ letters is the **alternating group** $A_n$ on $n$ letters. If $n \geq 2$, then this set forms a subgroup of $S_n$ of order $n!/2$.
 
+### Cosets
+
+**Definition**: Let $H$ be a subgroup of $G$. Given $a \in G$, the subset $aH = \\{ah \| h \in H\\}$ of $G$ is the **left coset** of $H$ containing $a$, while the subset $Ha = \\{ha \| h \in H\\}$ is the **right coset** of $H$ containing $a$.
+
+Example. Left cosets of subgroup $3\mathbb{Z}$ of $\mathbb{Z}$:
+
+$$ \begin{align} 0 + 3\mathbb{Z} = \{\dots, -9, -6, 0, 3, 6, 9, \dots\} \\ 1 + 3\mathbb{Z} = \{\dots, -8, -5, 1, 4, 7, 10, \dots\} \\  2 + 3\mathbb{Z} = \{\dots, -7, -4, 2, 5, 8, 11, \dots\} \\  \end{align} $$
+
+Some properties:
+
+* If $aH \cap bH \neq \emptyset $, then $aH = bH$. This means we can partition $G$ into left cosets of $H$.
+
+* If $G$ is Abelian, the left cosets and right cosets of $H$ will be equal. So, in the example above, $a + 3\mathbb{Z} = 3\mathbb{Z} + a$.
+
+The number of left cosets of a subgroup $H$ in a group $G$ is the **index**  $(G:H)$ of $H$ in $G$. From the example above, the index of $3\mathbb{Z}$ in $\mathbb{Z}$ is $3$ since there are 3 left cosets.
+
 
