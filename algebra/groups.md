@@ -174,6 +174,8 @@ Some properties:
 
 * If $G$ is Abelian, the left cosets and right cosets of $H$ will be equal. So, in the example above, $a + 3\mathbb{Z} = 3\mathbb{Z} + a$.
 
+* The order of $aH$ is the order of $H$, that is, $\|aH\| = \|H\|$. Thus, cosets of a subgroup are of equal size.
+
 The number of left cosets of a subgroup $H$ in a group $G$ is the **index**  $(G:H)$ of $H$ in $G$. From the example above, the index of $3\mathbb{Z}$ in $\mathbb{Z}$ is $3$ since there are 3 left cosets.
 
 
