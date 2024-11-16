@@ -179,3 +179,30 @@ Some properties:
 The number of left cosets of a subgroup $H$ in a group $G$ is the **index**  $(G:H)$ of $H$ in $G$. From the example above, the index of $3\mathbb{Z}$ in $\mathbb{Z}$ is $3$ since there are 3 left cosets.
 
 
+#### Layered Cosets
+
+Here's a proof from a homework excercise I did.
+
+Suppose $H$ and $K$ are subgroups of a group $G$ such that $K \leq H \leq G,$ and suppose that $(H : K)$ and $(G : H)$ are both finite. Then show that $(G : K) = (G: H)(H :K)$ is finite.
+
+The intuition here is that each coset of $H$ can be partitioned into $(H:K)$ cosets of $K$, and that $G$ can be partitioned into $(G:H)$ cosets of $H$, so $G$ can be partitioned into $(G:K) = (G:H)(H:K)$ cosets of $K$. Since both $(G:H)$ and $(H:K)$ are given as finite, their product is also finite.
+
+In more detail, say $G$ can be partitioned into $n = (G:H)$ cosets of $H$, where $n$ is a natural number. Let $A$ be a set of coset representatives $A \subseteq G$ such that $\mathcal{P} = \bigcup_{a_i \in A} a_i H$ is a partition of $G$ formed by the left cosets of $H$.
+
+Then, $\mathcal{P}$ is 
+
+$$ \begin{align} \mathcal{P} = \{ & a_1 H,  \\ & a_2 H, \\ & a_3 H, \\ & \cdots, \\ & a_n H\} \end{align}, \tag{a} $$
+
+and each $a_i H$ is a disjoint coset of of $H$ in $G$.
+
+Now, $H$ can be partitioned into $m = (H:K)$ cosets of $K$, where $m$ is a natural number. Let $B$ be a set of coset representatives $B \subseteq H$ such that $\mathcal{Q} = \bigcup_{b_i \in B} b_i K$ is a partition of $H$ formed by the left cosets of $K$.
+  
+Then, $\mathcal{Q} = \\{ b_1 K, b_2 K, b_3 K, \cdots,  b_m K\\}$. Now, we can recover $H$ by taking the union of the elements of $\mathcal{Q}$, that is, $H = \bigcup_{q \in Q} q$, so the elements of $\mathcal{Q}$, after a round of flattening, are the same as those of $H.$ If we replace $H$ in (a) with $\mathcal{Q}$, distribute each $a_n$ group action over the elements of $\mathcal{Q}$, and then take the union across each resulting set we end up with
+
+$$ \begin{align} \mathcal{R} = \{ & a_1 b_1 K, a_1 b_2 K, a_1 b_3 K, \cdots, a_1 b_m K,  \\ 
+                                  & a_2 b_1 K, a_2 b_2 K, a_2 b_3 K, \cdots, a_2 b_m K,  \\
+                                  & \cdots, \\
+                                  & a_3 b_1 K, a_3 b_2 K, a_3 b_3 K, \cdots, a_3 b_m K,  \\
+                                  & a_n b_1 K, a_n b_2 K, a_n b_3 K, \cdots, a_n b_m K\}, \end{align} $$
+
+which is $G$ partitioned into the left cosets of $K$. Because we constructed each element in $\mathcal{R}$ by partitioning the elements of a partition of $G$ into cosets of $K$ (then taking their union), we know they are disjoint and cover all of $G$. There are $nm = (G:H)(H:K) = (G:K)$ elements in $\mathcal{R}$, and since $n$ and $m$ are finite, so is $(G:K)$.
