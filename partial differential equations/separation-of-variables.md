@@ -166,3 +166,15 @@ $$ u(x,t) = \sum_{n=1}^{\infty} \left [ a_n \cos{\frac{n \pi \alpha}{L}t} + b_n 
 To find $a_n$ and $b_n$, we have
 
 $$ f(x) = \sum_{n=1}^{\infty} a_n \sin{\frac{n \pi x}{L}}, \quad g(x) = \sum_{n=1}^{\infty} \frac{n \pi \alpha}{L} b_n \sin{\frac{n \pi x}{L}}. $$
+
+### Example
+
+Solve the vibrating string problem with $\alpha = 5$, $L = \pi$, initial functions $f(x) = 2\sin{4x}+7\sin{5x}$ and $g(x) = 11\sin{6x} - 14\sin{13x}$.
+
+Our $a_n$'s are $a_4 = 2,$ $a_5 = 7$, and to find the $b_n$'s:
+
+$$ 11 = 5 \cdot 6 b_6, ~ b_6 = \frac{11}{30}; \quad -14 = 5 \cdot 13 b_13, ~ b_{13} = \frac{-14}{65}. $$
+
+Then
+
+$$ u(x,t) = 2\cos{20t}\sin{4x} + 7\cos{25t}\sin{5x} + \frac{11}{30}\sin{30t}\sin{6x} - \frac{14}{15}\sin{65t}\sin{13x}. $$
