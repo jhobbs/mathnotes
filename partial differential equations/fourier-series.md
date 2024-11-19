@@ -72,3 +72,36 @@ The following table (from "Differential Equations and Boundary Value Problems", 
 
 ![Summary of important integrals](fsints.png)
 
+# Fourier Series
+
+**Definition**: Let $f$ be a piecewise continuous function on the interval $[-L, L]$. The **Fourier Series** of $f$ is the trigonometric series
+
+$$ f(x) \sim \frac{a_0}{2} + \sum_{n=1}^{\infty} \left \{ a_n \cos{\frac{n \pi x}{L}} + b_n \sin{\frac{n \pi x}{L}} \right \}, \tag{8} $$ 
+
+where the $a_n$'s and $b_n$'s are given by the formulas:
+
+$$ a_n = \frac{1}{L} \int_{-L}^{L} f(x) \cos{\frac{n \pi x}{L}} dx, \quad n = 0, 1, 2, \dots, \tag{9} $$
+
+$$ b_n = \frac{1}{L} \int_{-L}^{L} f(x) \sin{\frac{n \pi x}{L}} dx, \quad n = 0, 1, 2, \dots, \tag{10} $$
+
+Formulas (9) and (10) are called the **Euler-Fourier formulas**. The $\sim$ symbols in (8) means that the series is associated with $f(x)$ but may not converge to $f(x)$.
+
+## Example 1
+
+Find the Fourier series for $f(x) = \|3x\|$, $-\pi < x < \pi$.
+
+Here, $L$ = $pi$. We get lucky here because $\|3x\|$ is even, so all $b_n$ terms are 0 (if it were odd, all $a_n$ terms would be 0). First, we'll find $a_0$ using (8). Since $f(x)$ is even, we simplify and integrate over just the positive half and double the result:
+
+$$ a_0 = \frac{1}{\pi} = \int_{-\pi}^{\pi} |3x| dx = \frac{6}{\pi} \int_{0}^{\pi} x dx = 3 \pi. $$
+
+Now, we find $a_n$ using (8), again taking advantage of our integrand being even, and then using integration by parts:
+
+$$ a_n = \frac{1}{\pi} \int_{-\pi}^{\pi} |3x|\cos{(nx)}dx = \frac{6}{\pi} \int_{0}^{\pi} x \cos{nx} dx = \frac{6}{\pi n^2}((-1)^n - 1). $$
+
+Now, using (9) we can write our Fourier series:
+
+$$ |3x| \sim \frac{3\pi}{2} + \sum_{n=1}^{\infty} \left ( \frac{6}{\pi n^2} \left ( (-1)^n - 1 \right ) \cos{(nx)}  \right ) $$
+
+The first few terms are:
+
+$$ |3x| \sim \frac{3 \pi}{2} - \frac{12}{\pi}\cos{x} - \frac{12}{9 \pi}\cos{3x} - \frac{12}{25\pi}\cos{5x} - \cdots $$  
