@@ -104,4 +104,26 @@ $$ |3x| \sim \frac{3\pi}{2} + \sum_{n=1}^{\infty} \left ( \frac{6}{\pi n^2} \lef
 
 The first few terms are:
 
-$$ |3x| \sim \frac{3 \pi}{2} - \frac{12}{\pi}\cos{x} - \frac{12}{9 \pi}\cos{3x} - \frac{12}{25\pi}\cos{5x} - \cdots $$  
+$$ |3x| \sim \frac{3 \pi}{2} - \frac{12}{\pi}\cos{x} - \frac{12}{9 \pi}\cos{3x} - \frac{12}{25\pi}\cos{5x} - \cdots $$
+
+## Extensions
+
+If we have a function $f(x)$ that is defined on $0 < x < L$, and we recall that an odd function defined on $[-L, L]$ has only sine terms, we might wish to construct an artificial extension of $f(x)$ onto $(-L, L)$ in such a way that the extended function is odd, so we could construct a Fourier series for the function that consists only of sine terms. We can accomplish this by defining the function
+
+$$ f_o(x) \mathrel{\vcenter{:}}= \begin{cases} 
+
+f(x), & 0 < x < L, \\
+
+-f(-x), & -L < x < 0, \end{cases} $$
+
+and extending $f_o(x)$ to all $x$ using $2L$-periodicity (well, all $x$ other than integer multiples of $L$). Since $f_o(x)$ is odd, its Fourier series will contain only sine terms, and since $f_o(x) = f(x)$ on $(0, L),$ $f_o(x)$ is an extension of $f(x)$. Specifically, it's called the **odd 2L-periodic extension** of $f(x).$ The resulting Fourier series expansion is called a half-range expansion for $f(x),$ since it represents the function $f(x)$ on $(0, L,)$ which is half the interval $(-L, L)$ where it represents $f_o(x).$
+
+Similarly, we can define the **even 2L-periodic extension** of $f(x)$ as
+
+$$ f_e(x) \mathrel{\vcenter{:}}= \begin{cases} 
+
+f(x), & 0 < x < L, \\
+
+f(-x), & -L < x < 0. \end{cases} $$
+
+Its fourier series would contain only cosines.
