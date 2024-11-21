@@ -126,4 +126,26 @@ f(x), & 0 < x < L, \\
 
 f(-x), & -L < x < 0. \end{cases} $$
 
-Its fourier series would contain only cosines.
+Its Fourier series would contain only cosines.
+
+## Fourier Cosine and Sine Series
+
+Using the notions of expansions above, we have the following definitions.
+
+Let $f(x)$ be a piecewise continuous function on the interval $[0, L].$ The **Fourer cosine series** of $f(x)$ on $[0, L]$ is
+
+$$ \frac{a_0}{2} + \sum_{n=1}^{\infty} a_n \cos{\frac{n \pi x}{L}}, \tag{4}  $$
+
+where
+
+$$ a_n = \frac{2}{L} \int_0^{L} f(x) \cos{\frac{n \pi x}{L}} dx, \quad n = 0, 1, \dots . $$
+
+The **Fourer sine series** of $f(x)$ on $[0, L]$ is
+
+$$ \sum_{n=1}^{\infty} b_n \sin{\frac{n \pi x}{L}}, \tag{6} $$
+
+where
+
+$$ b_n = \frac{2}{L} \int_0^{L} f(x) \sin{\frac{n \pi x}{L}} dx, \quad n = 1,2, \dots . $$
+
+The series in (4) is the Fourier series for $f_e(x)$, and that in (6) is the series for $f_o(x)$. These are called **half-range expansions** for $f(x)$.
