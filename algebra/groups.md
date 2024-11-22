@@ -51,6 +51,8 @@ A subgroup $H$ of a group $G$ is a subset of $G$ group together with the same op
 
 For example, the even integers under addition, $(2\mathbb{Z}, +)$, are a subgroup of the integers under addition.
 
+A subgroup $H$ of a group $G$ is normal if its left and right cosets coincide, that is, if $gH = Hg$, i.e. $gHg^{-1} = H$, for all $g \in G$. 
+
 ## Cyclic Groups
 
 A **cyclic group** is a group where there exists some $g \in G$ such that every element in $G$ can be generated from the group operation applied to $g$.
@@ -206,3 +208,25 @@ $$ \begin{align} \mathcal{R} = \{ & a_1 b_1 K, a_1 b_2 K, a_1 b_3 K, \cdots, a_1
                                   & a_n b_1 K, a_n b_2 K, a_n b_3 K, \cdots, a_n b_m K\}, \end{align} $$
 
 which is $G$ partitioned into the left cosets of $K$. Because we constructed each element in $\mathcal{R}$ by partitioning the elements of a partition of $G$ into cosets of $K$ (then taking their union), we know they are disjoint and cover all of $G$. There are $nm = (G:H)(H:K) = (G:K)$ elements in $\mathcal{R}$, and since $n$ and $m$ are finite, so is $(G:K)$.
+
+
+## Homomorphisms
+
+A **Homomorphism** is a map $\phi : G \to G'$ between groups (not necessarily a bijection), $\langle G, * \rangle$ and $\langle G', *' \rangle,$ that satisfies the homomorphism property:
+
+$$ \phi(a * b) = \phi(a) *' \phi(b), ~ \forall a, b \in G. $$
+
+Homomorphisms have some nice properties. Suppose that $\phi : G \to G'$ is a group homomorphism. Then the following properties hold.
+
+
+1. If $e$ is the identity of $G$, then $\phi(e)$ is the identity $e'$ in $G'$.
+
+2. If $a \in G$, then $\phi(a^{-1}) = \phi(a)^{-1}$.
+
+3. If $H$ is a subgroup of $G$, then the image of $H$ in $G'$ is a subgroup of $G'$.
+
+4. If $K'$ is a subgroup of $G'$, then the inverse image, $\phi^{-1}[K'] = \\{g \in G \| \phi(g) \in K'\\}$ is a subgroup of $G$.
+
+The **kernel** of a homomorphism $\phi$ is the set of elements that $\phi$ sends to $e'$, and it is denoted by $\ker{(\phi)}$. It is a normal subgroup of $G$.
+
+One useful fact you may recall from linear algebra that also applies with group homomorphisms is that $\phi$ is injective iff the kernel of $\phi$ is $\\{e\\}$.
