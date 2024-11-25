@@ -237,3 +237,29 @@ $$ 11 = 5 \cdot 6 b_6, ~ b_6 = \frac{11}{30}; \quad -14 = 5 \cdot 13 b_13, ~ b_{
 Then
 
 $$ u(x,t) = 2\cos{20t}\sin{4x} + 7\cos{25t}\sin{5x} + \frac{11}{30}\sin{30t}\sin{6x} - \frac{14}{15}\sin{65t}\sin{13x}. $$
+
+## Laplace's Equation
+
+Laplace's equation:
+
+$$ \Delta u = \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y ^2} = 0 $$
+
+Has a lot of applications. You might recall from complex analysis that the real and imaginary parts of an analytic (holomorphic) function must satisfy Laplace's equation.
+
+## Dirichlet and Neumann Boundary Conditions
+
+There are two basic types of boundary conditions that are usually associated with Laplace's equation. The first is **Dirichlet boundary conditions,** where the solution $u(x,y)$ to Laplace's equation in a domain $D$ is required to satisfy:
+
+$$ u(x,y) = f(x,y), \quad \text{on} ~ D, $$
+
+with $f(x,y)$ a specified function defined on the boundary $\partial D$ of $D$. The other type of boundary conditions are **Neumann boundary coundtiions,** where the directional derivative $\partial u/\partial n$ along the outward normal to the boundary is required to satisfy
+
+$$ \frac{\partial u}{\partial n}(x,y) = g(x,y), \quad \text{on} ~ D, $$
+
+with $g(x,y)$ a specified function defined on the boundary $\partial D$ of $D.$ We say that a boundary condition is **mixed** if the solution is required to satisfy $u(x,y) = f(x,y)$ on part of the boundary and $(\partial u / \partial n)(x,y) = g(x,y)$ on the remaining portion of the boundary.
+
+When solving problems like this, we sometime need to pick which type of Fourier series we want to use - sine or cosine.
+
+A Fourier cosine series is typically used for functions that have Neumann (derivative) boundary conditions (especially if the initial value of the derivative on each end is 0) or are even across the domain.
+
+A Fourier sine series is typically used for functions that have Dirichlet boundary conditions (especially if the initial value of the function on each end is 0) or are odd across the domain.
