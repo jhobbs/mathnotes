@@ -146,7 +146,7 @@ $$ u(x,t) = \sum_{n=1}^{\infty} c_n e^{- \beta (n \pi/L)^2 t}\sin{\left ( \frac{
 
 as long as this expansion and its first two derivatives converge.
 
-#### Other initial conditions
+#### Other homogenous boundary conditions
 
 ##### Ends zero, but with arbitrary f(x)
 
@@ -170,6 +170,39 @@ $$ \frac{a_0}{2} + \sum_{n=1}^{\infty} a_n e^{-\beta\frac{n\pi}{L}^2t} \cos{\fra
 where
 
 $$ a_n = \frac{2}{L} \int_0^{L} f(x) \cos{\frac{n \pi x}{L}} dx, \quad n = 0, 1, \dots . $$
+
+#### Nonhomogenous boundary conditions
+
+##### Ends kept at constant, non-zero temperature
+
+When the ends of the wire are kept a constant, non-zero temperatures:
+
+$$ u(0, t) = U_1, \quad U(L,t) = U_2, \quad t > 0, $$
+
+the boundary conditions are called nonhomogenous.
+
+Here, we'll end up with a solution that's a combintation of a steady-state solution $v(x)$ that satisfies the nonhomgenous boundary conditions, plus a transient solution $w(x,t)$, and
+
+$$ u(x,t) = v(x) + w(x,t), $$
+
+where $w(x,t)$ and its partial derivatives tend to zero as $t \to \inf$. The function $w(x,t)$ will then staisfy homogenous boundary conditions.
+
+For example, 
+
+$$ \frac{\partial u}{\partial t} = \beta \frac{\partial^2 u}{\partial x^2}, \quad 0 < x < L, \quad t > 0, \tag{11b} $$
+
+$$ u(0, t) = U_1, ~ u(L, t) = U_2, \quad t>0, \tag{12b} $$
+
+$$ u(x,0) = f(x), \quad 0 < x < L. \tag{13b} $$
+ 
+
+Here,
+
+$$ v(x) = U_1 + \frac{(U_2 - U_1)x}{L}, \quad w(x,t) = \sum_{n=1}^{\infty} c_n e^{-\beta(n\pi/L)^2t}\sin{\frac{n \pi x}{L}}, $$
+
+with
+
+$$ c_n = \frac{2}{L}\int_{0}^{L} \left [ f(x) -U_1 - \frac{(U_2 - U_1)x}{L} \right ] \sin{\frac{n \pi x}{L}}. $$ 
 
 
 ## Vibrating String Problem
