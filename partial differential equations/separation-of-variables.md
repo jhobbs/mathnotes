@@ -142,9 +142,35 @@ $$ f(x) = \sum_{n=1}^{\infty} c_n \sin{\left ( \frac{n \pi x}{L} \right )}, \qua
 
 and the complete solution to the generic problem given by (1)-(3) is
 
-$$ u(x,t) = \sum_{n=1}^{\infty} c_n e^{- \beta (n \pi/L)^2 t}\sin{\left ( \frac{n \pi x}{L}  \right )}, $$
+$$ u(x,t) = \sum_{n=1}^{\infty} c_n e^{- \beta (n \pi/L)^2 t}\sin{\left ( \frac{n \pi x}{L}  \right )}, \tag{2a} $$
 
 as long as this expansion and its first two derivatives converge.
+
+#### Other initial conditions
+
+##### Ends zero, but with arbitrary f(x)
+
+If our initial condition isn't just a simple, finite set of $c_n\sin(nx)$ functions, finding our $c_n$'s is just a matter of finding the coefficients for the fourier sine series
+
+$$ c_n = \frac{2}{L} \int_0^{L} f(x) \sin{\frac{n \pi x}{L}} dx, \quad n = 1,2, \dots , $$
+
+and substituting them into (2a) above. We use the sine series because the initial conditions having the ends set to 0 lines up with the behavior of sine.
+
+
+##### Ends perfectly insulated, with arbitrary f(x)
+
+If the ends of the wire are perfectly insulated, then no heat flows through them and thus the derivative of them, at each end, with respect to time, is 0:
+
+$$ \frac{\partial u}{\partial x}(0,t) = \frac{\partial u }{\partial x}(L, t) = 0, \quad t > 0. $$
+
+Now, we use the fourier cosine series because the derivative of cosine at $x=0$ is 0, which matches our initial conditions. So, our solution is
+
+$$ \frac{a_0}{2} + \sum_{n=1}^{\infty} a_n e^{-\beta\frac{n\pi}{L}^2t} \cos{\frac{n \pi x}{L}}    $$
+
+where
+
+$$ a_n = \frac{2}{L} \int_0^{L} f(x) \cos{\frac{n \pi x}{L}} dx, \quad n = 0, 1, \dots . $$
+
 
 ## Vibrating String Problem
 
