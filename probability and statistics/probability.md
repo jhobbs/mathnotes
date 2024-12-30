@@ -22,3 +22,5 @@ From this, we can give the formula for conditional probability. The probability 
 $$ P(A|B) = \frac{P(A ~\text{and} ~ B)}{P(B)}. $$
 
 That is to say, the probability of $A$ occurring given $B$ has occurred is the portion of times $B$ occurs that $A$ also occurs.
+
+If $P(A) = P(A\|B)$, then $A$ and $B$ are independent events, and $P(A) \cdot P(B) = P(A ~ \text{and} ~ B).$
