@@ -67,3 +67,11 @@ $$ 0.6x + 3 = 0.5(x + 20), $$
 because the left hand side represents the number of matches won in the first and second half of the season, and the right hand side the number of matches won overall.
 
 Solving for $x$, we get $x = 70.$ Then, the number of matches played for the entire year is $70 + 20 = 90$.
+
+### Which Quantity is Odd?
+
+if $x$ and $y$ are integers and $x = 50y + 69$, which of the following must be odd, what is a non-trivial linear combination of $x$ and $y$ that is odd?
+
+We can show that $x$ must be odd by considering a couple of cases. If $y$ is odd, $50y + 69 = 50(2n + 1) + 69 = 100n + 50 + 69 = 100n + 119$, which is odd. If $y$ is even, $50y = 50(2n) + 69 = 100n + 69$, which is also odd. Therefore, $x$ must be odd.
+
+We don't know if $y$ is odd or even. However, consider $x + 2y$. If $y$ is even, then $x + 2y$ = $2m + 1 + 2(2n) = 2(m + 2n) + 1$, which is odd. If $y$ is odd, then $x + 2y = 2m+1 2(2n+1) = 2(m+2n+1) + 1$, which is also odd. Therefore, $x + 2y$ is a non-trivial linear combination of $x$ and $y$ that is odd.
