@@ -52,4 +52,18 @@ So, we end up with
 
 $$ \sum_{n=1}^{100}{\frac{1}{n} - \frac{1}{n+1}} = 1 - \frac{1}{101} = \frac{100}{101}. $$
 
+## Algebra
 
+### Number of Matches Won
+
+During the first half of the year, a tennis player won 60 percent of the matches she played in. During the second half, the player won 3 out of the 20 matches she played in. If the tennis player won 50 percent of the matches she played in for the year, how many matches did she play in?
+
+Since we know that there were 20 matches played in the second half, our unknown is the number of matches played in the first half. Let's call that $x$.
+
+Then
+
+$$ 0.6x + 3 = 0.5(x + 20), $$
+
+because the left hand side represents the number of matches won in the first and second half of the season, and the right hand side the number of matches won overall.
+
+Solving for $x$, we get $x = 70.$ Then, the number of matches played for the entire year is $70 + 20 = 90$.
