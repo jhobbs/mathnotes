@@ -27,3 +27,29 @@ We can exploit the symmetry of an octagon to get our answer from here. The image
 There are 8 vertices, and each diagonal connects to two diagonals that are parallel to at least one side, so we have $\frac{8 \cdot 2}{2} = 8$ diagonals that are parallel to at least one side of the octagon.
 
 *Note:* I'm not sure how to generalize this to $n$-gons. In particular, I'm not sure how to find the number of diagonals parallel to at least one side.
+
+## Series
+
+Find the sum
+
+$$ \sum_{n=1}^{100}{\frac{1}{n} - \frac{1}{n+1}}.$$
+
+We can split the summation into two:
+
+$$ \sum_{n=1}^{100}{\frac{1}{n} - \frac{1}{n+1}} = \sum_{n=1}^{100}{\frac{1}{n}} -  \sum_{n=1}^{100}{\frac{1}{n+1}}. $$
+
+Now, it's helpful to write out some terms:
+
+$$ \begin{align} \sum_{n=1}^{100}{\frac{1}{n}} & = \frac{1}{1} + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{99} + \frac{1}{100} \\  \sum_{n=1}^{100}{\frac{1}{n+1}} & = \frac{1}{2} + \frac{1}{3} + \frac{1}{4} + \cdots + \frac{1}{100} + \frac{1}{101} \end{align}. $$
+
+From this, it's obvious that subtracting the second summation from the first cancels out all terms except the $\frac{1}{1}$ unique to the first summation and the $\frac{1}{101}$ unique to the second summation.
+
+$$ \require{cancel} $$ 
+
+$$ \begin{align} \sum_{n=1}^{100}{\frac{1}{n}} & = \frac{1}{1} + \cancel{\frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{99} + \frac{1}{100}} \\  \sum_{n=1}^{100}{\frac{1}{n+1}} & = \cancel{\frac{1}{2} + \frac{1}{3} + \frac{1}{4} + \cdots + \frac{1}{100}} + \frac{1}{101} \end{align}. $$
+
+So, we end up with
+
+$$ \sum_{n=1}^{100}{\frac{1}{n} - \frac{1}{n+1}} = 1 - \frac{1}{101} = \frac{100}{101}. $$
+
+
