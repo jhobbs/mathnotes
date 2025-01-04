@@ -90,4 +90,4 @@ Assume $q = r$. Then we have $3p < 2q < 4q$, which is true for $p = 1, q = 2$, s
 
 Next, $q > r$ is true when $p = 1, q = 3, r = 2$, and we have $3 < 6 < 8$, so $q > r$ can be true.
 
-Finally, $p > r$ is true when $p = 7, q = 11, r = 6$, and we have $21 < 22 < 24$, so $p > r$ can be true. However, it's not clear to me how to quickly find this example or how to quickly show that this can be the case.
+Finally, $p > r$ is true when $p = 7, q = 11, r = 6$, and we have $21 < 22 < 24$, so $p > r$ can be true. We can head this way by considering that $3x < 4z \iff x < \frac{4}{3}z$, and $3x < 2y \iff \frac{3}{2}x < y$, and $2y < 4z \iff y < 2z$. Then we can pick a $z$ and find $x$ and $y$ that satisfy those constraints. It turns out $6$ is the smallest $z$ that this works for, but $z=10$ also works, with $x=11$ and $y=17$.
