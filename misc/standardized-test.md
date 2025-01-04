@@ -75,3 +75,19 @@ if $x$ and $y$ are integers and $x = 50y + 69$, which of the following must be o
 We can show that $x$ must be odd by considering a couple of cases. If $y$ is odd, $50y + 69 = 50(2n + 1) + 69 = 100n + 50 + 69 = 100n + 119$, which is odd. If $y$ is even, $50y = 50(2n) + 69 = 100n + 69$, which is also odd. Therefore, $x$ must be odd.
 
 We don't know if $y$ is odd or even. However, consider $x + 2y$. If $y$ is even, then $x + 2y$ = $2m + 1 + 2(2n) = 2(m + 2n) + 1$, which is odd. If $y$ is odd, then $x + 2y = 2m+1 2(2n+1) = 2(m+2n+1) + 1$, which is also odd. Therefore, $x + 2y$ is a non-trivial linear combination of $x$ and $y$ that is odd.
+
+### Chained Inequality
+
+Given $p, q, r$ are positive integers such that $3p < 2q < 4r$, which of the following could be true?
+
+$$ \begin{align} p &= q \\  q &= r \\ q &> r  \\ p &> r. \end{align} $$
+
+We can consider each case.
+
+Assume $p = q$. Then we have $3p < 2p < 4r$, which is a contradiction, since $p$ is a positive integer. Therefore, $p$ can't equal $q$.
+
+Assume $q = r$. Then we have $3p < 2q < 4q$, which is true for $p = 1, q = 2$, so $q = r$ can be true.
+
+Next, $q > r$ is true when $p = 1, q = 3, r = 2$, and we have $3 < 6 < 8$, so $q > r$ can be true.
+
+Finally, $p > r$ is true when $p = 7, q = 11, r = 6$, and we have $21 < 22 < 24$, so $p > r$ can be true. However, it's not clear to me how to quickly find this example or how to quickly show that this can be the case.
