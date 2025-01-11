@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Limits
+title: Limits of a Function
 ---
 
-# Limits
+# Limits of a Function
 
 ## Delta Epsilon Definition
 

@@ -5,7 +5,7 @@ title: Limits and Continuity of Complex Functions
 
 # Limits of Complex Functions
 
-See first the [Limits notes for two dimensional functions](../calculus/limits.html).
+See first the [Limits notes for two dimensional functions](../calculus/limits-of-a-function.html).
 
 ## Delta Epsilon Definition
 
