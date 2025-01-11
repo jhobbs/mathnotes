@@ -34,3 +34,12 @@ $$ \{2, 2.2, 2.23, 2.236, \dots \}, $$
 
 must have a supremum due to the Completeness axiom. That supremum is $\sqrt{5}$, but $\sqrt{5}$ is not rational, therefore, the reals contain non-rational numbers.
 
+The **absolute value** of a real number is defined as follows:
+
+$$ |x| = \begin{cases} x & \text{if } x \geq 0 \\ -x & \text{if } x < 0 \end{cases}. $$
+
+One fact that follow from this definition is that for $a, b \in \mathbb{R}$, if $\|a\| < b$, then $-b < a < b$. *Proof*: We have two cases to consider:
+
+* If $a >= 0$, then $\|a\| = a$, so $a < b$. Since $a$ is positive, $b$ must also be positive, and therefore $-b$ must be negative, and so $-b < a < b$.
+
+* If $a < 0$, then $\|a\| = -a$, so $-a < b$. Since $a$ is negative, $-a$ must be positive, so $b$ must also be positive, and therefore $a < b$. Now, $-a < b \iff a > -b \iff -b < a$, and therefore $-b < a < b.$ $\square$
