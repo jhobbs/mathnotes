@@ -19,6 +19,8 @@ $$ \frac{3}{n+1} < \epsilon \iff 3 < \epsilon (n+1) \iff 3 < \epsilon n + \epsil
 
 Therefore, if we pick a natural number $N \geq \frac{3 - \epsilon}{\epsilon}$, then $\|a_n - 3\| < \epsilon$ whenever $n \geq N$, and $\lim_{n \to \infty} \frac{3n}{n+1} = 3.$
 
+We can simplify this proof a bit by recognizing that because $\frac{3}{n+1} < \frac{3}{n}$, if $\frac{3}{n} < \epsilon$, then $\frac{3}{n+1}$ is also less than $\epsilon$. $\frac{3}{n} < \epsilon$ when $n < \frac{3}{\epsilon},$ so we can choose $N$ as a natural number greater than $\frac{3}{\epsilon}.$
+
 ## Uniqueness of the Limit of a Sequence
 
 Note that the limit of a sequence is unique, that is, if $\lim_{n \to \infty} = L$ and $\lim_{n \to \infty} = M,$ then $L = M$. *Proof:*. Suppose $L > M$. Then $\frac{L - M}{2} > 0,$ and for some $N_1, N_2 \in \mathbb{N}$ we have
