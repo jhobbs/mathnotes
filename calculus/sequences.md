@@ -45,3 +45,19 @@ $$ - \frac{L - M}{2} + L < a_n, \text{ and } a_n < \frac{L - M}{2} + M. $$
 Hence we have that $\frac{L+M}{2} < a_n < \frac{L+M}{2}$, but this is impossible, so our supposition that $L > M$ must be false.
 
 We can make a similar argument assuming that $M > L$, and this leads to the conclusion that $L = M$, and therefore $L$ is the unique limit of the sequence.
+
+## Limit Laws for Sequences
+
+Constant Sequence: If $a_n = L$ for all $n \in N$, then $\lim_{n \to \infty} a_n = L.$
+
+Limit of a Sum is the Sum of the Limits: If $a_n$ and $b_n$ are convergent sequences, then $\lim_{n \to \infty}{(a_n + b_n)} = \lim_{n \to \infty}{a_n} + \lim_{n \to \infty}{b_n}$.
+
+Limit of a Difference is the Difference of the Limits: If $a_n$ and $b_n$ are convergent sequences, then $\lim_{n \to \infty}{(a_n - b_n)} = \lim_{n \to \infty}{a_n} - \lim_{n \to \infty}{b_n}$.
+
+Factoring a Constant Through the Limit: If $a_n$ is a convergent sequence and $c$ is a real number, then $\lim_{n \to \infty} ca_n = c \lim_{n \to \infty} a_n.$
+
+Limit of a Product is the Product of the Limits: If $a_n$ and $b_n$ are convergent sequences, then $\lim_{n \to \infty}{(a_n \cdot b_n)} = \lim_{n \to \infty}{a_n} \cdot \lim_{n \to \infty}{b_n}$.
+
+Limit of a Quotient is the Quotient of the Limits: If $a_n$ and $b_n$ are convergent sequences, and $\lim_{n \to \infty}{(b_n)} \neq 0$, then $\lim_{n \to \infty}{(\frac{a_n}{b_n})} = \frac{\lim_{n \to \infty}{a_n}}{\lim_{n \to \infty}{b_n}}$.
+
+Squeeze Theorem: If $a_n$ and $c_n$ are convergent sequences with the same liimt $L$, and $b_n$ is a sequence for which $a_n \leq b_n \leq c_n$ for all $n$, then $\lim_{n \to \infty}{b_n} = L$.
