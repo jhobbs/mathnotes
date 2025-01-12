@@ -43,3 +43,7 @@ One fact that follow from this definition is that for $a, b \in \mathbb{R}$, if 
 * If $a >= 0$, then $\|a\| = a$, so $a < b$. Since $a$ is positive, $b$ must also be positive, and therefore $-b$ must be negative, and so $-b < a < b$.
 
 * If $a < 0$, then $\|a\| = -a$, so $-a < b$. Since $a$ is negative, $-a$ must be positive, so $b$ must also be positive, and therefore $a < b$. Now, $-a < b \iff a > -b \iff -b < a$, and therefore $-b < a < b.$ $\square$
+
+Another fact is that the absolute value function is a norm, and thus satisfies the triangle inequality. For real $a, b$:
+
+$$ |a + b| \leq |a| + |b| $$
