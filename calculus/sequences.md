@@ -61,3 +61,15 @@ Limit of a Product is the Product of the Limits: If $a_n$ and $b_n$ are converge
 Limit of a Quotient is the Quotient of the Limits: If $a_n$ and $b_n$ are convergent sequences, and $\lim_{n \to \infty}{(b_n)} \neq 0$, then $\lim_{n \to \infty}{(\frac{a_n}{b_n})} = \frac{\lim_{n \to \infty}{a_n}}{\lim_{n \to \infty}{b_n}}$.
 
 Squeeze Theorem: If $a_n$ and $c_n$ are convergent sequences with the same liimt $L$, and $b_n$ is a sequence for which $a_n \leq b_n \leq c_n$ for all $n$, then $\lim_{n \to \infty}{b_n} = L$.
+
+## Bounded Sequences
+A sequence is said to be a **bounded sequence** if there exists a real number $M$ such that $\|a_n\| \leq M$ for all natural numbers $n$. In other words, $a_n$ is never further from $0$ than $\pm M$. If $a_n$ is less than or equal to some real number for all $n$, then $a_n$ is said to be **bounded above**, and if $a_n$ is greater than or equal to some real number for all $n$, it is said to be **bounded below.**
+
+## Divergent Sequences
+In general, any sequence that does not converge is said to **diverge** and is a **divergent sequence**.
+
+The real sequence $a_n$ is said to **diverge to infinity** if for every real number $M$, there exists a natural number $N$ such that $a_n > M$ whenever $n \geq N.$ In this case, we write $\lim_{n->\infty}{a_n} = \infty$. This means that for any given real number, not matter how large, we can find an $n$ that makes $a_n > M$.  
+
+The real sequence $a_n$ is said to **diverge to minus infinity** if for every real number $M$, there exists a natural number $N$ such that $a_n < M$ whenever $n \geq N.$ In this case, we write $\lim_{n->\infty}{a_n} = -\infty$. This means that for any given real number, not matter how small, we can find an $n$ that makes $a_n < M$. 
+
+A sequence can also diverge but not to infinity or minus infinity. For example, $a_n = (-1)^n$ does not converge, so it is divergent, but it does not diverge to $\pm \infty$.
