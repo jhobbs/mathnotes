@@ -81,3 +81,11 @@ The real sequence $a_n$ is said to be **increasing** if $a_n \leq a_{n+1}$ for a
 A real sequence is $a_n$ is said to be **monotone** if it is either increasing or decreasining.
 
 The **monotone convergence theorem** says that if a sequence is monotone and bounded, then it converges. *Proof*: Suppose that the sequence $a_n$ is bounded and increasing. Then, by the Completeness axiom, the set $\\{a_n \| n \in \mathbb{N} \\}$ has a least upper bound; let's call it $L.$ Then, for any positive $\epsilon$, $L - \epsilon$ can't be an upper bound of the set, since $L - \epsilon < L$. Therefore, for some $N \in \mathbb{N}$, $L - \epsilon < a_N$, and since $a_n$ increases monotonically, for all $n \geq N$, we have $L - \epsilon < a_n < L + \epsilon$, which implies $\|a_n - L\| < \epsilon,$ that is, that $a_n$ converges to $L$. $\square$
+
+## Subsequences
+
+The sequence $a_{f(n)}$ is called a **subsequence** of the sequence $a_n$ if $f : \mathbb{N} \to \mathbb{N}$ is a strictly increasing function. Another way to put this is that if $a_n$ is a sequence, if we construct $a'_n$ by removing $0$ or more elements from $a_n$ and leaving the remaining elements in the same order, then $a'_n$ is a subsequence of $a_n.$
+
+The **Limit of a Subsequence Theorem** says that if $a_n$ is a convergent sequence with limit $L$, then any subsequence $a_{f(n)}$ of $a_n$ will also converge to $L.$ *Proof*: Suppose $a_n$ converges to $L.$ Let $\epsilon > 0.$ Then for some $N \in \mathbb{N}$, for $n \geq N,$ $\|a_n - L\| < \epsilon$. Since $f(n)$ is strictly increasing, $f(n) \geq n$ for all $n,$ so if $n \geq N,$ then $f(n) \geq n \geq N,$ and $\|a_{f(n)} - L\| < \epsilon.$ $\square$
+
+This theorem also implies that a sequence is not convergent if it has a subsequence that does not converge, or if two subsequences converge to different limits, for example, $a_n = (-1)^n,$ where $a_{2n}$ converges to $1$ but $a_{2n+1}$ converges to $-1$.
