@@ -89,3 +89,55 @@ The sequence $a_{f(n)}$ is called a **subsequence** of the sequence $a_n$ if $f 
 The **Limit of a Subsequence Theorem** says that if $a_n$ is a convergent sequence with limit $L$, then any subsequence $a_{f(n)}$ of $a_n$ will also converge to $L.$ *Proof*: Suppose $a_n$ converges to $L.$ Let $\epsilon > 0.$ Then for some $N \in \mathbb{N}$, for $n \geq N,$ $\|a_n - L\| < \epsilon$. Since $f(n)$ is strictly increasing, $f(n) \geq n$ for all $n,$ so if $n \geq N,$ then $f(n) \geq n \geq N,$ and $\|a_{f(n)} - L\| < \epsilon.$ $\square$
 
 This theorem also implies that a sequence is not convergent if it has a subsequence that does not converge, or if two subsequences converge to different limits, for example, $a_n = (-1)^n,$ where $a_{2n}$ converges to $1$ but $a_{2n+1}$ converges to $-1$.
+
+We can also use this to find some limits. For example,
+
+$$ \lim_{n \to \infty} \left ( 1 + \frac{1}{n+3} \right )^n $$
+
+can be factored into
+
+$$ \lim_{n \to \infty} \left ( 1 + \frac{1}{n+3} \right )^{n+3} \cdot \left (1 + \frac{1}{n+3} \right )^{-3} $$
+
+The left factor is a subsequence of $\left ( 1 + \frac{1}{n} \right )^n$ which goes to $e,$ and the right factor goes to $1,$ so the limit of the whole expression is $e.$
+
+## Bolzano-Weirstrass Theorem
+
+The **Bolzano-Weirstrass Theorem** states that if a sequence of real numbers is bounded, then it has a convergent subsequence.
+
+## Cauchy Sequences
+
+A sequence is said to be **Cauchy** if for every $\epsilon > 0$, there exists a natural $N$ for which $\|a_m - a_n\| < \epsilon$ whenever $m, n > N.$  In other words, as we go further in the sequence, the terms get arbitrarily closer together.
+
+A sequence is Cauchy if and only if it is convergent.
+
+## Lim Sup and Lim Inf
+
+Suppose the real sequence $a_n$ is bounded. Then
+
+$$ \limsup_{n \to \infty} a_n = \lim_{n \to \infty} \sup\{a_n, a_{n+1}, \dots \} $$
+
+$$ \liminf_{n \to \infty} a_n = \lim_{n \to \infty} \inf\{a_n, a_{n+1}, \dots \} $$
+
+We can think of $\limsup_{n \to \infty}{a_n}$ as giving the smallest upper bound that the terms of $a_n$ get arbitrarily close to, but do not exceed, as $n$ increases indefinitely, and $\liminf_{n \to \infty}{a_n}$ as giving the greatest lower bound that the terms of $a_n$ get close to, but do not exceed, as $n$ increases indefinitely.
+
+If we define
+
+$$ b_n = \sup{\{a_n, a_{n+1}, \dots\}}, $$
+
+then we know $b_n$ is bounded because $a_n$ is bounded. Now, $b_1 = \sup{\\{a_1, a_2, \dots\\}}$ is the least upper bound of all the terms in $a_n$ and $b_2 = \sup{\\{a_2, a_3, \dots\\}}$ is the least upper bound of all the terms in $a_n$ except $a_1$ and $a_2$; therefore $b_2$ must be less than or equal to $b_1$ since removing terms can only lower the least upper bound. The patterns holds for all $b_n$, so $b_n$ is a decreasing sequence. Since it is decreasing and bounded, the Monotone Convergence Theorem tells us that $b_n$ converges. We can make a similar argument about
+
+$$ c_n = \inf{\{a_n, a_{n+1}, \dots\}}, $$
+
+which is bounded and increasing and also converges.
+
+If a sequence $a_n$ is convergent, then $\limsup_{n \to \infty}{a_n} = \liminf_{n \to \infty}{a_n}.$
+
+If a sequence $a_n$ is bounded, then $\liminf_{n \to \infty}{a_n} \leq \limsup_{n \to \infty}{a_n}.$
+
+If a sequence $a_n$ is bounded above, then $\limsup_{n \to \infty}{a_n} = \lim_{n \to \infty}\sup{\\{a_n, a_{n+1}, \dots\\}}.$
+
+If a sequence $a_n$ is not bounded above, then $\limsup_{n \to \infty}{a_n} = \infty.$
+
+If a sequence $a_n$ is bounded below then $\liminf_{n \to \infty}{a_n} = \lim_{n \to \infty}\inf{\\{a_n, a_{n+1}, \dots\\}}.$
+
+If a sequence $a_n$ is not bounded below, then $\liminf_{n \to \infty}{a_n} = -\infty.$
