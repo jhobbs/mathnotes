@@ -36,3 +36,7 @@ if $X$ is continuous.
 The positive square root of the variance, $\sigma,$ is called the **standard deviation** of $X.$
 
 Variance and stanard deviation tell us about how spread out the values of $X$ are around its mean.
+
+An alternative and equivalent formula for variance is
+
+$$ \sigma^2 = E[X^2] - E[X]^2. $$
