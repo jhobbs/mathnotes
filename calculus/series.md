@@ -15,6 +15,15 @@ $$ s_n = \sum_{k=1}^{n} a_n = a_1 + a_2 + \cdots + a_n. $$
 
 The series $\sum_{n=1}^{\infty}{a_n}$ is said to be convergent and to have a sum $m$ if the sequence of partial sums $s_n$ converges to $m.$ If the sequence $s_n$ diverges, then the series is said to diverge.
 
+## Absolute Convergence
+The series $\sum_{n=1}^{\infty}{a_n}$ is said to **converge absolutely** if $\sum_{n=1}^{\infty}{\|a_n\|}$ converges. The infinite series $\sum_{n=1}^{\infty}{a_n}$ is said to **converge conditionally** if it converges but $\sum_{n=1}^{\infty}{\|a_n\|}$ diverges.
+
+## Linearity of Summation of Convergent Series
+
+*Theorem*: If $c$ is a real number and the series $\sum_{n=1}^{\infty}{a_n}$ and $\sum_{n=1}^{\infty}{b_n}$ are convergent, then
+
+$$ \sum_{n=1}^{\infty}{ \left ( a_n + c \cdot b_n \right )} =  \sum_{n=1}^{\infty}{a_n} + c \sum_{n=1}^{\infty}{b_n}. $$
+
 ## Convergence Tests
 
 Before considering the sum of a series, we need to know if it converges or not. There are many tests for convergence; we will start with a test for divergence.
@@ -52,11 +61,24 @@ Note that when $\|r\| \geq 1,$ the series diverges.
 ### $2^n$ Test
 *Theorem:* Suppose $a_n \geq a_{n+1} \geq {0}$ for all $n \in \mathbb{N}$ (i.e. $a_n$ is nonnegative and decreasing.) Then the series $\sum_{n=1}^{\infty}{a_n}$ converges iff the series $\sum_{n=1}^{\infty}{2^n a_{2n}}$ converges.
 
-### $p-Series Test
-*Theorem:* The p-series $\sum_{n=1}^{\infty}{\frac{1}{n^p}}$ converges if $p > 1$ and diverges otherwise.
+### $p$-Series Test
+*Theorem:* The $p$-series $\sum_{n=1}^{\infty}{\frac{1}{n^p}}$ converges if $p > 1$ and diverges otherwise.
 
-## Linearity of Summation of Convergent Series
+### Alternating Series Test
+*Theorem:* Suppose $a_n \geq a_{n+1}$ for all natural numbers $n$ and that $\lim_{n \to \infty}{a_n} = 0.$ Then the alternating series $\sum_{n=1}^{\infty}{(-1)^{n+1}a_n}$ converges.
 
-*Theorem*: If $c$ is a real number and the series $\sum_{n=1}^{\infty}{a_n}$ and $\sum_{n=1}^{\infty}{b_n}$ are convergent, then
+### Absolute Value Test
+*Theorem:*  If the series $\sum_{n=1}^{\infty}{a_n}$ converges absolutely then it simply converges too.
 
-$$ \sum_{n=1}^{\infty}{ \left ( a_n + c \cdot b_n \right )} =  \sum_{n=1}^{\infty}{a_n} + c \sum_{n=1}^{\infty}{b_n}. $$
+### Comparison Test
+*Theorem:* Suppose $\sum_{n=1}^{\infty}{a_n}$ and $\sum_{n=1}^{\infty}{b_n}$ are series for which $\|a_n\| \leq \|b_n\|$ for all natural $n.$ Then if $\sum_{n=1}^{\infty}{b_n}$ converges absolutely, so does $\sum_{n=1}^{\infty}{a_n}.$ If $\sum_{n=1}^{\infty}{\|a_n\|}$ diverges, so does $\sum_{n=1}^{\infty}{\|b_n\|}.$
+
+### Limit Ratio Test
+*Theorem:* For the series $\sum_{n=1}^{\infty}{a_n},$ let
+
+$$ L = \lim_{n \to \infty}{\left | \frac{a_{n+1}}{a_n} \right |}. $$ 
+
+Then, if $L < 1,$ $\sum_{n=1}^{\infty}{a_n}$ converges absolutely. If $L > 1,$ $\sum_{n=1}^{\infty}{a_n}$ diverges.
+
+### Root Test
+*Theorem:*  For the series $\sum_{n=1}^{\infty}{a_n},$ let $L = \limsup_{n \to \infty}{\|a_n\|^{1/n}}.$ Then if $L < 1,$ $\sum_{n=1}^{\infty}{a_n}$ converges absolutely. If $L > 1,$ $\sum_{n=1}^{\infty}{a_n}$ diverges.
