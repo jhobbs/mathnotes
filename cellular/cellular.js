@@ -3,7 +3,49 @@ let cols;
 let rows;
 let resolution = 10;
 let running = false; // State of the automaton update
+let populationHistory = []; // Array to store population counts
+const maxHistory = 5; // Number of iterations to consider for rate change
 
+
+
+function resetGrid() {
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      if (random(1) < 0.09) {
+        grid[i][j] = 1;
+      } else {
+        grid[i][j] = 0;
+      }
+    }
+  }
+  updatePopulationHistory();
+}
+
+function updatePopulationHistory() {
+  let currentPopulation = 0;
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      if (grid[i][j] === 1) {
+        currentPopulation++;
+      }
+    }
+  }
+  populationHistory.push(currentPopulation);
+  if (populationHistory.length > maxHistory) {
+    populationHistory.shift();
+  }
+}
+
+function calculatePopulationRateChange() {
+  if (populationHistory.length < 2) {
+    return 0;
+  }
+  let rateChange = 0;
+  for (let i = 1; i < populationHistory.length; i++) {
+    rateChange += (populationHistory[i] - populationHistory[i - 1]);
+  }
+  return rateChange / (populationHistory.length - 1);
+}
 
 function setup() {
   createCanvas(600, 400); // Increased width to accommodate side display
@@ -28,6 +70,10 @@ function setup() {
   const toggleBtn = createButton('Toggle Run');
   toggleBtn.position(410, 30);
   toggleBtn.mousePressed(toggleRunning);
+  
+  const resetBtn = createButton('Reset');
+  resetBtn.position(510, 30);
+  resetBtn.mousePressed(resetGrid);
 }
 
 function toggleRunning() {
@@ -86,6 +132,7 @@ function updateEntries(grid) {
     }
   }
   grid = next;
+  updatePopulationHistory();
   return grid; 
 }
 
@@ -119,6 +166,10 @@ function draw() {
   let totalCells = cols * rows;
   let populationPercent = (populatedCount / totalCells) * 100;
   text(`Population: ${populationPercent.toFixed(2)}%`, 410, 70);
+
+  // Display population rate change
+  let rateChange = calculatePopulationRateChange();
+  text(`Rate Change: ${rateChange.toFixed(2)}`, 410, 90);
 
 }
 
