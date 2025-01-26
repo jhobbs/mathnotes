@@ -42,3 +42,9 @@ $$ s_n = (r + r^2 + \cdots + r^n) = r(1 + r + r^2 + \cdots + r^{n-1}) = r\frac{1
 $$ \lim_{n \to \infty}{s_n} = \lim_{n \to \infty}{r \frac{1 - r^n}{1 - r}} = r \frac{1}{1 - r} = \frac{r}{1 - r}. \square $$
 
 Note that when $\|r\| \geq 1,$ the series diverges.
+
+## Linearity of Summation of Convergent Series
+
+*Theorem*: If $c$ is a real number and the series $\sum_{n=1}^{\infty}{a_n}$ and $\sum_{n=1}^{\infty}{b_n}$ are convergent, then
+
+$$ \sum_{n=1}^{\infty}{ \left ( a_n + c \cdot b_n \right )} =  \sum_{n=1}^{\infty}{a_n} + c \sum_{n=1}^{\infty}{b_n}. $$
