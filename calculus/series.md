@@ -43,6 +43,18 @@ $$ \lim_{n \to \infty}{s_n} = \lim_{n \to \infty}{r \frac{1 - r^n}{1 - r}} = r \
 
 Note that when $\|r\| \geq 1,$ the series diverges.
 
+### Bounded Series with Nonnegative Terms
+
+*Theorem:* Suppose $a_n \geq 0$ for all $n \in \mathbb{N}.$ Then the series $\sum_{n=1}^{\infty}{a_n}$ converges iff the sequence of partial sums $s_n = \sum_{k=1}^{n}{a_k}$ is bounded.
+
+*Proof:* Assume the sequence of partial sums $s_n$ is bounded. Since all terms of $a_n$ are nonnegative, $s_n$ is increasing, and by the Monotone Convergence Theorem, must converge, meaning $\sum_{n=1}^{\infty}{a_n} = \lim_{n \to \infty} s_n$ converges. On the other hand, assume $\sum_{n=1}^{\infty}{a_n}$ converges. Then $s_n$ is a convergent sequence and is therefore bounded (see [sequences](./sequences.html)).
+
+### $2^n$ Test
+*Theorem:* Suppose $a_n \geq a_{n+1} \geq {0}$ for all $n \in \mathbb{N}$ (i.e. $a_n$ is nonnegative and decreasing.) Then the series $\sum_{n=1}^{\infty}{a_n}$ converges iff the series $\sum_{n=1}^{\infty}{2^n a_{2n}}$ converges.
+
+### $p-Series Test
+*Theorem:* The p-series $\sum_{n=1}^{\infty}{\frac{1}{n^p}}$ converges if $p > 1$ and diverges otherwise.
+
 ## Linearity of Summation of Convergent Series
 
 *Theorem*: If $c$ is a real number and the series $\sum_{n=1}^{\infty}{a_n}$ and $\sum_{n=1}^{\infty}{b_n}$ are convergent, then
