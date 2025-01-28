@@ -168,22 +168,23 @@ function draw() {
   noStroke();
   textSize(16);
   textAlign(LEFT, TOP);
-  text(`Running: ${running ? "Yes" : "No"}`, 410, 50);
+  let textX = width - 200; // Adjust the x position to be near the right side
+  text(`Running: ${running ? "Yes" : "No"}`, textX, 50);
 
   // Display population percentage
   let totalCells = cols * rows;
   let populationPercent = (populatedCount / totalCells) * 100;
-  text(`Population: ${populationPercent.toFixed(2)}%`, 410, 70);
+  text(`Population: ${populationPercent.toFixed(2)}%`, textX, 70);
 
   // Display population rate change
   let rateChange = calculatePopulationRateChange();
-  text(`Rate Change: ${rateChange.toFixed(2)}`, 410, 90);
+  text(`Rate Change: ${rateChange.toFixed(2)}`, textX, 90);
 
-  text(`Initial Pop. Rate: ${initialPopulationSlider.value().toFixed(2)}`, 410, 110);
+  text(`Initial Pop. Rate: ${initialPopulationSlider.value().toFixed(2)}`, textX, 110);
 
-  text(`Frame Rate: ${frameRateSlider.value().toFixed(2)}`, 410, 130);
+  text(`Frame Rate: ${frameRateSlider.value().toFixed(2)}`, textX, 130);
   
-  text(`Generation: ${generations}`, 410, 150);
+  text(`Generation: ${generations}`, textX, 150);
   
 }
 
