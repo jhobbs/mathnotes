@@ -1,17 +1,52 @@
 let grid;
 let cols;
 let rows;
-let resolution = 10;
+let resolution = 5;
 let running = false; // State of the automaton update
 let populationHistory = []; // Array to store population counts
 const maxHistory = 5; // Number of iterations to consider for rate change
+let generations = 0;
 
+let initialPopulationSlider;
 
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  cols = floor(width / resolution);
+  rows = floor(height / resolution);
+
+  grid = make2DArray(cols, rows);
+  frameRate(1);
+
+  // Button for toggling the automaton running state
+  const toggleBtn = createButton('Toggle Run');
+  toggleBtn.position(10, 10);
+  toggleBtn.mousePressed(toggleRunning);
+  
+  const resetBtn = createButton('Reset');
+  resetBtn.position(110, 10);
+  resetBtn.mousePressed(resetGrid);
+
+  // Slider for initial population percentage
+  initialPopulationSlider = createSlider(0, 1, 0.09, 0.01);
+  initialPopulationSlider.position(10, 40);
+
+  // Slider for frame rate
+  frameRateSlider = createSlider(0, 40, 1, 1);
+  frameRateSlider.position(10, 70);
+  frameRateSlider.input(setFramerate);
+  
+  resetGrid();
+}
+
+function setFramerate() {
+  frameRate(frameRateSlider.value());
+}
 
 function resetGrid() {
+  let initialPopulation = initialPopulationSlider.value();
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      if (random(1) < 0.09) {
+      if (random(1) < initialPopulation) {
         grid[i][j] = 1;
       } else {
         grid[i][j] = 0;
@@ -19,6 +54,7 @@ function resetGrid() {
     }
   }
   updatePopulationHistory();
+  generations = 0;
 }
 
 function updatePopulationHistory() {
@@ -45,35 +81,6 @@ function calculatePopulationRateChange() {
     rateChange += (populationHistory[i] - populationHistory[i - 1]);
   }
   return rateChange / (populationHistory.length - 1);
-}
-
-function setup() {
-  createCanvas(600, 400); // Increased width to accommodate side display
-  cols = 400 / resolution; // Only part of the canvas for the grid
-  rows = height / resolution;
-
-
-  grid = make2DArray(cols, rows);
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      if (random(1) < 0.09) {
-        grid[i][j] = 1;
-      } else {
-        grid[i][j] = 0;
-      }
-    }
-  }
-  
-  frameRate(1);
-
-  // Button for toggling the automaton running state
-  const toggleBtn = createButton('Toggle Run');
-  toggleBtn.position(410, 30);
-  toggleBtn.mousePressed(toggleRunning);
-  
-  const resetBtn = createButton('Reset');
-  resetBtn.position(510, 30);
-  resetBtn.mousePressed(resetGrid);
 }
 
 function toggleRunning() {
@@ -133,6 +140,7 @@ function updateEntries(grid) {
   }
   grid = next;
   updatePopulationHistory();
+  generations++;
   return grid; 
 }
 
@@ -171,5 +179,11 @@ function draw() {
   let rateChange = calculatePopulationRateChange();
   text(`Rate Change: ${rateChange.toFixed(2)}`, 410, 90);
 
+  text(`Initial Pop. Rate: ${initialPopulationSlider.value().toFixed(2)}`, 410, 110);
+
+  text(`Frame Rate: ${frameRateSlider.value().toFixed(2)}`, 410, 130);
+  
+  text(`Generation: ${generations}`, 410, 150);
+  
 }
 
