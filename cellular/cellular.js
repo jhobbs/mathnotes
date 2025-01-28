@@ -15,7 +15,7 @@ function setup() {
   rows = floor(height / resolution);
 
   grid = make2DArray(cols, rows);
-  frameRate(1);
+  frameRate(15);
 
   // Button for toggling the automaton running state
   const toggleBtn = createButton('Toggle Run');
@@ -31,7 +31,7 @@ function setup() {
   initialPopulationSlider.position(10, 40);
 
   // Slider for frame rate
-  frameRateSlider = createSlider(0, 40, 1, 1);
+  frameRateSlider = createSlider(0, 40, 15, 1);
   frameRateSlider.position(10, 70);
   frameRateSlider.input(setFramerate);
   
@@ -47,7 +47,11 @@ function resetGrid() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       if (random(1) < initialPopulation) {
-        grid[i][j] = 1;
+        if (i < cols / 2) {
+          grid[i][j] = 1;
+        } else {
+          grid[i][j] = 2;
+        }
       } else {
         grid[i][j] = 0;
       }
@@ -61,7 +65,7 @@ function updatePopulationHistory() {
   let currentPopulation = 0;
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      if (grid[i][j] === 1) {
+      if (grid[i][j] > 0) {
         currentPopulation++;
       }
     }
@@ -111,12 +115,42 @@ function countNeighbors(grid, x, y) {
     for (let j = -1; j < 2; j++) {
       let col = (x + i + cols) % cols;
       let row = (y + j + rows) % rows;
-      sum += grid[col][row];
+      sum += grid[col][row] > 0 ? 1 : 0;
     }
   }
-  sum -= grid[x][y];
+  sum -= grid[x][y] > 0 ? 1 : 0;
   return sum;
 }
+
+function pickColorFromNeighbors(grid, x, y) {
+  let neighborCounts = { 0: 0, 1: 0, 2: 0 };
+
+  for (let i = -1; i < 2; i++) {
+    for (let j = -1; j < 2; j++) {
+      if (i === 0 && j === 0) continue; // Skip the cell itself
+      let col = (x + i + cols) % cols;
+      let row = (y + j + rows) % rows;
+      neighborCounts[grid[col][row]]++;
+    }
+  }
+
+  let maxCount = Math.max(neighborCounts[1], neighborCounts[2]);
+  let mostCommonValues = [];
+
+  if (neighborCounts[1] === maxCount) {
+    mostCommonValues.push(1);
+  }
+  if (neighborCounts[2] === maxCount) {
+    mostCommonValues.push(2);
+  }
+
+  if (mostCommonValues.length === 0) {
+    return 0; // No neighbors or all are 0
+  }
+
+  return random(mostCommonValues);
+}
+
 
 function deepCopyGrid(grid) {
     return grid.map(row => [...row]);
@@ -132,8 +166,8 @@ function updateEntries(grid) {
       let state = grid[i][j];
       let neighbors = countNeighbors(grid, i, j);
       if (state == 0 && neighbors == 3) {
-        next[i][j] = 1;
-      } else if (state == 1 && (neighbors < 2 || neighbors > 3)) {
+        next[i][j] = pickColorFromNeighbors(grid, i, j);
+      } else if (state > 0 && (neighbors < 2 || neighbors > 3)) {
         next[i][j] = 0;
       }
     }
@@ -154,9 +188,13 @@ function draw() {
     for (let j = 0; j < rows; j++) {
       let x = i * resolution;
       let y = j * resolution;
-      if (grid[i][j] == 1) {
+      if (grid[i][j] > 0) {
         populatedCount++;
-        fill(255);
+        if (grid[i][j] == 1) {
+          fill(0, 255, 0); // Change fill color to green
+        } else {
+          fill(255, 0, 0); // Change fill color to red
+        }
         stroke(0);
         rect(x, y, resolution - 1, resolution - 1);
       }
@@ -185,6 +223,4 @@ function draw() {
   text(`Frame Rate: ${frameRateSlider.value().toFixed(2)}`, textX, 130);
   
   text(`Generation: ${generations}`, textX, 150);
-  
 }
-
