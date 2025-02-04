@@ -51,3 +51,26 @@ $$ \mu = \frac{nk}{N} ~ \text{and} ~ \sigma^2 = \frac{N - n}{N - 1} \cdot n \cdo
 
 It's worth noting that when $n$ is small compared to $N$, the lack of replacement in a hypergeoemetric process doesn't cause much impact to the distribution, and in these cases, the hypergeoemetric distrbution is similar to the binomial distribution. In fact, for large values of $N$ and small values of $n$, the binomial distribution approximates the hypergeoemetric distribution.
 
+## Poisson Distbution
+
+Experiments that give numerical values of a random variable $X,$ the number of outcomes during a given time interval or in a specified region, are called **Poisson experiments.** For example, the number of phone calls per hour an office recieves or the number of field mice per acre in a pasture. Note that while binomial and hypergeometric experiments dealt with discrete sequence of events (and give probabilities for discrete outcomes), Poisson experiments deal with continuous domains (and also give probabilities for discrete outcomes).
+
+A **Poisson process** possesses the following properties
+
+1. The number of outcomes occurring in one time/space region is independent of the number of outcomes occurring in any other disjoint time/space region, i.e., the Poisson process has no memory.
+
+2. The probability that a single outcome will occurr within a small region is proportional to the size of the region and does not depend on the number of outcomes occurring outside the region, or the relative position of the region.
+
+3. In a very small region, the probability of more than one event occurring is negligible.
+
+The probability distrbution of the Poisson random variable $X,$ representing the number of outcomes occurring in a given time interval or specified region denoted by $t,$ is
+
+$$ p(x, \lambda t) = \frac{e^{-\lambda t}(\lambda t)^x}{x!}. $$
+
+Both the mean and variance of the Poisson distribution $p(x, \lambda t)$ are $\lambda t.$
+
+Given a binomial distribution, if $n$ is large and $p$ is close to 0, the Poisson distribution approximates binomial probabilities.
+
+*Theorem:* Let $X$ be a binomial random variable with probability distribution $b(x, n, p).$ When $n \to \infty,$ $p \to 0,$ and $\lim_{n \to \infty}{np} = \mu$ remains constant,
+
+$$ \lim_{n \to \infty}{b(x, n, p)} = p(x, \mu). $$
