@@ -28,3 +28,26 @@ To break this down some, there are ${n \choose x}$ ways to have $x$ successes ou
 The mean and variance of the binomial distribution $b(x, n, p)$ are
 
 $$ \mu = np, ~ \text{and} ~ \sigma^2 = npq. $$
+
+## Hypergeometric Distributions
+
+The Hypergeometric distribution is similiar to the Binomial distrbution, but is performed without replacement. So, if success is drawing an ace from a deck of cards, in a Bionomial situation the card drawn each trial would be put back into the deck; in the Hypergeometric it would not be. Thus, the trials for a Hypergeometric distribution are not independent.
+
+A **Hypergeometric experiment** has the following properties:
+
+1. A random sample of size $n$ is selected without replacement from $N$ items.
+
+2. Of the $N$ items, $k$ may be classified as successes and $N - k$ are classified as failures.
+
+The number $X$ of successes of a Hypergeometric experiment is called a **Hypergeometric random vairable,** and its probability distrbution is called the **Hypergeometric distribution.**
+
+The probability distribution of $X$ describes the probability of $x$ successes in $n$ draws, without replacement, from a finite population of size $N$ that contains exactly $k$ successful items and $N - k$ failure items is
+
+$$ h(x, N, n, k) = \frac{\binom{k}{x}\binom{N-k}{n-x}}{\binom{N}{n}}, \quad \max{(0, n - (N -k))} \leq x \leq \min{(n, k)}. $$
+
+The mean and variance of the Hypergeometric distrbution $h(x, N, n, k)$ are
+
+$$ \mu = \frac{nk}{N} ~ \text{and} ~ \sigma^2 = \frac{N - n}{N - 1} \cdot n \cdot \frac{k}{N} \left ( 1 - \frac{k}{N} \right ). $$
+
+It's worth noting that when $n$ is small compared to $N$, the lack of replacement in a hypergeoemetric process doesn't cause much impact to the distribution, and in these cases, the hypergeoemetric distrbution is similar to the binomial distribution. In fact, for large values of $N$ and small values of $n$, the binomial distribution approximates the hypergeoemetric distribution.
+
