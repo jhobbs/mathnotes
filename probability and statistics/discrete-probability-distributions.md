@@ -29,6 +29,11 @@ The mean and variance of the binomial distribution $b(x, n, p)$ are
 
 $$ \mu = np, ~ \text{and} ~ \sigma^2 = npq. $$
 
+We can use a summation over the formula above to find the probability of there being between $a$ and $b$ successes:
+
+$$ \sum_{x=a}^b{\binom{n}{x} p^x q^{n-x}}. $$
+
+
 ## Hypergeometric Distributions
 
 The Hypergeometric distribution is similiar to the Binomial distrbution, but is performed without replacement. So, if success is drawing an ace from a deck of cards, in a Bionomial situation the card drawn each trial would be put back into the deck; in the Hypergeometric it would not be. Thus, the trials for a Hypergeometric distribution are not independent.
