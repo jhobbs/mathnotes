@@ -40,3 +40,13 @@ Simply put, if a differentiable function over an open interval $(a,b)$ has the s
 $$ f'(c) = \frac{f(b) - f(a)}{b-a}.$$
 
 This means that for a function continuous on an interval, and differentiable on that interval except maybe at its endpoints, there is a point on the interval where the derivative of the function at that point equals the slope of the function between its endpoints.
+
+*L'Hospital Rule (Theorem)*: Suppose there is a $\delta > 0$ such that $f$ and $g$ are differentiable on $(c  - \delta, c + \delta)$ with $g'(x) \neq 0$ on this interval. Suppose also that
+
+$$ \lim_{x \to c} \frac{f'(x)}{g'(x)} = L. $$
+
+Then if $\lim_{x \to c}f(x) = \lim_{x \to c}g(x) = 0,$ $\lim_{x \to c}f(x) = \lim_{x \to c}g(x) = \infty,$ or $\lim_{x \to c}f(x) = \lim_{x \to c}g(x) = -\infty,$ we have that
+
+$$ \lim_{x \to c} \frac{f(x)}{g(x)} = L. $$
+
+The endpoint $c$ can also be $\pm \infty.$
