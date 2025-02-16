@@ -81,8 +81,7 @@ Note that the probability of no two reels matching on any spins starts at $0$ fo
 
 ## Conclusion
 
-Most slot machines in Las Vegas have something like $10$ symbols; the probability of not having any two reels match on $20$ spins with $3$ reels and $10$ symbols are less than one percent, roughly $0.14\%,$ while the probability of having three reels match at least once is much higher at $18.2\%$
-
+Most slot machines in Las Vegas have something like $10$ symbols; the probability of not having any two reels match on $20$ spins with $3$ reels and $10$ symbols are less than one percent, roughly $0.14\%,$ while the probability of having three reels match at least once is much higher at $18.2\%.$
 
 My dad's intuition was right, and it's not even close! After doing the calculations, I was very surprised by how unlikely my dad's experience would be on a slot machine with this simplified behavior. I know that the machines are tilted in the house's favor, but I would have expected them to behave in a way that more closely matches our intuitive sense of fairness, since it seems like that would be more likely to entice people to play more.
 
