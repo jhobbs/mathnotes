@@ -3,8 +3,6 @@ layout: page
 title: Slot Machines
 ---
 
-# Slot Machines
-
 My dad told a story at dinner once about playing slots in Las Vegas. He doesn't gamble much, but he was there and had some time to kill, so he thought, "Why not, I'll give this a spin!" He put a \\$20 bill into a machine with three reels, and at \\\$1 per spin for a total of $20$ spins, he never even had two reels match, much less three! He said surely not having two reels match at least once in 20 spins is much more unlikely than having two reels match at least once, and wanted to know the odds. Someone pointed out that the machines don't have fair reels so it's impossible for an outsider to calculate the odds, but for the sake of getting to do some math, we can make some simplifying assumptions.
 
 Since we don't know how many symbols there were on each reel, let's assume the same $n$ symbols are on each reel, that on each spin, each reel's result is independent of the others, that each spin is independent of the others, and that each of the $n$ symbols is equally likely to be chosen.
