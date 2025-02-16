@@ -79,7 +79,7 @@ The limit of the sum as the norm of the partition approaches zero is said to equ
 
 $$ \lim_{\text{norm}P \to 0} S(f, P, T) = I,$$
 
-if for every $\epsilon 0,$ there exists a $\delta > 0$ such that for any partition $P$ of $[a,b]$ with $\text{norm}P < \delta$ and for any points $T,$ is is the case that
+if for every $\epsilon < 0,$ there exists a $\delta > 0$ such that for any partition $P$ of $[a,b]$ with $\text{norm}P < \delta$ and for any points $T,$ is is the case that
 
 $$ |S(f, P, T)| <  \epsilon. $$
 
