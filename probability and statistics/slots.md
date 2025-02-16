@@ -39,6 +39,8 @@ So far we've covered the odds of having at least two matches across three reels 
 
 $$ (1 - \frac{3n - 2}{n^2})^{20}. $$
 
+When there is only a single symbol, the probability of no spin having two matching reels is $0,$ because every spin will have at least two matching reels. As more symbols are added, it become more probable that there would be no spin with at least two matching reels.
+
 Here's a plot for up to $n = 100$ symbols of the probability of not having a single instance of at least two matching reels across $20$ spins:
 
 ![No matches across 20 spins](no_matches_across_20_spins.png)
