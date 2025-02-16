@@ -27,7 +27,7 @@ and the probabilty on any given spin that at least two match is
 
 $$ \frac{3n^2 - 2n}{n^3} = \frac{3n - 2}{n^2}. $$
 
-That's a bit abstract, but note that when $n$ is $1$ or $2$, we are guaranteed to have at least two reels matching, and that the odds decrease towards $0$ as $n$ gets larger. When there are $5$ symbols to choose from, the odds of having two reels match on any given spin are $52\%$; when there are $10$, the odds are $28%$. 
+That's a bit abstract, but note that when $n$ is $1$ or $2$, we are guaranteed to have at least two reels matching, and that the odds decrease towards $0$ as $n$ gets larger. When there are $5$ symbols to choose from, the odds of having two reels match on any given spin are $52\%$; when there are $10$, the odds are $28\%$. 
 
 Here's a plot of the odds for up to $n = 100,$ where the probability of at least two reels matching on a given spin is still $2.98\%,$ which is surprisingly high!
 
