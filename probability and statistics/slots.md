@@ -34,7 +34,7 @@ So, the total number of ways we have at least two reels with matching symbols is
 
 $$ 3 \times n \times (n-1) + n = 3n^2 - 2n, $$
 
-and the probabilty on any given spin that at least two match is
+and the probability on any given spin that at least two match is
 
 $$ \frac{3n^2 - 2n}{n^3} = \frac{3n - 2}{n^2}. $$
 
@@ -85,4 +85,4 @@ Most slot machines in Las Vegas have something like $10$ symbols; the probabilit
 
 My dad's intuition was right, and it's not even close! After doing the calculations, I was very surprised by how unlikely my dad's experience would be on a slot machine with this simplified behavior. I know that the machines are tilted in the house's favor, but I would have expected them to behave in a way that more closely matches our intuitive sense of fairness, since it seems like that would be more likely to entice people to continue to play.
 
-However, it's worth noting that even if our simplifying assumptions are accurate, this analysis alone doesn't say anything about the fairness of the machines since it doesn't account for how much is paid out on a match, and our expected return on investment is the probability of a match times the payout on a match. Even though the machines apparently artifically reduce the odds of a match, they could also inflate payouts to make up for it, bringing expected return on investment for a gambler over the long run to whatever value they want. In this case, we have no idea what the payout was, because my dad never won!
+However, it's worth noting that even if our simplifying assumptions are accurate, this analysis alone doesn't say anything about the fairness of the machines since it doesn't account for how much is paid out on a match, and our expected return on investment is the probability of a match times the payout on a match. Even though the machines apparently artificially reduce the odds of a match, they could also inflate payouts to make up for it, bringing expected return on investment for a gambler over the long run to whatever value they want. In this case, we have no idea what the payout was, because my dad never won!
