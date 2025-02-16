@@ -10,6 +10,7 @@ Since we don't know how many symbols there were on each reel, let's assume the s
 Then, our question is: which is the more likely outcome across $20$ spins?
 
 a) No two reels match on any spins.
+
 b) All three reels match on at least one spin.
 
 ## No Two Reels Match on Any Spin
