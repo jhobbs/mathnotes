@@ -23,8 +23,10 @@ $$ \bar{x} - t_{\alpha/2} \frac{s}{\sqrt{n}} < \mu < \bar{x} + t_{\alpha/2} \fra
 
 This uses the Student t-distribution.
 
-For large sample confidence interval, when $n \geq 30,$ we can assume $s \approx \sigma$ and use
+## Large-Sample Confidence Intervals for $p$
 
-$$ \bar{x} \pm z_{a/2}\frac{2}{\sqrt{n}} $$
+If $\hat{p}$ is the proportion of successes in a random sample of size $n$ and $\hat{q} = 1 - \hat{p}$ an approximate $100(1-\alpha)\%$ confidence interval, for the binomial parameter $p$ is given by
 
-to compute the confidence interval. This is just an approximation and gets better as $n$ gets bigger.
+$$ \hat{p} - z_{\alpha / 2 }\sqrt{\frac{\hat{p}\hat{q}}{n}} < p < \hat{p} + z_{\alpha/2} \sqrt{\frac{\hat{p}\hat{q}}{n}}. $$
+
+When $n$ is small and the unknown proportion $p$ is believed to be close to $0$ or $1$, this approach doesn't work well and shouldn't be used. This approach should only be used when both $n\hat{p}$ and $n\hat{q}$ are greater than or equal to $5.$
