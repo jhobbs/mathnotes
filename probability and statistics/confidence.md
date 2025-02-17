@@ -30,3 +30,11 @@ If $\hat{p}$ is the proportion of successes in a random sample of size $n$ and $
 $$ \hat{p} - z_{\alpha / 2 }\sqrt{\frac{\hat{p}\hat{q}}{n}} < p < \hat{p} + z_{\alpha/2} \sqrt{\frac{\hat{p}\hat{q}}{n}}. $$
 
 When $n$ is small and the unknown proportion $p$ is believed to be close to $0$ or $1$, this approach doesn't work well and shouldn't be used. This approach should only be used when both $n\hat{p}$ and $n\hat{q}$ are greater than or equal to $5.$
+
+*Theorem:* If $\hat{p}$ is used as an estimate of $p,$ we can be $100(1 - \alpha)\%$ confident that the error will be less than a specified amount $e$ when the sample size is approximately
+
+$$ n = \frac{z_{\alpha/2}^2 \hat{p} \hat{q}}{e^2}. $$
+
+*Theorem:* If $\hat{p}$ is used as an estimate of $p,$ we can be **at least** $100(1-\alpha)\%$ confident that the error will not exceed a specified amount $e$ when the sample size is
+
+$$ n = \frac{z_{\alpha/2}^2}{4e^2}. $$
