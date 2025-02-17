@@ -5,6 +5,12 @@ title: Confidence Intervals
 
 # Confidence Intervals
 
+A confidence interval tells us how likely it is that a population parameter falls within a specified range, based on a statistic calculated from a sample of data. This interval provides a range of values that, with a certain level of confidence (usually expressed as a percentage like $95\%$ or $99\%$), is believed to encompass the true parameter value. The width of the interval gives an idea of the precision of our estimate, with narrower intervals representing more precise estimates.
+
+To say that the range of values has a certain level of confidence means that if we were to repeat the experiment or sampling process many times (theoretically an infinite number of times), the true population parameter would fall within that interval in the stated percentage of all trials. For example, a $95\%$ confidence level means that $95$ out of $100$ such confidence intervals would contain the true population parameter (which is unknown).
+
+If you were to repeat the sampling process an infinite number of times, each time calculating a new $95\%$ confidence interval using the same method, about $95\%$ of these intervals would contain the true population parameter. Each interval is calculated from a different sample and might be different in range, but the method of calculation ensures that $95\%$ of these intervals will capture the true parameter value.
+
 *Theorem:* If $\bar{x}$ is the mean of a random sample of size $n$ from a population with a known variance $\sigma^2$, a $100(1-\alpha)%$ confident interval for $\mu$ is given by
 
 $$ \bar{x} - z_{\alpha/2} \frac{\sigma}{\sqrt{n}} < \mu < \bar{x} + z_{\alpha/2} \frac{\sigma}{\sqrt{n}}. $$
