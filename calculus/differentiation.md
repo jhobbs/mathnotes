@@ -15,6 +15,21 @@ Note that this is just the rise-over-run formula for the slope between two point
 
 *Theorem:* If $f$ is differentiable at $x,$ then it is continuous at $x.$
 
+*Proof*: Suppose that $f$ is differentiable at $a.$ We want to show that
+
+$$ \lim_{x -> a} f(x) = f(a). $$
+
+Now,
+
+$$ \begin{aligned}
+    \lim_{x \to a}(f(x) - f(a)) & = \lim_{x \to a} \left ( \frac{f(x) - f(a)}{(x - a)}(x - a) \right ) \\
+                \dots                   & = \lim_{x \to a} \left ( \frac{f(x) - f(a)}{(x - a)} \right ) \cdot \lim_{x \to a} (x - a) \\
+                \dots                    & = f'(x) \cdot 0 \\
+    \lim_{x \to a}f(x) - f(a)       & = 0 \\
+    \lim_{x \to a} f(x)             & = f(a). \square
+    \end{aligned}                               
+$$
+
 ## Derivative rules
 
 Let $c$ be a real number, and f and g be functions defined on an open interval and differentiable at a point $x$ in that interval.
