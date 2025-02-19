@@ -30,11 +30,20 @@ $$ \begin{aligned}
     \end{aligned}                               
 $$
 
-## Derivative rules
+## Derivative Rules
 
 Let $c$ be a real number, and f and g be functions defined on an open interval and differentiable at a point $x$ in that interval.
 
 Linearity: $(f+cg)' = f'(x) + cg'(x).$
+
+*Proof*:
+
+$$ \begin{aligned}
+    (f + cg)'(x) & = \lim_{y \to x} \frac{(f + cg)(y) - (f + cg)(x)}{y - x} \\
+                 & = \lim_{y \to x} \frac{f(y) + (cg)(y) - f(x) - (cg)(x)}{y - x} \\
+                 & = \lim_{y \to x} \frac{f(y) - f(x)}{y - x} + \lim_{y \to x} \frac{cg(y) - cg(x)}{y - x} \\
+                 & = f'(x) + cg'(x). ~ \square
+\end{aligned} $$
 
 Product: $(fg)'(x) = f'(x)g(x) +f(x)g'(x).$
 
