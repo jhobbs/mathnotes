@@ -47,6 +47,18 @@ $$ \begin{aligned}
 
 Product: $(fg)'(x) = f'(x)g(x) +f(x)g'(x).$
 
+The trick here is to subtract and add $f(y)g(x)$ to the numerator on the second line. This allows factoring, and then we just use limit laws.
+
+$$ \begin{aligned}
+    (fg)'(x) & = \lim_{y \to x} \frac{(fg)(y) - (fg)(x)}{y - x} \\
+             & = \lim_{y \to x} \frac{f(y)g(y) - f(y)g(x) + f(y)g(x) - f(x)g(x)}{y - x} \\
+             & = \lim_{y \to x} \frac{(g(y) - g(x))f(y) + (f(y) - f(x))g(x)}{y - x} \\
+             & =  \lim_{y \to x} g(x)\frac{f(y) - f(x)}{y - x}  + \lim_{y \to x} f(y)\frac{g(y) - g(x)}{y - x} \\
+             & =  \lim_{y \to x} g(x) \cdot \lim_{y \to x}\frac{f(y) - f(x)}{y - x}  + \lim_{y \to x} f(y) \cdot \lim_{y \to x}\frac{g(y) - g(x)}{y - x} \\
+             & = f'(x)g(x)+ f(x)g'(x). ~ \square \\
+\end{aligned}
+$$
+
 Quotient: $(f/g)'(x) = \frac{f'(x)g(x) -f(x)g'(x)}{\[g(x)\]^2}.$
 
 Let $h(x) = f(g(x)).$
