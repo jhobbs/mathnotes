@@ -47,7 +47,7 @@ $$ \begin{aligned}
 
 Product: $(fg)'(x) = f'(x)g(x) +f(x)g'(x).$
 
-The trick here is to subtract and add $f(y)g(x)$ to the numerator on the second line. This allows factoring, and then we just use limit laws.
+*Proof:* The trick here is to subtract and add $f(y)g(x)$ to the numerator on the second line. This allows factoring, and then we just use limit laws.
 
 $$ \begin{aligned}
     (fg)'(x) & = \lim_{y \to x} \frac{(fg)(y) - (fg)(x)}{y - x} \\
@@ -59,7 +59,21 @@ $$ \begin{aligned}
 \end{aligned}
 $$
 
-Quotient: $(f/g)'(x) = \frac{f'(x)g(x) -f(x)g'(x)}{\[g(x)\]^2}.$
+Quotient: $(f/g)'(x) = \frac{f'(x)g(x) - f(x)g'(x)}{\[g(x)\]^2}.$
+
+*Proof:* Since division is multiplication by a reciprocal, we use the same trick as for the product rule.
+
+$$
+\begin{aligned}
+    (f/g)'(x) & = \lim_{y \to x} \frac{(f/g)y - (f/g)x}{y - x} \\
+              & = \lim_{y \to x}  \frac{\frac{f(y)}{g(y)} - \frac{f(x)}{g(x)}}{y - x} \\
+              & = \lim_{y \to x}  \frac{\frac{f(y)g(x) - f(x)g(y)}{g(y)g(x)}}{y - x} \\
+              & = \lim_{y \to x}  \frac{\frac{f(y)g(x) - f(x)g(x) + f(x)g(x) - f(x)g(y)}{g(y)g(x)}}{y - x} \\
+              & = \lim_{y \to x}  \frac{\frac{f(y)g(x) - f(x)g(x)}{g(y)g(x)}}{y - x}  - \lim_{y \to x} \left (  \frac{\frac{f(x)g(y) - f(x)g(x)}{g(y)g(x)}}{y - x} \right ) \\
+              & = \lim_{y \to x} \left ( \frac{f(y) - f(x)}{y - x}\frac{g(x)}{g(y)g(x)} \right )  - \lim_{y \to x} \left ( \frac{g(y) - g(x)}{y - x}\frac{f(x)}{g(y)g(x)} \right ) \\
+              & = \frac{f'(x)g(x) - g'(x)f(x)}{[g(x)]^2}. ~ \square
+\end{aligned}
+$$ 
 
 Let $h(x) = f(g(x)).$
 
