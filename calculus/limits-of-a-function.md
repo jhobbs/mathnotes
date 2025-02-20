@@ -39,11 +39,11 @@ Now we've shown that as long as $\|\delta\| < \frac{\epsilon}{3}$, then $\|f(1 -
 
 This is more general than the definition above in that it applies to the case where there domain is a set of real numbers, not  just an interval.
 
-Let $A$ be a set of real numbers containing $a$ and $f(x)$ be a function $f : A \to \mathbb{R}.$ The **limit** of $f(x)$ as $x$ approaches $a$ is $L,$ written 
+Let $A$ be a set of real numbers and $f(x)$ be a function $f : A \to \mathbb{R}.$ The **limit** of $f(x)$ as $x$ approaches $a$ is $L,$ written 
 
 $$ \lim_{x \to a}{f(x)} = L $$
 
-if for every $\epsilon > 0$ there exists a $\delta > 0$ such that $\|f(x) - L\| < \epsilon$ if $0 < \|x - a\| < \delta.$ We assume there are numbers $x \in A$ satisfying $0 < \|x - a\| < \delta.$
+if for every $\epsilon > 0$ there exists some $\delta > 0$ such that $\|f(x) - L\| < \epsilon$ if $0 < \|x - a\| < \delta.$ We assume $a$ is a real number and that there are numbers $x \in A$ satisfying $0 < \|x - a\| < \delta.$
 
 ## Limits of Function Rules
 
