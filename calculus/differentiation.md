@@ -79,6 +79,13 @@ Let $h(x) = f(g(x)).$
 
 Chain: $h'(x) = f'(g(x)) \cdot g'(x).$
 
+## Local Extrema
+The real valued function on the real line $f$ is said to have a **local maximum** at $c \in \mathbb{R}$ if there exists a $\delta > 0$ such that $f(x) \leq f(c)$ for all $x \in (c - \delta, c + \delta).$
+
+The real valued function on the real line $f$ is said to have a **local minimum** at $c \in \mathbb{R}$ if there exists a $\delta > 0$ such that $f(x) \geq f(c)$ for all $x \in (c - \delta, c + \delta).$
+
+*Derivatives at Local Extrema Theorem (Fermat's Theorem):* Suppose $f$ is defined on an open interval, that $c$ is a number in that interval, and that $f$ has a local maximum or minimum at $c,$ and that $f'(c)$ exists. Then $f'(c) = 0.$
+
 ## Other Theorems
 
 *Rolle's Theorem:* Suppose $f$ is continuous on $[a,b]$ and differentiable on $(a,b)$ and that $f(a) = f(b).$ Then there exists a point $c$ in $(a,b)$ such that $f'(c) = 0.$
