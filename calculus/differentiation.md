@@ -24,7 +24,7 @@ Now,
 $$ \begin{aligned}
     \lim_{x \to a}(f(x) - f(a)) & = \lim_{x \to a} \left ( \frac{f(x) - f(a)}{(x - a)}(x - a) \right ) \\
                 \dots                   & = \lim_{x \to a} \left ( \frac{f(x) - f(a)}{(x - a)} \right ) \cdot \lim_{x \to a} (x - a) \\
-                \dots                    & = f'(x) \cdot 0 \\
+                \dots                    & = f'(a) \cdot 0 \\
     \lim_{x \to a}f(x) - f(a)       & = 0 \\
     \lim_{x \to a} f(x)             & = f(a). \square
     \end{aligned}                               
