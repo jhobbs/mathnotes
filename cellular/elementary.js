@@ -18,13 +18,31 @@ function setup() {
     currentRow = 0; // reset current row index on setup
     noLoop();
 
-    document.getElementById('startButton').addEventListener('click', () => {
-        running = !running;
-        if (running) {
-            loop(); // start simulation only when start is hit
-        } else {
-            noLoop();
+    // new helper to reset simulation from the first row
+    function initializeSimulation() {
+        grid = create2DArray(cols, rows);
+        grid[floor(cols / 2)][0] = 1;
+        background(51);
+        drawRow(0);
+        currentRow = 0;
+    }
+
+    // new helper to reset all rows below the first while preserving the first row
+    function resetBelowFirst() {
+        for (let i = 0; i < cols; i++) {
+            for (let j = 1; j < rows; j++) {
+                grid[i][j] = 0;
+            }
         }
+        background(51);
+        drawRow(0);
+        currentRow = 0;
+    }
+
+    document.getElementById('startButton').addEventListener('click', () => {
+        resetBelowFirst();
+        running = true;
+        loop();
     });
 
     document.getElementById('resetButton').addEventListener('click', () => {
