@@ -138,12 +138,12 @@ function draw() {
         drawRow(currentRow);
     }
     drawRulesVisuals();
-    // Update row entropy display with label "H_r:" and units "bits"
+    // update row entropy display: 2 decimal places and "b" appended with no space
     let ent = computeEntropy();
-    entDiv.html("H_r: " + nf(ent, 1, 3) + " bits");
-    // Update column entropy display with label "H_c:" and units "bits"
+    entDiv.html("H<sub>r</sub>: " + nf(ent, 1, 2) + "b");
+    // update column entropy display similarly
     let colEnt = computeColEntropy();
-    colEntDiv.html("H_c: " + nf(colEnt, 1, 3) + " bits");
+    colEntDiv.html("H<sub>c</sub>: " + nf(colEnt, 1, 2) + "b");
 }
 
 // new function: compute the Shannon entropy of the generated rows
