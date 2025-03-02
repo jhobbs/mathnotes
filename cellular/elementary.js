@@ -5,7 +5,7 @@ let grid;
 let running = false;
 let currentRow = 0; // new global to track the last generated row
 let lastToggleTime = 0; // new: track time for mobile tap debounce
-let toroidal = true; // new: global variable for toroidal behavior
+let toroidal = false; // new: global variable for toroidal behavior
 let gridOffsetX = 120; // new: left margin to show rule visuals
 let entDiv; // new: DOM element to display entropy
 let colEntDiv; // new: DOM element to display column entropy
@@ -24,7 +24,7 @@ const RULES = [
 
 function setup() {
     // new: create a checkbox for toroidal behavior, enabled by default, and position it above the canvas near the buttons
-    let toroidCheckbox = createCheckbox('Toroidal', true);
+    let toroidCheckbox = createCheckbox('Toroidal', toroidal);
     toroidCheckbox.position(10, 10);
     toroidCheckbox.changed(() => {
         toroidal = toroidCheckbox.checked();
