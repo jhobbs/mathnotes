@@ -7,6 +7,7 @@ let currentRow = 0; // new global to track the last generated row
 let lastToggleTime = 0; // new: track time for mobile tap debounce
 let toroidal = true; // new: global variable for toroidal behavior
 let gridOffsetX = 120; // new: left margin to show rule visuals
+let entDiv; // new: DOM element to display entropy
 
 // new constant for rule visuals
 const RULES = [
@@ -27,6 +28,12 @@ function setup() {
     toroidCheckbox.changed(() => {
         toroidal = toroidCheckbox.checked();
     });
+    
+    // Updated: position the entropy display to the right of the toroid checkbox
+    entDiv = createDiv("");
+    // Set entDiv's x position to 150 (adjust as needed) and y position the same as the checkbox
+    entDiv.position(150, 10); 
+    entDiv.style('color', '#fff');
     
     // new: create a label for the rule textbox and reposition both
     ruleLabel = createDiv("Rule:");
@@ -124,6 +131,31 @@ function draw() {
         generate();
         drawRow(currentRow);
     }
+    drawRulesVisuals();
+    // update row entropy display with units indicator "bits"
+    let ent = computeEntropy();
+    entDiv.html("Row Entropy: " + nf(ent, 1, 3) + " bits");
+}
+
+// new function: compute the Shannon entropy of the generated rows
+function computeEntropy() {
+    if (currentRow < 0) return 0;
+    let counts = {};
+    // sample all rows from 0 to currentRow inclusive
+    for (let r = 0; r <= currentRow; r++) {
+        let rowString = "";
+        for (let c = 0; c < cols; c++) {
+            rowString += grid[c][r];
+        }
+        counts[rowString] = (counts[rowString] || 0) + 1;
+    }
+    let total = currentRow + 1;
+    let entropy = 0;
+    for (let key in counts) {
+        let p = counts[key] / total;
+        entropy -= p * Math.log(p) / Math.log(2);
+    }
+    return entropy;
 }
 
 // new helper: update x coordinate with left margin
