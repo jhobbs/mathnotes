@@ -143,13 +143,14 @@ function drawRulesVisuals() {
 }
 
 function mousePressed() {
-    if (millis() - lastToggleTime < 300) return; // new: debounce rapid taps (300ms)
+    if (millis() - lastToggleTime < 300) return; // debounce rapid taps
     lastToggleTime = millis();
-    let x = floor(mouseX / cellSize);
+    // adjust mouseX by subtracting gridOffsetX to account for left margin
+    let x = floor((mouseX - gridOffsetX) / cellSize);
     let y = floor(mouseY / cellSize);
     if (y === 0 && x >= 0 && x < cols) {
         grid[x][y] = grid[x][y] === 1 ? 0 : 1;
-        drawRow(0); // new: only redraw the top row so the toggle is visible
+        drawRow(0); // only redraw the top row so the toggle is visible
     }
 }
 
