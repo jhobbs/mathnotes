@@ -27,6 +27,15 @@ function setup() {
     toroidCheckbox.changed(() => {
         toroidal = toroidCheckbox.checked();
     });
+    
+    // new: create a text input for rule number
+    ruleInput = createInput("128"); // default value (for example)
+    ruleInput.position(10, 30); // position below the checkbox
+    ruleInput.size(80);
+    ruleInput.input(() => {
+        updateRulesFromNumber(ruleInput.value());
+        drawRulesVisuals();
+    });
 
     cols = floor((windowWidth - gridOffsetX) / cellSize); // updated: use available width after left margin
     rows = floor((windowHeight - 50) / cellSize); // reserve 50px for controls
@@ -78,6 +87,18 @@ function setup() {
         running = false;
         noLoop();
     });
+}
+
+// new function to update RULES array from a rule number input
+function updateRulesFromNumber(num) {
+    let ruleNum = parseInt(num);
+    if (isNaN(ruleNum) || ruleNum < 0 || ruleNum > 255) return; // ignore invalid values
+    // convert to 8-bit binary string (for patterns 111 to 000)
+    let bin = ruleNum.toString(2).padStart(8, '0');
+    // update each RULES result in order corresponding to patterns "111" ... "000"
+    for (let i = 0; i < RULES.length; i++) {
+        RULES[i].result = parseInt(bin[i]);
+    }
 }
 
 // new: only generate and draw the next row, leaving previous rows unchanged
