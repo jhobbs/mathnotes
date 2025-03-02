@@ -28,9 +28,11 @@ function setup() {
         toroidal = toroidCheckbox.checked();
     });
     
-    // new: move the textbox down so it's fully within the demo area (e.g., y=50 instead of 30)
+    // new: create a label for the rule textbox and reposition both
+    ruleLabel = createDiv("Rule:");
+    ruleLabel.position(10, 70);
     ruleInput = createInput("30");
-    ruleInput.position(10, 50);
+    ruleInput.position(10, 90);
     ruleInput.size(80);
     ruleInput.input(() => {
         updateRulesFromNumber(ruleInput.value());
@@ -130,7 +132,7 @@ function drawRow(rowIndex) {
     }
 }
 
-// updated drawRulesVisuals: remove the text so only demo boxes are drawn
+// updated drawRulesVisuals: use a startY below the textbox and label (e.g. 130)
 function drawRulesVisuals() {
     noStroke();
     fill(51);
@@ -138,7 +140,7 @@ function drawRulesVisuals() {
     
     let ruleBoxSize = 15;
     let startX = 10;
-    let startY = 40; // demo boxes start here, below textbox
+    let startY = 130; // demo boxes start below the rule label and textbox
     let spacingY = ruleBoxSize * 2 + 10;
     
     for (let i = 0; i < RULES.length; i++) {
@@ -158,7 +160,7 @@ function drawRulesVisuals() {
     }
 }
 
-// updated mousePressed to handle clicks in rule demo area:
+// Updated mousePressed function to use startY = 130 for rule demo boxes
 function mousePressed() {
     if (millis() - lastToggleTime < 300) return; // debounce rapid taps
     lastToggleTime = millis();
@@ -167,26 +169,21 @@ function mousePressed() {
     if (mouseX < gridOffsetX) {
         let ruleBoxSize = 15;
         let startX = 10;
-        let startY = 40;
+        let startY = 130; // updated: match demo boxes startY in drawRulesVisuals()
         let spacingY = ruleBoxSize * 2 + 10;
         for (let i = 0; i < RULES.length; i++) {
             let boxX = startX + ((ruleBoxSize + 2) * 1);
             let boxY = startY + i * spacingY + ruleBoxSize + 2;
-            // check if mouse is inside this result box
             if (mouseX >= boxX && mouseX <= boxX + ruleBoxSize &&
                 mouseY >= boxY && mouseY <= boxY + ruleBoxSize) {
-                // toggle the rule's result
                 RULES[i].result = RULES[i].result === 1 ? 0 : 1;
-                // update ruleInput to match new rule number
                 let binaryString = RULES.map(rule => rule.result).join('');
                 let newRuleNum = parseInt(binaryString, 2);
                 ruleInput.value(newRuleNum);
-                // redraw rule visuals to reflect change
                 drawRulesVisuals();
-                return; // exit since rule was updated
+                return;
             }
         }
-        // if click was in left margin but not on any result box, do nothing
         return;
     }
   
