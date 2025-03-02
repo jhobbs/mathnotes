@@ -8,6 +8,7 @@ let lastToggleTime = 0; // new: track time for mobile tap debounce
 let toroidal = true; // new: global variable for toroidal behavior
 let gridOffsetX = 120; // new: left margin to show rule visuals
 let entDiv; // new: DOM element to display entropy
+let colEntDiv; // new: DOM element to display column entropy
 
 // new constant for rule visuals
 const RULES = [
@@ -29,11 +30,16 @@ function setup() {
         toroidal = toroidCheckbox.checked();
     });
     
-    // Updated: position the entropy display to the right of the toroid checkbox
+    // Updated: position the row entropy display closer to the toroid checkbox
     entDiv = createDiv("");
-    // Set entDiv's x position to 150 (adjust as needed) and y position the same as the checkbox
     entDiv.position(150, 10); 
     entDiv.style('color', '#fff');
+    
+    // new: create column entropy div positioned closer to row entropy for mobile-friendliness
+    colEntDiv = createDiv("");
+    // Set colEntDiv's x position to 250 (adjust as needed) so they're closer together
+    colEntDiv.position(250, 10);
+    colEntDiv.style('color', '#fff');
     
     // new: create a label for the rule textbox and reposition both
     ruleLabel = createDiv("Rule:");
@@ -132,9 +138,12 @@ function draw() {
         drawRow(currentRow);
     }
     drawRulesVisuals();
-    // update row entropy display with units indicator "bits"
+    // Update row entropy display with label "H_r:" and units "bits"
     let ent = computeEntropy();
-    entDiv.html("Row Entropy: " + nf(ent, 1, 3) + " bits");
+    entDiv.html("H_r: " + nf(ent, 1, 3) + " bits");
+    // Update column entropy display with label "H_c:" and units "bits"
+    let colEnt = computeColEntropy();
+    colEntDiv.html("H_c: " + nf(colEnt, 1, 3) + " bits");
 }
 
 // new function: compute the Shannon entropy of the generated rows
@@ -150,6 +159,26 @@ function computeEntropy() {
         counts[rowString] = (counts[rowString] || 0) + 1;
     }
     let total = currentRow + 1;
+    let entropy = 0;
+    for (let key in counts) {
+        let p = counts[key] / total;
+        entropy -= p * Math.log(p) / Math.log(2);
+    }
+    return entropy;
+}
+
+// new function: compute column entropy
+function computeColEntropy() {
+    let counts = {};
+    // for each column, build a string from row 0 to currentRow
+    for (let c = 0; c < cols; c++) {
+        let colString = "";
+        for (let r = 0; r <= currentRow; r++) {
+            colString += grid[c][r];
+        }
+        counts[colString] = (counts[colString] || 0) + 1;
+    }
+    let total = cols; // total number of columns
     let entropy = 0;
     for (let key in counts) {
         let p = counts[key] / total;
