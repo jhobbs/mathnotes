@@ -28,14 +28,15 @@ function setup() {
         toroidal = toroidCheckbox.checked();
     });
     
-    // new: create a text input for rule number
-    ruleInput = createInput("128"); // default value (for example)
-    ruleInput.position(10, 30); // position below the checkbox
+    // new: move the textbox down so it's fully within the demo area (e.g., y=50 instead of 30)
+    ruleInput = createInput("30");
+    ruleInput.position(10, 50);
     ruleInput.size(80);
     ruleInput.input(() => {
         updateRulesFromNumber(ruleInput.value());
         drawRulesVisuals();
     });
+    updateRulesFromNumber("30"); // initialize RULES to rule 30
 
     cols = floor((windowWidth - gridOffsetX) / cellSize); // updated: use available width after left margin
     rows = floor((windowHeight - 50) / cellSize); // reserve 50px for controls
@@ -129,27 +130,16 @@ function drawRow(rowIndex) {
     }
 }
 
-// updated drawRulesVisuals: clear the left margin area before drawing rules
+// updated drawRulesVisuals: remove the text so only demo boxes are drawn
 function drawRulesVisuals() {
-    // clear left margin area to remove previous text and drawings
     noStroke();
     fill(51);
     rect(0, 0, gridOffsetX, height);
     
     let ruleBoxSize = 15;
     let startX = 10;
-    let startY = 40;
-    let spacingY = ruleBoxSize * 2 + 10; // updated vertical spacing
-    
-    // compute the Wolfram rule number using results for patterns "111"->"000"
-    let binaryString = RULES.map(rule => rule.result).join('');
-    let ruleNumber = parseInt(binaryString, 2);
-    
-    fill(255);
-    noStroke();
-    textSize(14);
-    text("Rule " + ruleNumber, startX, startY - 10);
-    stroke(255);
+    let startY = 40; // demo boxes start here, below textbox
+    let spacingY = ruleBoxSize * 2 + 10;
     
     for (let i = 0; i < RULES.length; i++) {
         let { pattern, result } = RULES[i];
@@ -187,6 +177,10 @@ function mousePressed() {
                 mouseY >= boxY && mouseY <= boxY + ruleBoxSize) {
                 // toggle the rule's result
                 RULES[i].result = RULES[i].result === 1 ? 0 : 1;
+                // update ruleInput to match new rule number
+                let binaryString = RULES.map(rule => rule.result).join('');
+                let newRuleNum = parseInt(binaryString, 2);
+                ruleInput.value(newRuleNum);
                 // redraw rule visuals to reflect change
                 drawRulesVisuals();
                 return; // exit since rule was updated
