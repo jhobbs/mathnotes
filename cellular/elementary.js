@@ -6,6 +6,19 @@ let running = false;
 let currentRow = 0; // new global to track the last generated row
 let lastToggleTime = 0; // new: track time for mobile tap debounce
 let toroidal = true; // new: global variable for toroidal behavior
+let gridOffsetX = 120; // new: left margin to show rule visuals
+
+// new constant for rule visuals
+const RULES = [
+    { pattern: "111", result: 0 },
+    { pattern: "110", result: 0 },
+    { pattern: "101", result: 0 },
+    { pattern: "100", result: 1 },
+    { pattern: "011", result: 1 },
+    { pattern: "010", result: 1 },
+    { pattern: "001", result: 1 },
+    { pattern: "000", result: 0 }
+];
 
 function setup() {
     // new: create a checkbox for toroidal behavior, enabled by default, and position it above the canvas near the buttons
@@ -15,9 +28,10 @@ function setup() {
         toroidal = toroidCheckbox.checked();
     });
 
-    cols = floor((0.75 * windowWidth) / cellSize); // new: set cols based on 75% of window width
+    cols = floor((windowWidth - gridOffsetX) / cellSize); // updated: use available width after left margin
     rows = floor((windowHeight - 50) / cellSize); // reserve 50px for controls
-    createCanvas(cols * cellSize, rows * cellSize);
+    // new: adjust canvas width to include left margin for rule visuals
+    createCanvas(windowWidth, rows * cellSize); // updated: use 100% of window width
     background(51); // new: initialize background once
     frameRate(120); // new: set frame rate to 120 FPS for faster generation
     grid = create2DArray(cols, rows); // cells initialized to 0 (white by default)
@@ -75,12 +89,14 @@ function draw() {
             drawRow(currentRow);
         }
     }
+    // new: always redraw rule visuals on the left
+    drawRulesVisuals();
 }
 
-// new helper: draw only the specified row
+// new helper: update x coordinate with left margin
 function drawRow(rowIndex) {
     for (let i = 0; i < cols; i++) {
-        let x = i * cellSize;
+        let x = gridOffsetX + i * cellSize; // updated: offset x coordinate 
         let y = rowIndex * cellSize;
         if (grid[i][rowIndex] === 1) {
             fill(0); // Black for active (toggled) cells
@@ -89,6 +105,40 @@ function drawRow(rowIndex) {
         }
         stroke(255); // White grid lines
         rect(x, y, cellSize, cellSize);
+    }
+}
+
+// new function: draw rule visuals along the left side, with increased vertical padding and a rule number label
+function drawRulesVisuals() {
+    let ruleBoxSize = 15;
+    let startX = 10;
+    let startY = 40;
+    let spacingY = ruleBoxSize * 2 + 10; // updated vertical spacing
+    
+    // new: compute the Wolfram rule number, using results for patterns "111"->"000"
+    let binaryString = RULES.map(rule => rule.result).join('');
+    let ruleNumber = parseInt(binaryString, 2);
+    
+    fill(255);
+    noStroke();
+    textSize(14);
+    text("Rule " + ruleNumber, startX, startY - 10);
+    stroke(255);
+    
+    for (let i = 0; i < RULES.length; i++) {
+        let { pattern, result } = RULES[i];
+        let posY = startY + i * spacingY;
+        for (let j = 0; j < 3; j++) {
+            let posX = startX + j * (ruleBoxSize + 2);
+            (pattern[j] === "1") ? fill(0) : fill(255);
+            stroke(255);
+            rect(posX, posY, ruleBoxSize, ruleBoxSize);
+        }
+        let centerX = startX + ((ruleBoxSize + 2) * 1);
+        let posY2 = posY + ruleBoxSize + 2;
+        (result === 1) ? fill(0) : fill(255);
+        stroke(255);
+        rect(centerX, posY2, ruleBoxSize, ruleBoxSize);
     }
 }
 
