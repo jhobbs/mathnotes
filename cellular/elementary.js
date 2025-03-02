@@ -4,8 +4,17 @@ let rows;
 let grid;
 let running = false;
 let currentRow = 0; // new global to track the last generated row
+let lastToggleTime = 0; // new: track time for mobile tap debounce
+let toroidal = true; // new: global variable for toroidal behavior
 
 function setup() {
+    // new: create a checkbox for toroidal behavior, enabled by default, and position it above the canvas near the buttons
+    let toroidCheckbox = createCheckbox('Toroidal', true);
+    toroidCheckbox.position(10, 10);
+    toroidCheckbox.changed(() => {
+        toroidal = toroidCheckbox.checked();
+    });
+
     cols = floor((0.75 * windowWidth) / cellSize); // new: set cols based on 75% of window width
     rows = floor((windowHeight - 50) / cellSize); // reserve 50px for controls
     createCanvas(cols * cellSize, rows * cellSize);
@@ -84,6 +93,8 @@ function drawRow(rowIndex) {
 }
 
 function mousePressed() {
+    if (millis() - lastToggleTime < 300) return; // new: debounce rapid taps (300ms)
+    lastToggleTime = millis();
     let x = floor(mouseX / cellSize);
     let y = floor(mouseY / cellSize);
     if (y === 0 && x >= 0 && x < cols) {
@@ -108,9 +119,9 @@ function generate() {
     }
     let nextRow = currentRow + 1;
     for (let i = 0; i < cols; i++) {
-        let left = grid[(i - 1 + cols) % cols][currentRow];
+        let left = toroidal ? grid[(i - 1 + cols) % cols][currentRow] : ((i - 1) < 0 ? 0 : grid[i - 1][currentRow]);
         let me = grid[i][currentRow];
-        let right = grid[(i + 1) % cols][currentRow];
+        let right = toroidal ? grid[(i + 1) % cols][currentRow] : ((i + 1) >= cols ? 0 : grid[i + 1][currentRow]);
         grid[i][nextRow] = rules(left, me, right);
     }
     currentRow++;
