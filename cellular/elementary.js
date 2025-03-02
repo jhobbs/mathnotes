@@ -81,6 +81,7 @@ function setup() {
 
     document.getElementById('startButton').addEventListener('click', () => {
         resetBelowFirst();
+        drawRulesVisuals();
         running = true;
         loop();
     });
@@ -102,6 +103,7 @@ function setup() {
         }, 1000);
         noLoop();
     });
+    drawRulesVisuals();
 }
 
 // new function to update RULES array from a rule number input
@@ -119,14 +121,9 @@ function updateRulesFromNumber(num) {
 // new: only generate and draw the next row, leaving previous rows unchanged
 function draw() {
     if (running) {
-        // generate and draw two rows per frame to double the speed
-        for (let i = 0; i < 2 && running; i++) {
-            generate();
-            drawRow(currentRow);
-        }
+        generate();
+        drawRow(currentRow);
     }
-    // new: always redraw rule visuals on the left
-    drawRulesVisuals();
 }
 
 // new helper: update x coordinate with left margin
