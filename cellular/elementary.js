@@ -52,6 +52,11 @@ function setup() {
     drawRow(0);
     currentRow = 0; // reset current row index on setup
     noLoop();
+    
+    // simulate a click on the start (redraw) button after 1 second
+    setTimeout(() => {
+        document.getElementById('startButton').click();
+    }, 1000);
 
     // new helper to reset simulation from the first row
     function initializeSimulation() {
@@ -79,6 +84,8 @@ function setup() {
         running = true;
         loop();
     });
+    // change the start button text to "Redraw"
+    document.getElementById('startButton').innerText = "Redraw";
 
     document.getElementById('resetButton').addEventListener('click', () => {
         grid = create2DArray(cols, rows); // resets grid to 0 (white)
@@ -88,6 +95,11 @@ function setup() {
         drawRow(0);     // new: draw initial row
         currentRow = 0; // reset generation row index
         running = false;
+        drawRulesVisuals(); // redraw rule visuals after resetting
+        // simulate a click on the "Redraw" button 1 second after resetting
+        setTimeout(() => {
+            document.getElementById('startButton').click();
+        }, 1000);
         noLoop();
     });
 }
