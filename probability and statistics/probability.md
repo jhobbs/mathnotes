@@ -45,6 +45,10 @@ If $A$ and $B$ are mutually exclusive events, $P(A \cup B)= P(A) + P(B).$
 
 We have to subtract the overlap between $A$ and $B$ to avoid double counting.
 
+Similarly
+
+$$ P(A \cap B) = P(A) + P(B) - P(A \cup B). $$
+
 The probability of $A$ and $B$ is the probability of $A$ times the probability of $B$ given $A$, or equivalently, the probability of $B$ times the probability of $A$ given $B$.
 
 $$ P(A \cap B) = P(A ~ \text{and} ~ B) = P(B ~ \text{and} ~ A) = P(A) \cdot P(B|A) = P(B) \cdot P(A|B)  $$
