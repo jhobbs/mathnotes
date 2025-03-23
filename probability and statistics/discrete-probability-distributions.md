@@ -56,6 +56,8 @@ $$ \mu = \frac{nk}{N} ~ \text{and} ~ \sigma^2 = \frac{N - n}{N - 1} \cdot n \cdo
 
 It's worth noting that when $n$ is small compared to $N$, the lack of replacement in a hypergeoemetric process doesn't cause much impact to the distribution, and in these cases, the hypergeoemetric distrbution is similar to the binomial distribution. In fact, for large values of $N$ and small values of $n$, the binomial distribution approximates the hypergeoemetric distribution.
 
+To do this approximation, just use the binomial PMF with $p = k/N.$
+
 ## Poisson Distbution
 
 Experiments that give numerical values of a random variable $X,$ the number of outcomes during a given time interval or in a specified region, are called **Poisson experiments.** For example, the number of phone calls per hour an office recieves or the number of field mice per acre in a pasture. Note that while binomial and hypergeometric experiments dealt with discrete sequence of events (and give probabilities for discrete outcomes), Poisson experiments deal with continuous domains (and also give probabilities for discrete outcomes).
@@ -79,3 +81,5 @@ Given a binomial distribution, if $n$ is large and $p$ is close to 0, the Poisso
 *Theorem:* Let $X$ be a binomial random variable with probability distribution $b(x, n, p).$ When $n \to \infty,$ $p \to 0,$ and $\lim_{n \to \infty}{np} = \mu$ remains constant,
 
 $$ \lim_{n \to \infty}{b(x, n, p)} = p(x, \mu). $$
+
+So, to do this approximation, let $\lambda = \mu = np.$
