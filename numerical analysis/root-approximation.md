@@ -46,3 +46,19 @@ float findRoot(float a, float b, float TOL, int N_0, function f) {
 
 ```
 
+The bisection method has some limitations:
+
+* Slow convergence (linear rate - error approximately halves each iteration).
+* Requires a valid initial interval (bracket)
+* Limited to simple, single roots
+* Ignores derivative and curvature information
+* Can be computationally expensive for high accuracy
+* Limited dimensional applicability (single-variable functions)
+
+
+
+
+
+
+
+
