@@ -192,4 +192,8 @@ for each $j = 0, 1, \dots, n - 2.$ (the second derivatives of the cubic polynomi
 
 A **natural spline** approximates the shape a long flexible rod would take when forced to go through the sample points. Clamped boundary conditions generally lead to more accurate approximations, but require information about the derivatives of the function at its endpoints.
 
-The procedure for finding a cubic spline interpolation is to setup a system of equations using the contraints given above and to solve for the unknown constants.
+The procedure for finding a cubic spline interpolation over $n$ subintervals is to setup a system of equations using the contraints given above and to solve for the unknown constants. There will be $n$ cubic polynomials, each with 4 constants, so $4n$ equations will be needed to find the $4n$ constants.
+
+Each cubic polynomial is of the form
+
+$$ S_j(x) = a_j + b_j (x - x_j) + c_j (x - x_j)^2 + d_j(x - x_j)^3. $$
