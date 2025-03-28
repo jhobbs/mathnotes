@@ -80,3 +80,80 @@ $$ \begin{aligned} L_{n, k}(x) & = \frac{(x - x_0)(x - x_1)\cdots(x - x_{k-1})(x
 & = \prod_{i = 0, i \neq k}^{n} \frac{x - x_i}{x_k - x_i}. \end{aligned}  $$
 
 Sometimes we will write just $L_k(x)$ instead of $L_{n,k}(x)$ when the value of $n$ is clear.
+
+## Divided Differences
+
+If $P_n(x)$ is the $nth$ interpolating polynomial that agrees with $f$ at $n+1$ points, it is unique, but it be written in multiple forms. An alternative form that uses divided differences of $f$ with respect to samples at $x_0, x_1, \dots, x_n$ are used to express $P_n(x)$ in the form
+
+$$ P_n(x) = a_0 + a_1(x - x_0) + a_2(x - x_0)(x - x_1) + \cdots + a_n (x - x_0) \cdots (x - x_{n-1}), $$
+
+for appropriate constants $a_0, a_1, \dots, a_n.$
+
+To get a sense for how we find the constants, note that when $x = x_0,$ we want $P_n(x) = f(x_0),$ and that since all terms in $P_n(x)$, other than $a_0$, have $x-x_0$ in them and will thus be 0 at $x_0$, $a_0$ must be $f(x_0).$
+
+Similarly, at $x = x_1$, all terms other than the first two will be 0, so we have
+
+$$ P_n(x_1) = f(x_1) = a_0 + a_1(x_1 - x_0). $$
+
+Substituting $a_0 = f(x_0)$ and then solving for $a_1$ gives $a_1 = \frac{f(x_1) - f(x_0)}{x_1 - x_0}.$
+
+This process can be repeated to find more constants, but there is a simpler way.
+
+Now for some new notation. We say that the **zeroth divided difference** of $f$ with respect to $x_i,$ denoted as $f[x_i],$ is just the value of $f$ at $x_i:$
+
+$$ f[x_i] = f(x_i). $$
+
+Remaining divided differences are defined recursively; the **first divided difference** of $f$ with respect to $x_i$ and $x_{i+1}$ is denoted $f[x_i, x_{i+1}]$ and defined as
+
+$$ f[x_i, x_{i+1}] = \frac{f[x_{i+1}] - f[x_i]}{x_{i+1} - x_i}. $$
+
+The **second divided difference** is then
+
+$$ f[x_i, x_{i+1}, x_{i+2}] = \frac{f[x_{i+1}, x_{i+2}] - f[x_i, x_{i+1}]}{x_{i+2} - x_i}. $$
+
+In general, the **kth divided difference** is
+
+$$ f[x_i, x_{i+1}, x_{i+2}, \dots, x_{i+k}] = \frac{f[x_{i+1}, x_{i+2}, \dots, x_{i+k}] - f[x_i, x_{i+1}, \dots x_{i+k-1}]}{x_{i+k} - x_i}, $$
+
+and finally we get the **nth divided difference**
+
+$$ f[x_0, x_1, \dots, x_n] = \frac{f[x_1, x_2, \dots, x_n] - f[x_0, x_1, \dots, x_{n-1}]}{x_n - x_0}. $$
+
+This means that $a_0 = f[x_0],$ $a_1 = f[x_0, x_1],$ and in general
+
+$$ a_k = f[x_0, x_1, \cdots, x_k], $$
+
+for each $k = 0, 1, \dots, n.$ Now, we can rewrite $P_n(x)$ as **Newton's Divided Difference:**
+
+$$ P_n(x) = f[x_0] + \sum_{k=1}^{n} f[x_0, x_1, \dots, x_k](x - x_0)\cdots(x - x_{k-1}). $$
+
+One important fact is that the value of $f[x_0, x_1, \dots, x_k]$ is independent of the order of the numbers $x_0, x_1, \dots, x_k.$ That means we can add a sample point in the middle of others and calculate the additional term in order to improve the accuracy of the interpolation.
+
+Here's psuedocode:
+
+```
+float[] newtonsDividedDifference(float xs, float ys) {
+    assert(len(xs) = len(ys));
+
+    int n = len(xs) - 1;
+
+    float F[n+1][n+1];
+    float as[n+1];
+
+    for (int i = 0; i <= n; i++) {
+        F[i][0] = ys[i];
+    }
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= i; j++) {
+            //F[i][j] = f[x_{i - j}, ..., x_i]
+            F[i][j] = (F[i][j-1] - F[i - 1][j - 1])/(xs[i] - xs[i - j]);
+            if (i == j) {
+                as[i][i] = F[i][i];
+            }
+        }
+    }
+
+    return as;
+}
+```
