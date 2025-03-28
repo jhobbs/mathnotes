@@ -157,3 +157,39 @@ float[] newtonsDividedDifference(float xs, float ys) {
     return as;
 }
 ```
+
+## Cubic Splines
+
+Using a single high-degree polynomial to approximate a function on an interval has some issues. Particualarly, high-degree polynomials can oscillate erratically.
+
+Another approach is to use a lower degree polynomial to approximate the subinterval between each pair of successive points in the general interval; this is called **piecewise-polynomial approximation**.
+
+The simplest form of this is **piecewise-linear** approximation, where we join each pair of successive sample points with a series of straight line segments. This can produce reasonable approximations but has a major disadvantage in there is no differentiability at the endpoints of each subinterval (except in the special case that all points fall on the same line.) This means the approximating function is not continuously differentiable - it's not smooth - which typically doesn't match the behavior of the phsyical system being approximated.
+
+A better - and more common - approach is **cubic spline interpolation.** A cubic polynomial has 4 constants, which provides sufficient flexibility so that the approximating function is twice differentiable on the entire interval.
+
+Given a function $f$ defined on $[a, b]$ and a set of nodes $a = x_0 < x_1 < \cdots < x_n = b,$ a **cubic spline interpolant** $S$ for $f$ is a function that satisfies the following conditions:
+
+* $S(x)$ is a cubic polynomial, denoted as $S_j(x)$, on the subinterval $[x_j, x_{j+1}]$ for each $j = 0, 1, \dots, n - 1.$ ($S$ is a piecewise function with each piece being composed of a cubic polynomial that covers the subinterval between two successive points, overlapping at the endpoints)
+* $S_j(x_j) = f(x_j)$ and $S_j(x_{j+1}) = f(x_{j+1})$ for each $j = 0, 1, \dots, n - 1.$ (the cubic polynomial for each subinterval agrees with the function being approximated at the endpoints of each subinterval.) 
+* $S_{j+1}(x_{j+1}) = S_j(x_{j+1})$ for each $j = 0, 1, \dots, n - 2.$ (the cubic polynomials for two adjacent subintervals have the same value at the point they overlap.)
+
+* Next,
+
+$$ {S'}_{j+1} (x_{j+1}) = {S'}_{j}(x_{j+1}) $$
+
+for each $j = 0, 1, \dots, n - 2.$ (the first derivatives of the cubic polynomials for two adjacent subintervals have the same value at the point they overlap.)
+
+* Next,
+
+$$ {S''}_{j+1}(x_{j+1}) = {S''}_j(x_{j+1}) $$
+
+for each $j = 0, 1, \dots, n - 2.$ (the second derivatives of the cubic polynomials for two adjacent subintervals have the same value at the point they overlap.)
+
+* One of the following sets of boundary conditions is satisfied:
+    * ${S''}(x_0) = {S''}(x_n) = 0$ (**natural or free boundary**.)
+    * $S'(x_0) = f'(x_0)$ and $S'(x_n) = f'(x_n)$ (**clamped boundary**.)
+
+A **natural spline** approximates the shape a long flexible rod would take when forced to go through the sample points. Clamped boundary conditions generally lead to more accurate approximations, but require information about the derivatives of the function at its endpoints.
+
+The procedure for finding a cubic spline interpolation is to setup a system of equations using the contraints given above and to solve for the unknown constants.
