@@ -85,3 +85,21 @@ $$ \lim_{n \to \infty}{b(x, n, p)} = p(x, \mu). $$
 So, to do this approximation, let $\lambda t = \mu = np.$
 
 Note: some texts just use $\lambda$ in place of $\lambda t.$
+
+## Geometric Distribution
+
+A **geometric random variable** is a discrete random variable that models the number of independent Bernoulli trials needed to achieve the first success. The probability of success is constant (denoted by $p$) and the trials are independent. The probability mass function is
+
+$$ P(X = k) = (1 - p)^{k-1} p, $$
+
+for $k = 1, 2, 3 \dots.$ $k$ represents the number of independent trials it takes to achieve the first success, and $p$ is the probability of any given trial being successful.
+
+The mean is $\frac{1}{p}$ and the variance is $\frac{1 - p}{p^2}.$
+
+## Negative Binomial Distirbution
+
+The **negative binomial random variable** generalizes the geometric random variable by giving the probability that it takes $n$ independent trials to get $r$ successes. Its pmf is
+
+$$ P(x = n) = \binom{n - 1}{r - 1} p^r (1 - )^{n - r}. $$
+
+Its mean and variance are $\mu = \frac{r}{p}$ and $\sigma^2 = \frac{r(1-p)}{p^2}.$
