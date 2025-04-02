@@ -82,4 +82,6 @@ Given a binomial distribution, if $n$ is large and $p$ is close to 0, the Poisso
 
 $$ \lim_{n \to \infty}{b(x, n, p)} = p(x, \mu). $$
 
-So, to do this approximation, let $\lambda = \mu = np.$
+So, to do this approximation, let $\lambda t = \mu = np.$
+
+Note: some texts just use $\lambda$ in place of $\lambda t.$
