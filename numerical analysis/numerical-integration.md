@@ -78,3 +78,48 @@ For the **Composite Midpoint Rule** we again require even $n$.
 *Theorem:* Let $f \in C^2[a, b],$ $n$ be even, $h = (b - a)/(n + 2)$ and $x_j = a + (j + 1)h$ for each $j = -1, 0, \dots, n+1.$ There exists a $\mu \in (a, b)$ for which the Composite Midpoint rule for $n+2$ subintervals can be written with its error term as
 
 $$ \int_a^{b} f(x) dx = 2h \sum_{j=0}^{n/2} f(x_{2j}) + \frac{b - a}{6}h^2 f''(\mu). $$
+
+## Gaussian Quadature
+
+Recall that Newton-Cotes formulas use values of the function $f$ at equally spaced points. While convenient, this can significantly reduce accuracy of the approximation.
+
+In contrast, Gaussian quadature picks the optimal nodes $x_1, x_2,\dots,x_n$ in $[a,b]$ and coefficients $c_1, c_2, \dots, c_n$ to minimize expected error in the approximation
+
+$$ \int_a^{b} f(x) dx \approx \sum_{i=1}^{n} c_i f(x_i). $$
+
+Picking these optimal nodes and coefficients allows Gaussian quadature to be more accurate than Newton-Cotes formulas for the same number of nodes. While Newton-Cotes formulas can exactly approximate polynomials up of up to degree $n,$ Gaussian quadature can exactly approximatie polynomials of up to degree $2n - 1.$ This is achievable because the coefficients $c_i$ are arbitrary and the nodes $x_i$ are restricted only in being within $[a,b],$ so we get $2n$ parameters to choose, and the class of polynomials of degree at most $2n-1$ also contains $2n$ parameters, so properly picking $2n$ parameters allows us to exactly approximate any of those polynomials.
+
+For example, let's say we want to determine $c_1, c_2, x_1,$ and $x_2$ so that
+
+$$ \int_{-1}^{1} f(x) dx = \approx c_1 f(x_1) + c_2 f(x_2) $$
+
+gives the exact result whenver $f(x)$ is a polynomial of degree 3 or less, that is, when
+
+$$ f(x) = a_0 + a_1x + a_2x^2 + a_3x^3 $$
+
+for some constants $a_i.$
+
+Now,
+
+$$ \int (a_0 + a_1x + a_2x^2 + a_3x^3) dx  = a_0 \int 1 dx + a_1 \int x dx + a_2 \int x^2 dx + a_3 \int x^3 dx, $$
+
+so we neeed a formula that gives exact results when $f(x)$ is $1, x, x^2,$ and $x^3.$ That us, we need $c_1, c_2, x_1, x_2$ such that
+
+$$ c_1 \cdot 1 + c_2 \cdot 1 = \int_{-1}^1 1 dx = 2, \quad c_1 \cdot x_1 + c_2 \cdot x_2 = \int_{-1}^{1} x dx = 0, $$
+
+$$ c_1 \cdot {x_1}^2 + c_2 \cdot {x_2}^2 = \int_{-1}^1 x^2 dx = \frac{2}{3}, \quad c_1 \cdot {x_1}^3 + c_2 \cdot {x_2}^3 = \int_{-1}^{1} x^3 dx = 0.$$
+
+(Note that the RHS values $2, 0, 2/3,$ and $0$ in these equations are just the values of the preceding definite integrals.)
+
+Now we have a system of $4$ unknowns an $4$ equations which we can solve to find
+
+$$ c_1 = 1, c_2 = 1, x_1 = -\frac{\sqrt{3}}{3}, x_2 = \frac{\sqrt{3}}{3}. $$
+
+This gives the approximation formula
+
+$$ \int_{-1}^{1} f(x) dx \approx f(\frac{-\sqrt{3}}{3}) + f(\frac{\sqrt{3}}{3}), $$
+
+which as degree of precision three, meaining it produces the exact result for every polynomial of degree three or less. This is pretty amazing.
+
+
+
