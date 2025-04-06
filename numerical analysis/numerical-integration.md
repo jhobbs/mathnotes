@@ -121,5 +121,32 @@ $$ \int_{-1}^{1} f(x) dx \approx f(\frac{-\sqrt{3}}{3}) + f(\frac{\sqrt{3}}{3}),
 
 which as degree of precision three, meaining it produces the exact result for every polynomial of degree three or less. This is pretty amazing.
 
+### Legendre Polynomials
 
+There is an easier way to determine the nodes and coefficients for the formulas that give exact results for higher-degree polynomials.
 
+We will use a collection of orthogonal polynomials called the **Legendre Polynomials,** denoted here as $\\{P_0(x), P_1(x), \dots, P_n(x)\\}$ and having the properties
+
+1. For each $n$, $P_n(x)$ is a monic polynomial of degree $n.$
+
+2. $\int_{-1}^{1}P(x)P_n(x)dx = 0$ whenever $P(x)$ is a polynomial of degree less than $n.$
+
+Note that these polynomials form an orthogonal basis for the monic polynomials over the interval $[-1, 1].$
+
+The roots of these polynomials are distinct, lie in $(-1, 1),$ are symmetric with respect to the origin, and are the correct choice for determining the parameters that give us the nodes and coefficients for Gaussian quadature.
+
+The proof and reasoning are excluded here, but the procedure, using a the roots $r_{n,i}$ of the Legendre polynomials and associated coefficients $c_{n,i}$ (which are widely available in tables) is to approximate with precision $n$ as 
+
+$$ \int_{-1}^{1} f(x) dx \approx \sum_{i=1}^n c_{n, i} f(r_{n, i}). $$
+
+### Gaussian Quadature on Arbitrary Intervals
+
+This is all well and good if the interval in question is $[-1, 1],$ but what if it isn't?
+
+We can take advantage of the fact that $\int_{a}^{b}f(x) dx$ over an arbitrary interval $[a,b]$ can be transformed into an integral over $[-1, 1]$ by using a change of variable:
+
+$$ t = \frac{2x - a - b}{b - a} \iff x = \frac{1}{2}[(b - a)t + a + b]. $$
+
+Thus,
+
+$$ \int_a^{b} f(x) dx = \int_{-1}^{1} f \left ( \frac{(b - a)t + (b + a)}{2} \right ) \frac{(b - a)}{2} dt. $$
