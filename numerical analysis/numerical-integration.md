@@ -77,4 +77,4 @@ For the **Composite Midpoint Rule** we again require even $n$.
 
 *Theorem:* Let $f \in C^2[a, b],$ $n$ be even, $h = (b - a)/(n + 2)$ and $x_j = a + (j + 1)h$ for each $j = -1, 0, \dots, n+1.$ There exists a $\mu \in (a, b)$ for which the Composite Midpoint rule for $n+2$ subintervals can be written with its error term as
 
-$$ \int_a^{b} f(x) dx = 2h \sum_{j=0}^{n/2} f(x_{2j}) + \frac{b - a}{6}h^2 f''(\mu)
+$$ \int_a^{b} f(x) dx = 2h \sum_{j=0}^{n/2} f(x_{2j}) + \frac{b - a}{6}h^2 f''(\mu). $$
