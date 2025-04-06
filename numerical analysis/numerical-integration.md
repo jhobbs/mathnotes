@@ -9,7 +9,7 @@ title: Numerical Integration
 
 The basic method for approximating $\int_a^{b} f(x) dx$ is called **numerical quadrature** and uses the sum $\sum_{i=0}^n a_i f(x_i).$
 
-We'll cover quadature methods based on interpolation polynomials. The idea is to select a set of distinct nodes $\\{x_0, \dots, x_n\\}$ from the interval $[a, b],$ use them to construct a Lagrange interpolating polynomial and its error term, and then integrate those over $[a,b].$
+We'll cover quadrature methods based on interpolation polynomials. The idea is to select a set of distinct nodes $\\{x_0, \dots, x_n\\}$ from the interval $[a, b],$ use them to construct a Lagrange interpolating polynomial and its error term, and then integrate those over $[a,b].$
 
 When we use equally spaced nodes, the approximations produced from first and second Lagrange polynomials are known as the **Trapezoidal rule** and **Simpson's rule.** These are commonly introduced in calculus courses.
 
@@ -79,15 +79,15 @@ For the **Composite Midpoint Rule** we again require even $n$.
 
 $$ \int_a^{b} f(x) dx = 2h \sum_{j=0}^{n/2} f(x_{2j}) + \frac{b - a}{6}h^2 f''(\mu). $$
 
-## Gaussian Quadature
+## Gaussian Quadrature
 
 Recall that Newton-Cotes formulas use values of the function $f$ at equally spaced points. While convenient, this can significantly reduce accuracy of the approximation.
 
-In contrast, Gaussian quadature picks the optimal nodes $x_1, x_2,\dots,x_n$ in $[a,b]$ and coefficients $c_1, c_2, \dots, c_n$ to minimize expected error in the approximation
+In contrast, Gaussian quadrature picks the optimal nodes $x_1, x_2,\dots,x_n$ in $[a,b]$ and coefficients $c_1, c_2, \dots, c_n$ to minimize expected error in the approximation
 
 $$ \int_a^{b} f(x) dx \approx \sum_{i=1}^{n} c_i f(x_i). $$
 
-Picking these optimal nodes and coefficients allows Gaussian quadature to be more accurate than Newton-Cotes formulas for the same number of nodes. While Newton-Cotes formulas can exactly approximate polynomials up of up to degree $n,$ Gaussian quadature can exactly approximatie polynomials of up to degree $2n - 1.$ This is achievable because the coefficients $c_i$ are arbitrary and the nodes $x_i$ are restricted only in being within $[a,b],$ so we get $2n$ parameters to choose, and the class of polynomials of degree at most $2n-1$ also contains $2n$ parameters, so properly picking $2n$ parameters allows us to exactly approximate any of those polynomials.
+Picking these optimal nodes and coefficients allows Gaussian quadrature to be more accurate than Newton-Cotes formulas for the same number of nodes. While Newton-Cotes formulas can exactly approximate polynomials up of up to degree $n,$ Gaussian quadrature can exactly approximatie polynomials of up to degree $2n - 1.$ This is achievable because the coefficients $c_i$ are arbitrary and the nodes $x_i$ are restricted only in being within $[a,b],$ so we get $2n$ parameters to choose, and the class of polynomials of degree at most $2n-1$ also contains $2n$ parameters, so properly picking $2n$ parameters allows us to exactly approximate any of those polynomials.
 
 For example, let's say we want to determine $c_1, c_2, x_1,$ and $x_2$ so that
 
@@ -133,13 +133,13 @@ We will use a collection of orthogonal polynomials called the **Legendre Polynom
 
 Note that these polynomials form an orthogonal basis for the monic polynomials over the interval $[-1, 1].$
 
-The roots of these polynomials are distinct, lie in $(-1, 1),$ are symmetric with respect to the origin, and are the correct choice for determining the parameters that give us the nodes and coefficients for Gaussian quadature.
+The roots of these polynomials are distinct, lie in $(-1, 1),$ are symmetric with respect to the origin, and are the correct choice for determining the parameters that give us the nodes and coefficients for Gaussian quadrature.
 
 The proof and reasoning are excluded here, but the procedure, using a the roots $r_{n,i}$ of the Legendre polynomials and associated coefficients $c_{n,i}$ (which are widely available in tables) is to approximate with precision $n$ as 
 
 $$ \int_{-1}^{1} f(x) dx \approx \sum_{i=1}^n c_{n, i} f(r_{n, i}). $$
 
-### Gaussian Quadature on Arbitrary Intervals
+### Gaussian Quadrature on Arbitrary Intervals
 
 This is all well and good if the interval in question is $[-1, 1],$ but what if it isn't?
 
