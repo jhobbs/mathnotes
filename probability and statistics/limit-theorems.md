@@ -100,3 +100,23 @@ $$ (X - E[X])^2 \ge t^2 \iff |X - E[X]| \ge t. $$
 Thus,
 
 $$ P(|X - E[X]| \ge t) \le \frac{\sigma^2}{t^2}. \square $$
+
+### Example
+
+Suppose the length $X$ of a fish is a random variable measured in inches with mean
+
+$$ E[X] = \mu = 20 \text{ inches} $$
+
+and variance
+
+$$ \sigma^2 = 9 \text{ inches}^2 $$
+
+Chebyshev's inequality states that for any $t > 0$:
+
+$$ P(|X - \mu| \ge t) \le \frac{\sigma^2}{t^2} $$
+
+For $t = 4$ inches, the inequality becomes:
+
+$$ P(|X - 20| \ge 4) \le \frac{9}{16} $$
+
+This tells us that the probability of a fish's length deviating from 20 inches by at least 4 inches is at most $\frac{9}{16}$.
