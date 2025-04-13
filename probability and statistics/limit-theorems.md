@@ -142,3 +142,58 @@ Then, by Chebyshev's Inequality, we have
 $$ P \left ( \left |\frac{X_1 + \cdots + X_n}{n} - \mu  \right | \geq \epsilon \right ) \leq \frac{\sigma^2}{n \epsilon^2}. $$
 
 Now, as $n$ increases, the term on the right approaches $0$, which by the Squeeze Theorem implies the term on the left also approaches $0,$ and is $0$ at the limit. $\square$
+
+## Moment Generating Functions
+
+If $X$ is a random variable, then its moment generating function is a real-valued function on the reals defined as
+
+$$ M_x(t) = E[e^{tX}]. $$
+
+If $X$ is discrete, this is then
+
+$$ M_x(t) = \sum_{x} e^{tx}f(x) $$
+
+and if X is continuous, then this is
+
+$$ M_x(t) = \int_{-\infty}^{\infty} e^{tx}f(x). $$
+
+Now, note that $M_x(0) = E[e^{0 \cdot X}] = E[1] = 1.$
+
+In general, for the random variable $X$ with the moment generating function $M_X(t),$ we have that $M_X'(0) = E[X]$ and $M_X^{(n)}(0) = E[X^n]$ if the derivatives exist at $0$.
+
+Moment generating functions are unique and completely specify random variables.
+
+*Theorem:* The moment generating function for the sum of two random variables is the product of the moment generating functions of the two random variables. More generally, if $X_1, X_2, \dots X_n$ are independent random variables, then
+
+$$ M_{X_1 + X_2 + \cdots + X_n}(t) = M_{X_1}(t) \cdot M_{X_2}(t) \cdots M_{X_n}(t). $$
+
+*Proof:* We'll prove the case where $n = 2;$ the general proof is exactly the same but more tedious.
+
+$$ \begin{aligned}
+
+M_{X+Y}(t) & = E[e^{t(X+Y)}] \\
+           & = E[e^{tX}e^{tY}] \\
+           & = E[e^{tX}]E[e^{tY}] \\
+           & = M_X(t)M_Y(t). \square
+
+\end{aligned} $$
+
+### Continuity Theorem For Moment Generating Functions
+
+In essence, The Continuity Theorem For Moment Generating Functions says that if you have a sequence of random variables whose MGFs converge “nicely” (in a neighborhood of zero) to a limit function, then that limit function is the MGF of some random variable and the distributions of your sequence converge to the distribution of that random variable.
+
+*Theorem:* Let ${X_n}$ be a sequence of random variables with moment generating functions defined by
+
+$$ M_{X_n}(t) = E[e^{tX_n}] $$  
+
+for all $\|t\| < \epsilon$ for some $\epsilon > 0$.
+
+Suppose there exists a function $M(t)$, finite for $\|t\| < \epsilon$, such that  
+
+$$ \lim_{n \to \infty} M_{X_n}(t) = M(t) $$  
+
+for all $\|t\| < \epsilon$, and that $M(t)$ is the moment generating function of some random variable $X$.
+
+Then the distributions of ${X_n}$ converge in distribution to $X$, i.e.,
+
+$$ X_n \xrightarrow{d} X. $$
