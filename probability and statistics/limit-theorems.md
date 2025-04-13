@@ -3,7 +3,9 @@ layout: page
 title: Limit Theorems
 ---
 
-# Preliminaries
+# Limit Theorems
+
+I'm not sure which of these are proper limit theorems and which are preliminaries, but this is all a build up to the Central Limit Theorem.
 
 ## Markov's Inequality
 
@@ -197,3 +199,19 @@ for all $\|t\| < \epsilon$, and that $M(t)$ is the moment generating function of
 Then the distributions of ${X_n}$ converge in distribution to $X$, i.e.,
 
 $$ X_n \xrightarrow{d} X. $$
+
+## Central Limit Theorem
+
+The intuitive version of the Central Limit Theorem is that if $n$ values are sampled from a distribution with a mean $\mu$ and standard deviation $\sigma,$ then the sample mean of these values, $\bar{X},$ is approximately normal with mean $\mu$ and standard deviation $\frac{\sigma}{\sqrt{n}}$ for large $n.$
+
+This means that no matter what the underlying distribution of a population is, any sufficiently large sample from the population will be approximately normal. How large is sufficiently large depends on the shape of the distribution - for symmetric distributions it is lower and for asymmetric it is higher, but a common value is $n \geq 30.$
+
+A compact way to write this is
+
+$$ \frac{\bar{X} - \mu}{\frac{\sigma}{\sqrt{n}}} \sim Z, \quad n \geq 30. $$
+
+A more precise version of the theorem follows.
+
+*Central Limit Theorem:* If $c$ is a real constant and $X_1, X_2, \dots$ are independent random variables with mean $\mu$ and standard deviation $\sigma,$ then
+
+$$ \lim_{n \to \infty} P \left ( \frac{X_1 + \cdots + X_n - n \mu}{\sigma \sqrt{n}} \leq c \right ) = \int_{- \infty}^{c} \frac{1}{\sqrt{2 \pi}} e^{-\frac{x^2}{2}} dx. $$
