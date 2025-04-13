@@ -120,3 +120,25 @@ For $t = 4$ inches, the inequality becomes:
 $$ P(|X - 20| \ge 4) \le \frac{9}{16} $$
 
 This tells us that the probability of a fish's length deviating from 20 inches by at least 4 inches is at most $\frac{9}{16}$.
+
+## Law of Large Numbers
+
+*Theorem:* Suppose $X_1, X_2, \dots$ are independent and identically distributed random variables with finite mean $\mu.$ Then for any $\epsilon > 0,$
+
+$$ \lim_{n \to \infty} P \left ( \left |\frac{X_1 + \cdots + X_n}{n} - \mu  \right | \geq \epsilon \right ) = 0. $$
+
+Intuitively, this means that the more identically distributed random variables we have, the closer their average value will get to the mean for the random variables. If we think of each random variable as an identical sample from the same population, another way to think of this is the more samples we get, the closer the average value across all samples will be to the true average value for the population, and we can get as close as we like to the true average value for the population by taking more samples.
+
+*Proof:* We assume that the variance of the random variables is also finite. Then, note that
+
+$$ E \left [ \frac{X_1 + \cdots X_n}{n} \right ] = \mu, $$
+
+and 
+
+$$ V \left [ \frac{X_1 + \cdots X_n}{n} \right ] = \frac{\sigma^2}{n}. $$
+
+Then, by Chebyshev's Inequality, we have
+
+$$ P \left ( \left |\frac{X_1 + \cdots + X_n}{n} - \mu  \right | \geq \epsilon \right ) \leq \frac{\sigma^2}{n \epsilon^2}. $$
+
+Now, as $n$ increases, the term on the right approaches $0$, which by the Squeeze Theorem implies the term on the left also approaches $0,$ and is $0$ at the limit. $\square$
