@@ -22,3 +22,9 @@ This is derived from the fact that the error is
 $$ E = \sum_{i=1}^m (y_i - P_n(x_i))^2. $$
 
 The system of equations is produced to minimize $E$ by setting $0 = \frac{\partial E}{\partial a_j}$  for each $j = 0, 1,\dots,n.$
+
+# Continuous Least Squares Approximation
+
+If we have a function $f \in C[a,b],$ we can use a similar method to approximate it with a polynomial of degree $n.$ This time, our $(n+1)$ normal equations are, for each $j = 0, 1, \dots, n,$
+
+$$ \sum_{k=0}^{n} a_k \int_{a}^{b} x^{j+k} dx = \int_{a}^{b} x^j f(x) dx. $$
