@@ -81,7 +81,7 @@ $$ \begin{aligned} L_{n, k}(x) & = \frac{(x - x_0)(x - x_1)\cdots(x - x_{k-1})(x
 
 Sometimes we will write just $L_k(x)$ instead of $L_{n,k}(x)$ when the value of $n$ is clear.
 
-## Divided Differences
+### Divided Differences
 
 If $P_n(x)$ is the $nth$ interpolating polynomial that agrees with $f$ at $n+1$ points, it is unique, but it be written in multiple forms. An alternative form that uses divided differences of $f$ with respect to samples at $x_0, x_1, \dots, x_n$ are used to express $P_n(x)$ in the form
 
@@ -158,6 +158,18 @@ float[] newtonsDividedDifference(float xs, float ys) {
 }
 ```
 
+### Chebyshev Polynomials
+
+We can use the orthogonal family of Chebyshev Polynomials to pick optimal nodes for minimizing error for approximation of a function with Lagrange Interpolating Polynomials.
+
+Doing so requires either that the function we're approximating is on $[-1, 1]$ or doing some more advanced transformations I won't cover here, so just assume that's the domain.
+
+Then, to make $P_n(x),$ we pick the nodes as the roots of the monic Chebyshev Polynomial $\tilde{T}_{n+1}.$ Those nodes are then given by
+
+$$ x_k = \bar{x}_{k+1} = \cos{\left ( \frac{2k + 1}{2(n+1)} \pi \right ).} $$
+
+We then proceed as usual using one of the above methods.
+ 
 ## Cubic Splines
 
 Using a single high-degree polynomial to approximate a function on an interval has some issues. Particualarly, high-degree polynomials can oscillate erratically.
