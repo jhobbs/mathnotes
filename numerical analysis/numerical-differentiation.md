@@ -9,7 +9,7 @@ Recall that the derivative of a function $f$ at $x_0$ is
 
 $$ f'(x_0) = \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h}. $$
 
-A simple approximation of $f(x_0)$ can be given by simply picking a small value of $h$ and computing
+A simple approximation of $f'(x_0)$ can be given by simply picking a small value of $h$ and computing
 
 $$ \frac{f(x_0 + h) - f(x_0)}{h}. $$
 

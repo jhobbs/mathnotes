@@ -21,9 +21,13 @@ where $x_0 = a, x_1 = b, h = b - a,$ and $\xi$ is some value in $(x_0, x_1).$
 
 Simpson's rule uses three points and is
 
-$$ \int_{x_0}^{x_1} f(x) dx = \frac{h}{3}(f(x_0) + 4 f(x_1) + f(x_2)) - \frac{h^5}{90}f^{(4)}(\xi), $$
+$$ \int_{a}^{b} f(x) dx = \frac{h}{3}(f(x_0) + 4 f(x_1) + f(x_2)) - \frac{h^5}{90}f^{(4)}(\xi), $$
 
 where $x_0 = a, x_2 = b, x_1 = a + h, h = (b - a)/2,$ and $\xi$ is some value in $(x_0, x_2).$
+
+Perhaps simpler to read:
+
+$$ \int_{a}^{b} f(x) dx \approx \frac{b - a}{6} \left [ f(a) + 4 f \left ( \frac{a + b}{2} \right ) + f(b) \right ] $$
 
 In general, integrating Lagrange interpolating polynomials and there error terms give us **Newton-Cotes** formulas; the Trapezoidal rule and Simpson's rule are the first two examples of these.
 
