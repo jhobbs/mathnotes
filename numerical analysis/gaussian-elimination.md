@@ -41,6 +41,14 @@ $$ A = LU $$
 
 where $L$ is lower triangular (with 1’s on the diagonal) and $U$ is upper triangular. The multipliers used during Gaussian elimination become the entries of $L$. In other words, we perform Gaussian elimination as usual to get $U,$ but we also leave breadcrumbs of which operations we used to do this to get $L.$
 
+We start with $L$ as the identity matrix.
+
+Let's say our pivot is at $E_{j,1}$ and we want to eliminate the entry at $E_{j+1, 1}.$ We find the multiplier $m_{j+1, 1}$ such that
+
+$$ E_{j+1, 1} - m_{j+1, 1} E_{j, 1} = 0 $$
+
+and then we record that $m_{j+1,1}$ in $L$ as $L_{j+1, 1}.$
+
 **3×3 example:**
 
 Suppose
