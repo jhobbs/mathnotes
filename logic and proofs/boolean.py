@@ -178,6 +178,7 @@ class Expression:
             return vars_set
         else:
             raise ValueError(f"Unknown op: {self.op}")
+        
 
     def eval(self, values: dict):
         if self.op == 'var':
@@ -194,6 +195,47 @@ class Expression:
             return self.args[0].eval(values) == self.args[1].eval(values)
         else:
             raise ValueError(f"Unknown op: {self.op}")
+
+    def equivalent(self, other) -> bool:
+        """
+        Check if this expression is logically equivalent to another expression.
+        """
+        vars_self = self.vars()
+        vars_other = other.vars()
+        all_vars = sorted(vars_self | vars_other)
+        from itertools import product
+        for values_tuple in product([False, True], repeat=len(all_vars)):
+            values = dict(zip(all_vars, values_tuple))
+            if self.eval(values) != other.eval(values):
+                print(f"Not equivalent for values: {values}. {self.eval(values)} != {other.eval(values)}")
+                return False
+        return True
+
+    def classify(self) -> str:
+        """
+        Classify the expression as 'tautology', 'contradiction', or 'contingency'.
+        Returns:
+            str: One of 'tautology', 'contradiction', or 'contingency'
+        """
+        vars_ = sorted(self.vars())
+        from itertools import product
+        results = set()
+        for values_tuple in product([False, True], repeat=len(vars_)):
+            values = dict(zip(vars_, values_tuple))
+            results.add(self.eval(values))
+        if results == {True}:
+            return "tautology"
+        elif results == {False}:
+            return "contradiction"
+        else:
+            return "contingency"
+
+    @classmethod
+    def from_string(cls, s: str):
+        tokens = tokenize(s)
+        parser = Parser(tokens)
+        ast = parser.parse()
+        return ast_to_expr(ast)
 
     def __repr__(self):
         if self.op == 'var':
@@ -215,20 +257,15 @@ def ast_to_expr(ast: ASTNode) -> Expression:
         return Expression('bicond', ast_to_expr(ast.left), ast_to_expr(ast.right))
     else:
         raise TypeError(f"Unknown AST node: {ast}")
+    
 
 # Example usage:
 if __name__ == "__main__":
-    expr = "a && (b || !c) -> d <-> e"
-    #expr = "a"
-    tokens = tokenize(expr)
-    parser = Parser(tokens)
-    ast = parser.parse()
-    print(ast)
-    # Convert AST to Expression and evaluate
-    expr_obj = ast_to_expr(ast)
-    print(expr_obj)
-    print(expr_obj.vars())
-    # Example evaluation
-    #values = {'a': True}
-    values = {'a': True, 'b': False, 'c': True, 'd': True, 'e': False}
-    print(expr_obj.eval(values))
+    expr1 = Expression.from_string("(p -> q) -> r")
+    expr2 = Expression.from_string("p -> (q -> r)")
+    print(expr1.equivalent(expr2))
+    # Example classification usage:
+    print("expr1:", expr1.classify())
+    print("expr2:", expr2.classify())
+    expr3 = Expression.from_string("p -> (p || q)")
+    print("expr3:", expr3.classify())
