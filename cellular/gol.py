@@ -9,8 +9,11 @@ Performance optimizations:
 """
 
 import tkinter as tk
+from tkinter import filedialog, messagebox
 import numpy as np
 import random
+import json
+import os
 from collections import deque
 from scipy import ndimage
 
@@ -44,6 +47,19 @@ class OptimizedGameOfLife:
         self.last_update = 0
         self.update_interval = 1000 // self.frame_rate
         
+        # Save/Load
+        self.initial_state = None  # Store the starting configuration
+        self.saves_dir = "saved_patterns"
+        if not os.path.exists(self.saves_dir):
+            os.makedirs(self.saves_dir)
+        
+        # Cycle detection
+        self.state_history = deque(maxlen=1000)  # Store up to 1000 states
+        self.seen_states = {}  # Map state -> generation when first seen
+        self.cycle_detected = False
+        self.cycle_length = 0
+        self.cycle_start_gen = 0
+        
         self.setup_ui()
         self.reset_grid()
         self.update_loop()
@@ -65,6 +81,26 @@ class OptimizedGameOfLife:
             bg='#555555', fg='white', font=('Arial', 9)
         )
         self.reset_btn.pack(side=tk.LEFT, padx=3)
+        
+        # Save/Load buttons
+        self.save_btn = tk.Button(
+            control_frame, text="Save", command=self.save_pattern,
+            bg='#444444', fg='white', font=('Arial', 9)
+        )
+        self.save_btn.pack(side=tk.LEFT, padx=3)
+        
+        self.load_btn = tk.Button(
+            control_frame, text="Load", command=self.load_pattern,
+            bg='#444444', fg='white', font=('Arial', 9)
+        )
+        self.load_btn.pack(side=tk.LEFT, padx=3)
+        
+        # Save current state vs initial state
+        self.save_current_btn = tk.Button(
+            control_frame, text="Save Current", command=self.save_current_state,
+            bg='#666666', fg='white', font=('Arial', 8)
+        )
+        self.save_current_btn.pack(side=tk.LEFT, padx=2)
         
         # Main container for canvas and stats
         main_frame = tk.Frame(self.master, bg='#333333')
@@ -112,7 +148,7 @@ class OptimizedGameOfLife:
                 bg='#333333', fg='white', font=('Arial', 10, 'bold')).pack(anchor='w', pady=(0, 5))
         
         self.stats_labels = {}
-        stats = ['Running', 'Population', 'Rate Change', 'Generation', 'FPS']
+        stats = ['Running', 'Population', 'Rate Change', 'Generation', 'Cycle Status']
         for stat in stats:
             label = tk.Label(controls_frame, text=f"{stat}: ", 
                            bg='#333333', fg='white', font=('Arial', 9), anchor='w')
@@ -132,6 +168,11 @@ class OptimizedGameOfLife:
     
     def toggle_running(self):
         self.running = not self.running
+        # Reset cycle detection when manually starting/stopping
+        if self.running and self.cycle_detected:
+            self.cycle_detected = False
+            self.cycle_length = 0
+            self.cycle_start_gen = 0
     
     def reset_grid(self):
         self.initial_population = self.pop_slider.get()
@@ -146,8 +187,17 @@ class OptimizedGameOfLife:
         self.grid[mask] = 1  # All cells are green
         
         self.prev_grid = self.grid.copy()
+        self.initial_state = self.grid.copy()  # Save initial configuration
         self.update_population_history()
         self.generations = 0
+        
+        # Reset cycle detection
+        self.state_history.clear()
+        self.seen_states.clear()
+        self.cycle_detected = False
+        self.cycle_length = 0
+        self.cycle_start_gen = 0
+        
         self.draw_all_cells()
     
     def update_population_history(self):
@@ -174,6 +224,9 @@ class OptimizedGameOfLife:
         if 0 <= x < self.cols and 0 <= y < self.rows:
             self.grid[x][y] = 1 if self.grid[x][y] == 0 else 0
             self.draw_cell(x, y)
+            # Update initial state if we're at generation 0 (editing starting pattern)
+            if self.generations == 0:
+                self.initial_state = self.grid.copy()
     
     def count_neighbors_vectorized(self):
         """Vectorized neighbor counting using convolution"""
@@ -216,6 +269,38 @@ class OptimizedGameOfLife:
         
         self.update_population_history()
         self.generations += 1
+        
+        # Check for cycles
+        self.check_for_cycles()
+    
+    def check_for_cycles(self):
+        """Detect repeating patterns in the grid state"""
+        if self.cycle_detected:
+            return
+        
+        # Convert current grid to a hashable format for comparison
+        current_state = self.grid.tobytes()
+        
+        # Check if we've seen this state before
+        if current_state in self.seen_states:
+            # Found a cycle!
+            first_occurrence = self.seen_states[current_state]
+            self.cycle_detected = True
+            self.cycle_length = self.generations - first_occurrence
+            self.cycle_start_gen = first_occurrence
+            self.running = False  # Auto-pause when cycle detected
+            return
+        
+        # Record this state
+        self.seen_states[current_state] = self.generations
+        self.state_history.append((self.generations, current_state))
+        
+        # Clean up old states if we're at capacity
+        if len(self.state_history) > 950:  # Clean up when getting close to limit
+            # Remove the oldest states from the seen_states dict
+            old_gen, old_state = self.state_history[0]
+            if old_state in self.seen_states and self.seen_states[old_state] == old_gen:
+                del self.seen_states[old_state]
     
     def draw_cell(self, x, y):
         """Draw or update a single cell"""
@@ -268,16 +353,31 @@ class OptimizedGameOfLife:
         else:
             fps = 0
         
+        # Cycle status
+        if self.cycle_detected:
+            cycle_status = f"Cycle {self.cycle_length} (gen {self.cycle_start_gen})"
+            cycle_color = '#FFD700'  # Gold color for cycle detection
+        else:
+            cycle_status = "None"
+            cycle_color = '#FFFFFF'
+        
         stats_data = {
             'Running': "Yes" if self.running else "No",
             'Population': f"{population_percent:.1f}%",
             'Rate Change': f"{rate_change:.1f}",
             'Generation': str(self.generations),
+            'Cycle Status': cycle_status,
             'FPS': f"{fps:.1f}"
         }
         
+        # Update colors for cycle status
+        colors = {
+            'Cycle Status': cycle_color
+        }
+        
         for stat, value in stats_data.items():
-            self.stats_labels[stat].config(text=f"{stat}: {value}")
+            color = colors.get(stat, '#FFFFFF')
+            self.stats_labels[stat].config(text=f"{stat}: {value}", fg=color)
     
     def update_loop(self):
         current_time = self.master.tk.call('clock', 'milliseconds')
@@ -294,6 +394,135 @@ class OptimizedGameOfLife:
         
         # Schedule next update (faster polling for smooth interaction)
         self.master.after(16, self.update_loop)  # ~60 FPS UI updates
+    
+    def save_pattern(self):
+        """Save the initial configuration to a file"""
+        if self.initial_state is None:
+            messagebox.showwarning("No Pattern", "No initial pattern to save. Reset first to create a pattern.")
+            return
+        
+        filename = filedialog.asksaveasfilename(
+            title="Save Pattern",
+            defaultextension=".json",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+            initialdir=self.saves_dir
+        )
+        
+        if filename:
+            try:
+                # Convert numpy array to list for JSON serialization
+                pattern_data = {
+                    "pattern": self.initial_state.tolist(),
+                    "cols": self.cols,
+                    "rows": self.rows,
+                    "cell_size": self.cell_size,
+                    "initial_population": self.initial_population,
+                    "description": f"Pattern saved with {np.sum(self.initial_state > 0)} live cells"
+                }
+                
+                with open(filename, 'w') as f:
+                    json.dump(pattern_data, f, indent=2)
+                
+                messagebox.showinfo("Saved", f"Pattern saved to {os.path.basename(filename)}")
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to save pattern: {str(e)}")
+    
+    def save_current_state(self):
+        """Save the current state of the grid"""
+        filename = filedialog.asksaveasfilename(
+            title="Save Current State",
+            defaultextension=".json",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+            initialdir=self.saves_dir
+        )
+        
+        if filename:
+            try:
+                # Convert numpy array to list for JSON serialization
+                pattern_data = {
+                    "pattern": self.grid.tolist(),
+                    "cols": self.cols,
+                    "rows": self.rows,
+                    "cell_size": self.cell_size,
+                    "initial_population": self.initial_population,
+                    "generation": self.generations,
+                    "description": f"State saved at generation {self.generations} with {np.sum(self.grid > 0)} live cells"
+                }
+                
+                with open(filename, 'w') as f:
+                    json.dump(pattern_data, f, indent=2)
+                
+                messagebox.showinfo("Saved", f"Current state saved to {os.path.basename(filename)}")
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to save current state: {str(e)}")
+    
+    def load_pattern(self):
+        """Load a pattern from a file"""
+        filename = filedialog.askopenfilename(
+            title="Load Pattern",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+            initialdir=self.saves_dir
+        )
+        
+        if filename:
+            try:
+                with open(filename, 'r') as f:
+                    pattern_data = json.load(f)
+                
+                # Validate the loaded data
+                if "pattern" not in pattern_data:
+                    messagebox.showerror("Error", "Invalid pattern file: missing pattern data")
+                    return
+                
+                loaded_pattern = np.array(pattern_data["pattern"], dtype=np.int8)
+                loaded_cols, loaded_rows = loaded_pattern.shape
+                
+                # Check if dimensions match current grid
+                if loaded_cols != self.cols or loaded_rows != self.rows:
+                    response = messagebox.askyesno(
+                        "Dimension Mismatch", 
+                        f"Pattern dimensions ({loaded_cols}x{loaded_rows}) don't match current grid ({self.cols}x{self.rows}). "
+                        f"Load anyway? Pattern may be cropped or padded."
+                    )
+                    if not response:
+                        return
+                
+                # Stop simulation and clear grid
+                self.running = False
+                self.grid.fill(0)
+                self.canvas.delete("all")
+                self.cell_objects.clear()
+                
+                # Load pattern, handling dimension differences
+                min_cols = min(loaded_cols, self.cols)
+                min_rows = min(loaded_rows, self.rows)
+                self.grid[:min_cols, :min_rows] = loaded_pattern[:min_cols, :min_rows]
+                
+                # Update states
+                self.prev_grid = self.grid.copy()
+                self.initial_state = self.grid.copy()
+                self.generations = 0
+                self.population_history.clear()
+                self.update_population_history()
+                
+                # Reset cycle detection
+                self.state_history.clear()
+                self.seen_states.clear()
+                self.cycle_detected = False
+                self.cycle_length = 0
+                self.cycle_start_gen = 0
+                
+                # Update UI
+                if "initial_population" in pattern_data:
+                    self.pop_slider.set(pattern_data["initial_population"])
+                
+                self.draw_all_cells()
+                
+                description = pattern_data.get("description", "Loaded pattern")
+                messagebox.showinfo("Loaded", f"Pattern loaded successfully!\n{description}")
+                
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to load pattern: {str(e)}")
 
 
 def main():
