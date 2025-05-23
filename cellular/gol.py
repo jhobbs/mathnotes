@@ -59,6 +59,11 @@ class OptimizedGameOfLife:
         self.cycle_detected = False
         self.cycle_length = 0
         self.cycle_start_gen = 0
+        self.auto_pause_on_cycle = True  # Flag to control auto-pausing
+        
+        # Speed mode
+        self.speed_mode = False
+        self.max_generations = 100000
         
         self.setup_ui()
         self.reset_grid()
@@ -101,6 +106,13 @@ class OptimizedGameOfLife:
             bg='#666666', fg='white', font=('Arial', 8)
         )
         self.save_current_btn.pack(side=tk.LEFT, padx=2)
+        
+        # Speed mode toggle
+        self.speed_btn = tk.Button(
+            control_frame, text="Speed Mode", command=self.toggle_speed_mode,
+            bg='#800080', fg='white', font=('Arial', 9)
+        )
+        self.speed_btn.pack(side=tk.LEFT, padx=3)
         
         # Main container for canvas and stats
         main_frame = tk.Frame(self.master, bg='#333333')
@@ -148,7 +160,7 @@ class OptimizedGameOfLife:
                 bg='#333333', fg='white', font=('Arial', 10, 'bold')).pack(anchor='w', pady=(0, 5))
         
         self.stats_labels = {}
-        stats = ['Running', 'Population', 'Rate Change', 'Generation', 'Cycle Status']
+        stats = ['Running', 'Population', 'Rate Change', 'Generation', 'Cycle Status', 'Speed Mode']
         for stat in stats:
             label = tk.Label(controls_frame, text=f"{stat}: ", 
                            bg='#333333', fg='white', font=('Arial', 9), anchor='w')
@@ -168,11 +180,20 @@ class OptimizedGameOfLife:
     
     def toggle_running(self):
         self.running = not self.running
-        # Reset cycle detection when manually starting/stopping
+        # Don't reset cycle detection, just disable auto-pause after first cycle
         if self.running and self.cycle_detected:
-            self.cycle_detected = False
-            self.cycle_length = 0
-            self.cycle_start_gen = 0
+            self.auto_pause_on_cycle = False
+    
+    def toggle_speed_mode(self):
+        """Toggle speed mode - runs at max speed until cycle or 100k generations"""
+        self.speed_mode = not self.speed_mode
+        
+        if self.speed_mode:
+            self.speed_btn.config(text="Stop Speed", bg='#FF4500')
+            if not self.running:
+                self.running = True
+        else:
+            self.speed_btn.config(text="Speed Mode", bg='#800080')
     
     def reset_grid(self):
         self.initial_population = self.pop_slider.get()
@@ -197,6 +218,12 @@ class OptimizedGameOfLife:
         self.cycle_detected = False
         self.cycle_length = 0
         self.cycle_start_gen = 0
+        self.auto_pause_on_cycle = True  # Re-enable auto-pause for new simulation
+        
+        # Reset speed mode
+        if self.speed_mode:
+            self.speed_mode = False
+            self.speed_btn.config(text="Speed Mode", bg='#800080')
         
         self.draw_all_cells()
     
@@ -272,6 +299,12 @@ class OptimizedGameOfLife:
         
         # Check for cycles
         self.check_for_cycles()
+        
+        # Stop speed mode if conditions are met
+        if self.speed_mode and (self.cycle_detected or self.generations >= self.max_generations):
+            self.speed_mode = False
+            self.speed_btn.config(text="Speed Mode", bg='#800080')
+            self.running = False
     
     def check_for_cycles(self):
         """Detect repeating patterns in the grid state"""
@@ -288,7 +321,9 @@ class OptimizedGameOfLife:
             self.cycle_detected = True
             self.cycle_length = self.generations - first_occurrence
             self.cycle_start_gen = first_occurrence
-            self.running = False  # Auto-pause when cycle detected
+            # Only auto-pause if enabled and not in speed mode
+            if self.auto_pause_on_cycle and not self.speed_mode:
+                self.running = False
             return
         
         # Record this state
@@ -361,18 +396,24 @@ class OptimizedGameOfLife:
             cycle_status = "None"
             cycle_color = '#FFFFFF'
         
+        # Speed mode status
+        speed_status = "ON" if self.speed_mode else "OFF"
+        speed_color = '#FF4500' if self.speed_mode else '#FFFFFF'
+        
         stats_data = {
             'Running': "Yes" if self.running else "No",
             'Population': f"{population_percent:.1f}%",
             'Rate Change': f"{rate_change:.1f}",
             'Generation': str(self.generations),
             'Cycle Status': cycle_status,
+            'Speed Mode': speed_status,
             'FPS': f"{fps:.1f}"
         }
         
-        # Update colors for cycle status
+        # Update colors for cycle status and speed mode
         colors = {
-            'Cycle Status': cycle_color
+            'Cycle Status': cycle_color,
+            'Speed Mode': speed_color
         }
         
         for stat, value in stats_data.items():
@@ -382,18 +423,68 @@ class OptimizedGameOfLife:
     def update_loop(self):
         current_time = self.master.tk.call('clock', 'milliseconds')
         
-        # Update game state at specified frame rate
-        if current_time - self.last_update >= self.update_interval:
-            self.update_grid()
-            self.draw_changed_cells()
-            self.last_update = current_time
-        
-        # Update stats and UI less frequently (every 100ms)
-        if current_time % 100 < 20:  # Approximate every 100ms
+        if self.speed_mode and self.running:
+            # Speed mode: run as fast as possible until done
+            generations_per_batch = 5000  # Process many generations at once
+            for _ in range(generations_per_batch):
+                if not self.running or self.cycle_detected or self.generations >= self.max_generations:
+                    break
+                # Update grid logic only, no drawing
+                if not self.running:
+                    return
+                
+                # Store previous state
+                self.prev_grid = self.grid.copy()
+                
+                # Vectorized neighbor counting
+                neighbor_count = self.count_neighbors_vectorized()
+                
+                # Apply Conway's rules vectorially
+                birth_mask = (self.grid == 0) & (neighbor_count == 3)
+                death_mask = (self.grid > 0) & ((neighbor_count < 2) | (neighbor_count > 3))
+                
+                # Apply deaths and births
+                self.grid[death_mask] = 0
+                self.grid[birth_mask] = 1
+                
+                self.update_population_history()
+                self.generations += 1
+                
+                # Check for cycles (simplified for speed)
+                self.check_for_cycles()
+                
+                # Stop speed mode if conditions are met
+                if self.cycle_detected or self.generations >= self.max_generations:
+                    self.speed_mode = False
+                    self.speed_btn.config(text="Speed Mode", bg='#800080')
+                    self.running = False
+                    # Force complete redraw when speed mode ends
+                    self.canvas.delete("all")
+                    self.cell_objects.clear()
+                    self.draw_all_cells()
+                    break
+            
+            # Update display and stats (only when done or periodically)
+            if not self.speed_mode or self.generations % 5000 == 0:
+                self.draw_changed_cells()
             self.update_stats()
+            
+        else:
+            # Normal mode: update at specified frame rate
+            if current_time - self.last_update >= self.update_interval:
+                self.update_grid()
+                self.draw_changed_cells()
+                self.last_update = current_time
+            
+            # Update stats and UI less frequently (every 100ms)
+            if current_time % 100 < 20:  # Approximate every 100ms
+                self.update_stats()
         
-        # Schedule next update (faster polling for smooth interaction)
-        self.master.after(16, self.update_loop)  # ~60 FPS UI updates
+        # Schedule next update
+        if self.speed_mode and self.running:
+            self.master.after(1, self.update_loop)  # Immediate in speed mode
+        else:
+            self.master.after(16, self.update_loop)  # ~60 FPS UI updates normally
     
     def save_pattern(self):
         """Save the initial configuration to a file"""
@@ -511,6 +602,7 @@ class OptimizedGameOfLife:
                 self.cycle_detected = False
                 self.cycle_length = 0
                 self.cycle_start_gen = 0
+                self.auto_pause_on_cycle = True  # Re-enable auto-pause for loaded pattern
                 
                 # Update UI
                 if "initial_population" in pattern_data:
@@ -526,6 +618,8 @@ class OptimizedGameOfLife:
 
 
 def main():
+    import sys
+    
     try:
         import scipy
     except ImportError:
@@ -534,9 +628,28 @@ def main():
         subprocess.check_call(["pip", "install", "scipy"])
         import scipy
     
+    # Check for test mode
+    test_mode = "--test" in sys.argv
+    
     root = tk.Tk()
     root.resizable(False, False)
     game = OptimizedGameOfLife(root)
+    
+    if test_mode:
+        print("Running in test mode...")
+        # Auto-start the simulation
+        game.running = True
+        
+        # Schedule auto-exit after 3 seconds
+        def auto_exit():
+            print(f"Test completed. Ran {game.generations} generations.")
+            if game.cycle_detected:
+                print(f"Cycle detected: length {game.cycle_length} starting at generation {game.cycle_start_gen}")
+            root.quit()
+            root.destroy()
+        
+        root.after(3000, auto_exit)  # Exit after 3 seconds
+    
     root.mainloop()
 
 
