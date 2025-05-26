@@ -1,12 +1,18 @@
 import os
 import re
 from pathlib import Path
+from datetime import datetime
 from flask import Flask, render_template, send_from_directory, abort, url_for
 import markdown
 import frontmatter
 import yaml
 
 app = Flask(__name__)
+
+# Add current year to all templates
+@app.context_processor
+def inject_year():
+    return {'current_year': datetime.now().year}
 
 # Configuration
 CONTENT_DIRS = [

@@ -138,6 +138,15 @@
         table th {
             background-color: #f6f8fa;
         }
+        
+        footer {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e1e4e8;
+            text-align: center;
+            color: #6a737d;
+            font-size: 0.9rem;
+        }
     </style>
     
     {% block extra_head %}{% endblock %}
@@ -153,5 +162,9 @@
     <main>
         {% block content %}{% endblock %}
     </main>
+    
+    <footer>
+        <p>&copy; {{ current_year }} Jason Hobbs. All rights reserved.</p>
+    </footer>
 </body>
 </html>
