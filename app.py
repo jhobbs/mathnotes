@@ -83,6 +83,10 @@ def render_markdown_file(filepath):
                 placeholder = f'INLINEMATH{i}PLACEHOLDER'
                 html_content = html_content.replace(placeholder, f'${math}$')
             
+            # Fix escaped asterisks and tildes that should be rendered normally
+            html_content = html_content.replace(r'\*', '*')
+            html_content = html_content.replace(r'\~', '~')
+            
             return {
                 'content': html_content,
                 'metadata': post.metadata,
