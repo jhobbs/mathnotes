@@ -2,7 +2,7 @@ import os
 import re
 from pathlib import Path
 from datetime import datetime
-from flask import Flask, render_template, send_from_directory, abort, url_for
+from flask import Flask, render_template, send_from_directory, abort, url_for, make_response
 import markdown
 import frontmatter
 import yaml
@@ -202,6 +202,61 @@ def serve_content(filepath):
 def static_files(filename):
     """Serve static files."""
     return send_from_directory('static', filename)
+
+@app.route('/robots.txt')
+def robots():
+    """Serve robots.txt."""
+    return send_from_directory('.', 'robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    """Generate sitemap.xml for SEO."""
+    pages = []
+    base_url = 'https://www.lacunary.org'
+    
+    # Add home page
+    pages.append({
+        'loc': base_url,
+        'changefreq': 'weekly',
+        'priority': '1.0'
+    })
+    
+    # Recursively find all markdown files
+    def find_all_pages(directory=''):
+        for section in CONTENT_DIRS:
+            section_path = Path(section)
+            if section_path.exists():
+                for md_file in section_path.rglob('*.md'):
+                    # Skip index files as they're handled by directory URLs
+                    if md_file.name == 'index.md':
+                        url_path = str(md_file.parent).replace('\\', '/')
+                    else:
+                        url_path = str(md_file.with_suffix('')).replace('\\', '/')
+                    
+                    pages.append({
+                        'loc': f"{base_url}/{url_path}",
+                        'changefreq': 'monthly',
+                        'priority': '0.8'
+                    })
+    
+    find_all_pages()
+    
+    # Generate XML
+    sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    sitemap_xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    
+    for page in pages:
+        sitemap_xml += '  <url>\n'
+        sitemap_xml += f'    <loc>{page["loc"]}</loc>\n'
+        sitemap_xml += f'    <changefreq>{page["changefreq"]}</changefreq>\n'
+        sitemap_xml += f'    <priority>{page["priority"]}</priority>\n'
+        sitemap_xml += '  </url>\n'
+    
+    sitemap_xml += '</urlset>'
+    
+    response = make_response(sitemap_xml)
+    response.headers['Content-Type'] = 'application/xml'
+    return response
 
 @app.errorhandler(404)
 def page_not_found(e):

@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://jhobbs.github.io/mathnotes/sitemap.xml
+
+Sitemap: https://www.lacunary.org/sitemap.xml
