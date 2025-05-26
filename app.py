@@ -16,9 +16,9 @@ def inject_year():
 
 # Configuration
 CONTENT_DIRS = [
-    "algebra", "calculus", "ode", "trigonometry", "logic and proofs", 
-    "linear algebra", "physics", "complex", "graphics", 
-    "partial differential equations", "probability and statistics", 
+    "algebra", "calculus", "differential equations", "trigonometry", "logic and proofs", 
+    "linear algebra", "physics", "complex analysis", "graphics", 
+    "probability and statistics", 
     "misc", "numerical analysis", "discrete math", "cellular"
 ]
 
@@ -127,31 +127,27 @@ def get_all_content_for_section(section_path):
     if not path.exists():
         return content_files
     
-    for item in sorted(path.iterdir()):
-        if item.is_file() and item.suffix == '.md':
-            content_files.append({
-                'name': item.stem.replace('-', ' ').title(),
-                'path': str(item.relative_to(Path('.'))).replace('\\', '/'),
-                'is_subdir': False
-            })
-        elif item.is_dir() and not item.name.startswith('.'):
-            # Recursively get files from subdirectories
-            subdir_files = []
-            for subitem in sorted(item.iterdir()):
-                if subitem.is_file() and subitem.suffix == '.md':
-                    subdir_files.append({
-                        'name': subitem.stem.replace('-', ' ').title(),
-                        'path': str(subitem.relative_to(Path('.'))).replace('\\', '/')
-                    })
-            
-            if subdir_files:
-                content_files.append({
-                    'name': item.name.replace('-', ' ').title(),
-                    'is_subdir': True,
-                    'files': subdir_files
+    def process_directory(dir_path, depth=0):
+        items = []
+        for item in sorted(dir_path.iterdir()):
+            if item.is_file() and item.suffix == '.md':
+                items.append({
+                    'name': item.stem.replace('-', ' ').title(),
+                    'path': str(item.relative_to(Path('.'))).replace('\\', '/'),
+                    'is_subdir': False
                 })
+            elif item.is_dir() and not item.name.startswith('.') and not item.name.startswith('__'):
+                # Recursively get files from subdirectories
+                subdir_content = process_directory(item, depth + 1)
+                if subdir_content:
+                    items.append({
+                        'name': item.name.replace('-', ' ').title(),
+                        'is_subdir': True,
+                        'files': subdir_content
+                    })
+        return items
     
-    return content_files
+    return process_directory(path)
 
 @app.route('/')
 def index():

@@ -106,6 +106,27 @@
 </style>
 {% endblock %}
 
+{% macro render_item(item, level) %}
+    {% if item.is_subdir %}
+        <li class="content-item">
+            <div class="subdirectory" style="margin-left: {{ level * 1.5 }}rem;">
+                <h5 class="subdir-header">{{ item.name }}</h5>
+                <ul class="subdir-files">
+                    {% for subitem in item.files %}
+                        {{ render_item(subitem, level + 1) }}
+                    {% endfor %}
+                </ul>
+            </div>
+        </li>
+    {% else %}
+        <li {% if level == 0 %}class="content-item"{% endif %}>
+            <a href="{{ url_for('serve_content', filepath=item.path) }}" class="content-link">
+                {{ item.name }}
+            </a>
+        </li>
+    {% endif %}
+{% endmacro %}
+
 {% block content %}
 <h2>Mathematics Notes</h2>
 <p>{{ config.SITE_DESCRIPTION }}</p>
@@ -123,28 +144,7 @@
         <div class="section-content">
             <ul class="content-list">
                 {% for item in section.content %}
-                    {% if item.is_subdir %}
-                        <li class="content-item">
-                            <div class="subdirectory">
-                                <h5 class="subdir-header">{{ item.name }}</h5>
-                                <ul class="subdir-files">
-                                    {% for file in item.files %}
-                                    <li>
-                                        <a href="{{ url_for('serve_content', filepath=file.path) }}" class="content-link">
-                                            {{ file.name }}
-                                        </a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </li>
-                    {% else %}
-                        <li class="content-item">
-                            <a href="{{ url_for('serve_content', filepath=item.path) }}" class="content-link">
-                                {{ item.name }}
-                            </a>
-                        </li>
-                    {% endif %}
+                    {{ render_item(item, 0) }}
                 {% endfor %}
             </ul>
         </div>
@@ -172,12 +172,6 @@ function toggleSection(header) {
     }
 }
 
-// Optional: Open first section by default
-window.addEventListener('DOMContentLoaded', function() {
-    const firstHeader = document.querySelector('.section-header');
-    if (firstHeader) {
-        toggleSection(firstHeader);
-    }
-});
+// All sections start closed
 </script>
 {% endblock %}
