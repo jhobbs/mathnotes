@@ -25,7 +25,3 @@ primary_region = "ord"
   timeout = "5s"
   path = "/"
 
-[mounts]
-  source = "mathnotes_data"
-  destination = "/data"
-  initial_size = "1gb"
