@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - {{ config.SITE_TITLE }}{% endblock %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+
+{% if subdirs %}
+<h3>Subdirectories</h3>
+<ul class="file-list">
+    {% for subdir in subdirs %}
+    <li>
+        <a href="{{ url_for('serve_content', filepath=subdir.path) }}">📁 {{ subdir.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if files %}
+<h3>Files</h3>
+<ul class="file-list">
+    {% for file in files %}
+    <li>
+        <a href="{{ url_for('serve_content', filepath=file.path) }}">📄 {{ file.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if not files and not subdirs %}
+<p>This directory is empty.</p>
+{% endif %}
+{% endblock %}

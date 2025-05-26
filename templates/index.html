@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.SITE_TITLE }} - Home{% endblock %}
+
+{% block extra_head %}
+<style>
+    .collapsible-section {
+        margin-bottom: 1rem;
+    }
+    
+    .section-header {
+        background-color: #f6f8fa;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        border: 1px solid #e1e4e8;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: background-color 0.2s;
+    }
+    
+    .section-header:hover {
+        background-color: #e1e4e8;
+    }
+    
+    .section-header.active {
+        background-color: #0366d6;
+        color: white;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .toggle-icon {
+        font-size: 1.2rem;
+        transition: transform 0.3s;
+    }
+    
+    .section-header.active .toggle-icon {
+        transform: rotate(90deg);
+    }
+    
+    .section-content {
+        display: none;
+        border: 1px solid #e1e4e8;
+        border-top: none;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+        padding: 1rem;
+        background-color: #ffffff;
+    }
+    
+    .section-content.show {
+        display: block;
+    }
+    
+    .content-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .content-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .content-item:last-child {
+        border-bottom: none;
+    }
+    
+    .content-link {
+        color: #0366d6;
+        text-decoration: none;
+        display: block;
+        padding: 0.25rem 0;
+    }
+    
+    .content-link:hover {
+        text-decoration: underline;
+    }
+    
+    .subdirectory {
+        margin-left: 1.5rem;
+        margin-top: 0.5rem;
+    }
+    
+    .subdir-header {
+        font-weight: 600;
+        color: #586069;
+        margin: 0.5rem 0;
+        font-size: 1.1rem;
+    }
+    
+    .subdir-files {
+        list-style: none;
+        padding: 0;
+        margin-left: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>Mathematics Notes</h2>
+<p>{{ config.SITE_DESCRIPTION }}</p>
+
+<h3>Topics</h3>
+<p style="color: #586069; margin-bottom: 1.5rem;">Click on any section to expand and view its contents</p>
+
+<div class="sections-container">
+    {% for section in sections %}
+    <div class="collapsible-section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <h4 class="section-title">{{ section.name }}</h4>
+            <span class="toggle-icon">▶</span>
+        </div>
+        <div class="section-content">
+            <ul class="content-list">
+                {% for item in section.content %}
+                    {% if item.is_subdir %}
+                        <li class="content-item">
+                            <div class="subdirectory">
+                                <h5 class="subdir-header">{{ item.name }}</h5>
+                                <ul class="subdir-files">
+                                    {% for file in item.files %}
+                                    <li>
+                                        <a href="{{ url_for('serve_content', filepath=file.path) }}" class="content-link">
+                                            {{ file.name }}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="content-item">
+                            <a href="{{ url_for('serve_content', filepath=item.path) }}" class="content-link">
+                                {{ item.name }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+function toggleSection(header) {
+    const content = header.nextElementSibling;
+    const isOpen = content.classList.contains('show');
+    
+    // Close all sections
+    document.querySelectorAll('.section-content').forEach(el => {
+        el.classList.remove('show');
+    });
+    document.querySelectorAll('.section-header').forEach(el => {
+        el.classList.remove('active');
+    });
+    
+    // Open clicked section if it was closed
+    if (!isOpen) {
+        content.classList.add('show');
+        header.classList.add('active');
+    }
+}
+
+// Optional: Open first section by default
+window.addEventListener('DOMContentLoaded', function() {
+    const firstHeader = document.querySelector('.section-header');
+    if (firstHeader) {
+        toggleSection(firstHeader);
+    }
+});
+</script>
+{% endblock %}
