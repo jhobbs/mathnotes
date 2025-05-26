@@ -22,11 +22,9 @@ CONTENT_DIRS = [
     "misc", "numerical analysis", "discrete math", "cellular"
 ]
 
-# Load site configuration
-with open('_config.yml', 'r') as f:
-    site_config = yaml.safe_load(f)
-    app.config['SITE_TITLE'] = site_config.get('title', 'Mathnotes')
-    app.config['SITE_DESCRIPTION'] = site_config.get('description', '')
+# Site configuration
+app.config['SITE_TITLE'] = 'Mathnotes'
+app.config['SITE_DESCRIPTION'] = 'A collection of mathematics notes and interactive demonstrations'
 
 # Initialize Markdown with extensions
 md = markdown.Markdown(extensions=[
