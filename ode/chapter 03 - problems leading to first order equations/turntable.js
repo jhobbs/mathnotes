@@ -183,6 +183,7 @@ function moveBug() {
 }
 
 function drawLabels() {
+    applyTextStyle();
     text('bug locomotive speed', locomotiveSlider.width + 5, 13);
     text('record angular velocity', angularVelocitySlider.width + 5, 33);
     text('start position', rhoSlider.width + 5, 53);
