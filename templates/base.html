@@ -86,20 +86,6 @@
             text-decoration: none;
         }
         
-        nav {
-            margin-top: 0.5rem;
-        }
-        
-        nav a {
-            color: var(--link-color);
-            text-decoration: none;
-            margin-right: 1rem;
-        }
-        
-        nav a:hover {
-            text-decoration: underline;
-        }
-        
         main {
             min-height: 70vh;
         }
@@ -203,9 +189,6 @@
 <body>
     <header>
         <h1><a href="{{ url_for('index') }}">{{ config.SITE_TITLE }}</a></h1>
-        <nav>
-            <a href="{{ url_for('index') }}">Home</a>
-        </nav>
     </header>
     
     <main>
