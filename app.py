@@ -27,7 +27,6 @@ md = markdown.Markdown(extensions=[
     'extra',
     'codehilite',
     'toc',
-    'mdx_math',
     'tables',
     'fenced_code'
 ])
@@ -53,8 +52,32 @@ def render_markdown_file(filepath):
             
             content = re.sub(include_pattern, replace_include, content)
             
+            # Protect math delimiters from markdown processing
+            # Replace $$ ... $$ with placeholder
+            display_math_pattern = r'\$\$(.*?)\$\$'
+            display_maths = re.findall(display_math_pattern, content, re.DOTALL)
+            for i, math in enumerate(display_maths):
+                placeholder = f'DISPLAYMATH{i}PLACEHOLDER'
+                content = content.replace(f'$${math}$$', placeholder, 1)
+            
+            # Replace $ ... $ with placeholder
+            inline_math_pattern = r'(?<!\$)\$(?!\$)(.*?)\$(?!\$)'
+            inline_maths = re.findall(inline_math_pattern, content)
+            for i, math in enumerate(inline_maths):
+                placeholder = f'INLINEMATH{i}PLACEHOLDER'
+                content = content.replace(f'${math}$', placeholder, 1)
+            
             # Convert markdown to HTML
             html_content = md.convert(content)
+            
+            # Restore math delimiters
+            for i, math in enumerate(display_maths):
+                placeholder = f'DISPLAYMATH{i}PLACEHOLDER'
+                html_content = html_content.replace(placeholder, f'$${math}$$')
+            
+            for i, math in enumerate(inline_maths):
+                placeholder = f'INLINEMATH{i}PLACEHOLDER'
+                html_content = html_content.replace(placeholder, f'${math}$')
             
             return {
                 'content': html_content,
