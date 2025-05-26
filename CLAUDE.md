@@ -4,68 +4,85 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-Mathnotes is a Flask-based web application serving as a personal collection of mathematics notes. The application is containerized with Docker and can be deployed to platforms like fly.io.
+Mathnotes is a dual-purpose repository:
+1. **Flask Application** (main branch): A web application serving mathematics notes with interactive demonstrations
+2. **Jekyll Site** (GitHub Pages branch): A redirect site pointing to https://www.lacunary.org
 
 ## Common Commands
 
+### Local Development with Docker
 ```bash
-# Local development with Docker
+# Build and run with Docker Compose
 docker-compose up
 
-# Build Docker image
-docker build -t mathnotes .
+# Run in background
+docker-compose up -d
 
-# Run production container locally
-docker run -p 5000:5000 mathnotes
+# Rebuild after changes
+docker-compose build
+docker-compose restart
+```
 
+### Direct Python Development
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run Flask development server
+python app.py
+# or
+flask run --host=0.0.0.0 --port=5000 --reload
+```
+
+### Deployment
+```bash
 # Deploy to fly.io
 flyctl deploy
 
-# Install Python dependencies (for non-Docker development)
-pip install -r requirements.txt
+# Check deployment status
+flyctl status
 
-# Run Flask app directly
-python app.py
+# View logs
+flyctl logs
 ```
 
 ## Architecture
 
 ### Flask Application Structure
-- **Web framework**: Flask 3.0.0 with Gunicorn for production
-- **Content files**: Markdown with LaTeX math formatting (MathJax for rendering)
-- **Templates**: Flask/Jinja2 templates in `templates/` directory
-- **Configuration**: Site config loaded from `_config.yml` for backward compatibility
+- **app.py**: Main Flask application with routing and markdown rendering
+- **Content Organization**: Mathematical topics in subject directories (algebra/, calculus/, etc.)
+- **Interactive Demos**: HTML/JavaScript files embedded via iframes
+- **Templates**: Jinja2 templates in templates/ directory
 
-### Content Organization
-Mathematical topics are organized in subject-specific directories:
-- Core mathematics: algebra, calculus, complex, linear algebra, trigonometry
-- Applied mathematics: ode, partial differential equations, numerical analysis, discrete math
-- Physics and other topics: physics, logic and proofs, graphics, probability and statistics
+### Key Implementation Details
 
-### Interactive Components
-The repository includes several types of interactive content:
+1. **Markdown Processing**:
+   - Jekyll-style `{% include_relative %}` tags are converted to iframes
+   - Math expressions ($...$, $$...$$) are preserved for MathJax rendering
+   - Frontmatter is parsed but layout field is ignored
 
-1. **JavaScript Visualizations** (using p5.js)
-   - Located in various subject directories (e.g., cellular/, graphics/, physics/)
-   - Served as static files through Flask
-   - No build process required
+2. **Dark Mode Support**:
+   - CSS variables in base template adapt to system preference
+   - Interactive demos use `/static/demo-style.css` and `/static/demo-dark-mode.js`
+   - P5.js demos need `applyTextStyle()` for proper text color
 
-2. **Python Scripts**
-   - Standalone scripts for simulations (e.g., markov.py, boolean.py, gol.py)
-   - Run directly with Python 3
+3. **Content Discovery**:
+   - `get_all_content_for_section()` recursively finds all .md files
+   - Supports arbitrary directory nesting (e.g., differential equations/ordinary differential equations/chapter 01/)
+   - Files and subdirectories are sorted alphabetically
 
-3. **Jupyter Notebooks**
-   - Located in `partial differential equations/notebooks/`
-   - Used for computational explorations
+### Interactive Demonstrations
+Located in various subject directories:
+- **cellular/**: Conway's Game of Life and Elementary Cellular Automata
+- **ode/**: Pursuit curves (turntable.html), dilution calculator, pendulum simulation
+- **physics/**: Electric field visualization
+- **graphics/**: Projection demonstrations
 
-### Key Technical Details
-- **Math Rendering**: LaTeX expressions rendered client-side with MathJax 3
-- **Markdown Processing**: python-markdown with math extension
-- **URL Routing**: Flask handles both content pages and static files
-- **Docker**: Multi-platform support (linux/amd64, linux/arm64)
-- **CI/CD**: GitHub Actions automatically builds and publishes Docker images to ghcr.io
+All demos should include the dark mode CSS/JS for proper theme support.
 
-### Deployment
-- **Container Registry**: Images published to `ghcr.io/jhobbs/mathnotes`
-- **Fly.io Configuration**: Defined in `fly.toml` with auto-scaling settings
-- **Health Checks**: Configured at root path `/`
+## Important Notes
+
+- The site is deployed to fly.io at mathnotes.fly.dev
+- Custom domain: www.lacunary.org
+- When modifying interactive demos, ensure they include dark mode support
+- The Flask app handles spaces in directory names via URL encoding
