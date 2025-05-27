@@ -12,17 +12,15 @@ Mathnotes is a dual-purpose repository:
 
 ### Local Development with Docker
 ```bash
-# Build with git version baked into image
-./docker-build.sh
-
-# Run normally (version is already in the image)
-docker-compose up
+# Build and run with Docker Compose
+docker-compose up --build
 
 # Run in background
 docker-compose up -d
 
-# Build and run in one command
-./docker-build.sh && docker-compose up
+# Rebuild after changes
+docker-compose build
+docker-compose restart
 ```
 
 ### Direct Python Development

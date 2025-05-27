@@ -1,3 +1,10 @@
+# Stage 1: Get git version
+FROM alpine/git:latest AS version
+WORKDIR /app
+COPY .git .git
+RUN git describe --always --tags --dirty > /version.txt || echo "unknown" > /version.txt
+
+# Stage 2: Build the actual application
 FROM python:3.11-slim
 
 # Set working directory
@@ -12,11 +19,8 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Accept version as build argument
-ARG GIT_VERSION=unknown
-
-# Save version to file in a location that won't be overwritten by volume mounts
-RUN mkdir -p /version && echo "${GIT_VERSION}" > /version/version.txt
+# Copy version from first stage
+COPY --from=version /version.txt /version/version.txt
 
 # Copy the rest of the application
 COPY . .

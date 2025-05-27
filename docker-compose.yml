@@ -1,9 +1,6 @@
 services:
   web:
-    build:
-      context: .
-      args:
-        GIT_VERSION: ${GIT_VERSION:-unknown}
+    build: .
     ports:
       - "5000:5000"
     volumes:
