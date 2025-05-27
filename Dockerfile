@@ -1,7 +1,8 @@
 # Stage 1: Get git version
 FROM alpine/git:latest AS version
 WORKDIR /app
-COPY .git .git
+# Copy everything so git can properly check if working directory is clean
+COPY . .
 RUN git describe --always --tags --dirty > /version.txt || echo "unknown" > /version.txt
 
 # Stage 2: Build the actual application
