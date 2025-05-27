@@ -1,9 +1,10 @@
 # Stage 1: Get git version
 FROM alpine/git:latest AS version
 WORKDIR /app
-# Copy everything so git can properly check if working directory is clean
-COPY . .
-RUN git describe --always --tags --dirty > /version.txt || echo "unknown" > /version.txt
+COPY .git .git
+# For production builds, we use the commit version without --dirty
+# since Docker builds should be from committed code
+RUN git describe --always --tags > /version.txt || echo "unknown" > /version.txt
 
 # Stage 2: Build the actual application
 FROM python:3.11-slim
