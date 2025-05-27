@@ -12,15 +12,17 @@ Mathnotes is a dual-purpose repository:
 
 ### Local Development with Docker
 ```bash
-# Build and run with Docker Compose
+# Build with git version baked into image
+./docker-build.sh
+
+# Run normally (version is already in the image)
 docker-compose up
 
 # Run in background
 docker-compose up -d
 
-# Rebuild after changes
-docker-compose build
-docker-compose restart
+# Build and run in one command
+./docker-build.sh && docker-compose up
 ```
 
 ### Direct Python Development
@@ -86,3 +88,23 @@ All demos should include the dark mode CSS/JS for proper theme support.
 - Custom domain: www.lacunary.org
 - When modifying interactive demos, ensure they include dark mode support
 - The Flask app handles spaces in directory names via URL encoding
+
+## Allowed Commands and Operations
+
+These commands and operations have been explicitly allowed by the user and should be permitted in all future sessions:
+
+1. **Git Commands**:
+   - `git describe --always --tags --dirty` - Used to get version information
+   - All standard git operations for version control
+
+2. **File Operations**:
+   - Reading and modifying Dockerfile
+   - Creating version.txt during Docker build process
+   - Modifying .gitignore
+
+3. **Project-Specific Operations**:
+   - Adding version display to the footer
+   - Modifying app.py context processors
+   - Updating template files
+
+Note: Any command or operation the user explicitly tells Claude to remember should be added to this list.

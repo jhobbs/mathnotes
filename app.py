@@ -1,5 +1,6 @@
 import os
 import re
+import subprocess
 from pathlib import Path
 from datetime import datetime
 from flask import Flask, render_template, send_from_directory, abort, url_for, make_response
@@ -13,6 +14,30 @@ app = Flask(__name__)
 @app.context_processor
 def inject_year():
     return {'current_year': datetime.now().year}
+
+# Add version info to all templates
+@app.context_processor
+def inject_version():
+    version = 'unknown'
+    try:
+        # Try to read from Docker build location first
+        if os.path.exists('/version/version.txt'):
+            with open('/version/version.txt', 'r') as f:
+                version = f.read().strip()
+        # Try local version.txt (for non-volume-mounted Docker)
+        elif os.path.exists('version.txt'):
+            with open('version.txt', 'r') as f:
+                version = f.read().strip()
+        # Fallback to git command for local development
+        elif os.path.exists('.git'):
+            try:
+                version = subprocess.check_output(['git', 'describe', '--always', '--tags', '--dirty'], 
+                                                stderr=subprocess.DEVNULL).decode('utf-8').strip()
+            except:
+                pass
+    except:
+        pass
+    return {'app_version': version}
 
 # Configuration
 CONTENT_DIRS = [

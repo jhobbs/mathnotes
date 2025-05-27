@@ -12,6 +12,12 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Accept version as build argument
+ARG GIT_VERSION=unknown
+
+# Save version to file in a location that won't be overwritten by volume mounts
+RUN mkdir -p /version && echo "${GIT_VERSION}" > /version/version.txt
+
 # Copy the rest of the application
 COPY . .
 

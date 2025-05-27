@@ -6,3 +6,4 @@ vendor
 Gemfile.lock
 .aider*
 __pycache__
+version.txt
