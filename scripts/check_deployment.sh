@@ -14,8 +14,8 @@ echo "Current local commit: $CURRENT_COMMIT"
 echo "Checking deployment status..."
 
 # Check the live site version
-# The version is in the footer of mathnotes pages, not the homepage
-LIVE_VERSION=$(curl -s https://www.lacunary.org/mathnotes/ | grep -oP 'Version: \K[^<]+' | head -1)
+# The version is now inside a link in the footer
+LIVE_VERSION=$(curl -s https://www.lacunary.org/mathnotes/ | grep -oP 'Version:.*?>(\K[^<]+)' | head -1)
 
 if [ -z "$LIVE_VERSION" ]; then
     echo "Error: Unable to fetch version from live site"

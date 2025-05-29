@@ -23,8 +23,8 @@ START_TIME=$(date +%s)
 DEPLOYMENT_COMPLETE=false
 
 while true; do
-    # Check the live site version from mathnotes page (homepage doesn't have version)
-    LIVE_VERSION=$(curl -s https://www.lacunary.org/mathnotes/ 2>/dev/null | grep -oP 'Version: \K[^<]+' | head -1)
+    # Check the live site version from mathnotes page (version is now inside a link)
+    LIVE_VERSION=$(curl -s https://www.lacunary.org/mathnotes/ 2>/dev/null | grep -oP 'Version:.*?>(\K[^<]+)' | head -1)
     
     CURRENT_TIME=$(date +%s)
     ELAPSED=$((CURRENT_TIME - START_TIME))
