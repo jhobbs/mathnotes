@@ -82,31 +82,41 @@ def render_markdown_file(filepath):
             content = re.sub(include_pattern, replace_include, content)
             
             # Protect math delimiters from markdown processing
-            # Replace $$ ... $$ with placeholder
-            display_math_pattern = r'\$\$(.*?)\$\$'
-            display_maths = re.findall(display_math_pattern, content, re.DOTALL)
-            for i, math in enumerate(display_maths):
-                placeholder = f'DISPLAYMATH{i}PLACEHOLDER'
-                content = content.replace(f'$${math}$$', placeholder, 1)
+            # First handle display math ($$...$$), then inline math ($...$)
             
-            # Replace $ ... $ with placeholder
-            inline_math_pattern = r'(?<!\$)\$(?!\$)(.*?)\$(?!\$)'
-            inline_maths = re.findall(inline_math_pattern, content)
-            for i, math in enumerate(inline_maths):
-                placeholder = f'INLINEMATH{i}PLACEHOLDER'
-                content = content.replace(f'${math}$', placeholder, 1)
+            # Replace $$ ... $$ with placeholder and store original content
+            display_math_blocks = {}
+            display_counter = 0
+            def replace_display_math(match):
+                nonlocal display_counter
+                placeholder = f'DISPLAYMATH{display_counter}PLACEHOLDER'
+                display_math_blocks[placeholder] = match.group(0)  # Store complete $$...$$ 
+                display_counter += 1
+                return placeholder
+            
+            content = re.sub(r'\$\$.*?\$\$', replace_display_math, content, flags=re.DOTALL)
+            
+            # Replace $ ... $ with placeholder and store original content
+            inline_math_blocks = {}
+            inline_counter = 0
+            def replace_inline_math(match):
+                nonlocal inline_counter
+                placeholder = f'INLINEMATH{inline_counter}PLACEHOLDER'
+                inline_math_blocks[placeholder] = match.group(0)  # Store complete $...$
+                inline_counter += 1
+                return placeholder
+            
+            content = re.sub(r'(?<!\$)\$(?!\$).*?\$(?!\$)', replace_inline_math, content)
             
             # Convert markdown to HTML
             html_content = md.convert(content)
             
-            # Restore math delimiters
-            for i, math in enumerate(display_maths):
-                placeholder = f'DISPLAYMATH{i}PLACEHOLDER'
-                html_content = html_content.replace(placeholder, f'$${math}$$')
+            # Restore math blocks with their original content
+            for placeholder, math_content in display_math_blocks.items():
+                html_content = html_content.replace(placeholder, math_content)
             
-            for i, math in enumerate(inline_maths):
-                placeholder = f'INLINEMATH{i}PLACEHOLDER'
-                html_content = html_content.replace(placeholder, f'${math}$')
+            for placeholder, math_content in inline_math_blocks.items():
+                html_content = html_content.replace(placeholder, math_content)
             
             # Fix escaped asterisks and tildes that should be rendered normally
             html_content = html_content.replace(r'\*', '*')

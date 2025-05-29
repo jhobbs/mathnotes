@@ -80,7 +80,7 @@ The real sequence $a_n$ is said to be **increasing** if $a_n \leq a_{n+1}$ for a
 
 A real sequence is $a_n$ is said to be **monotone** if it is either increasing or decreasining.
 
-The **monotone convergence theorem** says that if a sequence is monotone and bounded, then it converges. *Proof*: Suppose that the sequence $a_n$ is bounded and increasing. Then, by the Completeness axiom, the set $\\{a_n \| n \in \mathbb{N} \\}$ has a least upper bound; let's call it $L.$ Then, for any positive $\epsilon$, $L - \epsilon$ can't be an upper bound of the set, since $L - \epsilon < L$. Therefore, for some $N \in \mathbb{N}$, $L - \epsilon < a_N$, and since $a_n$ increases monotonically, for all $n \geq N$, we have $L - \epsilon < a_n < L + \epsilon$, which implies $\|a_n - L\| < \epsilon,$ that is, that $a_n$ converges to $L$. $\square$
+The **monotone convergence theorem** says that if a sequence is monotone and bounded, then it converges. *Proof*: Suppose that the sequence $a_n$ is bounded and increasing. Then, by the Completeness axiom, the set $\{a_n | n \in \mathbb{N} \}$ has a least upper bound; let's call it $L.$ Then, for any positive $\epsilon$, $L - \epsilon$ can't be an upper bound of the set, since $L - \epsilon < L$. Therefore, for some $N \in \mathbb{N}$, $L - \epsilon < a_N$, and since $a_n$ increases monotonically, for all $n \geq N$, we have $L - \epsilon < a_n < L + \epsilon$, which implies $|a_n - L| < \epsilon,$ that is, that $a_n$ converges to $L$. $\square$
 
 ## Subsequences
 
@@ -124,7 +124,7 @@ If we define
 
 $$ b_n = \sup{\{a_n, a_{n+1}, \dots\}}, $$
 
-then we know $b_n$ is bounded because $a_n$ is bounded. Now, $b_1 = \sup{\\{a_1, a_2, \dots\\}}$ is the least upper bound of all the terms in $a_n$ and $b_2 = \sup{\\{a_2, a_3, \dots\\}}$ is the least upper bound of all the terms in $a_n$ except $a_1$ and $a_2$; therefore $b_2$ must be less than or equal to $b_1$ since removing terms can only lower the least upper bound. The patterns holds for all $b_n$, so $b_n$ is a decreasing sequence. Since it is decreasing and bounded, the Monotone Convergence Theorem tells us that $b_n$ converges. We can make a similar argument about
+then we know $b_n$ is bounded because $a_n$ is bounded. Now, $b_1 = \sup{\{a_1, a_2, \dots\}}$ is the least upper bound of all the terms in $a_n$ and $b_2 = \sup{\{a_2, a_3, \dots\}}$ is the least upper bound of all the terms in $a_n$ except $a_1$ and $a_2$; therefore $b_2$ must be less than or equal to $b_1$ since removing terms can only lower the least upper bound. The patterns holds for all $b_n$, so $b_n$ is a decreasing sequence. Since it is decreasing and bounded, the Monotone Convergence Theorem tells us that $b_n$ converges. We can make a similar argument about
 
 $$ c_n = \inf{\{a_n, a_{n+1}, \dots\}}, $$
 
@@ -134,10 +134,10 @@ If a sequence $a_n$ is convergent, then $\limsup_{n \to \infty}{a_n} = \liminf_{
 
 If a sequence $a_n$ is bounded, then $\liminf_{n \to \infty}{a_n} \leq \limsup_{n \to \infty}{a_n}.$
 
-If a sequence $a_n$ is bounded above, then $\limsup_{n \to \infty}{a_n} = \lim_{n \to \infty}\sup{\\{a_n, a_{n+1}, \dots\\}}.$
+If a sequence $a_n$ is bounded above, then $\limsup_{n \to \infty}{a_n} = \lim_{n \to \infty}\sup{\{a_n, a_{n+1}, \dots\}}.$
 
 If a sequence $a_n$ is not bounded above, then $\limsup_{n \to \infty}{a_n} = \infty.$
 
-If a sequence $a_n$ is bounded below then $\liminf_{n \to \infty}{a_n} = \lim_{n \to \infty}\inf{\\{a_n, a_{n+1}, \dots\\}}.$
+If a sequence $a_n$ is bounded below then $\liminf_{n \to \infty}{a_n} = \lim_{n \to \infty}\inf{\{a_n, a_{n+1}, \dots\}}.$
 
 If a sequence $a_n$ is not bounded below, then $\liminf_{n \to \infty}{a_n} = -\infty.$

@@ -5,11 +5,11 @@ title: Integration
 
 # Integration
 
-A **partition** $P$ of the interval $[a,b]$ is a set $\\{x_0, x_1, \dots, x_n\\}$ of real numbers such that
+A **partition** $P$ of the interval $[a,b]$ is a set $\{x_0, x_1, \dots, x_n\}$ of real numbers such that
 
 $$ x_0 <  x_1 < \cdots < x_n, \quad x_0 = a, x_n = b. $$
 
-Let $f$ be a bounded function on $[a,b],$ and let $P = \\{x_0, x_1, \dots, x_n\\}$ be a partition of $[a,b].$ Then the **upper sum** (upper Darboux sum) of $f$ for the partition $P$, $U(f,P),$ is given by
+Let $f$ be a bounded function on $[a,b],$ and let $P = \{x_0, x_1, \dots, x_n\}$ be a partition of $[a,b].$ Then the **upper sum** (upper Darboux sum) of $f$ for the partition $P$, $U(f,P),$ is given by
 
 $$ U(f, P) = \sum_{k=1}^n \sup{\{ f(x) | x \in [x_{k-1}, x_k]\}} (x_k - x_{k-1}), $$
 
@@ -65,13 +65,13 @@ $$ \int_a^{b} f(x) dx = f(c)(b - a). $$
 
 ## Riemann Sums
 
-Let $f$ be a bounded function on $[a,b]$ and $P = \\{x_0, x_1, \cdots, x_n\\}$ be a partition of $[a,b].$ Let $T = \\{t_1, t_2, \dots, t_n\\}$ where $t_k \in [x_{k-1}, x_k]$ for $k = 1,2,\dots, n.$ The sum
+Let $f$ be a bounded function on $[a,b]$ and $P = \{x_0, x_1, \cdots, x_n\}$ be a partition of $[a,b].$ Let $T = \{t_1, t_2, \dots, t_n\}$ where $t_k \in [x_{k-1}, x_k]$ for $k = 1,2,\dots, n.$ The sum
 
 $$ \sum_{k=1}^n f(t_k)(x_{k-1} - x_k) $$
 
 is called the **Riemann Sum** for the partition $P$ and points $T,$ and is denoted by $S(f, P, T).$
 
-Let $P = \\{x_0, x_1, \cdots, x_n\\}$ be a partition of $[a,b].$ The **norm** of $P$ is given by
+Let $P = \{x_0, x_1, \cdots, x_n\}$ be a partition of $[a,b].$ The **norm** of $P$ is given by
 
 $$ \text{norm}{P} = \max{\{ |x_k - x_{k-1} | | k \in \{1,2,\dots,n\} \}}. $$
 

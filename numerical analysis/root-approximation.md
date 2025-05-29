@@ -11,7 +11,7 @@ Sometimes we want to find approximate roots or an equation $f(x) = 0$ of a funct
 
 Let's say $f$ is a continuous function on the interval $[a, b]$ and that $f(a)$ and $f(b)$ have opposite sign. Then the Intermediate Value Theorem implies there is some $p \in (a,b)$ for which $f(p) = 0.$ We can approximate this $p$ by repeatedly halving subintervals of $(a,b)$ containing $p.$ More iterations will lead to an approximation with less error.
 
-*Theorem:* Suppose that $f \in C[a, b]$ and $f(a) \cdot f(b) < 0.$ The Bisection Method generates a sequence $\\{p_n\\}_{n=1}^{\infty}$ approximating a zero $p$ of $f$ with
+*Theorem:* Suppose that $f \in C[a, b]$ and $f(a) \cdot f(b) < 0.$ The Bisection Method generates a sequence $\{p_n\}_{n=1}^{\infty}$ approximating a zero $p$ of $f$ with
 
 $$ |p_n - p| \leq \frac{b - a}{2^n}, n \geq 1. $$
 
@@ -75,11 +75,11 @@ which can be solved for $p$ to get
 
 $$ p \approx p_0 - \frac{f(p_0)}{f'(p_0)} \equiv p_1. $$
 
-Repeating this process is Newton's method, which generates the sequence $\\{p_n\\}_{n=0}^{\infty}$ by
+Repeating this process is Newton's method, which generates the sequence $\{p_n\}_{n=0}^{\infty}$ by
 
 $$ p_n = p_{n-1} - \frac{f(p_{n-1})}{f'(p_{n-1})},  n \geq 1. $$
 
-*Theorem:* Let $f \in C^2[a, b].$ If $p \in (a, b)$ such that $f(p) = 0$ and $f'(p) \neq 0,$ then there exists a $\delta > 0$ such that Newton's method generates a sequence $\\{p_n\\}_{n=1}^{\infty}$ converging to $p$ for any initial approximation $p_0 \in [p - \delta, p + \delta].$
+*Theorem:* Let $f \in C^2[a, b].$ If $p \in (a, b)$ such that $f(p) = 0$ and $f'(p) \neq 0,$ then there exists a $\delta > 0$ such that Newton's method generates a sequence $\{p_n\}_{n=1}^{\infty}$ converging to $p$ for any initial approximation $p_0 \in [p - \delta, p + \delta].$
 
 Here's psuedocode:
 

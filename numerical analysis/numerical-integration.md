@@ -9,7 +9,7 @@ title: Numerical Integration
 
 The basic method for approximating $\int_a^{b} f(x) dx$ is called **numerical quadrature** and uses the sum $\sum_{i=0}^n a_i f(x_i).$
 
-We'll cover quadrature methods based on interpolation polynomials. The idea is to select a set of distinct nodes $\\{x_0, \dots, x_n\\}$ from the interval $[a, b],$ use them to construct a Lagrange interpolating polynomial and its error term, and then integrate those over $[a,b].$
+We'll cover quadrature methods based on interpolation polynomials. The idea is to select a set of distinct nodes $\{x_0, \dots, x_n\}$ from the interval $[a, b],$ use them to construct a Lagrange interpolating polynomial and its error term, and then integrate those over $[a,b].$
 
 When we use equally spaced nodes, the approximations produced from first and second Lagrange polynomials are known as the **Trapezoidal rule** and **Simpson's rule.** These are commonly introduced in calculus courses.
 
@@ -129,7 +129,7 @@ which as degree of precision three, meaining it produces the exact result for ev
 
 There is an easier way to determine the nodes and coefficients for the formulas that give exact results for higher-degree polynomials.
 
-We will use a collection of orthogonal polynomials called the **Legendre Polynomials,** denoted here as $\\{P_0(x), P_1(x), \dots, P_n(x)\\}$ and having the properties
+We will use a collection of orthogonal polynomials called the **Legendre Polynomials,** denoted here as $\{P_0(x), P_1(x), \dots, P_n(x)\}$ and having the properties
 
 1. For each $n$, $P_n(x)$ is a monic polynomial of degree $n.$
 
