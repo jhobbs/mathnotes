@@ -7,8 +7,8 @@
 MAX_WAIT_TIME=600  # Maximum time to wait in seconds (10 minutes)
 CHECK_INTERVAL=10  # How often to check in seconds
 
-# Get the current git commit hash
-CURRENT_COMMIT=$(git describe --always --tags --dirty 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+# Get the current git commit hash (short version to match what's on the site)
+CURRENT_COMMIT=$(git rev-parse --short HEAD 2>/dev/null)
 
 if [ -z "$CURRENT_COMMIT" ]; then
     echo "Error: Unable to get current git commit hash"

@@ -2,8 +2,8 @@
 
 # Script to check if the latest git commit is deployed to lacunary.org
 
-# Get the current git commit hash
-CURRENT_COMMIT=$(git describe --always --tags --dirty 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+# Get the current git commit hash (short version to match what's on the site)
+CURRENT_COMMIT=$(git rev-parse --short HEAD 2>/dev/null)
 
 if [ -z "$CURRENT_COMMIT" ]; then
     echo "Error: Unable to get current git commit hash"
