@@ -179,6 +179,8 @@ def get_all_content_for_section(section_path):
 @app.route('/')
 def homepage():
     """Main homepage with links to different sections"""
+    # The context processors (inject_year and inject_version) will automatically
+    # provide current_year and app_version to the template
     return render_template('homepage.html')
 
 @app.route('/mathnotes/')

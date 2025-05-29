@@ -9,6 +9,7 @@
             --bg-color: #fafafa;
             --text-color: #333;
             --link-color: #0366d6;
+            --footer-color: #6a737d;
         }
         
         @media (prefers-color-scheme: dark) {
@@ -16,6 +17,7 @@
                 --bg-color: #0d1117;
                 --text-color: #c9d1d9;
                 --link-color: #58a6ff;
+                --footer-color: #484f58;
             }
         }
         
@@ -24,14 +26,20 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            position: relative;
         }
         
         .container {
             text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         h1 {
@@ -49,6 +57,14 @@
         a:hover {
             text-decoration: underline;
         }
+        
+        footer {
+            position: absolute;
+            bottom: 1rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--footer-color);
+        }
     </style>
 </head>
 <body>
@@ -56,5 +72,8 @@
         <h1>lacunary.org</h1>
         <a href="/mathnotes/">Mathnotes</a>
     </div>
+    <footer>
+        &copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: {{ app_version }}
+    </footer>
 </body>
 </html>
