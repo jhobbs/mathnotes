@@ -7,3 +7,7 @@
     {{ content|safe }}
 </article>
 {% endblock %}
+
+{% block footer %}
+<p>&copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: <a href="https://github.com/jhobbs/mathnotes/blob/{{ app_version }}/{{ source_path }}" target="_blank" rel="noopener">{{ app_version }}</a></p>
+{% endblock %}

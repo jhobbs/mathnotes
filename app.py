@@ -125,7 +125,8 @@ def render_markdown_file(filepath):
             return {
                 'content': html_content,
                 'metadata': post.metadata,
-                'title': post.metadata.get('title', Path(filepath).stem.replace('-', ' ').title())
+                'title': post.metadata.get('title', Path(filepath).stem.replace('-', ' ').title()),
+                'source_path': filepath  # Add the source file path
             }
     except Exception as e:
         print(f"Error reading {filepath}: {e}")

@@ -174,6 +174,15 @@
             font-size: 0.75rem;
         }
         
+        footer a {
+            color: var(--footer-color);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
         /* General link styling */
         a {
             color: var(--link-color);
@@ -197,7 +206,9 @@
     </main>
     
     <footer>
-        <p>&copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: {{ app_version }}</p>
+        {% block footer %}
+        <p>&copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: <a href="https://github.com/jhobbs/mathnotes/commit/{{ app_version }}" target="_blank" rel="noopener">{{ app_version }}</a></p>
+        {% endblock %}
     </footer>
 </body>
 </html>

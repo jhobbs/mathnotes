@@ -65,6 +65,15 @@
             font-size: 0.75rem;
             color: var(--footer-color);
         }
+        
+        footer a {
+            color: var(--footer-color);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -73,7 +82,7 @@
         <a href="/mathnotes/">Mathnotes</a>
     </div>
     <footer>
-        &copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: {{ app_version }}
+        &copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: <a href="https://github.com/jhobbs/mathnotes/commit/{{ app_version }}" target="_blank" rel="noopener">{{ app_version }}</a>
     </footer>
 </body>
 </html>
