@@ -114,6 +114,7 @@ These commands and operations have been explicitly allowed by the user and shoul
    - Never include "Generated with Claude Code" or similar attribution in commit messages
    - Never add Claude as a co-author
    - Keep commit messages focused on the technical changes only
+   - Only commit and push changes when explicitly asked to "ship it" or similar by the user
 
 5. **Deployment Operations**:
    - Monitoring deployments via GitHub Actions (not direct fly.io deploys)
