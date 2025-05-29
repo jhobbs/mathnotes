@@ -107,5 +107,17 @@ These commands and operations have been explicitly allowed by the user and shoul
    - Modifying app.py context processors
    - Updating template files
    - Modifying health check configurations
+   - Creating and modifying scripts in the scripts/ directory
+   - Using chmod to make scripts executable
+
+4. **Git Commit Guidelines**:
+   - Never include "Generated with Claude Code" or similar attribution in commit messages
+   - Never add Claude as a co-author
+   - Keep commit messages focused on the technical changes only
+
+5. **Deployment Operations**:
+   - Monitoring deployments via GitHub Actions (not direct fly.io deploys)
+   - Using curl to check deployment status
+   - Creating deployment monitoring scripts
 
 Note: Any command or operation the user explicitly tells Claude to remember should be added to this list.
