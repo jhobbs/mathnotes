@@ -3,7 +3,7 @@ import re
 import subprocess
 from pathlib import Path
 from datetime import datetime
-from flask import Flask, render_template, send_from_directory, abort, url_for, make_response
+from flask import Flask, render_template, send_from_directory, abort, url_for, make_response, redirect
 import markdown
 import frontmatter
 import yaml
@@ -177,6 +177,11 @@ def get_all_content_for_section(section_path):
     return process_directory(path)
 
 @app.route('/')
+def root_redirect():
+    """Redirect root to /mathnotes/"""
+    return redirect('/mathnotes/')
+
+@app.route('/mathnotes/')
 def index():
     """Home page listing all sections."""
     sections = []
@@ -196,7 +201,7 @@ def index():
     
     return render_template('index.html', sections=sections)
 
-@app.route('/<path:filepath>')
+@app.route('/mathnotes/<path:filepath>')
 def serve_content(filepath):
     """Serve markdown content or static files."""
     # Check if it's a directory
@@ -227,21 +232,21 @@ def serve_content(filepath):
     
     abort(404)
 
-@app.route('/static/<path:filename>')
+@app.route('/mathnotes/static/<path:filename>')
 def static_files(filename):
     """Serve static files."""
     return send_from_directory('static', filename)
 
-@app.route('/robots.txt')
+@app.route('/mathnotes/robots.txt')
 def robots():
     """Serve robots.txt."""
     return send_from_directory('.', 'robots.txt')
 
-@app.route('/sitemap.xml')
+@app.route('/mathnotes/sitemap.xml')
 def sitemap():
     """Generate sitemap.xml for SEO."""
     pages = []
-    base_url = 'https://www.lacunary.org'
+    base_url = 'https://www.lacunary.org/mathnotes'
     
     # Add home page
     pages.append({
