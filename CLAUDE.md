@@ -94,15 +94,18 @@ These commands and operations have been explicitly allowed by the user and shoul
 1. **Git Commands**:
    - `git describe --always --tags --dirty` - Used to get version information
    - All standard git operations for version control
+   - `git restore` - Reverting changes to files
 
 2. **File Operations**:
    - Reading and modifying Dockerfile
    - Creating version.txt during Docker build process
    - Modifying .gitignore
+   - Modifying fly.toml
 
 3. **Project-Specific Operations**:
    - Adding version display to the footer
    - Modifying app.py context processors
    - Updating template files
+   - Modifying health check configurations
 
 Note: Any command or operation the user explicitly tells Claude to remember should be added to this list.

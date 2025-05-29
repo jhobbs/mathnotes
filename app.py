@@ -177,9 +177,9 @@ def get_all_content_for_section(section_path):
     return process_directory(path)
 
 @app.route('/')
-def root_redirect():
-    """Redirect root to /mathnotes/"""
-    return redirect('/mathnotes/')
+def homepage():
+    """Main homepage with links to different sections"""
+    return render_template('homepage.html')
 
 @app.route('/mathnotes/')
 def index():
@@ -237,22 +237,29 @@ def static_files(filename):
     """Serve static files."""
     return send_from_directory('static', filename)
 
-@app.route('/mathnotes/robots.txt')
+@app.route('/robots.txt')
 def robots():
     """Serve robots.txt."""
     return send_from_directory('.', 'robots.txt')
 
-@app.route('/mathnotes/sitemap.xml')
+@app.route('/sitemap.xml')
 def sitemap():
     """Generate sitemap.xml for SEO."""
     pages = []
-    base_url = 'https://www.lacunary.org/mathnotes'
+    base_url = 'https://www.lacunary.org'
     
-    # Add home page
+    # Add main home page
     pages.append({
         'loc': base_url,
         'changefreq': 'weekly',
         'priority': '1.0'
+    })
+    
+    # Add mathnotes section
+    pages.append({
+        'loc': f"{base_url}/mathnotes/",
+        'changefreq': 'weekly',
+        'priority': '0.9'
     })
     
     # Recursively find all markdown files
@@ -268,7 +275,7 @@ def sitemap():
                         url_path = str(md_file.with_suffix('')).replace('\\', '/')
                     
                     pages.append({
-                        'loc': f"{base_url}/{url_path}",
+                        'loc': f"{base_url}/mathnotes/{url_path}",
                         'changefreq': 'monthly',
                         'priority': '0.8'
                     })
