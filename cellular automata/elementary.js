@@ -60,8 +60,8 @@ function setup() {
     background(51); // new: initialize background once
     frameRate(120); // new: set frame rate to 120 FPS for faster generation
     grid = create2DArray(cols, rows); // cells initialized to 0 (white by default)
-    // new: initialize the top row with the middle cell active and draw it
-    grid[floor(cols / 2)][0] = 1;
+    // Initialize first row based on fill rate
+    initializeFirstRow();
     drawRow(0);
     currentRow = 0; // reset current row index on setup
     noLoop();
@@ -74,10 +74,32 @@ function setup() {
     // new helper to reset simulation from the first row
     function initializeSimulation() {
         grid = create2DArray(cols, rows);
-        grid[floor(cols / 2)][0] = 1;
+        initializeFirstRow();
         background(51);
         drawRow(0);
         currentRow = 0;
+    }
+    
+    // Initialize first row based on fill rate selection
+    function initializeFirstRow() {
+        const fillRateSelect = document.getElementById('fillRate');
+        const fillValue = fillRateSelect.value;
+        
+        // Clear first row
+        for (let i = 0; i < cols; i++) {
+            grid[i][0] = 0;
+        }
+        
+        if (fillValue === "1") {
+            // Single pixel in the middle
+            grid[floor(cols / 2)][0] = 1;
+        } else {
+            // Random fill with specified percentage
+            const fillRate = parseFloat(fillValue);
+            for (let i = 0; i < cols; i++) {
+                grid[i][0] = random() < fillRate ? 1 : 0;
+            }
+        }
     }
 
     // new helper to reset all rows below the first while preserving the first row
@@ -103,8 +125,8 @@ function setup() {
 
     document.getElementById('resetButton').addEventListener('click', () => {
         grid = create2DArray(cols, rows); // resets grid to 0 (white)
-        // new: reset top row with middle cell active
-        grid[floor(cols / 2)][0] = 1;
+        // Use the new initialization function
+        initializeFirstRow();
         background(51); // new: clear canvas
         drawRow(0);     // new: draw initial row
         currentRow = 0; // reset generation row index
