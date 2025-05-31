@@ -76,8 +76,12 @@ def render_markdown_file(filepath):
                 current_dir = os.path.dirname(filepath)
                 # Create the URL path for the included file
                 url_path = os.path.join(current_dir, include_file).replace('\\', '/')
-                # Return an iframe that loads the HTML file
-                return f'<iframe src="/mathnotes/{url_path}" width="100%" height="600" frameborder="0"></iframe>'
+                # Return an iframe that loads the HTML file with fullscreen button
+                iframe_id = f"demo-{hash(url_path)}"
+                return f'''<div class="demo-container">
+                    <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="600" frameborder="0"></iframe>
+                    <button class="fullscreen-btn" onclick="openFullscreen('{iframe_id}', '/mathnotes/{url_path}')" title="Open in fullscreen">⛶</button>
+                </div>'''
             
             content = re.sub(include_pattern, replace_include, content)
             

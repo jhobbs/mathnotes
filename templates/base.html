@@ -192,6 +192,72 @@
         h1, h2, h3, h4, h5, h6 {
             color: var(--header-color);
         }
+        
+        /* Demo container and fullscreen button */
+        .demo-container {
+            position: relative;
+            margin: 1rem 0;
+        }
+        
+        .fullscreen-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 1.2rem;
+            border-radius: 4px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .fullscreen-btn:hover {
+            opacity: 1;
+        }
+        
+        /* Fullscreen overlay */
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 9999;
+            display: none;
+        }
+        
+        .fullscreen-overlay.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .fullscreen-header {
+            padding: 1rem;
+            background: var(--code-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .fullscreen-close {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .fullscreen-iframe {
+            flex: 1;
+            width: 100%;
+            border: none;
+        }
     </style>
     
     {% block extra_head %}{% endblock %}
@@ -210,5 +276,56 @@
         <p>&copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: <a href="https://github.com/jhobbs/mathnotes/commit/{{ app_version }}" target="_blank" rel="noopener">{{ app_version }}</a></p>
         {% endblock %}
     </footer>
+    
+    <!-- Fullscreen overlay container -->
+    <div id="fullscreen-overlay" class="fullscreen-overlay">
+        <div class="fullscreen-header">
+            <span id="fullscreen-title">Interactive Demo</span>
+            <button class="fullscreen-close" onclick="closeFullscreen()" title="Close fullscreen">✕</button>
+        </div>
+        <iframe id="fullscreen-iframe" class="fullscreen-iframe"></iframe>
+    </div>
+    
+    <script>
+        function openFullscreen(iframeId, src) {
+            const overlay = document.getElementById('fullscreen-overlay');
+            const iframe = document.getElementById('fullscreen-iframe');
+            
+            // Set the source
+            iframe.src = src;
+            
+            // Show overlay
+            overlay.classList.add('active');
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+            
+            // Add escape key listener
+            document.addEventListener('keydown', handleEscapeKey);
+        }
+        
+        function closeFullscreen() {
+            const overlay = document.getElementById('fullscreen-overlay');
+            const iframe = document.getElementById('fullscreen-iframe');
+            
+            // Hide overlay
+            overlay.classList.remove('active');
+            
+            // Clear iframe source
+            iframe.src = '';
+            
+            // Restore body scroll
+            document.body.style.overflow = '';
+            
+            // Remove escape key listener
+            document.removeEventListener('keydown', handleEscapeKey);
+        }
+        
+        function handleEscapeKey(e) {
+            if (e.key === 'Escape') {
+                closeFullscreen();
+            }
+        }
+    </script>
 </body>
 </html>
