@@ -53,3 +53,5 @@ Which, for $k = 5,$ yields
 $$ E_{1,1}, E_{2,1}, E_{1,2}, E_{3,1}, E_{2,2}, E_{1,3}, E_{4,1}, E_{3,2}, E_{2,3}, E_{1,4}. $$
 
 This sequence may contain duplicates, so some indices may need to be skipped in constructing a subset $T$ of the positive integers such that $T ~ S,$ but we've now shown that $S$ is at most countable. To show $S$ is infinite and therefore countable, note that the infinite set $E_1$ is a subset of $S,$, and therefore $S$ is infinite and countable.
+
+{% include_relative countable-union.html %}

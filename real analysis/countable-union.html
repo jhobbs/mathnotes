@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countable Union Visualization</title>
+    <link rel="stylesheet" href="/static/demo-style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="/static/demo-dark-mode.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #canvas-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        #info {
+            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <div id="sketch-holder"></div>
+        <div id="info">
+            <h2>Diagonal Traversal of Countable Union</h2>
+            <p>This animation shows how elements from countably many countable sets (E<sub>n</sub>) 
+            can be enumerated using diagonal traversal, proving that a countable union of countable sets is countable.</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('Script started loading');
+        let gridSize = 10; // Reduced from 20 for better readability
+        let cellSize;
+        let margin = 60;
+        let traversalPath = [];
+        let currentIndex = 0;
+        let animationProgress = 0;
+        let animationSpeed = 0.02;
+        let linePoints = [];
+        
+        function setup() {
+            console.log('Setup called');
+            let canvasSize = min(windowWidth - 40, windowHeight - 200, 900); // Increased max size
+            console.log('Canvas size:', canvasSize);
+            let canvas = createCanvas(canvasSize, canvasSize);
+            canvas.parent('sketch-holder');
+            
+            cellSize = (canvasSize - 2 * margin) / gridSize;
+            console.log('Cell size:', cellSize);
+            
+            // Generate diagonal traversal path
+            generateTraversalPath();
+            console.log('Traversal path length:', traversalPath.length);
+            console.log('First few path elements:', traversalPath.slice(0, 5));
+            
+            textAlign(CENTER, CENTER);
+            strokeWeight(2);
+        }
+        
+        function generateTraversalPath() {
+            traversalPath = [];
+            
+            // Generate diagonal traversal order
+            // Stop after completing the diagonal that starts at E_10,1
+            // This happens when sum = 11 (row 10 + col 1 = 11)
+            for (let sum = 2; sum <= 11; sum++) {
+                // Each diagonal has elements where row + col = sum
+                // We traverse from bottom to top (increasing column, decreasing row)
+                let diagonalStart = true;
+                
+                for (let col = 1; col < sum; col++) {
+                    let row = sum - col;
+                    
+                    if (row >= 1 && row <= gridSize && col >= 1 && col <= gridSize) {
+                        traversalPath.push({
+                            n: row - 1, // Convert to 0-indexed (row)
+                            m: col - 1, // Convert to 0-indexed (col)
+                            isDiagonalStart: diagonalStart
+                        });
+                        diagonalStart = false;
+                    }
+                }
+            }
+            console.log('Generated path:', traversalPath.slice(0, 10));
+            console.log('Total path length:', traversalPath.length);
+        }
+        
+        let frameCount = 0;
+        
+        function draw() {
+            if (frameCount === 0) {
+                console.log('First draw call');
+                console.log('getBackgroundColor exists?', typeof getBackgroundColor !== 'undefined');
+            }
+            frameCount++;
+            
+            // Check if functions exist
+            if (typeof getBackgroundColor === 'undefined') {
+                console.error('getBackgroundColor is not defined');
+                background(255); // fallback to white
+            } else {
+                background(getBackgroundColor());
+            }
+            
+            // Draw grid elements
+            for (let n = 0; n < gridSize; n++) {
+                for (let m = 0; m < gridSize; m++) {
+                    let x = margin + m * cellSize + cellSize / 2;
+                    let y = margin + n * cellSize + cellSize / 2; // Standard positioning: E_1,1 at top-left
+                    
+                    // Draw cell
+                    noFill();
+                    if (typeof getStrokeColor === 'undefined') {
+                        stroke(200); // fallback gray
+                    } else {
+                        stroke(getStrokeColor());
+                    }
+                    strokeWeight(1);
+                    rect(x - cellSize/2, y - cellSize/2, cellSize, cellSize);
+                    
+                    // Draw label with subscripts
+                    if (typeof getTextColor === 'undefined') {
+                        fill(0); // fallback black
+                    } else {
+                        fill(getTextColor());
+                    }
+                    noStroke();
+                    textSize(cellSize * 0.3);
+                    
+                    // Always show labels since grid is smaller now
+                    drawSubscriptText('E', n + 1, m + 1, x, y);
+                }
+            }
+            
+            // Draw ellipsis to indicate infinite continuation
+            textSize(20);
+            fill(getTextColor());
+            noStroke();
+            
+            // Right edge ellipsis
+            text('...', margin + gridSize * cellSize + cellSize/2, height / 2);
+            
+            // Bottom edge ellipsis
+            text('...', width / 2, margin + gridSize * cellSize + cellSize/2);
+            
+            // Bottom-right corner ellipsis
+            text('...', margin + gridSize * cellSize + cellSize/2, margin + gridSize * cellSize + cellSize/2);
+            
+            // Draw axis labels
+            textSize(16);
+            fill(getTextColor());
+            noStroke();
+            
+            // Set label
+            push();
+            translate(margin / 2, height / 2);
+            rotate(-PI / 2);
+            text('Set number (n)', 0, 0);
+            pop();
+            
+            // Element label
+            text('Element index (m)', width / 2, height - margin / 2);
+            
+            // Add infinity symbols
+            textSize(14);
+            text('→ ∞', margin + gridSize * cellSize + cellSize, height - margin / 2);
+            text('↓ ∞', margin / 2, margin + gridSize * cellSize + cellSize);
+            
+            // Animate traversal line
+            drawTraversalLine();
+            
+            // Update animation
+            animationProgress += animationSpeed;
+            if (animationProgress >= 1) {
+                animationProgress = 0;
+                currentIndex = (currentIndex + 1) % traversalPath.length;
+                
+                // Add current point to line history
+                if (currentIndex > 0) {
+                    let curr = traversalPath[currentIndex - 1];
+                    let x = margin + curr.m * cellSize + cellSize / 2;
+                    let y = margin + curr.n * cellSize + cellSize / 2;
+                    linePoints.push({
+                        x: x, 
+                        y: y,
+                        isDiagonalStart: curr.isDiagonalStart
+                    });
+                    
+                    // Keep only recent points for performance
+                    if (linePoints.length > traversalPath.length) {
+                        linePoints.shift();
+                    }
+                }
+                
+                // Reset when complete
+                if (currentIndex === 0) {
+                    linePoints = [];
+                }
+            }
+        }
+        
+        function drawSubscriptText(base, sub1, sub2, x, y) {
+            let baseSize = cellSize * 0.4; // Increased from 0.3
+            let subSize = baseSize * 0.6; // Adjusted subscript size
+            
+            textSize(baseSize);
+            let baseWidth = textWidth(base);
+            
+            // Draw base
+            text(base, x - baseWidth * 0.3, y);
+            
+            // Draw subscripts
+            textSize(subSize);
+            text(sub1 + ',' + sub2, x + baseWidth * 0.5, y + baseSize * 0.3);
+        }
+        
+        function drawTraversalLine() {
+            // Draw completed path
+            noFill();
+            // Use cyan color for the line
+            if (isDarkMode()) {
+                stroke(88, 166, 255); // #58a6ff
+            } else {
+                stroke(3, 102, 214); // #0366d6
+            }
+            strokeWeight(3);
+            
+            // Draw completed path segments
+            for (let i = 1; i < linePoints.length; i++) {
+                let prev = linePoints[i - 1];
+                let curr = linePoints[i];
+                
+                // Check if this is a diagonal transition
+                if (curr.isDiagonalStart && i > 0) {
+                    // Draw dashed line for diagonal transitions
+                    drawingContext.setLineDash([5, 5]);
+                } else {
+                    // Solid line within diagonals
+                    drawingContext.setLineDash([]);
+                }
+                
+                line(prev.x, prev.y, curr.x, curr.y);
+            }
+            
+            // Reset to solid line
+            drawingContext.setLineDash([]);
+            
+            // Draw animated segment
+            if (currentIndex > 0 && currentIndex < traversalPath.length) {
+                let prev = traversalPath[currentIndex - 1];
+                let curr = traversalPath[currentIndex];
+                
+                let x1 = margin + prev.m * cellSize + cellSize / 2;
+                let y1 = margin + prev.n * cellSize + cellSize / 2;
+                let x2 = margin + curr.m * cellSize + cellSize / 2;
+                let y2 = margin + curr.n * cellSize + cellSize / 2;
+                
+                // Use dashed line if transitioning to new diagonal
+                if (curr.isDiagonalStart) {
+                    drawingContext.setLineDash([5, 5]);
+                } else {
+                    drawingContext.setLineDash([]);
+                }
+                
+                let x = lerp(x1, x2, animationProgress);
+                let y = lerp(y1, y2, animationProgress);
+                
+                if (linePoints.length > 0) {
+                    line(linePoints[linePoints.length - 1].x, linePoints[linePoints.length - 1].y, x, y);
+                }
+            }
+            
+            // Reset dash
+            drawingContext.setLineDash([]);
+            
+            // Highlight current element
+            if (currentIndex < traversalPath.length) {
+                let curr = traversalPath[currentIndex];
+                let x = margin + curr.m * cellSize + cellSize / 2;
+                let y = margin + curr.n * cellSize + cellSize / 2;
+                
+                // Use cyan color for highlight
+                if (isDarkMode()) {
+                    fill(88, 166, 255); // #58a6ff
+                } else {
+                    fill(3, 102, 214); // #0366d6
+                }
+                noStroke();
+                circle(x, y, cellSize * 0.3);
+                
+                // Show current element number
+                fill(getBackgroundColor());
+                textSize(cellSize * 0.2);
+                text(currentIndex + 1, x, y);
+            }
+        }
+        
+        function windowResized() {
+            let canvasSize = min(windowWidth - 40, windowHeight - 200, 900); // Match setup size
+            resizeCanvas(canvasSize, canvasSize);
+            cellSize = (canvasSize - 2 * margin) / gridSize;
+        }
+    </script>
+</body>
+</html>
