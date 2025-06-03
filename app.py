@@ -44,7 +44,7 @@ CONTENT_DIRS = [
     "algebra", "calculus", "differential equations", "trigonometry", "logic and proofs", 
     "linear algebra", "physics", "complex analysis", "graphics", 
     "probability and statistics", 
-    "misc", "numerical analysis", "discrete math", "cellular automata"
+    "misc", "numerical analysis", "discrete math", "cellular automata", "real analysis",
 ]
 
 # Site configuration
