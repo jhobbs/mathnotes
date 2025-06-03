@@ -5,6 +5,8 @@ title: Topology
 
 # Topology
 
+## Countably Infinite Sets
+
 Given two sets, $A$ and $B$, if there is a bijection (a one-to-one mapping of $A$ onto $B$) between $A$ and $B$, we say $A$ and $B$ have the same cardinal number, or that $A$ and $B$ are equivalent. We denote this as $A \sim B$.
 
 A set $A$ is said to be **countable** if there exists a bijection between $A$ and the set of all positive integers $\mathbb{Z}_{>0}$, that is, if $A \sim \mathbb{Z}_{>0}.$
@@ -18,3 +20,5 @@ Now, define $f : \mathbb{Z}_{>0} \to E$ as $f(k) = {x_{k_n}}$, which is a biject
 *Intuition:* We can show this by putting $A$ into a sequence ${x_n}$ of distinct values, so it can be indexed with the positive integers, and then constructing a subsequence of ${x_n}$ that are only the indices of elements of $E.$
 
 As an example, consider the even numbers ${0, 2, 4, \dots}$ as a subset of the non-negative integers ${0, 1, 2, \dots}.$ Then, the indices of the even numbers are ${1, 3, 5, \dots},$ and $f(1) = 0, f(1) = 2, \dots.$
+
+Also, note that this means that countably infinite sets are the smallest infinite sets. Any infinite subset of one has the same cardinality as the parent set, and the same cardinality of as the set of natural numbers - $\aleph_0$ - "aleph null."
