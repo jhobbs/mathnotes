@@ -5,11 +5,21 @@ title: Topology
 
 # Topology
 
-## Countably Infinite Sets
+## Cardinality and Countability
 
 Given two sets, $A$ and $B$, if there is a bijection (a one-to-one mapping of $A$ onto $B$) between $A$ and $B$, we say $A$ and $B$ have the same cardinal number, or that $A$ and $B$ are equivalent. We denote this as $A \sim B$.
 
+A set $A$ is said to be **finite** if $A \sim \mathbb{N}_n$ for some $n.$
+
+A set $A$ is said to be **infinite** it is not finite.
+
 A set $A$ is said to be **countable** if there exists a bijection between $A$ and the set of all positive integers $\mathbb{Z}_{>0}$, that is, if $A \sim \mathbb{Z}_{>0}.$
+
+A set $A$ is said to be **uncountable** if it is neither finite nor countable.
+
+A set $A$ is said to be **at most countable** if $A$ is finite or countable.
+
+### Countably Infinite Sets
 
 *Theorem*: Every infinite subset $E$ of a countably infinite set $A$ is countable.
 
