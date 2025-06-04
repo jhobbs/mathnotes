@@ -5,6 +5,8 @@ title: Topology
 
 # Topology
 
+**Note:** This section was developed by following Rudin, *Principles of Mathematical Analysis*, Chapter 2. The definitions and theorems are directly or nearly directly from there, but the proofs are at least attempts at expressing my own understanding.
+
 ## Cardinality and Countability
 
 Given two sets, $A$ and $B$, if there is a bijection (a one-to-one mapping of $A$ onto $B$) between $A$ and $B$, we say $A$ and $B$ have the same cardinal number, or that $A$ and $B$ are equivalent. We denote this as $A \sim B$.
@@ -67,3 +69,6 @@ So, for any given $n-1$-tuple $b$, we form $n$-tuples by appending each element 
 *Corollary:* The set of rational numbers is countable.
 
 *Proof:* Rational numbers just formed from pairs of integers: $(a, b) \to a/b, b \neq 0,$ so we use the above theorem with $n = 2.$
+
+
+
