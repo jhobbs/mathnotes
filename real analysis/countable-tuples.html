@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countable n-tuples Visualization</title>
+    <link rel="stylesheet" href="/static/demo-style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="/static/demo-dark-mode.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #canvas-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        #info {
+            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <div id="sketch-holder"></div>
+        <div id="info">
+            <h2>Countable n-tuples from Countable Set</h2>
+            <p>This animation illustrates the proof that B_n (the set of all n-tuples from a countable set A) is countable for any n.</p>
+        </div>
+    </div>
+
+    <script>
+        let canvasWidth;
+        let canvasHeight;
+        let centerY;
+        let columnSpacing = 180;
+        let circleRadius = 20;
+        let verticalSpacing = 40;
+        let smallCircleRadius = 12;
+        let animationStartTime;
+        let showA = false;
+        let showB1 = false;
+        let showB2 = false;
+        let showB3 = false;
+        
+        function setup() {
+            canvasWidth = min(windowWidth - 40, 1200);
+            canvasHeight = min(windowHeight - 200, 800);
+            let canvas = createCanvas(canvasWidth, canvasHeight);
+            canvas.parent('sketch-holder');
+            
+            centerY = canvasHeight / 2;
+            
+            textAlign(CENTER, CENTER);
+            strokeWeight(2);
+            
+            // Start animation timer
+            animationStartTime = millis();
+        }
+        
+        function draw() {
+            background(getBackgroundColor());
+            
+            // Update animation state based on elapsed time
+            let elapsed = millis() - animationStartTime;
+            let cycleTime = 10000; // 10 seconds total cycle
+            elapsed = elapsed % cycleTime; // Loop animation
+            
+            showA = elapsed >= 0;
+            showB1 = elapsed >= 2000;
+            showB2 = elapsed >= 4000;
+            showB3 = elapsed >= 6000;
+            
+            // Draw set A (left column)
+            if (showA) {
+                drawIntegerColumn(100, 'A', -5, 5);
+            }
+            
+            // Draw first connection and B_1
+            if (showB1) {
+                // Draw arrows from A to B_1
+                drawArrows(100, 280, -5, 5);
+                
+                // Draw first vertical dividing line
+                stroke(getStrokeColor());
+                strokeWeight(2);
+                line(190, 100, 190, canvasHeight - 100);
+                
+                // Draw |A| label over the first dividing line
+                fill(getBackgroundColor());
+                noStroke();
+                rect(170, centerY - 20, 40, 40);
+                fill(getTextColor());
+                textSize(24);
+                text('|A|', 190, centerY);
+                
+                // Draw set B_1 (middle column)
+                drawIntegerColumn(280, 'B₁', -5, 5);
+            }
+            
+            // Draw second connection and B_2
+            if (showB2) {
+                // Draw arrows from B_1 to B_2
+                drawArrowsToB2(280, 500, -5, 5);
+                
+                // Draw second vertical dividing line
+                stroke(getStrokeColor());
+                strokeWeight(2);
+                line(390, 100, 390, canvasHeight - 100);
+                
+                // Draw |A|² label over the second dividing line
+                fill(getBackgroundColor());
+                noStroke();
+                rect(365, centerY - 20, 50, 40);
+                fill(getTextColor());
+                textSize(22);
+                text('|A|²', 390, centerY);
+                
+                // Draw set B_2 (right column)
+                drawB2Column(500);
+            }
+            
+            // Draw third connection and B_3
+            if (showB3) {
+                // Draw arrows from B_2 to B_3
+                drawArrowsToB3(500, 720);
+                
+                // Draw third vertical dividing line
+                stroke(getStrokeColor());
+                strokeWeight(2);
+                line(610, 100, 610, canvasHeight - 100);
+                
+                // Draw |A|³ label over the third dividing line
+                fill(getBackgroundColor());
+                noStroke();
+                rect(585, centerY - 20, 50, 40);
+                fill(getTextColor());
+                textSize(22);
+                text('|A|³', 610, centerY);
+                
+                // Draw set B_3 (right column)
+                drawB3Column(720);
+            }
+        }
+        
+        function drawIntegerColumn(x, label, minVal, maxVal) {
+            // Draw column label
+            fill(getTextColor());
+            noStroke();
+            textSize(28);
+            textStyle(BOLD);
+            text(label, x, 60);
+            textStyle(NORMAL);
+            
+            // Draw integers in circles
+            for (let i = minVal; i <= maxVal; i++) {
+                let y = centerY + i * verticalSpacing;
+                
+                // Draw circle
+                stroke(getStrokeColor());
+                strokeWeight(2);
+                fill(getBackgroundColor());
+                circle(x, y, circleRadius * 2);
+                
+                // Draw number
+                fill(getTextColor());
+                noStroke();
+                textSize(18);
+                text(i, x, y);
+            }
+            
+            // Draw ellipsis and arrows for infinity
+            fill(getTextColor());
+            noStroke();
+            textSize(24);
+            
+            // Top ellipsis and arrow
+            let topY = centerY + minVal * verticalSpacing;
+            text('⋮', x, topY - 50);
+            textSize(20);
+            text('↑ ∞', x, topY - 80);
+            
+            // Bottom ellipsis and arrow
+            textSize(24);
+            let bottomY = centerY + maxVal * verticalSpacing;
+            text('⋮', x, bottomY + 50);
+            textSize(20);
+            text('↓ ∞', x, bottomY + 80);
+        }
+        
+        function drawArrows(x1, x2, minVal, maxVal) {
+            stroke(getStrokeColor());
+            strokeWeight(1);
+            
+            // Draw an arrow from each element in A to the corresponding element in B_1
+            for (let i = minVal; i <= maxVal; i++) {
+                let y = centerY + i * verticalSpacing;
+                
+                // Draw arrow line
+                stroke(getStrokeColor());
+                strokeWeight(1);
+                drawingContext.setLineDash([3, 3]);
+                line(x1 + circleRadius, y, x2 - circleRadius, y);
+                drawingContext.setLineDash([]);
+                
+                // Draw arrowhead
+                strokeWeight(2);
+                line(x2 - circleRadius, y, x2 - circleRadius - 8, y - 4);
+                line(x2 - circleRadius, y, x2 - circleRadius - 8, y + 4);
+            }
+        }
+        
+        function drawB2Column(x) {
+            // Draw column label
+            fill(getTextColor());
+            noStroke();
+            textSize(28);
+            textStyle(BOLD);
+            text('B₂', x, 60);
+            textStyle(NORMAL);
+            
+            // Show elements for all visible B_1 elements
+            let visibleElements = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5];
+            let subElements = [-1, 0, 1]; // Show these 3 sub-elements for each
+            
+            textSize(14);
+            for (let i = 0; i < visibleElements.length; i++) {
+                let baseY = centerY + visibleElements[i] * verticalSpacing;
+                
+                // Draw ellipsis above first sub-element
+                fill(getTextColor());
+                noStroke();
+                text('⋮', x, baseY - 30);
+                
+                // Draw the 3 sub-elements
+                for (let j = 0; j < subElements.length; j++) {
+                    let y = baseY + (j - 1) * 20; // Reduced spacing between sub-elements
+                    
+                    // Draw smaller circle
+                    stroke(getStrokeColor());
+                    strokeWeight(1);
+                    fill(getBackgroundColor());
+                    circle(x, y, smallCircleRadius * 2);
+                    
+                    // Draw tuple notation
+                    fill(getTextColor());
+                    noStroke();
+                    textSize(12);
+                    text(`(${visibleElements[i]},${subElements[j]})`, x, y);
+                }
+                
+                // Draw ellipsis below last sub-element
+                fill(getTextColor());
+                noStroke();
+                textSize(14);
+                text('⋮', x, baseY + 30);
+            }
+        }
+        
+        function drawArrowsToB2(x1, x2, minVal, maxVal) {
+            stroke(getStrokeColor());
+            strokeWeight(0.5);
+            drawingContext.setLineDash([2, 2]);
+            
+            // For visible elements, draw arrows to their visible children
+            let visibleElements = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5];
+            let subElements = [-1, 0, 1];
+            
+            for (let elem of visibleElements) {
+                let y1 = centerY + elem * verticalSpacing;
+                let baseY2 = centerY + elem * verticalSpacing;
+                
+                // Draw arrows to the 3 visible sub-elements
+                for (let j = 0; j < subElements.length; j++) {
+                    let y2 = baseY2 + (j - 1) * 20;
+                    line(x1 + circleRadius, y1, x2 - smallCircleRadius, y2);
+                }
+                
+                // Draw arrows going off-screen (up and down)
+                // Up arrow
+                line(x1 + circleRadius, y1, x2 - 30, baseY2 - 50);
+                // Down arrow
+                line(x1 + circleRadius, y1, x2 - 30, baseY2 + 50);
+            }
+            
+            // For elements outside the visible ones, draw arrows going off-screen
+            for (let i = minVal; i <= maxVal; i++) {
+                if (!visibleElements.includes(i)) {
+                    let y1 = centerY + i * verticalSpacing;
+                    
+                    // Draw multiple arrows spreading out
+                    for (let offset = -40; offset <= 40; offset += 20) {
+                        let targetY = centerY + i * verticalSpacing + offset;
+                        if (i < -2) {
+                            // Elements above middle section
+                            targetY = max(50, targetY);
+                        } else {
+                            // Elements below middle section
+                            targetY = min(canvasHeight - 50, targetY);
+                        }
+                        line(x1 + circleRadius, y1, canvasWidth - 20, targetY);
+                    }
+                }
+            }
+            
+            drawingContext.setLineDash([]);
+        }
+        
+        function drawB3Column(x) {
+            // Draw column label
+            fill(getTextColor());
+            noStroke();
+            textSize(28);
+            textStyle(BOLD);
+            text('B₃', x, 60);
+            textStyle(NORMAL);
+            
+            // Show many more elements from B_3, allowing overlap
+            // Sample from different B_2 elements
+            let sampleB2Elements = [
+                {base: -5, sub: -1}, {base: -5, sub: 0}, {base: -5, sub: 1},
+                {base: -4, sub: -1}, {base: -4, sub: 0}, {base: -4, sub: 1},
+                {base: -3, sub: -1}, {base: -3, sub: 0}, {base: -3, sub: 1},
+                {base: -2, sub: -1}, {base: -2, sub: 0}, {base: -2, sub: 1},
+                {base: -1, sub: -1}, {base: -1, sub: 0}, {base: -1, sub: 1},
+                {base: 0, sub: -1}, {base: 0, sub: 0}, {base: 0, sub: 1},
+                {base: 1, sub: -1}, {base: 1, sub: 0}, {base: 1, sub: 1},
+                {base: 2, sub: -1}, {base: 2, sub: 0}, {base: 2, sub: 1},
+                {base: 3, sub: -1}, {base: 3, sub: 0}, {base: 3, sub: 1},
+                {base: 4, sub: -1}, {base: 4, sub: 0}, {base: 4, sub: 1},
+                {base: 5, sub: -1}, {base: 5, sub: 0}, {base: 5, sub: 1}
+            ];
+            
+            textSize(9);
+            let nodeRadius = 8;
+            
+            // Draw nodes in a dense pattern
+            for (let i = 0; i < sampleB2Elements.length; i++) {
+                let elem = sampleB2Elements[i];
+                let baseY = centerY + elem.base * verticalSpacing + elem.sub * 12;
+                
+                // Show 5 sub-elements for each, with overlap
+                let subSubElements = [-2, -1, 0, 1, 2];
+                for (let j = 0; j < subSubElements.length; j++) {
+                    let y = baseY + j * 10 + (i % 3) * 3; // Add some jitter
+                    let xOffset = (j % 2) * 15 - 7.5; // Stagger left and right
+                    
+                    // Draw tiny circle
+                    stroke(getStrokeColor());
+                    strokeWeight(0.5);
+                    fill(getBackgroundColor());
+                    circle(x + xOffset, y, nodeRadius * 2);
+                    
+                    // Draw 3-tuple notation
+                    fill(getTextColor());
+                    noStroke();
+                    textSize(7);
+                    text(`(${elem.base},${elem.sub},${subSubElements[j]})`, x + xOffset, y);
+                }
+            }
+            
+            // Add ellipsis at edges
+            fill(getTextColor());
+            noStroke();
+            textSize(16);
+            text('⋮', x, 90);
+            text('⋮', x, canvasHeight - 90);
+        }
+        
+        function drawArrowsToB3(x1, x2) {
+            stroke(getStrokeColor());
+            strokeWeight(0.2);
+            drawingContext.setLineDash([1, 2]);
+            
+            // Draw arrows from each B_2 element to multiple B_3 elements
+            let nodeRadius = 8;
+            
+            // From each visible B_2 element, draw arrows to its B_3 children
+            for (let base = -5; base <= 5; base++) {
+                for (let sub of [-1, 0, 1]) {
+                    let y1 = centerY + base * verticalSpacing + sub * 20;
+                    
+                    // Draw arrows to several B_3 children
+                    for (let k of [-2, -1, 0, 1, 2]) {
+                        let y2 = centerY + base * verticalSpacing + sub * 12 + k * 10;
+                        let xOffset = (k % 2) * 15 - 7.5;
+                        
+                        // Only draw if within reasonable bounds
+                        if (y2 > 100 && y2 < canvasHeight - 100) {
+                            line(x1 + smallCircleRadius, y1, x2 + xOffset - nodeRadius, y2);
+                        }
+                    }
+                    
+                    // Also draw some arrows going off-screen
+                    if (base % 3 === 0) {
+                        line(x1 + smallCircleRadius, y1, canvasWidth - 5, y1 - 40);
+                        line(x1 + smallCircleRadius, y1, canvasWidth - 5, y1 + 40);
+                    }
+                }
+            }
+            
+            drawingContext.setLineDash([]);
+        }
+        
+        function windowResized() {
+            canvasWidth = min(windowWidth - 40, 1200);
+            canvasHeight = min(windowHeight - 200, 800);
+            resizeCanvas(canvasWidth, canvasHeight);
+            centerY = canvasHeight / 2;
+        }
+    </script>
+</body>
+</html>

@@ -66,6 +66,8 @@ $$ B_n = \{(b,a) | b \in B_{n-1}, a \in A\} = \bigcup_{b \in B_{n-1}} ({b} \time
 
 So, for any given $n-1$-tuple $b$, we form $n$-tuples by appending each element of $a$ to it, and so the set of pairs $(b,a)$ has the same cardinality as $A,$ and is thus countable. $B_n$ is thus the union of the countable set of countable sets (the set of sets formed by appending each element of $A$ to each element of $B_{n-1}$) and is therefore countable itself, by a theorem proved above. Therefore, by induction, every $B_n$ is countable.
 
+{% include_relative countable-tuples.html %}
+
 *Corollary:* The set of rational numbers is countable.
 
 *Proof:* Rational numbers just formed from pairs of integers: $(a, b) \to a/b, b \neq 0,$ so we use the above theorem with $n = 2.$
