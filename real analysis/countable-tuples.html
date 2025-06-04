@@ -52,6 +52,8 @@
         let showB1 = false;
         let showB2 = false;
         let showB3 = false;
+        let showB4 = false;
+        let shiftLeft = false;
         
         function setup() {
             canvasWidth = min(windowWidth - 40, 1200);
@@ -80,76 +82,123 @@
             showB1 = elapsed >= 2000;
             showB2 = elapsed >= 4000;
             showB3 = elapsed >= 6000;
+            shiftLeft = elapsed >= 8000;
+            showB4 = elapsed >= 8000;
             
-            // Draw set A (left column)
+            // Define 4 equally spaced column positions (shifted left to center better)
+            let col1 = 100;
+            let col2 = 300; 
+            let col3 = 500;
+            let col4 = 700;
+            let colSpacing = 200;
+            
+            // Calculate shift offset - each column moves one position left
+            let shift = shiftLeft ? -colSpacing : 0;
+            
+            // Draw set A (column 1)
             if (showA) {
-                drawIntegerColumn(100, 'A', -5, 5);
+                drawIntegerColumn(col1 + shift, 'A', -5, 5);
             }
             
             // Draw first connection and B_1
             if (showB1) {
                 // Draw arrows from A to B_1
-                drawArrows(100, 280, -5, 5);
+                drawArrows(col1 + shift, col2 + shift, -5, 5);
                 
                 // Draw first vertical dividing line
+                let lineX = col1 + (colSpacing / 2) + shift;
                 stroke(getStrokeColor());
                 strokeWeight(2);
-                line(190, 100, 190, canvasHeight - 100);
+                line(lineX, 100, lineX, canvasHeight - 100);
                 
                 // Draw |A| label over the first dividing line
                 fill(getBackgroundColor());
                 noStroke();
-                rect(170, centerY - 20, 40, 40);
+                rect(lineX - 20, centerY - 20, 40, 40);
                 fill(getTextColor());
                 textSize(24);
-                text('|A|', 190, centerY);
+                text('|A|', lineX, centerY);
                 
-                // Draw set B_1 (middle column)
-                drawIntegerColumn(280, 'B₁', -5, 5);
+                // Draw set B_1 (column 2)
+                drawIntegerColumn(col2 + shift, 'B₁', -5, 5);
             }
             
             // Draw second connection and B_2
             if (showB2) {
                 // Draw arrows from B_1 to B_2
-                drawArrowsToB2(280, 500, -5, 5);
+                drawArrowsToB2(col2 + shift, col3 + shift, -5, 5);
                 
                 // Draw second vertical dividing line
+                let lineX = col2 + (colSpacing / 2) + shift;
                 stroke(getStrokeColor());
                 strokeWeight(2);
-                line(390, 100, 390, canvasHeight - 100);
+                line(lineX, 100, lineX, canvasHeight - 100);
                 
                 // Draw |A|² label over the second dividing line
                 fill(getBackgroundColor());
                 noStroke();
-                rect(365, centerY - 20, 50, 40);
+                rect(lineX - 25, centerY - 20, 50, 40);
                 fill(getTextColor());
                 textSize(22);
-                text('|A|²', 390, centerY);
+                text('|A|²', lineX, centerY);
                 
-                // Draw set B_2 (right column)
-                drawB2Column(500);
+                // Draw set B_2 (column 3)
+                drawB2Column(col3 + shift);
             }
             
             // Draw third connection and B_3
             if (showB3) {
                 // Draw arrows from B_2 to B_3
-                drawArrowsToB3(500, 720);
+                drawArrowsToB3(col3 + shift, col4 + shift);
                 
                 // Draw third vertical dividing line
+                let lineX = col3 + (colSpacing / 2) + shift;
                 stroke(getStrokeColor());
                 strokeWeight(2);
-                line(610, 100, 610, canvasHeight - 100);
+                line(lineX, 100, lineX, canvasHeight - 100);
                 
                 // Draw |A|³ label over the third dividing line
                 fill(getBackgroundColor());
                 noStroke();
-                rect(585, centerY - 20, 50, 40);
+                rect(lineX - 25, centerY - 20, 50, 40);
                 fill(getTextColor());
                 textSize(22);
-                text('|A|³', 610, centerY);
+                text('|A|³', lineX, centerY);
                 
-                // Draw set B_3 (right column)
-                drawB3Column(720);
+                // Draw set B_3 (column 4)
+                drawB3Column(col4 + shift);
+            }
+            
+            // Draw fourth connection and B_4
+            if (showB4) {
+                console.log('Drawing B4, showB4:', showB4, 'shift:', shift);
+                
+                // B_3 is drawn at col4 + shift, B_4 at col4
+                let b3Position = col4 + shift;
+                let b4Position = col4;
+                
+                // Draw arrows from B_3 to B_4
+                drawArrowsToB4(b3Position, b4Position);
+                
+                // Draw fourth vertical dividing line (between shifted B_3 and B_4)
+                let lineX = (b3Position + b4Position) / 2; // Midpoint between B_3 and B_4
+                console.log('B3 position:', b3Position, 'B4 position:', col4, 'Line X:', lineX);
+                
+                stroke(getStrokeColor());
+                strokeWeight(2);
+                line(lineX, 100, lineX, canvasHeight - 100);
+                
+                // Draw set B_4 at the rightmost position
+                drawB4Column(col4);
+                
+                // Draw |A|⁴ label AFTER everything else so it's on top
+                fill(getBackgroundColor());
+                noStroke();
+                rect(lineX - 25, centerY - 20, 50, 40);
+                fill(getTextColor());
+                textSize(22);
+                text('|A|⁴', lineX, centerY);
+                console.log('Drew |A|⁴ label at:', lineX, centerY);
             }
         }
         
@@ -411,6 +460,113 @@
             
             drawingContext.setLineDash([]);
         }
+        
+        function drawB4Column(x) {
+            // Draw column label
+            fill(getTextColor());
+            noStroke();
+            textSize(28);
+            textStyle(BOLD);
+            text('B₄', x, 60);
+            textStyle(NORMAL);
+            
+            // Show extremely dense packed elements from B_4
+            // Many more B_3 elements as sources
+            let sampleB3Elements = [
+                {base: -5, sub1: -1, sub2: 0}, {base: -5, sub1: 0, sub2: 1}, {base: -5, sub1: 1, sub2: -1},
+                {base: -4, sub1: -1, sub2: 0}, {base: -4, sub1: 0, sub2: 1}, {base: -4, sub1: 1, sub2: -1},
+                {base: -3, sub1: -1, sub2: 0}, {base: -3, sub1: 0, sub2: 1}, {base: -3, sub1: 1, sub2: -1},
+                {base: -2, sub1: -1, sub2: 0}, {base: -2, sub1: 0, sub2: 1}, {base: -2, sub1: 1, sub2: -1},
+                {base: -1, sub1: -1, sub2: 0}, {base: -1, sub1: 0, sub2: 1}, {base: -1, sub1: 1, sub2: -1},
+                {base: 0, sub1: -1, sub2: 0}, {base: 0, sub1: 0, sub2: 1}, {base: 0, sub1: 1, sub2: -1},
+                {base: 1, sub1: -1, sub2: 0}, {base: 1, sub1: 0, sub2: 1}, {base: 1, sub1: 1, sub2: -1},
+                {base: 2, sub1: -1, sub2: 0}, {base: 2, sub1: 0, sub2: 1}, {base: 2, sub1: 1, sub2: -1},
+                {base: 3, sub1: -1, sub2: 0}, {base: 3, sub1: 0, sub2: 1}, {base: 3, sub1: 1, sub2: -1},
+                {base: 4, sub1: -1, sub2: 0}, {base: 4, sub1: 0, sub2: 1}, {base: 4, sub1: 1, sub2: -1},
+                {base: 5, sub1: -1, sub2: 0}, {base: 5, sub1: 0, sub2: 1}, {base: 5, sub1: 1, sub2: -1}
+            ];
+            
+            let nodeRadius = 4; // Even smaller
+            
+            // Draw massively dense pattern
+            for (let i = 0; i < sampleB3Elements.length; i++) {
+                let elem = sampleB3Elements[i];
+                let baseY = centerY + elem.base * verticalSpacing + elem.sub1 * 8 + elem.sub2 * 4;
+                
+                // Show many 4-tuples for each, heavily overlapped and packed
+                let subSubSubElements = [-2, -1, 0, 1, 2];
+                for (let j = 0; j < subSubSubElements.length; j++) {
+                    for (let k = 0; k < 4; k++) { // Even more overlapping instances
+                        let y = baseY + j * 6 + k * 2 + (i % 7) * 1;
+                        let xOffset = (j % 4) * 8 - 12 + k * 3 + (i % 3) * 2;
+                        
+                        // Only draw if within reasonable bounds
+                        if (y > 90 && y < canvasHeight - 90 && Math.abs(xOffset) < 30) {
+                            // Draw tiny circle
+                            stroke(getStrokeColor());
+                            strokeWeight(0.2);
+                            fill(getBackgroundColor());
+                            circle(x + xOffset, y, nodeRadius * 2);
+                            
+                            // Draw 4-tuple notation (tiny)
+                            fill(getTextColor());
+                            noStroke();
+                            textSize(4);
+                            text(`(${elem.base},${elem.sub1},${elem.sub2},${subSubSubElements[j]})`, x + xOffset, y);
+                        }
+                    }
+                }
+            }
+            
+            // Add ellipsis everywhere to show overwhelming density
+            fill(getTextColor());
+            noStroke();
+            textSize(24);
+            text('⋮', x, 85);
+            text('⋮', x, canvasHeight - 85);
+            text('⋮', x - 25, centerY - 50);
+            text('⋮', x + 25, centerY - 50);
+            text('⋮', x - 25, centerY + 50);
+            text('⋮', x + 25, centerY + 50);
+            text('⋮', x, centerY);
+        }
+        
+        function drawArrowsToB4(x1, x2) {
+            stroke(getStrokeColor());
+            strokeWeight(0.1);
+            drawingContext.setLineDash([1, 3]);
+            
+            // Draw just a few sample arrows due to extreme density
+            for (let base of [-3, -1, 0, 1, 3]) {
+                let baseY = centerY + base * verticalSpacing;
+                
+                // From B_3 elements to some B_4 elements
+                for (let j of [0, 2, 4]) {
+                    let y1 = baseY + j * 10;
+                    let targetY = centerY + base * verticalSpacing + j * 8;
+                    
+                    // Draw spreading arrows
+                    for (let spread = -20; spread <= 20; spread += 10) {
+                        if (targetY + spread > 100 && targetY + spread < canvasHeight - 100) {
+                            line(x1 + 8, y1, x2 - 6, targetY + spread);
+                        }
+                    }
+                }
+            }
+            
+            // Many arrows going completely off-screen
+            for (let i = -5; i <= 5; i++) {
+                if (i % 2 === 0) {
+                    let baseY = centerY + i * verticalSpacing;
+                    for (let offset = -30; offset <= 30; offset += 15) {
+                        line(x1 + 8, baseY + offset, canvasWidth - 5, baseY + offset + Math.random() * 60 - 30);
+                    }
+                }
+            }
+            
+            drawingContext.setLineDash([]);
+        }
+        
         
         function windowResized() {
             canvasWidth = min(windowWidth - 40, 1200);
