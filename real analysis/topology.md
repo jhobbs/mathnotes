@@ -35,9 +35,9 @@ Also, note that this means that countably infinite sets are the smallest infinit
 
 ## Intersections and Unions of Sets
 
-*Theorem*: Let $\{E_n\}, n 1, 2, 3, \dots$ be a sequence of countable sets. Then let $S = \bigcup_{n=1}^\infty E_n.$ Then, $S$ is countable.
+*Theorem*: Let $\{E_n\}, n = 1, 2, 3, \dots$ be a sequence of countable sets. Then let $S = \bigcup_{n=1}^\infty E_n.$ Then, $S$ is countable.
 
-We can construct an array where the rows are the sets that make up the entries of $\{E_n\}.$ Then, we can create a single sequence from all the entries of the sets of $\{E_n\}$ by iterating over them in the following order:
+Proof: We can construct an infinite array where the rows are sequence constructed by the sets that make up the entries of $\{E_n\}.$ Then, we can create a single sequence from all the entries of the sets of $\{E_n\}$ by iterating over them in the following order:
 
 ```python
 sequence = []
