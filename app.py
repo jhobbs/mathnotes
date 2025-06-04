@@ -79,7 +79,7 @@ def render_markdown_file(filepath):
                 # Return an iframe that loads the HTML file with fullscreen button
                 iframe_id = f"demo-{hash(url_path)}"
                 return f'''<div class="demo-container">
-                    <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="600" frameborder="0"></iframe>
+                    <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="800" frameborder="0"></iframe>
                     <button class="fullscreen-btn" onclick="openFullscreen('{iframe_id}', '/mathnotes/{url_path}')" title="Open in fullscreen">⛶</button>
                 </div>'''
             

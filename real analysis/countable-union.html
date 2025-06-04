@@ -53,7 +53,8 @@
         
         function setup() {
             console.log('Setup called');
-            let canvasSize = min(windowWidth - 40, windowHeight - 200, 900); // Increased max size
+            // Make canvas use most of available space, with max of 1400px for very large screens
+            let canvasSize = min(windowWidth - 40, windowHeight - 200, 1400);
             console.log('Canvas size:', canvasSize);
             let canvas = createCanvas(canvasSize, canvasSize);
             canvas.parent('sketch-holder');
@@ -213,7 +214,7 @@
         }
         
         function drawSubscriptText(base, sub1, sub2, x, y) {
-            let baseSize = cellSize * 0.4; // Increased from 0.3
+            let baseSize = cellSize * 0.5; // Increased for better readability
             let subSize = baseSize * 0.6; // Adjusted subscript size
             
             textSize(baseSize);
@@ -303,13 +304,13 @@
                 
                 // Show current element number
                 fill(getBackgroundColor());
-                textSize(cellSize * 0.2);
+                textSize(cellSize * 0.3); // Increased for better readability
                 text(currentIndex + 1, x, y);
             }
         }
         
         function windowResized() {
-            let canvasSize = min(windowWidth - 40, windowHeight - 200, 900); // Match setup size
+            let canvasSize = min(windowWidth - 40, windowHeight - 200, 1400); // Match setup size
             resizeCanvas(canvasSize, canvasSize);
             cellSize = (canvasSize - 2 * margin) / gridSize;
         }
