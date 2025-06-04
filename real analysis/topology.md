@@ -55,3 +55,11 @@ $$ E_{1,1}, E_{2,1}, E_{1,2}, E_{3,1}, E_{2,2}, E_{1,3}, E_{4,1}, E_{3,2}, E_{2,
 This sequence may contain duplicates, so some indices may need to be skipped in constructing a subset $T$ of the positive integers such that $T ~ S,$ but we've now shown that $S$ is at most countable. To show $S$ is infinite and therefore countable, note that the infinite set $E_1$ is a subset of $S,$, and therefore $S$ is infinite and countable.
 
 {% include_relative countable-union.html %}
+
+*Theorem*: Let $A$ be a countable set, and let $B_n$ be the set of all $n$-tuples $(a_1, \dots, a_n)$ where $a_k \in A (k = 1, \dots, n),$ and the elements $a_1, \dots, a_n$ need not be distinct. Then $B_n$ is countable.
+
+*Proof*: We will proceed using proof by induction. First, for the base case, note that $B_1$ is the set of $1$-tuples formed by elements of $A$, so $B_1 = A$ and is thus countable. Now, for the inductive step, assume $B_{n-1}$ is countable $(n = 2, 3, 4, \dots).$ Then we have that
+
+$$ B_n = \{(b,a) | b \in B_{n-1}, a \in A\} = \bigcup_{b \in B_{n-1}} ({b} \times A). $$
+
+So, for any given $n-1$-tuple $b$, we form $n$-tuples by appending each element of $a$ to it, and so the set of pairs $(b,a)$ has the same cardinality as $A,$ and is thus countable. $B_n$ is thus the union of the countable set of countable sets (the set of sets formed by appending each element of $A$ to each element of $B_{n-1}$) and is therefore countable itself, by a theorem proved above. Therefore, by induction, every $B_n$ is countable.
