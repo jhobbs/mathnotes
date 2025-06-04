@@ -215,17 +215,17 @@
         
         function drawSubscriptText(base, sub1, sub2, x, y) {
             let baseSize = cellSize * 0.5; // Increased for better readability
-            let subSize = baseSize * 0.6; // Adjusted subscript size
+            let subSize = baseSize * 0.5; // Made smaller
             
             textSize(baseSize);
             let baseWidth = textWidth(base);
             
-            // Draw base
-            text(base, x - baseWidth * 0.3, y);
+            // Draw base - moved more to top-left
+            text(base, x - cellSize * 0.2, y - cellSize * 0.1);
             
             // Draw subscripts
             textSize(subSize);
-            text(sub1 + ',' + sub2, x + baseWidth * 0.5, y + baseSize * 0.3);
+            text(sub1 + ',' + sub2, x + cellSize * 0.12, y + cellSize * 0.12);
         }
         
         function drawTraversalLine() {
