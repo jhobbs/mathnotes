@@ -82,4 +82,10 @@ $$ p_n = \neg s_{n_n}, n = 1, 2, 3, \dots $$
 
 That is, the $n$th digit of $p$ will be the opposite of whatever the $n$th digit of $s_n$ is. So, $p$ differs from $s_1$ in the first digit, from $s_2$ in the second digit, $s_3$ in the third digit, and so on, so that it differs from all elements of $E,$ and therefore is not contained in $E.$ But, $p$ is definitely in $A$ since it its elements are the digits $0$ and $1.$ Therefore, $E$ is a proper subset of $A,$ so any countable subset of $A$ must be a proper subset of $A.$ But, $A$ can't be a proper subset of itself, and therefore $A$ must be uncountable. $\square$ 
 
-{% include_relative diagonalization.html %} 
+This approach to proving this theorem is due to Cantor and is called diagonalization, and the animation below illustrates why.
+
+{% include_relative diagonalization.html %}
+
+*Corollary:* There set of real numbers is uncountable.
+
+I won't give a full proof here, but this can be accomplished by considering the binary representation of real numbers in the interval $[0, 1)$ consists of infinite sequences of $0$ and $1$.
