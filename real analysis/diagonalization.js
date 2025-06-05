@@ -101,7 +101,7 @@ function drawSequenceTable() {
         fill(getTextColor());
         textAlign(RIGHT, CENTER);
         textSize(14);
-        text(`s${i+1}:`, startX - 10, startY + i * CELL_SIZE + CELL_SIZE/2);
+        text(`s${getSubscript(i+1)}:`, startX - 10, startY + i * CELL_SIZE + CELL_SIZE/2);
         
         // Draw ellipsis to indicate infinite sequence
         textAlign(LEFT, CENTER);
@@ -169,7 +169,7 @@ function drawLabels() {
     textSize(12);
     
     if (animationState === 'building' && currentStep < SEQUENCE_LENGTH) {
-        text(`Step ${currentStep + 1}: p[${currentStep + 1}] = opposite of s${currentStep + 1}[${currentStep + 1}]`, 
+        text(`Step ${currentStep + 1}: p${getSubscript(currentStep + 1)} = opposite of s${getSubscript(currentStep + 1)}[${currentStep + 1}]`, 
              width/2, startY);
     } else if (animationState === 'paused') {
         text("Construction complete! p differs from every sequence in the list.", width/2, startY);
@@ -242,6 +242,11 @@ function getFilledCellColor() {
         return color(0, 100, 0); // Dark green for filled cells
     }
     return color(200, 255, 200); // Light green for filled cells
+}
+
+function getSubscript(num) {
+    const subscripts = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'];
+    return num.toString().split('').map(digit => subscripts[parseInt(digit)]).join('');
 }
 
 // Optional: Add click to restart
