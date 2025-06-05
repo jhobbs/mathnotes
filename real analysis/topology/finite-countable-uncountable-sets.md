@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Topology
+title: Finite, Countable, and Uncountable Sets
 ---
 
-# Topology
+# Finite, Countable, and Uncountable Sets
 
 **Note:** This section was developed by following Rudin, *Principles of Mathematical Analysis*, Chapter 2. The definitions and theorems are directly or nearly directly from there, but the proofs are at least attempts at expressing my own understanding.
 
