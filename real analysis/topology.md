@@ -35,7 +35,7 @@ As an example, consider the even numbers $\{0, 2, 4, \dots\}$ as a subset of the
 
 Also, note that this means that countably infinite sets are the smallest infinite sets. Any infinite subset of one has the same cardinality as the parent set, and the same cardinality of as the set of natural numbers - $\aleph_0$ - "aleph null."
 
-## Intersections and Unions of Sets
+### Intersections and Unions of Sets
 
 *Theorem*: Let $\{E_n\}, n = 1, 2, 3, \dots$ be a sequence of countable sets. Then let $S = \bigcup_{n=1}^\infty E_n.$ Then, $S$ is countable.
 
@@ -54,7 +54,7 @@ Which, for $k = 5,$ yields
 
 $$ E_{1,1}, E_{2,1}, E_{1,2}, E_{3,1}, E_{2,2}, E_{1,3}, E_{4,1}, E_{3,2}, E_{2,3}, E_{1,4}. $$
 
-This sequence may contain duplicates, so some indices may need to be skipped in constructing a subset $T$ of the positive integers such that $T ~ S,$ but we've now shown that $S$ is at most countable. To show $S$ is infinite and therefore countable, note that the infinite set $E_1$ is a subset of $S,$, and therefore $S$ is infinite and countable.
+This sequence may contain duplicates, so some indices may need to be skipped in constructing a subset $T$ of the positive integers such that $T ~ S,$ but we've now shown that $S$ is at most countable. To show $S$ is infinite and therefore countable, note that the infinite set $E_1$ is a subset of $S,$, and therefore $S$ is infinite and countable. $\square$
 
 {% include_relative countable-union.html %}
 
@@ -64,7 +64,7 @@ This sequence may contain duplicates, so some indices may need to be skipped in 
 
 $$ B_n = \{(b,a) | b \in B_{n-1}, a \in A\} = \bigcup_{b \in B_{n-1}} ({b} \times A). $$
 
-So, for any given $n-1$-tuple $b$, we form $n$-tuples by appending each element of $a$ to it, and so the set of pairs $(b,a)$ has the same cardinality as $A,$ and is thus countable. $B_n$ is thus the union of the countable set of countable sets (the set of sets formed by appending each element of $A$ to each element of $B_{n-1}$) and is therefore countable itself, by a theorem proved above. Therefore, by induction, every $B_n$ is countable.
+So, for any given $n-1$-tuple $b$, we form $n$-tuples by appending each element of $a$ to it, and so the set of pairs $(b,a)$ has the same cardinality as $A,$ and is thus countable. $B_n$ is thus the union of the countable set of countable sets (the set of sets formed by appending each element of $A$ to each element of $B_{n-1}$) and is therefore countable itself, by a theorem proved above. Therefore, by induction, every $B_n$ is countable. $\square$
 
 {% include_relative countable-tuples.html %}
 
@@ -72,5 +72,14 @@ So, for any given $n-1$-tuple $b$, we form $n$-tuples by appending each element 
 
 *Proof:* Rational numbers just formed from pairs of integers: $(a, b) \to a/b, b \neq 0,$ so we use the above theorem with $n = 2.$
 
+### Uncountably Infinite Sets
 
+*Theorem*: Let $A$ be the set of all sequences whose elements are the digits $0$ and $1$. This set $A$ is uncountable.
 
+*Proof*: Let $E$ be a countable subset of $A,$ and call the elements of $E$ $s_1, s_2, s_3, \dots.$ We will construct a new sequence $p$ in the following way:
+
+$$ p_n = \neg s_{n_n}, n = 1, 2, 3, \dots $$
+
+That is, the $n$th digit of $p$ will be the opposite of whatever the $n$th digit of $s_n$ is. So, $p$ differs from $s_1$ in the first digit, from $s_2$ in the second digit, $s_3$ in the third digit, and so on, so that it differs from all elements of $E,$ and therefore is not contained in $E.$ But, $p$ is definitely in $A$ since it its elements are the digits $0$ and $1.$ Therefore, $E$ is a proper subset of $A,$ so any countable subset of $A$ must be a proper subset of $A.$ But, $A$ can't be a proper subset of itself, and therefore $A$ must be uncountable. $\square$ 
+
+{% include_relative diagonalization.html %} 
