@@ -3,6 +3,7 @@ layout: page
 redirect_from:
 - ode/chapter 06 - problems leading to linear equations of order two/lesson 28 - undamped
   motion
+- ode/chapter 06 - problems leading to linear equations of order two/lesson 28 - undamped motion.html
 title: Undamped Motion
 description: Analysis of simple harmonic motion and forced oscillations using second-order linear differential equations. Covers spring-mass systems, pendulum motion, resonance phenomena, and both free and forced undamped vibrations.
 ---
@@ -67,7 +68,7 @@ $$ \tag{e} \frac{dx}{dt} = v = -c \omega_0 \sin{(\omega_0 t + \delta)} $$
 
 (*jmh* my notes)
 
-First, review my notes on [Frequency and Period](../../trigonometry/frequency.html).
+First, review my notes on [Frequency and Period](/mathnotes/trigonometry/frequency-and-period).
 
 We can reuse $(d)$ and $(e)$ above to find the description of motion for any simple harmonic motion. Here are some important parameters from it (we'll use a particle as an example although not all problems will involve particles):
 

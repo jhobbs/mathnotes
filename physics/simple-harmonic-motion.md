@@ -12,7 +12,7 @@ Simple Harmonic Motion is sinusoidal periodic motion that repeats perfectly over
 
 Some basic formulas of a particle exhibiting simple harmonic motion follow.
 
-Here, $x_m$ is the amplitude of the displacement the particle, $\omega$ is the [angular frequency](../trigonometry/frequency.html) of the particle's motion (i.e. $2 \pi f$ where $f$ is the frequency), and $\phi$ is the phase angle of the particle, i.e. the position in the cycle of the particle at $t = 0$. 
+Here, $x_m$ is the amplitude of the displacement the particle, $\omega$ is the [angular frequency](/mathnotes/trigonometry/frequency-and-period) of the particle's motion (i.e. $2 \pi f$ where $f$ is the frequency), and $\phi$ is the phase angle of the particle, i.e. the position in the cycle of the particle at $t = 0$. 
 
 Displacement: $x = x_m \cos{(\omega t + \phi)}$
 

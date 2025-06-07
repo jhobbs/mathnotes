@@ -26,7 +26,7 @@ Using alternative notation, this can be written
 
 $$ \frac{\partial u}{\partial t}(x,t) = \alpha \frac{\partial^2 u}{\partial x^2}(x,t). $$
 
-Notice that $\frac{\partial^2 u}{\partial x^2}$ is the [Laplacian](../calculus/multivariable-differential-operators.html) in one dimension. In higher dimensions, the heat equation can be adjusted to account for the additional heat flow contribution along the other axes by the simple modification
+Notice that $\frac{\partial^2 u}{\partial x^2}$ is the [Laplacian](/mathnotes/calculus/multivariable-differential-operators) in one dimension. In higher dimensions, the heat equation can be adjusted to account for the additional heat flow contribution along the other axes by the simple modification
 
 $$ \frac{\partial u}{\partial t} = \alpha \nabla^2 u, $$
 
@@ -66,4 +66,4 @@ One more thing to note. When the temperature reaches a steady state and $u$ does
 
 $$ \nabla^2 u = 0. $$
 
-To see how to solve the heat equation, see [Separation of Variables](./separation-of-variables.html).
+To see how to solve the heat equation, see [Separation of Variables](/mathnotes/differential%20equations/separation-of-variables).

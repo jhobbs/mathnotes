@@ -1,6 +1,15 @@
 ---
+description: Systematic method for solving homogeneous linear differential equations
+  with constant coefficients using the characteristic equation. Covers cases of real
+  distinct roots, repeated roots, and complex conjugate pairs.
 layout: page
 redirect_from:
+- chapter 04 - linear differential equations of order greater than one/lesson 20 -
+  solution of the homogeneous linear differential equation of order n with constant
+  coefficients.html
+- differential equations/chapter 04 - linear differential equations of order greater
+  than one/lesson 20 - solution of the homogeneous linear differential equation of
+  order n with constant coefficients.html
 - ode/chapter 04 - linear differential equations of order greater than one/lesson
   20 - solution of the homogeneous linear differential equation of order n with constant
   coefficients
@@ -9,7 +18,6 @@ redirect_from:
   coefficients
 title: Solution of the Homogeneous Linear Differential Equation of Order n with Constant
   Coefficients
-description: Systematic method for solving homogeneous linear differential equations with constant coefficients using the characteristic equation. Covers cases of real distinct roots, repeated roots, and complex conjugate pairs.
 ---
 
 # Solution of the Homogeneous Linear Differential Equation of Order n with Constant Coefficients

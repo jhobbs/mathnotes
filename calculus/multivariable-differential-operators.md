@@ -59,7 +59,7 @@ and in three dimensions by
 
 $$ \nabla^2 f = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2} + \frac{\partial^2 f}{\partial z^2} $$
 
-Solutions to Laplace's equation $\nabla^2 f = 0$ are called [harmonic functions](../complex/module%2006%20-%20harmonic.html).
+Solutions to Laplace's equation $\nabla^2 f = 0$ are called [harmonic functions](/mathnotes/complex%20analysis/harmonic-functions).
 
 
 ## Directional Derivative

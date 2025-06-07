@@ -10,7 +10,7 @@ title: Power Series Solutions to Linear Differential Equations
 
 # Power Series Solutions to Linear Differential Equations
 
-It may be helpful to review [shifting the summation index](../../calculus/summation.html) before proceeding. 
+It may be helpful to review [shifting the summation index](/mathnotes/real%20analysis/summation) before proceeding. 
 
 We'll also use the following theorem about power series vanishing on an interval: If $\sum_{n=0}^{\infty}{a_0(x-x_0)^n} = 0$ for all $x$ in some open interval, then each coefficient $a_n$ equals zero.
 

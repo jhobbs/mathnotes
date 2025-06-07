@@ -19,7 +19,7 @@ Substituting this form for a solution into the partial differential equation and
 
 ## Solving the Heat Equation
 
-First, see the notes on the [heat equation](./heat.html) We have the following mathematical model for the heat flow in a uniform wire without internal sources $(P = 0)$ whose ends are kept at the constant temperature $0^\circ c$:
+First, see the notes on the [heat equation](/mathnotes/differential%20equations/heat-equation) We have the following mathematical model for the heat flow in a uniform wire without internal sources $(P = 0)$ whose ends are kept at the constant temperature $0^\circ c$:
 
 $$ \frac{\partial u}{\partial t}(x,t) = \beta \frac{\partial^2 u}{\partial x^2}(x,t), \quad 0 < x < L, \quad t > 0, \tag{1} $$
 

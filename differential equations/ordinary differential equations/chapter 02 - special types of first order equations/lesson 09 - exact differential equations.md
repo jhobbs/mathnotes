@@ -5,6 +5,7 @@ redirect_from:
   equations
 - ode/lesson 09 - exact differential equations
 - ode/lesson 9 - exact differential equations
+- ode/chapter 02 - special types of first order equations/lesson 09 - exact differential equations.html
 title: Exact Differential Equations
 description: Theory and solution methods for exact differential equations. Includes necessary and sufficient conditions for exactness and techniques for finding solutions when differential expressions are exact.
 ---
