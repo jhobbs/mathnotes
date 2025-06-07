@@ -63,4 +63,14 @@ A **half-open interval** $(a,b]$ or $[a, b)$ is the set of all real numbers such
 
 Given $\vec{a}, \vec{b} \in \mathbb{R}^k,$ if $\vec{a}_i < \vec{b}_i$ for all $i = 1, 2, \dots, k,$ then the set of all points $\vec{x}$ who satisfy $\vec{a}_i \leq \vec{x}_i \leq \vec{b}_i,$ $i = 1, 2, \dots, k,$ is called a **k-cell**. So, a 1-cell is an interval, a 2-cell is a rectangle, and so on.
 
-Given $\vec{x} \in \mathbb{R}^k, r > 0,$ the open or closed **ball** with center $\vec{x}$ and radius $r$ is defined as the set of points $\vec{y}$ such that $|\vec{x} - \vec{y}| < r$ or $|\vec{x} - \vec{y}| \leq r,$ respectively. 
+Given $\vec{x} \in \mathbb{R}^k, r > 0,$ the open or closed **ball** with center $\vec{x}$ and radius $r$ is defined as the set of points $\vec{y}$ such that $|\vec{x} - \vec{y}| < r$ or $|\vec{x} - \vec{y}| \leq r,$ respectively.
+
+## Convex Sets
+
+A set $E \subset \mathbb{R}^k$ is said to be **convex** if
+
+$$ \lambda \vec{x} + (1 - \lambda)\vec{y} \in E $$
+
+whenever $\vec{x}, \vec{y} \in E,$ and $0 < \lambda < 1.$
+
+In geometric terms, this means a set is convex if we can connect any two points in the set with a line segment whose points are all within the set.
