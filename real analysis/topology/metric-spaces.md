@@ -45,3 +45,5 @@ d(x, y) = \begin{cases}
 $$
 
 It's easy to see that this satisfies the metric axioms above for any set.
+
+Also note that every subset $Y$ of a metric space $X$ is also a metric space, since if the metric axioms hold for all points in $X,$ that necessarily includes the points in $Y.$
