@@ -288,7 +288,7 @@
     <div id="fullscreen-overlay" class="fullscreen-overlay">
         <div class="fullscreen-header">
             <span id="fullscreen-title">Interactive Demo</span>
-            <button class="fullscreen-close" onclick="closeFullscreen()" title="Close fullscreen">✕</button>
+            <button class="fullscreen-close" title="Close fullscreen">✕</button>
         </div>
         <iframe id="fullscreen-iframe" class="fullscreen-iframe"></iframe>
     </div>
@@ -333,6 +333,26 @@
                 closeFullscreen();
             }
         }
+        
+        // Initialize event listeners when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handler for fullscreen close button
+            const closeBtn = document.querySelector('.fullscreen-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeFullscreen);
+            }
+            
+            // Add click handlers for all fullscreen buttons
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('fullscreen-btn')) {
+                    const iframeId = e.target.getAttribute('data-iframe-id');
+                    const src = e.target.getAttribute('data-src');
+                    if (iframeId && src) {
+                        openFullscreen(iframeId, src);
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>

@@ -139,7 +139,7 @@
 <div class="sections-container">
     {% for section in sections %}
     <div class="collapsible-section">
-        <div class="section-header" onclick="toggleSection(this)">
+        <div class="section-header" data-section="toggle">
             <h4 class="section-title">{{ section.name }}</h4>
             <span class="toggle-icon">▶</span>
         </div>
@@ -154,7 +154,7 @@
     {% endfor %}
 </div>
 
-<script>
+<script nonce="{{ csp_nonce }}">
 function toggleSection(header) {
     const content = header.nextElementSibling;
     const isOpen = content.classList.contains('show');
@@ -173,6 +173,17 @@ function toggleSection(header) {
         header.classList.add('active');
     }
 }
+
+// Initialize event listeners when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers for all section headers
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('[data-section="toggle"]')) {
+            const header = e.target.closest('[data-section="toggle"]');
+            toggleSection(header);
+        }
+    });
+});
 
 // All sections start closed
 </script>

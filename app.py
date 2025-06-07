@@ -211,7 +211,7 @@ def render_markdown_file(filepath):
                 iframe_id = f"demo-{hash(url_path)}"
                 return f'''<div class="demo-container">
                     <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="800" frameborder="0"></iframe>
-                    <button class="fullscreen-btn" onclick="openFullscreen('{iframe_id}', '/mathnotes/{url_path}')" title="Open in fullscreen">⛶</button>
+                    <button class="fullscreen-btn" data-iframe-id="{iframe_id}" data-src="/mathnotes/{url_path}" title="Open in fullscreen">⛶</button>
                 </div>'''
             
             content = re.sub(include_pattern, replace_include, content)
