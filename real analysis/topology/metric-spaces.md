@@ -74,3 +74,24 @@ $$ \lambda \vec{x} + (1 - \lambda)\vec{y} \in E $$
 whenever $\vec{x}, \vec{y} \in E,$ and $0 < \lambda < 1.$
 
 In geometric terms, this means a set is convex if we can connect any two points in the set with a line segment whose points are all within the set.
+
+*Theorem*: Balls are convex.
+
+*Proof*: Let $\vec{y}, \vec{z}$ be points in a ball with center $\vec{x}$ and radius $r$. Then, by definition, $|\vec{y} - \vec{x}| < r,$ and $|\vec{z} - \vec{x}| < r.$ Suppose $\vec{p} \in \{ \lambda \vec{y} + (1 - \lambda)\vec{z} | 0 < \lambda < 1 \}.$ We will show that $|\vec{x} - \vec{p}| < r.$
+
+$$ \begin{aligned}
+  
+  |\vec{x}-\vec{p}| &= |\vec{x} - (\lambda\vec{y} + (1-\lambda)\vec{z})| \quad(\text{substitute definition of } \vec{p})\\
+  &= |\vec{x} - \lambda\vec{y} - (1-\lambda)\vec{z}| \quad(\text{distribute the } - )\\
+  &= |\vec{x} - \lambda\vec{y} - (\vec{z} - \lambda\vec{z})| \quad(\text{rewrite }(1-\lambda)\vec{z})\\
+  &= |\vec{x} - \lambda\vec{y} - \vec{z} + \lambda\vec{z}| \quad(\text{expand parentheses})\\
+  &= |\vec{x} - \lambda\vec{y} - \vec{z} + \lambda\vec{z} + \lambda\vec{x} - \lambda\vec{x}| \quad(\text{add and subtract } \lambda\vec{x})\\
+  &= |\lambda(\vec{x}-\vec{y}) + (1-\lambda)(\vec{x}-\vec{z})| \quad(\text{factor } \lambda \text{ and } 1-\lambda)\\
+  &\le \lambda\,|\vec{x}-\vec{y}| + (1-\lambda)\,|\vec{x}-\vec{z}| \quad(\text{triangle inequality})\\
+  & < \lambda r + (1-\lambda)r \quad(\text{since } |\vec{x}-\vec{y}|,|\vec{x}-\vec{z}| < r)\\
+  &= r \quad(\text{because } \lambda + (1-\lambda)=1).
+\end{aligned} $$
+
+So, $\vec{p}$ is within our ball and therefore all balls are convex. $\square$
+
+Similar proofs can be used to show that closed balls and $k$-cells are also convex.
