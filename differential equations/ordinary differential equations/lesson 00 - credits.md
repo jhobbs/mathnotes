@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- ode/lesson 00 - credits
 title: ODE Credits
 ---
 

@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- calculus/limits-of-a-function
+- calculus/limits
 title: Limits of a Function
 ---
 

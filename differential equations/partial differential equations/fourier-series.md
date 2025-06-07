@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- partial differential equations/fourier-series
 title: Fourier Series
 ---
 

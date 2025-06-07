@@ -46,6 +46,21 @@ flyctl status
 flyctl logs
 ```
 
+### Development Tools
+```bash
+# Set up pre-commit hook for redirect checking
+./scripts/setup_precommit_hook.sh
+
+# Check for missing redirects in moved files
+python3 scripts/check_redirects.py
+
+# Automatically add missing redirects to moved files
+python3 scripts/check_redirects.py --fix
+
+# Move files safely with automatic redirect handling
+./scripts/move_file.sh old/path.md new/path.md
+```
+
 ## Architecture
 
 ### Flask Application Structure
@@ -87,6 +102,18 @@ All demos should include the dark mode CSS/JS for proper theme support.
 - When modifying interactive demos, ensure they include dark mode support
 - The Flask app handles spaces in directory names via URL encoding
 
+## File Movement and Renaming Protocol
+
+When moving or renaming markdown files, ALWAYS follow this checklist:
+
+1. **Before moving/renaming**: Note the current canonical URL by checking the frontmatter `slug` field, or if none exists, the current file path
+2. **After moving/renaming**: Add `redirect_from` to the frontmatter with the old URL
+3. **Test**: Verify the old URL redirects to the new one
+4. **Common scenarios**:
+   - Moving `algebra/groups.md` → `group-theory/intro.md`: Add `redirect_from: [algebra/groups]`
+   - Renaming `integration.md` → `integration-strategies.md`: Add `redirect_from: [calculus/integration]`
+   - Changing slug from `groups` to `group-theory-basics`: Add `redirect_from: [algebra/groups]`
+
 ## Allowed Commands and Operations
 
 These commands and operations have been explicitly allowed by the user and should be permitted in all future sessions:
@@ -115,6 +142,7 @@ These commands and operations have been explicitly allowed by the user and shoul
    - Never add Claude as a co-author
    - Keep commit messages focused on the technical changes only
    - Only commit and push changes when explicitly asked to "ship it" or similar by the user
+   - Pre-commit hook will warn about moved/deleted markdown files to prevent broken links
 
 5. **Deployment Operations**:
    - Monitoring deployments via GitHub Actions (not direct fly.io deploys)

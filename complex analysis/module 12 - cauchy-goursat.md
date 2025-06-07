@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- complex/module 12 - cauchy-goursat
 title: Cauchy-Goursat Theorem
 ---
 

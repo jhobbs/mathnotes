@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- complex/module 11 - independence of path
 title: Indepenence of Path of Contour Integrals
 ---
 

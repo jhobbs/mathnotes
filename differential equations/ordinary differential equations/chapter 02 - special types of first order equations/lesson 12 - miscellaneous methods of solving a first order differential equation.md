@@ -1,5 +1,9 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 02 - special types of first order equations/lesson 12 - miscellaneous
+  methods of solving a first order differential equation
+- ode/lesson 12 - miscellaneous methods of solving a first order differential equation
 title: Equations Permitting a Choice of Method
 ---
 

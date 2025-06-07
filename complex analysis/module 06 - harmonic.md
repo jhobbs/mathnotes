@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- complex/module 06 - harmonic
+- complex/module 6 - harmonic
 title: Harmonic Functions
 ---
 

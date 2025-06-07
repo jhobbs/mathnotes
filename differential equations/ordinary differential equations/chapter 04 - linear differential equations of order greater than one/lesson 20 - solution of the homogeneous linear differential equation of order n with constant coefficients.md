@@ -1,6 +1,14 @@
 ---
 layout: page
-title: Solution of the Homogeneous Linear Differential Equation of Order n with Constant Coefficients
+redirect_from:
+- ode/chapter 04 - linear differential equations of order greater than one/lesson
+  20 - solution of the homogeneous linear differential equation of order n with constant
+  coefficients
+- ode/chapter 04 - linear differential equations of order greater than one/lesson
+  20 - solution of the homogeneous linear differential equation of order n with constrant
+  coefficients
+title: Solution of the Homogeneous Linear Differential Equation of Order n with Constant
+  Coefficients
 ---
 
 # Solution of the Homogeneous Linear Differential Equation of Order n with Constant Coefficients

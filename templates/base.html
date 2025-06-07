@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ config.SITE_TITLE }}{% endblock %}</title>
     <meta name="description" content="{{ config.SITE_DESCRIPTION }}">
+    {% if canonical_url %}
+    <link rel="canonical" href="https://www.lacunary.org{{ canonical_url }}">
+    {% endif %}
     
     <!-- MathJax for LaTeX rendering -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>

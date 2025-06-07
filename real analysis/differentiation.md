@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- calculus/differentiation
 title: Differentiation
 ---
 

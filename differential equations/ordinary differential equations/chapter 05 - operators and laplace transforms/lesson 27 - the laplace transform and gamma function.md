@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 05 - operators and laplace transforms/lesson 27 - the laplace transform
+  and gamma function
 title: The Laplace Transform. Gamma Function.
 ---
 

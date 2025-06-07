@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 05 - operators and laplace transforms/lesson 25 - inverse operators
 title: Inverse Operators
 ---
 

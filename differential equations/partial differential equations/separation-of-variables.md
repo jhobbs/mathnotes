@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- partial differential equations/separation-of-variables
 title: Separation of Variables
 ---
 

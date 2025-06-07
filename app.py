@@ -3,12 +3,85 @@ import re
 import subprocess
 from pathlib import Path
 from datetime import datetime
-from flask import Flask, render_template, send_from_directory, abort, url_for, make_response, redirect
+from flask import Flask, render_template, send_from_directory, abort, url_for, make_response, redirect, request
 import markdown
 import frontmatter
 import yaml
+import unicodedata
+from urllib.parse import quote, unquote
 
 app = Flask(__name__)
+
+# URL mapping for permalinks
+url_mappings = {}  # Maps canonical URLs to file paths
+redirect_mappings = {}  # Maps old URLs to canonical URLs
+file_to_canonical = {}  # Maps file paths to canonical URLs
+
+def slugify(text):
+    """Convert text to URL-friendly slug."""
+    # Convert to lowercase and normalize unicode
+    text = unicodedata.normalize('NFKD', text.lower())
+    # Remove non-alphanumeric characters except spaces and hyphens
+    text = re.sub(r'[^a-z0-9\s-]', '', text)
+    # Replace spaces with hyphens
+    text = re.sub(r'\s+', '-', text.strip())
+    # Remove multiple consecutive hyphens
+    text = re.sub(r'-+', '-', text)
+    return text
+
+def build_url_mappings():
+    """Build URL mappings from all content files."""
+    global url_mappings, redirect_mappings, file_to_canonical
+    
+    for section in CONTENT_DIRS:
+        section_path = Path(section)
+        if not section_path.exists():
+            continue
+            
+        for md_file in section_path.rglob('*.md'):
+            try:
+                with open(md_file, 'r', encoding='utf-8') as f:
+                    post = frontmatter.load(f)
+                    
+                # Get slug from frontmatter or generate from title
+                slug = post.metadata.get('slug')
+                if not slug:
+                    title = post.metadata.get('title', md_file.stem.replace('-', ' '))
+                    slug = slugify(title)
+                
+                # Build canonical URL
+                relative_path = md_file.relative_to(Path('.'))
+                section_name = relative_path.parts[0]
+                canonical_url = f"{section_name}/{slug}"
+                
+                # Store mappings
+                file_path = str(relative_path).replace('\\', '/')
+                url_mappings[canonical_url] = file_path
+                file_to_canonical[file_path] = canonical_url
+                
+                # Handle redirects
+                redirect_from = post.metadata.get('redirect_from', [])
+                if isinstance(redirect_from, str):
+                    redirect_from = [redirect_from]
+                    
+                for old_url in redirect_from:
+                    # Clean up old URL
+                    old_url = old_url.strip('/')
+                    if old_url.startswith('mathnotes/'):
+                        old_url = old_url[len('mathnotes/'):]
+                    redirect_mappings[old_url] = canonical_url
+                    
+                # Also map the file-based URL to canonical
+                file_based_url = file_path
+                if file_based_url.endswith('.md'):
+                    file_based_url = file_based_url[:-3]
+                if file_based_url != canonical_url:
+                    redirect_mappings[file_based_url] = canonical_url
+                    
+            except Exception as e:
+                print(f"Error processing {md_file}: {e}")
+                
+    print(f"Built {len(url_mappings)} URL mappings and {len(redirect_mappings)} redirects")
 
 # Add current year to all templates
 @app.context_processor
@@ -59,6 +132,9 @@ md = markdown.Markdown(extensions=[
     'tables',
     'fenced_code'
 ])
+
+# Build URL mappings on startup
+build_url_mappings()
 
 def render_markdown_file(filepath):
     """Read and render a markdown file with frontmatter."""
@@ -126,11 +202,22 @@ def render_markdown_file(filepath):
             html_content = html_content.replace(r'\*', '*')
             html_content = html_content.replace(r'\~', '~')
             
+            # Get canonical URL for this file
+            file_path_normalized = filepath.replace('\\', '/')
+            canonical_url = file_to_canonical.get(file_path_normalized)
+            if canonical_url:
+                canonical_path = f"/mathnotes/{canonical_url}"
+            else:
+                # Fallback to current URL structure
+                file_path_no_ext = file_path_normalized.replace('.md', '')
+                canonical_path = f"/mathnotes/{file_path_no_ext}"
+            
             return {
                 'content': html_content,
                 'metadata': post.metadata,
                 'title': post.metadata.get('title', Path(filepath).stem.replace('-', ' ').title()),
-                'source_path': filepath  # Add the source file path
+                'source_path': filepath,  # Add the source file path
+                'canonical_url': canonical_path
             }
     except Exception as e:
         print(f"Error reading {filepath}: {e}")
@@ -147,9 +234,17 @@ def get_directory_contents(directory):
     
     for item in sorted(path.iterdir()):
         if item.is_file() and item.suffix == '.md':
+            file_path_raw = str(item.relative_to(Path('.')))
+            file_path = file_path_raw.replace('\\', '/')
+            canonical_url = file_to_canonical.get(file_path)
+            if canonical_url:
+                url = canonical_url
+            else:
+                url = file_path.replace('.md', '')
+            
             files.append({
                 'name': item.stem.replace('-', ' ').title(),
-                'path': str(item.relative_to(Path('.'))).replace('\\', '/')
+                'path': url
             })
         elif item.is_dir() and not item.name.startswith('.'):
             # Check if directory contains markdown files
@@ -173,9 +268,17 @@ def get_all_content_for_section(section_path):
         items = []
         for item in sorted(dir_path.iterdir()):
             if item.is_file() and item.suffix == '.md':
+                file_path_raw = str(item.relative_to(Path('.')))
+                file_path = file_path_raw.replace('\\', '/')
+                canonical_url = file_to_canonical.get(file_path)
+                if canonical_url:
+                    url = canonical_url
+                else:
+                    url = file_path.replace('.md', '')
+                    
                 items.append({
                     'name': item.stem.replace('-', ' ').title(),
-                    'path': str(item.relative_to(Path('.'))).replace('\\', '/'),
+                    'path': url,
                     'is_subdir': False
                 })
             elif item.is_dir() and not item.name.startswith('.') and not item.name.startswith('__'):
@@ -221,6 +324,18 @@ def index():
 @app.route('/mathnotes/<path:filepath>')
 def serve_content(filepath):
     """Serve markdown content or static files."""
+    # First check if this URL needs a redirect
+    if filepath in redirect_mappings:
+        canonical_url = redirect_mappings[filepath]
+        return redirect(f"/mathnotes/{canonical_url}", code=301)
+    
+    # Check if this is a canonical URL
+    if filepath in url_mappings:
+        md_path = url_mappings[filepath]
+        content = render_markdown_file(md_path)
+        if content:
+            return render_template('page.html', **content)
+    
     # Check if it's a directory
     if Path(filepath).exists() and Path(filepath).is_dir():
         files, subdirs = get_directory_contents(filepath)
@@ -230,9 +345,15 @@ def serve_content(filepath):
                              subdirs=subdirs,
                              title=filepath.replace('/', ' - ').title())
     
-    # Check for markdown file
+    # Check for markdown file (backward compatibility)
     md_path = filepath if filepath.endswith('.md') else f"{filepath}.md"
     if Path(md_path).exists():
+        # Redirect to canonical URL if it exists
+        md_path_normalized = md_path.replace('\\', '/')
+        canonical_url = file_to_canonical.get(md_path_normalized)
+        if canonical_url:
+            return redirect(f"/{canonical_url}", code=301)
+        # Otherwise serve directly
         content = render_markdown_file(md_path)
         if content:
             return render_template('page.html', **content)
@@ -279,25 +400,13 @@ def sitemap():
         'priority': '0.9'
     })
     
-    # Recursively find all markdown files
-    def find_all_pages(directory=''):
-        for section in CONTENT_DIRS:
-            section_path = Path(section)
-            if section_path.exists():
-                for md_file in section_path.rglob('*.md'):
-                    # Skip index files as they're handled by directory URLs
-                    if md_file.name == 'index.md':
-                        url_path = str(md_file.parent).replace('\\', '/')
-                    else:
-                        url_path = str(md_file.with_suffix('')).replace('\\', '/')
-                    
-                    pages.append({
-                        'loc': f"{base_url}/mathnotes/{url_path}",
-                        'changefreq': 'monthly',
-                        'priority': '0.8'
-                    })
-    
-    find_all_pages()
+    # Add all canonical URLs from the URL mappings
+    for canonical_url in url_mappings:
+        pages.append({
+            'loc': f"{base_url}/mathnotes/{canonical_url}",
+            'changefreq': 'monthly', 
+            'priority': '0.8'
+        })
     
     # Generate XML
     sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>\n'

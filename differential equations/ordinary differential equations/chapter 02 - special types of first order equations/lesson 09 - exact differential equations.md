@@ -1,5 +1,10 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 02 - special types of first order equations/lesson 09 - exact differential
+  equations
+- ode/lesson 09 - exact differential equations
+- ode/lesson 9 - exact differential equations
 title: Exact Differential Equations
 ---
 

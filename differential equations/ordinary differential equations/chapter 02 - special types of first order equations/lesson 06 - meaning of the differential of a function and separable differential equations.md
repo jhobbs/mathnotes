@@ -1,5 +1,14 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 02 - special types of first order equations/lesson 06 - meaning of the
+  differential of a function and separable differential equations
+- ode/lesson 06 - meaning of the differential of a function and separable differential
+  equations
+- ode/lesson 6 - meaning of the differential of a function and separable differential
+  equations
+- diffeq/lesson 6 - meaning of the differential of a function and separable differential
+  equations
 title: Meaning of the Differential
 ---
 

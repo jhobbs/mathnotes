@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 03 - problems leading to first order equations/lesson 13 - geometric
+  problems
 title: Geometric Problems
 ---
 

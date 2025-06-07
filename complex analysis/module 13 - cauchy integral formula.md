@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- complex/module 13 - cauchy integral formula
 title: Cauchy Integral Formula
 ---
 # Cauchy Integral Formula

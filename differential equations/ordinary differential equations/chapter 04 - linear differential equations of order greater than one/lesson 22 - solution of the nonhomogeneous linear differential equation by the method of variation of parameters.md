@@ -1,6 +1,11 @@
 ---
 layout: page
-title: Solution of the Nonhomogeneous Linear Differential Equation by the Method of Variation of Parameters
+redirect_from:
+- ode/chapter 04 - linear differential equations of order greater than one/lesson
+  22 - solution of the nonhomogeneous linear differential equation by the method of
+  variation of parameters
+title: Solution of the Nonhomogeneous Linear Differential Equation by the Method of
+  Variation of Parameters
 ---
 
 # Solution of the Nonhomogeneous Linear Differential Equation by the Method of Variation of Parameters

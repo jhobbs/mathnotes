@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- complex/module 22 - classification of singularities
 title: Classification of Singularities
 ---
 # Classification of Singularities

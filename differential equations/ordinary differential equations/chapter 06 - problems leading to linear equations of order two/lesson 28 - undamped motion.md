@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 06 - problems leading to linear equations of order two/lesson 28 - undamped
+  motion
 title: Undamped Motion
 ---
 

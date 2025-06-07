@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- proof techniques/induction
 title: Induction
 ---
 # Induction

@@ -1,5 +1,11 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 02 - special types of first order equations/lesson 07 - first order
+  differential equation with homogenous coefficients
+- ode/lesson 07 - first order differential equation with homogenous coefficients
+- ode/lesson 7 - first order differential equation with homogenous coefficients
+- diffeq/lesson 7 - first order differential equation with homogenous coefficients
 title: First Order Differential Equation with Homogenous Coefficients
 ---
 

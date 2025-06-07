@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 06 - problems leading to linear equations of order two/lesson 30 - electric
+  circuits
 title: Electric Circuits
 ---
 

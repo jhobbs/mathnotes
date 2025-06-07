@@ -1,5 +1,9 @@
 ---
 layout: page
+redirect_from:
+- complex/module 04 - limits
+- complex/module 4 - limits
+- complex/limits
 title: Limits and Continuity of Complex Functions
 ---
 

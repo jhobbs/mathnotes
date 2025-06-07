@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- complex/module 05 - derivatives
+- complex/module 5 - derivatives
 title: Derivatives of Complex Functions
 ---
 

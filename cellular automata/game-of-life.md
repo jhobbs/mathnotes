@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- cellular/game-of-life
 title: Conway's Game of Life
 ---
 

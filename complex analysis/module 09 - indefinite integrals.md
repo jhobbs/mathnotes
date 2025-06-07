@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- complex/module 09 - indefinite integrals
+- complex/module 9 - indefinite integrals
 title: Complex Indefinite Integrals
 ---
 

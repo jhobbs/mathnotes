@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 05 - operators and laplace transforms/lesson 24 - differential and polynomial
+  operators
 title: Differential and Polynomial Operators
 ---
 

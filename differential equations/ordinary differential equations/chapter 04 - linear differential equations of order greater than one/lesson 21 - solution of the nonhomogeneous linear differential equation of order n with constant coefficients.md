@@ -1,6 +1,11 @@
 ---
 layout: page
-title: Solution of the Nonhomogeneous Linear Differential Equation of Order n with Constant Coefficients (Method of Undetermined Coefficients)
+redirect_from:
+- ode/chapter 04 - linear differential equations of order greater than one/lesson
+  21 - solution of the nonhomogeneous linear differential equation of order n with
+  constant coefficients
+title: Solution of the Nonhomogeneous Linear Differential Equation of Order n with
+  Constant Coefficients (Method of Undetermined Coefficients)
 ---
 
 # Solution of the Nonhomogeneous Linear Differential Equation of Order n with Constant Coefficients (Method of Undetermined Coefficients)

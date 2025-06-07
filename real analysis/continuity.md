@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- calculus/continuity
+test: change
 title: Continuity
 ---
 

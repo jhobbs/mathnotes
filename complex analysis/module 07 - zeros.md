@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- complex/module 07 - zeros
+- complex/module 7 - zeros
 title: Zeros and Singularities
 ---
 

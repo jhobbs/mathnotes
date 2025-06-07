@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- complex/module 08 - elementary functions
+- complex/module 8 - elementary functions
 title: Elementary Functions
 ---
 

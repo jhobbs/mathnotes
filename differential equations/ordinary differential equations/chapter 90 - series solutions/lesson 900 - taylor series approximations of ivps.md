@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 90 - series solutions/lesson 900 - taylor series approximations of ivps
 title: Taylor Polynomial Approximations of IVPs
 ---
 

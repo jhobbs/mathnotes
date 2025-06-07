@@ -1,5 +1,11 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 01 - basic concepts/lesson 03 - the differential equation
+- ode/lesson 03 - the differential equation
+- ode/lesson 3 - the differential equation
+- diffeq/lesson 3 - the differential equation
+- diffeq/firstorderode
 title: The Differential Equation
 ---
 # The Differential Equation

@@ -1,5 +1,10 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 01 - basic concepts/lesson 05 - Direction Field
+- ode/lesson 05 - Direction Field
+- ode/lesson 5 - Direction Field
+- diffeq/lesson 5 - Direction Field
 title: Direction Field
 ---
 

@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- complex/module 21 - laurent series
 title: Laurent Series
 ---
 # Laurent Series

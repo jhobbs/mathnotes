@@ -1,5 +1,9 @@
 ---
 layout: page
+redirect_from:
+- complex/module 03 - complex functions
+- complex/module 3 - complex functions
+- complex/complex-functions
 title: Complex Functions
 ---
 

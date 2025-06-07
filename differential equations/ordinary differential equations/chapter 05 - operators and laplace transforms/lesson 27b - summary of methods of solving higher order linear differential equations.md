@@ -1,5 +1,8 @@
 ---
 layout: page
+redirect_from:
+- ode/chapter 05 - operators and laplace transforms/lesson 27b - summary of methods
+  of solving higher order linear differential equations
 title: Summary of Methods of Solving Higher Order Linear Differential Equations
 ---
 

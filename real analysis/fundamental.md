@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- calculus/fundamental
 title: Fundamental Theorem of Calculus
 ---
 

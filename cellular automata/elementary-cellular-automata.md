@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- cellular/elementary-cellular-automata
 title: Elementary Cellular Automata
 ---
 

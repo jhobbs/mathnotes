@@ -1,5 +1,7 @@
 ---
 layout: page
+redirect_from:
+- complex/module 20 - taylor and maclaurin series
 title: Taylor and Maclaurin Series
 ---
 # Taylor and Maclaurin Series
