@@ -41,6 +41,10 @@ def add_security_headers(response):
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=()'
     
+    # HTTP Strict Transport Security (HSTS)
+    # max-age=31536000 (1 year), includeSubDomains, preload
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload'
+    
     return response
 
 # URL mapping for permalinks
