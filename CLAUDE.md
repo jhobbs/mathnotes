@@ -152,3 +152,54 @@ These commands and operations have been explicitly allowed by the user and shoul
    - Creating deployment monitoring scripts
 
 Note: Any command or operation the user explicitly tells Claude to remember should be added to this list.
+
+## Security Implementation
+
+The application implements comprehensive security headers and Content Security Policy (CSP) to protect against XSS and other attacks. When creating new files or modifying existing ones, you MUST follow these security requirements:
+
+### CSP Nonce Requirements
+- All inline `<script>` tags must include `nonce="{{ csp_nonce }}"`
+- No `onclick`, `onload`, or other inline event handlers are allowed
+- Use `addEventListener` and event delegation patterns instead
+- Use data attributes (`data-*`) for passing parameters to event handlers
+- The CSP nonce is available in all templates via the `{{ csp_nonce }}` context variable
+
+### Current CSP Configuration
+```
+script-src 'self' 'nonce-{unique-per-request}' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com
+style-src 'self' 'unsafe-inline'
+img-src 'self' data:
+font-src 'self' https://cdn.jsdelivr.net
+connect-src 'self'
+frame-src 'self'
+frame-ancestors 'self'
+base-uri 'self'
+form-action 'self'
+object-src 'none'
+upgrade-insecure-requests
+```
+
+### Security Headers Applied
+- Content Security Policy (CSP) with nonces
+- HTTP Strict Transport Security (HSTS): max-age=31536000; includeSubDomains; preload
+- Cross-Origin-Opener-Policy: same-origin
+- Cross-Origin-Embedder-Policy: credentialless
+- X-Content-Type-Options: nosniff
+- X-XSS-Protection: 1; mode=block
+- Referrer-Policy: strict-origin-when-cross-origin
+- Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+### Implementation Details
+- CSP nonces are generated per-request using `secrets.token_urlsafe(16)`
+- Nonces are added to Flask's `g` object and injected into templates via context processor
+- All inline scripts in templates use the nonce for security
+- Interactive demos load p5.js from cdnjs.cloudflare.com (approved in CSP)
+- MathJax loads from cdn.jsdelivr.net (approved in CSP)
+- Removed polyfill.io dependency for better security
+
+### For New Files
+- HTML templates: Use `nonce="{{ csp_nonce }}"` for any inline scripts
+- Interactive demos: Scripts must load from approved CDNs or be inline with nonces
+- No inline event handlers (onclick, onload, etc.) anywhere
+- Use proper event listeners with `addEventListener` instead
+- All security headers are automatically applied via Flask middleware
