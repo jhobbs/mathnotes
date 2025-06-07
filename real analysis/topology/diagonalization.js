@@ -1,18 +1,18 @@
 let sequences = [];
 let constructedSequence = [];
 let currentStep = 0;
-let animationState = 'building'; // 'building', 'shifting'
-let pauseCounter = 0;
-let highlightTimer = 0;
-let shiftProgress = 0; // For smooth shifting animation
+let animationState = 'building'; // 'building', 'shifting', 'post-shift-pause'
+let animationStartTime = 0; // Track when current animation started
+let highlightStartTime = 0; // Track when highlight started
 let totalSteps = 0; // Total steps taken across all iterations
 let startingSequenceNumber = 1; // Track which sequence we're starting from
 let startingPositionNumber = 1; // Track which position we're starting from
 const SEQUENCE_LENGTH = 8;
 const NUM_SEQUENCES = 8;
 const CELL_SIZE = 40;
-const HIGHLIGHT_DURATION = 60; // frames
-const SHIFT_DURATION = 30; // frames for shifting animation
+const HIGHLIGHT_DURATION = 1000; // milliseconds
+const SHIFT_DURATION = 1500; // milliseconds for shifting animation (1.5 seconds)
+const POST_SHIFT_PAUSE = 500; // milliseconds to pause after shift (0.5 seconds)
 const SHIFT_AMOUNT = 7; // How many positions to shift diagonally
 
 function setup() {
@@ -34,7 +34,8 @@ function draw() {
     fill(getTextColor());
     textAlign(CENTER, CENTER);
     textSize(16);
-    text("Binary Sequences (showing first 8 digits of infinite sequences)", width/2, 30);
+    let endPosition = startingPositionNumber + SEQUENCE_LENGTH - 1;
+    text(`Binary Sequences (showing positions ${startingPositionNumber}-${endPosition} of infinite sequences)`, width/2, 30);
     
     // Draw the table of sequences
     drawSequenceTable();
@@ -57,9 +58,8 @@ function generateNewSequences() {
     startingSequenceNumber = 1;
     startingPositionNumber = 1;
     animationState = 'building';
-    pauseCounter = 0;
-    highlightTimer = 0;
-    shiftProgress = 0;
+    animationStartTime = 0;
+    highlightStartTime = 0;
     
     // Generate random binary sequences
     for (let i = 0; i < NUM_SEQUENCES; i++) {
@@ -114,7 +114,8 @@ function drawSequenceTable() {
     let shiftOffsetY = 0;
     if (animationState === 'shifting') {
         // Smooth easing for the shift
-        let t = shiftProgress / SHIFT_DURATION;
+        let elapsed = millis() - animationStartTime;
+        let t = min(elapsed / SHIFT_DURATION, 1.0);
         shiftOffsetX = SHIFT_AMOUNT * CELL_SIZE * easeInOutCubic(t);
         shiftOffsetY = SHIFT_AMOUNT * CELL_SIZE * easeInOutCubic(t);
     }
@@ -159,9 +160,23 @@ function drawSequenceTable() {
             // Highlight diagonal cell if currently being processed
             let actualPosition = startingPositionNumber + j;
             let actualSequence = startingSequenceNumber + i;
-            if (i === currentStep && j === currentStep && 
-                animationState === 'building' && highlightTimer > 0 &&
-                actualPosition === actualSequence) {
+            let isHighlighting = animationState === 'building' && 
+                                highlightStartTime > 0 && 
+                                (millis() - highlightStartTime) < HIGHLIGHT_DURATION;
+            
+            // During shift, highlight the cell at (7,7) as it moves to (0,0)
+            let isShiftHighlight = false;
+            if (animationState === 'shifting') {
+                // The cell that was at (7,7) is moving up and left
+                isShiftHighlight = i === SHIFT_AMOUNT && j === SHIFT_AMOUNT;
+            } else if (animationState === 'post-shift-pause') {
+                // After shift, highlight the new top-left cell
+                isShiftHighlight = i === 0 && j === 0;
+            }
+            
+            if ((i === currentStep && j === currentStep && 
+                isHighlighting && actualPosition === actualSequence) ||
+                isShiftHighlight) {
                 fill(255, 255, 0); // Bright yellow highlight
             } else {
                 fill(getCellBackgroundColor());
@@ -172,7 +187,14 @@ function drawSequenceTable() {
             rect(x, y, CELL_SIZE, CELL_SIZE);
             
             // Draw the digit from the correct position in the sequence
-            fill(getTextColor());
+            // Use dark text on highlighted cells for better contrast
+            if ((i === currentStep && j === currentStep && 
+                isHighlighting && actualPosition === actualSequence) ||
+                isShiftHighlight) {
+                fill(0); // Always use black text on yellow highlight
+            } else {
+                fill(getTextColor());
+            }
             noStroke();
             textAlign(CENTER, CENTER);
             textSize(20);
@@ -199,7 +221,8 @@ function drawConstructedSequence() {
     // Calculate shift offset for smooth animation
     let shiftOffsetX = 0;
     if (animationState === 'shifting') {
-        let t = shiftProgress / SHIFT_DURATION;
+        let elapsed = millis() - animationStartTime;
+        let t = min(elapsed / SHIFT_DURATION, 1.0);
         shiftOffsetX = SHIFT_AMOUNT * CELL_SIZE * easeInOutCubic(t);
     }
     
@@ -228,7 +251,21 @@ function drawConstructedSequence() {
         if (x > startX + SEQUENCE_LENGTH * CELL_SIZE) continue;
         
         // Highlight current cell being filled
-        if (j === currentStep && animationState === 'building' && highlightTimer > 0) {
+        let isHighlighting = animationState === 'building' && 
+                            highlightStartTime > 0 && 
+                            (millis() - highlightStartTime) < HIGHLIGHT_DURATION;
+        
+        // During shift and post-shift pause, highlight the appropriate cell
+        let isShiftHighlight = false;
+        if (animationState === 'shifting') {
+            // During shift, highlight the cell at position 7 as it moves to position 0
+            isShiftHighlight = j === SHIFT_AMOUNT;
+        } else if (animationState === 'post-shift-pause') {
+            // After shift, highlight the first cell
+            isShiftHighlight = j === 0;
+        }
+                            
+        if ((j === currentStep && isHighlighting) || isShiftHighlight) {
             fill(255, 255, 0); // Bright yellow highlight
         } else if (constructedSequence[j] !== -1) {
             fill(getFilledCellColor()); // Light green for filled cells
@@ -242,7 +279,12 @@ function drawConstructedSequence() {
         
         // Draw the digit if it exists
         if (constructedSequence[j] !== -1) {
-            fill(getTextColor());
+            // Use dark text on highlighted cells for better contrast
+            if ((j === currentStep && isHighlighting) || isShiftHighlight) {
+                fill(0); // Always use black text on yellow highlight
+            } else {
+                fill(getTextColor());
+            }
             noStroke();
             textAlign(CENTER, CENTER);
             textSize(20);
@@ -290,6 +332,8 @@ function drawLabels() {
              width/2, startY);
     } else if (animationState === 'shifting') {
         text("Shifting diagonally to continue the infinite construction...", width/2, startY);
+    } else if (animationState === 'post-shift-pause') {
+        text("Continuing along the diagonal with new sequences...", width/2, startY);
     }
     
     // Show total steps processed
@@ -298,11 +342,13 @@ function drawLabels() {
 }
 
 function handleAnimation() {
+    let currentTime = millis();
+    
     if (animationState === 'building') {
         if (currentStep < SEQUENCE_LENGTH) {
-            if (highlightTimer === 0) {
+            if (highlightStartTime === 0) {
                 // Start highlighting
-                highlightTimer = HIGHLIGHT_DURATION;
+                highlightStartTime = currentTime;
                 
                 // Set the constructed digit to be opposite of diagonal element
                 let digitIndex = startingPositionNumber - 1 + currentStep;
@@ -311,24 +357,30 @@ function handleAnimation() {
                 totalSteps++;
             }
             
-            highlightTimer--;
-            
-            if (highlightTimer === 0) {
+            // Check if highlight duration has passed
+            if (currentTime - highlightStartTime >= HIGHLIGHT_DURATION) {
                 currentStep++;
+                highlightStartTime = 0;
+                
                 if (currentStep >= SEQUENCE_LENGTH) {
                     animationState = 'shifting';
-                    shiftProgress = 0;
+                    animationStartTime = currentTime;
                 }
             }
         }
     } else if (animationState === 'shifting') {
-        shiftProgress++;
-        
-        if (shiftProgress >= SHIFT_DURATION) {
+        // Check if shift duration has passed
+        if (currentTime - animationStartTime >= SHIFT_DURATION) {
             // Perform the actual diagonal shift at the end of animation
             shiftDiagonally();
+            animationState = 'post-shift-pause';
+            animationStartTime = currentTime;
+        }
+    } else if (animationState === 'post-shift-pause') {
+        // Check if pause duration has passed
+        if (currentTime - animationStartTime >= POST_SHIFT_PAUSE) {
             animationState = 'building';
-            shiftProgress = 0;
+            highlightStartTime = 0;
         }
     }
 }
