@@ -7,6 +7,8 @@ title: Metric Spaces
 
 **Note:** This section was developed by following Rudin, *Principles of Mathematical Analysis*, Chapter 2.
 
+## Definition of a Metric Space
+
 A set $X,$ whose elements we'll call points, together with a distance function $d: X \times X \to \mathbb{R}$ is called a **metric space** and the distance function $d$ is called a **metric,** if the following conditions, called the metric axioms, hold for $p, q, r \in X:$
 
 * If $p \neq q, d(p,q) > 0.$ (distance is always positive between two distinct points.)
@@ -18,6 +20,8 @@ A set $X,$ whose elements we'll call points, together with a distance function $
 * $d(p,q) \leq d(p,r) + d(r,p)$ (triangle inequality.)
 
 We can denote a metric space on set $X$ with metric $d$ as the tuple $(X, d).$
+
+## Examples of Metric Spaces
 
 *Theorem:* $(\mathbb{R}^n, d : \mathbb{R}^n \to \mathbb{R} = | \vec{x} - \vec{y} |)$ is a metric space for any $n \geq 0.$
 
@@ -47,3 +51,15 @@ $$
 It's easy to see that this satisfies the metric axioms above for any set.
 
 Also note that every subset $Y$ of a metric space $X$ is also a metric space, since if the metric axioms hold for all points in $X,$ that necessarily includes the points in $Y.$
+
+## Segments, Intervals, Cells and Balls
+
+A **segment** $(a, b)$ is the set of all real numbers $x$ such that $a < x < b.$
+
+A **interval** $[a, b]$ is the set of all real numbers $x$ such that $a \leq x \leq b.$
+
+A **half-open interval** $(a,b]$ or $[a, b)$ is the set of all real numbers such that $a < x \leq b$ or $a \leq x < b,$ respectively.
+
+Given $\vec{a}, \vec{b} \in \mathbb{R}^k,$ if $\vec{a}_i < \vec{b}_i$ for all $i = 1, 2, \dots, k,$ then the set of all points $\vec{x}$ who satisfy $\vec{a}_i \leq \vec{x}_i \leq \vec{b}_i,$ $i = 1, 2, \dots, k,$ is called a **k-cell**. So, a 1-cell is an interval, a 2-cell is a rectangle, and so on.
+
+Given $\vec{x} \in \mathbb{R}^k, r > 0,$ the open or closed **ball** with center $\vec{x}$ and radius $r$ is defined as the set of points $\vec{y}$ such that $|\vec{x} - \vec{y}| < r$ or $|\vec{x} - \vec{y}| \leq r,$ respectively. 

@@ -4,6 +4,10 @@
 app = "mathnotes"
 primary_region = "ord"
 
+# Deploy machines in multiple regions
+[deploy]
+  strategy = "rolling"
+
 [build]
   dockerfile = "Dockerfile"
 
