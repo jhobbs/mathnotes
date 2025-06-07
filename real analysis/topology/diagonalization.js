@@ -73,24 +73,37 @@ function generateNewSequences() {
 }
 
 // Get or generate a digit for a specific sequence and position
-function getSequenceDigit(sequenceIndex, position) {
+function getSequenceDigit(sequenceIndex, absolutePosition) {
     // Ensure the sequence exists
     if (sequenceIndex >= sequences.length) {
         return 0; // Fallback
     }
     
-    // Generate digits up to the requested position if needed
-    while (sequences[sequenceIndex].length <= position) {
+    // Convert absolute position to relative position within the cleaned sequence
+    // The first digit in our sequence array corresponds to startingPositionNumber
+    let relativePosition = absolutePosition - (startingPositionNumber - 1);
+    
+    // Generate digits up to the requested relative position if needed
+    while (sequences[sequenceIndex].length <= relativePosition) {
         sequences[sequenceIndex].push(Math.floor(Math.random() * 2));
     }
     
-    return sequences[sequenceIndex][position];
+    return sequences[sequenceIndex][relativePosition];
 }
 
 function shiftDiagonally() {
     // Update starting numbers for the diagonal shift
     startingSequenceNumber += SHIFT_AMOUNT;
     startingPositionNumber += SHIFT_AMOUNT;
+    
+    // Clean up digits that are no longer needed from remaining sequences
+    // Remove digits to the left of our new starting position
+    let digitsToRemove = SHIFT_AMOUNT;
+    for (let i = SHIFT_AMOUNT; i < sequences.length; i++) {
+        if (sequences[i].length > digitsToRemove) {
+            sequences[i].splice(0, digitsToRemove);
+        }
+    }
     
     // Remove the first SHIFT_AMOUNT sequences
     sequences.splice(0, SHIFT_AMOUNT);
