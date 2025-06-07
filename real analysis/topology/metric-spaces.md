@@ -82,9 +82,7 @@ In geometric terms, this means a set is convex if we can connect any two points 
 $$ \begin{aligned}
   
   |\vec{x}-\vec{p}| &= |\vec{x} - (\lambda\vec{y} + (1-\lambda)\vec{z})| \quad(\text{substitute definition of } \vec{p})\\
-  &= |\vec{x} - \lambda\vec{y} - (1-\lambda)\vec{z}| \quad(\text{distribute the } - )\\
-  &= |\vec{x} - \lambda\vec{y} - (\vec{z} - \lambda\vec{z})| \quad(\text{rewrite }(1-\lambda)\vec{z})\\
-  &= |\vec{x} - \lambda\vec{y} - \vec{z} + \lambda\vec{z}| \quad(\text{expand parentheses})\\
+  &= |\vec{x} - \lambda\vec{y} - \vec{z} + \lambda\vec{z}| \quad(\text{expand})\\
   &= |\vec{x} - \lambda\vec{y} - \vec{z} + \lambda\vec{z} + \lambda\vec{x} - \lambda\vec{x}| \quad(\text{add and subtract } \lambda\vec{x})\\
   &= |\lambda(\vec{x}-\vec{y}) + (1-\lambda)(\vec{x}-\vec{z})| \quad(\text{factor } \lambda \text{ and } 1-\lambda)\\
   &\le \lambda\,|\vec{x}-\vec{y}| + (1-\lambda)\,|\vec{x}-\vec{z}| \quad(\text{triangle inequality})\\
