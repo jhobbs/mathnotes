@@ -45,6 +45,12 @@ def add_security_headers(response):
     # max-age=31536000 (1 year), includeSubDomains, preload
     response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload'
     
+    # Cross-Origin-Opener-Policy for origin isolation
+    response.headers['Cross-Origin-Opener-Policy'] = 'same-origin'
+    
+    # Cross-Origin-Embedder-Policy (using credentialless for better compatibility)
+    response.headers['Cross-Origin-Embedder-Policy'] = 'credentialless'
+    
     return response
 
 # URL mapping for permalinks
