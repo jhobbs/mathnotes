@@ -63,18 +63,28 @@ function generateNewSequences() {
     
     // Generate random binary sequences
     for (let i = 0; i < NUM_SEQUENCES; i++) {
-        let sequence = [];
-        // Generate enough digits to handle future shifts
-        for (let j = 0; j < SEQUENCE_LENGTH * 10; j++) {
-            sequence.push(Math.floor(Math.random() * 2));
-        }
-        sequences.push(sequence);
+        sequences.push([]);
     }
     
     // Initialize empty constructed sequence
     for (let i = 0; i < SEQUENCE_LENGTH; i++) {
         constructedSequence.push(-1); // -1 means empty
     }
+}
+
+// Get or generate a digit for a specific sequence and position
+function getSequenceDigit(sequenceIndex, position) {
+    // Ensure the sequence exists
+    if (sequenceIndex >= sequences.length) {
+        return 0; // Fallback
+    }
+    
+    // Generate digits up to the requested position if needed
+    while (sequences[sequenceIndex].length <= position) {
+        sequences[sequenceIndex].push(Math.floor(Math.random() * 2));
+    }
+    
+    return sequences[sequenceIndex][position];
 }
 
 function shiftDiagonally() {
@@ -85,13 +95,9 @@ function shiftDiagonally() {
     // Remove the first SHIFT_AMOUNT sequences
     sequences.splice(0, SHIFT_AMOUNT);
     
-    // Add SHIFT_AMOUNT new sequences at the end
+    // Add SHIFT_AMOUNT new empty sequences at the end
     for (let i = 0; i < SHIFT_AMOUNT; i++) {
-        let newSequence = [];
-        for (let j = 0; j < SEQUENCE_LENGTH * 10; j++) {
-            newSequence.push(Math.floor(Math.random() * 2));
-        }
-        sequences.push(newSequence);
+        sequences.push([]);
     }
     
     // Shift constructed sequence left
@@ -199,7 +205,8 @@ function drawSequenceTable() {
             textAlign(CENTER, CENTER);
             textSize(20);
             let digitIndex = startingPositionNumber - 1 + j;
-            text(sequences[i][digitIndex], x + CELL_SIZE/2, y + CELL_SIZE/2);
+            let digit = getSequenceDigit(i, digitIndex);
+            text(digit, x + CELL_SIZE/2, y + CELL_SIZE/2);
         }
     }
     
@@ -352,7 +359,7 @@ function handleAnimation() {
                 
                 // Set the constructed digit to be opposite of diagonal element
                 let digitIndex = startingPositionNumber - 1 + currentStep;
-                let diagonalDigit = sequences[currentStep][digitIndex];
+                let diagonalDigit = getSequenceDigit(currentStep, digitIndex);
                 constructedSequence[currentStep] = 1 - diagonalDigit;
                 totalSteps++;
             }
