@@ -19,7 +19,7 @@ def add_security_headers(response):
     # Content Security Policy
     csp_directives = [
         "default-src 'self'",
-        "script-src 'self' 'unsafe-inline' https://polyfill.io https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
+        "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
         "style-src 'self' 'unsafe-inline'",
         "img-src 'self' data:",
         "font-src 'self' https://cdn.jsdelivr.net",
