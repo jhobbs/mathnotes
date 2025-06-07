@@ -1,9 +1,10 @@
 import os
 import re
 import subprocess
+import secrets
 from pathlib import Path
 from datetime import datetime
-from flask import Flask, render_template, send_from_directory, abort, url_for, make_response, redirect, request
+from flask import Flask, render_template, send_from_directory, abort, url_for, make_response, redirect, request, g
 import markdown
 import frontmatter
 import yaml
@@ -12,14 +13,23 @@ from urllib.parse import quote, unquote
 
 app = Flask(__name__)
 
+# Generate CSP nonce for each request
+@app.before_request
+def generate_nonce():
+    """Generate a unique nonce for CSP."""
+    g.csp_nonce = secrets.token_urlsafe(16)
+
 # Content Security Policy middleware
 @app.after_request
 def add_security_headers(response):
     """Add security headers including CSP to all responses."""
-    # Content Security Policy
+    # Get the nonce for this request
+    nonce = getattr(g, 'csp_nonce', '')
+    
+    # Content Security Policy with nonce
     csp_directives = [
         "default-src 'self'",
-        "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
+        f"script-src 'self' 'nonce-{nonce}' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
         "style-src 'self' 'unsafe-inline'",
         "img-src 'self' data:",
         "font-src 'self' https://cdn.jsdelivr.net",
@@ -127,6 +137,11 @@ def build_url_mappings():
 @app.context_processor
 def inject_year():
     return {'current_year': datetime.now().year}
+
+# Add CSP nonce to all templates
+@app.context_processor
+def inject_nonce():
+    return {'csp_nonce': getattr(g, 'csp_nonce', '')}
 
 # Add version info to all templates
 @app.context_processor
