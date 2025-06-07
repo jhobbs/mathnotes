@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Slot Machines
+description: Applied probability analysis of slot machine mechanics using combinatorics and independent events to calculate matching probabilities across multiple spins.
 ---
 
 My dad told a story at dinner once about playing slots in Las Vegas. He doesn't gamble much, but he was there and had some time to kill, so he thought, "Why not, I'll give this a spin!" He put a \\$20 bill into a machine with three reels, and at \\\$1 per spin for a total of $20$ spins, he never even had two reels match, much less three! He said surely not having two reels match at least once in 20 spins is much less likely than having three reels match at least once, and wanted to know the odds. Someone pointed out that the machines don't have fair reels so it's impossible for an outsider to calculate the odds, but for the sake of getting to do some math, we can make some simplifying assumptions.

@@ -6,6 +6,7 @@ redirect_from:
 - ode/lesson 4 - general solutions
 - diffeq/lesson 4 - general solutions
 title: The General Solution of a Differential Equation
+description: N-parameter families of solutions, the relationship between solution multiplicity and equation order, and definitions of general and particular solutions.
 ---
 
 # The General Solution of a Differential Equation

@@ -3,6 +3,7 @@ layout: page
 redirect_from:
 - complex/module 13 - cauchy integral formula
 title: Cauchy Integral Formula
+description: Fundamental formula expressing analytic function values as contour integrals, with applications to derivatives and evaluation of integrals.
 ---
 # Cauchy Integral Formula
 

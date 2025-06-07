@@ -3,6 +3,7 @@ layout: page
 redirect_from:
 - complex/module 11 - independence of path
 title: Indepenence of Path of Contour Integrals
+description: Conditions for path independence of contour integrals, antiderivatives, and the role of branch cuts and singularities.
 ---
 
 # Independence of Path of Contour Integrals

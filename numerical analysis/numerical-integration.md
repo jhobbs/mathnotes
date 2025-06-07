@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Numerical Integration
+description: Quadrature methods including trapezoidal and Simpson's rules, composite integration techniques, and Gaussian quadrature using optimal node selection.
 ---
 
 # Numerical Integration

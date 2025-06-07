@@ -4,6 +4,7 @@ redirect_from:
 - complex/module 09 - indefinite integrals
 - complex/module 9 - indefinite integrals
 title: Complex Indefinite Integrals
+description: Complex antiderivatives and indefinite integration, with considerations for multivalued functions and domains of validity.
 ---
 
 # Complex Indefinite Integrals

@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Rounding Errors
+description: Analysis of floating-point arithmetic precision, error measurement techniques, and computational strategies like nesting to minimize numerical errors.
 ---
 
 # Rounding Errors

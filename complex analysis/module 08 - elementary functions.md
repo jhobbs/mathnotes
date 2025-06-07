@@ -4,6 +4,7 @@ redirect_from:
 - complex/module 08 - elementary functions
 - complex/module 8 - elementary functions
 title: Elementary Functions
+description: Complex exponential, trigonometric, hyperbolic, and logarithmic functions with their properties, periodicity, and branch structures.
 ---
 
 # Elementary Functions

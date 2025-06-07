@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Properties of Vectors
+description: Fundamental vector operations in Rⁿ including magnitude, addition, scalar multiplication, and linear combinations with definitions of span and vector spaces.
 ---
 
 # Properties of Vectors

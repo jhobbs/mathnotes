@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Recurrence Relations
+description: Methods for solving linear recurrence relations with constant coefficients, including characteristic polynomial approach, homogeneous and non-homogeneous equations, and handling repeated roots.
 ---
 
 # Recurrence Relations

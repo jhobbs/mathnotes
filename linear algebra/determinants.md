@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Determinants
+description: Methods for computing determinants through row reduction and cofactor expansion, with applications to Cramer's rule for solving linear systems.
 ---
 
 # Determinants

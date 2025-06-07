@@ -6,6 +6,7 @@ redirect_from:
 - ode/lesson 5 - Direction Field
 - diffeq/lesson 5 - Direction Field
 title: Direction Field
+description: Geometric visualization of differential equations through integral curves, line elements, isoclines, and classification of ordinary and singular points.
 ---
 
 # Direction Field

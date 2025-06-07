@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Probability Basics
+description: Foundational concepts including sample spaces, events, probability rules, conditional probability, and independence using set theory operations.
 ---
 
 # Probability Basics

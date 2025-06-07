@@ -7,6 +7,7 @@ redirect_from:
 - diffeq/lesson 3 - the differential equation
 - diffeq/firstorderode
 title: The Differential Equation
+description: Fundamental definitions of ordinary differential equations, their order, and the distinction between explicit and implicit solutions.
 ---
 # The Differential Equation
 

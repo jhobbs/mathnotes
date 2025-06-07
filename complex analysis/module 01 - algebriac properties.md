@@ -7,6 +7,7 @@ redirect_from:
 - ode/chapter 04 - linear differential equations of order greater than one/lesson
   18 - complex numbers
 title: Algebraic Properties
+description: Introduction to complex numbers, their algebraic properties, polar and exponential forms, and operations including roots and quadratics.
 ---
 
 # Algebraic Properties

@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Integration Strategies
+description: Comprehensive collection of integration techniques including trigonometric substitution, reduction formulae, u-substitution, and integration by parts with detailed examples and applications.
 ---
 
 # Integration Strategies

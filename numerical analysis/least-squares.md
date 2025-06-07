@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Least Squares
+description: Polynomial approximation techniques for both discrete data sets and continuous functions using least squares error minimization.
 ---
 
 # Discrete Least Squares Approximation

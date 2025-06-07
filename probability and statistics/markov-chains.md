@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Markov Chains
+description: Stochastic processes with transition matrices, ergodic properties, and steady-state probability calculations using linear algebra methods.
 ---
 
 # Markov Chains

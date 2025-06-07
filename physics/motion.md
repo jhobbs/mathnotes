@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Newtonian Motion
+description: Classical mechanics covering forces, energy, momentum, and rotational dynamics using calculus-based analysis and vector methods.
 ---
 
 # Newtonian Motion

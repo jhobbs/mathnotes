@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Random Variables and Probability Distributions
+description: Mathematical framework for discrete and continuous random variables with their probability mass functions and cumulative distribution functions.
 ---
 
 # Random Variables and Probability Distributions

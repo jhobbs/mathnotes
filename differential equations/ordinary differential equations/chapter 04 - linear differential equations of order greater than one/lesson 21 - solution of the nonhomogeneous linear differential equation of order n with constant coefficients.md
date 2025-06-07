@@ -6,6 +6,7 @@ redirect_from:
   constant coefficients
 title: Solution of the Nonhomogeneous Linear Differential Equation of Order n with
   Constant Coefficients (Method of Undetermined Coefficients)
+description: Comprehensive treatment of the method of undetermined coefficients for solving nonhomogeneous linear differential equations with constant coefficients. Covers multiple cases and the use of complex variables for particular solutions.
 ---
 
 # Solution of the Nonhomogeneous Linear Differential Equation of Order n with Constant Coefficients (Method of Undetermined Coefficients)

@@ -6,6 +6,7 @@ redirect_from:
 - ode/lesson 11 - the linear differential equation of the first order and bernoulli
   equation
 title: The Linear Differential Equation
+description: Solution methods for first-order linear differential equations using integrating factors, and techniques for solving Bernoulli and Ricatti equations. Covers the standard form and systematic solution approaches.
 ---
 
 # The Linear Differential Equation

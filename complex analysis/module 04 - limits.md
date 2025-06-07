@@ -5,6 +5,7 @@ redirect_from:
 - complex/module 4 - limits
 - complex/limits
 title: Limits and Continuity of Complex Functions
+description: Delta-epsilon definition of limits for complex functions, continuity, removable discontinuities, and multi-valued functions with branches and branch cuts.
 ---
 
 # Limits of Complex Functions

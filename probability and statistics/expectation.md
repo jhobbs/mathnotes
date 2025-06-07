@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Expectation
+description: Mathematical definitions and computational methods for expected value and variance of discrete and continuous random variables.
 ---
 
 # Expectation

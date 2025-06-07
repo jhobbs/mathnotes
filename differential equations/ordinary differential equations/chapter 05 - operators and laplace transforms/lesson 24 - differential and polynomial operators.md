@@ -4,6 +4,7 @@ redirect_from:
 - ode/chapter 05 - operators and laplace transforms/lesson 24 - differential and polynomial
   operators
 title: Differential and Polynomial Operators
+description: Introduction to operator notation for differential equations and the linear properties of polynomial operators. Covers the principle of superposition and operator methods for solving linear differential equations with constant coefficients.
 ---
 
 # Differential and Polynomial Operators

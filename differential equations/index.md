@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Differential Equations
+description: Mathematical equations relating functions with their derivatives, covering ordinary and partial differential equations with applications to physics, engineering, and other fields.
 ---
 
 # Differential Equations

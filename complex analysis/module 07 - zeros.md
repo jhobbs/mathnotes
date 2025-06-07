@@ -4,6 +4,7 @@ redirect_from:
 - complex/module 07 - zeros
 - complex/module 7 - zeros
 title: Zeros and Singularities
+description: Classification of zeros by order, isolated singularities, and their characterization in terms of analytic functions.
 ---
 
 # Zeros and Singularities

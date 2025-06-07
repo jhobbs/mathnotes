@@ -4,6 +4,7 @@ redirect_from:
 - ode/chapter 06 - problems leading to linear equations of order two/lesson 28 - undamped
   motion
 title: Undamped Motion
+description: Analysis of simple harmonic motion and forced oscillations using second-order linear differential equations. Covers spring-mass systems, pendulum motion, resonance phenomena, and both free and forced undamped vibrations.
 ---
 
 # Undamped Motion

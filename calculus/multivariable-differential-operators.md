@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Multivariable Differential Operators
+description: Vector calculus operators including gradient, curl, divergence, and Laplacian with geometric interpretations, mathematical definitions, and applications to physics and engineering.
 ---
 
 # Multivariable Differential Operators

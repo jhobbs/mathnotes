@@ -9,6 +9,7 @@ redirect_from:
   coefficients
 title: Solution of the Homogeneous Linear Differential Equation of Order n with Constant
   Coefficients
+description: Systematic method for solving homogeneous linear differential equations with constant coefficients using the characteristic equation. Covers cases of real distinct roots, repeated roots, and complex conjugate pairs.
 ---
 
 # Solution of the Homogeneous Linear Differential Equation of Order n with Constant Coefficients

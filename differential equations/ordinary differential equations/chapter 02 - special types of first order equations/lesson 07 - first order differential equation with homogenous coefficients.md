@@ -7,6 +7,7 @@ redirect_from:
 - ode/lesson 7 - first order differential equation with homogenous coefficients
 - diffeq/lesson 7 - first order differential equation with homogenous coefficients
 title: First Order Differential Equation with Homogenous Coefficients
+description: Solution methods for first-order differential equations with homogeneous coefficients. Covers the definition of homogeneous functions and substitution techniques that transform these equations into separable forms.
 ---
 
 # First Order Differential Equation with Homogenous Coefficients

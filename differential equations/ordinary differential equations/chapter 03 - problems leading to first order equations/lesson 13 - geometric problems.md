@@ -4,6 +4,7 @@ redirect_from:
 - ode/chapter 03 - problems leading to first order equations/lesson 13 - geometric
   problems
 title: Geometric Problems
+description: Applications of differential equations to geometric problems involving tangent lines, curves, and trajectories. Covers techniques for finding families of curves with specified geometric properties.
 ---
 
 # Geometric Problems

@@ -4,6 +4,7 @@ redirect_from:
 - ode/chapter 03 - problems leading to first order equations/lesson 16 - motion of
   a particle along a straight line
 title: Motion of a Particle Along a Straight Line
+description: Applications of first-order differential equations to particle motion including vertical motion with gravity, air resistance effects, terminal velocity, and horizontal motion with friction. Covers Newton's laws and various resistance models.
 ---
 
 # Motion of a Particle Along a Straight Line

@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Factoring
+description: Techniques for factoring polynomials, including sum and difference of cubes formulas with memory aids and algebraic patterns.
 ---
 
 # Factoring

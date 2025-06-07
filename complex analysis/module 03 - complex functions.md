@@ -5,6 +5,7 @@ redirect_from:
 - complex/module 3 - complex functions
 - complex/complex-functions
 title: Complex Functions
+description: Complex-valued functions, geometric transformations, bilinear mappings, and methods for finding images of curves in the complex plane.
 ---
 
 # Complex Functions

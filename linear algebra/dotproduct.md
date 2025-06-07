@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Dot Product
+description: Definition and properties of the dot product in Rⁿ, including geometric interpretation as angle measurement and its relationship to vector projection.
 ---
 
 # Dot Product

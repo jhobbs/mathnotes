@@ -4,6 +4,7 @@ redirect_from:
 - calculus/limits-of-a-function
 - calculus/limits
 title: Limits of a Function
+description: Presents the rigorous epsilon-delta definition of limits for functions, including one-sided limits and limits involving infinity, with concrete examples and proof techniques.
 ---
 
 # Limits of a Function

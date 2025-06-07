@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Arc Length and Line Integrals
+description: Theory and computation of line integrals including arc length for parametric curves, path independence, Green's theorem, and applications to complex analysis and vector fields.
 ---
 
 # Arc Length and Line Integrals

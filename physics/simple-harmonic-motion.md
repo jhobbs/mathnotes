@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Simple Harmonic Motion
+description: Sinusoidal oscillatory motion analyzed through differential equations, covering springs, pendulums, and damped systems with trigonometric solutions.
 ---
 
 # Simple Harmonic Motion

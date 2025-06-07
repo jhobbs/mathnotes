@@ -3,6 +3,7 @@ layout: page
 redirect_from:
 - real analysis/topology
 title: Finite, Countable, and Uncountable Sets
+description: Explores set cardinality through bijections, proving countability of rationals and uncountability of reals using Cantor's diagonalization argument.
 ---
 
 # Finite, Countable, and Uncountable Sets

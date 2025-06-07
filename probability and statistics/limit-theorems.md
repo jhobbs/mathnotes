@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Limit Theorems
+description: Fundamental probability limit theorems including Markov and Chebyshev inequalities, Law of Large Numbers, and Central Limit Theorem with moment generating functions.
 ---
 
 # Limit Theorems

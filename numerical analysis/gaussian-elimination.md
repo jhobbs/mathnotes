@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Gaussian Elimination
+description: Matrix row operations for solving linear systems, including pivoting strategies and LU factorization for efficient multiple-solve scenarios.
 ---
 
 # Gaussian Elimination

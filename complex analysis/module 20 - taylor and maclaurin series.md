@@ -3,6 +3,7 @@ layout: page
 redirect_from:
 - complex/module 20 - taylor and maclaurin series
 title: Taylor and Maclaurin Series
+description: Power series expansions of analytic functions, convergence properties, and fundamental series for elementary functions.
 ---
 # Taylor and Maclaurin Series
 

@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Joint Probability
+description: Bivariate random variables, marginalization, multinomial distributions, convolutions, and covariance-correlation analysis.
 ---
 
 # Joint Probability

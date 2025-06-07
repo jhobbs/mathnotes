@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Some Continuous Probability Distributions
+description: Study of uniform and normal distributions including their density functions, parameters, and the normal approximation to binomial distributions.
 ---
 
 # Some Continuous Probability Distributions

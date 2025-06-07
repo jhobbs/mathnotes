@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Static Equilibrium
+description: Analysis of rigid bodies at rest using force and torque balance equations to solve for unknown forces in mechanical systems.
 ---
 
 # Static Equilibrium

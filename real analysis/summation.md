@@ -3,6 +3,7 @@ layout: page
 redirect_from:
 - calculus/summation
 title: Summation
+description: Demonstrates techniques for manipulating infinite series, including index shifting and combining series with different terms into unified expressions.
 ---
 
 # Summation

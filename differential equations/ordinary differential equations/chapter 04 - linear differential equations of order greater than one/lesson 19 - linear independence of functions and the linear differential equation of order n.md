@@ -6,6 +6,7 @@ redirect_from:
   n
 title: Linear Independence of Functions. The Linear Differential Equation of Order
   n.
+description: Fundamental theory of linear differential equations of higher order including linear independence of solutions, existence and uniqueness theorems, and the structure of general solutions for homogeneous and nonhomogeneous equations.
 ---
 
 # Linear Independence of Functions. The Linear Differential Equation of Order n.

@@ -6,6 +6,7 @@ redirect_from:
 - ode/lesson 09 - exact differential equations
 - ode/lesson 9 - exact differential equations
 title: Exact Differential Equations
+description: Theory and solution methods for exact differential equations. Includes necessary and sufficient conditions for exactness and techniques for finding solutions when differential expressions are exact.
 ---
 
 # Exact Differential Equations

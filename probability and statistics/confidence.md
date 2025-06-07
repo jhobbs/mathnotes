@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Confidence Intervals
+description: Statistical methods for estimating population parameters with specified confidence levels using normal and t-distributions.
 ---
 
 # Confidence Intervals

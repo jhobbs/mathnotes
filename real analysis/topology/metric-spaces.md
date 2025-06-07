@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Metric Spaces
+description: Introduces metric spaces through axioms and examples, covering the definition of distance functions and fundamental geometric concepts like segments, intervals, cells, and balls.
 ---
 
 # Metric Spaces

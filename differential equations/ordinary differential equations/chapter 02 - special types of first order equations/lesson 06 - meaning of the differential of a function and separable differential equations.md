@@ -10,6 +10,7 @@ redirect_from:
 - diffeq/lesson 6 - meaning of the differential of a function and separable differential
   equations
 title: Meaning of the Differential
+description: Introduction to the concept of differentials and separable variable differential equations. Covers the differential as a function of two variables and the method for solving equations where variables can be separated.
 ---
 
 # Meaning of the Differential

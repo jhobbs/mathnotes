@@ -4,6 +4,7 @@ redirect_from:
 - ode/chapter 05 - operators and laplace transforms/lesson 27 - the laplace transform
   and gamma function
 title: The Laplace Transform. Gamma Function.
+description: Theory and application of Laplace transforms for solving linear differential equations with initial conditions. Includes properties, inverse transforms, and the gamma function for extending factorial operations to non-integers.
 ---
 
 # The Laplace Transform. Gamma Function.

@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Electric Fields
+description: Vector field theory applied to electrostatics, covering field superposition, electric dipoles, and interactive field visualizations.
 ---
 
 # Electric Fields

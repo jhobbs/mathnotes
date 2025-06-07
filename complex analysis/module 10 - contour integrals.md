@@ -3,6 +3,7 @@ layout: page
 redirect_from:
 - complex/module 10 - contour integrals
 title: Contour Integrals
+description: Line integrals in the complex plane, parameterization methods, properties, and evaluation techniques for closed contours.
 ---
 
 # Contour Integrals

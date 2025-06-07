@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Numerical Differentiation
+description: Forward, backward, and central difference formulas for approximating derivatives, including multi-point methods based on Lagrange polynomial differentiation.
 ---
 
 # Numerical Differentiation

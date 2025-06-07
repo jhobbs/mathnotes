@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Some Discrete Probability Distbutions
+description: Analysis of binomial, hypergeometric, Poisson, geometric, and negative binomial distributions with their probability mass functions and parameters.
 ---
 
 # Some Discrete Probability Distributions

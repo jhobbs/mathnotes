@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Lengths, Areas and Volumes
+description: Geometric applications of integration including volumes of solids of revolution, areas enclosed by polar curves, and arc length calculations for parametric and polar coordinate systems.
 ---
 
 # Lengths, Areas and Volumes

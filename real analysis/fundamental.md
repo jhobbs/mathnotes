@@ -3,6 +3,7 @@ layout: page
 redirect_from:
 - calculus/fundamental
 title: Fundamental Theorem of Calculus
+description: States and explains both parts of the Fundamental Theorem of Calculus, along with integration techniques including integration by parts and substitution.
 ---
 
 # Fundamental Theorem of Calculus

@@ -3,6 +3,7 @@ layout: page
 redirect_from:
 - calculus/integration
 title: Integration
+description: Develops the rigorous theory of Riemann integration using upper and lower Darboux sums, Riemann's condition, and proves fundamental properties of integrable functions.
 ---
 
 # Integration

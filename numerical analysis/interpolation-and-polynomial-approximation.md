@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Interpolation and Polynomial Approximation
+description: Lagrange and Newton polynomial interpolation methods, divided differences, and cubic spline techniques for approximating functions through discrete data points.
 ---
 
 # Interpolation and Polynomial Approximation

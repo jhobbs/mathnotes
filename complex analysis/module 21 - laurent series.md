@@ -3,6 +3,7 @@ layout: page
 redirect_from:
 - complex/module 21 - laurent series
 title: Laurent Series
+description: Series expansions with negative powers for functions analytic in annular regions, including geometric series techniques and examples.
 ---
 # Laurent Series
 

@@ -4,6 +4,7 @@ redirect_from:
 - complex/module 06 - harmonic
 - complex/module 6 - harmonic
 title: Harmonic Functions
+description: Harmonic functions satisfying Laplace's equation, harmonic conjugates, and their relationship to analytic complex functions.
 ---
 
 # Harmonic Functions
