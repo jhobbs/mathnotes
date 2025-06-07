@@ -12,6 +12,37 @@ from urllib.parse import quote, unquote
 
 app = Flask(__name__)
 
+# Content Security Policy middleware
+@app.after_request
+def add_security_headers(response):
+    """Add security headers including CSP to all responses."""
+    # Content Security Policy
+    csp_directives = [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' https://polyfill.io https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
+        "style-src 'self' 'unsafe-inline'",
+        "img-src 'self' data:",
+        "font-src 'self' https://cdn.jsdelivr.net",
+        "connect-src 'self'",
+        "frame-src 'self'",
+        "frame-ancestors 'self'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "object-src 'none'",
+        "upgrade-insecure-requests"
+    ]
+    
+    response.headers['Content-Security-Policy'] = '; '.join(csp_directives)
+    
+    # Additional security headers
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=()'
+    
+    return response
+
 # URL mapping for permalinks
 url_mappings = {}  # Maps canonical URLs to file paths
 redirect_mappings = {}  # Maps old URLs to canonical URLs
