@@ -75,7 +75,7 @@ whenever $\vec{x}, \vec{y} \in E,$ and $0 < \lambda < 1.$
 
 In geometric terms, this means a set is convex if we can connect any two points in the set with a line segment whose points are all within the set.
 
-*Theorem*: Balls are convex.
+*Theorem*: All balls are convex.
 
 *Proof*: Let $\vec{y}, \vec{z}$ be points in a ball with center $\vec{x}$ and radius $r$. Then, by definition, $|\vec{y} - \vec{x}| < r,$ and $|\vec{z} - \vec{x}| < r.$ Suppose $\vec{p} \in \{ \lambda \vec{y} + (1 - \lambda)\vec{z} | 0 < \lambda < 1 \}.$ We will show that $|\vec{x} - \vec{p}| < r.$
 
