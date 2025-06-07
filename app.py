@@ -451,6 +451,11 @@ def static_files(filename):
     """Serve static files."""
     return send_from_directory('static', filename)
 
+@app.route('/favicon.ico')
+def favicon():
+    """Serve favicon.ico."""
+    return send_from_directory('.', 'favicon.ico')
+
 @app.route('/robots.txt')
 def robots():
     """Serve robots.txt."""
