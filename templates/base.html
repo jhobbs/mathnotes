@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ config.SITE_TITLE }}{% endblock %}</title>
-    <meta name="description" content="{{ config.SITE_DESCRIPTION }}">
+    <meta name="description" content="{% block description %}{{ page_description or config.SITE_DESCRIPTION }}{% endblock %}">
     {% if canonical_url %}
     <link rel="canonical" href="https://www.lacunary.org{{ canonical_url }}">
     {% endif %}

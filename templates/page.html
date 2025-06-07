@@ -2,6 +2,8 @@
 
 {% block title %}{{ title }} - {{ config.SITE_TITLE }}{% endblock %}
 
+{% block description %}{{ page_description or config.SITE_DESCRIPTION }}{% endblock %}
+
 {% block content %}
 <article>
     {{ content|safe }}

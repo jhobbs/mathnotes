@@ -34,6 +34,8 @@ python app.py
 flask run --host=0.0.0.0 --port=5000 --reload
 ```
 
+**Note**: For testing changes, prefer using Docker as it ensures a consistent environment with all dependencies properly installed.
+
 ### Deployment
 ```bash
 # Deploy to fly.io

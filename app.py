@@ -212,10 +212,31 @@ def render_markdown_file(filepath):
                 file_path_no_ext = file_path_normalized.replace('.md', '')
                 canonical_path = f"/mathnotes/{file_path_no_ext}"
             
+            # Generate description from frontmatter or content
+            description = post.metadata.get('description', '')
+            if not description:
+                # Generate description from first paragraph of content
+                # Remove HTML tags and math expressions for a clean description
+                clean_content = re.sub(r'<[^>]+>', '', html_content)  # Remove HTML tags
+                clean_content = re.sub(r'\$\$[^$]+\$\$', '', clean_content)  # Remove display math
+                clean_content = re.sub(r'\$[^$]+\$', '', clean_content)  # Remove inline math
+                clean_content = re.sub(r'\s+', ' ', clean_content).strip()  # Normalize whitespace
+                
+                # Take first sentence or up to 160 characters
+                if clean_content:
+                    sentences = clean_content.split('. ')
+                    if sentences:
+                        description = sentences[0]
+                        if len(description) > 160:
+                            description = description[:157] + '...'
+                        elif not description.endswith('.'):
+                            description += '.'
+            
             return {
                 'content': html_content,
                 'metadata': post.metadata,
                 'title': post.metadata.get('title', Path(filepath).stem.replace('-', ' ').title()),
+                'page_description': description,
                 'source_path': filepath,  # Add the source file path
                 'canonical_url': canonical_path
             }
@@ -343,7 +364,7 @@ def serve_content(filepath):
                              directory=filepath,
                              files=files,
                              subdirs=subdirs,
-                             title=filepath.replace('/', ' - ').title())
+                             title=filepath.strip('/').replace('/', ' - ').title())
     
     # Check for markdown file (backward compatibility)
     md_path = filepath if filepath.endswith('.md') else f"{filepath}.md"

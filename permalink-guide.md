@@ -52,6 +52,7 @@ All listed URLs will redirect (301) to the canonical URL.
 ---
 title: Partial Fractions
 slug: partial-fractions-decomposition
+description: Learn how to decompose rational functions into simpler fractions for easier integration and analysis.
 ---
 ```
 
@@ -63,6 +64,7 @@ If you move `calculus/integration.md` to `calculus/integration-strategies.md`:
 ---
 title: Integration Strategies
 slug: integration-techniques
+description: Comprehensive guide to integration techniques including substitution, by parts, and trigonometric methods.
 redirect_from:
   - calculus/integration
 ---
@@ -94,6 +96,20 @@ redirect_from:
 
 3. **Keep slugs stable** - once published, avoid changing slugs to prevent breaking external links
 
+## SEO Features
+
+### Meta Descriptions
+Each page can have a custom meta description for better search engine optimization:
+
+```yaml
+---
+title: Your Page Title
+description: A concise description of your page content that appears in search results.
+---
+```
+
+If no description is provided, the system automatically generates one from the first sentence of your content.
+
 ## Technical Details
 
 - Slugs are automatically generated from titles if not specified
@@ -101,3 +117,4 @@ redirect_from:
 - All old URLs automatically redirect to canonical URLs
 - Canonical URL meta tags are added for SEO
 - The sitemap uses canonical URLs
+- Meta descriptions are automatically generated or can be customized in frontmatter
