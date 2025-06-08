@@ -11,7 +11,7 @@ title: Trajectories
 
 When two curves intersect in a plane, the angle between them is defined to be the angle made by their respective tangents drawn at their point of intersection.
 
-![Isogonal Trajectories](isogonal%20trajectories.jpg)
+![Isogonal Trajectories](/mathnotes/differential equations/ordinary differential equations/chapter 03 - problems leading to first order equations/isogonal%20trajectories.jpg)
 
 In the above figure, $\alpha$ is the positive angle from the curve $c_1$ with tangent line $L_1$ to the curve $c_2$ with tangent line $L_2$; $\beta$ is the positive angle from the curve $c_2$ to the curve $c_1$. If we call $m_1$ the slope of $L_1$ and $m_2$ the slope of $L_2$, then by a formula in analytic geometry:
 
@@ -33,7 +33,7 @@ $$ \tag{14.21} {y_1}' y' = -1,~y' = - \frac{1}{ {y_1}'} $$
 
 ### Orthogonal Trajectories in Polar Coordinates
 
-![Orthogonal Trajectories in Polar Coordinates](orthogonal%20trajectories%20in%20polar%20coordinates.jpg)
+![Orthogonal Trajectories in Polar Coordinates](/mathnotes/differential equations/ordinary differential equations/chapter 03 - problems leading to first order equations/orthogonal%20trajectories%20in%20polar%20coordinates.jpg)
 
 In the above figure, call $P(r,\theta)$ the point of intersection in polar coordinates of two curves $c_1,c_2$, which are orthogonal trajectories of each other. Call $\phi_1$ and $\phi_2$ the respective angle the tangent to each curve $c_1$ and $c_2$ makes with the radius vector $r$ (measured from the radius vector counterclockwise to the tangent). Since the two tangents are orthogonal, it is evient form the figure that:
 
