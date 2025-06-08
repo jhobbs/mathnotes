@@ -216,6 +216,50 @@ def render_markdown_file(filepath):
             
             content = re.sub(include_pattern, replace_include, content)
             
+            # Process wiki-style internal links [[slug]] or [[text|slug]]
+            def replace_wiki_link(match):
+                link_content = match.group(1)
+                if '|' in link_content:
+                    # Format: [[Link Text|slug]]
+                    link_text, slug = link_content.split('|', 1)
+                    link_text = link_text.strip()
+                    slug = slug.strip()
+                else:
+                    # Format: [[slug]]
+                    slug = link_content.strip()
+                    link_text = slug.replace('-', ' ').title()
+                
+                # Check if slug contains a section prefix
+                if '/' in slug:
+                    # Direct section/slug reference
+                    canonical_url = slug
+                else:
+                    # Search for the slug in our mappings
+                    # First try exact match in current section
+                    current_section = Path(filepath).parts[0] if Path(filepath).parts else ''
+                    canonical_url = None
+                    
+                    # Try current section first
+                    if current_section:
+                        potential_url = f"{current_section}/{slug}"
+                        if potential_url in url_mappings:
+                            canonical_url = potential_url
+                    
+                    # If not found, search all sections
+                    if not canonical_url:
+                        for url in url_mappings:
+                            if url.endswith(f"/{slug}") or url == slug:
+                                canonical_url = url
+                                break
+                
+                if canonical_url:
+                    return f'[{link_text}](/mathnotes/{canonical_url})'
+                else:
+                    # If slug not found, return the original text with a broken link indicator
+                    return f'[{link_text}](#broken-link-{slug})'
+            
+            content = re.sub(r'\[\[([^\]]+)\]\]', replace_wiki_link, content)
+            
             # Protect math delimiters from markdown processing
             # First handle display math ($$...$$), then inline math ($...$)
             
