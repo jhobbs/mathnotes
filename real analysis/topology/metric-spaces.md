@@ -93,3 +93,38 @@ $$ \begin{aligned}
 So, $\vec{p}$ is within our ball and therefore all balls are convex. $\square$
 
 Similar proofs can be used to show that closed balls and $k$-cells are also convex.
+
+## Elements and Subsets of a Metric Space
+
+Assume we have a metric space $(X, d).$
+
+A **neighborhood,** or **r-neighborhood** of $p$ is a set $N_r(p)$ consisting of all $q$ such that $d(p, q) < r$ for some $r > 0.$ This subset of $X$ is all the points within a circle of radius $r$ - the open ball of radius $r$ centered at $p.$
+
+A point $p$ is a **limit point** of the set $E$ if every neighborhood of $p$ contains a point $q \neq p$ such that $q \in E.$
+
+If $p \in E$ and $p$ is not a limit point of $E,$ then $p is called an **isolated point** of E.
+
+$E$ is **closed** if every limit point of $E$ is a point of $E.$
+
+A point $p$ is an **interior point** of $E$ if there is a neighborhood $N$ of $p$ such that $N \subset E.$
+
+$E$ is open if every point of $E$ is an interior point of $E.$
+
+The **complement** of $E$ (denoted by $E^c$) is the set of all points $p \in X$ such that $p \notin E.$
+
+$E$ is **perfect** if $E$ is closed and if every point of $E$ is a limit point of $E.$
+
+$E$ is **bounded** if there is a real number $M$ and a point $q \in X$ such that $d(p, q) < M$ for all $p \in E.$
+
+$E$ is **dense** in $X$ if every point of $X$ is a limit point of $E,$ or a point of $E$ (or both.)
+
+*Theorem*: Every neighborhood is an open set.
+
+*Proof*: Suppose $N_r(p)$ is a neighborhood in $X.$ Let $q \in N_r(p).$ We need to show that $q$ is an interior point of $N_r(p).$ Let $s = r - d(p, q);$ because $d(p, q) < r$, we have $s > 0.$ Now let $N_s(q)$ be the neighborhood of radius $s$ around $q.$ We need to show that $N_s(q) \subset N_r(p).$ Suppose $x \in N_s(q).$ First note that because $s = r - d(p, q),$ $d(p,q) = r - s.$ Now,
+
+$$ \begin{aligned} d(p, x) & \leq d(p,q) + d(q, x) \\
+                           & < r - s + s \\
+                           & = r.
+\end{aligned} $$
+
+Therefore, $N_s(q) \subset N_r(p),$ so $q$ is an interior point of $N_r(p),$ and since $q$ was arbitrary, every point of $N_r(p)$ is interior. Hence, $N_r(p)$ is open. $\square$
