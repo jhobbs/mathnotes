@@ -6,6 +6,8 @@ let isZoomed = false;
 let dragStart = null;
 let currentDrag = null;
 let state = 'waiting'; // 'waiting', 'dragging_outer', 'waiting_inner', 'complete'
+let minZoom = 0.5;
+let maxZoom = 10;
 
 // Colors
 let bgColor, axisColor, gridColor, outerColor, innerColor, textColor;
@@ -90,7 +92,7 @@ function draw() {
 
 function drawGrid() {
     stroke(gridColor);
-    strokeWeight(0.5);
+    strokeWeight(0.5 / zoomLevel);
     
     let gridSize = 50;
     for (let x = -width; x <= width; x += gridSize) {
@@ -103,7 +105,7 @@ function drawGrid() {
 
 function drawAxes() {
     stroke(axisColor);
-    strokeWeight(2);
+    strokeWeight(2 / zoomLevel);
     
     // X-axis
     line(-width, 0, width, 0);
@@ -130,7 +132,7 @@ function drawNeighborhood(n) {
     // Draw dashed border for outer neighborhood
     noFill();
     stroke(axisColor);
-    strokeWeight(2);
+    strokeWeight(2 / zoomLevel); // Scale stroke weight with zoom
     dashedCircle(n.center.x, n.center.y, n.radius * 2);
     
     // Draw center point
@@ -153,7 +155,7 @@ function drawNeighborhood(n) {
             // Draw dashed border for inner neighborhood
             noFill();
             stroke(axisColor);
-            strokeWeight(1.5);
+            strokeWeight(1.5 / zoomLevel); // Scale stroke weight with zoom
             dashedCircle(n.innerPoint.x, n.innerPoint.y, innerRadius * 2);
             
             // Draw inner point
@@ -178,15 +180,27 @@ function dashedLine(x1, y1, x2, y2) {
 
 function dashedCircle(x, y, diameter) {
     let radius = diameter / 2;
-    let circumference = TWO_PI * radius;
-    let dashLength = 8;
-    let gapLength = 6;
-    let totalLength = dashLength + gapLength;
-    let steps = circumference / totalLength;
     
-    for (let i = 0; i < steps; i++) {
-        let startAngle = (i * totalLength / radius);
-        let endAngle = ((i * totalLength + dashLength) / radius);
+    // Calculate visual radius (how big it appears on screen)
+    let visualRadius = radius * zoomLevel;
+    let visualCircumference = TWO_PI * visualRadius;
+    
+    // Fixed visual dash and gap size in pixels
+    let visualDashLength = 8;
+    let visualGapLength = 6;
+    let visualTotalLength = visualDashLength + visualGapLength;
+    
+    // Calculate how many dashes we need
+    let numDashes = Math.floor(visualCircumference / visualTotalLength);
+    
+    // Calculate actual dash length in world coordinates
+    let dashAngle = (visualDashLength / visualRadius);
+    let gapAngle = (visualGapLength / visualRadius);
+    let totalAngle = dashAngle + gapAngle;
+    
+    for (let i = 0; i < numDashes; i++) {
+        let startAngle = i * totalAngle;
+        let endAngle = startAngle + dashAngle;
         
         let x1 = x + radius * cos(startAngle);
         let y1 = y + radius * sin(startAngle);
@@ -274,10 +288,16 @@ function resetDemo() {
 
 function toggleZoom() {
     if (neighborhoods.length > 0 && neighborhoods[neighborhoods.length - 1].innerPoint) {
-        isZoomed = !isZoomed;
-        if (isZoomed) {
+        if (zoomLevel === 1) {
+            // Zoom in to inner point
             zoomCenter = neighborhoods[neighborhoods.length - 1].innerPoint;
             zoomLevel = 3;
+            isZoomed = true;
+        } else {
+            // Reset zoom
+            zoomLevel = 1;
+            isZoomed = false;
+            zoomCenter = null;
         }
     }
 }
@@ -306,4 +326,42 @@ if (window.matchMedia) {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
         updateColors();
     });
+}
+
+// Handle wheel events for zooming
+function mouseWheel(event) {
+    // Prevent default scrolling
+    event.preventDefault();
+    
+    // Get mouse position in world coordinates before zoom
+    let mouseWorldBefore = screenToWorld(mouseX, mouseY);
+    
+    // Calculate zoom change (positive delta = zoom out, negative = zoom in)
+    let zoomDelta = event.delta * 0.01; // Increased sensitivity
+    let newZoom = constrain(zoomLevel * (1 + zoomDelta), minZoom, maxZoom);
+    
+    if (newZoom !== zoomLevel) {
+        let oldZoom = zoomLevel;
+        zoomLevel = newZoom;
+        
+        // Adjust zoom center to keep mouse position fixed
+        if (zoomLevel !== 1) {
+            if (!isZoomed) {
+                // First time zooming
+                zoomCenter = mouseWorldBefore;
+                isZoomed = true;
+            } else {
+                // Adjust zoom center to keep point under mouse stationary
+                let zoomRatio = zoomLevel / oldZoom;
+                zoomCenter.x = mouseWorldBefore.x - (mouseWorldBefore.x - zoomCenter.x) / zoomRatio;
+                zoomCenter.y = mouseWorldBefore.y - (mouseWorldBefore.y - zoomCenter.y) / zoomRatio;
+            }
+        } else {
+            // Reset zoom
+            isZoomed = false;
+            zoomCenter = null;
+        }
+    }
+    
+    return false; // Prevent page scroll
 }
