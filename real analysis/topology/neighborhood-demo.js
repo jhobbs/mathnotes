@@ -7,7 +7,7 @@ let dragStart = null;
 let currentDrag = null;
 let state = 'waiting'; // 'waiting', 'dragging_outer', 'waiting_inner', 'complete'
 let minZoom = 0.5;
-let maxZoom = 10;
+let maxZoom = 100;
 
 // Colors
 let bgColor, axisColor, gridColor, outerColor, innerColor, textColor;
@@ -78,7 +78,7 @@ function draw() {
         
         // Draw center point
         fill(axisColor);
-        circle(dragStart.x, dragStart.y, 8);
+        circle(dragStart.x, dragStart.y, 8 / zoomLevel);
     }
     
     pop();
@@ -138,7 +138,7 @@ function drawNeighborhood(n) {
     // Draw center point
     fill(axisColor);
     noStroke();
-    circle(n.center.x, n.center.y, 8);
+    circle(n.center.x, n.center.y, 8 / zoomLevel);
     
     // Draw inner neighborhood if it exists
     if (n.innerPoint) {
@@ -161,7 +161,7 @@ function drawNeighborhood(n) {
             // Draw inner point
             fill(axisColor);
             noStroke();
-            circle(n.innerPoint.x, n.innerPoint.y, 6);
+            circle(n.innerPoint.x, n.innerPoint.y, 6 / zoomLevel);
         }
     }
 }
@@ -227,13 +227,6 @@ function mousePressed() {
         if (d < lastN.radius) {
             lastN.innerPoint = worldPos;
             state = 'complete';
-            
-            // Auto-zoom to show the detail
-            if (!isZoomed) {
-                zoomCenter = worldPos;
-                isZoomed = true;
-                zoomLevel = 3;
-            }
         }
     }
 }
@@ -288,13 +281,13 @@ function resetDemo() {
 
 function toggleZoom() {
     if (neighborhoods.length > 0 && neighborhoods[neighborhoods.length - 1].innerPoint) {
-        if (zoomLevel === 1) {
-            // Zoom in to inner point
+        if (Math.abs(zoomLevel - 1) < 0.1) {
+            // Only use button zoom if we're at default zoom
             zoomCenter = neighborhoods[neighborhoods.length - 1].innerPoint;
             zoomLevel = 3;
             isZoomed = true;
         } else {
-            // Reset zoom
+            // Reset zoom completely
             zoomLevel = 1;
             isZoomed = false;
             zoomCenter = null;
@@ -347,15 +340,14 @@ function mouseWheel(event) {
         // Adjust zoom center to keep mouse position fixed
         if (zoomLevel !== 1) {
             if (!isZoomed) {
-                // First time zooming
-                zoomCenter = mouseWorldBefore;
+                // First time zooming - use (0,0) as initial center
+                zoomCenter = createVector(0, 0);
                 isZoomed = true;
-            } else {
-                // Adjust zoom center to keep point under mouse stationary
-                let zoomRatio = zoomLevel / oldZoom;
-                zoomCenter.x = mouseWorldBefore.x - (mouseWorldBefore.x - zoomCenter.x) / zoomRatio;
-                zoomCenter.y = mouseWorldBefore.y - (mouseWorldBefore.y - zoomCenter.y) / zoomRatio;
             }
+            // Always adjust zoom center to keep point under mouse stationary
+            let zoomRatio = zoomLevel / oldZoom;
+            zoomCenter.x = mouseWorldBefore.x - (mouseWorldBefore.x - zoomCenter.x) / zoomRatio;
+            zoomCenter.y = mouseWorldBefore.y - (mouseWorldBefore.y - zoomCenter.y) / zoomRatio;
         } else {
             // Reset zoom
             isZoomed = false;
