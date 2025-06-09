@@ -95,11 +95,37 @@ function drawGrid() {
     strokeWeight(0.5 / zoomLevel);
     
     let gridSize = 50;
-    for (let x = -width; x <= width; x += gridSize) {
-        line(x, -height, x, height);
+    
+    // Calculate the visible world bounds
+    let viewBounds = {
+        left: -width / zoomLevel,
+        right: width / zoomLevel,
+        top: -height / zoomLevel,
+        bottom: height / zoomLevel
+    };
+    
+    if (isZoomed && zoomCenter) {
+        viewBounds.left += zoomCenter.x;
+        viewBounds.right += zoomCenter.x;
+        viewBounds.top += zoomCenter.y;
+        viewBounds.bottom += zoomCenter.y;
     }
-    for (let y = -height; y <= height; y += gridSize) {
-        line(-width, y, width, y);
+    
+    // Extend grid lines well beyond the visible area
+    let gridExtent = max(width, height) * 2;
+    
+    // Draw vertical grid lines
+    let startX = Math.floor(viewBounds.left / gridSize) * gridSize;
+    let endX = Math.ceil(viewBounds.right / gridSize) * gridSize;
+    for (let x = startX - gridExtent; x <= endX + gridExtent; x += gridSize) {
+        line(x, viewBounds.top - gridExtent, x, viewBounds.bottom + gridExtent);
+    }
+    
+    // Draw horizontal grid lines
+    let startY = Math.floor(viewBounds.top / gridSize) * gridSize;
+    let endY = Math.ceil(viewBounds.bottom / gridSize) * gridSize;
+    for (let y = startY - gridExtent; y <= endY + gridExtent; y += gridSize) {
+        line(viewBounds.left - gridExtent, y, viewBounds.right + gridExtent, y);
     }
 }
 
@@ -107,20 +133,40 @@ function drawAxes() {
     stroke(axisColor);
     strokeWeight(2 / zoomLevel);
     
-    // X-axis
-    line(-width, 0, width, 0);
-    // Y-axis
-    line(0, -height, 0, height);
+    // Calculate the visible world bounds
+    let viewBounds = {
+        left: -width / zoomLevel,
+        right: width / zoomLevel,
+        top: -height / zoomLevel,
+        bottom: height / zoomLevel
+    };
     
-    // Labels
-    fill(textColor);
-    noStroke();
-    textAlign(RIGHT, TOP);
-    text('5', width/2 - 10, 10);
-    text('-5', -width/2 + 30, 10);
-    textAlign(LEFT, BOTTOM);
-    text('5', 10, -height/2 + 20);
-    text('-5', 10, height/2 - 10);
+    if (isZoomed && zoomCenter) {
+        viewBounds.left += zoomCenter.x;
+        viewBounds.right += zoomCenter.x;
+        viewBounds.top += zoomCenter.y;
+        viewBounds.bottom += zoomCenter.y;
+    }
+    
+    // Extend axes well beyond the visible area
+    let axisExtent = max(width, height) * 2;
+    
+    // X-axis
+    line(viewBounds.left - axisExtent, 0, viewBounds.right + axisExtent, 0);
+    // Y-axis  
+    line(0, viewBounds.top - axisExtent, 0, viewBounds.bottom + axisExtent);
+    
+    // Labels (only show when near default view)
+    if (zoomLevel < 2) {
+        fill(textColor);
+        noStroke();
+        textAlign(RIGHT, TOP);
+        text('5', width/2 - 10, 10);
+        text('-5', -width/2 + 30, 10);
+        textAlign(LEFT, BOTTOM);
+        text('5', 10, -height/2 + 20);
+        text('-5', 10, height/2 - 10);
+    }
 }
 
 function drawNeighborhood(n) {
