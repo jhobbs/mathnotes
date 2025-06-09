@@ -186,28 +186,28 @@ function drawNeighborhood(n) {
     noStroke();
     circle(n.center.x, n.center.y, 8 / zoomLevel);
     
-    // Draw inner neighborhood if it exists
-    if (n.innerPoint) {
+    // Draw inner neighborhoods for each inner point
+    for (let innerPoint of n.innerPoints) {
         fill(innerColor);
         noStroke();
         
         // Calculate radius to edge of outer neighborhood
-        let distToCenter = dist(n.center.x, n.center.y, n.innerPoint.x, n.innerPoint.y);
+        let distToCenter = dist(n.center.x, n.center.y, innerPoint.x, innerPoint.y);
         let innerRadius = n.radius - distToCenter; // Goes right to the edge
         
         if (innerRadius > 0) {
-            circle(n.innerPoint.x, n.innerPoint.y, innerRadius * 2);
+            circle(innerPoint.x, innerPoint.y, innerRadius * 2);
             
             // Draw dashed border for inner neighborhood
             noFill();
             stroke(axisColor);
             strokeWeight(1.5 / zoomLevel); // Scale stroke weight with zoom
-            dashedCircle(n.innerPoint.x, n.innerPoint.y, innerRadius * 2);
+            dashedCircle(innerPoint.x, innerPoint.y, innerRadius * 2);
             
             // Draw inner point
             fill(axisColor);
             noStroke();
-            circle(n.innerPoint.x, n.innerPoint.y, 6 / zoomLevel);
+            circle(innerPoint.x, innerPoint.y, 6 / zoomLevel);
         }
     }
 }
@@ -265,13 +265,13 @@ function mousePressed() {
     if (state === 'waiting') {
         dragStart = worldPos;
         state = 'dragging_outer';
-    } else if (state === 'waiting_inner') {
-        // Check if click is inside the last neighborhood
-        let lastN = neighborhoods[neighborhoods.length - 1];
-        let d = dist(worldPos.x, worldPos.y, lastN.center.x, lastN.center.y);
+    } else if (state === 'waiting_inner' || state === 'complete') {
+        // Check if click is inside the original neighborhood
+        let outerN = neighborhoods[neighborhoods.length - 1];
+        let d = dist(worldPos.x, worldPos.y, outerN.center.x, outerN.center.y);
         
-        if (d < lastN.radius) {
-            lastN.innerPoint = worldPos;
+        if (d < outerN.radius) {
+            outerN.innerPoints.push(worldPos);
             state = 'complete';
         }
     }
@@ -291,7 +291,7 @@ function mouseReleased() {
             neighborhoods.push({
                 center: dragStart,
                 radius: radius,
-                innerPoint: null
+                innerPoints: []
             });
             state = 'waiting_inner';
         } else {
@@ -326,10 +326,11 @@ function resetDemo() {
 }
 
 function toggleZoom() {
-    if (neighborhoods.length > 0 && neighborhoods[neighborhoods.length - 1].innerPoint) {
+    if (neighborhoods.length > 0 && neighborhoods[neighborhoods.length - 1].innerPoints.length > 0) {
         if (Math.abs(zoomLevel - 1) < 0.1) {
             // Only use button zoom if we're at default zoom
-            zoomCenter = neighborhoods[neighborhoods.length - 1].innerPoint;
+            let lastInnerPoint = neighborhoods[neighborhoods.length - 1].innerPoints[neighborhoods[neighborhoods.length - 1].innerPoints.length - 1];
+            zoomCenter = lastInnerPoint;
             zoomLevel = 3;
             isZoomed = true;
         } else {
@@ -355,7 +356,7 @@ function updateInstruction() {
             instruction.textContent = 'Click inside the neighborhood to show it contains interior points.';
             break;
         case 'complete':
-            instruction.textContent = 'The inner neighborhood shows this point is interior. Every point in a neighborhood is interior, so neighborhoods are open!';
+            instruction.textContent = 'Click more points inside the neighborhood to show they are all interior points. Every point in a neighborhood is interior, so neighborhoods are open!';
             break;
     }
 }
