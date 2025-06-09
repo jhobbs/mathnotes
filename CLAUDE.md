@@ -61,6 +61,18 @@ python3 scripts/check_redirects.py --fix
 
 # Move files safely with automatic redirect handling
 ./scripts/move_file.sh old/path.md new/path.md
+
+# Check for broken internal links
+python3 scripts/link_checker.py
+
+# Monitor deployment status
+./scripts/monitor_deployment.sh
+
+# Check if deployment is ready
+./scripts/check_deployment.sh
+
+# Scale Fly.io regions
+./scripts/scale_regions.sh
 ```
 
 ## Architecture
@@ -77,6 +89,7 @@ python3 scripts/check_redirects.py --fix
    - Jekyll-style `{% include_relative %}` tags are converted to iframes
    - Math expressions ($...$, $$...$$) are preserved for MathJax rendering
    - Frontmatter is parsed but layout field is ignored
+   - Wiki-style internal links: `[[slug]]` or `[[text|slug]]` for resilient cross-references
 
 2. **Dark Mode Support**:
    - CSS variables in base template adapt to system preference
@@ -87,13 +100,14 @@ python3 scripts/check_redirects.py --fix
    - `get_all_content_for_section()` recursively finds all .md files
    - Supports arbitrary directory nesting (e.g., differential equations/ordinary differential equations/chapter 01/)
    - Files and subdirectories are sorted alphabetically
+   - Slug-based URL system with automatic slug generation from titles
 
 ### Interactive Demonstrations
 Located in various subject directories:
-- **cellular/**: Conway's Game of Life and Elementary Cellular Automata
-- **ode/**: Pursuit curves (turntable.html), dilution calculator, pendulum simulation
-- **physics/**: Electric field visualization
-- **graphics/**: Projection demonstrations
+- **cellular automata/**: Conway's Game of Life (gol.py) and Elementary Cellular Automata (cellular.html, elementary.html)
+- **differential equations/ordinary differential equations/**: Pursuit curves (turntable.html), dilution calculator, pendulum simulation
+- **physics/**: Electric field visualization (electric-field.html)
+- **graphics/**: Projection demonstrations (projection.html)
 
 All demos should include the dark mode CSS/JS for proper theme support.
 
@@ -152,6 +166,20 @@ These commands and operations have been explicitly allowed by the user and shoul
    - Creating deployment monitoring scripts
 
 Note: Any command or operation the user explicitly tells Claude to remember should be added to this list.
+
+## Deployment Process
+
+The application uses GitHub Actions for CI/CD:
+
+1. **Workflow Trigger**: Push to main branch
+2. **Build Process**: 
+   - Docker image built with version tag from git
+   - Image pushed to GitHub Container Registry (ghcr.io)
+3. **Deployment**:
+   - Fly.io deployment triggered via GitHub Actions
+   - Multi-region deployment with rolling updates
+   - Auto-scaling configured (min 0 machines)
+4. **Monitoring**: Use `./scripts/monitor_deployment.sh` to track deployment progress
 
 ## Security Implementation
 
