@@ -10,7 +10,7 @@ description: Delta-epsilon definition of limits for complex functions, continuit
 
 # Limits of Complex Functions
 
-See first the [Limits notes for two dimensional functions](../calculus/limits-of-a-function.html).
+See first the [[Limits notes for two dimensional functions|real analysis/limits-of-a-function]].
 
 ## Delta Epsilon Definition
 

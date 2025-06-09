@@ -12,7 +12,7 @@ description: Complex-valued functions, geometric transformations, bilinear mappi
 
 A complex-valued function $f$ of a complex variable $z$ is a rule that assigns a complex number $f(z)$ to each complex number $z$ in a set $S$.
 
-The set of complex numbers on which a function operates is called the **domain of definition.**. It can be a domain in the sense described in [Regions of the Complex Plane](module%2002%20-%20regions%20of%20the%20complex%20plane), but it doesn't have to be. If the domain of definition isn't explicitly specified, it is assumed to be the entire complex plane.
+The set of complex numbers on which a function operates is called the **domain of definition.**. It can be a domain in the sense described in [[Regions of the Complex Plane|complex analysis/regions-of-the-complex-plane]], but it doesn't have to be. If the domain of definition isn't explicitly specified, it is assumed to be the entire complex plane.
 
 We often use the format
 

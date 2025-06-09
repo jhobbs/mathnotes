@@ -12,7 +12,7 @@ title: Solution of a Linear Differential Equation by Means of the Partial Fracti
 
 ## Partial Fraction Expansion Theorem
 
-This chapter uses partial fraction expansion (aka partial fraction decomposition) from algebra. This is the same PFD used to pull integrals apart into simpler ones. It is covered in [my notes on Partial Fraction Decomposition](/mathnotes/algebra/partial-fraction-decomposition) and I won't go into it again here.
+This chapter uses partial fraction expansion (aka partial fraction decomposition) from algebra. This is the same PFD used to pull integrals apart into simpler ones. It is covered in [[my notes on Partial Fraction Decomposition|algebra/partial-fraction-decomposition]] and I won't go into it again here.
 
 ## First Method of Solving a Linear Equation by Means of the Partial Fraction Expansion of Inverse Operators
 

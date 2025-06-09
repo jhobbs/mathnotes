@@ -8,7 +8,7 @@ description: Line integrals in the complex plane, parameterization methods, prop
 
 # Contour Integrals
 
-A contour integral is essentially a [line integral](../calculus/line-integrals.html) in the complex plane.
+A contour integral is essentially a [[line integral|calculus/arc-length-and-line-integrals]] in the complex plane.
 
 Given a smooth curve $C$ in a domain $D$ and $f(z) = u(x,y) + v(x,y)i$ a contiuous function defined along $C$, we say that
 

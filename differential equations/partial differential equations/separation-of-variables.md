@@ -19,7 +19,7 @@ Substituting this form for a solution into the partial differential equation and
 
 ## Solving the Heat Equation
 
-First, see the notes on the [heat equation](/mathnotes/differential%20equations/heat-equation) We have the following mathematical model for the heat flow in a uniform wire without internal sources $(P = 0)$ whose ends are kept at the constant temperature $0^\circ c$:
+First, see the notes on the [[heat equation|differential equations/heat-equation]]. We have the following mathematical model for the heat flow in a uniform wire without internal sources $(P = 0)$ whose ends are kept at the constant temperature $0^\circ c$:
 
 $$ \frac{\partial u}{\partial t}(x,t) = \beta \frac{\partial^2 u}{\partial x^2}(x,t), \quad 0 < x < L, \quad t > 0, \tag{1} $$
 
@@ -71,7 +71,7 @@ where $\lambda$ can be any constant.
 
 Notice that the function $X(x) \equiv 0$ is a soluton of (7) for every $\lambda$. Depending on the choice of $\lambda$, this may be the only solution to the boundary value problem. Thus, to find a non-trival solution $u(x,t) = X(x)T(t)$, we must first determine those values of $\lambda$ for which the boundary value problem has nontrivial solutions. These solutions are called the **eigenfunctions** of the problem; the **eigenvalues** are the special values of $\lambda$.
 
-To solve the equation in (7), we note that it has constant coefficients and follow [the method outlined for linear differential equations with constant coefficients](chapter%2004%20-%20linear%20differential%20equations%20of%20order%20greater%20than%20one/lesson%2020%20-%20solution%20of%20the%20homogeneous%20linear%20differential%20equation%20of%20order%20n%20with%20constant%20coefficients.html), and then solve for the constants using the boundary conditions.
+To solve the equation in (7), we note that it has constant coefficients and follow [[the method outlined for linear differential equations with constant coefficients|differential equations/solution-of-the-homogeneous-linear-differential-equation-of-order-n-with-constant-coefficients]], and then solve for the constants using the boundary conditions.
 
 There are three cases:
 

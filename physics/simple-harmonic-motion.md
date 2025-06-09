@@ -6,13 +6,13 @@ description: Sinusoidal oscillatory motion analyzed through differential equatio
 
 # Simple Harmonic Motion
 
-Note: I explore this topic in more mathematical detail in my Ordinary Differential Equations notes on [Undamped Motion](../ode/chapter 06 - problems leading to linear equations of order two/lesson 28 - undamped motion.html).
+Note: I explore this topic in more mathematical detail in my Ordinary Differential Equations notes on [[Undamped Motion|differential equations/undamped-motion]].
 
 Simple Harmonic Motion is sinusoidal periodic motion that repeats perfectly over and over. It is a simplified model of motion of objects like a box bouncing on a spring or a simple pendulum, ignoring dampening forces such as friction and making some other simplifying assumptions.
 
 Some basic formulas of a particle exhibiting simple harmonic motion follow.
 
-Here, $x_m$ is the amplitude of the displacement the particle, $\omega$ is the [angular frequency](/mathnotes/trigonometry/frequency-and-period) of the particle's motion (i.e. $2 \pi f$ where $f$ is the frequency), and $\phi$ is the phase angle of the particle, i.e. the position in the cycle of the particle at $t = 0$. 
+Here, $x_m$ is the amplitude of the displacement the particle, $\omega$ is the [[angular frequency|trigonometry/frequency-and-period]] of the particle's motion (i.e. $2 \pi f$ where $f$ is the frequency), and $\phi$ is the phase angle of the particle, i.e. the position in the cycle of the particle at $t = 0$. 
 
 Displacement: $x = x_m \cos{(\omega t + \phi)}$
 

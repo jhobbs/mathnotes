@@ -39,7 +39,7 @@ $$ \frac{\partial}{\partial x}(g(x,y) + h(x)) = v_x = g'(x,y) + h'(x,y). \tag{c}
 
 From the Cauchy-Riemann equations, $v_x = -u_y$. Comparing $g'(x,y) + h'(x)$ to $-u_y$, we find $h'(x)$ as the missing terms from $g'(x,y)$ in $-u_y$, if any. Integrating these gives the value of $h(x)$, which we can plug into (b) to get $v(x,y)$.
 
-Note that this is the same mechnical procedure we use to [solve first order exact differential equations](../ode/chapter 02 - special types of first order equations/lesson 09 - exact differential equations.html).
+Note that this is the same mechnical procedure we use to [[solve first order exact differential equations|differential equations/exact-differential-equations]].
 
 We can use this to find analytic functions from a harmonic function by using the harmonic conjugates and the harmonic function as the real and imaginary parts of a complex function.
 

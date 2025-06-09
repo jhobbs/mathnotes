@@ -21,7 +21,7 @@ $$ \tag{28.11} \frac{d^2 x}{dt^2} + {\omega_0}^2 x = 0 $$
 
 Where $\omega_0$ is a positive constant and $x$ gives the position of the particle as a function of time $t$.
 
-The solution of $(28.11)$ is (see [Solution of the Homogeneous Linear Differential Equation of Order n with Constant Coefficients](../chapter%2004%20-%20linear%20differential%20equations%20of%20order%20greater%20than%20one/lesson%2020%20-%20solution%20of%20the%20homogeneous%20linear%20differential%20equation%20of%20order%20n%20with%20constant%20coefficients.html)):
+The solution of $(28.11)$ is (see [[Solution of the Homogeneous Linear Differential Equation of Order n with Constant Coefficients|differential equations/solution-of-the-homogeneous-linear-differential-equation-of-order-n-with-constant-coefficients]]):
 
 $$ \tag{28.12} x = c_1 \cos{\omega_0 t} + c_2 \sin{\omega_0 t} $$
 
@@ -68,7 +68,7 @@ $$ \tag{e} \frac{dx}{dt} = v = -c \omega_0 \sin{(\omega_0 t + \delta)} $$
 
 (*jmh* my notes)
 
-First, review my notes on [Frequency and Period](/mathnotes/trigonometry/frequency-and-period).
+First, review my notes on [[Frequency and Period|trigonometry/frequency-and-period]].
 
 We can reuse $(d)$ and $(e)$ above to find the description of motion for any simple harmonic motion. Here are some important parameters from it (we'll use a particle as an example although not all problems will involve particles):
 
