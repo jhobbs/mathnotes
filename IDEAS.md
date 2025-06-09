@@ -12,7 +12,7 @@ This file tracks ideas for future features, enhancements, and demonstrations for
 
 ## Interactive Demonstrations
 
-(Add future demo ideas here)
+- **Reusable Cartesian Plane Library**: Extract the cartesian plane, grid, axes, and zoom functionality from the neighborhood demo into a reusable JavaScript library for other mathematical visualizations
 
 ## Content Ideas
 
