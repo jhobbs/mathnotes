@@ -167,6 +167,13 @@ These commands and operations have been explicitly allowed by the user and shoul
 
 Note: Any command or operation the user explicitly tells Claude to remember should be added to this list.
 
+## Todo and Ideas Management
+
+When the user asks to add something to the todo list or mentions future ideas:
+- Add them to the `IDEAS.md` file in the root directory
+- Organize ideas by category (Features, Interactive Demonstrations, Content Ideas, Technical Improvements)
+- Do not use the TodoWrite tool for long-term project ideas - that's for current session task tracking only
+
 ## Deployment Process
 
 The application uses GitHub Actions for CI/CD:
