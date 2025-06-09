@@ -128,3 +128,5 @@ $$ \begin{aligned} d(p, x) & \leq d(p,q) + d(q, x) \\
 \end{aligned} $$
 
 Therefore, $N_s(q) \subset N_r(p),$ so $q$ is an interior point of $N_r(p),$ and since $q$ was arbitrary, every point of $N_r(p)$ is interior. Hence, $N_r(p)$ is open. $\square$
+
+{% include_relative neighborhood-demo.html %}
