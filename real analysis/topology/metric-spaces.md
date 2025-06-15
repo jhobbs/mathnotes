@@ -152,4 +152,6 @@ Now we deal with the cases where neither $E$ nor $E^c$ are empty.
 
 Now, let $E^c$ be closed. Let $x \in E.$ Since $E^c$ is closed, $x$ is not a limit point of $E^c,$ that is $x$ has some neighborhood that doesn't contain a point in $E^c$ and must therefore be a subset of $E.$ Therefore, $x$ is an interior point of $E,$ and $E$ is open.
 
-Conversely, assume $E$ is open. Let $x$ be a limit point of $E^c.$ Suppose, for the sake of contradiction, that $x \in E.$ Then, since $E$ is open, $x$ is an interior point of $E$ and has some neighborhood that is a subset of $E.$ This is a contradiction, since every neighborhood of $x$ must contain at least one point of $E^c$ to be a limit point of $E^c.$ Therefore, $x$ must be in $E^c,$ and it follows that $E^c$ is closed.
+Conversely, assume $E$ is open. Let $x$ be a limit point of $E^c.$ Suppose, for the sake of contradiction, that $x \in E.$ Then, since $E$ is open, $x$ is an interior point of $E$ and has some neighborhood that is a subset of $E.$ This is a contradiction, since every neighborhood of $x$ must contain at least one point of $E^c$ to be a limit point of $E^c.$ Therefore, $x$ must be in $E^c,$ and it follows that $E^c$ is closed. $\square$
+
+For some intuition, consider $U = [0, 4], E = [0,3].$ Any point $x$ in $E$ has a neighborhood $N_r(x)$ that contains only points in $E$ with as $r < d(x, 3).$ Since 3 must be in $E^c,$ we have $E^c = [3,4],$ which is obviously closed. Here, 3 is the boundary between the two sets - it is a limit point for both sets - and it has to be in one set or the other.
