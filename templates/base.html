@@ -266,6 +266,146 @@
             width: 100%;
             border: none;
         }
+        
+        /* Structured mathematical content styles */
+        .math-block {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            border-left: 3px solid var(--border-color);
+            background-color: var(--code-bg);
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .math-block-header {
+            margin-bottom: 0.75rem;
+            font-weight: bold;
+            color: var(--header-color);
+        }
+        
+        .math-block-type {
+            font-style: normal;
+        }
+        
+        .math-block-title {
+            margin-left: 0.5rem;
+            font-weight: normal;
+            font-style: italic;
+        }
+        
+        .math-block-content {
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+        
+        /* Specific styles for different block types */
+        .math-definition {
+            border-left-color: #0366d6;
+            background-color: rgba(3, 102, 214, 0.05);
+        }
+        
+        .math-theorem {
+            border-left-color: #28a745;
+            background-color: rgba(40, 167, 69, 0.05);
+        }
+        
+        .math-lemma {
+            border-left-color: #17a2b8;
+            background-color: rgba(23, 162, 184, 0.05);
+        }
+        
+        .math-proposition {
+            border-left-color: #6610f2;
+            background-color: rgba(102, 16, 242, 0.05);
+        }
+        
+        .math-corollary {
+            border-left-color: #e83e8c;
+            background-color: rgba(232, 62, 140, 0.05);
+        }
+        
+        .math-proof {
+            border-left-color: #fd7e14;
+            background-color: rgba(253, 126, 20, 0.05);
+            font-style: normal;
+        }
+        
+        .math-proof .math-block-header {
+            font-style: italic;
+            font-weight: normal;
+        }
+        
+        .math-example {
+            border-left-color: #20c997;
+            background-color: rgba(32, 201, 151, 0.05);
+        }
+        
+        .math-remark, .math-note {
+            border-left-color: #6c757d;
+            background-color: rgba(108, 117, 125, 0.05);
+        }
+        
+        .math-intuition {
+            border-left-color: #ffc107;
+            background-color: rgba(255, 193, 7, 0.05);
+        }
+        
+        .math-exercise {
+            border-left-color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.05);
+        }
+        
+        .math-solution {
+            border-left-color: #343a40;
+            background-color: rgba(52, 58, 64, 0.05);
+            margin-left: 2rem;
+        }
+        
+        /* Dark mode adjustments */
+        @media (prefers-color-scheme: dark) {
+            .math-definition {
+                background-color: rgba(88, 166, 255, 0.1);
+            }
+            
+            .math-theorem {
+                background-color: rgba(53, 179, 82, 0.1);
+            }
+            
+            .math-lemma {
+                background-color: rgba(36, 176, 198, 0.1);
+            }
+            
+            .math-proposition {
+                background-color: rgba(134, 77, 217, 0.1);
+            }
+            
+            .math-corollary {
+                background-color: rgba(240, 107, 167, 0.1);
+            }
+            
+            .math-proof {
+                background-color: rgba(255, 146, 64, 0.1);
+            }
+            
+            .math-example {
+                background-color: rgba(64, 214, 176, 0.1);
+            }
+            
+            .math-remark, .math-note {
+                background-color: rgba(139, 148, 158, 0.1);
+            }
+            
+            .math-intuition {
+                background-color: rgba(255, 208, 64, 0.1);
+            }
+            
+            .math-exercise {
+                background-color: rgba(232, 91, 103, 0.1);
+            }
+            
+            .math-solution {
+                background-color: rgba(73, 80, 87, 0.1);
+            }
+        }
     </style>
     
     {% block extra_head %}{% endblock %}

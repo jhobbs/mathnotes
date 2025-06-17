@@ -10,6 +10,7 @@ import frontmatter
 import yaml
 import unicodedata
 from urllib.parse import quote, unquote
+from structured_math import StructuredMathParser, process_structured_math_content
 
 app = Flask(__name__)
 
@@ -260,6 +261,10 @@ def render_markdown_file(filepath):
             
             content = re.sub(r'\[\[([^\]]+)\]\]', replace_wiki_link, content)
             
+            # Process structured mathematical content - first pass
+            math_parser = StructuredMathParser()
+            content, block_markers = math_parser.parse(content)
+            
             # Protect math delimiters from markdown processing
             # First handle display math ($$...$$), then inline math ($...$)
             
@@ -300,6 +305,10 @@ def render_markdown_file(filepath):
             # Fix escaped asterisks and tildes that should be rendered normally
             html_content = html_content.replace(r'\*', '*')
             html_content = html_content.replace(r'\~', '~')
+            
+            # Process structured mathematical content - second pass
+            if block_markers:
+                html_content = process_structured_math_content(html_content, block_markers, md)
             
             # Get canonical URL for this file
             file_path_normalized = filepath.replace('\\', '/')

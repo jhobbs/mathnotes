@@ -238,3 +238,6 @@ upgrade-insecure-requests
 - No inline event handlers (onclick, onload, etc.) anywhere
 - Use proper event listeners with `addEventListener` instead
 - All security headers are automatically applied via Flask middleware
+```
+
+When testing: you have to use docker to test
