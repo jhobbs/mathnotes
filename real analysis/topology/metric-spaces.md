@@ -30,13 +30,13 @@ We can denote a metric space on set $X$ with metric $d$ as the tuple $(X, d).$
 
 * Let $p, q \in R^n, p \neq q.$ Then $|p - q| < 0,$ so $d(p,q) > 0.$
 
-* Let $p \in R^n.$ $p - p = 0,$ so $|p - p| = 0,$ so $d(p,p) = 0.$
+* Let $p \in R^n.$ Now, $p - p = 0,$ so $|p - p| = 0,$ so $d(p,p) = 0.$
 
-* Let $p, q \in R^n.$ $|p - q| = |q - p|, so $d(p,q) = d(q, p).$
+* Let $p, q \in R^n.$ $|p - q| = |q - p|,$ so $d(p,q) = d(q, p).$
 
 * Let $p, q, r$ \in $R^n.$ $|p - q| \leq |p - r| + |r - p|,$ so $d(p,q) \leq d(p,r) + d(r, p).$
 
-Therefore, $d$ is a metric on $R^n$ and $(R^n, d)$ is a metric space. $\square.$
+Therefore, $d$ is a metric on $R^n$ and $(R^n, d)$ is a metric space. $\square$
 
 Note that $R^n$ by itself is just a vector space, but together with a norm forms becomes a metric space. The proof above relies on the properties of norms without going into detail - norms are similar to distance metrics but they are even stricter because they require homogeneity - $a|x| = |ax|.$
 
@@ -75,9 +75,9 @@ whenever $\vec{x}, \vec{y} \in E,$ and $0 < \lambda < 1.$
 
 In geometric terms, this means a set is convex if we can connect any two points in the set with a line segment whose points are all within the set.
 
-*Theorem*: All balls are convex.
+*Theorem:* All balls are convex.
 
-*Proof*: Let $\vec{y}, \vec{z}$ be points in a ball with center $\vec{x}$ and radius $r$. Then, by definition, $|\vec{y} - \vec{x}| < r,$ and $|\vec{z} - \vec{x}| < r.$ Suppose $\vec{p} \in \{ \lambda \vec{y} + (1 - \lambda)\vec{z} | 0 < \lambda < 1 \}.$ We will show that $|\vec{x} - \vec{p}| < r.$
+*Proof:* Let $\vec{y}, \vec{z}$ be points in a ball with center $\vec{x}$ and radius $r$. Then, by definition, $|\vec{y} - \vec{x}| < r,$ and $|\vec{z} - \vec{x}| < r.$ Suppose $\vec{p} \in \{ \lambda \vec{y} + (1 - \lambda)\vec{z} | 0 < \lambda < 1 \}.$ We will show that $|\vec{x} - \vec{p}| < r.$
 
 $$ \begin{aligned}
   
@@ -118,9 +118,9 @@ $E$ is **bounded** if there is a real number $M$ and a point $q \in X$ such that
 
 $E$ is **dense** in $X$ if every point of $X$ is a limit point of $E,$ or a point of $E$ (or both.)
 
-*Theorem*: Every neighborhood is an open set.
+*Theorem:* Every neighborhood is an open set.
 
-*Proof*: Suppose $N_r(p)$ is a neighborhood in $X.$ Let $q \in N_r(p).$ We need to show that $q$ is an interior point of $N_r(p).$ Let $s = r - d(p, q);$ because $d(p, q) < r$, we have $s > 0.$ Now let $N_s(q)$ be the neighborhood of radius $s$ around $q.$ We need to show that $N_s(q) \subset N_r(p).$ Suppose $x \in N_s(q).$ First note that because $s = r - d(p, q),$ $d(p,q) = r - s.$ Now,
+*Proof:* Suppose $N_r(p)$ is a neighborhood in $X.$ Let $q \in N_r(p).$ We need to show that $q$ is an interior point of $N_r(p).$ Let $s = r - d(p, q);$ because $d(p, q) < r$, we have $s > 0.$ Now let $N_s(q)$ be the neighborhood of radius $s$ around $q.$ We need to show that $N_s(q) \subset N_r(p).$ Suppose $x \in N_s(q).$ First note that because $s = r - d(p, q),$ $d(p,q) = r - s.$ Now,
 
 $$ \begin{aligned} d(p, x) & \leq d(p,q) + d(q, x) \\
                            & < r - s + s \\
@@ -132,19 +132,19 @@ Therefore, $N_s(q) \subset N_r(p),$ so $q$ is an interior point of $N_r(p),$ and
 {% include_relative neighborhood-demo.html %}
 
 
-*Theorem*: If $p$ is a limit point of a set $E,$ then every neighborhood of $p$ contains infinitely many points of $E.$
+*Theorem:* If $p$ is a limit point of a set $E,$ then every neighborhood of $p$ contains infinitely many points of $E.$
 
-*Proof*: Let $p$ be a limit point of $E$ and let $N_r(p)$ be a neighborhood of $p.$ Suppose that $N_r(p)$ contains only finitely many points of $E.$ Since we have finitely many points, we can inspect each and find the minimum distance from $p$ to any point in $N_r(p) \bigcup E\setminus\{p\}$ and call it $s.$ Now, we can make a new neighborhood $N_s(p),$ which contains none of the points in $N_r(p) \bigcup E\setminus\{p\}$ since they're all at least $s$ away from $p,$ by construction. But then, $p$ is not a limit point of $E,$ since it has a neighborhood that contains no points of $E\setminus\{p\}$ Therefore, we have a contradiction, and $N_r(p)$ must therefore contain infinitely many points. $\square$
+*Proof:* Let $p$ be a limit point of $E$ and let $N_r(p)$ be a neighborhood of $p.$ Suppose that $N_r(p)$ contains only finitely many points of $E.$ Since we have finitely many points, we can inspect each and find the minimum distance from $p$ to any point in $N_r(p) \bigcup E\setminus\{p\}$ and call it $s.$ Now, we can make a new neighborhood $N_s(p),$ which contains none of the points in $N_r(p) \bigcup E\setminus\{p\}$ since they're all at least $s$ away from $p,$ by construction. But then, $p$ is not a limit point of $E,$ since it has a neighborhood that contains no points of $E\setminus\{p\}$ Therefore, we have a contradiction, and $N_r(p)$ must therefore contain infinitely many points. $\square$
 
 From this, it's evident that a finite set of points has no limit points.
 
-*Theorem*: Let ${E_\alpha}$ be a collection of sets. Then
+*Theorem:* Let ${E_\alpha}$ be a collection of sets. Then
 
 $$ \left ( \bigcup_{\alpha} E_\alpha \right )^c = \bigcap_{\alpha} \left ( E_{\alpha}^c \right ). $$
 
-Suppose $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$ Then, $x \notin \bigcup_{\alpha} E_\alpha,$ so $x$ is not in any $E_\alpha.$ Therefore, for every $E_\alpha,$ $x \in E_\alpha^c,$ and thus $x \in \bigcap_{\alpha} \left ( E_{\alpha}^c \right ).$ Conversely, suppose $x \in \bigcap_{\alpha} \left ( E_{\alpha}^c \right ).$ Then, $x$ is in every $E_\alpha^c,$ that is, $x$ is not in any $E_\alpha.$ Therefore, $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c. ~ \square$
+*Proof:* Suppose $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$ Then, $x \notin \bigcup_{\alpha} E_\alpha,$ so $x$ is not in any $E_\alpha.$ Therefore, for every $E_\alpha,$ $x \in E_\alpha^c,$ and thus $x \in \bigcap_{\alpha} \left ( E_{\alpha}^c \right ).$ Conversely, suppose $x \in \bigcap_{\alpha} \left ( E_{\alpha}^c \right ).$ Then, $x$ is in every $E_\alpha^c,$ that is, $x$ is not in any $E_\alpha.$ Therefore, $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c. ~ \square$
 
-*Theorem*: A set E is open iff its complement is closed.
+*Theorem:* A set E is open iff its complement is closed.
 
 *Proof:* First, consider the case that $E^c$ is empty, and therefore open. If $E^c$ has no limit points, it is vaccuously closed. Suppose $E^c$ has a limit point $x.$ Since $E$ is empty, $x$ must be in $E^c,$ therefore $x$ is closed. Now, consider the case that $E^c$ is empty, and therefore closed. If $E$ is empty, it is open, and the theorem is satisfied. If $E$ is not empty, a point $x$ in $E$ has only points in $E$ in any neighborhood, since all points are in $E,$ and therefore $E$ is open.
 
