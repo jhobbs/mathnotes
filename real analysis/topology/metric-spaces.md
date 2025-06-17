@@ -155,3 +155,25 @@ Now, let $E^c$ be closed. Let $x \in E.$ Since $E^c$ is closed, $x$ is not a lim
 Conversely, assume $E$ is open. Let $x$ be a limit point of $E^c.$ Suppose, for the sake of contradiction, that $x \in E.$ Then, since $E$ is open, $x$ is an interior point of $E$ and has some neighborhood that is a subset of $E.$ This is a contradiction, since every neighborhood of $x$ must contain at least one point of $E^c$ to be a limit point of $E^c.$ Therefore, $x$ must be in $E^c,$ and it follows that $E^c$ is closed. $\square$
 
 For some intuition, consider $U = [0, 4], E = [0,3].$ Any point $x$ in $E$ has a neighborhood $N_r(x)$ that contains only points in $E$ with as $r < d(x, 3),$ so it is open. Since 3 must be in $E^c,$ we have $E^c = [3,4],$ which is obviously closed. Here, 3 is the boundary between the two sets - it is a limit point for both sets - and it has to be in one set or the other. So, $E$ is open, but not closed, since it doesn't contain one of its limit points, 3. $E^c$ is closed because if $x$ is a limit point of $E^c,$ it would be a contradiction for it to be in $E,$ which is open and only contains interior points of $E.$ $E^c$ is also not open, because 3 has no neighborhoods that contain only points of $E^c.$
+
+*Theorem:*
+
+(a) - For any collection $\{G_a\}$ of open sets, $\bigcup_{\alpha} G_\alpha$ is open.
+
+(b) - For any collection $\{F_a\}$ of closed sets, $\bigcap_{\alpha} F_\alpha$ is closed.
+
+(c) - For any finite collection $G_1,\dots,G_n$ of open sets, $\bigcap_{i=1}^n G_i$ is open.
+
+(d) - For any finite collection $F_1,\dots,F_n$ of closed sets, $\bigcup_{i=1}^n F_i$ is closed.
+
+*Proof:* Let $G = \bigcup_{\alpha} G_\alpha, x \in G.$ Then $x$ is in some $G_\alpha$ for some $\alpha,$ and is an interior point of that $G_\alpha,$ since $G_\alpha$ is open. Therefore, $x$ has some neighborhood that is a subset of $G_\alpha$ and therefore of $G,$ so $x$ is an interior point of $G$ and $G$ is open - this shows (a).
+
+Note that
+
+$$ (\bigcap_{\alpha} F_\alpha)^c = \bigcup_{\alpha} F_\alpha^c, \tag{e} $$
+
+and by (a) above, (e) is open. Then its complement, $\bigcap{\alpha} F_\alpha$ is closed, and we've shown (b).
+
+Now, let $x$ be in $G = \bigcap_{i=1}^n G_i,$ so $x$ is in every $G_i,$ and has a neighborhood $N_i$ in every $G_i$ with radius $r_i > 0.$ Let $r$ be $\min\{r_1, \dots, r_n\}.$ Then, $x$ has a neighborhood $N$ of radius $r$ in every $G_i,$ and thus in $G,$ so $x$ is an interior point of $G,$ and we've shown (c).
+
+ Now, $(\bigcup_{i=1}^n F_i)^c = \bigcap_{i=1}^n F_i^c$ is open by (c), so its complement, $\bigcup_{i=1}^n F_i$ is closed, and we've shown (d). $\square.$
