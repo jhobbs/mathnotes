@@ -1,0 +1,68 @@
+"""
+Mathnotes - A Flask application for serving mathematical notes with interactive demonstrations.
+
+This package provides a web interface for mathematics content with features like:
+- Structured mathematical content (theorems, definitions, proofs)
+- Interactive HTML demonstrations
+- Dark mode support
+- LaTeX math rendering
+- Cross-referenced content
+"""
+
+__version__ = "1.0.0"
+
+from flask import Flask
+from .config import SITE_TITLE, SITE_DESCRIPTION
+from .security import generate_nonce, add_security_headers
+from .context_processors import inject_year, inject_nonce, inject_version
+from .url_mapper import URLMapper
+from .markdown_processor import MarkdownProcessor
+from .routes import register_routes
+
+
+def create_app(config=None):
+    """
+    Flask application factory.
+    
+    Args:
+        config: Optional configuration dictionary
+        
+    Returns:
+        Configured Flask application instance
+    """
+    import os
+    # Get the parent directory of the package for template/static file paths
+    package_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(package_dir)
+    
+    app = Flask(__name__, 
+                template_folder=os.path.join(parent_dir, 'templates'),
+                static_folder=os.path.join(parent_dir, 'static'))
+    
+    # Apply any custom configuration
+    if config:
+        app.config.update(config)
+    
+    # Site configuration
+    app.config['SITE_TITLE'] = SITE_TITLE
+    app.config['SITE_DESCRIPTION'] = SITE_DESCRIPTION
+    
+    # Initialize components
+    url_mapper = URLMapper()
+    url_mapper.build_url_mappings()
+    
+    markdown_processor = MarkdownProcessor(url_mapper)
+    
+    # Register middleware
+    app.before_request(generate_nonce)
+    app.after_request(add_security_headers)
+    
+    # Register context processors
+    app.context_processor(inject_year)
+    app.context_processor(inject_nonce)
+    app.context_processor(inject_version)
+    
+    # Register routes
+    register_routes(app, url_mapper, markdown_processor)
+    
+    return app

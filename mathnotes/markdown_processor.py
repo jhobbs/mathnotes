@@ -7,8 +7,8 @@ import re
 from pathlib import Path
 from typing import Dict, Optional
 import frontmatter
-from config import create_markdown_instance
-from structured_math import StructuredMathParser, process_structured_math_content
+from .config import create_markdown_instance
+from .structured_math import StructuredMathParser, process_structured_math_content
 
 class MarkdownProcessor:
     """Handles markdown processing with Jekyll includes, wiki links, and structured math."""

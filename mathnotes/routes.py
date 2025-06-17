@@ -4,8 +4,8 @@ Flask routes for the Mathnotes application.
 
 from pathlib import Path
 from flask import render_template, send_from_directory, abort, redirect, make_response
-from config import CONTENT_DIRS, BASE_URL
-from file_utils import get_directory_contents, get_all_content_for_section
+from .config import CONTENT_DIRS, BASE_URL
+from .file_utils import get_directory_contents, get_all_content_for_section
 
 def register_routes(app, url_mapper, markdown_processor):
     """Register all Flask routes with the application."""

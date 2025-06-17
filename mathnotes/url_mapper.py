@@ -5,8 +5,8 @@ URL mapping and routing utilities for the Mathnotes application.
 from pathlib import Path
 import frontmatter
 from typing import Dict
-from utils import slugify
-from config import CONTENT_DIRS
+from .utils import slugify
+from .config import CONTENT_DIRS
 
 class URLMapper:
     """Handles URL mappings and redirects for the application."""

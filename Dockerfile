@@ -30,5 +30,5 @@ COPY . .
 # Expose port
 EXPOSE 5000
 
-# Run the application with gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "app:app"]
+# Run the application with gunicorn using the WSGI entry point
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "wsgi:application"]
