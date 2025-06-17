@@ -27,3 +27,24 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Ideally preserves markdown compatibility
   - Allows gradual conversion of existing content
   - Potential approaches: custom HTML-like tags, markdown extensions with explicit delimiters, YAML frontmatter blocks, or custom shortcodes
+
+- **Attribution/Citation Blocks**: Create structured blocks for referencing content from other authors
+  - Explicit citation formatting with proper attribution
+  - Support for different citation styles
+  - Clear visual distinction from original content
+  - Link to original sources when possible
+  - Track and index all citations across the site
+
+- **Structured Definitions Index**: Build an indexable system for mathematical definitions
+  - Separate from theorems but similar structured approach
+  - Searchable definition index across all content
+  - Cross-references between definitions and their usage
+  - Consistent formatting and numbering
+  - Ability to link to definitions from other pages
+
+- **Google Structured Data Integration**: Implement Schema.org markup for mathematical content
+  - Add JSON-LD structured data for theorems, definitions, and proofs
+  - Use MathObject, Article, or EducationalResource schemas
+  - Improve SEO and discoverability in search results
+  - Enable rich snippets for mathematical content
+  - Consider using CreativeWork for cited/attributed content
