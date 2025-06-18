@@ -31,9 +31,8 @@ We can denote a metric space on set $X$ with metric $d$ as the tuple $(X, d).$
 
 :::theorem
 $(\mathbb{R}^n, d : \mathbb{R}^n \to \mathbb{R} = | \vec{x} - \vec{y} |)$ is a metric space for any $n \geq 0.$
-:::
 
-:::proof
+::::proof
 First, for $n = 0$, $\mathbb{R}^0$ is just the empty set, so the metric axioms are vacuously satisfied for all points in the set. Now, for $n \geq 1,$
 
 * Let $p, q \in R^n, p \neq q.$ Then $|p - q| < 0,$ so $d(p,q) > 0.$
@@ -45,6 +44,7 @@ First, for $n = 0$, $\mathbb{R}^0$ is just the empty set, so the metric axioms a
 * Let $p, q, r$ \in $R^n.$ $|p - q| \leq |p - r| + |r - p|,$ so $d(p,q) \leq d(p,r) + d(r, p).$
 
 Therefore, $d$ is a metric on $R^n$ and $(R^n, d)$ is a metric space.
+::::
 :::
 
 
@@ -111,9 +111,8 @@ In geometric terms, this means a set is convex if we can connect any two points 
 
 :::theorem
 All balls are convex.
-:::
 
-:::proof
+::::proof
 Let $\vec{y}, \vec{z}$ be points in a ball with center $\vec{x}$ and radius $r$. Then, by definition, $|\vec{y} - \vec{x}| < r,$ and $|\vec{z} - \vec{x}| < r.$ Suppose $\vec{p} \in \{ \lambda \vec{y} + (1 - \lambda)\vec{z} | 0 < \lambda < 1 \}.$ We will show that $|\vec{x} - \vec{p}| < r.$
 
 $$ \begin{aligned}
@@ -128,11 +127,13 @@ $$ \begin{aligned}
 \end{aligned} $$
 
 So, $\vec{p}$ is within our ball and therefore all balls are convex.
+::::
+
+::::note
+Similar proofs can be used to show that closed balls and $k$-cells are also convex.
+::::
 :::
 
-:::note
-Similar proofs can be used to show that closed balls and $k$-cells are also convex.
-:::
 
 ## Elements and Subsets of a Metric Space
 
@@ -182,10 +183,8 @@ $E$ is **dense** in $X$ if every point of $X$ is a limit point of $E,$ or a poin
 
 :::theorem
 Every neighborhood is an open set.
-:::
 
-
-:::proof
+::::proof
 Suppose $N_r(p)$ is a neighborhood in $X.$ Let $q \in N_r(p).$ We need to show that $q$ is an interior point of $N_r(p).$ Let $s = r - d(p, q);$ because $d(p, q) < r$, we have $s > 0.$ Now let $N_s(q)$ be the neighborhood of radius $s$ around $q.$ We need to show that $N_s(q) \subset N_r(p).$ Suppose $x \in N_s(q).$ First note that because $s = r - d(p, q),$ $d(p,q) = r - s.$ Now,
 
 $$ \begin{aligned} d(p, x) & \leq d(p,q) + d(q, x) \\
@@ -194,6 +193,7 @@ $$ \begin{aligned} d(p, x) & \leq d(p,q) + d(q, x) \\
 \end{aligned} $$
 
 Therefore, $N_s(q) \subset N_r(p),$ so $q$ is an interior point of $N_r(p),$ and since $q$ was arbitrary, every point of $N_r(p)$ is interior. Hence, $N_r(p)$ is open.
+::::
 :::
 
 {% include_relative neighborhood-demo.html %}
@@ -201,31 +201,30 @@ Therefore, $N_s(q) \subset N_r(p),$ so $q$ is an interior point of $N_r(p),$ and
 
 :::theorem
 If $p$ is a limit point of a set $E,$ then every neighborhood of $p$ contains infinitely many points of $E.$
-:::
 
-:::proof
+::::proof
 Let $p$ be a limit point of $E$ and let $N_r(p)$ be a neighborhood of $p.$ Suppose that $N_r(p)$ contains only finitely many points of $E.$ Since we have finitely many points, we can inspect each and find the minimum distance from $p$ to any point in $N_r(p) \bigcup E\setminus\{p\}$ and call it $s.$ Now, we can make a new neighborhood $N_s(p),$ which contains none of the points in $N_r(p) \bigcup E\setminus\{p\}$ since they're all at least $s$ away from $p,$ by construction. But then, $p$ is not a limit point of $E,$ since it has a neighborhood that contains no points of $E\setminus\{p\}$ Therefore, we have a contradiction, and $N_r(p)$ must therefore contain infinitely many points.
-:::
+::::
 
-:::corollary
+::::corollary
 From this, it's evident that a finite set of points has no limit points.
+::::
 :::
 
 :::theorem
 Let ${E_\alpha}$ be a collection of sets. Then
 
 $$ \left ( \bigcup_{\alpha} E_\alpha \right )^c = \bigcap_{\alpha} \left ( E_{\alpha}^c \right ). $$
-:::
 
-:::proof
+::::proof
 Suppose $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$ Then, $x \notin \bigcup_{\alpha} E_\alpha,$ so $x$ is not in any $E_\alpha.$ Therefore, for every $E_\alpha,$ $x \in E_\alpha^c,$ and thus $x \in \bigcap_{\alpha} \left ( E_{\alpha}^c \right ).$ Conversely, suppose $x \in \bigcap_{\alpha} \left ( E_{\alpha}^c \right ).$ Then, $x$ is in every $E_\alpha^c,$ that is, $x$ is not in any $E_\alpha.$ Therefore, $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$
+::::
 :::
 
 :::theorem
 A set E is open iff its complement is closed.
-:::
 
-:::proof
+::::proof
 First, consider the case that $E^c$ is empty, and therefore open. If $E^c$ has no limit points, it is vaccuously closed. Suppose $E^c$ has a limit point $x.$ Since $E$ is empty, $x$ must be in $E^c,$ therefore $x$ is closed. Now, consider the case that $E^c$ is empty, and therefore closed. If $E$ is empty, it is open, and the theorem is satisfied. If $E$ is not empty, a point $x$ in $E$ has only points in $E$ in any neighborhood, since all points are in $E,$ and therefore $E$ is open.
 
 Now we deal with the cases where neither $E$ nor $E^c$ are empty.
@@ -233,6 +232,7 @@ Now we deal with the cases where neither $E$ nor $E^c$ are empty.
 Now, let $E^c$ be closed. Let $x \in E.$ Since $E^c$ is closed, $x$ is not a limit point of $E^c,$ that is $x$ has some neighborhood that doesn't contain a point in $E^c$ and must therefore be a subset of $E.$ Therefore, $x$ is an interior point of $E,$ and $E$ is open.
 
 Conversely, assume $E$ is open. Let $x$ be a limit point of $E^c.$ Suppose, for the sake of contradiction, that $x \in E.$ Then, since $E$ is open, $x$ is an interior point of $E$ and has some neighborhood that is a subset of $E.$ This is a contradiction, since every neighborhood of $x$ must contain at least one point of $E^c$ to be a limit point of $E^c.$ Therefore, $x$ must be in $E^c,$ and it follows that $E^c$ is closed.
+::::
 :::
 
 :::remark
@@ -247,9 +247,8 @@ For some intuition, consider $U = [0, 4], E = [0,3].$ Any point $x$ in $E$ has a
 (c) - For any finite collection $G_1,\dots,G_n$ of open sets, $\bigcap_{i=1}^n G_i$ is open.
 
 (d) - For any finite collection $F_1,\dots,F_n$ of closed sets, $\bigcup_{i=1}^n F_i$ is closed.
-:::
 
-:::proof
+::::proof
 Let $G = \bigcup_{\alpha} G_\alpha, x \in G.$ Then $x$ is in some $G_\alpha$ for some $\alpha,$ and is an interior point of that $G_\alpha,$ since $G_\alpha$ is open. Therefore, $x$ has some neighborhood that is a subset of $G_\alpha$ and therefore of $G,$ so $x$ is an interior point of $G$ and $G$ is open - this shows (a).
 
 Note that
@@ -261,11 +260,12 @@ and by (a) above, (e) is open. Then its complement, $\bigcap{\alpha} F_\alpha$ i
 Now, let $x$ be in $G = \bigcap_{i=1}^n G_i,$ so $x$ is in every $G_i,$ and has a neighborhood $N_i$ in every $G_i$ with radius $r_i > 0.$ Let $r$ be $\min\{r_1, \dots, r_n\}.$ Then, $x$ has a neighborhood $N$ of radius $r$ in every $G_i,$ and thus in $G,$ so $x$ is an interior point of $G,$ and we've shown (c).
 
  Now, $(\bigcup_{i=1}^n F_i)^c = \bigcap_{i=1}^n F_i^c$ is open by (c), so its complement, $\bigcup_{i=1}^n F_i$ is closed, and we've shown (d).
+::::
+::::note
+In parts (c) and (d) of the above theorem, finiteness of the collections of sets is required - the property do not necessarily hold for infinite collections of sets.
+::::
 :::
 
-:::note
-In parts (c) and (d) of the above theorem, finiteness of the collections of sets is required - the property do not necessarily hold for infinite collections of sets.
-:::
 
 :::definition "Closure"
 If $X$ is a metric space, $E \subset X,$ and $E'$ denotes the set of all limit points of $E$ in $X,$ then the **closure** of $E$ is the set $\overline{E} = E \cup E'.$
@@ -281,12 +281,16 @@ If $X$ is a metric space and $E \subset X,$ then
 (c) $\overline{E} \subset F$ for every closed set $F \subset X$ such that $E \subset F.$
 
 By (a) and (c), $\overline{E}$ is the smallest closed subset of $X$ that contains $E.$
-:::
 
-:::proof
+::::proof
 (a) Suppose $p \in X$ and $p \notin \overline{E}.$ Then $p$ is not in $E$ and is not in $E',$ and is in fact in $\overline{E}^c.$ Now, since $p$ is not a limit point of $E,$ it has some neighborhood $N_r(p)$ that does not intersect $E.$ Any point $x$ in $N_r(p)$ is an interior point of $N_r(p)$, and therefore has its own neighborhood $N_\epsilon{(x)}$ that does not intersect $E,$ and therefore $x$ is not a limit point of $E.$ Thus, any point in $\overline{E}^c$ is an interior point of $\overline{E}^c,$ and $\overline{E}^c$ is therefore open and its complement, $\overline{E},$ is closed (since a set is open iff its complement is closed.)
 
 (b) Suppose $E$ is closed. Then it contains its limit points, so $E = E \cup E' = \overline{E}.$ Conversely, suppose $E = \overline{E}.$ By (a), $E$ is closed.
 
 (c) Suppose that $E \subset F \subset X,$ and that $F$ is closed. Suppose $p \in \overline{E}.$ If $p \in E,$ then $p \in F$ because $E \subset F.$ If $p \in E',$ then it must be in $F$ also, since $F$ contains all points of $E,$ and is closed, and thus must contain the limit points of $E.$  
+::::
+:::
+
+:::theorem
+Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \overline{E}.$ Hence $y \in E$ if $E$ is closed.
 :::
