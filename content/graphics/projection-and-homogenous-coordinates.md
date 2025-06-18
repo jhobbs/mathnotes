@@ -121,7 +121,7 @@ the resulting $w$ component. Because we included the perspective projection tran
 
 The end transformation is an example of a **projective transformation**, which are a generalizations of affine transformations to include operations that change perspective. Affine transformations are in turn generalizations of linear transformations to include translation. And, again, the transformation is a linear transformation in projective space (using homogenous coordinates) but not necessarily in Euclidean space. Projective transformations are also called collineations because they preserve collinearity of points. If three points are on a straight line in the input space, they will be on a straight line in the output space as well.
 
-The widget below puts all of this together using p5 in 2d mode. All of the '3d' stuff here is happening via [hardcoded matrix transformations done in JS](https://github.com/jhobbs/mathnotes/blob/main/graphics/projection6.js). 
+The widget below puts all of this together using p5 in 2d mode. All of the '3d' stuff here is happening via [hardcoded matrix transformations done in JS](https://github.com/jhobbs/mathnotes/blob/main/content/graphics/projection6.js). 
 {% include_relative projection.html %}
 
 There is definitely some weird stuff going on here when you rotate or translate far enough - I'm not sure what's going on there yet, but it works pretty well within a certain range.
