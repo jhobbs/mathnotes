@@ -60,11 +60,14 @@ For instance, if $y = 2$, then $c = \sqrt{2} \approx 1.414$.
 
 :::remark
 The continuity requirement in the Intermediate Value Theorem is essential. Consider the function:
+
 $$f(x) = \begin{cases}
 x & \text{if } x < 0 \\
 x + 1 & \text{if } x \geq 0
 \end{cases}$$
+
 This function has a jump discontinuity at $x = 0$ and fails to satisfy the IVT.
+
 :::
 
 ## Advanced Features

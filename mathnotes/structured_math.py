@@ -250,10 +250,46 @@ def process_structured_math_content(html_content: str, block_markers: Dict[str, 
     
     # Process each block marker
     for marker_id, block in block_markers.items():
+        # Protect math in block content before markdown processing
+        block_content = block.content
+        
+        # Protect display math ($$...$$)
+        display_math_blocks = {}
+        display_counter = 0
+        
+        def replace_display_math(match):
+            nonlocal display_counter
+            placeholder = f'BLOCKMATHD{display_counter}PLACEHOLDER'
+            display_math_blocks[placeholder] = match.group(0)
+            display_counter += 1
+            return placeholder
+        
+        block_content = re.sub(r'\$\$.*?\$\$', replace_display_math, block_content, flags=re.DOTALL)
+        
+        # Protect inline math ($...$)
+        inline_math_blocks = {}
+        inline_counter = 0
+        
+        def replace_inline_math(match):
+            nonlocal inline_counter
+            placeholder = f'BLOCKMATHI{inline_counter}PLACEHOLDER'
+            inline_math_blocks[placeholder] = match.group(0)
+            inline_counter += 1
+            return placeholder
+        
+        block_content = re.sub(r'(?<!\$)\$(?!\$).*?\$(?!\$)', replace_inline_math, block_content)
+        
         # Process the block's content through markdown
-        block_html = md_processor.convert(block.content)
+        block_html = md_processor.convert(block_content)
         # Reset the markdown processor for the next conversion
         md_processor.reset()
+        
+        # Restore protected math
+        for placeholder, math_content in display_math_blocks.items():
+            block_html = block_html.replace(placeholder, math_content)
+        
+        for placeholder, math_content in inline_math_blocks.items():
+            block_html = block_html.replace(placeholder, math_content)
         
         # Render the complete block
         rendered_block = parser.render_block_html(block, block_html)

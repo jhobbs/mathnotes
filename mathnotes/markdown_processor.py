@@ -147,7 +147,8 @@ class MarkdownProcessor:
         def replace_display_math(match):
             nonlocal display_counter
             placeholder = f'DISPLAYMATH{display_counter}PLACEHOLDER'
-            display_math_blocks[placeholder] = match.group(0)
+            math_content = match.group(0)
+            display_math_blocks[placeholder] = math_content
             display_counter += 1
             return placeholder
         
@@ -173,12 +174,28 @@ class MarkdownProcessor:
         """Restore protected math blocks in HTML content."""
         # Restore math blocks with their original content
         for placeholder, math_content in display_math_blocks.items():
-            html_content = html_content.replace(placeholder, math_content)
+            # Fix escaped backslashes in math content for proper LaTeX rendering
+            fixed_math_content = self._fix_math_backslashes(math_content)
+            html_content = html_content.replace(placeholder, fixed_math_content)
         
         for placeholder, math_content in inline_math_blocks.items():
-            html_content = html_content.replace(placeholder, math_content)
+            # Fix escaped backslashes in math content for proper LaTeX rendering
+            fixed_math_content = self._fix_math_backslashes(math_content)
+            html_content = html_content.replace(placeholder, fixed_math_content)
         
         return html_content
+    
+    def _fix_math_backslashes(self, math_content: str) -> str:
+        """Fix escaped backslashes in math content for proper LaTeX rendering."""
+        # In markdown processing, \\ can get converted to single \ which breaks LaTeX line breaks
+        # We need to restore proper \\ for LaTeX environments like cases, align, etc.
+        
+        # Fix line breaks in LaTeX environments
+        # Pattern: single backslash followed by whitespace and then & or end of line
+        # This typically happens in cases, align, matrix environments
+        fixed_content = re.sub(r'(?<!\\)\\(?!\\)(\s*(?:&|\n|\r|$))', r'\\\\\\1', math_content, flags=re.MULTILINE)
+        
+        return fixed_content
     
     def _generate_description(self, metadata: Dict, html_content: str) -> str:
         """Generate page description from frontmatter or content."""
