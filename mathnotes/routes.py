@@ -48,10 +48,23 @@ def apply_content_file_caching(response, filepath):
 def register_routes(app, url_mapper, markdown_processor):
     """Register all Flask routes with the application."""
     
+
     @app.route('/')
     def homepage():
         """Main homepage with links to different sections."""
         return render_template('homepage.html')
+
+    @app.route('/favicon.ico')
+    def favicon():
+        """Serve favicon.ico."""
+        import os
+        return send_from_directory(os.getcwd(), 'favicon.ico')
+
+    @app.route('/robots.txt')
+    def robots():
+        """Serve robots.txt."""
+        import os
+        return send_from_directory(os.getcwd(), 'robots.txt')
 
     @app.route('/mathnotes/')
     def index():
@@ -78,30 +91,13 @@ def register_routes(app, url_mapper, markdown_processor):
     @app.route('/mathnotes/<path:filepath>')
     def serve_content(filepath):
         """Serve markdown content or static files."""
-        # Handle static files (HTML, JS, CSS, images) first to avoid send_from_directory issues with spaces
+        # Handle static files using proper send_from_directory with absolute paths
         if Path(filepath).exists() and Path(filepath).is_file():
-            if filepath.endswith('.html'):
-                with open(filepath, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                response = Response(content, mimetype='text/html')
-                return apply_content_file_caching(response, filepath)
-            elif filepath.endswith('.js'):
-                with open(filepath, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                response = Response(content, mimetype='application/javascript')
-                return apply_content_file_caching(response, filepath)
-            elif filepath.endswith('.css'):
-                with open(filepath, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                response = Response(content, mimetype='text/css')
-                return apply_content_file_caching(response, filepath)
-            elif filepath.endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg')):
-                with open(filepath, 'rb') as f:
-                    content = f.read()
-                import mimetypes
-                mimetype = mimetypes.guess_type(filepath)[0] or 'application/octet-stream'
-                response = Response(content, mimetype=mimetype)
-                return apply_content_file_caching(response, filepath)
+            if filepath.endswith(('.html', '.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg')):
+                import os
+                directory = os.path.dirname(os.path.abspath(filepath))
+                filename = os.path.basename(filepath)
+                return send_from_directory(directory, filename)
         
         # First check if this URL needs a redirect
         redirect_url = url_mapper.get_redirect_url(filepath)
@@ -145,16 +141,6 @@ def register_routes(app, url_mapper, markdown_processor):
     def static_files(filename):
         """Serve static files."""
         return send_from_directory('static', filename)
-
-    @app.route('/favicon.ico')
-    def favicon():
-        """Serve favicon.ico."""
-        return send_from_directory('.', 'favicon.ico')
-
-    @app.route('/robots.txt')
-    def robots():
-        """Serve robots.txt."""
-        return send_from_directory('.', 'robots.txt')
 
     @app.route('/sitemap.xml')
     def sitemap():
