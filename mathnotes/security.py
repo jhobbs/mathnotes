@@ -29,7 +29,7 @@ def add_security_headers(response):
         "default-src 'self'",
         f"script-src 'self' 'nonce-{nonce}' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
         "style-src 'self' 'unsafe-inline'",
-        "img-src 'self' data:",
+        "img-src 'self' data: https://upload.wikimedia.org",
         "font-src 'self' https://cdn.jsdelivr.net",
         "connect-src 'self'",
         "frame-src 'self'",
