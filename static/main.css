@@ -1,0 +1,416 @@
+/*
+ * Mathnotes Main Styles
+ * A collection of mathematics notes and interactive demonstrations
+ */
+
+/* =============================================================================
+   CSS CUSTOM PROPERTIES (VARIABLES)
+   ============================================================================= */
+
+/* Light mode color scheme */
+:root {
+    --bg-color: #fafafa;
+    --text-color: #333;
+    --header-color: #333;
+    --link-color: #0366d6;
+    --border-color: #e1e4e8;
+    --code-bg: #f6f8fa;
+    --blockquote-color: #6a737d;
+    --footer-color: #6a737d;
+    --iframe-bg: #ffffff;
+}
+
+/* Dark mode color scheme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #0d1117;
+        --text-color: #c9d1d9;
+        --header-color: #f0f6fc;
+        --link-color: #58a6ff;
+        --border-color: #30363d;
+        --code-bg: #161b22;
+        --blockquote-color: #8b949e;
+        --footer-color: #484f58;
+        --iframe-bg: #0d1117;
+    }
+    
+    /* Make images slightly dimmer in dark mode */
+    img {
+        opacity: 0.9;
+    }
+    
+    /* Invert colors for iframes (interactive demos) */
+    iframe {
+        background-color: var(--iframe-bg);
+    }
+}
+
+/* =============================================================================
+   BASE STYLES
+   ============================================================================= */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--bg-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header {
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+header a {
+    color: var(--header-color);
+    text-decoration: none;
+}
+
+main {
+    min-height: 70vh;
+}
+
+footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--footer-color);
+    font-family: monospace;
+    font-size: 0.75rem;
+}
+
+footer a {
+    color: var(--footer-color);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* =============================================================================
+   TYPOGRAPHY
+   ============================================================================= */
+
+/* General link styling */
+a {
+    color: var(--link-color);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--header-color);
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Blockquotes */
+blockquote {
+    border-left: 4px solid var(--border-color);
+    margin: 0;
+    padding-left: 1rem;
+    color: var(--blockquote-color);
+}
+
+/* =============================================================================
+   CODE AND PREFORMATTED TEXT
+   ============================================================================= */
+
+pre {
+    background-color: var(--code-bg);
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+code {
+    background-color: var(--code-bg);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 85%;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* =============================================================================
+   TABLES
+   ============================================================================= */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+table th, table td {
+    border: 1px solid var(--border-color);
+    padding: 0.5rem;
+}
+
+table th {
+    background-color: var(--code-bg);
+}
+
+/* =============================================================================
+   NAVIGATION AND LISTS
+   ============================================================================= */
+
+.section-list {
+    list-style: none;
+    padding: 0;
+}
+
+.section-list li {
+    margin-bottom: 0.5rem;
+}
+
+.section-list a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.section-list a:hover {
+    text-decoration: underline;
+}
+
+.file-list {
+    list-style: none;
+    padding: 0;
+}
+
+.file-list li {
+    margin-bottom: 0.5rem;
+}
+
+/* =============================================================================
+   INTERACTIVE DEMO COMPONENTS
+   ============================================================================= */
+
+/* Demo container and fullscreen button */
+.demo-container {
+    position: relative;
+    margin: 1rem 0;
+}
+
+.fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--code-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    border-radius: 4px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.fullscreen-btn:hover {
+    opacity: 1;
+}
+
+/* Fullscreen overlay */
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-color);
+    z-index: 9999;
+    display: none;
+}
+
+.fullscreen-overlay.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.fullscreen-header {
+    padding: 1rem;
+    background: var(--code-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fullscreen-close {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.fullscreen-iframe {
+    flex: 1;
+    width: 100%;
+    border: none;
+}
+
+/* =============================================================================
+   STRUCTURED MATHEMATICAL CONTENT
+   ============================================================================= */
+
+/* Base math block styles */
+.math-block {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border-left: 3px solid var(--border-color);
+    background-color: var(--code-bg);
+    border-radius: 0 6px 6px 0;
+}
+
+.math-block-header {
+    margin-bottom: 0.75rem;
+    font-weight: bold;
+    color: var(--header-color);
+}
+
+.math-block-type {
+    font-style: normal;
+}
+
+.math-block-title {
+    margin-left: 0.5rem;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.math-block-content {
+    color: var(--text-color);
+    line-height: 1.8;
+}
+
+/* Specific styles for different mathematical block types */
+.math-definition {
+    border-left-color: #0366d6;
+    background-color: rgba(3, 102, 214, 0.05);
+}
+
+.math-theorem {
+    border-left-color: #28a745;
+    background-color: rgba(40, 167, 69, 0.05);
+}
+
+.math-lemma {
+    border-left-color: #17a2b8;
+    background-color: rgba(23, 162, 184, 0.05);
+}
+
+.math-proposition {
+    border-left-color: #6610f2;
+    background-color: rgba(102, 16, 242, 0.05);
+}
+
+.math-corollary {
+    border-left-color: #e83e8c;
+    background-color: rgba(232, 62, 140, 0.05);
+}
+
+.math-proof {
+    border-left-color: #fd7e14;
+    background-color: rgba(253, 126, 20, 0.05);
+    font-style: normal;
+}
+
+.math-proof .math-block-header {
+    font-style: italic;
+    font-weight: normal;
+}
+
+.math-example {
+    border-left-color: #20c997;
+    background-color: rgba(32, 201, 151, 0.05);
+}
+
+.math-remark, .math-note {
+    border-left-color: #6c757d;
+    background-color: rgba(108, 117, 125, 0.05);
+}
+
+.math-intuition {
+    border-left-color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.05);
+}
+
+.math-exercise {
+    border-left-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.05);
+}
+
+.math-solution {
+    border-left-color: #343a40;
+    background-color: rgba(52, 58, 64, 0.05);
+    margin-left: 2rem;
+}
+
+/* Dark mode adjustments for structured math content */
+@media (prefers-color-scheme: dark) {
+    .math-definition {
+        background-color: rgba(88, 166, 255, 0.1);
+    }
+    
+    .math-theorem {
+        background-color: rgba(53, 179, 82, 0.1);
+    }
+    
+    .math-lemma {
+        background-color: rgba(36, 176, 198, 0.1);
+    }
+    
+    .math-proposition {
+        background-color: rgba(134, 77, 217, 0.1);
+    }
+    
+    .math-corollary {
+        background-color: rgba(240, 107, 167, 0.1);
+    }
+    
+    .math-proof {
+        background-color: rgba(255, 146, 64, 0.1);
+    }
+    
+    .math-example {
+        background-color: rgba(64, 214, 176, 0.1);
+    }
+    
+    .math-remark, .math-note {
+        background-color: rgba(139, 148, 158, 0.1);
+    }
+    
+    .math-intuition {
+        background-color: rgba(255, 208, 64, 0.1);
+    }
+    
+    .math-exercise {
+        background-color: rgba(232, 91, 103, 0.1);
+    }
+    
+    .math-solution {
+        background-color: rgba(73, 80, 87, 0.1);
+    }
+}

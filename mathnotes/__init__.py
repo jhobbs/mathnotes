@@ -12,7 +12,7 @@ This package provides a web interface for mathematics content with features like
 __version__ = "1.0.0"
 
 from flask import Flask
-from .config import SITE_TITLE, SITE_DESCRIPTION
+from .config import SITE_TITLE, SITE_DESCRIPTION, SEND_FILE_MAX_AGE_DEFAULT, STATIC_FILE_CACHE_CONFIG
 from .security import generate_nonce, add_security_headers
 from .context_processors import inject_year, inject_nonce, inject_version
 from .url_mapper import URLMapper
@@ -46,6 +46,7 @@ def create_app(config=None):
     # Site configuration
     app.config['SITE_TITLE'] = SITE_TITLE
     app.config['SITE_DESCRIPTION'] = SITE_DESCRIPTION
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = SEND_FILE_MAX_AGE_DEFAULT
     
     # Initialize components
     url_mapper = URLMapper()
