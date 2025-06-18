@@ -249,7 +249,6 @@ For some intuition, consider $U = [0, 4], E = [0,3].$ Any point $x$ in $E$ has a
 (d) - For any finite collection $F_1,\dots,F_n$ of closed sets, $\bigcup_{i=1}^n F_i$ is closed.
 :::
 
-
 :::proof
 Let $G = \bigcup_{\alpha} G_\alpha, x \in G.$ Then $x$ is in some $G_\alpha$ for some $\alpha,$ and is an interior point of that $G_\alpha,$ since $G_\alpha$ is open. Therefore, $x$ has some neighborhood that is a subset of $G_\alpha$ and therefore of $G,$ so $x$ is an interior point of $G$ and $G$ is open - this shows (a).
 
@@ -262,4 +261,32 @@ and by (a) above, (e) is open. Then its complement, $\bigcap{\alpha} F_\alpha$ i
 Now, let $x$ be in $G = \bigcap_{i=1}^n G_i,$ so $x$ is in every $G_i,$ and has a neighborhood $N_i$ in every $G_i$ with radius $r_i > 0.$ Let $r$ be $\min\{r_1, \dots, r_n\}.$ Then, $x$ has a neighborhood $N$ of radius $r$ in every $G_i,$ and thus in $G,$ so $x$ is an interior point of $G,$ and we've shown (c).
 
  Now, $(\bigcup_{i=1}^n F_i)^c = \bigcap_{i=1}^n F_i^c$ is open by (c), so its complement, $\bigcup_{i=1}^n F_i$ is closed, and we've shown (d).
+:::
+
+:::note
+In parts (c) and (d) of the above theorem, finiteness of the collections of sets is required - the property do not necessarily hold for infinite collections of sets.
+:::
+
+:::definition "Closure"
+If $X$ is a metric space, $E \subset X,$ and $E'$ denotes the set of all limit points of $E$ in $X,$ then the **closure** of $E$ is the set $\overline{E} = E \cup E'.$
+:::
+
+:::theorem
+If $X$ is a metric space and $E \subset X,$ then
+
+(a) $\overline{E}$ is closed.
+
+(b) $E = \overline{E}$ iff $E$ is closed.
+
+(c) $\overline{E} \subset F$ for every closed set $F \subset X$ such that $E \subset F.$
+
+By (a) and (c), $\overline{E}$ is the smallest closed subset of $X$ that contains $E.$
+:::
+
+:::proof
+(a) Suppose $p \in X$ and $p \notin \overline{E}.$ Then $p$ is not in $E$ and is not in $E',$ and is in fact in $\overline{E}^c.$ Now, since $p$ is not a limit point of $E,$ it has some neighborhood $N_r(p)$ that does not intersect $E.$ Any point $x$ in $N_r(p)$ is an interior point of $N_r(p)$, and therefore has its own neighborhood $N_\epsilon{(x)}$ that does not intersect $E,$ and therefore $x$ is not a limit point of $E.$ Thus, any point in $\overline{E}^c$ is an interior point of $\overline{E}^c,$ and $\overline{E}^c$ is therefore open and its complement, $\overline{E},$ is closed (since a set is open iff its complement is closed.)
+
+(b) Suppose $E$ is closed. Then it contains its limit points, so $E = E \cup E' = \overline{E}.$ Conversely, suppose $E = \overline{E}.$ By (a), $E$ is closed.
+
+(c) Suppose that $E \subset F \subset X,$ and that $F$ is closed. Suppose $p \in \overline{E}.$ If $p \in E,$ then $p \in F$ because $E \subset F.$ If $p \in E',$ then it must be in $F$ also, since $F$ contains all points of $E,$ and is closed, and thus must contain the limit points of $E.$  
 :::
