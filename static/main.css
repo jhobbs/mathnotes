@@ -284,6 +284,36 @@ table th {
     border-radius: 0 6px 6px 0;
 }
 
+/* Nested block styles */
+.math-block-nested {
+    margin: 1rem 0;
+    margin-left: 0.25rem;
+    padding: 0.75rem;
+    padding-left: 1rem;
+    border-left-width: 5px;
+    background-color: rgba(0, 0, 0, 0.02);
+    position: relative;
+}
+
+/* Add a subtle visual connector for nested blocks */
+.math-block-nested::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: -1rem;
+    bottom: -1rem;
+    width: 5px;
+    background-color: inherit;
+    opacity: 0.3;
+}
+
+/* Dark mode nested blocks */
+@media (prefers-color-scheme: dark) {
+    .math-block-nested {
+        background-color: rgba(255, 255, 255, 0.02);
+    }
+}
+
 .math-block-header {
     margin-bottom: 0.75rem;
     font-weight: bold;
@@ -305,112 +335,178 @@ table th {
     line-height: 1.8;
 }
 
+/* Tighter spacing for nested content */
+.math-block-nested .math-block-content {
+    line-height: 1.7;
+}
+
+/* Remove extra spacing at the bottom of nested blocks */
+.math-block-nested:last-child {
+    margin-bottom: 0.5rem;
+}
+
 /* Specific styles for different mathematical block types */
 .math-definition {
-    border-left-color: #0366d6;
-    background-color: rgba(3, 102, 214, 0.05);
+    border-left-color: #2c5282;
+    background-color: rgba(44, 82, 130, 0.05);
 }
 
 .math-theorem {
-    border-left-color: #28a745;
-    background-color: rgba(40, 167, 69, 0.05);
+    border-left-color: #2d3748;
+    background-color: rgba(45, 55, 72, 0.05);
 }
 
 .math-lemma {
-    border-left-color: #17a2b8;
-    background-color: rgba(23, 162, 184, 0.05);
+    border-left-color: #2b6cb0;
+    background-color: rgba(43, 108, 176, 0.05);
 }
 
 .math-proposition {
-    border-left-color: #6610f2;
-    background-color: rgba(102, 16, 242, 0.05);
+    border-left-color: #3182ce;
+    background-color: rgba(49, 130, 206, 0.05);
 }
 
 .math-corollary {
-    border-left-color: #e83e8c;
-    background-color: rgba(232, 62, 140, 0.05);
+    border-left-color: #718096;
+    background-color: rgba(113, 128, 150, 0.04);
 }
 
 .math-proof {
-    border-left-color: #fd7e14;
-    background-color: rgba(253, 126, 20, 0.05);
+    border-left-color: #38a169;
+    background-color: rgba(56, 161, 105, 0.05);
     font-style: normal;
 }
 
-.math-proof .math-block-header {
-    font-style: italic;
-    font-weight: normal;
-}
 
 .math-example {
-    border-left-color: #20c997;
-    background-color: rgba(32, 201, 151, 0.05);
+    border-left-color: #2f855a;
+    background-color: rgba(47, 133, 90, 0.05);
 }
 
 .math-remark, .math-note {
-    border-left-color: #6c757d;
-    background-color: rgba(108, 117, 125, 0.05);
+    border-left-color: #4a5568;
+    background-color: rgba(74, 85, 104, 0.04);
 }
 
 .math-intuition {
-    border-left-color: #ffc107;
-    background-color: rgba(255, 193, 7, 0.05);
+    border-left-color: #38b2ac;
+    background-color: rgba(56, 178, 172, 0.05);
 }
 
 .math-exercise {
-    border-left-color: #dc3545;
-    background-color: rgba(220, 53, 69, 0.05);
+    border-left-color: #2c5282;
+    background-color: rgba(44, 82, 130, 0.06);
 }
 
 .math-solution {
-    border-left-color: #343a40;
-    background-color: rgba(52, 58, 64, 0.05);
+    border-left-color: #4a5568;
+    background-color: rgba(74, 85, 104, 0.04);
     margin-left: 2rem;
 }
 
 /* Dark mode adjustments for structured math content */
 @media (prefers-color-scheme: dark) {
     .math-definition {
-        background-color: rgba(88, 166, 255, 0.1);
+        background-color: rgba(44, 82, 130, 0.12);
     }
     
     .math-theorem {
-        background-color: rgba(53, 179, 82, 0.1);
+        background-color: rgba(45, 55, 72, 0.12);
     }
     
     .math-lemma {
-        background-color: rgba(36, 176, 198, 0.1);
+        background-color: rgba(43, 108, 176, 0.12);
     }
     
     .math-proposition {
-        background-color: rgba(134, 77, 217, 0.1);
+        background-color: rgba(49, 130, 206, 0.12);
     }
     
     .math-corollary {
-        background-color: rgba(240, 107, 167, 0.1);
+        background-color: rgba(113, 128, 150, 0.1);
     }
     
     .math-proof {
-        background-color: rgba(255, 146, 64, 0.1);
+        background-color: rgba(56, 161, 105, 0.12);
     }
     
     .math-example {
-        background-color: rgba(64, 214, 176, 0.1);
+        background-color: rgba(47, 133, 90, 0.12);
     }
     
     .math-remark, .math-note {
-        background-color: rgba(139, 148, 158, 0.1);
+        background-color: rgba(74, 85, 104, 0.1);
     }
     
     .math-intuition {
-        background-color: rgba(255, 208, 64, 0.1);
+        background-color: rgba(56, 178, 172, 0.12);
     }
     
     .math-exercise {
-        background-color: rgba(232, 91, 103, 0.1);
+        background-color: rgba(44, 82, 130, 0.14);
     }
     
     .math-solution {
-        background-color: rgba(73, 80, 87, 0.1);
+        background-color: rgba(74, 85, 104, 0.1);
+    }
+}
+
+/* Nested block color adjustments */
+.math-block-nested.math-definition {
+    background-color: rgba(44, 82, 130, 0.03);
+}
+
+.math-block-nested.math-theorem {
+    background-color: rgba(45, 55, 72, 0.03);
+}
+
+.math-block-nested.math-lemma {
+    background-color: rgba(43, 108, 176, 0.03);
+}
+
+.math-block-nested.math-proposition {
+    background-color: rgba(49, 130, 206, 0.03);
+}
+
+.math-block-nested.math-corollary {
+    background-color: rgba(113, 128, 150, 0.025);
+}
+
+.math-block-nested.math-proof {
+    background-color: rgba(56, 161, 105, 0.03);
+}
+
+.math-block-nested.math-example {
+    background-color: rgba(47, 133, 90, 0.03);
+}
+
+/* Dark mode nested blocks */
+@media (prefers-color-scheme: dark) {
+    .math-block-nested.math-definition {
+        background-color: rgba(44, 82, 130, 0.06);
+    }
+    
+    .math-block-nested.math-theorem {
+        background-color: rgba(45, 55, 72, 0.06);
+    }
+    
+    .math-block-nested.math-lemma {
+        background-color: rgba(43, 108, 176, 0.06);
+    }
+    
+    .math-block-nested.math-proposition {
+        background-color: rgba(49, 130, 206, 0.06);
+    }
+    
+    .math-block-nested.math-corollary {
+        background-color: rgba(113, 128, 150, 0.05);
+    }
+    
+    .math-block-nested.math-proof {
+        background-color: rgba(56, 161, 105, 0.06);
+    }
+    
+    .math-block-nested.math-example {
+        background-color: rgba(47, 133, 90, 0.06);
     }
 }

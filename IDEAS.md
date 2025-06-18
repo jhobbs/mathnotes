@@ -28,12 +28,6 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Allows gradual conversion of existing content
   - Potential approaches: custom HTML-like tags, markdown extensions with explicit delimiters, YAML frontmatter blocks, or custom shortcodes
 
-- **Nested Mathematical Blocks**: Allow proofs, lemmas, and corollaries to be embedded inside theorem blocks
-  - State a theorem and include all related content (lemmas, proof, corollaries) within its block
-  - Create hierarchical structure where theorem contains its associated elements
-  - Improve logical organization and readability
-  - Could use nested block syntax or special child block types
-  - Maintains clear relationship between theorem and its supporting content
 
 - **Attribution/Citation Blocks**: Create structured blocks for referencing content from other authors
   - Explicit citation formatting with proper attribution

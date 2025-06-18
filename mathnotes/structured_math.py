@@ -36,6 +36,8 @@ class MathBlock:
     title: Optional[str] = None
     label: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
+    children: List['MathBlock'] = field(default_factory=list)
+    parent: Optional['MathBlock'] = None
     
     @property
     def css_class(self) -> str:
@@ -65,14 +67,15 @@ class MathBlock:
 class StructuredMathParser:
     """Parser for structured mathematical content."""
     
-    # Pattern for block start: :::type "optional title" {optional: metadata}
+    # Pattern for block start: :::+type "optional title" {optional: metadata}
+    # Now captures the number of colons for nesting level
     BLOCK_START_PATTERN = re.compile(
-        r'^:::(\w+)(?:\s+"([^"]+)")?(?:\s+\{([^}]+)\})?\s*$',
+        r'^(:::+)(\w+)(?:\s+"([^"]+)")?(?:\s+\{([^}]+)\})?\s*$',
         re.MULTILINE
     )
     
-    # Pattern for block end: ::: or :::end
-    BLOCK_END_PATTERN = re.compile(r'^:::(?:end)?\s*$', re.MULTILINE)
+    # Pattern for block end: :::+ or :::+end (must match opening colons)
+    BLOCK_END_PATTERN = re.compile(r'^(:::+)(?:end)?\s*$', re.MULTILINE)
     
     def __init__(self):
         self.blocks: List[MathBlock] = []
@@ -88,82 +91,147 @@ class StructuredMathParser:
         Syntax:
         :::theorem "Fundamental Theorem of Calculus" {label: ftc}
         Content here...
-        :::
         
-        :::proof
-        Proof content...
+        ::::lemma "Supporting Lemma"
+        Lemma content...
+        ::::
+        
+        ::::proof
+        Main proof content...
+        ::::
+        
         :::
         """
         self.blocks = []
         self._block_markers = {}
-        processed_content = []
         lines = content.split('\n')
-        i = 0
+        
+        # Parse all blocks recursively
+        parsed_lines, _ = self._parse_blocks(lines, 0, None, 0)
+        
+        return '\n'.join(parsed_lines), self._block_markers
+    
+    def _parse_blocks(self, lines: List[str], start_idx: int, parent_block: Optional[MathBlock], expected_level: int) -> Tuple[List[str], int]:
+        """
+        Parse blocks starting from the given index at the expected nesting level.
+        
+        Args:
+            lines: List of lines to parse
+            start_idx: Starting index
+            parent_block: Parent block for nested blocks
+            expected_level: Expected nesting level (number of colons - 3)
+        
+        Returns:
+            Tuple of (processed_lines, next_index)
+        """
+        processed_lines = []
+        i = start_idx
         
         while i < len(lines):
             line = lines[i]
             
             # Check for block start
-            match = self.BLOCK_START_PATTERN.match(line)
-            if match:
-                block_type_str = match.group(1).lower()
-                title = match.group(2)
-                metadata_str = match.group(3)
+            start_match = self.BLOCK_START_PATTERN.match(line)
+            if start_match:
+                colons = start_match.group(1)
+                level = len(colons) - 3  # ::: is level 0, :::: is level 1, etc.
+                
+                # If this block is at a deeper level than expected, stop processing
+                if level > expected_level:
+                    return processed_lines, i
+                
+                # If this block is at a shallower level than expected, stop processing
+                if level < expected_level:
+                    return processed_lines, i
+                
+                block_type_str = start_match.group(2).lower()
+                title = start_match.group(3)
+                metadata_str = start_match.group(4)
                 
                 # Parse block type
                 try:
                     block_type = MathBlockType(block_type_str)
                 except ValueError:
                     # Unknown block type, treat as regular content
-                    processed_content.append(line)
+                    processed_lines.append(line)
                     i += 1
                     continue
                 
                 # Parse metadata
                 metadata = self._parse_metadata(metadata_str) if metadata_str else {}
                 
-                # Find block end
-                block_lines = []
+                # Create block
+                block = MathBlock(
+                    block_type=block_type,
+                    content="",
+                    title=title,
+                    label=metadata.get('label'),
+                    metadata=metadata,
+                    parent=parent_block
+                )
+                
+                # Add to parent's children if nested
+                if parent_block:
+                    parent_block.children.append(block)
+                else:
+                    self.blocks.append(block)
+                
+                # Parse block content
+                block_content_lines = []
                 i += 1
-                block_start_line = i
                 
                 while i < len(lines):
-                    if self.BLOCK_END_PATTERN.match(lines[i]):
-                        # Found end of block
-                        block_content = '\n'.join(block_lines)
-                        
-                        # Create block
-                        block = MathBlock(
-                            block_type=block_type,
-                            content=block_content.strip(),
-                            title=title,
-                            label=metadata.get('label'),
-                            metadata=metadata
-                        )
-                        self.blocks.append(block)
+                    end_match = self.BLOCK_END_PATTERN.match(lines[i])
+                    if end_match and len(end_match.group(1)) == len(colons):
+                        # Found matching end marker
+                        # Set block content
+                        block.content = '\n'.join(block_content_lines).strip()
                         
                         # Create a unique marker for this block
                         marker_id = f"MATHBLOCK{len(self._block_markers)}MARKER"
                         self._block_markers[marker_id] = block
                         
-                        # Add marker on its own line to preserve block structure
-                        processed_content.append(marker_id)
+                        # Add marker
+                        processed_lines.append(marker_id)
                         
                         i += 1
                         break
                     else:
-                        block_lines.append(lines[i])
-                        i += 1
+                        # Check if this is a nested block
+                        nested_start_match = self.BLOCK_START_PATTERN.match(lines[i])
+                        if nested_start_match:
+                            nested_level = len(nested_start_match.group(1)) - 3
+                            if nested_level == level + 1:
+                                # This is a direct child block
+                                child_lines, next_i = self._parse_blocks(lines, i, block, nested_level)
+                                block_content_lines.extend(child_lines)
+                                i = next_i
+                            else:
+                                # Not a direct child, treat as content
+                                block_content_lines.append(lines[i])
+                                i += 1
+                        else:
+                            # Regular content line
+                            block_content_lines.append(lines[i])
+                            i += 1
                 else:
-                    # No end found, treat original line as regular content
-                    processed_content.append(line)
-                    # Add the lines we consumed back
-                    processed_content.extend(lines[block_start_line:i])
+                    # No matching end found, treat original line as content
+                    processed_lines.append(line)
+                    # Don't try to process the rest as part of this block
             else:
-                processed_content.append(line)
+                # Check for end marker that doesn't match any open block
+                end_match = self.BLOCK_END_PATTERN.match(line)
+                if end_match:
+                    end_level = len(end_match.group(1)) - 3
+                    if end_level < expected_level:
+                        # This ends a parent block, stop processing
+                        return processed_lines, i
+                
+                # Regular content line
+                processed_lines.append(line)
                 i += 1
         
-        return '\n'.join(processed_content), self._block_markers
+        return processed_lines, i
     
     def _parse_metadata(self, metadata_str: str) -> Dict[str, Any]:
         """Parse metadata string into dictionary."""
@@ -176,16 +244,22 @@ class StructuredMathParser:
                 metadata[key.strip()] = value.strip()
         return metadata
     
-    def render_block_html(self, block: MathBlock, content_html: str) -> str:
+    def render_block_html(self, block: MathBlock, content_html: str, block_markers: Dict[str, MathBlock], md_processor) -> str:
         """
         Render a math block to HTML with pre-processed content.
         
         Args:
             block: The MathBlock to render
             content_html: The markdown-processed HTML content for the block
+            block_markers: Dictionary of all block markers for rendering children
+            md_processor: Markdown processor for rendering child content
         """
         # Build the opening div with appropriate classes and attributes
-        attrs = [f'class="{block.css_class}"']
+        css_classes = [block.css_class]
+        if block.parent:
+            css_classes.append("math-block-nested")
+        
+        attrs = [f'class="{" ".join(css_classes)}"']
         
         if block.label:
             attrs.append(f'id="{block.label}"')
@@ -209,21 +283,79 @@ class StructuredMathParser:
             header_parts.append('</div>')
             html_parts.extend(header_parts)
         else:
-            # For proofs, use italic "Proof:" header
-            html_parts.append('<div class="math-block-header"><em>Proof:</em></div>')
+            # For proofs, use bold "Proof" header (without colon)
+            html_parts.append('<div class="math-block-header"><span class="math-block-type">Proof</span></div>')
         
         # Add content - already processed as markdown
         html_parts.append('<div class="math-block-content">')
-        html_parts.append(content_html)
+        
+        # Process content and render any child blocks
+        processed_content = content_html
+        
+        # Render child blocks that are referenced in the content
+        for marker_id, child_block in block_markers.items():
+            if child_block.parent == block and marker_id in processed_content:
+                # Render the child block
+                child_html = self._render_child_block(child_block, block_markers, md_processor)
+                # Replace marker with rendered child
+                processed_content = processed_content.replace(f'<p>{marker_id}</p>', child_html)
+                processed_content = processed_content.replace(marker_id, child_html)
+        
+        html_parts.append(processed_content)
         
         # Add QED symbol for proofs if not already present
-        if block.block_type == MathBlockType.PROOF and not content_html.rstrip().endswith('$\\square$'):
+        if block.block_type == MathBlockType.PROOF and not processed_content.rstrip().endswith('$\\square$'):
             html_parts.append(' $\\square$')
         
         html_parts.append('</div>')
         html_parts.append('</div>')
         
         return '\n'.join(html_parts)
+    
+    def _render_child_block(self, block: MathBlock, block_markers: Dict[str, MathBlock], md_processor) -> str:
+        """Render a child block with its content."""
+        # Process the block's content through markdown
+        block_content = block.content
+        
+        # Protect math before markdown processing
+        display_math_blocks = {}
+        display_counter = 0
+        
+        def replace_display_math(match):
+            nonlocal display_counter
+            placeholder = f'CHILDMATHD{display_counter}PLACEHOLDER'
+            display_math_blocks[placeholder] = match.group(0)
+            display_counter += 1
+            return placeholder
+        
+        block_content = re.sub(r'\$\$.*?\$\$', replace_display_math, block_content, flags=re.DOTALL)
+        
+        # Protect inline math
+        inline_math_blocks = {}
+        inline_counter = 0
+        
+        def replace_inline_math(match):
+            nonlocal inline_counter
+            placeholder = f'CHILDMATHI{inline_counter}PLACEHOLDER'
+            inline_math_blocks[placeholder] = match.group(0)
+            inline_counter += 1
+            return placeholder
+        
+        block_content = re.sub(r'(?<!\$)\$(?!\$).*?\$(?!\$)', replace_inline_math, block_content)
+        
+        # Process through markdown
+        block_html = md_processor.convert(block_content)
+        md_processor.reset()
+        
+        # Restore math
+        for placeholder, math_content in display_math_blocks.items():
+            block_html = block_html.replace(placeholder, math_content)
+        
+        for placeholder, math_content in inline_math_blocks.items():
+            block_html = block_html.replace(placeholder, math_content)
+        
+        # Render the block with nested support
+        return self.render_block_html(block, block_html, block_markers, md_processor)
     
     def get_blocks_by_type(self, block_type: MathBlockType) -> List[MathBlock]:
         """Get all blocks of a specific type."""
@@ -248,55 +380,57 @@ def process_structured_math_content(html_content: str, block_markers: Dict[str, 
     """
     parser = StructuredMathParser()
     
-    # Process each block marker
+    # Process only top-level blocks (blocks without parents)
+    # Child blocks will be processed recursively by their parents
     for marker_id, block in block_markers.items():
-        # Protect math in block content before markdown processing
-        block_content = block.content
-        
-        # Protect display math ($$...$$)
-        display_math_blocks = {}
-        display_counter = 0
-        
-        def replace_display_math(match):
-            nonlocal display_counter
-            placeholder = f'BLOCKMATHD{display_counter}PLACEHOLDER'
-            display_math_blocks[placeholder] = match.group(0)
-            display_counter += 1
-            return placeholder
-        
-        block_content = re.sub(r'\$\$.*?\$\$', replace_display_math, block_content, flags=re.DOTALL)
-        
-        # Protect inline math ($...$)
-        inline_math_blocks = {}
-        inline_counter = 0
-        
-        def replace_inline_math(match):
-            nonlocal inline_counter
-            placeholder = f'BLOCKMATHI{inline_counter}PLACEHOLDER'
-            inline_math_blocks[placeholder] = match.group(0)
-            inline_counter += 1
-            return placeholder
-        
-        block_content = re.sub(r'(?<!\$)\$(?!\$).*?\$(?!\$)', replace_inline_math, block_content)
-        
-        # Process the block's content through markdown
-        block_html = md_processor.convert(block_content)
-        # Reset the markdown processor for the next conversion
-        md_processor.reset()
-        
-        # Restore protected math
-        for placeholder, math_content in display_math_blocks.items():
-            block_html = block_html.replace(placeholder, math_content)
-        
-        for placeholder, math_content in inline_math_blocks.items():
-            block_html = block_html.replace(placeholder, math_content)
-        
-        # Render the complete block
-        rendered_block = parser.render_block_html(block, block_html)
-        
-        # Replace the marker with the rendered block
-        # Look for the marker in a paragraph tag or standalone
-        html_content = html_content.replace(f'<p>{marker_id}</p>', rendered_block)
-        html_content = html_content.replace(marker_id, rendered_block)
+        if block.parent is None:  # Only process top-level blocks
+            # Protect math in block content before markdown processing
+            block_content = block.content
+            
+            # Protect display math ($$...$$)
+            display_math_blocks = {}
+            display_counter = 0
+            
+            def replace_display_math(match):
+                nonlocal display_counter
+                placeholder = f'BLOCKMATHD{display_counter}PLACEHOLDER'
+                display_math_blocks[placeholder] = match.group(0)
+                display_counter += 1
+                return placeholder
+            
+            block_content = re.sub(r'\$\$.*?\$\$', replace_display_math, block_content, flags=re.DOTALL)
+            
+            # Protect inline math ($...$)
+            inline_math_blocks = {}
+            inline_counter = 0
+            
+            def replace_inline_math(match):
+                nonlocal inline_counter
+                placeholder = f'BLOCKMATHI{inline_counter}PLACEHOLDER'
+                inline_math_blocks[placeholder] = match.group(0)
+                inline_counter += 1
+                return placeholder
+            
+            block_content = re.sub(r'(?<!\$)\$(?!\$).*?\$(?!\$)', replace_inline_math, block_content)
+            
+            # Process the block's content through markdown
+            block_html = md_processor.convert(block_content)
+            # Reset the markdown processor for the next conversion
+            md_processor.reset()
+            
+            # Restore protected math
+            for placeholder, math_content in display_math_blocks.items():
+                block_html = block_html.replace(placeholder, math_content)
+            
+            for placeholder, math_content in inline_math_blocks.items():
+                block_html = block_html.replace(placeholder, math_content)
+            
+            # Render the complete block with nested blocks support
+            rendered_block = parser.render_block_html(block, block_html, block_markers, md_processor)
+            
+            # Replace the marker with the rendered block
+            # Look for the marker in a paragraph tag or standalone
+            html_content = html_content.replace(f'<p>{marker_id}</p>', rendered_block)
+            html_content = html_content.replace(marker_id, rendered_block)
     
     return html_content
