@@ -215,8 +215,14 @@ class StructuredMathParser:
                             block_content_lines.append(lines[i])
                             i += 1
                 else:
-                    # No matching end found, treat original line as content
-                    processed_lines.append(line)
+                    # No matching end found - unclosed block error
+                    block_start_line = start_idx + i - len(block_content_lines) - 1
+                    error_html = self._render_block_error(
+                        f"Unclosed {block_type.value} block",
+                        f"Block started with '{colons}{block_type_str}' but no matching closing '{colons}' found",
+                        line_number=block_start_line + 1  # Convert to 1-based line numbering
+                    )
+                    processed_lines.append(error_html)
                     # Don't try to process the rest as part of this block
             else:
                 # Check for end marker that doesn't match any open block
@@ -226,6 +232,16 @@ class StructuredMathParser:
                     if end_level < expected_level:
                         # This ends a parent block, stop processing
                         return processed_lines, i
+                    elif end_level > expected_level:
+                        # Orphaned closing tag
+                        error_html = self._render_block_error(
+                            "Mismatched closing tag",
+                            f"Found closing tag '{end_match.group(1)}' but no matching opening block at this nesting level",
+                            line_number=start_idx + i + 1  # Convert to 1-based line numbering
+                        )
+                        processed_lines.append(error_html)
+                        i += 1
+                        continue
                 
                 # Regular content line
                 processed_lines.append(line)
@@ -243,6 +259,19 @@ class StructuredMathParser:
                 key, value = pair.split(':', 1)
                 metadata[key.strip()] = value.strip()
         return metadata
+    
+    def _render_block_error(self, error_title: str, error_message: str, line_number: int = None) -> str:
+        """Render a visible error block for parsing errors."""
+        line_info = f" (around line {line_number})" if line_number else ""
+        return f'''<div class="math-block-error">
+    <div class="math-block-error-header">
+        <strong>⚠️ Math Block Error{line_info}</strong>
+    </div>
+    <div class="math-block-error-content">
+        <strong>{error_title}</strong><br>
+        {error_message}
+    </div>
+</div>'''
     
     def render_block_html(self, block: MathBlock, content_html: str, block_markers: Dict[str, MathBlock], md_processor) -> str:
         """

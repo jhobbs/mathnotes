@@ -53,11 +53,19 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.6;
     color: var(--text-color);
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     background-color: var(--bg-color);
     transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Responsive design - smaller width on mobile */
+@media (max-width: 768px) {
+    body {
+        max-width: 100%;
+        padding: 15px;
+    }
 }
 
 header {
@@ -290,7 +298,7 @@ table th {
     margin-left: 0.25rem;
     padding: 0.75rem;
     padding-left: 1rem;
-    border-left-width: 5px;
+    border-left-width: 3px;
     background-color: rgba(0, 0, 0, 0.02);
     position: relative;
 }
@@ -299,10 +307,10 @@ table th {
 .math-block-nested::before {
     content: '';
     position: absolute;
-    left: -5px;
+    left: -3px;
     top: -1rem;
     bottom: -1rem;
-    width: 5px;
+    width: 3px;
     background-color: inherit;
     opacity: 0.3;
 }
@@ -343,6 +351,37 @@ table th {
 /* Remove extra spacing at the bottom of nested blocks */
 .math-block-nested:last-child {
     margin-bottom: 0.5rem;
+}
+
+/* Error blocks for parsing errors */
+.math-block-error {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 2px solid #dc3545;
+    border-left: 5px solid #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-radius: 4px;
+    color: #721c24;
+}
+
+.math-block-error-header {
+    margin-bottom: 0.5rem;
+    font-size: 1.1em;
+}
+
+.math-block-error-content {
+    font-family: monospace;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+/* Dark mode error styling */
+@media (prefers-color-scheme: dark) {
+    .math-block-error {
+        background-color: rgba(220, 53, 69, 0.15);
+        color: #f8d7da;
+        border-color: #dc3545;
+    }
 }
 
 /* Specific styles for different mathematical block types */

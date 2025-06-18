@@ -36,6 +36,17 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Link to original sources when possible
   - Track and index all citations across the site
 
+- **Automatic Numbering and Reference System**: Implement automatic numbering for theorems, definitions, equations, etc. with dynamic cross-references
+  - Auto-number theorems, lemmas, propositions, definitions, examples sequentially (e.g., "Theorem 1.1", "Definition 2.3")
+  - Support hierarchical numbering by section/chapter
+  - Dynamic reference system where `\ref{label}` automatically shows correct number
+  - References update automatically when content is reordered or new items are inserted
+  - Support for equation numbering and referencing
+  - Cross-page references that work across the entire site
+  - LaTeX-style labeling system with `{label: my-theorem}` in block metadata
+  - Generate "References" or "See Also" sections automatically
+  - Note: We're basically reimplementing LaTeX's reference system for the web!
+
 - **Structured Definitions Index**: Build an indexable system for mathematical definitions
   - Separate from theorems but similar structured approach
   - Searchable definition index across all content
