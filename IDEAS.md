@@ -48,3 +48,11 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Improve SEO and discoverability in search results
   - Enable rich snippets for mathematical content
   - Consider using CreativeWork for cited/attributed content
+
+- **Proper Static File Serving**: Replace the current file reading hack with proper static file serving
+  - Currently reading files directly and creating Response objects to handle paths with spaces
+  - Should implement proper URL encoding/decoding for file paths
+  - Consider using Flask's send_file() with proper path sanitization
+  - Or implement a custom static file handler that properly handles spaces in paths
+  - Ensure cache headers are properly applied through Flask's normal static file mechanisms
+  - This would be cleaner, more maintainable, and follow Flask best practices

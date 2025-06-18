@@ -36,7 +36,8 @@ class URLMapper:
                     
                     # Build canonical URL
                     relative_path = md_file.relative_to(Path('.'))
-                    section_name = relative_path.parts[0]
+                    # Remove "content/" prefix from section name for URLs
+                    section_name = relative_path.parts[1] if relative_path.parts[0] == 'content' else relative_path.parts[0]
                     canonical_url = f"{section_name}/{slug}"
                     
                     # Store mappings

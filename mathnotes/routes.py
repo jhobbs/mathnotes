@@ -2,10 +2,48 @@
 Flask routes for the Mathnotes application.
 """
 
+import os
 from pathlib import Path
-from flask import render_template, send_from_directory, abort, redirect, make_response
-from .config import CONTENT_DIRS, BASE_URL
+from flask import render_template, send_from_directory, abort, redirect, make_response, Response, request, current_app
+from .config import CONTENT_DIRS, BASE_URL, STATIC_FILE_CACHE_CONFIG
 from .file_utils import get_directory_contents, get_all_content_for_section
+
+def apply_content_file_caching(response, filepath):
+    """Apply caching headers to content files based on extension and environment."""
+    # Check if we're in development mode
+    is_development = (
+        current_app.debug or 
+        os.environ.get('FLASK_ENV') == 'development' or
+        os.environ.get('FLASK_DEBUG') == '1' or
+        'localhost' in request.host or
+        '127.0.0.1' in request.host
+    )
+    
+    if not is_development:
+        # Production: Apply caching based on file type
+        _, ext = os.path.splitext(filepath)
+        ext = ext.lower()
+        
+        if ext in STATIC_FILE_CACHE_CONFIG:
+            cache_config = STATIC_FILE_CACHE_CONFIG[ext]
+            max_age = cache_config['max_age']
+            is_public = cache_config.get('public', True)
+            
+            # Set cache control headers
+            cache_control_parts = [f'max-age={max_age}']
+            if is_public:
+                cache_control_parts.append('public')
+            else:
+                cache_control_parts.append('private')
+            
+            response.headers['Cache-Control'] = ', '.join(cache_control_parts)
+    else:
+        # Development: Explicitly disable caching
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+    
+    return response
 
 def register_routes(app, url_mapper, markdown_processor):
     """Register all Flask routes with the application."""
@@ -24,8 +62,10 @@ def register_routes(app, url_mapper, markdown_processor):
             if path.exists():
                 content = get_all_content_for_section(section, url_mapper.file_to_canonical)
                 if content:
+                    # Extract section name without content/ prefix
+                    section_name = section.replace('content/', '') if section.startswith('content/') else section
                     sections.append({
-                        'name': section.title(),
+                        'name': section_name.title(),
                         'path': section,
                         'content': content
                     })
@@ -38,6 +78,31 @@ def register_routes(app, url_mapper, markdown_processor):
     @app.route('/mathnotes/<path:filepath>')
     def serve_content(filepath):
         """Serve markdown content or static files."""
+        # Handle static files (HTML, JS, CSS, images) first to avoid send_from_directory issues with spaces
+        if Path(filepath).exists() and Path(filepath).is_file():
+            if filepath.endswith('.html'):
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                response = Response(content, mimetype='text/html')
+                return apply_content_file_caching(response, filepath)
+            elif filepath.endswith('.js'):
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                response = Response(content, mimetype='application/javascript')
+                return apply_content_file_caching(response, filepath)
+            elif filepath.endswith('.css'):
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                response = Response(content, mimetype='text/css')
+                return apply_content_file_caching(response, filepath)
+            elif filepath.endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg')):
+                with open(filepath, 'rb') as f:
+                    content = f.read()
+                import mimetypes
+                mimetype = mimetypes.guess_type(filepath)[0] or 'application/octet-stream'
+                response = Response(content, mimetype=mimetype)
+                return apply_content_file_caching(response, filepath)
+        
         # First check if this URL needs a redirect
         redirect_url = url_mapper.get_redirect_url(filepath)
         if redirect_url:
@@ -72,15 +137,7 @@ def register_routes(app, url_mapper, markdown_processor):
             if content:
                 return render_template('page.html', **content)
         
-        # Check for HTML files (interactive demos)
-        if filepath.endswith('.html') and Path(filepath).exists():
-            return send_from_directory('.', filepath)
-        
-        # Check for static files (js, css, images)
-        if Path(filepath).exists() and Path(filepath).is_file():
-            directory = Path(filepath).parent
-            filename = Path(filepath).name
-            return send_from_directory(str(directory) or '.', filename)
+        # Static files are handled at the top of the function now
         
         abort(404)
 
