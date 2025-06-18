@@ -65,6 +65,13 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Keep fullscreen popup functionality but use modal/overlay instead of iframe
   - Would provide seamless user experience without iframe boundaries
 
+- **Better Desktop Layout**: Take more advantage of horizontal space on desktop displays
+  - Mobile layout already works well for narrow screens
+  - Desktop has too much unused horizontal space with current single-column layout
+  - Consider sidebar navigation, table of contents, or multi-column content
+  - Could add section navigation, definition index, or theorem overview in sidebar
+  - Maintain mobile-first responsive design while maximizing desktop real estate
+
 - **Proper Static File Serving**: Replace the current file reading hack with proper static file serving
   - Currently reading files directly and creating Response objects to handle paths with spaces
   - Should implement proper URL encoding/decoding for file paths
