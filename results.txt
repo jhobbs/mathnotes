@@ -1,0 +1,17 @@
+LinkChecker 10.4.0
+Copyright (C) 2000-2016 Bastian Kleineidam, 2010-2023 LinkChecker Authors
+LinkChecker comes with ABSOLUTELY NO WARRANTY!
+This is free software, and you are welcome to redistribute it under
+certain conditions. Look at the file `COPYING' within this distribution.
+Read the documentation at https://linkchecker.github.io/linkchecker/
+Write comments and bugs to https://github.com/linkchecker/linkchecker/issues
+
+Start checking at 2025-06-17 19:53:16-005
+
+Statistics:
+Downloaded: 1.07MB.
+Content types: 25 image, 128 text, 0 video, 0 audio, 13 application, 0 mail and 260 other.
+URL lengths: min=21, max=373, avg=104.
+
+That's it. 426 links in 426 URLs checked. 0 warnings found. 0 errors found.
+Stopped checking at 2025-06-17 19:54:16-005 (1 minute, 0 second)

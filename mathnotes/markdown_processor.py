@@ -67,6 +67,9 @@ class MarkdownProcessor:
                 # Restore math blocks with their original content
                 html_content = self._restore_math_blocks(html_content, display_math_blocks, inline_math_blocks)
                 
+                # Fix relative image paths to include content/ prefix
+                html_content = self._fix_relative_image_paths(html_content, filepath)
+                
                 # Fix escaped asterisks and tildes that should be rendered normally
                 html_content = html_content.replace(r'\*', '*')
                 html_content = html_content.replace(r'\~', '~')
@@ -199,3 +202,45 @@ class MarkdownProcessor:
                         description += '.'
         
         return description
+    
+    def _fix_relative_image_paths(self, html_content: str, filepath: str) -> str:
+        """Fix image paths in HTML to include the content directory prefix."""
+        import re
+        import os
+        
+        # Get the directory of the current markdown file
+        current_dir = os.path.dirname(filepath)
+        
+        # Pattern to match img tags with src attributes
+        img_pattern = r'<img([^>]*)\ssrc="([^"]+)"([^>]*)>'
+        
+        def replace_img_src(match):
+            pre_attrs = match.group(1)
+            src = match.group(2)
+            post_attrs = match.group(3)
+            
+            # Skip if it's already an absolute URL or data URI
+            if (src.startswith('http://') or src.startswith('https://') or 
+                src.startswith('data:')):
+                return match.group(0)  # Return unchanged
+            
+            # Handle absolute paths starting with /mathnotes/ but missing content/ prefix
+            if src.startswith('/mathnotes/') and not src.startswith('/mathnotes/content/'):
+                # Check if this path refers to a file that should be in content/
+                old_path = src[len('/mathnotes/'):]  # Remove /mathnotes/ prefix
+                if not old_path.startswith('static/'):  # Don't modify static file paths
+                    new_src = f"/mathnotes/content/{old_path}"
+                    return f'<img{pre_attrs} src="{new_src}"{post_attrs}>'
+            
+            # Handle relative paths
+            elif not src.startswith('/'):
+                # Convert relative path to include the content directory
+                if current_dir:
+                    new_src = f"/mathnotes/{current_dir}/{src}"
+                else:
+                    new_src = f"/mathnotes/{src}"
+                return f'<img{pre_attrs} src="{new_src}"{post_attrs}>'
+            
+            return match.group(0)  # Return unchanged
+        
+        return re.sub(img_pattern, replace_img_src, html_content)
