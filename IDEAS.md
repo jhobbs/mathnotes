@@ -28,6 +28,13 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Allows gradual conversion of existing content
   - Potential approaches: custom HTML-like tags, markdown extensions with explicit delimiters, YAML frontmatter blocks, or custom shortcodes
 
+- **Nested Mathematical Blocks**: Allow proofs, lemmas, and corollaries to be embedded inside theorem blocks
+  - State a theorem and include all related content (lemmas, proof, corollaries) within its block
+  - Create hierarchical structure where theorem contains its associated elements
+  - Improve logical organization and readability
+  - Could use nested block syntax or special child block types
+  - Maintains clear relationship between theorem and its supporting content
+
 - **Attribution/Citation Blocks**: Create structured blocks for referencing content from other authors
   - Explicit citation formatting with proper attribution
   - Support for different citation styles
@@ -48,6 +55,15 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Improve SEO and discoverability in search results
   - Enable rich snippets for mathematical content
   - Consider using CreativeWork for cited/attributed content
+
+- **Better Demo Embedding System**: Replace iframe-based demo embedding with direct HTML integration
+  - Current iframe approach creates unnecessary scrollbars and isolation
+  - Should directly embed demo HTML/CSS/JS content into the rendered page
+  - Parse demo files and inject their content inline without any isolation/namespacing
+  - Eliminate scrollbar issues and improve visual integration
+  - Remove need for separate demo CSS/JS files since demos will share main page styles
+  - Keep fullscreen popup functionality but use modal/overlay instead of iframe
+  - Would provide seamless user experience without iframe boundaries
 
 - **Proper Static File Serving**: Replace the current file reading hack with proper static file serving
   - Currently reading files directly and creating Response objects to handle paths with spaces
