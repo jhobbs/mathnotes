@@ -39,7 +39,7 @@ $$ \tau = -pE\sin{\theta} $$
 
 where $p$ and $E$ are the respective magnitudes of the dipole moment and electric field.
 
-Here's a simulation of an electric field. Press the down arrow key to switch to making negatively charged particles, and spacebar sets them in motion.
+Here's a simulation of an electric field. Click to add negative charges (blue), Ctrl+click to add positive charges (red), and spacebar sets them in motion.
 
 {% include_relative electric-field.html %}
 

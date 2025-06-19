@@ -7,7 +7,17 @@ var moveParticles = false;
 
 function setup() {
     noStroke()
-    let canvas = createCanvas(windowWidth / 2, windowHeight / 1.5);
+    // Get the container element to size canvas to fit
+    let container = document.getElementById("field");
+    let containerWidth = container ? container.offsetWidth : windowWidth;
+    let containerHeight = container ? container.offsetHeight : windowHeight * 0.6;
+    
+    // If container has no explicit height, use a reasonable ratio
+    if (containerHeight <= 0) {
+        containerHeight = containerWidth * 0.6; // 3:5 aspect ratio
+    }
+    
+    let canvas = createCanvas(containerWidth, containerHeight);
     canvas.parent("field");
     background(51);
     frameRate(60);

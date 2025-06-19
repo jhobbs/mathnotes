@@ -167,6 +167,12 @@ These commands and operations have been explicitly allowed by the user and shoul
 
 Note: Any command or operation the user explicitly tells Claude to remember should be added to this list.
 
+## Commit and Ship Guidelines
+
+- **Do not ever commit and ship something without asking**
+  - Always seek explicit user confirmation before committing or deploying changes
+  - Ensure that the user provides clear instructions or approval for shipping code
+
 ## Todo and Ideas Management
 
 When the user asks to add something to the todo list or mentions future ideas:
