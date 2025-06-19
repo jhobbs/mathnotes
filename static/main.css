@@ -216,7 +216,7 @@ table th {
 /* Demo container and fullscreen button */
 .demo-container {
     position: relative;
-    margin: 1rem 0;
+    margin: 1rem 0 0.25rem 0;
 }
 
 /* Direct integration demo component */
