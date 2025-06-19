@@ -8,4 +8,6 @@ services:
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
+      - ENABLE_DIRECT_DEMOS=${ENABLE_DIRECT_DEMOS:-false}
+      - DIRECT_DEMO_WHITELIST=${DIRECT_DEMO_WHITELIST:-}
     command: ["python", "run.py"]

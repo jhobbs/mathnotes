@@ -7,8 +7,9 @@ import re
 from pathlib import Path
 from typing import Dict, Optional
 import frontmatter
-from .config import create_markdown_instance
+from .config import create_markdown_instance, ENABLE_DIRECT_DEMOS, DIRECT_DEMO_WHITELIST
 from .structured_math import StructuredMathParser, process_structured_math_content
+from flask import g
 
 class MarkdownProcessor:
     """Handles markdown processing with Jekyll includes, wiki links, and structured math."""
@@ -27,6 +28,10 @@ class MarkdownProcessor:
         Returns:
             Dictionary with content, metadata, and other rendering info
         """
+        # Track demos for this render
+        integrated_demos = []
+        demo_scripts = []
+        
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
                 post = frontmatter.load(f)
@@ -41,12 +46,17 @@ class MarkdownProcessor:
                     current_dir = os.path.dirname(filepath)
                     # Create the URL path for the included file
                     url_path = os.path.join(current_dir, include_file).replace('\\', '/')
-                    # Return an iframe that loads the HTML file with fullscreen button
-                    iframe_id = f"demo-{hash(url_path)}"
-                    return f'''<div class="demo-container">
-                        <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="800" frameborder="0"></iframe>
-                        <button class="fullscreen-btn" data-iframe-id="{iframe_id}" data-src="/mathnotes/{url_path}" title="Open in fullscreen">⛶</button>
-                    </div>'''
+                    
+                    # Check if direct integration is enabled for this demo
+                    if ENABLE_DIRECT_DEMOS and include_file in DIRECT_DEMO_WHITELIST:
+                        return self._integrate_demo_directly(current_dir, include_file, integrated_demos, demo_scripts)
+                    else:
+                        # Use traditional iframe approach
+                        iframe_id = f"demo-{hash(url_path)}"
+                        return f'''<div class="demo-container">
+                            <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="800" frameborder="0"></iframe>
+                            <button class="fullscreen-btn" data-iframe-id="{iframe_id}" data-src="/mathnotes/{url_path}" title="Open in fullscreen">⛶</button>
+                        </div>'''
                 
                 content = re.sub(include_pattern, replace_include, content)
                 
@@ -97,7 +107,9 @@ class MarkdownProcessor:
                     'title': post.metadata.get('title', Path(filepath).stem.replace('-', ' ').title()),
                     'page_description': description,
                     'source_path': filepath,
-                    'canonical_url': canonical_path
+                    'canonical_url': canonical_path,
+                    'has_integrated_demos': len(integrated_demos) > 0,
+                    'demo_scripts': demo_scripts
                 }
         except Exception as e:
             print(f"Error reading {filepath}: {e}")
@@ -261,3 +273,103 @@ class MarkdownProcessor:
             return match.group(0)  # Return unchanged
         
         return re.sub(img_pattern, replace_img_src, html_content)
+    
+    def _integrate_demo_directly(self, current_dir: str, include_file: str, integrated_demos: list, demo_scripts: list) -> str:
+        """
+        Integrate a demo HTML file directly into the page instead of using an iframe.
+        
+        Args:
+            current_dir: Directory of the current markdown file
+            include_file: Name of the HTML file to include
+            
+        Returns:
+            HTML string with the demo integrated directly
+        """
+        demo_path = os.path.join(current_dir, include_file)
+        
+        # Track this demo
+        integrated_demos.append(include_file)
+        
+        try:
+            with open(demo_path, 'r', encoding='utf-8') as f:
+                html_content = f.read()
+            
+            # First, extract external script references from head
+            script_src_pattern = r'<script[^>]+src="([^"]+)"[^>]*></script>'
+            for match in re.finditer(script_src_pattern, html_content, re.IGNORECASE):
+                src = match.group(1)
+                # Skip CDN scripts (they're loaded in base template)
+                if not src.startswith('http') and not src.startswith('//'):
+                    # Convert relative path to absolute
+                    if not src.startswith('/'):
+                        script_path = os.path.join(current_dir, src).replace('\\', '/')
+                    else:
+                        script_path = src.lstrip('/')
+                    if script_path not in demo_scripts:
+                        demo_scripts.append(script_path)
+            
+            # Extract content between <body> tags (or entire content if no body tags)
+            body_match = re.search(r'<body[^>]*>(.*?)</body>', html_content, re.DOTALL | re.IGNORECASE)
+            if body_match:
+                demo_content = body_match.group(1)
+            else:
+                # If no body tags, try to extract main content
+                # Remove DOCTYPE, html, head tags
+                demo_content = re.sub(r'<!DOCTYPE[^>]*>', '', html_content, flags=re.IGNORECASE)
+                demo_content = re.sub(r'<html[^>]*>|</html>', '', demo_content, flags=re.IGNORECASE)
+                demo_content = re.sub(r'<head[^>]*>.*?</head>', '', demo_content, flags=re.DOTALL | re.IGNORECASE)
+                demo_content = demo_content.strip()
+            
+            # Extract script tags and add CSP nonces
+            script_pattern = r'<script([^>]*)>(.*?)</script>'
+            scripts = []
+            
+            def extract_script(match):
+                attrs = match.group(1)
+                content = match.group(2)
+                
+                # Check if it's an external script
+                if 'src=' in attrs:
+                    # Keep external scripts as-is
+                    return match.group(0)
+                else:
+                    # For inline scripts, we'll add them separately with nonces
+                    scripts.append(content)
+                    return ''  # Remove from main content
+            
+            demo_content = re.sub(script_pattern, extract_script, demo_content, flags=re.DOTALL | re.IGNORECASE)
+            
+            # Generate unique demo ID
+            demo_id = f"demo-{hash(demo_path) & 0x7FFFFFFF}"  # Positive hash
+            
+            # Build the integrated demo HTML
+            integrated_html = f'''<div class="demo-component" data-demo-id="{demo_id}" data-demo-file="{include_file}">
+                <div class="demo-content">
+                    {demo_content}
+                </div>'''
+            
+            # Add scripts with proper nonces and scope isolation
+            if scripts:
+                integrated_html += '\n'
+                for script in scripts:
+                    integrated_html += f'''<script nonce="{{{{ csp_nonce }}}}">
+(function() {{
+    // Scope isolation for {include_file}
+    const demoContainer = document.querySelector('[data-demo-id="{demo_id}"]');
+    {script}
+}})();
+</script>'''
+            
+            integrated_html += '\n</div>'
+            
+            return integrated_html
+            
+        except Exception as e:
+            print(f"Error integrating demo {demo_path}: {e}")
+            # Fallback to iframe approach
+            url_path = os.path.join(current_dir, include_file).replace('\\', '/')
+            iframe_id = f"demo-{hash(url_path)}"
+            return f'''<div class="demo-container">
+                <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="800" frameborder="0"></iframe>
+                <button class="fullscreen-btn" data-iframe-id="{iframe_id}" data-src="/mathnotes/{url_path}" title="Open in fullscreen">⛶</button>
+            </div>'''

@@ -2,6 +2,7 @@
 Configuration settings for the Mathnotes Flask application.
 """
 
+import os
 import markdown
 
 # Site configuration
@@ -67,3 +68,7 @@ STATIC_FILE_CACHE_CONFIG = {
     # HTML files - shorter cache for interactive demos
     '.html': {'max_age': 3600, 'public': True},   # 1 hour
 }
+
+# Demo integration feature flags
+ENABLE_DIRECT_DEMOS = os.environ.get('ENABLE_DIRECT_DEMOS', 'false').lower() == 'true'
+DIRECT_DEMO_WHITELIST = [demo.strip() for demo in os.environ.get('DIRECT_DEMO_WHITELIST', '').split(',') if demo.strip()]

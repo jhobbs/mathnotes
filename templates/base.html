@@ -30,6 +30,11 @@
     <!-- Main stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     
+    <!-- Demo styles for integrated demos -->
+    {% if has_integrated_demos %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='demo-style.css') }}">
+    {% endif %}
+    
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -117,5 +122,16 @@
             });
         });
     </script>
+    
+    <!-- Load P5.js and demo scripts for integrated demos -->
+    {% if has_integrated_demos %}
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js"></script>
+    <script src="{{ url_for('static', filename='demo-dark-mode.js') }}" nonce="{{ csp_nonce }}"></script>
+    {% if demo_scripts %}
+        {% for script_path in demo_scripts %}
+        <script src="/mathnotes/{{ script_path }}" nonce="{{ csp_nonce }}"></script>
+        {% endfor %}
+    {% endif %}
+    {% endif %}
 </body>
 </html>

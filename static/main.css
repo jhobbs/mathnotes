@@ -219,6 +219,25 @@ table th {
     margin: 1rem 0;
 }
 
+/* Direct integration demo component */
+.demo-component {
+    position: relative;
+    margin: 1rem 0;
+    min-height: 400px;
+}
+
+.demo-component .demo-content {
+    position: relative;
+    width: 100%;
+    min-height: 400px;
+}
+
+/* Ensure P5.js canvases in demo components are properly contained */
+.demo-component canvas {
+    max-width: 100%;
+    height: auto;
+}
+
 .fullscreen-btn {
     position: absolute;
     top: 10px;
