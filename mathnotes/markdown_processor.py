@@ -303,6 +303,15 @@ class MarkdownProcessor:
                     # Convert relative path to absolute
                     if not src.startswith('/'):
                         script_path = os.path.join(current_dir, src).replace('\\', '/')
+                        
+                        # Check if there's an integrated version and use that instead
+                        base_name = os.path.splitext(src)[0]
+                        integrated_version = f"{base_name}-integrated.js"
+                        integrated_path = os.path.join(current_dir, integrated_version).replace('\\', '/')
+                        
+                        if os.path.exists(integrated_path):
+                            script_path = integrated_path
+                            
                     else:
                         script_path = src.lstrip('/')
                     if script_path not in demo_scripts:

@@ -14,7 +14,16 @@ function setup() {
     const demoContainer = currentScript ? currentScript.closest('.demo-component') : document.querySelector('.demo-component');
     const fieldElement = demoContainer ? demoContainer.querySelector('#field') : document.getElementById('field');
     
-    let canvas = createCanvas(windowWidth / 2, windowHeight / 1.5);
+    // Use container width instead of half window width for better mobile experience
+    let containerWidth = windowWidth;
+    if (demoContainer) {
+        containerWidth = demoContainer.offsetWidth;
+    }
+    
+    // Use full container width, but cap height for reasonable viewing
+    let canvasHeight = Math.min(windowHeight * 0.6, containerWidth * 0.6);
+    let canvas = createCanvas(containerWidth, canvasHeight);
+    
     if (fieldElement) {
         canvas.parent(fieldElement);
     } else {

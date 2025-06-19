@@ -224,6 +224,7 @@ table th {
     position: relative;
     margin: 1rem 0;
     min-height: 400px;
+    width: 100%;
 }
 
 .demo-component .demo-content {
@@ -236,6 +237,20 @@ table th {
 .demo-component canvas {
     max-width: 100%;
     height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Mobile optimization for demo components */
+@media (max-width: 768px) {
+    .demo-component {
+        margin: 0.5rem 0;
+        width: 100%;
+    }
+    
+    .demo-component .demo-content {
+        padding: 0;
+    }
 }
 
 .fullscreen-btn {
