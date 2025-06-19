@@ -69,6 +69,5 @@ STATIC_FILE_CACHE_CONFIG = {
     '.html': {'max_age': 3600, 'public': True},   # 1 hour
 }
 
-# Demo integration feature flags
-ENABLE_DIRECT_DEMOS = os.environ.get('ENABLE_DIRECT_DEMOS', 'false').lower() == 'true'
-DIRECT_DEMO_WHITELIST = [demo.strip() for demo in os.environ.get('DIRECT_DEMO_WHITELIST', '').split(',') if demo.strip()]
+# Demo integration is now handled automatically by file presence
+# No configuration needed - demos use direct integration if *-integrated.html exists

@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 from typing import Dict, Optional
 import frontmatter
-from .config import create_markdown_instance, ENABLE_DIRECT_DEMOS, DIRECT_DEMO_WHITELIST
+from .config import create_markdown_instance
 from .structured_math import StructuredMathParser, process_structured_math_content
 from flask import g
 
@@ -38,25 +38,27 @@ class MarkdownProcessor:
                 
                 # Process Jekyll-style includes
                 content = post.content
-                include_pattern = r'{%\s*include_relative\s+([^\s%}]+)\s*%}'
                 
+                # Handle integrated includes first
+                integrated_pattern = r'{%\s*include_integrated_relative\s+([^\s%}]+)\s*%}'
+                def replace_integrated_include(match):
+                    include_file = match.group(1)
+                    current_dir = os.path.dirname(filepath)
+                    return self._integrate_demo_directly(current_dir, include_file, integrated_demos, demo_scripts)
+                
+                content = re.sub(integrated_pattern, replace_integrated_include, content)
+                
+                # Handle regular includes (iframe)
+                include_pattern = r'{%\s*include_relative\s+([^\s%}]+)\s*%}'
                 def replace_include(match):
                     include_file = match.group(1)
-                    # Get the directory of the current markdown file
                     current_dir = os.path.dirname(filepath)
-                    # Create the URL path for the included file
                     url_path = os.path.join(current_dir, include_file).replace('\\', '/')
-                    
-                    # Check if direct integration is enabled for this demo
-                    if ENABLE_DIRECT_DEMOS and include_file in DIRECT_DEMO_WHITELIST:
-                        return self._integrate_demo_directly(current_dir, include_file, integrated_demos, demo_scripts)
-                    else:
-                        # Use traditional iframe approach
-                        iframe_id = f"demo-{hash(url_path)}"
-                        return f'''<div class="demo-container">
-                            <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="400" frameborder="0"></iframe>
-                            <button class="fullscreen-btn" data-iframe-id="{iframe_id}" data-src="/mathnotes/{url_path}" title="Open in fullscreen">⛶</button>
-                        </div>'''
+                    iframe_id = f"demo-{hash(url_path)}"
+                    return f'''<div class="demo-container">
+                        <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="400" frameborder="0"></iframe>
+                        <button class="fullscreen-btn" data-iframe-id="{iframe_id}" data-src="/mathnotes/{url_path}" title="Open in fullscreen">⛶</button>
+                    </div>'''
                 
                 content = re.sub(include_pattern, replace_include, content)
                 

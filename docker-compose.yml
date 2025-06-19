@@ -8,6 +8,4 @@ services:
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
-      - ENABLE_DIRECT_DEMOS=${ENABLE_DIRECT_DEMOS:-true}
-      - DIRECT_DEMO_WHITELIST=${DIRECT_DEMO_WHITELIST:-electric-field.html}
     command: ["python", "run.py"]
