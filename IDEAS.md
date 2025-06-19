@@ -84,3 +84,17 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Or implement a custom static file handler that properly handles spaces in paths
   - Ensure cache headers are properly applied through Flask's normal static file mechanisms
   - This would be cleaner, more maintainable, and follow Flask best practices
+
+- **Standardize JS Demo Container/Canvas System**: Create a reusable framework for responsive demo sizing
+  - Extract the container detection and canvas sizing logic worked out for the electric field demo
+  - Create a standard template/library that handles desktop vs mobile sizing consistently
+  - Ensure all interactive demos use the same responsive sizing approach
+  - Eliminate need to manually solve container/canvas sizing for each demo
+  - Should handle both iframe and direct integration methods
+
+- **Mobile-Friendly Controls for Electric Field Demo**: Add touch-friendly UI controls
+  - Add on-screen play/pause button (alternative to spacebar)
+  - Add charge polarity toggle button (alternative to Ctrl+click)
+  - Add charge strength slider/input control
+  - Improve mobile usability and accessibility
+  - Consider adding visual feedback for current settings
