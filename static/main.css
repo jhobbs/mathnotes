@@ -248,6 +248,12 @@ table th {
     
     .demo-component .demo-content {
         padding: 0;
+        width: 100%;
+    }
+    
+    .demo-component canvas {
+        width: 100% !important;
+        height: auto !important;
     }
 }
 

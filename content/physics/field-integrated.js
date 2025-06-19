@@ -9,22 +9,25 @@ var moveParticles = false;
 function setup() {
     noStroke()
     
-    // Find the container within the current demo component
-    const currentScript = document.currentScript || document.querySelector('script[src*="field-integrated.js"]');
-    const demoContainer = currentScript ? currentScript.closest('.demo-component') : document.querySelector('.demo-component');
-    const fieldElement = demoContainer ? demoContainer.querySelector('#field') : document.getElementById('field');
+    // Get container elements first
+    const fieldElement = document.getElementById('field');
+    const demoContainer = document.querySelector('.demo-component');
     
-    // Get the container element to size canvas to fit
-    let container = fieldElement || demoContainer;
-    let containerWidth = container ? container.offsetWidth : windowWidth;
-    let containerHeight = container ? container.offsetHeight : windowHeight * 0.6;
+    // Simple responsive sizing - use full width on mobile
+    let canvasWidth, canvasHeight;
     
-    // If container has no explicit height, use a reasonable ratio
-    if (containerHeight <= 0) {
-        containerHeight = containerWidth * 0.6; // 3:5 aspect ratio
+    if (windowWidth < 768) {
+        // Mobile: use full window width minus small margin with reasonable height
+        canvasWidth = windowWidth - 20;
+        canvasHeight = (windowWidth - 20) * 0.65;
+    } else {
+        // Desktop: use container-based sizing
+        const container = fieldElement || demoContainer;
+        canvasWidth = container ? container.offsetWidth - 20 : windowWidth * 0.8;
+        canvasHeight = canvasWidth * 0.6;
     }
     
-    let canvas = createCanvas(containerWidth, containerHeight);
+    let canvas = createCanvas(canvasWidth, canvasHeight);
     
     if (fieldElement) {
         canvas.parent(fieldElement);
