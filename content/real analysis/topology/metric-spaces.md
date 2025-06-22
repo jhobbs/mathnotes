@@ -28,6 +28,8 @@ We can denote a metric space on set $X$ with metric $d$ as the tuple $(X, d).$
 
 ## Examples of Metric Spaces
 
+The most important metric spaces are the euclidean spaes $R^n$ together with a norm.
+
 
 :::theorem
 $(\mathbb{R}^n, d : \mathbb{R}^n \to \mathbb{R} = | \vec{x} - \vec{y} |)$ is a metric space for any $n \geq 0.$
@@ -52,6 +54,8 @@ Therefore, $d$ is a metric on $R^n$ and $(R^n, d)$ is a metric space.
 Note that $R^n$ by itself is just a vector space, but together with a norm forms a metric space. The proof above relies on the properties of norms without going into detail - norms are similar to distance metrics but they are even stricter because they require homogeneity - $a|x| = |ax|.$
 
 We could define other, non-norm metrics on $R^n,$ such as the **discrete metric,** which works for any set $X.$
+
+Also note that every subset of a $Y$ of a metric space $X$ is a metric space on its own, using the same distance function.
 :::
 
 :::definition "Discrete Metric"
@@ -293,4 +297,27 @@ By (a) and (c), $\overline{E}$ is the smallest closed subset of $X$ that contain
 
 :::theorem
 Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \overline{E}.$ Hence $y \in E$ if $E$ is closed.
+
+::::proof
+Suppose $y \in E.$ Then $y \in \overline{E}.$ Suppose $y \notin E.$ Now, by hypothesis, for every $h > 0,$ there is some $x$ such that $y - h < x < y,$ because otherwise, $x$ would be an uppper bound on $E.$ Therefore, every neighborhood $N_h(y)$ contains some $x \in E,$ and thus $y$ is a limit point of $E$ and $y \in \overline{E}.$
+::::
+:::
+
+:::definition "Open Relative"
+Suppose $E \subset Y \subset X,$ and $X$ is a metric space. We say that $E$ is **open relative** to $Y$ if to each $p \in E$ there is associated an $r > 0$ such that $q \in E, q \in Y$ whenever $d(p, q) < r.$
+:::
+
+:::theorem
+Suppose $Y \subset X.$ A subset $E$ of $Y$ is open relative to $Y$ iff $E = Y \cap G$ for some open subset $G$ of $X.$
+
+::::proof
+Suppose $E$ is open relative to $Y.$ Then, for every $p \in E,$ there is some $r_p > 0$ such that $d(p, q) < r_p,$ $q \in X$ implies that $q \in Y.$ Let $V_p$ be the set of all $q \in X$ where $d(p,q) < r_p$ (and thus $q \in Y$) and let
+
+$$ G = \bigcup_{p \in E} V_p. $$
+
+Then, since each $V_p$ is an open subset of $X,$ so is $G.$ Now, since $p \in V_p$ for each $p \in E,$ $E \subset G \cap Y.$ Also, since $V_p \cap Y \subset E$ for every $p \in E,$ $G \cap Y \subset E,$ and $E = G \cap Y.$
+
+Conversely, suppose $E = Y \cap G$ for some open subset $G$ of $X.$ Now, suppose $p \in E.$ Then, $p \in G,$ and there is some neighborhood $V_p \subset G.$ Then, $V_p \cap Y \subset E,$ so $E$ is open relative to $Y.$
+
+::::
 :::
