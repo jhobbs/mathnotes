@@ -7,7 +7,7 @@ new p5(function(p) {
     let traversalPath = [];
     let currentIndex = 0;
     let animationProgress = 0;
-    let animationSpeed = 0.02;
+    let animationSpeed = 0.03;
     let linePoints = [];
 
     // ===== p5.js Setup and Main Loop =====
