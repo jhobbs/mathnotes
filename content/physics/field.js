@@ -1,34 +1,48 @@
-var particles = [];
+// Electric field simulation - version for direct integration
+// This version is scoped to work within a demo container
 
+var particles = [];
 var forces = [];
 var numForces = 30;
-
 var moveParticles = false;
 
 function setup() {
     noStroke()
-    // Get the container element to size canvas to fit
-    let container = document.getElementById("field");
-    let containerWidth = container ? container.offsetWidth : windowWidth;
-    let containerHeight = container ? container.offsetHeight : windowHeight * 0.6;
     
-    // If container has no explicit height, use a reasonable ratio
-    if (containerHeight <= 0) {
-        containerHeight = containerWidth * 0.6; // 3:5 aspect ratio
+    // Get container elements first
+    const fieldElement = document.getElementById('field');
+    const demoContainer = document.querySelector('.demo-component');
+    
+    // Simple responsive sizing - use full width on mobile
+    let canvasWidth, canvasHeight;
+    
+    if (windowWidth < 768) {
+        // Mobile: use full window width minus small margin with reasonable height
+        canvasWidth = windowWidth - 20;
+        canvasHeight = (windowWidth - 20) * 0.65;
+    } else {
+        // Desktop: use container-based sizing
+        const container = fieldElement || demoContainer;
+        canvasWidth = container ? container.offsetWidth - 20 : windowWidth * 0.8;
+        canvasHeight = canvasWidth * 0.6;
     }
     
-    let canvas = createCanvas(containerWidth, containerHeight);
-    canvas.parent("field");
+    let canvas = createCanvas(canvasWidth, canvasHeight);
+    
+    if (fieldElement) {
+        canvas.parent(fieldElement);
+    } else {
+        canvas.parent("field");
+    }
+    
     background(51);
     frameRate(60);
-
 
     for (let i = width / numForces; i < width; i += width / numForces) {
         for (let j = height / numForces; j < height; j += height / numForces) {
             forces.push(new Force(i, j))
         }
     }
-
 }
 
 function draw() {
@@ -40,7 +54,6 @@ function draw() {
     }
 
     if (moveParticles) {
-
         for (let i = 0; i < particles.length; i++) {
             let particlePos = particles[i].p;
             let particleCharge = particles[i].m;
@@ -59,13 +72,10 @@ function draw() {
     }
 }
 
-
 function getElectrostaticForce(charges, point, charge) {
-
     resultingVector = createVector(0, 0)
 
     for (let i = 0; i < charges.length; i++) {
-
         let mPos = charges[i].p;
         let mCharge = charges[i].m * 100;
         let distance = dist(mPos.x, mPos.y, point.x, point.y);
@@ -81,19 +91,16 @@ function getElectrostaticForce(charges, point, charge) {
         resultingVector.add(createVector(
             ((-charge * mCharge) / pow(distance, 2)) * cosI,
             ((-charge * mCharge) / pow(distance, 2)) * sinJ));
-
     }
 
     return resultingVector;
-
 }
-
 
 // Add particle on click
 function mouseClicked() {
-    let sgn = -1;
-    if (keyCode === DOWN_ARROW) {
-        sgn = 1;
+    let sgn = -1; // Default to negative charge
+    if (keyIsDown(CONTROL)) {
+        sgn = 1; // Positive charge when Ctrl is held
     }
     particles.push(new Particle(mouseX, mouseY, sgn * 15))
 }
@@ -106,7 +113,7 @@ function arrow(x1, y1, x2, y2, offset) {
     rotate(angle - HALF_PI); //rotates the arrow point
     triangle(-offset * 0.6, offset*1.5, offset * 0.6, offset*1.5, 0, 0); //draws the arrow point as a triangle
     pop();
-  }
+}
 
 class Force {
     constructor(xPos, yPos) {
@@ -118,19 +125,25 @@ class Force {
         this.mag = getElectrostaticForce(charges, this.pos, -1)
     }
     paint() {
-
         let distance = dist(this.pos.x, this.pos.y, this.pos.x + this.mag.x * 100, this.pos.y + this.mag.y * 100)
         stroke(map(distance, 0, 50, 150, 255), 255, 100)
-        arrow(this.pos.x, this.pos.y, this.pos.x - this.mag.x * 500, this.pos.y - this.mag.y * 500, 3);
+        arrow(this.pos.x, this.pos.y, this.pos.x - this.mag.x * 200, this.pos.y - this.mag.y * 200, 3);
     }
 }
 
 function keyPressed() {
     if (keyCode === 32) {
         moveParticles = !moveParticles;
+        return false; // Prevent default behavior
     }
 }
 
+// Prevent spacebar from scrolling the page when anywhere on the page
+document.addEventListener('keydown', function(event) {
+    if (event.code === 'Space' || event.keyCode === 32) {
+        event.preventDefault();
+    }
+}, true);
 
 class Particle {
     constructor(xPos, yPos, charge) {
@@ -139,14 +152,20 @@ class Particle {
 
         this.inertia = createVector(0, 0);
         if (charge > 0) {
-            this.color = color(255, 0, 0);
+            this.color = color(255, 0, 0); // Red for positive
         } else {
-            this.color = color(0, 0, 255);
+            this.color = color(0, 0, 255); // Blue for negative
         }
     }
 
     paint() {
-        fill(this.color)
+        colorMode(RGB); // Ensure RGB mode for particle colors
+        noStroke();
+        if (this.charge > 0) {
+            fill(255, 0, 0); // Red for positive
+        } else {
+            fill(0, 0, 255); // Blue for negative
+        }
         circle(this.pos.x, this.pos.y, sqrt(abs(this.charge) * 100 / PI) - 5);
     }
 
