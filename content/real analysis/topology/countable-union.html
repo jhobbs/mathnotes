@@ -1,45 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countable Union Visualization</title>
     <link rel="stylesheet" href="/static/demo-style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-    <script src="/static/demo-dark-mode.js"></script>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        #canvas-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-        #info {
-            text-align: center;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 600px;
-        }
-    </style>
+    <script src="countable-union.js"></script>
 </head>
 <body>
-    <div id="canvas-container">
-        <div id="sketch-holder"></div>
-        <div id="info">
-            <h2>Diagonal Traversal of Countable Union</h2>
+    <div id="canvas-container" style="text-align: center;">
+        <div id="union-sketch-holder"></div>
+        <div id="info" style="margin-top: 20px;">
+            <h3>Diagonal Traversal of Countable Union</h3>
             <p>This animation shows how elements from countably many countable sets (E<sub>n</sub>) 
             can be enumerated using diagonal traversal, proving that a countable union of countable sets is countable.</p>
         </div>
     </div>
-
-    <script src="countable-union.js"></script>
 </body>
 </html>

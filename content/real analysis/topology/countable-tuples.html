@@ -1,44 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countable n-tuples Visualization</title>
     <link rel="stylesheet" href="/static/demo-style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-    <script src="/static/demo-dark-mode.js"></script>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        #canvas-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-        #info {
-            text-align: center;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 800px;
-        }
-    </style>
+    <script src="countable-tuples.js"></script>
 </head>
 <body>
-    <div id="canvas-container">
-        <div id="sketch-holder"></div>
-        <div id="info">
-            <h2>Countable n-tuples from Countable Set</h2>
+    <div id="canvas-container" style="text-align: center;">
+        <div id="tuples-sketch-holder"></div>
+        <div id="info" style="margin-top: 20px;">
+            <h3>Countable n-tuples from Countable Set</h3>
             <p>This animation illustrates the proof that B_n (the set of all n-tuples from a countable set A) is countable for any n.</p>
         </div>
     </div>
-    
-    <script src="countable-tuples.js"></script>
 </body>
 </html>
