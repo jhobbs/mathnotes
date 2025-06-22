@@ -40,6 +40,9 @@ new p5(function(p) {
     let canvasWidth, canvasHeight, centerY;
     let animationStartTime;
     let maxVisibleColumns = 4; // Will be calculated based on available width
+    
+    // Performance optimization: cache generated tuples
+    let cachedTuples = new Map();
 
     // ===== p5.js Setup and Draw =====
     p.setup = function() {
@@ -74,6 +77,9 @@ new p5(function(p) {
         p.strokeWeight(2);
         
         animationStartTime = p.millis();
+        
+        // Reduce frame rate for better performance when multiple demos are on same page
+        p.frameRate(45); // Down from default 60fps
     };
 
     p.draw = function() {
@@ -289,8 +295,9 @@ new p5(function(p) {
         const density = p.min(n, 4);
         const jitter = p.min(n - 1, 3);
         
-        // Generate and display sample tuples
-        const sampleElements = generateSampleTuples(n - 1, p.min(11, 5 + n * 2));
+        // Generate and display sample tuples - reduce count for performance
+        const maxElements = n > 4 ? p.min(8, 3 + n) : p.min(11, 5 + n * 2);
+        const sampleElements = generateSampleTuples(n - 1, maxElements);
         
         for (let i = 0; i < sampleElements.length; i++) {
             const baseY = getTupleY(i, sampleElements.length);
@@ -308,8 +315,8 @@ new p5(function(p) {
             }
         }
         
-        // Add density indicators for complex columns
-        if (n >= 4) {
+        // Add density indicators for complex columns - only for highest levels
+        if (n >= 6) {
             drawDensityIndicators(x, n);
         }
     }
@@ -383,12 +390,13 @@ new p5(function(p) {
             ? generateIntegerArray() 
             : generateSampleTuples(fromLevel, p.min(11, 5 + fromLevel * 2));
         
-        // Calculate arrow density
-        const density = fromLevel === 0 ? 1 : p.min(3 + fromLevel, 6);
-        const spreadFactor = p.min(toLevel * 10, 60);
+        // Calculate arrow density - reduce for performance
+        const density = fromLevel === 0 ? 1 : p.min(2 + fromLevel, 4); // Reduced from 3+fromLevel, 6
+        const spreadFactor = p.min(toLevel * 8, 40); // Reduced from 10, 60
         
-        // Draw arrows for each source element
-        for (let i = 0; i < sourceElements.length; i++) {
+        // Draw fewer arrows for performance - sample every other element for higher levels
+        const step = toLevel > 3 ? 2 : 1;
+        for (let i = 0; i < sourceElements.length; i += step) {
             const y1 = fromLevel === 0 
                 ? centerY + sourceElements[i][0] * CONFIG.VERTICAL_SPACING
                 : getTupleY(i, sourceElements.length);
@@ -397,8 +405,8 @@ new p5(function(p) {
             
             drawArrowsFromElement(x1, x2, y1, i, density, toLevel, fromLevel);
             
-            // Add spreading arrows for higher levels
-            if (toLevel >= 2 && i % p.max(1, 4 - toLevel) === 0) {
+            // Reduce spreading arrows frequency for performance
+            if (toLevel >= 2 && i % p.max(2, 5 - toLevel) === 0) { // Increased modulo for less frequent arrows
                 drawSpreadingArrows(x1, x2, y1, spreadFactor, toLevel, fromLevel);
             }
         }
@@ -448,8 +456,16 @@ new p5(function(p) {
     }
 
     function generateSampleTuples(level, count) {
+        // Use cache to avoid regenerating the same tuples
+        const cacheKey = `${level}-${count}`;
+        if (cachedTuples.has(cacheKey)) {
+            return cachedTuples.get(cacheKey);
+        }
+        
         if (level === 1) {
-            return generateIntegerArray();
+            const result = generateIntegerArray();
+            cachedTuples.set(cacheKey, result);
+            return result;
         }
         
         const result = [];
@@ -480,7 +496,9 @@ new p5(function(p) {
             }
         }
         
-        return result.slice(0, count);
+        const finalResult = result.slice(0, count);
+        cachedTuples.set(cacheKey, finalResult);
+        return finalResult;
     }
 
     function getTupleY(elementIndex, totalElements) {
