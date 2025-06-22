@@ -6,10 +6,9 @@ new p5(function(p) {
         STEP_DURATION: 2000,      // Time between columns appearing (ms)
         END_PAUSE: 2000,          // Pause at end before restarting (ms)
         
-        // Layout
-        COLUMN_SPACING: 200,      // Horizontal spacing between columns
-        START_X: 100,             // Starting x position for first column
-        MAX_VISIBLE_COLUMNS: 4,   // Maximum columns visible at once
+        // Layout  
+        COLUMN_SPACING: 120,      // Horizontal spacing between columns (reduced from 200)
+        START_X: 60,              // Starting x position for first column (reduced from 100)
         TOTAL_COLUMNS: 10,        // Total B_n sets to show (B_0 through B_9)
         
         // Column content
@@ -40,6 +39,7 @@ new p5(function(p) {
     // ===== Global Variables =====
     let canvasWidth, canvasHeight, centerY;
     let animationStartTime;
+    let maxVisibleColumns = 4; // Will be calculated based on available width
 
     // ===== p5.js Setup and Draw =====
     p.setup = function() {
@@ -64,6 +64,10 @@ new p5(function(p) {
         
         let canvas = p.createCanvas(canvasWidth, canvasHeight);
         canvas.parent('tuples-sketch-holder');
+        
+        // Calculate how many columns can fit based on available width
+        const availableWidth = canvasWidth - CONFIG.START_X * 2; // Account for margins
+        maxVisibleColumns = Math.max(4, Math.floor(availableWidth / CONFIG.COLUMN_SPACING));
         
         centerY = canvasHeight / 2;
         p.textAlign(p.CENTER, p.CENTER);
@@ -101,6 +105,10 @@ new p5(function(p) {
         
         p.resizeCanvas(canvasWidth, canvasHeight);
         centerY = canvasHeight / 2;
+        
+        // Recalculate how many columns can fit based on new width
+        const availableWidth = canvasWidth - CONFIG.START_X * 2; // Account for margins
+        maxVisibleColumns = Math.max(4, Math.floor(availableWidth / CONFIG.COLUMN_SPACING));
     };
 
     // ===== Animation Logic =====
@@ -125,7 +133,7 @@ new p5(function(p) {
     function getVisibleColumns(currentStep) {
         const columns = [];
         
-        if (currentStep < CONFIG.MAX_VISIBLE_COLUMNS) {
+        if (currentStep < maxVisibleColumns) {
             // Initial phase: columns appear one by one
             for (let i = 0; i <= currentStep; i++) {
                 columns.push({
@@ -134,9 +142,9 @@ new p5(function(p) {
                 });
             }
         } else {
-            // Shifting phase: show MAX_VISIBLE_COLUMNS, shifted appropriately
-            const offset = currentStep - CONFIG.MAX_VISIBLE_COLUMNS + 1;
-            for (let i = 0; i < CONFIG.MAX_VISIBLE_COLUMNS; i++) {
+            // Shifting phase: show maxVisibleColumns, shifted appropriately
+            const offset = currentStep - maxVisibleColumns + 1;
+            for (let i = 0; i < maxVisibleColumns; i++) {
                 const colIndex = i + offset;
                 if (colIndex < CONFIG.TOTAL_COLUMNS) {
                     columns.push({
