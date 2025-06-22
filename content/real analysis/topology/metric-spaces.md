@@ -103,7 +103,7 @@ Given $\vec{x} \in \mathbb{R}^k, r > 0,$ the open or closed **ball** with center
 
 ## Convex Sets
 
-:::definition "Convext Set"
+:::definition "Convex Set"
 A set $E \subset \mathbb{R}^k$ is said to be **convex** if
 
 $$ \lambda \vec{x} + (1 - \lambda)\vec{y} \in E $$
