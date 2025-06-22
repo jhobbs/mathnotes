@@ -79,7 +79,7 @@ new p5(function(p) {
         animationStartTime = p.millis();
         
         // Reduce frame rate for better performance when multiple demos are on same page
-        p.frameRate(45); // Down from default 60fps
+        p.frameRate(30); // Further reduced from 45fps to 30fps
     };
 
     p.draw = function() {
@@ -295,15 +295,27 @@ new p5(function(p) {
         const density = p.min(n, 4);
         const jitter = p.min(n - 1, 3);
         
-        // Generate and display sample tuples - reduce count for performance
-        const maxElements = n > 4 ? p.min(8, 3 + n) : p.min(11, 5 + n * 2);
+        // Generate and display sample tuples - aggressive reduction for high levels
+        let maxElements;
+        if (n > 6) {
+            maxElements = 5; // Very few elements for high levels
+        } else if (n > 4) {
+            maxElements = p.min(7, 3 + n);
+        } else {
+            maxElements = p.min(11, 5 + n * 2);
+        }
         const sampleElements = generateSampleTuples(n - 1, maxElements);
         
-        for (let i = 0; i < sampleElements.length; i++) {
+        // Reduce visual complexity for high levels
+        const elementStep = n > 5 ? 2 : 1; // Skip every other element for very high levels
+        
+        for (let i = 0; i < sampleElements.length; i += elementStep) {
             const baseY = getTupleY(i, sampleElements.length);
             const subElements = getSubElements(density);
             
-            for (let j = 0; j < subElements.length; j++) {
+            // Reduce sub-element density for high levels
+            const subStep = n > 6 ? 2 : 1;
+            for (let j = 0; j < subElements.length; j += subStep) {
                 const spacing = p.max(6, 20 - (n - 2) * 3);
                 const y = baseY + (j - p.floor(density/2)) * spacing + (i % jitter) * 2;
                 const xOffset = (j % 2) * p.min(15, 25 - n * 2) - p.min(7.5, 12.5 - n);
@@ -394,8 +406,12 @@ new p5(function(p) {
         const density = fromLevel === 0 ? 1 : p.min(2 + fromLevel, 4); // Reduced from 3+fromLevel, 6
         const spreadFactor = p.min(toLevel * 8, 40); // Reduced from 10, 60
         
-        // Draw fewer arrows for performance - sample every other element for higher levels
-        const step = toLevel > 3 ? 2 : 1;
+        // Draw fewer arrows for performance - skip more elements for higher levels
+        let step = 1;
+        if (toLevel > 6) step = 4;      // Skip 3/4 of arrows for very high levels
+        else if (toLevel > 4) step = 3; // Skip 2/3 of arrows for high levels  
+        else if (toLevel > 3) step = 2; // Skip every other arrow
+        
         for (let i = 0; i < sourceElements.length; i += step) {
             const y1 = fromLevel === 0 
                 ? centerY + sourceElements[i][0] * CONFIG.VERTICAL_SPACING
@@ -405,8 +421,8 @@ new p5(function(p) {
             
             drawArrowsFromElement(x1, x2, y1, i, density, toLevel, fromLevel);
             
-            // Reduce spreading arrows frequency for performance
-            if (toLevel >= 2 && i % p.max(2, 5 - toLevel) === 0) { // Increased modulo for less frequent arrows
+            // Reduce spreading arrows frequency for performance - disable for high levels
+            if (toLevel >= 2 && toLevel <= 5 && i % p.max(3, 6 - toLevel) === 0) { // Only show for mid-levels
                 drawSpreadingArrows(x1, x2, y1, spreadFactor, toLevel, fromLevel);
             }
         }
