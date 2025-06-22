@@ -172,6 +172,7 @@ Note: Any command or operation the user explicitly tells Claude to remember shou
 - **Do not ever commit and ship something without asking**
   - Always seek explicit user confirmation before committing or deploying changes
   - Ensure that the user provides clear instructions or approval for shipping code
+  - **Never commit and push on your own**
 
 ## Todo and Ideas Management
 
