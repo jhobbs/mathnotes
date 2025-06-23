@@ -200,7 +200,7 @@ Therefore, $N_s(q) \subset N_r(p),$ so $q$ is an interior point of $N_r(p),$ and
 ::::
 :::
 
-{% include_relative neighborhood-demo.html %}
+{% include_integrated_relative neighborhood-demo.html %}
 
 
 :::theorem

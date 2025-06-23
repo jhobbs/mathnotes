@@ -1,73 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open Neighborhoods Demonstration</title>
     <link rel="stylesheet" href="/static/demo-style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-    <script src="/static/demo-dark-mode.js"></script>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        #canvas-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-        #info {
-            text-align: center;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 600px;
-        }
-        #controls {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            text-align: center;
-        }
-        button {
-            background-color: var(--primary-color, #007bff);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            margin: 5px;
-        }
-        button:hover {
-            opacity: 0.9;
-        }
-        .instruction {
-            color: var(--text-color);
-            font-style: italic;
-            margin: 10px 0;
-        }
-    </style>
+    <script src="neighborhood-demo.js"></script>
 </head>
 <body>
-    <div id="canvas-container">
-        <div id="sketch-holder"></div>
-        <div id="controls">
+    <div id="neighborhood-container" style="text-align: center;">
+        <div id="neighborhood-sketch-holder"></div>
+        <div id="controls" style="margin-top: 20px;">
             <button id="reset-btn">Reset</button>
             <button id="zoom-toggle">Toggle Zoom</button>
         </div>
-        <div id="info">
-            <h2>Every Neighborhood is Open</h2>
+        <div id="info" style="margin-top: 20px;">
+            <h3>Every Neighborhood is Open</h3>
             <p>This demonstration shows that every neighborhood in a metric space is an open set.</p>
             <p class="instruction" id="instruction">Click and drag to create a neighborhood.</p>
             <p>A set is <strong>open</strong> if every point in the set is an interior point. A point is an <strong>interior point</strong> if there exists a neighborhood around it that is entirely contained within the set.</p>
             <p style="font-size: 0.9em; opacity: 0.8;">Use trackpad/mouse wheel to zoom in and out</p>
         </div>
     </div>
-
-    <script src="neighborhood-demo.js"></script>
 </body>
 </html>

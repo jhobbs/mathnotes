@@ -14,6 +14,14 @@ This file tracks ideas for future features, enhancements, and demonstrations for
 
 - **Reusable Cartesian Plane Library**: Extract the cartesian plane, grid, axes, and zoom functionality from the neighborhood demo into a reusable JavaScript library for other mathematical visualizations
 
+- **Convert Remaining Demos to Integrated Format**: The following demos are still using iframe embedding (include_relative) and need to be converted to the integrated format (include_integrated_relative):
+  - **neighborhood-demo.html** - Real Analysis/Topology: Metric Spaces
+  - **projection.html** - Graphics: Projection and Homogeneous Coordinates
+  - **pendulum.html** - Differential Equations: Undamped Motion
+  - **elementary.html** - Cellular Automata: Elementary Cellular Automata
+  - **dilution.html** - Differential Equations: Dilution and Accretion
+  - **cellular.html** - Cellular Automata: Game of Life
+
 ## Content Ideas
 
 (Add future content ideas here)
