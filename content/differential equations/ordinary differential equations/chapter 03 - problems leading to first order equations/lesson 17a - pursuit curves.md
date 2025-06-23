@@ -188,6 +188,6 @@ We show a limited history of the bug's position to make the path more obvious. T
 * red - the bug's linear velocity from the turntable's rotation
 * yellow - the bug's combined velocity from its locomotive motion and the turntable's rotation
 
-{% include_relative turntable.html %}
+{% include_integrated_relative turntable.html %}
 
 It's interesting to me that the "always walk towards the light" approach can wind up with the bug never reaching the light, but instead getting stuck at some kind of equillibrium point where the bug's locomotive velocity and the linear velocity from the rotation of the turntable are equal in value and opposite in direction. I wonder how we find which initial conditions lead to the bug reaching the light and which don't? For those that don't, I wonder how we find the equillibrium point the bug will stop at.
