@@ -10,6 +10,10 @@ description: Definitions and properties of neighborhoods, interior and boundary 
 
 # Regions of the Complex Plane
 
+:::note
+This overlaps with the definitions in [[metric-spaces]] - I need to combine these!
+:::
+
 An **$\epsilon$-neighborhood** of a point $z_0$ is the set of all complex numbers $z$ satisfying
 
 $$ | z - z_0 | < \epsilon. $$
