@@ -28,6 +28,19 @@ This file tracks ideas for future features, enhancements, and demonstrations for
 
 ## Technical Improvements
 
+### ✅ Implemented Features
+
+- **Cross-Reference System for Structured Blocks** (Implemented 2024-12-26)
+  - Basic syntax: `@label` for auto-generated link text
+  - Type-specific: `@type:label` validates block type  
+  - Custom text: `@[custom text](label)` for full control
+  - Works in nested blocks (e.g., references within proofs)
+  - Error handling for broken references
+  - Currently supports same-page references only
+  - Next steps: cross-page references, tooltips, integration with numbering system
+
+### TODO Features
+
 - **Structured Theorem System**: Design and implement a structured theorem system with explicit control over theorem/proof boundaries
   - Must have explicit start/stop boundaries for theorems, proofs, definitions, examples, intuition sections
   - Should be opt-in (won't break existing content)
@@ -55,14 +68,16 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Generate "References" or "See Also" sections automatically
   - Note: We're basically reimplementing LaTeX's reference system for the web!
 
-- **Deep Linking to Structured Content**: Enable direct linking to specific theorems, definitions, and other structured items
-  - Generate unique anchor IDs for each theorem, definition, lemma, etc.
-  - Support linking from one theorem's proof to another theorem as justification
-  - Allow hash-based URLs like `/page#theorem-2-3` or `/page#def-continuity`
-  - Highlight or scroll to the target item when accessed via deep link
-  - Could integrate with the automatic numbering system for consistent IDs
-  - Enable tooltip previews when hovering over internal reference links
-  - Support both same-page and cross-page deep links
+- **Deep Linking to Structured Content**: ✅ PARTIALLY IMPLEMENTED - Basic cross-references now work!
+  - ✅ Generate unique anchor IDs for each theorem, definition, lemma, etc. (uses label metadata)
+  - ✅ Support linking from one theorem's proof to another theorem as justification (@label syntax)
+  - ✅ Allow hash-based URLs like `/page#theorem-2-3` or `/page#def-continuity` (works with labels)
+  - ✅ Support same-page deep links
+  - TODO: Highlight or scroll to the target item when accessed via deep link
+  - TODO: Integrate with the automatic numbering system for consistent IDs (when numbering is implemented)
+  - TODO: Enable tooltip previews when hovering over internal reference links
+  - TODO: Support cross-page deep links (currently only same-page references work)
+  - TODO: Roll out cross-references to all existing content (currently only in test files)
 
 - **Structured Definitions Index**: Build an indexable system for mathematical definitions
   - Separate from theorems but similar structured approach
