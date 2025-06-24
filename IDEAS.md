@@ -55,6 +55,15 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Generate "References" or "See Also" sections automatically
   - Note: We're basically reimplementing LaTeX's reference system for the web!
 
+- **Deep Linking to Structured Content**: Enable direct linking to specific theorems, definitions, and other structured items
+  - Generate unique anchor IDs for each theorem, definition, lemma, etc.
+  - Support linking from one theorem's proof to another theorem as justification
+  - Allow hash-based URLs like `/page#theorem-2-3` or `/page#def-continuity`
+  - Highlight or scroll to the target item when accessed via deep link
+  - Could integrate with the automatic numbering system for consistent IDs
+  - Enable tooltip previews when hovering over internal reference links
+  - Support both same-page and cross-page deep links
+
 - **Structured Definitions Index**: Build an indexable system for mathematical definitions
   - Separate from theorems but similar structured approach
   - Searchable definition index across all content
