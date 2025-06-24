@@ -69,6 +69,9 @@ class MarkdownProcessor:
                 math_parser = StructuredMathParser()
                 content, block_markers = math_parser.parse(content)
                 
+                # Process cross-references to structured blocks (@label or @type:label)
+                content = self._process_block_references(content, block_markers)
+                
                 # Protect math delimiters from markdown processing
                 content, display_math_blocks = self._protect_display_math(content)
                 content, inline_math_blocks = self._protect_inline_math(content)
@@ -152,6 +155,95 @@ class MarkdownProcessor:
             if url.endswith(f"/{slug}") or url == slug:
                 return url
         return None
+    
+    def _process_block_references(self, content: str, block_markers: Dict) -> str:
+        """Process cross-references to structured blocks.
+        
+        Supported formats:
+        - @label - Auto-generated link text
+        - @type:label - Auto-generated link text with type prefix
+        - @[custom text](label) - Custom link text
+        - @[custom text](type:label) - Custom link text with type validation
+        """
+        
+        def replace_custom_reference(match):
+            """Handle @[text](label) format"""
+            link_text = match.group(1)
+            ref_text = match.group(2)
+            
+            # Parse reference format: either "label" or "type:label"
+            if ':' in ref_text:
+                ref_type, ref_label = ref_text.split(':', 1)
+                ref_type = ref_type.strip()
+                ref_label = ref_label.strip()
+            else:
+                ref_type = None
+                ref_label = ref_text.strip()
+            
+            # Find the referenced block
+            target_block = None
+            for marker_id, block in block_markers.items():
+                if block.label == ref_label:
+                    # If type is specified, verify it matches
+                    if ref_type is None or block.block_type.value == ref_type:
+                        target_block = block
+                        break
+            
+            if target_block:
+                # Use the custom link text provided
+                return f'<a href="#{ref_label}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
+            else:
+                # Reference not found - return with error styling
+                return f'<span class="block-reference-error" data-ref="{ref_text}">@[{link_text}]({ref_text})</span>'
+        
+        def replace_simple_reference(match):
+            """Handle @label or @type:label format"""
+            ref_text = match.group(1)
+            
+            # Parse reference format: either "label" or "type:label"
+            if ':' in ref_text:
+                ref_type, ref_label = ref_text.split(':', 1)
+                ref_type = ref_type.strip()
+                ref_label = ref_label.strip()
+            else:
+                ref_type = None
+                ref_label = ref_text.strip()
+            
+            # Find the referenced block
+            target_block = None
+            for marker_id, block in block_markers.items():
+                if block.label == ref_label:
+                    # If type is specified, verify it matches
+                    if ref_type is None or block.block_type.value == ref_type:
+                        target_block = block
+                        break
+            
+            if target_block:
+                # Generate the link text
+                if ref_type:
+                    link_text = f"{target_block.display_name} {ref_label}"
+                else:
+                    link_text = target_block.display_name
+                    if target_block.title:
+                        link_text += f" ({target_block.title})"
+                
+                # Create the link with fragment identifier
+                return f'<a href="#{ref_label}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
+            else:
+                # Reference not found - return with error styling
+                return f'<span class="block-reference-error" data-ref="{ref_text}">@{ref_text}</span>'
+        
+        # First process custom references @[text](label)
+        # Pattern: @[any text](label or type:label)
+        custom_reference_pattern = r'@\[([^\]]+)\]\(([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)\)'
+        content = re.sub(custom_reference_pattern, replace_custom_reference, content)
+        
+        # Then process simple references @label or @type:label
+        # Pattern to match @label or @type:label (avoiding email addresses)
+        simple_reference_pattern = r'(?<![a-zA-Z0-9])@([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)'
+        content = re.sub(simple_reference_pattern, replace_simple_reference, content)
+        
+        return content
     
     def _protect_display_math(self, content: str):
         """Protect display math ($$...$$) from markdown processing."""
