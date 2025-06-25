@@ -306,10 +306,14 @@ class StructuredMathParser:
         # Add header if applicable
         if block.block_type != MathBlockType.PROOF:
             header_parts = [f'<div class="math-block-header">']
-            header_parts.append(f'<span class="math-block-type">{block.display_name}</span>')
             
             if block.title:
-                header_parts.append(f'<span class="math-block-title">({block.title})</span>')
+                # Type: Title format
+                header_parts.append(f'<span class="math-block-type">{block.display_name}:</span>')
+                header_parts.append(f'<span class="math-block-title">{block.title}</span>')
+            else:
+                # Just type without colon
+                header_parts.append(f'<span class="math-block-type">{block.display_name}</span>')
             
             header_parts.append('</div>')
             html_parts.extend(header_parts)
