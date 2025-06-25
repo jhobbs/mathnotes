@@ -72,11 +72,11 @@ class MathBlock:
         # Remove markdown formatting but preserve content
         text = self.content
         
-        # Remove display math blocks ($$...$$)
+        # Remove display math blocks ($$...$$) completely
         text = re.sub(r'\$\$.*?\$\$', '', text, flags=re.DOTALL)
         
-        # Remove inline math ($...$) but keep as placeholder
-        text = re.sub(r'\$[^$]+\$', '[math]', text)
+        # Keep inline math ($...$) as-is for rendering
+        # No need to replace - let MathJax handle it
         
         # Remove markdown emphasis markers
         text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)  # Bold

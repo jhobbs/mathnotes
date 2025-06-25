@@ -67,8 +67,11 @@ Suppose $K$ is compact relative to metric space $X.$ Let $p \in K^c.$ For each $
 Closed subsets of compact sets are compact.
 
 ::::proof
-Suppose $F \subset K \subset X,$ with $F$ closed relative to $X,$ and $K$ compact. Let $\{V_\alpha\}$ be an open cover of $F.$ Since $F^c$ is open relative to $X$ (see @open-iff-complement-closed).
+Suppose $F \subset K \subset X,$ with $F$ closed relative to $X,$ and $K$ compact. Let $\{V_\alpha\}$ be an open cover of $F.$ Since $F^c$ is open relative to $X$ (see @open-iff-complement-closed), if we add it to $\{V_\alpha\},$ we obtain an open cover of $K;$ let's call it $\Omega.$ Since $K$ is compact, we can obtain a finite subcover of $K$ by discarding all but a finite number of sets from $\Omega;$ let's call it $\Phi.$ Since $F \subset K,$ $\Phi$ is also a finite subcover of $F,$ and therefore $F$ is compact.
+::::
 
+::::note
+If $F^c \in \Phi,$ we may, but aren't required, to exclude it, and still have a finite open cover of $F.$
 ::::
 
 :::
