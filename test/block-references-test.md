@@ -104,11 +104,30 @@ This definition also has no title.
 If $f$ is continuous on $[a,b]$ and $g$ is differentiable, then the composite function has interesting properties.
 :::
 
+:::definition "Open Set"
+A set $U$ is open if every point in $U$ has a neighborhood contained in $U$.
+:::
+
+:::definition "Closed Set"
+A set $F$ is closed if its complement is open.
+:::
+
+:::definition "Complex Number, Real Part"
+A complex number has a real and imaginary part.
+:::
+
 References to blocks without titles:
 - @no-title-theorem should show just the label
 - @no-title-def should also show just the label
 - @theorem:no-title-theorem with type specified
 - @math-theorem shows theorem with math replaced
+
+## Testing Auto-Generated Labels
+
+References to definitions with auto-generated labels:
+- @open-set should link to the "Open Set" definition
+- @closed-set should link to the "Closed Set" definition  
+- @complex-number-real-part should link to the complex number definition
 
 ## End of Test
 
