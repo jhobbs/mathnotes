@@ -244,7 +244,7 @@ Conversely, assume $E$ is open. Let $x$ be a limit point of $E^c.$ Suppose, for 
 For some intuition, consider $U = [0, 4], E = [0,3].$ Any point $x$ in $E$ has a neighborhood $N_r(x)$ that contains only points in $E$ with as $r < d(x, 3),$ so it is open. Since 3 must be in $E^c,$ we have $E^c = [3,4],$ which is obviously closed. Here, 3 is the boundary between the two sets - it is a limit point for both sets - and it has to be in one set or the other. So, $E$ is open, but not closed, since it doesn't contain one of its limit points, 3. $E^c$ is closed because if $x$ is a limit point of $E^c,$ it would be a contradiction for it to be in $E,$ which is open and only contains interior points of $E.$ $E^c$ is also not open, because 3 has no neighborhoods that contain only points of $E^c.$
 :::
 
-:::theorem
+:::theorem {label: union-and-intersection-of-open-and-closed-sets}
 (a) - For any collection $\{G_a\}$ of open sets, $\bigcup_{\alpha} G_\alpha$ is open.
 
 (b) - For any collection $\{F_a\}$ of closed sets, $\bigcap_{\alpha} F_\alpha$ is closed.
@@ -308,7 +308,7 @@ Suppose $y \in E.$ Then $y \in \overline{E}.$ Suppose $y \notin E.$ Now, by hypo
 Suppose $E \subset Y \subset X,$ and $X$ is a metric space. We say that $E$ is **open relative** to $Y$ if to each $p \in E$ there is associated an $r > 0$ such that $q \in E, q \in Y$ whenever $d(p, q) < r.$
 :::
 
-:::theorem
+:::theorem {label: open-relative-iff-intersection-with-open-subset}
 Suppose $Y \subset X.$ A subset $E$ of $Y$ is open relative to $Y$ iff $E = Y \cap G$ for some open subset $G$ of $X.$
 
 ::::proof
