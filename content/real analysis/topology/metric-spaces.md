@@ -225,8 +225,8 @@ Suppose $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$ Then, $x \notin \b
 ::::
 :::
 
-:::theorem
-A set E is open iff its complement is closed.
+:::theorem "A set E is open iff its complement is closed" {label: open-iff-complement-closed}
+
 
 ::::proof
 First, consider the case that $E^c$ is empty, and therefore open. If $E^c$ has no limit points, it is vaccuously closed. Suppose $E^c$ has a limit point $x.$ Since $E$ is empty, $x$ must be in $E^c,$ therefore $x$ is closed. Now, consider the case that $E^c$ is empty, and therefore closed. If $E$ is empty, it is open, and the theorem is satisfied. If $E$ is not empty, a point $x$ in $E$ has only points in $E$ in any neighborhood, since all points are in $E,$ and therefore $E$ is open.

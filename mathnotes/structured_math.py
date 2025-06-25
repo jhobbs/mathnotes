@@ -77,9 +77,11 @@ class StructuredMathParser:
     # Pattern for block end: :::+ or :::+end (must match opening colons)
     BLOCK_END_PATTERN = re.compile(r'^(:::+)(?:end)?\s*$', re.MULTILINE)
     
-    def __init__(self):
+    def __init__(self, current_file: str = None, block_index = None):
         self.blocks: List[MathBlock] = []
         self._block_markers: Dict[str, MathBlock] = {}
+        self.current_file = current_file
+        self.block_index = block_index
     
     def parse(self, content: str) -> Tuple[str, Dict[str, MathBlock]]:
         """
@@ -405,6 +407,8 @@ class StructuredMathParser:
     def _process_child_block_references(self, content: str, block_markers: Dict[str, MathBlock]) -> str:
         """Process cross-references to structured blocks within child blocks.
         
+        Supports both local and cross-file references using the global block index.
+        
         Supported formats:
         - @label - Auto-generated link text
         - @type:label - Auto-generated link text with type prefix
@@ -426,18 +430,35 @@ class StructuredMathParser:
                 ref_type = None
                 ref_label = ref_text.strip()
             
-            # Find the referenced block
+            # Find the referenced block - first check local blocks
             target_block = None
+            target_url = None
+            
+            # Check local blocks first
             for marker_id, block in block_markers.items():
                 if block.label == ref_label:
                     # If type is specified, verify it matches
                     if ref_type is None or block.block_type.value == ref_type:
                         target_block = block
+                        target_url = f"#{ref_label}"  # Local reference
                         break
+            
+            # If not found locally and we have a global index, check there
+            if not target_block and self.block_index:
+                block_ref = self.block_index.get_reference(ref_label)
+                if block_ref:
+                    # Verify type if specified
+                    if ref_type is None or block_ref.block.block_type.value == ref_type:
+                        target_block = block_ref.block
+                        # Check if it's in the same file
+                        if block_ref.file_path == self.current_file:
+                            target_url = f"#{ref_label}"
+                        else:
+                            target_url = block_ref.full_url
             
             if target_block:
                 # Use the custom link text provided
-                return f'<a href="#{ref_label}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
+                return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
             else:
                 # Reference not found - return with error styling
                 return f'<span class="block-reference-error" data-ref="{ref_text}">@[{link_text}]({ref_text})</span>'
@@ -455,14 +476,31 @@ class StructuredMathParser:
                 ref_type = None
                 ref_label = ref_text.strip()
             
-            # Find the referenced block
+            # Find the referenced block - first check local blocks
             target_block = None
+            target_url = None
+            
+            # Check local blocks first
             for marker_id, block in block_markers.items():
                 if block.label == ref_label:
                     # If type is specified, verify it matches
                     if ref_type is None or block.block_type.value == ref_type:
                         target_block = block
+                        target_url = f"#{ref_label}"  # Local reference
                         break
+            
+            # If not found locally and we have a global index, check there
+            if not target_block and self.block_index:
+                block_ref = self.block_index.get_reference(ref_label)
+                if block_ref:
+                    # Verify type if specified
+                    if ref_type is None or block_ref.block.block_type.value == ref_type:
+                        target_block = block_ref.block
+                        # Check if it's in the same file
+                        if block_ref.file_path == self.current_file:
+                            target_url = f"#{ref_label}"
+                        else:
+                            target_url = block_ref.full_url
             
             if target_block:
                 # Generate the link text
@@ -473,8 +511,8 @@ class StructuredMathParser:
                     if target_block.title:
                         link_text += f" ({target_block.title})"
                 
-                # Create the link with fragment identifier
-                return f'<a href="#{ref_label}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
+                # Create the link with appropriate URL
+                return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
             else:
                 # Reference not found - return with error styling
                 return f'<span class="block-reference-error" data-ref="{ref_text}">@{ref_text}</span>'
@@ -492,7 +530,8 @@ class StructuredMathParser:
         return content
 
 
-def process_structured_math_content(html_content: str, block_markers: Dict[str, MathBlock], md_processor) -> str:
+def process_structured_math_content(html_content: str, block_markers: Dict[str, MathBlock], md_processor, 
+                                   current_file: str = None, block_index = None) -> str:
     """
     Replace block markers in HTML content with rendered math blocks.
     
@@ -500,8 +539,10 @@ def process_structured_math_content(html_content: str, block_markers: Dict[str, 
         html_content: The markdown-processed HTML content
         block_markers: Dictionary mapping marker IDs to MathBlock objects
         md_processor: The markdown processor to use for block content
+        current_file: Path to the current file being processed
+        block_index: Global block index for cross-file references
     """
-    parser = StructuredMathParser()
+    parser = StructuredMathParser(current_file=current_file, block_index=block_index)
     
     # Process only top-level blocks (blocks without parents)
     # Child blocks will be processed recursively by their parents

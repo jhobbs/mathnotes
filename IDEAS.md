@@ -31,13 +31,14 @@ This file tracks ideas for future features, enhancements, and demonstrations for
 ### ✅ Implemented Features
 
 - **Cross-Reference System for Structured Blocks** (Implemented 2024-12-26)
-  - Basic syntax: `@label` for auto-generated link text
-  - Type-specific: `@type:label` validates block type  
-  - Custom text: `@[custom text](label)` for full control
-  - Works in nested blocks (e.g., references within proofs)
-  - Error handling for broken references
-  - Currently supports same-page references only
-  - Next steps: cross-page references, tooltips, integration with numbering system
+  - ✅ Basic syntax: `@label` for auto-generated link text
+  - ✅ Type-specific: `@type:label` validates block type  
+  - ✅ Custom text: `@[custom text](label)` for full control
+  - ✅ Works in nested blocks (e.g., references within proofs)
+  - ✅ Error handling for broken references
+  - ✅ Cross-file references (builds global index on startup)
+  - ✅ Automatic URL resolution for cross-file links
+  - TODO: Tooltips on hover, integration with numbering system
 
 ### TODO Features
 
@@ -68,16 +69,17 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Generate "References" or "See Also" sections automatically
   - Note: We're basically reimplementing LaTeX's reference system for the web!
 
-- **Deep Linking to Structured Content**: ✅ PARTIALLY IMPLEMENTED - Basic cross-references now work!
+- **Deep Linking to Structured Content**: ✅ FULLY IMPLEMENTED - Cross-references work across files!
   - ✅ Generate unique anchor IDs for each theorem, definition, lemma, etc. (uses label metadata)
   - ✅ Support linking from one theorem's proof to another theorem as justification (@label syntax)
   - ✅ Allow hash-based URLs like `/page#theorem-2-3` or `/page#def-continuity` (works with labels)
   - ✅ Support same-page deep links
+  - ✅ Support cross-page deep links with automatic URL resolution
+  - ✅ Global block index built on startup for all labeled blocks
   - TODO: Highlight or scroll to the target item when accessed via deep link
   - TODO: Integrate with the automatic numbering system for consistent IDs (when numbering is implemented)
   - TODO: Enable tooltip previews when hovering over internal reference links
-  - TODO: Support cross-page deep links (currently only same-page references work)
-  - TODO: Roll out cross-references to all existing content (currently only in test files)
+  - TODO: Roll out cross-references to all existing content (add labels to blocks)
 
 - **Structured Definitions Index**: Build an indexable system for mathematical definitions
   - Separate from theorems but similar structured approach

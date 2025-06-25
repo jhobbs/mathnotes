@@ -14,9 +14,10 @@ from flask import g
 class MarkdownProcessor:
     """Handles markdown processing with Jekyll includes, wiki links, and structured math."""
     
-    def __init__(self, url_mapper):
+    def __init__(self, url_mapper, block_index=None):
         self.md = create_markdown_instance()
         self.url_mapper = url_mapper
+        self.block_index = block_index
     
     def render_markdown_file(self, filepath: str) -> Optional[Dict]:
         """
@@ -70,7 +71,7 @@ class MarkdownProcessor:
                 content, block_markers = math_parser.parse(content)
                 
                 # Process cross-references to structured blocks (@label or @type:label)
-                content = self._process_block_references(content, block_markers)
+                content = self._process_block_references(content, block_markers, filepath)
                 
                 # Protect math delimiters from markdown processing
                 content, display_math_blocks = self._protect_display_math(content)
@@ -91,7 +92,10 @@ class MarkdownProcessor:
                 
                 # Process structured mathematical content - second pass
                 if block_markers:
-                    html_content = process_structured_math_content(html_content, block_markers, self.md)
+                    html_content = process_structured_math_content(
+                        html_content, block_markers, self.md, 
+                        current_file=filepath, block_index=self.block_index
+                    )
                 
                 # Get canonical URL for this file
                 file_path_normalized = filepath.replace('\\', '/')
@@ -156,7 +160,7 @@ class MarkdownProcessor:
                 return url
         return None
     
-    def _process_block_references(self, content: str, block_markers: Dict) -> str:
+    def _process_block_references(self, content: str, block_markers: Dict, current_file: str) -> str:
         """Process cross-references to structured blocks.
         
         Supported formats:
@@ -180,18 +184,35 @@ class MarkdownProcessor:
                 ref_type = None
                 ref_label = ref_text.strip()
             
-            # Find the referenced block
+            # Find the referenced block - first check local blocks
             target_block = None
+            target_url = None
+            
+            # Check local blocks first
             for marker_id, block in block_markers.items():
                 if block.label == ref_label:
                     # If type is specified, verify it matches
                     if ref_type is None or block.block_type.value == ref_type:
                         target_block = block
+                        target_url = f"#{ref_label}"  # Local reference
                         break
+            
+            # If not found locally and we have a global index, check there
+            if not target_block and self.block_index:
+                block_ref = self.block_index.get_reference(ref_label)
+                if block_ref:
+                    # Verify type if specified
+                    if ref_type is None or block_ref.block.block_type.value == ref_type:
+                        target_block = block_ref.block
+                        # Check if it's in the same file
+                        if block_ref.file_path == current_file:
+                            target_url = f"#{ref_label}"
+                        else:
+                            target_url = block_ref.full_url
             
             if target_block:
                 # Use the custom link text provided
-                return f'<a href="#{ref_label}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
+                return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
             else:
                 # Reference not found - return with error styling
                 return f'<span class="block-reference-error" data-ref="{ref_text}">@[{link_text}]({ref_text})</span>'
@@ -209,14 +230,31 @@ class MarkdownProcessor:
                 ref_type = None
                 ref_label = ref_text.strip()
             
-            # Find the referenced block
+            # Find the referenced block - first check local blocks
             target_block = None
+            target_url = None
+            
+            # Check local blocks first
             for marker_id, block in block_markers.items():
                 if block.label == ref_label:
                     # If type is specified, verify it matches
                     if ref_type is None or block.block_type.value == ref_type:
                         target_block = block
+                        target_url = f"#{ref_label}"  # Local reference
                         break
+            
+            # If not found locally and we have a global index, check there
+            if not target_block and self.block_index:
+                block_ref = self.block_index.get_reference(ref_label)
+                if block_ref:
+                    # Verify type if specified
+                    if ref_type is None or block_ref.block.block_type.value == ref_type:
+                        target_block = block_ref.block
+                        # Check if it's in the same file
+                        if block_ref.file_path == current_file:
+                            target_url = f"#{ref_label}"
+                        else:
+                            target_url = block_ref.full_url
             
             if target_block:
                 # Generate the link text
@@ -227,8 +265,8 @@ class MarkdownProcessor:
                     if target_block.title:
                         link_text += f" ({target_block.title})"
                 
-                # Create the link with fragment identifier
-                return f'<a href="#{ref_label}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
+                # Create the link with appropriate URL
+                return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
             else:
                 # Reference not found - return with error styling
                 return f'<span class="block-reference-error" data-ref="{ref_text}">@{ref_text}</span>'
