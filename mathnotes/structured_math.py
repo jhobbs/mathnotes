@@ -504,12 +504,14 @@ class StructuredMathParser:
             
             if target_block:
                 # Generate the link text
-                if ref_type:
-                    link_text = f"{target_block.display_name} {ref_label}"
+                if target_block.title:
+                    link_text = target_block.title
                 else:
-                    link_text = target_block.display_name
-                    if target_block.title:
-                        link_text += f" ({target_block.title})"
+                    # Only show type if there's no title
+                    if ref_type:
+                        link_text = f"{target_block.display_name} {ref_label}"
+                    else:
+                        link_text = ref_label
                 
                 # Create the link with appropriate URL
                 return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'

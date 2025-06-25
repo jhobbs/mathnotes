@@ -90,6 +90,21 @@ We can also use custom link text: @[the continuity assumption](continuity) is cr
 
 The proof in @advanced demonstrates how references work within nested blocks.
 
+## Testing Blocks Without Titles
+
+:::theorem {label: no-title-theorem}
+This theorem has no title, just a label.
+:::
+
+:::definition {label: no-title-def}
+This definition also has no title.
+:::
+
+References to blocks without titles:
+- @no-title-theorem should show just the label
+- @no-title-def should also show just the label
+- @theorem:no-title-theorem with type specified
+
 ## End of Test
 
 This completes the basic test of the block reference system.
