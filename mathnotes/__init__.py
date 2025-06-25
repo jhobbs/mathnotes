@@ -18,6 +18,7 @@ from .context_processors import inject_year, inject_nonce, inject_version
 from .url_mapper import URLMapper
 from .markdown_processor import MarkdownProcessor
 from .routes import register_routes
+from .block_index import BlockIndex
 
 
 def create_app(config=None):
@@ -52,7 +53,11 @@ def create_app(config=None):
     url_mapper = URLMapper()
     url_mapper.build_url_mappings()
     
-    markdown_processor = MarkdownProcessor(url_mapper)
+    # Build global block index
+    block_index = BlockIndex(url_mapper)
+    block_index.build_index()
+    
+    markdown_processor = MarkdownProcessor(url_mapper, block_index)
     
     # Register middleware
     app.before_request(generate_nonce)
