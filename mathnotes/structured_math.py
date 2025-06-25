@@ -62,6 +62,50 @@ class MathBlock:
             MathBlockType.SOLUTION: "Solution",
         }
         return names.get(self.block_type, self.block_type.value.title())
+    
+    @property
+    def content_snippet(self) -> str:
+        """Get the first 7 words of content as a snippet for references."""
+        # Strip markdown and get plain text
+        import re
+        
+        # Remove markdown formatting but preserve content
+        text = self.content
+        
+        # Remove display math blocks ($$...$$)
+        text = re.sub(r'\$\$.*?\$\$', '', text, flags=re.DOTALL)
+        
+        # Remove inline math ($...$) but keep as placeholder
+        text = re.sub(r'\$[^$]+\$', '[math]', text)
+        
+        # Remove markdown emphasis markers
+        text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)  # Bold
+        text = re.sub(r'\*([^*]+)\*', r'\1', text)      # Italic
+        text = re.sub(r'__([^_]+)__', r'\1', text)      # Bold
+        text = re.sub(r'_([^_]+)_', r'\1', text)        # Italic
+        
+        # Remove links but keep text
+        text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
+        
+        # Remove headers
+        text = re.sub(r'^#+\s+', '', text, flags=re.MULTILINE)
+        
+        # Clean up whitespace
+        text = ' '.join(text.split())
+        
+        # Get first 7 words
+        words = text.split()[:7]
+        
+        if len(words) == 0:
+            return self.label or "untitled"
+        
+        snippet = ' '.join(words)
+        
+        # Add ellipsis if there were more words
+        if len(text.split()) > 7:
+            snippet += '...'
+            
+        return snippet
 
 
 class StructuredMathParser:
@@ -511,11 +555,8 @@ class StructuredMathParser:
                 if target_block.title:
                     link_text = target_block.title
                 else:
-                    # Only show type if there's no title
-                    if ref_type:
-                        link_text = f"{target_block.display_name} {ref_label}"
-                    else:
-                        link_text = ref_label
+                    # Use content snippet for better context
+                    link_text = target_block.content_snippet
                 
                 # Create the link with appropriate URL
                 return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
