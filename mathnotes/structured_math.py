@@ -106,6 +106,25 @@ class MathBlock:
             snippet += '...'
             
         return snippet
+    
+    @staticmethod
+    def normalize_label_from_title(title: str) -> str:
+        """Generate a normalized label from a title."""
+        import re
+        
+        # Convert to lowercase
+        label = title.lower()
+        
+        # Replace whitespace, commas, and other punctuation with hyphens
+        label = re.sub(r'[\s,]+', '-', label)
+        
+        # Remove any remaining non-alphanumeric characters except hyphens
+        label = re.sub(r'[^a-z0-9-]', '', label)
+        
+        # Remove leading/trailing hyphens and collapse multiple hyphens
+        label = re.sub(r'-+', '-', label).strip('-')
+        
+        return label
 
 
 class StructuredMathParser:
@@ -206,12 +225,17 @@ class StructuredMathParser:
                 # Parse metadata
                 metadata = self._parse_metadata(metadata_str) if metadata_str else {}
                 
+                # Auto-generate label for definitions if not explicitly provided
+                label = metadata.get('label')
+                if not label and block_type == MathBlockType.DEFINITION and title:
+                    label = MathBlock.normalize_label_from_title(title)
+                
                 # Create block
                 block = MathBlock(
                     block_type=block_type,
                     content="",
                     title=title,
-                    label=metadata.get('label'),
+                    label=label,
                     metadata=metadata,
                     parent=parent_block
                 )
@@ -460,12 +484,12 @@ class StructuredMathParser:
         Supported formats:
         - @label - Auto-generated link text
         - @type:label - Auto-generated link text with type prefix
-        - @[custom text](label) - Custom link text
-        - @[custom text](type:label) - Custom link text with type validation
+        - @{custom text|label} - Custom link text
+        - @{custom text|type:label} - Custom link text with type validation
         """
         
         def replace_custom_reference(match):
-            """Handle @[text](label) format"""
+            """Handle @{text|label} format"""
             link_text = match.group(1)
             ref_text = match.group(2)
             
@@ -509,7 +533,7 @@ class StructuredMathParser:
                 return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
             else:
                 # Reference not found - return with error styling
-                return f'<span class="block-reference-error" data-ref="{ref_text}">@[{link_text}]({ref_text})</span>'
+                return f'<span class="block-reference-error" data-ref="{ref_text}">@{{{link_text}|{ref_text}}}</span>'
         
         def replace_simple_reference(match):
             """Handle @label or @type:label format"""
@@ -564,9 +588,9 @@ class StructuredMathParser:
                 # Reference not found - return with error styling
                 return f'<span class="block-reference-error" data-ref="{ref_text}">@{ref_text}</span>'
         
-        # First process custom references @[text](label)
-        # Pattern: @[any text](label or type:label)
-        custom_reference_pattern = r'@\[([^\]]+)\]\(([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)\)'
+        # First process custom references @{text|label}
+        # Pattern: @{any text|label or type:label}
+        custom_reference_pattern = r'@\{([^|]+)\|([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)\}'
         content = re.sub(custom_reference_pattern, replace_custom_reference, content)
         
         # Then process simple references @label or @type:label
@@ -597,6 +621,9 @@ def process_structured_math_content(html_content: str, block_markers: Dict[str, 
         if block.parent is None:  # Only process top-level blocks
             # Protect math in block content before markdown processing
             block_content = block.content
+            
+            # Process cross-references in block content
+            block_content = parser._process_child_block_references(block_content, block_markers)
             
             # Protect display math ($$...$$)
             display_math_blocks = {}

@@ -40,6 +40,7 @@ class MarkdownProcessor:
                 # Process Jekyll-style includes
                 content = post.content
                 
+                
                 # Handle integrated includes first
                 integrated_pattern = r'{%\s*include_integrated_relative\s+([^\s%}]+)\s*%}'
                 def replace_integrated_include(match):
@@ -73,6 +74,7 @@ class MarkdownProcessor:
                 # Process cross-references to structured blocks (@label or @type:label)
                 content = self._process_block_references(content, block_markers, filepath)
                 
+                
                 # Protect math delimiters from markdown processing
                 content, display_math_blocks = self._protect_display_math(content)
                 content, inline_math_blocks = self._protect_inline_math(content)
@@ -82,6 +84,7 @@ class MarkdownProcessor:
                 
                 # Restore math blocks with their original content
                 html_content = self._restore_math_blocks(html_content, display_math_blocks, inline_math_blocks)
+                
                 
                 # Fix relative image paths to include content/ prefix
                 html_content = self._fix_relative_image_paths(html_content, filepath)
@@ -121,7 +124,9 @@ class MarkdownProcessor:
                     'demo_scripts': demo_scripts
                 }
         except Exception as e:
+            import traceback
             print(f"Error reading {filepath}: {e}")
+            print(f"Traceback: {traceback.format_exc()}")
             return None
     
     def _replace_wiki_link(self, match):
@@ -166,12 +171,12 @@ class MarkdownProcessor:
         Supported formats:
         - @label - Auto-generated link text
         - @type:label - Auto-generated link text with type prefix
-        - @[custom text](label) - Custom link text
-        - @[custom text](type:label) - Custom link text with type validation
+        - @{custom text|label} - Custom link text
+        - @{custom text|type:label} - Custom link text with type validation
         """
         
         def replace_custom_reference(match):
-            """Handle @[text](label) format"""
+            """Handle @{text|label} format"""
             link_text = match.group(1)
             ref_text = match.group(2)
             
@@ -215,7 +220,7 @@ class MarkdownProcessor:
                 return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
             else:
                 # Reference not found - return with error styling
-                return f'<span class="block-reference-error" data-ref="{ref_text}">@[{link_text}]({ref_text})</span>'
+                return f'<span class="block-reference-error" data-ref="{ref_text}">@{{{link_text}|{ref_text}}}</span>'
         
         def replace_simple_reference(match):
             """Handle @label or @type:label format"""
@@ -270,9 +275,9 @@ class MarkdownProcessor:
                 # Reference not found - return with error styling
                 return f'<span class="block-reference-error" data-ref="{ref_text}">@{ref_text}</span>'
         
-        # First process custom references @[text](label)
-        # Pattern: @[any text](label or type:label)
-        custom_reference_pattern = r'@\[([^\]]+)\]\(([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)\)'
+        # First process custom references @{text|label}
+        # Pattern: @{any text|label or type:label}
+        custom_reference_pattern = r'@\{([^|]+)\|([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)\}'
         content = re.sub(custom_reference_pattern, replace_custom_reference, content)
         
         # Then process simple references @label or @type:label
