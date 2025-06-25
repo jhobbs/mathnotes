@@ -54,7 +54,9 @@ Conversely, suppose $K$ is compact relative to $Y$ and let $\{G_\alpha\}$ be a c
 ::::
 :::
 
-:::theorem "Any compact subset K of a metric space X is closed."
+:::theorem
+
+Any compact subset $K$ of a metric space $X$ is closed.
 
 ::::proof
 Suppose $K$ is compact relative to metric space $X.$ Let $p \in K^c.$ For each $q \in K,$ we can define $r_q = \frac{1}{2} d(p,q),$ and let $P_q$ and $Q_q$ be neighborhoods of radius $r_q$ around $p$ and $q,$ respectively. Note that $P_q$ and $Q_q$ are disjoint, because we defined their radii to be half the distance between them, and they are open.) Now, since $K$ is compact, we can pick a finite number of points in $K,$ $q_1, \dots, q_n,$ such that $K \subset Q_{q_1} \cup \cdots \cup Q_{q_n} = Q$ ($Q$ is a finite subcover of $K.$) Using the same set of points as reference, let $P_{q_1} \cap \cdots \cap P_{q_n} = P.$ Note that $P \cap Q = \{\},$ since each $P_q$ is disjoint with its paired $Q_q$ (to be in $P$, a point must be in all $P_q,$ but any point in $Q$ is not in at least one $P_q.$) $P$ is open, since it is the intersection of finitely many open sets (see a proof in [[metric-spaces]],) and obviously contains $p,$ since each $P_q$ contains $p$. Therefore, $p$ has a neigborhood $P$ that is disjoint with $K$ (since $P \cap K \subset P \cap Q = \{\}$), and is therefore an interior point of $K^c.$ It follows that $K^c$ is open, and that $K$ is closed.

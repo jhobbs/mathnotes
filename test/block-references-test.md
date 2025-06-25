@@ -100,10 +100,15 @@ This theorem has no title, just a label.
 This definition also has no title.
 :::
 
+:::theorem {label: math-theorem}
+If $f$ is continuous on $[a,b]$ and $g$ is differentiable, then the composite function has interesting properties.
+:::
+
 References to blocks without titles:
 - @no-title-theorem should show just the label
 - @no-title-def should also show just the label
 - @theorem:no-title-theorem with type specified
+- @math-theorem shows theorem with math replaced
 
 ## End of Test
 
