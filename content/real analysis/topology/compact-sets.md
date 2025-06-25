@@ -54,7 +54,7 @@ Conversely, suppose $K$ is compact relative to $Y$ and let $\{G_\alpha\}$ be a c
 ::::
 :::
 
-:::theorem
+:::theorem {label: compact-implies-closed}
 
 Any compact subset $K$ of a metric space $X$ is closed.
 
@@ -63,7 +63,7 @@ Suppose $K$ is compact relative to metric space $X.$ Let $p \in K^c.$ For each $
 ::::
 :::
 
-:::theorem
+:::theorem {label: closed-subsets-of-compact-sets-are-compact}
 Closed subsets of compact sets are compact.
 
 ::::proof
@@ -74,4 +74,11 @@ Suppose $F \subset K \subset X,$ with $F$ closed relative to $X,$ and $K$ compac
 If $F^c \in \Phi,$ we may, but aren't required, to exclude it, and still have a finite open cover of $F.$
 ::::
 
+::::corollary
+If $F$ is closed and $K$ is compact, then $F \cap K$ is compact.
+
+:::::proof
+Because @{compact sets are closed|compact-implies-closed} and @{the intersection of two closed sets is again closed|union-and-intersection-of-open-and-closed-sets}, $F \cap K$ is closed. Since $F \cap K \subset K$ and @{closed subsets of compact sets are compact|closed-subsets-of-compact-sets-are-compact}, $F \cap K$ is compact.
+:::::
+::::
 :::
