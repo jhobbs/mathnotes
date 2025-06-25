@@ -373,7 +373,7 @@ table th {
 .math-block-title {
     margin-left: 0.5rem;
     font-weight: normal;
-    font-style: italic;
+    font-style: normal;
 }
 
 .math-block-content {

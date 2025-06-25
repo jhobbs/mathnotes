@@ -225,7 +225,7 @@ Suppose $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$ Then, $x \notin \b
 ::::
 :::
 
-:::theorem "A set E is open iff its complement is closed" {label: open-iff-complement-closed}
+:::theorem "A set E is open iff its complement is closed." {label: open-iff-complement-closed}
 
 
 ::::proof
