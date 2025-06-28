@@ -98,3 +98,11 @@ Suppose $x \in K_n, n \geq 2.$ Then, by definition, $x \in K_{n-1},$ and by indu
 :::::
 ::::
 :::
+
+:::theorem {label: infinite-subset-of-compact-set-has-limit-point}
+If $E$ is an infinite subset of a compact set $K,$ then $E$ has a limit point in $K.$
+
+::::proof
+Assume, for the sake of contradiction, that no point in $K$ is a limit point of $E.$ Then any point $q$ in $K$ has a neighborhood with at most one point in $E;$ $q,$ if $q \in E.$ Since $E$ is infinite, an infinite number of these singleton neighborhoods would be required to cover it, and therefore to cover $K,$ since $E \subset K.$ But, this contradicts our hypothesis that $K$ is compact. Therefore, our provisional assumption must be false, and $K$ must contain a limit point of $E.$
+::::
+:::
