@@ -107,7 +107,7 @@ Assume, for the sake of contradiction, that no point in $K$ is a limit point of 
 ::::
 :::
 
-:::theorem
+:::theorem {label: intersection-of-sequence-of-nested-intervals-is-nonempty}
 If ${I_n}$ is a sequence of intervals in $R^1,$ such that $I_{n+1} \subset I_n, n = 1,2,3,...,$ then $\bigcap_{i=1}^n I_n$ is not empty.
 
 ::::proof
