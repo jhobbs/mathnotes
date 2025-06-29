@@ -106,3 +106,17 @@ If $E$ is an infinite subset of a compact set $K,$ then $E$ has a limit point in
 Assume, for the sake of contradiction, that no point in $K$ is a limit point of $E.$ Then any point $q$ in $K$ has a neighborhood with at most one point in $E;$ $q,$ if $q \in E.$ Since $E$ is infinite, an infinite number of these singleton neighborhoods would be required to cover it, and therefore to cover $K,$ since $E \subset K.$ But, this contradicts our hypothesis that $K$ is compact. Therefore, our provisional assumption must be false, and $K$ must contain a limit point of $E.$
 ::::
 :::
+
+:::theorem
+If ${I_n}$ is a sequence of intervals in $R^1,$ such that $I_{n+1} \subset I_n, n = 1,2,3,...,$ then $\bigcap_{i=1}^n I_n$ is not empty.
+
+::::proof
+Let $I_n = [a_n, b_n],$ and let $E$ be the set of all $a_n.$ Then, $E$ is nonempty, because even if $a_n = b_n$ for all $n,$ it at least contains a single point. It is also bounded above by $b_1,$ since any $b_n$ is in $[a_1, b_1].$ Let $x = \sup E.$ Let $m$ and $n$ be positive integers and we have that
+
+
+$$ a_n \leq a_{m+n} \leq b_{m+n} \leq b_m, $$
+
+so that $x \leq b_m$ for each $m.$ Since $a_m \leq x,$ we have that $a_m \leq x \leq b_m,$ that is, $x \in I_m$ for all $m = 1, 2, 3, \dots,$ so $x \in \bigcap_{i=1}^n I_n$ and thus $\bigcap_{i=1}^n I_n$ is not empty.
+::::
+
+:::
