@@ -89,16 +89,17 @@ class MarkdownProcessor:
                 # Fix relative image paths to include content/ prefix
                 html_content = self._fix_relative_image_paths(html_content, filepath)
                 
-                # Fix escaped asterisks and tildes that should be rendered normally
-                html_content = html_content.replace(r'\*', '*')
-                html_content = html_content.replace(r'\~', '~')
-                
                 # Process structured mathematical content - second pass
                 if block_markers:
                     html_content = process_structured_math_content(
                         html_content, block_markers, self.md, 
                         current_file=filepath, block_index=self.block_index
                     )
+                
+                # Fix escaped asterisks and tildes that should be rendered normally
+                # Note: This must happen AFTER structured math processing to preserve LaTeX escapes
+                html_content = html_content.replace(r'\*', '*')
+                html_content = html_content.replace(r'\~', '~')
                 
                 # Get canonical URL for this file
                 file_path_normalized = filepath.replace('\\', '/')
