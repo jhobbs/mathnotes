@@ -126,9 +126,9 @@ Every $k$-cell is compact.
 ::::proof
 Let $I$ be a $k$-cell, consisting of all points $\vec{x} = (x_1, \dots, x_k)$ such that $a_j \leq x_j \leq b_j, 1 \leq j \leq k.$ Let
 
-$$ \delta = { \sqrt{\sum_{j=1}^k (b_j - a_j)^2}  }. $$
+$$ \delta = { \sqrt{\sum_{j=1}^k (b_j - a_j)^2}  }, $$
 
-Then for any points $\vec{x}, \vec{y} \in I, |\vec{x} - \vec{y}| \leq \delta,$ i.e., the distance between any two points can't exceed the maximum distance allowed by the dimensions of the $k$-cell (the diagonal).
+i.e., the maximum distance between any two points in $I$ (the diagonal). Then for any points $\vec{x}, \vec{y} \in I, |\vec{x} - \vec{y}| \leq \delta.$
 
 Suppose, for the sake of contradiction, that there is an open cover $\{G_\alpha\}$ of $I$ that contains no finite subcover of $I.$ Now, let $c_j = (a_j + b_j)/2,$ i.e. $c_j$ is the midpoint of $[a_j, b_j].$ We can subdivide $I$ into $2^k$ $k$-cells $Q_i,$ determined by the intervals $[a_j, c_j]$ and $[c_j, b_j].$ At least one $Q_i,$ call it $I_1,$ cannot be covered by any finite subcollection of $\{G_\alpha\},$ or else $I$ would have a finite subcover in $\{G_\alpha\}.$ We then can subdivide $I_1$ and so on, obtaining a sequence $\{I_n\}$ with the following properties:
 
@@ -142,6 +142,6 @@ From (a) and @intersection-of-sequence-of-nested-intervals-is-nonempty, there is
 ::::
 
 ::::intuition
-If a $k$-cell has an open cover $\{G_\alpha\}$, then any point in it will be in some $G_\alpha,$ and can therefore be surrounded by an open ball with some positive radius, lying entirely in $G_\alpha$. That open ball takes up some space, and we can then subdivide the $k$-cell into small enough parts that some part is entirely within that open ball. We still have finitely many subdivisions, and each of those could be covered with a similary constructed open ball, which means we can cover the entire $k$-cell with finitely many open balls.
+If a $k$-cell has an open cover $\{G_\alpha\}$, then any point in it will be in some $G_\alpha,$ and can therefore be surrounded by an open ball with some positive radius, lying entirely in $G_\alpha$. That open ball takes up some space, and we can then subdivide the $k$-cell into small enough parts that some part is entirely within that open ball. We still have finitely many subdivisions, and each of those could be covered with a similary constructed open ball, which means we can cover the entire $k$-cell with finitely many open balls covered by finitely many elements of $\{G_\alpha\}.$
 ::::
 :::
