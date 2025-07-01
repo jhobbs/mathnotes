@@ -128,17 +128,17 @@ Let $I$ be a $k$-cell, consisting of all points $\vec{x} = (x_1, \dots, x_k)$ su
 
 $$ \delta = { \sqrt{\sum_{j=1}^k (b_j - a_j)^2}  }. $$
 
-Then for any points $\vec{x}, \vec{y} \in I, |\vec{x} - \vec{y}| \leq \delta.$
+Then for any points $\vec{x}, \vec{y} \in I, |\vec{x} - \vec{y}| \leq \delta,$ i.e., the distance between any two points can't exceed the maximum distance allowed by the dimensions of the $k$-cell (the diagonal).
 
 Suppose, for the sake of contradiction, that there is an open cover $\{G_\alpha\}$ of $I$ that contains no finite subcover of $I.$ Now, let $c_j = (a_j + b_j)/2,$ i.e. $c_j$ is the midpoint of $[a_j, b_j].$ We can subdivide $I$ into $2^k$ $k$-cells $Q_i,$ determined by the intervals $[a_j, c_j]$ and $[c_j, b_j].$ At least one $Q_i,$ call it $I_1,$ cannot be covered by any finite subcollection of $\{G_\alpha\},$ or else $I$ would have a finite subcover in $\{G_\alpha\}.$ We then can subdivide $I_1$ and so on, obtaining a sequence $\{I_n\}$ with the following properties:
 
-(a) $I_{n+1} \subset I_{n}$ (each $k$-cell in the sequence is nested in the previous)
+(a) $I_{n+1} \subset I_{n}$ (each $k$-cell in the sequence is nested in the previous.)
 
-(b) $I_n$ is not covered by any finite subset of $\{G_\alpha\}$
+(b) $I_n$ is not covered by any finite subset of $\{G_\alpha\}.$
 
-(c) if $\vec{x}, \vec{y} \in I_n,$ then $|\vec{x} - \vec{y}| \leq 2^{-n} \delta.$
+(c) If $\vec{x}, \vec{y} \in I_n,$ then $|\vec{x} - \vec{y}| \leq 2^{-n} \delta.$
 
-From (a) and @intersection-of-sequence-of-nested-intervals-is-nonempty, there is some point $\vec{x}^*$ that is in every $I_n.$ For some $\alpha, x^* \in G_\alpha,$ since $\{G_\alpha\}$ is a cover of all of $I.$ $G_\alpha$ is open, for some $r > 0, |\vec{y} - \vec{x^*}| < r$ implies that y \in $G_\alpha,$ that is, $vec{x}$ has a neighborhood that lies entirely within $G_\alpha.$ If we make $n$ big enough, we have that $2^{-n} \delta < r,$ then by (c), $I_n \subset G_\alpha,$ that is, $I_n$ is entirely covered by $G_\alpha.$ But, this contradicts (b), so our provisional assumption is incorrect, and $\{G_\alpha\}$ must have a finite subcover that covers $I,$ and therefore $I$ is compact.
+From (a) and @intersection-of-sequence-of-nested-intervals-is-nonempty, there is some point $\vec{x}^*$ that is in every $I_n.$ For some $\alpha, x^* \in G_\alpha,$ since $\{G_\alpha\}$ is a cover of all of $I.$ $G_\alpha$ is open, so for some $r > 0, |\vec{y} - \vec{x^*}| < r$ implies that $y \in G_\alpha,$ that is, $\vec{x}$ has a neighborhood that lies entirely within $G_\alpha.$ If we make $n$ big enough, we have that $2^{-n} \delta < r,$ so by (c), $I_n \subset G_\alpha,$ that is, $I_n$ is entirely covered by $G_\alpha.$ But, this contradicts (b), so our provisional assumption is incorrect, and $\{G_\alpha\}$ must have a finite subcover that covers $I,$ and therefore $I$ is compact.
 ::::
 
 ::::intuition
