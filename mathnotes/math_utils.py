@@ -6,7 +6,11 @@ as markdown syntax.
 """
 
 import re
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, TYPE_CHECKING
+
+# Avoid circular imports
+if TYPE_CHECKING:
+    from .structured_math import MathBlock
 
 
 class MathProtector:
@@ -148,3 +152,136 @@ def restore_math(content: str, protector: MathProtector) -> str:
         Content with math restored
     """
     return protector.restore_math(content)
+
+
+class BlockReferenceProcessor:
+    """Handles processing of cross-references to structured blocks.
+    
+    This unified processor ensures consistent behavior for block references
+    across both main content and child blocks.
+    
+    Supported formats:
+    - @label - Auto-generated link text
+    - @type:label - Auto-generated link text with type prefix
+    - @{custom text|label} - Custom link text
+    - @{custom text|type:label} - Custom link text with type validation
+    """
+    
+    def __init__(self, block_markers: Dict[str, 'MathBlock'], current_file: str = None, block_index = None):
+        """Initialize the reference processor.
+        
+        Args:
+            block_markers: Dictionary mapping marker IDs to MathBlock objects
+            current_file: Path to the current file being processed
+            block_index: Global block index for cross-file references
+        """
+        self.block_markers = block_markers
+        self.current_file = current_file
+        self.block_index = block_index
+    
+    def process_references(self, content: str) -> str:
+        """Process all block references in the content.
+        
+        Args:
+            content: The content containing references
+            
+        Returns:
+            Content with references replaced by links
+        """
+        # First process custom references @{text|label}
+        # Pattern: @{any text|label or type:label}
+        custom_reference_pattern = r'@\{([^|]+)\|([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)\}'
+        content = re.sub(custom_reference_pattern, self._replace_custom_reference, content)
+        
+        # Then process simple references @label or @type:label
+        # Pattern to match @label or @type:label (avoiding email addresses)
+        simple_reference_pattern = r'(?<![a-zA-Z0-9])@([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)'
+        content = re.sub(simple_reference_pattern, self._replace_simple_reference, content)
+        
+        return content
+    
+    def _replace_custom_reference(self, match) -> str:
+        """Handle @{text|label} format."""
+        link_text = match.group(1)
+        ref_text = match.group(2)
+        
+        # Parse reference format: either "label" or "type:label"
+        if ':' in ref_text:
+            ref_type, ref_label = ref_text.split(':', 1)
+            ref_type = ref_type.strip()
+            ref_label = ref_label.strip()
+        else:
+            ref_type = None
+            ref_label = ref_text.strip()
+        
+        # Find the referenced block
+        target_block, target_url = self._find_target_block(ref_label, ref_type)
+        
+        if target_block:
+            # Use the custom link text provided
+            return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
+        else:
+            # Reference not found - return with error styling
+            return f'<span class="block-reference-error" data-ref="{ref_text}">@{{{link_text}|{ref_text}}}</span>'
+    
+    def _replace_simple_reference(self, match) -> str:
+        """Handle @label or @type:label format."""
+        ref_text = match.group(1)
+        
+        # Parse reference format: either "label" or "type:label"
+        if ':' in ref_text:
+            ref_type, ref_label = ref_text.split(':', 1)
+            ref_type = ref_type.strip()
+            ref_label = ref_label.strip()
+        else:
+            ref_type = None
+            ref_label = ref_text.strip()
+        
+        # Find the referenced block
+        target_block, target_url = self._find_target_block(ref_label, ref_type)
+        
+        if target_block:
+            # Generate the link text
+            if target_block.title:
+                link_text = target_block.title
+            else:
+                # Use content snippet for better context
+                link_text = target_block.content_snippet
+            
+            # Create the link with appropriate URL
+            return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
+        else:
+            # Reference not found - return with error styling
+            return f'<span class="block-reference-error" data-ref="{ref_text}">@{ref_text}</span>'
+    
+    def _find_target_block(self, ref_label: str, ref_type: Optional[str]) -> Tuple[Optional['MathBlock'], Optional[str]]:
+        """Find the target block for a reference.
+        
+        Args:
+            ref_label: The label to search for
+            ref_type: Optional type to validate against
+            
+        Returns:
+            Tuple of (block, url) or (None, None) if not found
+        """
+        # Check local blocks first
+        for marker_id, block in self.block_markers.items():
+            if block.label == ref_label:
+                # If type is specified, verify it matches
+                if ref_type is None or block.block_type.value == ref_type:
+                    return block, f"#{ref_label}"  # Local reference
+        
+        # If not found locally and we have a global index, check there
+        if self.block_index:
+            block_ref = self.block_index.get_reference(ref_label)
+            if block_ref:
+                # Verify type if specified
+                if ref_type is None or block_ref.block.block_type.value == ref_type:
+                    # Check if it's in the same file
+                    if block_ref.file_path == self.current_file:
+                        target_url = f"#{ref_label}"
+                    else:
+                        target_url = block_ref.full_url
+                    return block_ref.block, target_url
+        
+        return None, None
