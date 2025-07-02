@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+      - /app/__pycache__
+      - /app/.pytest_cache
+      - /app/.tox
+      - /app/htmlcov
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    command: python run.py

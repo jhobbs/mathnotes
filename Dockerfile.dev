@@ -1,0 +1,27 @@
+# Development Dockerfile with test dependencies
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    git \
+    make \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements files
+COPY requirements.txt requirements-dev.txt ./
+
+# Install both production and development dependencies
+RUN pip install --no-cache-dir -r requirements-dev.txt
+
+# Copy the rest of the application
+COPY . .
+
+# Expose port
+EXPOSE 5000
+
+# Default command for development
+CMD ["python", "run.py"]

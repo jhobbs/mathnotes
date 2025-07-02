@@ -8,3 +8,6 @@ Gemfile.lock
 __pycache__
 version.txt
 *.swp
+.coverage
+coverage.xml
+venv
