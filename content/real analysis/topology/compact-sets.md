@@ -145,3 +145,36 @@ From (a) and @intersection-of-sequence-of-nested-intervals-is-nonempty, there is
 If a $k$-cell has an open cover $\{G_\alpha\}$, then any point in it will be in some $G_\alpha,$ and can therefore be surrounded by an open ball with some positive radius, lying entirely in $G_\alpha$. That open ball takes up some space, and we can then subdivide the $k$-cell into small enough parts that some part is entirely within that open ball. We still have finitely many subdivisions, and each of those could be covered with a similary constructed open ball, which means we can cover the entire $k$-cell with finitely many open balls covered by finitely many elements of $\{G_\alpha\}.$
 ::::
 :::
+
+:::theorem "Heine-Borel" {label: heine-borel}
+If a set $E$ in $R^k$ has one of the following three properties, then it has the other two:
+
+(a) $E$ is closed and bounded.
+
+(b) $E$ is compact.
+
+(c) Every infinite subset of $E$ has a limit point in $E.$
+
+
+::::proof
+If (a) holds, then $E \subset I$ for some $k$-cell $I,$ and (b) follows from the facts that @{every $k$-cell is compact|every-k-cell-is-compact} and @{closed subsets of compact sets are compact|closed-subsets-of-compact-sets-are-compact}. Then, (c) follows from the fact that @{any infinite subset $K$ of a compact set $E$ has a limit point in $E$|infinite-subset-of-compact-set-has-limit-point}. To complete, the cycle of implication, we must now show that (c) implies (a).
+
+Assume, for the sake of contradiction, that $E$ is not bounded. Then, $E$ must contain an indexed set of points $\{x_n\}, n = 1, 2, 3, \dots$ where each $x_n$ must satisfy $|x_n| > n.$ $\{x_n\}$ is obviously infinite, but we will show it has no limit points in $E.$ Let $p \in E.$ Then for some positive integer $N,$ $|p| < N.$ Since $N$ is finite, there can only be finitely many points $\{q_\alpha\}$ in $\{x_n\}$ with $|x_n| < N.$ If $\{q_\alpha\}$ is empty, then $p$ is obviously not a limit point of $\{x_n\}.$ Otherwise, let $r = \min\{d(p, q_\alpha)\}.$ Then $r > 0$ and let $N_r\{p\}$ be a neighborhood of $p.$ Since no point in $\{x_n\},$ other than perhaps $p,$ lies in $\{x_n\},$ $p$ is clearly not a limit point of $\{x_n\}.$ Thus, our provisional assumption is invalid and (c) implies $E$ is bounded.
+
+To show that (c) implies $E$ is closed, assume for the sake of contradiction that $E$ is not closed. Then, there is a point $x_0 \in R^k$ which is a limit point of $E$ but is not in $E.$ We will construct an infinite subset of $E$ and show that it has no limit point in $E.$ For $n = 1, 2, 3, \dots,$ let the point $x_n$ be some point in $E$ such that $|x_n - x_0| < 1/n;$ let $\{x_n\}$ be the set of such points. $\{x_n\}$ is certainly infinite (because $|x_n - x_0|$ will eventually be bigger than $1/n$ for some $n$ if we keep reusing the same $x_n$ infinitely many times.) Now, $\{x_n\}$ has $x_0$ as a limit point, and we will show it is its only limit point in $R^k.$ Assume $y \in R^k, y \neq x_0.$ Then, via the triangle inequality,
+
+
+$$ \begin{aligned}
+
+|x_n - y| & \geq |x_0 - y| - |x_n - x_0| \\
+          & \geq |x_0 - y| - \frac{1}{n} \\
+          & \geq \frac{1}{2} |x_0 - y|
+\end{aligned} $$
+
+for all but finitely many $n,$ and thus $y$ is not a limit point of $\{x_n\}$ because its @{its neighborhoods do not contain infinitely many points of $\{x_n\}$|neighborhood-of-limit-point-contains-infinitely-many-points}. Thus, $\{x_n\}$ has no limit point in $E,$ which contradicts (c), and therefore our provisional assumption that $E$ is not closed is incorrect, and (c) implies that $E$ is closed.
+::::
+
+::::note
+Without proof here, (b) and (c) are equivalent in any metric space, but (a) does not imply (b) and (c) in every metric space (we assumed $R^k$ above.)
+::::
+:::
