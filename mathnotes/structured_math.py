@@ -10,6 +10,7 @@ import markdown
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any, Tuple
 from enum import Enum
+from .math_utils import MathProtector
 
 
 class MathBlockType(Enum):
@@ -426,41 +427,15 @@ class StructuredMathParser:
         block_content = self._process_child_block_references(block_content, block_markers)
         
         # Protect math before markdown processing
-        display_math_blocks = {}
-        display_counter = 0
-        
-        def replace_display_math(match):
-            nonlocal display_counter
-            placeholder = f'CHILDMATHD{display_counter}PLACEHOLDER'
-            display_math_blocks[placeholder] = match.group(0)
-            display_counter += 1
-            return placeholder
-        
-        block_content = re.sub(r'\$\$.*?\$\$', replace_display_math, block_content, flags=re.DOTALL)
-        
-        # Protect inline math
-        inline_math_blocks = {}
-        inline_counter = 0
-        
-        def replace_inline_math(match):
-            nonlocal inline_counter
-            placeholder = f'CHILDMATHI{inline_counter}PLACEHOLDER'
-            inline_math_blocks[placeholder] = match.group(0)
-            inline_counter += 1
-            return placeholder
-        
-        block_content = re.sub(r'(?<!\$)\$(?!\$).*?\$(?!\$)', replace_inline_math, block_content)
+        child_math_protector = MathProtector(prefix="CHILDMATH")
+        block_content = child_math_protector.protect_math(block_content)
         
         # Process through markdown
         block_html = md_processor.convert(block_content)
         md_processor.reset()
         
         # Restore math
-        for placeholder, math_content in display_math_blocks.items():
-            block_html = block_html.replace(placeholder, math_content)
-        
-        for placeholder, math_content in inline_math_blocks.items():
-            block_html = block_html.replace(placeholder, math_content)
+        block_html = child_math_protector.restore_math(block_html)
         
         # Render the block with nested support
         return self.render_block_html(block, block_html, block_markers, md_processor)
@@ -625,31 +600,9 @@ def process_structured_math_content(html_content: str, block_markers: Dict[str, 
             # Process cross-references in block content
             block_content = parser._process_child_block_references(block_content, block_markers)
             
-            # Protect display math ($$...$$)
-            display_math_blocks = {}
-            display_counter = 0
-            
-            def replace_display_math(match):
-                nonlocal display_counter
-                placeholder = f'BLOCKMATHD{display_counter}PLACEHOLDER'
-                display_math_blocks[placeholder] = match.group(0)
-                display_counter += 1
-                return placeholder
-            
-            block_content = re.sub(r'\$\$.*?\$\$', replace_display_math, block_content, flags=re.DOTALL)
-            
-            # Protect inline math ($...$)
-            inline_math_blocks = {}
-            inline_counter = 0
-            
-            def replace_inline_math(match):
-                nonlocal inline_counter
-                placeholder = f'BLOCKMATHI{inline_counter}PLACEHOLDER'
-                inline_math_blocks[placeholder] = match.group(0)
-                inline_counter += 1
-                return placeholder
-            
-            block_content = re.sub(r'(?<!\$)\$(?!\$).*?\$(?!\$)', replace_inline_math, block_content)
+            # Protect math before markdown processing
+            block_math_protector = MathProtector(prefix="BLOCKMATH")
+            block_content = block_math_protector.protect_math(block_content)
             
             # Process the block's content through markdown
             block_html = md_processor.convert(block_content)
@@ -657,11 +610,7 @@ def process_structured_math_content(html_content: str, block_markers: Dict[str, 
             md_processor.reset()
             
             # Restore protected math
-            for placeholder, math_content in display_math_blocks.items():
-                block_html = block_html.replace(placeholder, math_content)
-            
-            for placeholder, math_content in inline_math_blocks.items():
-                block_html = block_html.replace(placeholder, math_content)
+            block_html = block_math_protector.restore_math(block_html)
             
             # Render the complete block with nested blocks support
             rendered_block = parser.render_block_html(block, block_html, block_markers, md_processor)

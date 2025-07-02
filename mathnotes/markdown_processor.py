@@ -9,6 +9,7 @@ from typing import Dict, Optional
 import frontmatter
 from .config import create_markdown_instance
 from .structured_math import StructuredMathParser, process_structured_math_content
+from .math_utils import MathProtector
 from flask import g
 
 class MarkdownProcessor:
@@ -76,14 +77,15 @@ class MarkdownProcessor:
                 
                 
                 # Protect math delimiters from markdown processing
-                content, display_math_blocks = self._protect_display_math(content)
-                content, inline_math_blocks = self._protect_inline_math(content)
+                math_protector = MathProtector()
+                content = math_protector.protect_math(content)
                 
                 # Convert markdown to HTML
                 html_content = self.md.convert(content)
                 
                 # Restore math blocks with their original content
-                html_content = self._restore_math_blocks(html_content, display_math_blocks, inline_math_blocks)
+                html_content = math_protector.restore_math(html_content)
+                html_content = math_protector.fix_math_backslashes(html_content)
                 
                 
                 # Fix relative image paths to include content/ prefix
@@ -288,63 +290,6 @@ class MarkdownProcessor:
         
         return content
     
-    def _protect_display_math(self, content: str):
-        """Protect display math ($$...$$) from markdown processing."""
-        display_math_blocks = {}
-        display_counter = 0
-        
-        def replace_display_math(match):
-            nonlocal display_counter
-            placeholder = f'DISPLAYMATH{display_counter}PLACEHOLDER'
-            math_content = match.group(0)
-            display_math_blocks[placeholder] = math_content
-            display_counter += 1
-            return placeholder
-        
-        content = re.sub(r'\$\$.*?\$\$', replace_display_math, content, flags=re.DOTALL)
-        return content, display_math_blocks
-    
-    def _protect_inline_math(self, content: str):
-        """Protect inline math ($...$) from markdown processing."""
-        inline_math_blocks = {}
-        inline_counter = 0
-        
-        def replace_inline_math(match):
-            nonlocal inline_counter
-            placeholder = f'INLINEMATH{inline_counter}PLACEHOLDER'
-            inline_math_blocks[placeholder] = match.group(0)
-            inline_counter += 1
-            return placeholder
-        
-        content = re.sub(r'(?<!\$)\$(?!\$).*?\$(?!\$)', replace_inline_math, content)
-        return content, inline_math_blocks
-    
-    def _restore_math_blocks(self, html_content: str, display_math_blocks: Dict, inline_math_blocks: Dict) -> str:
-        """Restore protected math blocks in HTML content."""
-        # Restore math blocks with their original content
-        for placeholder, math_content in display_math_blocks.items():
-            # Fix escaped backslashes in math content for proper LaTeX rendering
-            fixed_math_content = self._fix_math_backslashes(math_content)
-            html_content = html_content.replace(placeholder, fixed_math_content)
-        
-        for placeholder, math_content in inline_math_blocks.items():
-            # Fix escaped backslashes in math content for proper LaTeX rendering
-            fixed_math_content = self._fix_math_backslashes(math_content)
-            html_content = html_content.replace(placeholder, fixed_math_content)
-        
-        return html_content
-    
-    def _fix_math_backslashes(self, math_content: str) -> str:
-        """Fix escaped backslashes in math content for proper LaTeX rendering."""
-        # In markdown processing, \\ can get converted to single \ which breaks LaTeX line breaks
-        # We need to restore proper \\ for LaTeX environments like cases, align, etc.
-        
-        # Fix line breaks in LaTeX environments
-        # Pattern: single backslash followed by whitespace and then & or end of line
-        # This typically happens in cases, align, matrix environments
-        fixed_content = re.sub(r'(?<!\\)\\(?!\\)(\s*(?:&|\n|\r|$))', r'\\\\\\1', math_content, flags=re.MULTILINE)
-        
-        return fixed_content
     
     def _generate_description(self, metadata: Dict, html_content: str) -> str:
         """Generate page description from frontmatter or content."""

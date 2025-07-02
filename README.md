@@ -29,11 +29,39 @@ docker run -p 5000:5000 mathnotes
 ### Local Development
 
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# Quick setup (creates venv and installs dependencies)
+./setup-dev.sh
+
+# Manual setup
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements-dev.txt
 
 # Run development server
 python run.py
+```
+
+### Testing
+
+```bash
+# Run all tests
+make test  # or: pytest
+
+# Run with coverage
+make coverage
+
+# Run specific test file
+pytest test/test_math_utils.py -v
+
+# Use the convenience script
+./run-tests.sh unit      # Run unit tests
+./run-tests.sh coverage  # Run with coverage
+./run-tests.sh docker    # Force Docker mode
+
+# Run linting and formatting
+make lint    # Check code style
+make format  # Auto-format code
+make check   # Run all checks (lint, type, test)
 ```
 
 ## Architecture
