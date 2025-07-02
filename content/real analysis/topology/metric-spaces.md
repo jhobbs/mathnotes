@@ -203,7 +203,7 @@ Therefore, $N_s(q) \subset N_r(p),$ so $q$ is an interior point of $N_r(p),$ and
 {% include_integrated_relative neighborhood-demo.html %}
 
 
-:::theorem
+:::theorem {label: neighborhood-of-limit-point-contains-infinitely-many-points}
 If $p$ is a limit point of a set $E,$ then every neighborhood of $p$ contains infinitely many points of $E.$
 
 ::::proof
