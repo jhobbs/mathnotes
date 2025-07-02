@@ -24,10 +24,10 @@ Pain points:
 
 ## 2  Refactor / Simplification Plan
 
-| # | Action | Benefit |
-|---|--------|---------|
-| **2.1** | **Centralise math-placeholder helpers**<br>`protect_math()` / `restore_math()` used everywhere. | Single regex implementation; fewer subtle MathJax bugs. |
-| **2.2** | **Unify reference replacement**<br>`replace_block_references()` shared by both main & child paths. | Guarantees identical behaviour & styling for `@label` / `@{text\|label}`. |
+| # | Action | Benefit | Status |
+|---|--------|---------|--------|
+| **2.1** | **Centralise math-placeholder helpers**<br>`protect_math()` / `restore_math()` used everywhere. | Single regex implementation; fewer subtle MathJax bugs. | ✅ Completed |
+| **2.2** | **Unify reference replacement**<br>`replace_block_references()` shared by both main & child paths. | Guarantees identical behaviour & styling for `@label` / `@{text\|label}`. | ✅ Completed |
 | **2.3** | **Streamline rendering flow**<br>Option A: build a custom **Python-Markdown extension** to parse `:::blocktype ...` in one pass.<br>Option B (interim): keep two-pass but parse into an AST, then render by tree-walk (no HTML placeholder swapping). | Removes placeholder hacks; simpler control of nesting; fewer state resets. |
 | **2.4** | **Isolate Markdown instances / state**<br>Either one instance with our extension, or clearly separate instances for main & block content. | Predictable behaviour, easier debugging. |
 | **2.5** | **Reduce metadata plumbing**<br>Parser holds a reference to a global `BlockIndex`; drop `block_index` arg in deep calls. | Simpler signatures; less boiler-plate. |
@@ -68,8 +68,8 @@ Pain points:
 
 ## 5  Next Steps Checklist
 
-- [ ] Extract and unit-test `protect_math` / `restore_math` utilities.  
-- [ ] Merge duplicate reference-handling into `replace_block_references`.  
+- [x] Extract and unit-test `protect_math` / `restore_math` utilities. (Completed: Centralized in `math_utils.py` with `MathProtector` class)
+- [x] Merge duplicate reference-handling into `replace_block_references`. (Completed: Unified with `BlockReferenceProcessor` in commit 4e6d8a1)  
 - [ ] Decide on Extension-vs-Two-Pass approach; spike a Markdown extension prototype.  
 - [ ] Build initial pytest suite (parser + reference + renderer).  
 - [ ] Add GitHub Actions workflow running tests + flake8/black.  
