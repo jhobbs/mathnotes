@@ -9,7 +9,7 @@ from typing import Dict, Optional
 import frontmatter
 from .config import create_markdown_instance
 from .structured_math import StructuredMathParser, process_structured_math_content
-from .math_utils import MathProtector
+from .math_utils import MathProtector, BlockReferenceProcessor
 from flask import g
 
 class MarkdownProcessor:
@@ -169,7 +169,7 @@ class MarkdownProcessor:
         return None
     
     def _process_block_references(self, content: str, block_markers: Dict, current_file: str) -> str:
-        """Process cross-references to structured blocks.
+        """Process cross-references to structured blocks using the unified processor.
         
         Supported formats:
         - @label - Auto-generated link text
@@ -177,118 +177,13 @@ class MarkdownProcessor:
         - @{custom text|label} - Custom link text
         - @{custom text|type:label} - Custom link text with type validation
         """
-        
-        def replace_custom_reference(match):
-            """Handle @{text|label} format"""
-            link_text = match.group(1)
-            ref_text = match.group(2)
-            
-            # Parse reference format: either "label" or "type:label"
-            if ':' in ref_text:
-                ref_type, ref_label = ref_text.split(':', 1)
-                ref_type = ref_type.strip()
-                ref_label = ref_label.strip()
-            else:
-                ref_type = None
-                ref_label = ref_text.strip()
-            
-            # Find the referenced block - first check local blocks
-            target_block = None
-            target_url = None
-            
-            # Check local blocks first
-            for marker_id, block in block_markers.items():
-                if block.label == ref_label:
-                    # If type is specified, verify it matches
-                    if ref_type is None or block.block_type.value == ref_type:
-                        target_block = block
-                        target_url = f"#{ref_label}"  # Local reference
-                        break
-            
-            # If not found locally and we have a global index, check there
-            if not target_block and self.block_index:
-                block_ref = self.block_index.get_reference(ref_label)
-                if block_ref:
-                    # Verify type if specified
-                    if ref_type is None or block_ref.block.block_type.value == ref_type:
-                        target_block = block_ref.block
-                        # Check if it's in the same file
-                        if block_ref.file_path == current_file:
-                            target_url = f"#{ref_label}"
-                        else:
-                            target_url = block_ref.full_url
-            
-            if target_block:
-                # Use the custom link text provided
-                return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
-            else:
-                # Reference not found - return with error styling
-                return f'<span class="block-reference-error" data-ref="{ref_text}">@{{{link_text}|{ref_text}}}</span>'
-        
-        def replace_simple_reference(match):
-            """Handle @label or @type:label format"""
-            ref_text = match.group(1)
-            
-            # Parse reference format: either "label" or "type:label"
-            if ':' in ref_text:
-                ref_type, ref_label = ref_text.split(':', 1)
-                ref_type = ref_type.strip()
-                ref_label = ref_label.strip()
-            else:
-                ref_type = None
-                ref_label = ref_text.strip()
-            
-            # Find the referenced block - first check local blocks
-            target_block = None
-            target_url = None
-            
-            # Check local blocks first
-            for marker_id, block in block_markers.items():
-                if block.label == ref_label:
-                    # If type is specified, verify it matches
-                    if ref_type is None or block.block_type.value == ref_type:
-                        target_block = block
-                        target_url = f"#{ref_label}"  # Local reference
-                        break
-            
-            # If not found locally and we have a global index, check there
-            if not target_block and self.block_index:
-                block_ref = self.block_index.get_reference(ref_label)
-                if block_ref:
-                    # Verify type if specified
-                    if ref_type is None or block_ref.block.block_type.value == ref_type:
-                        target_block = block_ref.block
-                        # Check if it's in the same file
-                        if block_ref.file_path == current_file:
-                            target_url = f"#{ref_label}"
-                        else:
-                            target_url = block_ref.full_url
-            
-            if target_block:
-                # Generate the link text
-                if target_block.title:
-                    link_text = target_block.title
-                else:
-                    # Use content snippet for better context
-                    link_text = target_block.content_snippet
-                
-                # Create the link with appropriate URL
-                return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
-            else:
-                # Reference not found - return with error styling
-                return f'<span class="block-reference-error" data-ref="{ref_text}">@{ref_text}</span>'
-        
-        # First process custom references @{text|label}
-        # Pattern: @{any text|label or type:label}
-        custom_reference_pattern = r'@\{([^|]+)\|([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)\}'
-        content = re.sub(custom_reference_pattern, replace_custom_reference, content)
-        
-        # Then process simple references @label or @type:label
-        # Pattern to match @label or @type:label (avoiding email addresses)
-        simple_reference_pattern = r'(?<![a-zA-Z0-9])@([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)'
-        content = re.sub(simple_reference_pattern, replace_simple_reference, content)
-        
-        return content
+        # Use the unified BlockReferenceProcessor
+        processor = BlockReferenceProcessor(
+            block_markers=block_markers,
+            current_file=current_file,
+            block_index=self.block_index
+        )
+        return processor.process_references(content)
     
     
     def _generate_description(self, metadata: Dict, html_content: str) -> str:
