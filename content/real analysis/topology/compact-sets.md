@@ -90,7 +90,7 @@ If $\{K_\alpha\}$ is a collection of compact subsets of a metric space $X$ such 
 Let $G_\alpha = K_\alpha^c$ for each $\alpha,$ and note that since $K_\alpha$ is @{compact and therefore closed|compact-implies-closed}, $G_\alpha$ is open. Then, fix a member $K_1$ of $\{K_\alpha\}.$ Assume, for contradiction's sake, that no point of $K_1$ is in all $K_\alpha,$ that is, that $\bigcap K_\alpha = \emptyset.$ Then, any point $x \in K_1$ is in some $K_\alpha^c = G_\alpha,$ so $\{G_\alpha\}$ forms an open cover of $K_1.$ Since $K_1$ is compact, some finite subset $G_{\alpha_1}, \dots, G_{\alpha_n}$ of $\{G_\alpha\}$ forms a finite subcover of $K_1$ such that $K_1 \subset G_{\alpha_1} \cup \cdots \cup G_{\alpha_n} = \left ( K_{\alpha_1} \cap \cdots \cap K_{\alpha_n} \right )^c$ (by De Morgan's.) Therefore $K_1 \cap K_{\alpha_1} \cap \cdots \cap K_{\alpha_n} = \emptyset.$ This is an empty intersection of a finite subcollection of $\{K_\alpha\},$ which contradicts our hypothesis that all finite intersections are nonempty. Therefore, our assumption that no point in $K_1$ is in all $K_\alpha$ is incorrect, and some point in $K_1$ is in all $K_\alpha,$ and therefore $\bigcap K_\alpha$ is not empty.
 ::::
 
-::::corollary
+::::corollary {label: intersection-of-nonempty-nested-compact-sets-is-nonempty}
 If $\{K_\alpha\}$ is a sequence of nonempty compact sets such that $K_{n+1} \subset K_n, n = 1, 2, 3, \dots,$ then $\bigcap_{i=1}^\infty K_n$ is not empty.
 
 :::::proof

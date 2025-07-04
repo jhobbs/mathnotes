@@ -210,8 +210,8 @@ If $p$ is a limit point of a set $E,$ then every neighborhood of $p$ contains in
 Let $p$ be a limit point of $E$ and let $N_r(p)$ be a neighborhood of $p.$ Suppose that $N_r(p)$ contains only finitely many points of $E.$ Since we have finitely many points, we can inspect each and find the minimum distance from $p$ to any point in $N_r(p) \bigcup E\setminus\{p\}$ and call it $s.$ Now, we can make a new neighborhood $N_s(p),$ which contains none of the points in $N_r(p) \bigcup E\setminus\{p\}$ since they're all at least $s$ away from $p,$ by construction. But then, $p$ is not a limit point of $E,$ since it has a neighborhood that contains no points of $E\setminus\{p\}$ Therefore, we have a contradiction, and $N_r(p)$ must therefore contain infinitely many points.
 ::::
 
-::::corollary
-From this, it's evident that a finite set of points has no limit points.
+::::corollary {label: only-infinite-sets-have-limit-points}
+From this, it's evident that a finite set of points has no limit points. That is, if a set has a limit point, then the set if infinite.
 ::::
 :::
 
