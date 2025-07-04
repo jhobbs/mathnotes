@@ -177,7 +177,7 @@ $$ l\frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l } {\theta_0} \sin{\left (\sqrt{ \
 
 Note that for both the case where the pendulum is accelerated and where it is simply released, the period and natural frequency are the same. Note also that the period and natural frequency are independent of the initial angle. This means the pendulum will have the same period regardless of the initial angle and angular velocity! The period is dependent only on the length of the pendulum and the gravitational constant.
 
-{% include_relative pendulum.html %}
+{% include_integrated_relative pendulum.html %}
 
 This animation uses the small angle approximation for pendulum motion, so it may be off significantly at larger angles. However, it does a fine job showing that the period does not change with the starting angle or starting angular velocity (for small angles).
 
