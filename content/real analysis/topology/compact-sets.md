@@ -178,3 +178,22 @@ for all but finitely many $n,$ and thus $y$ is not a limit point of $\{x_n\}$ be
 Without proof here, (b) and (c) are equivalent in any metric space, but (a) does not imply (b) and (c) in every metric space (we assumed $R^k$ above.)
 ::::
 :::
+
+:::theorem "Bolzano-Weierstass" {label: bolzano-weierstrass}
+Every bounded infinite subset of $R^k$ has a limit point in $R^k.$
+
+::::proof
+Suppose $E$ is a bounded infinite subset of $R^k.$ Then, it is a subset of a $k$-cell $I \subset R^k,$ and because @{every $k$-cell is compact|every-k-cell-is-compact}, $I$ is compact. Since @{infinite subsets of a compact set $K$ have a limit point in $K$, $E$ has a limit point in $I$ and therefore in $R^k.$
+::::
+
+::::note
+This theorem shows up in other forms, especially related to sequences. For example, in my intro real analysis class, it was expressed as the much weaker "Every bounded sequence in $R^1$ has a convergent subsequence." Other equivalent forms are
+
+* Any bounded sequence in $R^k$ has a convergent subsequence.
+
+* Closed and bounded subsets of $R^k$ are sequentially compact.
+
+There seem to be two approaches to topology of metric spaces - the point/set approach used by Rudin and covered here, and a sequence based approach that many other authors like Pugh use in introductory texts. We don't use the term "sequentially compact" anywhere in this page - that's work for a future exercise.
+::::
+
+:::
