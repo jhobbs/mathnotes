@@ -73,6 +73,10 @@ class MathBlock:
         # Remove markdown formatting but preserve content
         text = self.content
         
+        # Remove any math protection markers that might be present
+        text = re.sub(r'[A-Z]+MATH\d+MARKER', '', text)
+        text = re.sub(r'[A-Z]+BLOCK\d+MARKER', '', text)
+        
         # Remove display math blocks ($$...$$) completely
         text = re.sub(r'\$\$.*?\$\$', '', text, flags=re.DOTALL)
         

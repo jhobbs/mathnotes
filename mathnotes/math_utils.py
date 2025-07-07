@@ -249,17 +249,21 @@ class BlockReferenceProcessor:
         target_block, target_url = self._find_target_block(ref_label, ref_type)
         
         if target_block:
-            # Use the reference text as written (preserving case) if it's a simple label reference
-            # Only use the title/content snippet if we need type prefixing
+            # Generate the link text based on what's available and reference format
             if ref_type:
-                # For type:label format, use the title with type prefix
+                # For type:label format, always use title or content snippet
                 if target_block.title:
                     link_text = target_block.title
                 else:
                     link_text = target_block.content_snippet
             else:
-                # For simple @label format, preserve the case as written
-                link_text = ref_label
+                # For simple @label format
+                if target_block.title:
+                    # Has title: preserve case as written in reference
+                    link_text = ref_label
+                else:
+                    # No title: use content snippet for better context
+                    link_text = target_block.content_snippet
             
             # Create the link with appropriate URL
             return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
@@ -360,7 +364,7 @@ class BlockReferenceProcessor:
             content = embed_info['content']
             
             # Protect math before markdown processing
-            math_protector = MathProtector(prefix=f"EMBED{marker}")
+            math_protector = MathProtector(prefix=f"EMBEDMATH{marker[-8:]}")
             content = math_protector.protect_math(content)
             
             # Convert markdown to HTML
