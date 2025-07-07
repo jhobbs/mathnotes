@@ -30,5 +30,29 @@ For each $n$, let $K_n = \overline{V_n} \cap P.$ Since $\overline{V_n}$ is close
 ::::corollary
 Every interval $[a, b] (a < b)$ is uncountable, and thus the set of all real numbers is uncountable as it contains uncountable subsets.
 ::::
+:::
+
+## The Cantor Set
+
+:::definition "Cantor set"
+Let $E_0$ be the interval $[0, 1].$ Remove the segment $(\frac{1}{3}, \frac{2}{3}),$ and let
+
+$$ E_1 = [0, \frac{1}{3}] \cup [\frac{2}{3}, 1]. $$
+
+Similarly, remove the middle thirds of these intervals, and let
+
+$$E_2 = [0, \frac{1}{9}] \cup [\frac{2}{9}, \frac{3}{9}] \cup [\frac{6}{9}, \frac{7}{9}] \cup [\frac{8}{9}, 1]. $$
+
+We can continue this forever, and we get a nested sequence $\{E_n\}$ of compact sets $E_n$  where:
+
+(a) $E_{n+1} \subset E_n.$
+
+(b) $E_n$ is the union of $2^n$ intervals, each of length $1/3^n.$
+
+Finally, the set
+
+$$ P = \bigcap_{n=1}^\infty E_n $$
+
+is called the **Cantor set.**
 
 :::
