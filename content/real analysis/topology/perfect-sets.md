@@ -54,5 +54,21 @@ Finally, the set
 $$ P = \bigcap_{n=1}^\infty E_n $$
 
 is called the **Cantor set.**
+:::
+
+:::Theorem
+The Cantor set is compact.
+
+::::Proof
+Clearly, $P$ is bounded, for it lies within $[0, 1].$ Each $E_n$ is composed of the union of $2^n$ closed intervals, and @{the union of finitely many closed intervals is also closed|union-and-intersection-of-open-and-closed-sets}. $P$ is then the intersection of infinitely many closed intervals, @{which is again closed|union-and-intersection-of-open-and-closed-sets}. Therefore, $P$ is closed and bounded, and by @heine-borel, is compact.
+::::
+:::
+
+:::Theorem
+The Cantor set is not empty.
+
+::::Proof
+Suppose $E_n$ has $[\alpha, \beta]$ as an interval and thus $\alpha, \beta \in E_n.$ Then, by definition, $E_{n+1}$ will contain $[\alpha, \frac{\beta - \alpha}{3}]$ and $\frac{2(\beta - \alpha)}{3}, \beta]$ as intervals, so $\alpha, \beta \in E_{n+1}.$ Note that $E_0$ has $[0, 1]$ as an interval. By induction, all $E_n$ contain $0$ and $1$, and therefore so does their intersection $P,$ and $P$ is nonempty.
+::::
 
 :::
