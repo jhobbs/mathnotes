@@ -49,7 +49,7 @@ Suppose $E_n$ has $[\alpha, \beta]$ as an interval and thus $\alpha, \beta \in E
 :::
 
 :::Theorem
-The Cantor set contains no @{segment|segment}.
+The Cantor set contains no @segment.
 
 ::::Proof
 Suppose, for the sake of contradiction, that some segment $(\alpha, \beta)$ \subset $P$ and let $L = \beta - \alpha.$ Pick some $n \in \mathbb{N}$ such that $1/3^n < L.$ Now, $E_n$ is the union of $2^n$ intervals of length $1/3^n,$ and since $(\alpha, \beta) \subset P,$ it must be the case that $(\alpha, \beta)$ is a subset of some interval of length $1/3^n.$ However, this can't be the case, since $L > 1/3^n,$ by construction. Therefore, our provision assumption is incorrect, and $P$ contains no segment. 
