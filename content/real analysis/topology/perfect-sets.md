@@ -10,7 +10,9 @@ description: Introduces perfect sets.
 This section was developed by following Rudin, *Principles of Mathematical Analysis*, Chapter 2.
 :::
 
-Review the definition of a @{perfect set|perfect-set}.
+Review the definition of a perfect set:
+
+@embed{perfect-set}
 
 :::theorem
 Let $P$ be a nonempty perfect set in $R^k.$ Then $P$ is uncountable.

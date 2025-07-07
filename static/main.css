@@ -634,3 +634,138 @@ table th {
         background-color: rgba(47, 133, 90, 0.06);
     }
 }
+
+/* =============================================================================
+   EMBEDDED BLOCKS (TRANSCLUSION)
+   ============================================================================= */
+
+/* Container for embedded/transcluded blocks */
+.embedded-block {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--border-color);
+    background-color: var(--code-bg);
+    border-radius: 6px;
+    position: relative;
+}
+
+/* Header for embedded blocks */
+.embedded-header {
+    margin-bottom: 0.75rem;
+    font-weight: bold;
+    color: var(--header-color);
+    font-size: 0.95em;
+    opacity: 0.9;
+}
+
+/* Content of embedded blocks */
+.embedded-content {
+    color: var(--text-color);
+    line-height: 1.8;
+}
+
+/* Source attribution for embedded blocks */
+.embedded-source {
+    margin-top: 0.75rem;
+    font-size: 0.85em;
+    color: var(--footer-color);
+    text-align: right;
+}
+
+.embedded-source a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.embedded-source a:hover {
+    text-decoration: underline;
+}
+
+/* Type-specific embedded block colors - matching the original block colors */
+.embedded-block.embedded-definition {
+    border-left-color: #2c5282;
+    background-color: rgba(44, 82, 130, 0.05);
+}
+
+.embedded-block.embedded-theorem {
+    border-left-color: #2d3748;
+    background-color: rgba(45, 55, 72, 0.05);
+}
+
+.embedded-block.embedded-lemma {
+    border-left-color: #2b6cb0;
+    background-color: rgba(43, 108, 176, 0.05);
+}
+
+.embedded-block.embedded-proposition {
+    border-left-color: #3182ce;
+    background-color: rgba(49, 130, 206, 0.05);
+}
+
+.embedded-block.embedded-corollary {
+    border-left-color: #718096;
+    background-color: rgba(113, 128, 150, 0.04);
+}
+
+.embedded-block.embedded-proof {
+    border-left-color: #38a169;
+    background-color: rgba(56, 161, 105, 0.05);
+}
+
+.embedded-block.embedded-example {
+    border-left-color: #2f855a;
+    background-color: rgba(47, 133, 90, 0.05);
+}
+
+/* Dark mode embedded blocks */
+@media (prefers-color-scheme: dark) {
+    .embedded-block {
+        background-color: rgba(255, 255, 255, 0.03);
+        border-color: var(--border-color);
+    }
+    
+    .embedded-block.embedded-definition {
+        background-color: rgba(44, 82, 130, 0.12);
+    }
+    
+    .embedded-block.embedded-theorem {
+        background-color: rgba(45, 55, 72, 0.12);
+    }
+    
+    .embedded-block.embedded-lemma {
+        background-color: rgba(43, 108, 176, 0.12);
+    }
+    
+    .embedded-block.embedded-proposition {
+        background-color: rgba(49, 130, 206, 0.12);
+    }
+    
+    .embedded-block.embedded-corollary {
+        background-color: rgba(113, 128, 150, 0.1);
+    }
+    
+    .embedded-block.embedded-proof {
+        background-color: rgba(56, 161, 105, 0.12);
+    }
+    
+    .embedded-block.embedded-example {
+        background-color: rgba(47, 133, 90, 0.12);
+    }
+}
+
+/* Error styling for failed embeds */
+.embed-error {
+    color: #dc3545;
+    font-weight: bold;
+    background-color: rgba(220, 53, 69, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .embed-error {
+        background-color: rgba(220, 53, 69, 0.2);
+        color: #f8d7da;
+    }
+}

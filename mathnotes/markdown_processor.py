@@ -73,7 +73,13 @@ class MarkdownProcessor:
                 content, block_markers = math_parser.parse(content)
                 
                 # Process cross-references to structured blocks (@label or @type:label)
-                content = self._process_block_references(content, block_markers, filepath)
+                # Store the processor to use it later for embedded blocks
+                self.block_ref_processor = BlockReferenceProcessor(
+                    block_markers=block_markers,
+                    current_file=filepath,
+                    block_index=self.block_index
+                )
+                content = self.block_ref_processor.process_references(content)
                 
                 
                 # Protect math delimiters from markdown processing
@@ -86,6 +92,10 @@ class MarkdownProcessor:
                 # Restore math blocks with their original content
                 html_content = math_protector.restore_math(html_content)
                 html_content = math_protector.fix_math_backslashes(html_content)
+                
+                # Process embedded blocks after markdown conversion
+                if hasattr(self, 'block_ref_processor') and self.block_ref_processor.embedded_blocks:
+                    html_content = self.block_ref_processor.process_embedded_blocks(html_content, self.md)
                 
                 
                 # Fix relative image paths to include content/ prefix
