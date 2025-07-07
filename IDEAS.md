@@ -132,3 +132,28 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Add charge strength slider/input control
   - Improve mobile usability and accessibility
   - Consider adding visual feedback for current settings
+
+- **Remove Spaces from URLs**: Eliminate spaces in URLs while preserving readable directory/file names
+  - Currently URLs contain encoded spaces (%20) which look unprofessional
+  - Convert directory names like "real analysis" to "real-analysis" in URLs
+  - Keep display names unchanged (still show "Real Analysis" in navigation/titles)
+  - Consider also removing spaces from actual directory names on disk for cleaner file system
+  - Would need URL redirects from old space-containing URLs to new hyphenated ones
+  - Update all internal links to use the new URL format
+
+- **Reorganize Top-Level Sections**: Consolidate sections to align with classical mathematical organization
+  - Current structure has too many top-level sections
+  - Reorganize into classical mathematical branches: Algebra, Analysis, Topology, Geometry, Logic, etc.
+  - Move current sections to appropriate subsections:
+    - "Real Analysis" → Analysis/Real Analysis
+    - "Complex Analysis" → Analysis/Complex Analysis  
+    - "Numerical Analysis" → Analysis/Numerical Analysis
+    - "Linear Algebra" → Algebra/Linear Algebra
+    - "Discrete Math" → Logic/Discrete Mathematics or Algebra/Discrete Mathematics
+    - "Differential Equations" → Analysis/Differential Equations
+    - "Probability and Statistics" → Analysis/Probability Theory (or its own section)
+    - "Calculus" → Analysis/Calculus
+    - "Trigonometry" → Geometry/Trigonometry (or Analysis/Trigonometry)
+    - "Physics" → Applied Mathematics/Physics (or remove if focusing on pure math)
+  - Create cleaner, more academic hierarchy that matches how mathematics is traditionally organized
+  - Would need extensive URL redirects to preserve existing links
