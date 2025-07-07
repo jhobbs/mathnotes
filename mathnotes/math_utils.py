@@ -165,6 +165,8 @@ class BlockReferenceProcessor:
     - @type:label - Auto-generated link text with type prefix
     - @{custom text|label} - Custom link text
     - @{custom text|type:label} - Custom link text with type validation
+    - @embed{label} - Embed/transclude the full block content
+    - @embed{type:label} - Embed with type validation
     """
     
     def __init__(self, block_markers: Dict[str, 'MathBlock'], current_file: str = None, block_index = None):
@@ -178,6 +180,7 @@ class BlockReferenceProcessor:
         self.block_markers = block_markers
         self.current_file = current_file
         self.block_index = block_index
+        self.embedded_blocks = {}  # Store embedded blocks for later processing
     
     def process_references(self, content: str) -> str:
         """Process all block references in the content.
@@ -188,12 +191,17 @@ class BlockReferenceProcessor:
         Returns:
             Content with references replaced by links
         """
-        # First process custom references @{text|label}
+        # First process embed directives @embed{label} or @embed{type:label}
+        # Pattern: @embed{label or type:label}
+        embed_pattern = r'@embed\{([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)\}'
+        content = re.sub(embed_pattern, self._replace_embed_reference, content)
+        
+        # Then process custom references @{text|label}
         # Pattern: @{any text|label or type:label}
         custom_reference_pattern = r'@\{([^|]+)\|([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)\}'
         content = re.sub(custom_reference_pattern, self._replace_custom_reference, content)
         
-        # Then process simple references @label or @type:label
+        # Finally process simple references @label or @type:label
         # Pattern to match @label or @type:label (avoiding email addresses)
         simple_reference_pattern = r'(?<![a-zA-Z0-9])@([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)'
         content = re.sub(simple_reference_pattern, self._replace_simple_reference, content)
@@ -290,3 +298,88 @@ class BlockReferenceProcessor:
                     return block_ref.block, target_url
         
         return None, None
+    
+    def _replace_embed_reference(self, match) -> str:
+        """Handle @embed{label} format for transcluding content."""
+        ref_text = match.group(1)
+        
+        # Parse reference format: either "label" or "type:label"
+        if ':' in ref_text:
+            ref_type, ref_label = ref_text.split(':', 1)
+            ref_type = ref_type.strip()
+            ref_label = ref_label.strip()
+        else:
+            ref_type = None
+            ref_label = ref_text.strip()
+        
+        # Find the referenced block
+        target_block, target_url = self._find_target_block(ref_label, ref_type)
+        
+        if target_block:
+            # Get the source link if this is from another file
+            source_info = ""
+            if target_url and not target_url.startswith('#'):
+                # This is from another file, add source link
+                source_info = f'<div class="embedded-source"><a href="{target_url}">source</a></div>'
+            
+            # Construct the embedded content
+            block_type_display = target_block.block_type.value.replace('_', ' ').title()
+            title_part = f": {target_block.title}" if target_block.title else ""
+            
+            # Generate a unique marker for this embedded block
+            import uuid
+            embed_marker = f"EMBED_MARKER_{uuid.uuid4().hex[:8]}_{ref_label}"
+            
+            # Store the block content for later processing
+            self.embedded_blocks[embed_marker] = {
+                'content': target_block.content,
+                'block_type': target_block.block_type.value,
+                'title': f"{block_type_display}{title_part}",
+                'source_info': source_info,
+                'ref_label': ref_label
+            }
+            
+            # Return the marker - it will be replaced after markdown processing
+            return embed_marker
+        else:
+            # Reference not found - return with error styling
+            return f'<span class="embed-error" data-ref="{ref_text}">@embed{{{ref_text}}} (not found)</span>'
+    
+    def process_embedded_blocks(self, html_content: str, md_processor) -> str:
+        """Process embedded block markers after markdown conversion.
+        
+        Args:
+            html_content: HTML content containing embed markers
+            md_processor: Markdown processor instance
+            
+        Returns:
+            HTML with embedded blocks properly rendered
+        """
+        for marker, embed_info in self.embedded_blocks.items():
+            # Process the embedded content through markdown
+            content = embed_info['content']
+            
+            # Protect math before markdown processing
+            math_protector = MathProtector(prefix=f"EMBED{marker}")
+            content = math_protector.protect_math(content)
+            
+            # Convert markdown to HTML
+            content_html = md_processor.convert(content)
+            md_processor.reset()
+            
+            # Restore math
+            content_html = math_protector.restore_math(content_html)
+            
+            # Build the embedded block HTML
+            embedded_html = f'''<div class="embedded-block embedded-{embed_info['block_type']}" data-embed-label="{embed_info['ref_label']}">
+<div class="embedded-header">{embed_info['title']}</div>
+<div class="embedded-content">{content_html}</div>
+{embed_info['source_info']}
+</div>'''
+            
+            # Replace the marker with the rendered block
+            # Look for the marker in a paragraph tag or standalone
+            html_content = html_content.replace(f'<p>{marker}</p>', embedded_html)
+            html_content = html_content.replace(marker, embedded_html)
+            
+        return html_content
