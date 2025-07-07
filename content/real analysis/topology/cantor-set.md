@@ -40,7 +40,7 @@ Clearly, $P$ is bounded, for it lies within $[0, 1].$ Each $E_n$ is composed of 
 ::::
 :::
 
-:::Theorem
+:::Theorem {label: cantor-set-is-not-empty}
 The Cantor set is not empty.
 
 ::::Proof
@@ -53,6 +53,18 @@ The Cantor set contains no @segment.
 
 ::::Proof
 Suppose, for the sake of contradiction, that some segment $(\alpha, \beta)$ \subset $P$ and let $L = \beta - \alpha.$ Pick some $n \in \mathbb{N}$ such that $1/3^n < L.$ Now, $E_n$ is the union of $2^n$ intervals of length $1/3^n,$ and since $(\alpha, \beta) \subset P,$ it must be the case that $(\alpha, \beta)$ is a subset of some interval of length $1/3^n.$ However, this can't be the case, since $L > 1/3^n,$ by construction. Therefore, our provision assumption is incorrect, and $P$ contains no segment. 
+::::
+:::
+
+:::theorem {label: cantor-set-is-perfect}
+The Cantor set is perfect.
+
+::::proof
+Let $x \in P.$ Let $r > 0,$ and pick $n \in \mathbb{N}$ to be large enough that $1/3^n < r.$ Then, $x$ lies in one of the $2^n$ intervals of length $1/3^n$ in $E_n;$ call it $I_n.$ The endpoints of $I_n$ are also in $P$ (see @cantor-set-is-not-empty,) and at least one of them is not $x.$ Since the endpoints are contained in a neighborhood of $x$ with radius $r > 0,$ all neighborhoods of $x$ are limit points of $P,$ and therefore $P$ is perfect.
+::::
+
+::::corollary
+Because @{nonempty perfect sets in $R^k$ are uncountable|non-empty-perfect-sets-in-rk-are-uncountable}, and the Cantor set is @{nonempty|cantor-set-is-not-empty} and @{perfect|cantor-set-is-perfect}, the Cantor set is uncountable. 
 ::::
 
 :::

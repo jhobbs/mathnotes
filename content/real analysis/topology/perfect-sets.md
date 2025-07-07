@@ -14,7 +14,7 @@ Review the definition of a perfect set:
 
 @embed{perfect-set}
 
-:::theorem
+:::theorem {label: non-empty-perfect-sets-in-rk-are-uncountable}
 Let $P$ be a nonempty perfect set in $R^k.$ Then $P$ is uncountable.
 
 ::::proof
