@@ -241,12 +241,17 @@ class BlockReferenceProcessor:
         target_block, target_url = self._find_target_block(ref_label, ref_type)
         
         if target_block:
-            # Generate the link text
-            if target_block.title:
-                link_text = target_block.title
+            # Use the reference text as written (preserving case) if it's a simple label reference
+            # Only use the title/content snippet if we need type prefixing
+            if ref_type:
+                # For type:label format, use the title with type prefix
+                if target_block.title:
+                    link_text = target_block.title
+                else:
+                    link_text = target_block.content_snippet
             else:
-                # Use content snippet for better context
-                link_text = target_block.content_snippet
+                # For simple @label format, preserve the case as written
+                link_text = ref_label
             
             # Create the link with appropriate URL
             return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
