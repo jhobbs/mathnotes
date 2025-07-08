@@ -157,3 +157,11 @@ This file tracks ideas for future features, enhancements, and demonstrations for
     - "Physics" → Applied Mathematics/Physics (or remove if focusing on pure math)
   - Create cleaner, more academic hierarchy that matches how mathematics is traditionally organized
   - Would need extensive URL redirects to preserve existing links
+
+- **Definition Disambiguation System**: Handle cases where multiple files define the same concept
+  - Detect when two or more files contain definitions with the same label or term
+  - Provide disambiguation mechanism (e.g., namespace by section or file)
+  - Show disambiguation page when referencing ambiguous terms
+  - Allow explicit selection of which definition to link to
+  - Could use file path or section hierarchy for automatic namespacing
+  - Warn during build process about duplicate definition labels

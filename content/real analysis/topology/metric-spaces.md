@@ -296,7 +296,7 @@ By (a) and (c), $\overline{E}$ is the smallest closed subset of $X$ that contain
 ::::
 :::
 
-:::theorem
+:::theorem {label: sup-is-in-closure-of-bounded-nonempty-set-of-reals}
 Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \overline{E}.$ Hence $y \in E$ if $E$ is closed.
 
 ::::proof
