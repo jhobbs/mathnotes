@@ -177,4 +177,4 @@ $$ t = \frac{\frac{x}{k}^{\frac{c}{b}}-v}{c} $$
 QED.
 
 ## Dilution Calculator
-{% include_relative dilution.html %}
+{% include_integrated_relative dilution-integrated.html %}

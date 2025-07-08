@@ -1,39 +1,23 @@
 "use strict";
 
-const INPUT_FIELDS = [
-    "solutionStartingVolume",
-    "solutionStartingMass",
-    "inflowVolumeRate",
-    "inflowConcentration",
-    "outflowVolumeRate",
-    "desiredMass",
-    "desiredTime"
-];
-
 function setupParameters() {
-    const parametersP = document.getElementById("parameters");
-
-    parametersP.replaceChildren();
-
-    INPUT_FIELDS.forEach(inputField => {
-        const parameterP = document.createElement("p");
-        const parameterText = document.createTextNode(`${inputField}: `);
-        const parameterInput = document.createElement("input");
-        parameterP.appendChild(parameterText);
-        parameterInput.id = inputField;
-        parameterP.appendChild(parameterInput);
-        parametersP.appendChild(parameterP);
-    });
+    // For integrated demos - just add event listener
+    const calculateBtn = document.getElementById('Calculate');
+    if (calculateBtn) {
+        calculateBtn.addEventListener('click', calculate);
+    }
 }
 
 function getParameters() {
-    const parameters = {};
-
-    INPUT_FIELDS.forEach(inputField => {
-        parameters[inputField] = Number(document.getElementById(inputField).value);
-    });
-
-    return parameters;
+    return {
+        solutionStartingVolume: Number(document.getElementById("solutionStartingVolume").value),
+        solutionStartingMass: Number(document.getElementById("solutionStartingMass").value),
+        inflowVolumeRate: Number(document.getElementById("inflowVolumeRate").value),
+        inflowConcentration: Number(document.getElementById("inflowConcentration").value),
+        outflowVolumeRate: Number(document.getElementById("outflowVolumeRate").value),
+        desiredMass: Number(document.getElementById("desiredMass").value),
+        desiredTime: Number(document.getElementById("desiredTime").value)
+    };
 }
 
 function calculateResults(parameters) {
@@ -119,4 +103,11 @@ function calculate() {
         resultP.appendChild(resultA);
         resultsP.appendChild(resultP);
     }
+}
+
+// Initialize when DOM is ready (for integrated demos)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupParameters);
+} else {
+    setupParameters();
 }

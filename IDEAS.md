@@ -19,7 +19,7 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - **projection.html** - Graphics: Projection and Homogeneous Coordinates
   - **pendulum.html** - Differential Equations: Undamped Motion
   - **elementary.html** - Cellular Automata: Elementary Cellular Automata
-  - **dilution.html** - Differential Equations: Dilution and Accretion
+  - ✅ **dilution.html** - Differential Equations: Dilution and Accretion (Completed)
   - **cellular.html** - Cellular Automata: Game of Life
 
 ## Content Ideas
