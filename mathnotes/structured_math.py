@@ -489,6 +489,7 @@ def process_structured_math_content(html_content: str, block_markers: Dict[str, 
     """
     parser = StructuredMathParser(current_file=current_file, block_index=block_index)
     
+    
     # Process only top-level blocks (blocks without parents)
     # Child blocks will be processed recursively by their parents
     for marker_id, block in block_markers.items():
