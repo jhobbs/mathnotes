@@ -144,8 +144,13 @@
             const toggleBtn = document.getElementById('math-content-toggle');
             
             if (showOnlyStatements) {
-                // Hide proofs, examples, remarks, notes, intuition, exercises, and solutions
+                // Hide proofs, examples, remarks, notes, intuition, exercises, solutions, and interactive demos
                 document.querySelectorAll('.math-proof, .math-example, .math-remark, .math-note, .math-intuition, .math-exercise, .math-solution').forEach(el => {
+                    el.style.display = 'none';
+                });
+                
+                // Hide interactive demo containers (both iframe and integrated versions)
+                document.querySelectorAll('.demo-container, .demo-component').forEach(el => {
                     el.style.display = 'none';
                 });
                 
@@ -157,6 +162,11 @@
             } else {
                 // Show all content
                 document.querySelectorAll('.math-block').forEach(el => {
+                    el.style.display = '';
+                });
+                
+                // Show interactive demo containers
+                document.querySelectorAll('.demo-container, .demo-component').forEach(el => {
                     el.style.display = '';
                 });
                 
