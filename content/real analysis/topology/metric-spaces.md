@@ -271,6 +271,13 @@ In parts (c) and (d) of the above theorem, finiteness of the collections of sets
 ::::
 :::
 
+:::theorem
+Let $E'$ be the set of all limit points of a set $E$ in space $X.$ Then $E'$ is closed.
+
+::::proof
+Let $p \in X, p \notin E'.$ Then some neighborhood $N$ of $p$ contains no points in $E,$ other than possibly $p$ itself. If $N$ contains only $p,$ then $p$ is not a limit point of $E'.$ Suppose, for the sake of contradiction, some point $q \in N, q \neq p$ is a limit point of $E'.$ Then, every neighborhood of $q$ contains some point $m$ in $E'.$ Let $M \subset N, p \notin M,$ be such a neighborhood, and let $m \in M, m \neq q$ be a limit point of $E$. Now, $m$ has neighborhoods wholly in $N,$ and such neighborhoods can have no point in $E,$ so we have a contradiction, and therefore $q$ is not a limit point of $E'.$ Hence, $p$ is an interior point of $E'^c,$ and $E'^c$ is open, and therefore $E'$ is closed.
+::::
+:::
 
 :::definition "Closure"
 If $X$ is a metric space, $E \subset X,$ and $E'$ denotes the set of all limit points of $E$ in $X,$ then the **closure** of $E$ is the set $\overline{E} = E \cup E'.$
@@ -295,6 +302,7 @@ By (a) and (c), $\overline{E}$ is the smallest closed subset of $X$ that contain
 (c) Suppose that $E \subset F \subset X,$ and that $F$ is closed. Suppose $p \in \overline{E}.$ If $p \in E,$ then $p \in F$ because $E \subset F.$ If $p \in E',$ then it must be in $F$ also, since $F$ contains all points of $E,$ and is closed, and thus must contain the limit points of $E.$  
 ::::
 :::
+
 
 :::theorem {label: sup-is-in-closure-of-bounded-nonempty-set-of-reals}
 Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \overline{E}.$ Hence $y \in E$ if $E$ is closed.
