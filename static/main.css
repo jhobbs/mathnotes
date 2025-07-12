@@ -476,8 +476,8 @@ table th {
 }
 
 .math-theorem {
-    border-left-color: #2d3748;
-    background-color: rgba(45, 55, 72, 0.05);
+    border-left-color: #38a169;
+    background-color: rgba(56, 161, 105, 0.05);
 }
 
 .math-lemma {
@@ -496,8 +496,8 @@ table th {
 }
 
 .math-proof {
-    border-left-color: #38a169;
-    background-color: rgba(56, 161, 105, 0.05);
+    border-left-color: #2d3748;
+    background-color: rgba(45, 55, 72, 0.05);
     font-style: normal;
 }
 
@@ -535,7 +535,7 @@ table th {
     }
     
     .math-theorem {
-        background-color: rgba(45, 55, 72, 0.12);
+        background-color: rgba(56, 161, 105, 0.12);
     }
     
     .math-lemma {
@@ -551,7 +551,7 @@ table th {
     }
     
     .math-proof {
-        background-color: rgba(56, 161, 105, 0.12);
+        background-color: rgba(45, 55, 72, 0.12);
     }
     
     .math-example {
@@ -581,7 +581,7 @@ table th {
 }
 
 .math-block-nested.math-theorem {
-    background-color: rgba(45, 55, 72, 0.03);
+    background-color: rgba(56, 161, 105, 0.03);
 }
 
 .math-block-nested.math-lemma {
@@ -597,7 +597,7 @@ table th {
 }
 
 .math-block-nested.math-proof {
-    background-color: rgba(56, 161, 105, 0.03);
+    background-color: rgba(45, 55, 72, 0.03);
 }
 
 .math-block-nested.math-example {
@@ -611,7 +611,7 @@ table th {
     }
     
     .math-block-nested.math-theorem {
-        background-color: rgba(45, 55, 72, 0.06);
+        background-color: rgba(56, 161, 105, 0.06);
     }
     
     .math-block-nested.math-lemma {
@@ -627,7 +627,7 @@ table th {
     }
     
     .math-block-nested.math-proof {
-        background-color: rgba(56, 161, 105, 0.06);
+        background-color: rgba(45, 55, 72, 0.06);
     }
     
     .math-block-nested.math-example {
