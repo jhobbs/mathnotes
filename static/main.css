@@ -769,3 +769,50 @@ table th {
         color: #f8d7da;
     }
 }
+
+/* Math content toggle button styles */
+.math-content-toggle-container {
+    position: sticky;
+    top: 10px;
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem 0;
+    padding: 0 1rem;
+}
+
+.math-content-toggle {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.math-content-toggle:hover {
+    background-color: var(--link-color);
+    color: var(--bg-color);
+    border-color: var(--link-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.math-content-toggle:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode toggle button */
+@media (prefers-color-scheme: dark) {
+    .math-content-toggle {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .math-content-toggle:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+}
