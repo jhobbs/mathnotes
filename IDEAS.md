@@ -10,6 +10,12 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Allow filtering/browsing content by tags
   - Display tags on individual pages
 
+- ✅ **Show/Hide Math Details Toggle** (Implemented 2025-07-12): Toggle between viewing only key mathematical statements (definitions, theorems, lemmas, corollaries) and full content including proofs
+  - Sticky toggle button appears when page has both statements and details
+  - Hides proofs, examples, remarks, notes, intuition sections when activated
+  - Allows quick review of theorems and definitions without distraction
+  - Button text changes to indicate current state
+
 ## Interactive Demonstrations
 
 - **Reusable Cartesian Plane Library**: Extract the cartesian plane, grid, axes, and zoom functionality from the neighborhood demo into a reusable JavaScript library for other mathematical visualizations
