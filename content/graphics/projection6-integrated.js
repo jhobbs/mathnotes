@@ -56,7 +56,16 @@
   };
 
   window[demoId + '_draw'] = function() {
-    background(220);
+    // Dark mode support - check both class and system preference
+    const isDarkModeClass = document.documentElement.classList.contains('dark-mode');
+    const isDarkModePref = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = isDarkModeClass || isDarkModePref;
+    
+    if (isDark) {
+      background(32); // Dark background
+    } else {
+      background(220); // Light background
+    }
     
     // Get the camera angle values from the sliders
     let cameraAngleX = -cameraAngleXSlider.value();
@@ -136,7 +145,12 @@
       math.matrix([30, 30, 100, 1])    // Mouth right
     ];
 
-    fill(0);
+    // Set colors based on dark mode
+    if (isDark) {
+      fill(200); // Light gray for dark mode
+    } else {
+      fill(0); // Black for light mode
+    }
     noStroke();
 
     // Apply matrix multiplication to each point and draw the resulting points
@@ -151,7 +165,11 @@
     }
 
     // Draw a dense bounding box around the face
-    stroke(0);
+    if (isDark) {
+      stroke(200); // Light gray for dark mode
+    } else {
+      stroke(0); // Black for light mode
+    }
     noFill();
     let boundingBoxPoints = [];
     let halfSize = 120;
