@@ -91,7 +91,7 @@ class MathProtector:
     def fix_math_backslashes(self, content: str) -> str:
         """Fix escaped backslashes in LaTeX content.
         
-        Converts \\\\ back to \\ for proper LaTeX rendering.
+        Preserve double backslashes within math expressions for LaTeX line breaks.
         
         Args:
             content: Content that may have escaped backslashes
@@ -99,22 +99,7 @@ class MathProtector:
         Returns:
             Content with backslashes fixed
         """
-        # Fix within display math
-        content = re.sub(
-            r'(\$\$.*?\$\$)',
-            lambda m: m.group(1).replace('\\\\', '\\'),
-            content,
-            flags=re.DOTALL
-        )
-        
-        # Fix within inline math
-        content = re.sub(
-            r'(?<!\$)(\$(?!\$).*?\$)(?!\$)',
-            lambda m: m.group(1).replace('\\\\', '\\'),
-            content,
-            flags=re.DOTALL
-        )
-        
+        # Don't modify math content - the issue is elsewhere
         return content
     
     def reset(self):
