@@ -7,8 +7,10 @@ COPY .git .git
 RUN git describe --always --tags > /version.txt || echo "unknown" > /version.txt
 
 # Stage 2: Build frontend assets
-FROM node:20-alpine AS frontend
+FROM node:22-alpine AS frontend
 WORKDIR /app
+# Upgrade npm to latest version
+RUN npm install -g npm@latest
 COPY package*.json ./
 RUN npm ci
 COPY tsconfig.json vite.config.ts ./
