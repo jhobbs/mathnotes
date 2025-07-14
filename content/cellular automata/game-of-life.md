@@ -29,7 +29,7 @@ Explore the Game of Life with this interactive demonstration. You can:
 - Load pre-defined patterns
 - Adjust the simulation speed
 
-{% include_relative cellular.html %}
+{% include_integrated_relative cellular-integrated.html %}
 
 ## Common Patterns
 
