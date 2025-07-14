@@ -93,26 +93,27 @@ class TestMathProtector:
         assert protector.inline_counter == 1
     
     def test_fix_math_backslashes(self):
-        """Test fixing escaped backslashes in LaTeX."""
+        """Test that fix_math_backslashes now preserves content unchanged."""
         protector = MathProtector()
         
         # Test display math with matrix/cases environments
-        # Input has double backslashes that should be converted to single
+        # The function should now preserve double backslashes for LaTeX
         content = r"""$$
 \begin{cases}
-x + y = 5\\\\
+x + y = 5\\
 x - y = 1
 \end{cases}
 $$"""
         
         fixed = protector.fix_math_backslashes(content)
-        assert r"x + y = 5\\" in fixed
-        assert r"x - y = 1" in fixed
+        # Content should be unchanged
+        assert fixed == content
         
         # Test inline math
-        inline_content = r"The equation $a \\\\ b$ shows a line break."
+        inline_content = r"The equation $a \\ b$ shows a line break."
         fixed_inline = protector.fix_math_backslashes(inline_content)
-        assert r"$a \\ b$" in fixed_inline
+        # Content should be unchanged
+        assert fixed_inline == inline_content
     
     def test_reset(self):
         """Test resetting the protector state."""
@@ -242,7 +243,8 @@ class TestBlockReferenceProcessor:
         assert 'class="block-reference"' in result
         assert 'data-ref-type="definition"' in result
         assert 'data-ref-label="metric-space"' in result
-        assert '>Metric Space</a>' in result
+        # Simple references now show the label text as written
+        assert '>metric-space</a>' in result
     
     def test_simple_reference_without_title(self):
         """Test @label reference to a block without a title (uses content snippet)."""
@@ -329,8 +331,11 @@ class TestBlockReferenceProcessor:
         
         # Check all three references are processed
         assert result.count('<a href=') == 3
-        assert '>Metric Space</a>' in result
+        # Simple reference shows label text
+        assert '>metric-space</a>' in result
+        # Typed reference shows title
         assert '>Compact sets are closed</a>' in result
+        # Custom text reference shows custom text
         assert '>our lemma</a>' in result
     
     def test_email_not_processed(self):
@@ -377,7 +382,8 @@ class TestBlockReferenceProcessor:
         result = processor.process_references(content)
         
         assert '<a href="/mathnotes/topology/basics#open-set"' in result
-        assert '>Open Set</a>' in result
+        # Simple reference shows label text
+        assert '>open-set</a>' in result
     
     def test_same_file_reference_with_block_index(self):
         """Test that references within the same file use local anchors."""
@@ -415,7 +421,8 @@ class TestBlockReferenceProcessor:
         # Should use local anchor, not full URL
         assert '<a href="#local-thm"' in result
         assert '/mathnotes/' not in result
-        assert '>Local Theorem</a>' in result
+        # Simple reference shows label text
+        assert '>local-thm</a>' in result
     
     def test_special_characters_in_label(self):
         """Test labels with hyphens and underscores."""
@@ -433,7 +440,8 @@ class TestBlockReferenceProcessor:
         result = processor.process_references(content)
         
         assert '<a href="#special_def-123"' in result
-        assert '>Special Def</a>' in result
+        # Simple reference shows label text
+        assert '>special_def-123</a>' in result
     
     def test_reference_at_start_of_line(self):
         """Test reference at the beginning of a line."""
