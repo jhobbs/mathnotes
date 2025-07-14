@@ -171,3 +171,15 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Allow explicit selection of which definition to link to
   - Could use file path or section hierarchy for automatic namespacing
   - Warn during build process about duplicate definition labels
+
+- **Clean Up Integrated Include Pattern**: Improve the include_integrated_relative implementation
+  - Current approach includes full HTML files and requires manual handling of script dependencies
+  - Math.js and other libraries need to be manually added to base template
+  - Script loading is fragile - demos break if scripts aren't in exactly the right place
+  - Consider a cleaner approach:
+    - Separate demo content (HTML) from dependencies (scripts/styles)
+    - Auto-detect and inject required scripts into the page head
+    - Use a manifest or metadata approach to declare dependencies
+    - Support both external CDN scripts and local script files
+    - Provide clear error messages when dependencies are missing
+  - Would reduce debugging time and make demo integration more reliable
