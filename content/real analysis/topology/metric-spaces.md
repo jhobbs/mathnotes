@@ -313,8 +313,15 @@ Suppose $p$ is a limit point of $E.$ Then every neighborhood of $p$ contains som
 
 Conversely, suppose $p$ is a limit point of $\overline{E}.$ Then, every neighborhood $N$ of $p$ contains a point of $q \in \overline{E}, q \neq p.$ If $q \in E,$ then $N$ clearly contains a point in $E.$ Otherwise, $q \in E', q \not in E.$ Now, since $q \in N$ and @{every neighborhood is an open set|every-neighborhood-is-an-open-set}, $q$ has some neighborhood $M \subset N.$ Since $q \in E',$ $M$ contains some point $s \in E.$ Since $M \subset N,$ $s \in N,$ and therefore $N$ contains a point in $E.$ Thus, all neighborhoods of $p$ contain some point in $E,$ and $p$ is a limit point of $E.$
 ::::
-
 :::
+
+:::theorem
+A set $E$ and its limit points $E'$ do not necessarily have the same limit points. 
+::::proof
+Consider $P = \{\frac{1}{n} | n \in \mathbb{N}\}.$ Then $P$ has one limit point, $0,$ but $P' = \{0\}$ has no limit points, since the only number that contains $0$ in all its neighborhoods is $0$ itself (see @only-infinite-sets-have-limit-points.)
+::::
+:::
+
 
 :::theorem {label: sup-is-in-closure-of-bounded-nonempty-set-of-reals}
 Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \overline{E}.$ Hence $y \in E$ if $E$ is closed.
