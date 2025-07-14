@@ -37,3 +37,9 @@ def inject_version():
     except:
         pass
     return {'app_version': version}
+
+def inject_env():
+    """Add environment info to all templates."""
+    return {
+        'is_development': os.environ.get('FLASK_ENV') == 'development'
+    }

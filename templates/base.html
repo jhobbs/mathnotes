@@ -211,5 +211,14 @@
             }
         });
     </script>
+    
+    {% if is_development %}
+    <!-- Vite development server -->
+    <script type="module" src="http://localhost:5173/static/dist/@vite/client"></script>
+    <script type="module" src="http://localhost:5173/static/dist/main.ts"></script>
+    {% else %}
+    <!-- Production build -->
+    <script type="module" src="{{ url_for('static', filename='dist/main.js') }}"></script>
+    {% endif %}
 </body>
 </html>

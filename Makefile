@@ -1,4 +1,4 @@
-.PHONY: help test test-unit test-integration coverage lint format type check install install-dev clean docker-test docker-build venv
+.PHONY: help test test-unit test-integration coverage lint format type check install install-dev clean docker-test docker-build venv build-frontend dev-frontend
 
 VENV = venv
 PYTHON = $(VENV)/bin/python3
@@ -18,6 +18,8 @@ help:
 	@echo "  make check         Run all checks (lint, type, test)"
 	@echo "  make docker-test   Run tests in Docker"
 	@echo "  make docker-build  Build Docker image"
+	@echo "  make build-frontend Build frontend assets with Vite"
+	@echo "  make dev-frontend  Run Vite dev server"
 	@echo "  make clean         Clean up generated files"
 
 # Create virtual environment
@@ -71,6 +73,14 @@ docker-test:
 docker-build:
 	docker-compose build
 
+# Frontend commands
+build-frontend:
+	npm install
+	npm run build
+
+dev-frontend:
+	docker-compose -f docker-compose.dev.yml up
+
 # Tox commands (if tox is installed)
 tox:
 	tox
@@ -94,3 +104,5 @@ clean:
 	find . -type f -name ".coverage" -delete
 	find . -type f -name "coverage.xml" -delete
 	find . -type d -name "*.egg-info" -exec rm -rf {} +
+	rm -rf node_modules
+	rm -rf mathnotes/static/dist
