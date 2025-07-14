@@ -185,7 +185,7 @@ $E$ is **bounded** if there is a real number $M$ and a point $q \in X$ such that
 $E$ is **dense** in $X$ if every point of $X$ is a limit point of $E,$ or a point of $E$ (or both.)
 :::
 
-:::theorem
+:::theorem {label: every-neighborhood-is-an-open-set}
 Every neighborhood is an open set.
 
 ::::proof
@@ -283,7 +283,7 @@ Let $p \in X, p \notin E'.$ Then some neighborhood $N$ of $p$ contains no points
 If $X$ is a metric space, $E \subset X,$ and $E'$ denotes the set of all limit points of $E$ in $X,$ then the **closure** of $E$ is the set $\overline{E} = E \cup E'.$
 :::
 
-:::theorem
+:::theorem {label: set-is-its-closure-iff-it-is-closed}
 If $X$ is a metric space and $E \subset X,$ then
 
 (a) $\overline{E}$ is closed.
@@ -303,6 +303,18 @@ By (a) and (c), $\overline{E}$ is the smallest closed subset of $X$ that contain
 ::::
 :::
 
+:::theorem
+If $E$ is a set in a metric space, then $E$ and $\overline{E}$ have the same limit points.
+
+::::proof
+If $E$ is closed, then we are done, because @{a set equals its closure if it is closed|set-is-its-closure-iff-it-is-closed}. 
+
+Suppose $p$ is a limit point of $E.$ Then every neighborhood of $p$ contains some $q \in E, q \neq p.$ Since $q \in E, ~ q \in \overline{E}$, so $p$ is a limit point of $\overline{E}.$
+
+Conversely, suppose $p$ is a limit point of $\overline{E}.$ Then, every neighborhood $N$ of $p$ contains a point of $q \in \overline{E}, q \neq p.$ If $q \in E,$ then $N$ clearly contains a point in $E.$ Otherwise, $q \in E', q \not in E.$ Now, since $q \in N$ and @{every neighborhood is an open set|every-neighborhood-is-an-open-set}, $q$ has some neighborhood $M \subset N.$ Since $q \in E',$ $M$ contains some point $s \in E.$ Since $M \subset N,$ $s \in N,$ and therefore $N$ contains a point in $E.$ Thus, all neighborhoods of $p$ contain some point in $E,$ and $p$ is a limit point of $E.$
+::::
+
+:::
 
 :::theorem {label: sup-is-in-closure-of-bounded-nonempty-set-of-reals}
 Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \overline{E}.$ Hence $y \in E$ if $E$ is closed.
