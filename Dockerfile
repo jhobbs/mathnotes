@@ -6,7 +6,16 @@ COPY .git .git
 # since Docker builds should be from committed code
 RUN git describe --always --tags > /version.txt || echo "unknown" > /version.txt
 
-# Stage 2: Build the actual application
+# Stage 2: Build frontend assets
+FROM node:20-alpine AS frontend
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY tsconfig.json vite.config.ts ./
+COPY mathnotes/demos ./mathnotes/demos
+RUN npm run build
+
+# Stage 3: Build the actual application
 FROM python:3.11-slim
 
 # Set working directory
@@ -23,6 +32,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy version from first stage
 COPY --from=version /version.txt /version/version.txt
+
+# Copy built frontend assets from frontend stage
+COPY --from=frontend /app/mathnotes/static/dist ./static/dist
 
 # Copy the rest of the application
 COPY . .

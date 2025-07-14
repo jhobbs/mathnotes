@@ -13,7 +13,22 @@ services:
       - /app/.pytest_cache
       - /app/.tox
       - /app/htmlcov
+      - /app/node_modules
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
     command: python run.py
+    depends_on:
+      - vite
+
+  vite:
+    image: node:20-alpine
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"

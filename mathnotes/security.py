@@ -24,14 +24,28 @@ def add_security_headers(response):
     # Get the nonce for this request
     nonce = getattr(g, 'csp_nonce', '')
     
+    # Check if we're in development mode
+    is_development = (
+        os.environ.get('FLASK_ENV') == 'development' or
+        os.environ.get('FLASK_DEBUG') == '1'
+    )
+    
     # Content Security Policy with nonce
+    script_src = f"script-src 'self' 'nonce-{nonce}' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com"
+    connect_src = "connect-src 'self'"
+    
+    # In development, allow Vite dev server
+    if is_development:
+        script_src += " http://localhost:5173"
+        connect_src += " http://localhost:5173 ws://localhost:5173"
+    
     csp_directives = [
         "default-src 'self'",
-        f"script-src 'self' 'nonce-{nonce}' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
+        script_src,
         "style-src 'self' 'unsafe-inline'",
         "img-src 'self' data: https://upload.wikimedia.org",
         "font-src 'self' https://cdn.jsdelivr.net",
-        "connect-src 'self'",
+        connect_src,
         "frame-src 'self'",
         "frame-ancestors 'self'",
         "base-uri 'self'",
