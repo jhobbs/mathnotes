@@ -22,8 +22,9 @@ services:
       - vite
 
   vite:
-    image: node:20-alpine
-    working_dir: /app
+    build:
+      context: .
+      dockerfile: Dockerfile.node-dev
     ports:
       - "5173:5173"
     volumes:
