@@ -11,8 +11,9 @@ FROM node:22-alpine AS frontend
 WORKDIR /app
 # Upgrade npm to latest version
 RUN npm install -g npm@latest
-COPY package*.json ./
-RUN npm ci
+COPY package.json ./
+# Don't copy package-lock.json to avoid platform-specific issues
+RUN npm install
 COPY tsconfig.json vite.config.ts ./
 COPY mathnotes/demos ./mathnotes/demos
 RUN npm run build
