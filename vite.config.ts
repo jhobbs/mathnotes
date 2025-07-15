@@ -5,7 +5,7 @@ export default defineConfig({
   root: './mathnotes/demos',
   base: '/static/dist/',
   build: {
-    outDir: '../../mathnotes/static/dist',
+    outDir: '../../static/dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {

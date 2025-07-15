@@ -1,23 +1,15 @@
 // Main entry point for Vite
 // This file will handle dynamic imports of demo modules
 
-interface DemoConfig {
-  darkMode?: boolean;
-  width?: number;
-  height?: number;
-}
-
-interface DemoInstance {
-  cleanup(): void;
-  resize?(): void;
-  pause?(): void;
-  resume?(): void;
-}
+import type { DemoConfig, DemoInstance } from './types';
 
 // Demo registry - will be populated as demos are converted
 const demoRegistry: Record<string, () => Promise<{ default: (container: HTMLElement, config?: DemoConfig) => DemoInstance }>> = {
-  // Example: 'electric-field': () => import('./physics/electric-field')
+  'electric-field': () => import('./physics/electric-field')
 };
+
+// Expose registry globally for inline scripts
+(window as any).demoRegistry = demoRegistry;
 
 // Initialize demos on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -53,5 +45,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Export types for demo modules to use
-export type { DemoConfig, DemoInstance };
+// Re-export types for demo modules to use
+export type { DemoConfig, DemoInstance } from './types';

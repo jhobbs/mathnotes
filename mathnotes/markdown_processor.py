@@ -51,6 +51,24 @@ class MarkdownProcessor:
                 
                 content = re.sub(integrated_pattern, replace_integrated_include, content)
                 
+                # Handle new demo module includes
+                demo_pattern = r'{%\s*include_demo\s+"([^"]+)"\s*%}'
+                def replace_demo_include(match):
+                    demo_name = match.group(1)
+                    # Generate unique ID for this demo instance
+                    demo_id = f"demo-{demo_name}-{hash(f'{filepath}-{match.start()}') & 0x7FFFFFFF}"
+                    
+                    # Add the demo script to load
+                    if 'static/dist/main.js' not in demo_scripts:
+                        demo_scripts.append('static/dist/main.js')
+                    
+                    # Track that we need to initialize this demo
+                    integrated_demos.append(f'{demo_name}:{demo_id}')
+                    
+                    return f'<div class="demo-component" data-demo="{demo_name}" id="{demo_id}"></div>'
+                
+                content = re.sub(demo_pattern, replace_demo_include, content)
+                
                 # Handle regular includes (iframe)
                 include_pattern = r'{%\s*include_relative\s+([^\s%}]+)\s*%}'
                 def replace_include(match):
