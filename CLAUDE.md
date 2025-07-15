@@ -57,6 +57,12 @@ pytest test/test_math_utils.py -v
 make lint    # Check code style
 make format  # Auto-format code
 make check   # Run all checks (lint, type, test)
+
+# Run full tox test suite
+make tox
+make tox-py311     # Python 3.11 specific
+make tox-lint      # Just linting
+make tox-coverage  # Coverage specific
 ```
 
 ### Deployment
@@ -93,6 +99,21 @@ python3 scripts/link_checker.py
 
 # Scale Fly.io regions
 ./scripts/scale_regions.sh
+
+# Find mathematical definitions not using structured blocks
+python3 scripts/find_unstructured_definitions.py
+
+# Test Docker build locally with GitHub Actions configuration
+./scripts/test-github-build.sh
+
+# Test multi-platform builds (linux/amd64, linux/arm64)
+./scripts/test-multiplatform-build.sh
+
+# Build frontend assets (TypeScript/Vite)
+make build-frontend
+
+# Run integrated dev environment (Flask + Vite)
+make dev-frontend  # or: docker-compose -f docker-compose.dev.yml up
 ```
 
 ## Architecture
@@ -113,8 +134,16 @@ mathnotes/
 ├── security.py             # CSP nonces and security headers
 ├── context_processors.py   # Template context injection
 ├── file_utils.py           # File system utilities
-└── utils.py                # General utilities
+├── utils.py                # General utilities
+└── demos/                   # Frontend TypeScript source (built with Vite)
 ```
+
+### Frontend Build System
+- **Vite** configured for TypeScript and p5.js demos
+- Source code in `mathnotes/demos/`
+- Build output to `mathnotes/static/dist/`
+- Development server proxies to Flask on port 5000
+- docker-compose.dev.yml provides integrated Flask + Vite development
 
 ### Key Implementation Details
 
@@ -244,6 +273,7 @@ upgrade-insecure-requests
 
 1. **Making Changes**:
    - Use Docker for testing: `docker-compose up --build`
+   - For integrated frontend development: `docker-compose -f docker-compose.dev.yml up`
    - Check for JavaScript errors in browser console
    - Verify CSP compliance for new scripts
    - Test both light and dark modes
@@ -254,11 +284,14 @@ upgrade-insecure-requests
    - Use `{% include_integrated_relative demo.html %}` for direct embedding
    - Include dark mode CSS/JS
    - Test CSP nonce handling
+   - TypeScript demos go in `mathnotes/demos/` and are built with Vite
 
 3. **Testing**:
    - Run tests before committing: `make test`
    - Check coverage: `make coverage`
    - Lint code: `make lint`
+   - Format code: `make format` (Black configured for 100-char lines)
+   - Run type checking: `make type` (mypy in strict mode)
    - Use Playwright for integration testing when needed
 
 ## Todo and Ideas Management
@@ -278,6 +311,8 @@ GitHub Actions CI/CD pipeline:
 4. **Deploy**: Fly.io via GitHub Actions
 5. **Monitor**: Use `./scripts/monitor_deployment.sh`
 
+The pipeline builds multi-platform Docker images (linux/amd64, linux/arm64) using buildx and automatically deploys to Fly.io on successful builds.
+
 ## Common Troubleshooting
 
 - **CSP Errors**: Check that inline scripts have nonces
@@ -288,3 +323,22 @@ GitHub Actions CI/CD pipeline:
 
 When testing: you MUST use Docker to test changes
 - In dev mode, ALWAYS use `docker-compose -f docker-compose.dev.yml`
+
+## Project Configuration
+
+### Python Configuration (pyproject.toml)
+- Python 3.11 minimum requirement
+- Black formatter: 100-character line length
+- Pytest with coverage configuration
+- Flake8 and mypy for code quality
+- Tox for multi-environment testing
+
+### Key Dependencies
+- **Backend**: Flask 3.0.0, Markdown 3.5.1, python-frontmatter 1.0.1, gunicorn 21.2.0
+- **Frontend**: TypeScript, Vite, p5.js for visualizations
+- **Development**: pytest, black, flake8, mypy, tox, pre-commit
+
+### Future Development Plans
+- **JS Demo Modernization** (JS_DEMO_MODERNIZATION_PLAN.md): TypeScript conversion, Vite integration, module-based system
+- **Math Blocks Refactor** (REFACTOR-MATHBLOCKS-PLAN.md): Simplified structured math parsing
+- **Feature Ideas** (IDEAS.md): Tags system, automatic theorem numbering, desktop layout improvements
