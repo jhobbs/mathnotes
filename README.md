@@ -83,7 +83,6 @@ mathnotes/
 │   └── utils.py                 # General utilities
 ├── wsgi.py                      # Production WSGI entry point
 ├── run.py                       # Development server entry point
-├── app.py                       # Backward compatibility
 ├── templates/                   # Jinja2 templates
 ├── static/                      # Static assets (CSS, JS)
 └── [content directories]        # Mathematical content
@@ -305,7 +304,6 @@ All listed URLs will redirect (301) to the canonical URL.
 
 - **`wsgi.py`** - Production WSGI entry point for Gunicorn/uWSGI
 - **`run.py`** - Development server with debug mode
-- **`app.py`** - Backward compatibility (deprecated)
 
 ### Adding Content
 
