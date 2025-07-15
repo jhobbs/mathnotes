@@ -116,11 +116,16 @@ This document outlines a comprehensive plan to modernize the Mathnotes JavaScrip
 - Install Vite as the build tool and dev server
 
 #### 1.2 Organize Source Directory
-- Create dedicated directory (e.g., `mathnotes/demos/` or `content/demos/`)
-- Each demo gets subfolder with HTML snippet and TypeScript module
-- Example: `demos/electric-field/` contains:
-  - `electric-field.html` (markup snippet)
-  - `electric-field.ts` (logic with types)
+- Create proper separation of framework and content:
+  - `demos-framework/` - TypeScript framework/library code
+    - `src/main.ts` - Main entry point and demo registry
+    - `src/types.ts` - Shared TypeScript interfaces
+    - `src/utils/` - Common utilities
+  - `demos/` - Actual demo implementations
+    - `physics/electric-field/electric-field.ts`
+    - `math/complex-plane/complex-plane.ts`
+    - etc.
+- Keep TypeScript code OUT of the Python package directory
 
 #### 1.3 Modernize Dependency Management
 - Use npm for libraries (p5.js, math.js, etc.)
@@ -296,41 +301,50 @@ interface DemoConfig {
 
 ## Incremental Implementation Sessions
 
-1. **Session 1 - Build Setup** (~200 lines)
+1. **Session 1 - Build Setup** (~200 lines) ✅ COMPLETED
    - Create package.json with TypeScript and Vite
    - Configure vite.config.ts and tsconfig.json
    - Set up development server with Flask proxy
    - Verify TypeScript module compilation and serving
 
-2. **Session 2 - Pilot Demo Refactor** (~300 lines)
+2. **Session 2 - Pilot Demo Refactor** (~300 lines) ✅ COMPLETED
    - Convert Electric Field demo to TypeScript
    - Define demo interfaces and types
    - Implement `{% include_demo %}` tag
    - Test Vite HMR during development
 
-3. **Session 3 - Include System Refinements** (~150 lines)
+3. **Session 3 - Restructure Demo Organization** (~250 lines)
+   - Move TypeScript code out of Python package directory
+   - Create proper separation:
+     - `demos-framework/` - Demo library/framework code (types, utilities, main.ts)
+     - `demos/` - Actual demo implementations
+   - Update Vite configuration for new structure
+   - Update imports and build paths
+   - Ensure Flask static file serving works with new structure
+
+4. **Session 4 - Include System Refinements** (~150 lines)
    - Handle multiple demos
    - Ensure common libs loaded once
 
-4. **Session 4 - Convert Remaining Demos**
+5. **Session 5 - Convert Remaining Demos**
    - 2-3 demos per session (~100 lines each)
 
-5. **Session 5 - Common Library Refactoring** (~200 lines initial)
+6. **Session 6 - Common Library Refactoring** (~200 lines initial)
    - Create shared modules
    - Start with one utility
 
-6. **Session 6 - Testing Setup** (~200 lines)
+7. **Session 7 - Testing Setup** (~200 lines)
    - Add Playwright
    - Write basic test cases
 
-7. **Session 7 - Complete Test Coverage**
+8. **Session 8 - Complete Test Coverage**
    - Tests for all demos
 
-8. **Session 8 - Cleanup Legacy Code** (~100 lines)
+9. **Session 9 - Cleanup Legacy Code** (~100 lines)
    - Remove iframe code
    - Simplify obsolete logic
 
-9. **Session 9 - Documentation & Polish**
+10. **Session 10 - Documentation & Polish**
    - Write docs
    - Cross-browser fixes
 
