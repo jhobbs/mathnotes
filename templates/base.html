@@ -30,10 +30,7 @@
     <!-- Main stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     
-    <!-- Demo styles for integrated demos -->
-    {% if has_integrated_demos %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='demo-style.css') }}">
-    {% endif %}
+    <!-- Demo styles are for iframe content only, not needed for integrated demos -->
     
     {% block extra_head %}{% endblock %}
 </head>
