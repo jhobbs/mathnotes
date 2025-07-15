@@ -323,6 +323,18 @@ Consider $P = \{\frac{1}{n} | n \in \mathbb{N}\}.$ Then $P$ has one limit point,
 :::
 
 
+:::theorem
+Closure distributes over finite unions.
+
+If $B_n = \bigcup_{i=i}^n A_i,$ then $\overline{B_n} = \bigcup_{i=1}^n \overline{A_i}, n = 1, 2, 3, \dots.$ 
+
+::::proof
+Let $p \in \bigcup_{i=1}^n \overline{A_i}.$ Then, $p \in \overline{A_i}$ for some $i.$ If $p \in A_i,$ then $p \in \bigcup_{i=i}^n A_i = B_n,$ so $p \in \overline{B_n}.$ If $p$ is in some $A_{i}',$ then every neighborhood of $p$ contains some point $q \in A_i, q \neq p,$ and since $A_i \subset B_n,$ $q \in B_n,$ so $p \in \overline{B_n}.$
+
+Conversely, let $p \in \overline{B_n}.$ If $p \in B_n,$ $p \in A_i$ for some $i,$ and thus $p \in \overline{A_i} \subset \bigcup_{i=1}^n \overline{A_i}.$ If $p$ is only in $B_{n}',$ suppose for contradiction that $p \notin \bigcup_{i=1}^n \overline{A_i}.$ For each $i,$ let $N_i$ be a neighborhood centered at $p$ with $N_i \cap A_i = \emptyset.$ Then, $N = \bigcap_{i=1}^n N_i$ is a neighborhood of $p$ (see @union-and-intersection-of-open-and-closed-sets,) but $N \cap N_i = \emptyset$ for all $i,$ so $N \cap B_n = \emptyset.$ But, this contradicts our hypothesis that $p \in \overline{B_n},$ so our contradictory assumption must be invalid, and $p \in \bigcup_{i=1}^n \overline{A_i}.$
+::::
+:::
+
 :::theorem {label: sup-is-in-closure-of-bounded-nonempty-set-of-reals}
 Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \overline{E}.$ Hence $y \in E$ if $E$ is closed.
 
@@ -349,3 +361,5 @@ Conversely, suppose $E = Y \cap G$ for some open subset $G$ of $X.$ Now, suppose
 
 ::::
 :::
+
+
