@@ -6,6 +6,6 @@ services:
     volumes:
       - .:/app
     environment:
-      - FLASK_ENV=development
-      - FLASK_DEBUG=1
-    command: ["python", "run.py"]
+      - FLASK_ENV=production
+      - FLASK_DEBUG=0
+    command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "wsgi:application"]
