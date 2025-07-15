@@ -58,9 +58,8 @@ class MarkdownProcessor:
                     # Generate unique ID for this demo instance
                     demo_id = f"demo-{demo_name}-{hash(f'{filepath}-{match.start()}') & 0x7FFFFFFF}"
                     
-                    # Add the demo script to load
-                    if 'static/dist/main.js' not in demo_scripts:
-                        demo_scripts.append('static/dist/main.js')
+                    # Don't add main.js here - it's already loaded in base.html
+                    # based on development/production environment
                     
                     # Track that we need to initialize this demo
                     integrated_demos.append(f'{demo_name}:{demo_id}')

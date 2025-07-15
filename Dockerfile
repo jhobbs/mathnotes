@@ -37,7 +37,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY --from=version /version.txt /version/version.txt
 
 # Copy built frontend assets from frontend stage
-COPY --from=frontend /app/mathnotes/static/dist ./static/dist
+COPY --from=frontend /app/static/dist ./static/dist
 
 # Copy the rest of the application
 COPY . .

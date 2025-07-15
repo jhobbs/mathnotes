@@ -19,6 +19,9 @@ docker-compose up -d
 # Rebuild after changes
 docker-compose build
 docker-compose restart
+
+# IMPORTANT: For dev mode, use specific compose file
+docker-compose -f docker-compose.dev.yml
 ```
 
 ### Direct Python Development
@@ -284,3 +287,4 @@ GitHub Actions CI/CD pipeline:
 - **Test Failures**: Run in Docker for consistency
 
 When testing: you MUST use Docker to test changes
+- In dev mode, ALWAYS use `docker-compose -f docker-compose.dev.yml`
