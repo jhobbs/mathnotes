@@ -200,7 +200,7 @@ Therefore, $N_s(q) \subset N_r(p),$ so $q$ is an interior point of $N_r(p),$ and
 ::::
 :::
 
-{% include_integrated_relative neighborhood-demo.html %}
+{% include_demo "neighborhood" %}
 
 
 :::theorem {label: neighborhood-of-limit-point-contains-infinitely-many-points}

@@ -3,7 +3,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
   root: '.',
-  base: '/',
+  base: '/static/dist/',
   build: {
     outDir: './static/dist',
     emptyOutDir: true,
@@ -34,7 +34,8 @@ export default defineConfig({
         target: 'http://web-dev:5000',
         changeOrigin: true,
       },
-      '/static': {
+      // Don't proxy /static/dist since that's Vite's base
+      '^/static/(?!dist)': {
         target: 'http://web-dev:5000',
         changeOrigin: true,
       },

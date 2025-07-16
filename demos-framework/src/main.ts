@@ -5,7 +5,8 @@ import type { DemoConfig, DemoInstance } from './types';
 
 // Demo registry - will be populated as demos are converted
 const demoRegistry: Record<string, () => Promise<{ default: (container: HTMLElement, config?: DemoConfig) => DemoInstance }>> = {
-  'electric-field': () => import('@demos/physics/electric-field')
+  'electric-field': () => import('@demos/physics/electric-field'),
+  'neighborhood': () => import('@demos/topology/neighborhood')
 };
 
 // Expose registry globally for inline scripts
@@ -25,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const module = await demoRegistry[demoName]();
       const config: DemoConfig = {
-        darkMode: document.documentElement.classList.contains('dark-mode'),
+        darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
         width: container.dataset.width ? parseInt(container.dataset.width) : undefined,
         height: container.dataset.height ? parseInt(container.dataset.height) : undefined,
       };

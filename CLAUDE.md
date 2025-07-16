@@ -181,6 +181,16 @@ mathnotes/
    - Alphabetical sorting of files and directories
 
 ### Interactive Demonstrations
+
+#### Modern TypeScript Demos (Preferred)
+- **Framework**: `demos-framework/src/` - Contains main.ts, types.ts, utilities
+- **Implementations**: `demos/` - Organized by subject (e.g., `demos/physics/electric-field.ts`)
+- **Usage**: `{% include_demo "demo-name" %}` in markdown files
+- **Dark Mode**: Automatically detected via `window.matchMedia('(prefers-color-scheme: dark)')`
+- **Development**: TypeScript served directly by Vite with HMR
+- **Production**: Bundled and code-split by Vite
+
+#### Legacy HTML/JS Demos (Being Phased Out)
 Located in various subject directories with dark mode support:
 - Use `/static/demo-style.css` for consistent styling
 - Include `/static/demo-dark-mode.js` for theme detection
@@ -317,12 +327,31 @@ The pipeline builds multi-platform Docker images (linux/amd64, linux/arm64) usin
 
 - **CSP Errors**: Check that inline scripts have nonces
 - **404 Errors**: Use sitemap to find correct URLs
-- **Dark Mode Issues**: Ensure demos include dark mode JS
+- **Dark Mode Issues**: Site uses CSS media queries `@media (prefers-color-scheme: dark)`, NOT a class-based system
 - **Cache Issues**: Development mode auto-detected via localhost
 - **Test Failures**: Run in Docker for consistency
 
 When testing: you MUST use Docker to test changes
 - In dev mode, ALWAYS use `docker-compose -f docker-compose.dev.yml`
+
+### Vite Development Server Configuration (IMPORTANT)
+
+The Vite dev server configuration is tricky due to base path requirements:
+
+1. **Base Path**: Vite ALWAYS uses `/static/dist/` as base in both dev and production
+2. **Development URLs**: 
+   - Vite client: Not needed (Vite injects it automatically)
+   - Main entry: `http://localhost:5173/static/dist/demos-framework/src/main.ts`
+3. **Production URLs**: 
+   - Main entry: `/static/dist/main.js` (served by Flask)
+4. **Proxy Configuration**: 
+   - `/mathnotes` → Flask
+   - `/static/` (except `/static/dist/`) → Flask
+   - `/static/dist/` → Served by Vite in dev, Flask in prod
+5. **Key Gotchas**:
+   - Don't try to detect dev/prod mode in vite.config.ts
+   - TypeScript files are served directly in development
+   - The built files use the same base path structure
 
 ## Project Configuration
 
