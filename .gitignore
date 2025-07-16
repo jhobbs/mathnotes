@@ -23,4 +23,4 @@ yarn-error.log*
 *.tsbuildinfo
 
 # Vite
-mathnotes/static/dist/
+static/dist/
