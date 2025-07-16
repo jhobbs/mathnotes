@@ -85,7 +85,7 @@ This sequence may contain duplicates, so some indices may need to be skipped in 
 ::::
 :::
 
-{% include_integrated_relative countable-union.html %}
+{% include_demo "countable-union" %}
 
 :::theorem
 Let $A$ be a countable set, and let $B_n$ be the set of all $n$-tuples $(a_1, \dots, a_n)$ where $a_k \in A (k = 1, \dots, n),$ and the elements $a_1, \dots, a_n$ need not be distinct. Then $B_n$ is countable.
@@ -107,7 +107,7 @@ Rational numbers just formed from pairs of integers: $(a, b) \to a/b, b \neq 0,$
 ::::
 :::
 
-{% include_integrated_relative countable-tuples.html %}
+{% include_demo "countable-tuples" %}
 
 ### Uncountably Infinite Sets
 
@@ -135,5 +135,5 @@ I won't give a full proof here, but this can be accomplished by considering the 
 ::::
 :::
 
-{% include_integrated_relative diagonalization.html %}
+{% include_demo "diagonalization" %}
 
