@@ -133,8 +133,6 @@ export default function createTurntableDemo(container: HTMLElement, config?: Dem
     };
 
     const redo = () => {
-      p.clear();
-      p.circle(0, 0, RECORD_RADIUS * 2);
       bug_theta = (rhoSlider.value() as number);
       bugHistory = [];
       i = 0;
