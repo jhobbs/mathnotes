@@ -10,7 +10,8 @@ const demoRegistry: Record<string, () => Promise<{ default: (container: HTMLElem
   'projection': () => import('@demos/graphics/projection'),
   'countable-union': () => import('@demos/real-analysis/topology/countable-union'),
   'countable-tuples': () => import('@demos/real-analysis/topology/countable-tuples'),
-  'diagonalization': () => import('@demos/real-analysis/topology/diagonalization')
+  'diagonalization': () => import('@demos/real-analysis/topology/diagonalization'),
+  'turntable': () => import('@demos/differential-equations/turntable')
 };
 
 // Expose registry globally for inline scripts
