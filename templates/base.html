@@ -211,8 +211,7 @@
     
     {% if is_development %}
     <!-- Vite development server -->
-    <script type="module" src="http://localhost:5173/node_modules/vite/dist/client/client.mjs"></script>
-    <script type="module" src="http://localhost:5173/demos-framework/src/main.ts"></script>
+    <script type="module" src="http://localhost:5173/static/dist/demos-framework/src/main.ts"></script>
     {% else %}
     <!-- Production build -->
     <script type="module" src="{{ url_for('static', filename='dist/main.js') }}"></script>
