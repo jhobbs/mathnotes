@@ -20,14 +20,20 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["vite/client", "p5/global"]
+    "types": ["vite/client", "p5/global"],
+    "paths": {
+      "@framework/*": ["./demos-framework/src/*"],
+      "@demos/*": ["./demos/*"]
+    }
   },
   "include": [
-    "mathnotes/demos/**/*.ts",
-    "mathnotes/demos/**/*.tsx"
+    "demos-framework/**/*.ts",
+    "demos-framework/**/*.tsx",
+    "demos/**/*.ts",
+    "demos/**/*.tsx"
   ],
   "exclude": [
     "node_modules",
-    "mathnotes/static/dist"
+    "static/dist"
   ]
 }

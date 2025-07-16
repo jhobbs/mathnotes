@@ -5,7 +5,7 @@ import type { DemoConfig, DemoInstance } from './types';
 
 // Demo registry - will be populated as demos are converted
 const demoRegistry: Record<string, () => Promise<{ default: (container: HTMLElement, config?: DemoConfig) => DemoInstance }>> = {
-  'electric-field': () => import('./physics/electric-field')
+  'electric-field': () => import('@demos/physics/electric-field')
 };
 
 // Expose registry globally for inline scripts

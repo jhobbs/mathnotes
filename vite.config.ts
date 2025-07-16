@@ -2,14 +2,14 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
-  root: './mathnotes/demos',
-  base: '/static/dist/',
+  root: '.',
+  base: '/',
   build: {
-    outDir: '../../static/dist',
+    outDir: './static/dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'mathnotes/demos/main.ts'),
+        main: resolve(__dirname, 'demos-framework/src/main.ts'),
       },
       output: {
         entryFileNames: '[name].js',
@@ -19,12 +19,26 @@ export default defineConfig({
     },
     sourcemap: true
   },
+  resolve: {
+    alias: {
+      '@demos': resolve(__dirname, 'demos'),
+      '@framework': resolve(__dirname, 'demos-framework/src')
+    }
+  },
   server: {
     host: '0.0.0.0',
     port: 5173,
     proxy: {
-      // Proxy all non-asset requests to Flask container
-      '^/(?!(@vite|src|node_modules|static/dist))': {
+      // Proxy only specific paths to Flask
+      '/mathnotes': {
+        target: 'http://web-dev:5000',
+        changeOrigin: true,
+      },
+      '/static': {
+        target: 'http://web-dev:5000',
+        changeOrigin: true,
+      },
+      '/sitemap.xml': {
         target: 'http://web-dev:5000',
         changeOrigin: true,
       }
