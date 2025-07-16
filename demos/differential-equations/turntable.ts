@@ -244,12 +244,6 @@ export default function createTurntableDemo(container: HTMLElement, config?: Dem
       p.strokeWeight(2);
       p.fill(getBackgroundColor(p));
       p.circle(0, 0, RECORD_RADIUS * 2);
-      
-      // Draw some grooves on the record
-      p.strokeWeight(0.5);
-      for (let r = 40; r < RECORD_RADIUS; r += 20) {
-        p.circle(0, 0, r * 2);
-      }
       p.strokeWeight(1);
     };
 
