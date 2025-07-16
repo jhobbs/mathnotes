@@ -15,7 +15,8 @@ COPY package.json ./
 # Don't copy package-lock.json to avoid platform-specific issues
 RUN npm install
 COPY tsconfig.json vite.config.ts ./
-COPY mathnotes/demos ./mathnotes/demos
+COPY demos-framework ./demos-framework
+COPY demos ./demos
 RUN npm run build
 
 # Stage 3: Build the actual application

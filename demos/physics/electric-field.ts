@@ -1,6 +1,6 @@
 // Electric field simulation - TypeScript module version
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig } from '../types';
+import type { DemoInstance, DemoConfig } from '@framework/types';
 
 interface Particle {
   pos: p5.Vector;

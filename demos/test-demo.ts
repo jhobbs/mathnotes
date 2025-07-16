@@ -1,5 +1,5 @@
 // Test demo to verify TypeScript compilation
-import type { DemoConfig, DemoInstance } from './main';
+import type { DemoConfig, DemoInstance } from '@framework/types';
 
 export default function initTestDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const message = document.createElement('p');
