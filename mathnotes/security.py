@@ -34,9 +34,9 @@ def add_security_headers(response):
     script_src = f"script-src 'self' 'nonce-{nonce}' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com"
     connect_src = "connect-src 'self'"
     
-    # In development, allow Vite dev server
+    # In development, allow Vite dev server and eval for dynamic imports
     if is_development:
-        script_src += " http://localhost:5173"
+        script_src += " http://localhost:5173 'unsafe-eval'"
         connect_src += " http://localhost:5173 ws://localhost:5173"
     
     csp_directives = [

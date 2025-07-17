@@ -32,7 +32,6 @@ class MarkdownProcessor:
         """
         # Track demos for this render
         integrated_demos = []
-        demo_scripts = []
         
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
@@ -41,15 +40,6 @@ class MarkdownProcessor:
                 # Process Jekyll-style includes
                 content = post.content
                 
-                
-                # Handle integrated includes first
-                integrated_pattern = r'{%\s*include_integrated_relative\s+([^\s%}]+)\s*%}'
-                def replace_integrated_include(match):
-                    include_file = match.group(1)
-                    current_dir = os.path.dirname(filepath)
-                    return self._integrate_demo_directly(current_dir, include_file, integrated_demos, demo_scripts)
-                
-                content = re.sub(integrated_pattern, replace_integrated_include, content)
                 
                 # Handle new demo module includes
                 demo_pattern = r'{%\s*include_demo\s+"([^"]+)"\s*%}'
@@ -150,8 +140,7 @@ class MarkdownProcessor:
                     'page_description': description,
                     'source_path': filepath,
                     'canonical_url': canonical_path,
-                    'has_integrated_demos': len(integrated_demos) > 0,
-                    'demo_scripts': demo_scripts
+                    'has_integrated_demos': len(integrated_demos) > 0
                 }
         except Exception as e:
             import traceback
@@ -276,117 +265,3 @@ class MarkdownProcessor:
         
         return re.sub(img_pattern, replace_img_src, html_content)
     
-    def _integrate_demo_directly(self, current_dir: str, include_file: str, integrated_demos: list, demo_scripts: list) -> str:
-        """
-        Integrate a demo HTML file directly into the page instead of using an iframe.
-        
-        Args:
-            current_dir: Directory of the current markdown file
-            include_file: Name of the HTML file to include
-            
-        Returns:
-            HTML string with the demo integrated directly
-        """
-        demo_path = os.path.join(current_dir, include_file)
-        
-        # Track this demo
-        integrated_demos.append(include_file)
-        
-        try:
-            with open(demo_path, 'r', encoding='utf-8') as f:
-                html_content = f.read()
-            
-            # First, extract external script references from head
-            script_src_pattern = r'<script[^>]+src="([^"]+)"[^>]*></script>'
-            for match in re.finditer(script_src_pattern, html_content, re.IGNORECASE):
-                src = match.group(1)
-                # Skip CDN scripts and static scripts (they're loaded in base template or already handled)
-                if (not src.startswith('http') and not src.startswith('//') and 
-                    not src.startswith('/static/')):
-                    # Convert relative path to absolute
-                    if not src.startswith('/'):
-                        script_path = os.path.join(current_dir, src).replace('\\', '/')
-                        
-                        # Check if there's an integrated version and use that instead
-                        base_name = os.path.splitext(src)[0]
-                        integrated_version = f"{base_name}-integrated.js"
-                        integrated_path = os.path.join(current_dir, integrated_version).replace('\\', '/')
-                        
-                        if os.path.exists(integrated_path):
-                            script_path = integrated_path
-                            
-                    else:
-                        script_path = src.lstrip('/')
-                    
-                    # Remove content/ prefix since routes handle it internally
-                    if script_path.startswith('content/'):
-                        script_path = script_path[8:]  # Remove 'content/' prefix
-                    
-                    if script_path not in demo_scripts:
-                        demo_scripts.append(script_path)
-            
-            # Extract content between <body> tags (or entire content if no body tags)
-            body_match = re.search(r'<body[^>]*>(.*?)</body>', html_content, re.DOTALL | re.IGNORECASE)
-            if body_match:
-                demo_content = body_match.group(1)
-            else:
-                # If no body tags, try to extract main content
-                # Remove DOCTYPE, html, head tags
-                demo_content = re.sub(r'<!DOCTYPE[^>]*>', '', html_content, flags=re.IGNORECASE)
-                demo_content = re.sub(r'<html[^>]*>|</html>', '', demo_content, flags=re.IGNORECASE)
-                demo_content = re.sub(r'<head[^>]*>.*?</head>', '', demo_content, flags=re.DOTALL | re.IGNORECASE)
-                demo_content = demo_content.strip()
-            
-            # Extract script tags and add CSP nonces
-            script_pattern = r'<script([^>]*)>(.*?)</script>'
-            scripts = []
-            
-            def extract_script(match):
-                attrs = match.group(1)
-                content = match.group(2)
-                
-                # Check if it's an external script
-                if 'src=' in attrs:
-                    # Keep external scripts as-is
-                    return match.group(0)
-                else:
-                    # For inline scripts, we'll add them separately with nonces
-                    scripts.append(content)
-                    return ''  # Remove from main content
-            
-            demo_content = re.sub(script_pattern, extract_script, demo_content, flags=re.DOTALL | re.IGNORECASE)
-            
-            # Generate unique demo ID
-            demo_id = f"demo-{hash(demo_path) & 0x7FFFFFFF}"  # Positive hash
-            
-            # Build the integrated demo HTML
-            integrated_html = f'''<div class="demo-component" data-demo-id="{demo_id}" data-demo-file="{include_file}">
-                <div class="demo-content">
-                    {demo_content}
-                </div>'''
-            
-            # Add scripts with proper nonces and scope isolation
-            if scripts:
-                integrated_html += '\n'
-                for script in scripts:
-                    integrated_html += f'''<script nonce="{{{{ csp_nonce }}}}">
-(function() {{
-    // Scope isolation for {include_file}
-    const demoContainer = document.querySelector('[data-demo-id="{demo_id}"]');
-    {script}
-}})();
-</script>'''
-            
-            integrated_html += '\n</div>'
-            
-            return integrated_html
-            
-        except Exception as e:
-            print(f"Error integrating demo {demo_path}: {e}")
-            # Fallback to iframe approach
-            url_path = os.path.join(current_dir, include_file).replace('\\', '/')
-            iframe_id = f"demo-{hash(url_path)}"
-            return f'''<div class="demo-container">
-                <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="800" frameborder="0"></iframe>
-                <button class="fullscreen-btn" data-iframe-id="{iframe_id}" data-src="/mathnotes/{url_path}" title="Open in fullscreen">⛶</button>
-            </div>'''
