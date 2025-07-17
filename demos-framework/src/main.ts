@@ -11,7 +11,8 @@ const demoRegistry: Record<string, () => Promise<{ default: (container: HTMLElem
   'countable-union': () => import('@demos/real-analysis/topology/countable-union'),
   'countable-tuples': () => import('@demos/real-analysis/topology/countable-tuples'),
   'diagonalization': () => import('@demos/real-analysis/topology/diagonalization'),
-  'turntable': () => import('@demos/differential-equations/turntable')
+  'turntable': () => import('@demos/differential-equations/turntable'),
+  'cellular-automata/game-of-life': () => import('@demos/cellular-automata/game-of-life')
 };
 
 // Expose registry globally for inline scripts

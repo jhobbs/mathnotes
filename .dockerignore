@@ -39,3 +39,7 @@ CLAUDE.md
 Dockerfile
 docker-compose.yml
 .dockerignore
+
+# Build artifacts (these are built inside Docker)
+static/dist/
+node_modules/
