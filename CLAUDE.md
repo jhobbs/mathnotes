@@ -192,11 +192,10 @@ mathnotes/
 - **Production**: Bundled and code-split by Vite
 
 #### Legacy HTML/JS Demos (Being Phased Out)
-Located in various subject directories with dark mode support:
+Located in various subject directories:
 - Use `/static/demo-style.css` for consistent styling
-- Include `/static/demo-dark-mode.js` for theme detection
-- P5.js demos should call `applyTextStyle()` for proper text color
-- For integrated demos, ensure CSP nonces are properly applied
+- Dark mode is handled automatically by the TypeScript demos
+- CSP nonces are properly applied by the framework
 
 ## Important Notes
 

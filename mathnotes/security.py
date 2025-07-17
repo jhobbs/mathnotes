@@ -31,12 +31,13 @@ def add_security_headers(response):
     )
     
     # Content Security Policy with nonce
-    script_src = f"script-src 'self' 'nonce-{nonce}' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com"
+    # Note: p5.js requires 'unsafe-eval' to work properly
+    script_src = f"script-src 'self' 'nonce-{nonce}' 'unsafe-eval'"
     connect_src = "connect-src 'self'"
     
-    # In development, allow Vite dev server and eval for dynamic imports
+    # In development, also allow Vite dev server
     if is_development:
-        script_src += " http://localhost:5173 'unsafe-eval'"
+        script_src += " http://localhost:5173"
         connect_src += " http://localhost:5173 ws://localhost:5173"
     
     csp_directives = [

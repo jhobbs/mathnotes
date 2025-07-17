@@ -12,10 +12,12 @@
   "devDependencies": {
     "@types/p5": "^1.7.6",
     "typescript": "^5.3.3",
-    "vite": "^5.4.19"
+    "vite": "^5.4.19",
+    "vite-plugin-static-copy": "^1.0.0"
   },
   "dependencies": {
     "mathjs": "^11.11.0",
+    "mathjax": "^3.2.2",
     "p5": "^1.9.0"
   }
 }

@@ -32,4 +32,4 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
-    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    command: sh -c "npm install && mkdir -p static/dist/fonts/mathjax/woff-v2 && cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/*.woff static/dist/fonts/mathjax/woff-v2/ && npm run dev -- --host 0.0.0.0"
