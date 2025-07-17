@@ -12,6 +12,8 @@ version.txt
 coverage.xml
 venv
 
+results.txt
+
 # Node.js
 node_modules/
 npm-debug.log*
