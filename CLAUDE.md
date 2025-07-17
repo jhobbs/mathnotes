@@ -4,370 +4,234 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-Mathnotes is a Flask application serving mathematics notes with interactive demonstrations. The application has been refactored into a modular Python package structure for better maintainability and testability.
+Mathnotes is a Flask application serving mathematics notes with interactive demonstrations. The application features:
+- Structured mathematical content with semantic markup (theorems, proofs, definitions)
+- TypeScript/p5.js interactive demos built with Vite
+- Wiki-style cross-references using `[[slug]]` syntax
+- Dark mode support with automatic detection
+- Comprehensive security headers including CSP with nonces
 
 ## Common Commands
 
-### Local Development with Docker
+### Running Tests
 ```bash
-# Build and run with Docker Compose
-docker-compose up --build
-
-# Run in background
-docker-compose up -d
-
-# Rebuild after changes
-docker-compose build
-docker-compose restart
-
-# IMPORTANT: For dev mode, use specific compose file
-docker-compose -f docker-compose.dev.yml
-```
-
-### Direct Python Development
-```bash
-# Quick setup (creates venv and installs dependencies)
-./setup-dev.sh
-
-# Run development server
-python run.py
-# or
-python -m mathnotes
-```
-
-**Note**: For testing changes, prefer using Docker as it ensures a consistent environment with all dependencies properly installed.
-
-### Testing
-```bash
-# Run all tests
-make test  # or: pytest
-
-# Run with coverage
-make coverage
+# Run all tests with coverage
+make test
 
 # Run specific test file
 pytest test/test_math_utils.py -v
 
-# Use the convenience script
-./run-tests.sh unit      # Run unit tests
-./run-tests.sh coverage  # Run with coverage
-./run-tests.sh docker    # Force Docker mode
+# Run tests in Docker (recommended for consistency)
+docker-compose run --rm web pytest
 
-# Run linting and formatting
-make lint    # Check code style
-make format  # Auto-format code
-make check   # Run all checks (lint, type, test)
+# Run with coverage report
+make coverage
+./run-tests.sh coverage
+```
 
-# Run full tox test suite
-make tox
-make tox-py311     # Python 3.11 specific
-make tox-lint      # Just linting
-make tox-coverage  # Coverage specific
+### Code Quality
+```bash
+# Format code (Black, 100-char line length)
+make format
+
+# Lint code (Flake8)
+make lint
+
+# Type checking (mypy in strict mode)
+make type
+
+# Run all checks
+make check
+```
+
+### Development Server
+```bash
+# Integrated development (Flask + Vite HMR) - RECOMMENDED
+docker-compose -f docker-compose.dev.yml up
+
+# Build and run with standard Docker
+docker-compose up --build
+
+# Direct Python (requires manual frontend build)
+./setup-dev.sh  # One-time setup
+python run.py   # or: python -m mathnotes
+```
+
+### Frontend Development
+```bash
+# Build frontend assets for production
+make build-frontend
+
+# Development with Vite HMR (integrated with Flask)
+make dev-frontend
 ```
 
 ### Deployment
 ```bash
-# Deploy to fly.io (via GitHub Actions - preferred)
+# Deploy via GitHub Actions (automatic on push to main)
 git push origin main
-
-# Check deployment status
-flyctl status
-
-# View logs
-flyctl logs
 
 # Monitor deployment
 ./scripts/monitor_deployment.sh
+
+# Check deployment status
+flyctl status
+flyctl logs
 ```
 
-### Development Tools
+### Content Management
 ```bash
-# Set up pre-commit hook for redirect checking
-./scripts/setup_precommit_hook.sh
-
-# Check for missing redirects in moved files
-python3 scripts/check_redirects.py
-
-# Automatically add missing redirects to moved files
-python3 scripts/check_redirects.py --fix
-
-# Move files safely with automatic redirect handling
-./scripts/move_file.sh old/path.md new/path.md
-
 # Check for broken internal links
 python3 scripts/link_checker.py
 
-# Scale Fly.io regions
-./scripts/scale_regions.sh
+# Move files with automatic redirect handling
+./scripts/move_file.sh old/path.md new/path.md
 
-# Find mathematical definitions not using structured blocks
+# Check/fix missing redirects
+python3 scripts/check_redirects.py --fix
+
+# Find unstructured mathematical definitions
 python3 scripts/find_unstructured_definitions.py
-
-# Test Docker build locally with GitHub Actions configuration
-./scripts/test-github-build.sh
-
-# Test multi-platform builds (linux/amd64, linux/arm64)
-./scripts/test-multiplatform-build.sh
-
-# Build frontend assets (TypeScript/Vite)
-make build-frontend
-
-# Run integrated dev environment (Flask + Vite)
-make dev-frontend  # or: docker-compose -f docker-compose.dev.yml up
 ```
 
-## Architecture
+## Architecture Overview
 
-### Modular Package Structure
-The application uses Flask's application factory pattern with a clean package structure:
+### Request Flow
+1. **URL Resolution** (`url_mapper.py`): Maps slugs to file paths, handles redirects
+2. **Markdown Processing** (`markdown_processor.py`): 
+   - Protects math expressions from markdown parsing
+   - Processes wiki-style links `[[slug]]`
+   - Handles `{% include_demo %}` tags
+3. **Structured Math** (`structured_math.py`): 
+   - Parses `:::type` blocks (definition, theorem, proof, etc.)
+   - Builds global index for cross-references
+   - Handles `@label` references and `@@label` embeds
+4. **Security** (`security.py`): Applies CSP nonces and security headers
+5. **Rendering**: Flask/Jinja2 templates with MathJax for LaTeX
 
+### Key Architectural Decisions
+
+1. **URL System**: Content uses slug-based canonical URLs (`/mathnotes/section/slug`) with automatic redirects from file-based paths. This allows content reorganization without breaking links.
+
+2. **Math Processing Pipeline**: 
+   - Math expressions are protected before markdown parsing
+   - Structured blocks are parsed and indexed globally
+   - Cross-references resolved using the global index
+   - MathJax handles final LaTeX rendering client-side
+
+3. **Demo System**: TypeScript demos are registered in `demos-framework/src/main.ts` and loaded dynamically. Vite handles bundling with code splitting.
+
+4. **CSP Implementation**: Per-request nonces ensure inline scripts are secure. All demos must use event listeners instead of inline handlers.
+
+5. **Development/Production Detection**: Automatic via localhost detection, affects caching headers and asset loading.
+
+## Important Implementation Details
+
+### Math Content Protection
+The markdown processor uses a two-phase approach:
+1. **Protection Phase**: Replace `$...$` and `$$...$$` with placeholders
+2. **Restoration Phase**: Restore math after markdown conversion
+This prevents markdown from interfering with LaTeX syntax.
+
+### Cross-Reference System
+- `@label` - Links to a block with auto-generated text
+- `@type:label` - Links with type validation (e.g., `@theorem:ftc`)
+- `@{Custom text|label}` - Custom link text
+- `@@label` - Embeds the entire block content inline
+
+### Demo Integration
+```markdown
+{% include_demo "demo-name" %}
 ```
-mathnotes/
-├── __init__.py              # Flask app factory (create_app)
-├── config.py                # Centralized configuration
-├── markdown_processor.py    # Markdown rendering with Jekyll-style includes
-├── structured_math.py       # Mathematical content system
-├── url_mapper.py           # URL routing and redirect handling
-├── routes.py               # Flask route definitions
-├── block_index.py          # Global index for math references
-├── math_utils.py           # Math protection and block references
-├── security.py             # CSP nonces and security headers
-├── context_processors.py   # Template context injection
-├── file_utils.py           # File system utilities
-├── utils.py                # General utilities
-└── demos/                   # Frontend TypeScript source (built with Vite)
-```
+- Demo must be registered in `demos-framework/src/main.ts`
+- TypeScript source in `mathnotes/demos/`
+- Automatic dark mode support
+- CSP-compliant (no inline scripts)
 
-### Frontend Build System
-- **Vite** configured for TypeScript and p5.js demos
-- Source code in `mathnotes/demos/`
-- Build output to `mathnotes/static/dist/`
-- Development server proxies to Flask on port 5000
-- docker-compose.dev.yml provides integrated Flask + Vite development
+### File Movement Protocol
+When moving/renaming content files:
+1. Note the current canonical URL
+2. Add `redirect_from: [old-url]` to frontmatter
+3. Test redirect works
+4. Or use: `./scripts/move_file.sh old/path.md new/path.md`
 
-### Key Implementation Details
+## Development Guidelines
 
-1. **Markdown Processing** (`markdown_processor.py`):
-   - Jekyll-style `{% include_relative %}` tags are converted to iframes
-   - Math expressions ($...$, $$...$$) are preserved for MathJax rendering
-   - Wiki-style internal links: `[[slug]]` or `[[text|slug]]` for resilient cross-references
-   - Frontmatter parsing with layout field ignored
+### Git Commit Rules
+- No "Generated with Claude Code" or AI attribution
+- Technical, concise commit messages
+- Only commit when explicitly requested ("ship it")
+- Pre-commit hook warns about moved/deleted files
 
-2. **URL Mapping** (`url_mapper.py`):
-   - Builds URL map on startup from frontmatter slugs
-   - Handles redirects from `redirect_from` frontmatter
-   - File-based URLs redirect to canonical slug-based URLs
-   - Supports arbitrary directory nesting
+### Testing Requirements
+- Always test in Docker for consistency
+- Use `docker-compose -f docker-compose.dev.yml` for development
+- Verify both light and dark modes
+- Check browser console for CSP violations
+- Test demos on mobile devices
 
-3. **Structured Mathematics** (`structured_math.py`):
-   - Semantic markup for mathematical content
-   - Block types: definition, theorem, lemma, proposition, corollary, proof, example, remark, note, intuition, exercise, solution
-   - Cross-references: `@label`, `@type:label`, `@{Custom text|label}`, `@@label` (embed)
-   - Global block index built on startup
+### CSP Compliance
+- All inline scripts need `nonce="{{ csp_nonce }}"`
+- No inline event handlers (onclick, onload)
+- Use `addEventListener` and data attributes
+- Demos must be CSP-compliant
 
-4. **Security** (`security.py`):
-   - CSP with per-request nonces
-   - Comprehensive security headers
-   - Smart caching based on file type and environment
+### URL Best Practices
+- Choose stable, descriptive slugs
+- Always add redirects when moving files
+- Use wiki-style links for resilience: `[[slug]]`
+- Canonical URLs adapt automatically for dev/prod
 
-5. **Content Discovery**:
-   - Recursive traversal of content directories
-   - Supports spaces in directory names
-   - Alphabetical sorting of files and directories
+## Configuration
 
-6. **Dynamic URL Configuration** (`config.py`, `context_processors.py`):
-   - `get_base_url()` function detects development vs production environment
-   - Canonical URLs and sitemap automatically adapt for local testing
-   - Uses localhost/127.0.0.1 detection and Flask environment variables
-   - Context processor injects `base_url` into all templates
+### Environment Detection
+Development mode auto-detected via:
+- `localhost` or `127.0.0.1` in URL
+- `FLASK_ENV=development`
+- `FLASK_DEBUG=1`
+- `app.debug=True`
 
-### Interactive Demonstrations
+### Vite Configuration
+- Base path: Always `/static/dist/` in dev and prod
+- Dev: TypeScript served directly from `http://localhost:5173`
+- Prod: Bundled assets served by Flask
+- Proxy config handles routing between Vite and Flask
 
-#### Modern TypeScript Demos (Preferred)
-- **Framework**: `demos-framework/src/` - Contains main.ts, types.ts, utilities
-- **Implementations**: `demos/` - Organized by subject (e.g., `demos/physics/electric-field.ts`)
-- **Usage**: `{% include_demo "demo-name" %}` in markdown files
-- **Dark Mode**: Automatically detected via `window.matchMedia('(prefers-color-scheme: dark)')`
-- **Development**: TypeScript served directly by Vite with HMR
-- **Production**: Bundled and code-split by Vite
+### Python Dependencies
+- Python 3.11+ required
+- Key packages: Flask 3.0.0, Markdown 3.5.1, python-frontmatter 1.0.1
+- Dev tools: pytest, black, flake8, mypy, tox
 
-#### Legacy HTML/JS Demos (Being Phased Out)
-Located in various subject directories:
-- Use `/static/demo-style.css` for consistent styling
-- Dark mode is handled automatically by the TypeScript demos
-- CSP nonces are properly applied by the framework
+## Deployment
 
-## Important Notes
+### GitHub Actions Pipeline
+1. Push to main triggers build
+2. Multi-platform Docker images (amd64, arm64)
+3. Push to ghcr.io registry
+4. Automatic deployment to Fly.io
+5. Monitor with `./scripts/monitor_deployment.sh`
 
-- Site deployed to fly.io at mathnotes.fly.dev
-- Custom domain: www.lacunary.org
-- When working with demos, always test in Docker
-- Use the sitemap (`/sitemap.xml`) to quickly find URLs
-- CSP nonces are required for all inline scripts
+### Production URLs
+- Primary: https://www.lacunary.org
+- Fly.io: https://mathnotes.fly.dev
 
-## File Movement and Renaming Protocol
+## Troubleshooting
 
-When moving or renaming markdown files, ALWAYS follow this checklist:
-
-1. **Before moving/renaming**: Note the current canonical URL (check slug or file path)
-2. **After moving/renaming**: Add `redirect_from` to the frontmatter
-3. **Test**: Verify the old URL redirects properly
-4. **Use tools**: Prefer `./scripts/move_file.sh` for automatic redirect handling
-
-## Allowed Commands and Operations
-
-These commands and operations have been explicitly allowed by the user:
-
-1. **Git Commands**:
-   - `git describe --always --tags --dirty` - Version information
-   - All standard git operations
-   - `git restore` - Reverting changes
-
-2. **File Operations**:
-   - Modifying Dockerfile, .gitignore, fly.toml
-   - Creating version.txt during build
-   - Creating/modifying scripts in scripts/
-   - Using chmod for executable permissions
-
-3. **Project-Specific Operations**:
-   - Modifying any files in the mathnotes/ package
-   - Updating templates and static files
-   - Creating integrated demos with CSP support
-
-4. **Git Commit Guidelines**:
-   - Never include "Generated with Claude Code" or attribution
-   - Never add Claude as co-author
-   - Keep commit messages technical and concise
-   - Only commit when explicitly asked to "ship it"
-   - Pre-commit hook warns about moved/deleted files
-
-5. **Deployment Operations**:
-   - Monitoring via GitHub Actions (preferred over direct deploys)
-   - Using deployment monitoring scripts
-   - Checking deployment status with curl
-
-## Security Implementation
-
-### CSP Nonce Requirements
-- All inline `<script>` tags must include `nonce="{{ csp_nonce }}"`
-- No inline event handlers (onclick, onload, etc.)
-- Use `addEventListener` and event delegation
-- Use data attributes for parameters
-- CSP nonce available in templates via `{{ csp_nonce }}`
-
-### Current CSP Configuration
-```
-script-src 'self' 'nonce-{unique-per-request}' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com
-style-src 'self' 'unsafe-inline'
-img-src 'self' data:
-font-src 'self' https://cdn.jsdelivr.net
-connect-src 'self'
-frame-src 'self'
-frame-ancestors 'self'
-base-uri 'self'
-form-action 'self'
-object-src 'none'
-upgrade-insecure-requests
-```
-
-### Security Headers
-- HSTS: max-age=31536000; includeSubDomains; preload
-- Cross-Origin-Opener-Policy: same-origin
-- Cross-Origin-Embedder-Policy: credentialless
-- X-Content-Type-Options: nosniff
-- X-XSS-Protection: 1; mode=block
-- Referrer-Policy: strict-origin-when-cross-origin
-- Permissions-Policy: camera=(), microphone=(), geolocation=()
-
-## Development Workflow
-
-1. **Making Changes**:
-   - Use Docker for testing: `docker-compose up --build`
-   - For integrated frontend development: `docker-compose -f docker-compose.dev.yml up`
-   - Check for JavaScript errors in browser console
-   - Verify CSP compliance for new scripts
-   - Test both light and dark modes
-
-2. **Adding Interactive Demos**:
-   - Create TypeScript demo in `mathnotes/demos/`
-   - Register demo in `demos-framework/src/main.ts`
-   - Use `{% include_demo "demo-name" %}` in markdown files
-   - Legacy: Use `{% include_relative demo.html %}` for iframe embedding (being phased out)
-   - Test CSP nonce handling
-
-3. **Testing**:
-   - Run tests before committing: `make test`
-   - Check coverage: `make coverage`
-   - Lint code: `make lint`
-   - Format code: `make format` (Black configured for 100-char lines)
-   - Run type checking: `make type` (mypy in strict mode)
-   - Use Playwright for integration testing when needed
-
-## Todo and Ideas Management
-
-For long-term project ideas:
-- Add to `IDEAS.md` file in root directory
-- Organize by category
-- Do not use TodoWrite tool for these (that's for current session only)
-
-## Deployment Process
-
-GitHub Actions CI/CD pipeline:
-
-1. **Trigger**: Push to main branch
-2. **Build**: Docker image with git version tag
-3. **Registry**: Push to ghcr.io
-4. **Deploy**: Fly.io via GitHub Actions
-5. **Monitor**: Use `./scripts/monitor_deployment.sh`
-
-The pipeline builds multi-platform Docker images (linux/amd64, linux/arm64) using buildx and automatically deploys to Fly.io on successful builds.
-
-## Common Troubleshooting
-
-- **CSP Errors**: Check that inline scripts have nonces
-- **404 Errors**: Use sitemap to find correct URLs
-- **Dark Mode Issues**: Site uses CSS media queries `@media (prefers-color-scheme: dark)`, NOT a class-based system
-- **Cache Issues**: Development mode auto-detected via localhost
+### Common Issues
+- **CSP Errors**: Check for missing nonces on inline scripts
+- **404 Errors**: Use `/sitemap.xml` to find correct URLs
+- **Dark Mode**: Uses CSS `@media (prefers-color-scheme)`, not classes
 - **Test Failures**: Run in Docker for consistency
-- **URL/Canonical Issues**: Use local development mode to test; base URLs adapt automatically
+- **Permission Errors**: Clean with `rm -rf htmlcov .pytest_cache`
 
-When testing: you MUST use Docker to test changes
-- In dev mode, ALWAYS use `docker-compose -f docker-compose.dev.yml`
+### Debug Commands
+```bash
+# Check URL mappings
+python3 -c "from mathnotes import create_app; app = create_app(); print(app.url_mapper.url_mappings)"
 
-### Vite Development Server Configuration (IMPORTANT)
+# Verify demo registration
+grep -r "registerDemo" mathnotes/demos-framework/src/main.ts
 
-The Vite dev server configuration is tricky due to base path requirements:
-
-1. **Base Path**: Vite ALWAYS uses `/static/dist/` as base in both dev and production
-2. **Development URLs**: 
-   - Vite client: Not needed (Vite injects it automatically)
-   - Main entry: `http://localhost:5173/static/dist/demos-framework/src/main.ts`
-3. **Production URLs**: 
-   - Main entry: `/static/dist/main.js` (served by Flask)
-4. **Proxy Configuration**: 
-   - `/mathnotes` → Flask
-   - `/static/` (except `/static/dist/`) → Flask
-   - `/static/dist/` → Served by Vite in dev, Flask in prod
-5. **Key Gotchas**:
-   - Don't try to detect dev/prod mode in vite.config.ts
-   - TypeScript files are served directly in development
-   - The built files use the same base path structure
-
-## Project Configuration
-
-### Python Configuration (pyproject.toml)
-- Python 3.11 minimum requirement
-- Black formatter: 100-character line length
-- Pytest with coverage configuration
-- Flake8 and mypy for code quality
-- Tox for multi-environment testing
-
-### Key Dependencies
-- **Backend**: Flask 3.0.0, Markdown 3.5.1, python-frontmatter 1.0.1, gunicorn 21.2.0
-- **Frontend**: TypeScript, Vite, p5.js for visualizations
-- **Development**: pytest, black, flake8, mypy, tox, pre-commit
-
-### Future Development Plans
-- **JS Demo Modernization** (JS_DEMO_MODERNIZATION_PLAN.md): TypeScript conversion, Vite integration, module-based system
-- **Math Blocks Refactor** (REFACTOR-MATHBLOCKS-PLAN.md): Simplified structured math parsing
-- **Feature Ideas** (IDEAS.md): Tags system, automatic theorem numbering, desktop layout improvements
+# Check for CSP violations
+# Open browser console and look for CSP errors
+```

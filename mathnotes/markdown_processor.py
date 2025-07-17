@@ -58,19 +58,6 @@ class MarkdownProcessor:
                 
                 content = re.sub(demo_pattern, replace_demo_include, content)
                 
-                # Handle regular includes (iframe)
-                include_pattern = r'{%\s*include_relative\s+([^\s%}]+)\s*%}'
-                def replace_include(match):
-                    include_file = match.group(1)
-                    current_dir = os.path.dirname(filepath)
-                    url_path = os.path.join(current_dir, include_file).replace('\\', '/')
-                    iframe_id = f"demo-{hash(url_path)}"
-                    return f'''<div class="demo-container">
-                        <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="400" frameborder="0"></iframe>
-                    </div>'''
-                
-                content = re.sub(include_pattern, replace_include, content)
-                
                 # Process wiki-style internal links [[slug]] or [[text|slug]]
                 content = re.sub(r'\[\[([^\]]+)\]\]', self._replace_wiki_link, content)
                 

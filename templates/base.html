@@ -20,7 +20,7 @@
     <!-- Main stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     
-    <!-- Demo styles are for iframe content only, not needed for integrated demos -->
+    <!-- Main stylesheet loaded above contains all demo styles -->
     
     {% block extra_head %}{% endblock %}
 </head>
@@ -55,8 +55,8 @@
                     el.style.display = 'none';
                 });
                 
-                // Hide interactive demo containers (both iframe and integrated versions)
-                document.querySelectorAll('.demo-container, .demo-component').forEach(el => {
+                // Hide interactive demo containers
+                document.querySelectorAll('.demo-component').forEach(el => {
                     el.style.display = 'none';
                 });
                 

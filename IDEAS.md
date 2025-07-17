@@ -20,11 +20,6 @@ This file tracks ideas for future features, enhancements, and demonstrations for
 
 - **Reusable Cartesian Plane Library**: Extract the cartesian plane, grid, axes, and zoom functionality from the neighborhood demo into a reusable JavaScript library for other mathematical visualizations
 
-- **Convert Remaining Demos to TypeScript**: The following demos are still using iframe embedding (include_relative) and need to be converted to the TypeScript module format (include_demo):
-  - Various physics demos
-  - Mathematical visualization demos
-  - See existing TypeScript demos in `mathnotes/demos/` for examples
-
 ## Content Ideas
 
 (Add future content ideas here)
@@ -98,51 +93,12 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Enable rich snippets for mathematical content
   - Consider using CreativeWork for cited/attributed content
 
-- **Better Demo Embedding System**: Replace iframe-based demo embedding with direct HTML integration
-  - Current iframe approach creates unnecessary scrollbars and isolation
-  - Should directly embed demo HTML/CSS/JS content into the rendered page
-  - Parse demo files and inject their content inline without any isolation/namespacing
-  - Eliminate scrollbar issues and improve visual integration
-  - Remove need for separate demo CSS/JS files since demos will share main page styles
-  - Keep fullscreen popup functionality but use modal/overlay instead of iframe
-  - Would provide seamless user experience without iframe boundaries
-
-- **Better Desktop Layout**: Take more advantage of horizontal space on desktop displays
-  - Mobile layout already works well for narrow screens
-  - Desktop has too much unused horizontal space with current single-column layout
-  - Consider sidebar navigation, table of contents, or multi-column content
-  - Could add section navigation, definition index, or theorem overview in sidebar
-  - Maintain mobile-first responsive design while maximizing desktop real estate
-
-- **Proper Static File Serving**: Replace the current file reading hack with proper static file serving
-  - Currently reading files directly and creating Response objects to handle paths with spaces
-  - Should implement proper URL encoding/decoding for file paths
-  - Consider using Flask's send_file() with proper path sanitization
-  - Or implement a custom static file handler that properly handles spaces in paths
-  - Ensure cache headers are properly applied through Flask's normal static file mechanisms
-  - This would be cleaner, more maintainable, and follow Flask best practices
-
-- **Standardize JS Demo Container/Canvas System**: Create a reusable framework for responsive demo sizing
-  - Extract the container detection and canvas sizing logic worked out for the electric field demo
-  - Create a standard template/library that handles desktop vs mobile sizing consistently
-  - Ensure all interactive demos use the same responsive sizing approach
-  - Eliminate need to manually solve container/canvas sizing for each demo
-  - Should handle both iframe and direct integration methods
-
 - **Mobile-Friendly Controls for Electric Field Demo**: Add touch-friendly UI controls
   - Add on-screen play/pause button (alternative to spacebar)
   - Add charge polarity toggle button (alternative to Ctrl+click)
   - Add charge strength slider/input control
   - Improve mobile usability and accessibility
   - Consider adding visual feedback for current settings
-
-- **Remove Spaces from URLs**: Eliminate spaces in URLs while preserving readable directory/file names
-  - Currently URLs contain encoded spaces (%20) which look unprofessional
-  - Convert directory names like "real analysis" to "real-analysis" in URLs
-  - Keep display names unchanged (still show "Real Analysis" in navigation/titles)
-  - Consider also removing spaces from actual directory names on disk for cleaner file system
-  - Would need URL redirects from old space-containing URLs to new hyphenated ones
-  - Update all internal links to use the new URL format
 
 - **Reorganize Top-Level Sections**: Consolidate sections to align with classical mathematical organization
   - Current structure has too many top-level sections
@@ -168,9 +124,3 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Allow explicit selection of which definition to link to
   - Could use file path or section hierarchy for automatic namespacing
   - Warn during build process about duplicate definition labels
-
-- **Complete TypeScript Demo Migration**: Continue migrating legacy HTML/JS demos to TypeScript
-  - Use the modern demo framework in `demos-framework/`
-  - Register demos in `demos-framework/src/main.ts`
-  - Leverage Vite for bundling and HMR during development
-  - Ensure proper type safety and dark mode support
