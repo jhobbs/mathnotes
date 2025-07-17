@@ -14,7 +14,7 @@ __version__ = "1.0.0"
 from flask import Flask
 from .config import SITE_TITLE, SITE_DESCRIPTION, SEND_FILE_MAX_AGE_DEFAULT, STATIC_FILE_CACHE_CONFIG
 from .security import generate_nonce, add_security_headers
-from .context_processors import inject_year, inject_nonce, inject_version, inject_env
+from .context_processors import inject_year, inject_nonce, inject_version, inject_env, inject_base_url
 from .url_mapper import URLMapper
 from .markdown_processor import MarkdownProcessor
 from .routes import register_routes
@@ -68,6 +68,7 @@ def create_app(config=None):
     app.context_processor(inject_nonce)
     app.context_processor(inject_version)
     app.context_processor(inject_env)
+    app.context_processor(inject_base_url)
     
     # Register routes
     register_routes(app, url_mapper, markdown_processor)

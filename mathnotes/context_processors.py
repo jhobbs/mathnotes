@@ -5,7 +5,8 @@ Flask context processors for the Mathnotes application.
 import os
 import subprocess
 from datetime import datetime
-from flask import g
+from flask import g, request
+from .config import get_base_url
 
 def inject_year():
     """Add current year to all templates."""
@@ -42,4 +43,10 @@ def inject_env():
     """Add environment info to all templates."""
     return {
         'is_development': os.environ.get('FLASK_ENV') == 'development'
+    }
+
+def inject_base_url():
+    """Add dynamic base URL to all templates."""
+    return {
+        'base_url': get_base_url(request)
     }
