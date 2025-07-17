@@ -37,11 +37,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy version from first stage
 COPY --from=version /version.txt /version/version.txt
 
-# Copy built frontend assets from frontend stage
-COPY --from=frontend /app/static/dist ./static/dist
-
-# Copy the rest of the application
+# Copy the rest of the application first (excluding static/dist)
 COPY . .
+
+# Copy built frontend assets from frontend stage (this overwrites any local static/dist)
+COPY --from=frontend /app/static/dist ./static/dist
 
 # Expose port
 EXPOSE 5000

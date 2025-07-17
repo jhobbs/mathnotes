@@ -26,10 +26,10 @@ These rules are applied simultaneously to all cells in each generation.
 Explore the Game of Life with this interactive demonstration. You can:
 - Click cells to toggle them alive/dead
 - Use the controls to start, stop, and step through generations
-- Load pre-defined patterns
-- Adjust the simulation speed
+- Adjust the simulation speed and initial population
+- Watch population statistics in real-time
 
-{% include_integrated_relative cellular-integrated.html %}
+{% include_demo "cellular-automata/game-of-life" %}
 
 ## Common Patterns
 
