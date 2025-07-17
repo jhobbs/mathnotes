@@ -67,7 +67,6 @@ class MarkdownProcessor:
                     iframe_id = f"demo-{hash(url_path)}"
                     return f'''<div class="demo-container">
                         <iframe id="{iframe_id}" src="/mathnotes/{url_path}" width="100%" height="400" frameborder="0"></iframe>
-                        <button class="fullscreen-btn" data-iframe-id="{iframe_id}" data-src="/mathnotes/{url_path}" title="Open in fullscreen">⛶</button>
                     </div>'''
                 
                 content = re.sub(include_pattern, replace_include, content)
