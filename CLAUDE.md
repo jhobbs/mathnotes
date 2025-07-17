@@ -180,6 +180,12 @@ mathnotes/
    - Supports spaces in directory names
    - Alphabetical sorting of files and directories
 
+6. **Dynamic URL Configuration** (`config.py`, `context_processors.py`):
+   - `get_base_url()` function detects development vs production environment
+   - Canonical URLs and sitemap automatically adapt for local testing
+   - Uses localhost/127.0.0.1 detection and Flask environment variables
+   - Context processor injects `base_url` into all templates
+
 ### Interactive Demonstrations
 
 #### Modern TypeScript Demos (Preferred)
@@ -330,6 +336,7 @@ The pipeline builds multi-platform Docker images (linux/amd64, linux/arm64) usin
 - **Dark Mode Issues**: Site uses CSS media queries `@media (prefers-color-scheme: dark)`, NOT a class-based system
 - **Cache Issues**: Development mode auto-detected via localhost
 - **Test Failures**: Run in Docker for consistency
+- **URL/Canonical Issues**: Use local development mode to test; base URLs adapt automatically
 
 When testing: you MUST use Docker to test changes
 - In dev mode, ALWAYS use `docker-compose -f docker-compose.dev.yml`
