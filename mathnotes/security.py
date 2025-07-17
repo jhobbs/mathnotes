@@ -95,19 +95,38 @@ def apply_static_file_caching(response):
     is_development = (
         current_app.debug or 
         os.environ.get('FLASK_ENV') == 'development' or
-        os.environ.get('FLASK_DEBUG') == '1' or
-        'localhost' in request.host or
-        '127.0.0.1' in request.host
+        os.environ.get('FLASK_DEBUG') == '1'
     )
     
     # Only apply to static files
     if request.endpoint == 'static' or request.path.startswith('/static/'):
         if not is_development:
-            # Production: Apply caching based on file type
-            _, ext = os.path.splitext(request.path)
+            # Production: Apply caching based on file type and pattern
+            path = request.path
+            _, ext = os.path.splitext(path)
             ext = ext.lower()
             
-            if ext in STATIC_FILE_CACHE_CONFIG:
+            # Check if this is a hashed asset (contains hash in filename)
+            # Vite generates files like: chunk-ABC123.js, index-DEF456.css
+            import re
+            is_hashed_asset = bool(re.search(r'-[a-f0-9]{6,}\.', path))
+            
+            # Special handling for dist directory files
+            if '/static/dist/' in path:
+                if is_hashed_asset or '/fonts/' in path:
+                    # Hashed assets and fonts can be cached forever
+                    max_age = 31536000  # 1 year
+                    response.headers['Cache-Control'] = f'public, max-age={max_age}, immutable'
+                elif path.endswith(('main.js', 'mathjax.js')):
+                    # Entry points should have shorter cache
+                    max_age = 3600  # 1 hour
+                    response.headers['Cache-Control'] = f'public, max-age={max_age}'
+                else:
+                    # Other dist files get moderate caching
+                    max_age = 86400  # 1 day
+                    response.headers['Cache-Control'] = f'public, max-age={max_age}'
+            elif ext in STATIC_FILE_CACHE_CONFIG:
+                # Use configured cache settings for other static files
                 cache_config = STATIC_FILE_CACHE_CONFIG[ext]
                 max_age = cache_config['max_age']
                 is_public = cache_config.get('public', True)
@@ -120,10 +139,6 @@ def apply_static_file_caching(response):
                     cache_control_parts.append('private')
                 
                 response.headers['Cache-Control'] = ', '.join(cache_control_parts)
-                
-                # Remove the no-cache header if it exists
-                if 'Cache-Control' in response.headers and 'no-cache' in response.headers['Cache-Control']:
-                    response.headers['Cache-Control'] = ', '.join(cache_control_parts)
         else:
             # Development: Explicitly disable caching for static files only
             response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
