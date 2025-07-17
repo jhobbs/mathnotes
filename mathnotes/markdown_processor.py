@@ -257,19 +257,17 @@ class MarkdownProcessor:
                 src.startswith('data:')):
                 return match.group(0)  # Return unchanged
             
-            # Handle absolute paths starting with /mathnotes/ but missing content/ prefix
-            if src.startswith('/mathnotes/') and not src.startswith('/mathnotes/content/'):
-                # Check if this path refers to a file that should be in content/
-                old_path = src[len('/mathnotes/'):]  # Remove /mathnotes/ prefix
-                if not old_path.startswith('static/'):  # Don't modify static file paths
-                    new_src = f"/mathnotes/content/{old_path}"
-                    return f'<img{pre_attrs} src="{new_src}"{post_attrs}>'
+            # Handle absolute paths - keep them as is since routes now handle content/ internally
+            if src.startswith('/mathnotes/'):
+                return match.group(0)  # Return unchanged
             
             # Handle relative paths
             elif not src.startswith('/'):
-                # Convert relative path to include the content directory
+                # Convert relative path to proper URL (without content/ prefix since routes handle it)
                 if current_dir:
-                    new_src = f"/mathnotes/{current_dir}/{src}"
+                    # Remove 'content/' prefix from current_dir if present
+                    clean_dir = current_dir.replace('content/', '') if current_dir.startswith('content/') else current_dir
+                    new_src = f"/mathnotes/{clean_dir}/{src}"
                 else:
                     new_src = f"/mathnotes/{src}"
                 return f'<img{pre_attrs} src="{new_src}"{post_attrs}>'
@@ -302,8 +300,9 @@ class MarkdownProcessor:
             script_src_pattern = r'<script[^>]+src="([^"]+)"[^>]*></script>'
             for match in re.finditer(script_src_pattern, html_content, re.IGNORECASE):
                 src = match.group(1)
-                # Skip CDN scripts (they're loaded in base template)
-                if not src.startswith('http') and not src.startswith('//'):
+                # Skip CDN scripts and static scripts (they're loaded in base template or already handled)
+                if (not src.startswith('http') and not src.startswith('//') and 
+                    not src.startswith('/static/')):
                     # Convert relative path to absolute
                     if not src.startswith('/'):
                         script_path = os.path.join(current_dir, src).replace('\\', '/')
@@ -318,6 +317,11 @@ class MarkdownProcessor:
                             
                     else:
                         script_path = src.lstrip('/')
+                    
+                    # Remove content/ prefix since routes handle it internally
+                    if script_path.startswith('content/'):
+                        script_path = script_path[8:]  # Remove 'content/' prefix
+                    
                     if script_path not in demo_scripts:
                         demo_scripts.append(script_path)
             

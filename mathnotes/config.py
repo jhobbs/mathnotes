@@ -13,19 +13,19 @@ SITE_DESCRIPTION = 'A collection of mathematics notes and interactive demonstrat
 CONTENT_DIRS = [
     "content/algebra", 
     "content/calculus", 
-    "content/differential equations", 
+    "content/differential-equations", 
     "content/trigonometry", 
-    "content/logic and proofs", 
-    "content/linear algebra", 
+    "content/logic-and-proofs", 
+    "content/linear-algebra", 
     "content/physics", 
-    "content/complex analysis", 
+    "content/complex-analysis", 
     "content/graphics", 
-    "content/probability and statistics", 
+    "content/probability-and-statistics", 
     "content/misc", 
-    "content/numerical analysis", 
-    "content/discrete math", 
-    "content/cellular automata", 
-    "content/real analysis",
+    "content/numerical-analysis", 
+    "content/discrete-math", 
+    "content/cellular-automata", 
+    "content/real-analysis",
 ]
 
 # Markdown configuration
