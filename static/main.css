@@ -17,7 +17,6 @@
     --code-bg: #f6f8fa;
     --blockquote-color: #6a737d;
     --footer-color: #6a737d;
-    --iframe-bg: #ffffff;
 }
 
 /* Dark mode color scheme */
@@ -31,17 +30,11 @@
         --code-bg: #161b22;
         --blockquote-color: #8b949e;
         --footer-color: #484f58;
-        --iframe-bg: #0d1117;
     }
     
     /* Make images slightly dimmer in dark mode */
     img {
         opacity: 0.9;
-    }
-    
-    /* Invert colors for iframes (interactive demos) */
-    iframe {
-        background-color: var(--iframe-bg);
     }
 }
 
@@ -212,12 +205,6 @@ table th {
 /* =============================================================================
    INTERACTIVE DEMO COMPONENTS
    ============================================================================= */
-
-/* Demo container */
-.demo-container {
-    position: relative;
-    margin: 1rem 0;
-}
 
 /* Direct integration demo component */
 .demo-component {

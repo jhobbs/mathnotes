@@ -6,11 +6,10 @@ This document outlines a comprehensive plan to modernize the Mathnotes JavaScrip
 
 ## Current Issues
 
-### 1. Legacy Iframe Embedding
-- Older demos use `{% include_relative %}` to embed via iframes
-- Approach is clunky and isolates content
-- Makes integration and styling difficult
-- Goal: Remove all iframe-based demos
+### 1. Legacy Iframe Embedding (REMOVED)
+- Previously used `{% include_relative %}` to embed via iframes
+- This approach has been completely removed from the codebase
+- All demos should now use the TypeScript module approach
 
 ### 2. Legacy HTML Integration (REMOVED)
 - ~~Previous `{% include_integrated_relative %}` approach read full HTML files~~ (removed)
@@ -270,7 +269,7 @@ interface DemoConfig {
 **Objective**: Finalize transition and improve remaining issues
 
 #### 5.1 Remove Legacy Code
-- Strip out old `{% include_relative %}` handling
+- ~~Strip out old `{% include_relative %}` handling~~ (completed)
 - Remove iframe-related code
 - Remove feature flags
 
