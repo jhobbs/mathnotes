@@ -10,22 +10,12 @@
     <link rel="canonical" href="{{ base_url }}{{ canonical_url }}">
     {% endif %}
     
-    <!-- MathJax for LaTeX rendering -->
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script nonce="{{ csp_nonce }}">
-        {% raw %}
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true,
-                macros: {
-                    vec: ['\\mathbf{#1}', 1]
-                }
-            }
-        };
-        {% endraw %}
-    </script>
+    <!-- MathJax initialization -->
+    {% if is_development %}
+    <script type="module" src="http://localhost:5173/static/dist/demos-framework/src/mathjax-entry.ts"></script>
+    {% else %}
+    <script type="module" src="{{ url_for('static', filename='dist/mathjax.js') }}"></script>
+    {% endif %}
     
     <!-- Main stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
