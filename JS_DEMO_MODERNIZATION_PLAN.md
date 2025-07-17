@@ -12,12 +12,12 @@ This document outlines a comprehensive plan to modernize the Mathnotes JavaScrip
 - Makes integration and styling difficult
 - Goal: Remove all iframe-based demos
 
-### 2. Messy HTML Integration
-- Current `{% include_integrated_relative %}` approach reads full HTML files
-- Strips `<head>` and `<body>` tags to embed content
-- Hard to maintain - only part of HTML makes it into final page DOM
-- Scripts in head can be missed or have ordering issues
-- Markdown processor uses regex to extract sections (fragile)
+### 2. Legacy HTML Integration (REMOVED)
+- ~~Previous `{% include_integrated_relative %}` approach read full HTML files~~ (removed)
+- Now using modern TypeScript module approach with `{% include_demo %}`
+- Clean separation of demo logic and presentation
+- Vite handles bundling and dependencies
+- Type-safe demo implementations
 
 ### 3. Script Loading Order & Duplication
 - Each demo HTML includes its own scripts and library references

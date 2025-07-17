@@ -20,13 +20,10 @@ This file tracks ideas for future features, enhancements, and demonstrations for
 
 - **Reusable Cartesian Plane Library**: Extract the cartesian plane, grid, axes, and zoom functionality from the neighborhood demo into a reusable JavaScript library for other mathematical visualizations
 
-- **Convert Remaining Demos to Integrated Format**: The following demos are still using iframe embedding (include_relative) and need to be converted to the integrated format (include_integrated_relative):
-  - **neighborhood-demo.html** - Real Analysis/Topology: Metric Spaces
-  - **projection.html** - Graphics: Projection and Homogeneous Coordinates
-  - **pendulum.html** - Differential Equations: Undamped Motion
-  - **elementary.html** - Cellular Automata: Elementary Cellular Automata
-  - ✅ **dilution.html** - Differential Equations: Dilution and Accretion (Completed)
-  - **cellular.html** - Cellular Automata: Game of Life
+- **Convert Remaining Demos to TypeScript**: The following demos are still using iframe embedding (include_relative) and need to be converted to the TypeScript module format (include_demo):
+  - Various physics demos
+  - Mathematical visualization demos
+  - See existing TypeScript demos in `mathnotes/demos/` for examples
 
 ## Content Ideas
 
@@ -172,14 +169,8 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Could use file path or section hierarchy for automatic namespacing
   - Warn during build process about duplicate definition labels
 
-- **Clean Up Integrated Include Pattern**: Improve the include_integrated_relative implementation
-  - Current approach includes full HTML files and requires manual handling of script dependencies
-  - Math.js and other libraries need to be manually added to base template
-  - Script loading is fragile - demos break if scripts aren't in exactly the right place
-  - Consider a cleaner approach:
-    - Separate demo content (HTML) from dependencies (scripts/styles)
-    - Auto-detect and inject required scripts into the page head
-    - Use a manifest or metadata approach to declare dependencies
-    - Support both external CDN scripts and local script files
-    - Provide clear error messages when dependencies are missing
-  - Would reduce debugging time and make demo integration more reliable
+- **Complete TypeScript Demo Migration**: Continue migrating legacy HTML/JS demos to TypeScript
+  - Use the modern demo framework in `demos-framework/`
+  - Register demos in `demos-framework/src/main.ts`
+  - Leverage Vite for bundling and HMR during development
+  - Ensure proper type safety and dark mode support

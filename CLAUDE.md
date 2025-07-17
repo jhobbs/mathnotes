@@ -149,11 +149,6 @@ mathnotes/
 
 1. **Markdown Processing** (`markdown_processor.py`):
    - Jekyll-style `{% include_relative %}` tags are converted to iframes
-   - NEW: `{% include_integrated_relative %}` embeds HTML/JS directly in the page
-     - Extracts body content
-     - Wraps JS in function scopes with unique demo IDs
-     - Adds CSP nonces to inline scripts
-     - Supports `-integrated.js` file variants
    - Math expressions ($...$, $$...$$) are preserved for MathJax rendering
    - Wiki-style internal links: `[[slug]]` or `[[text|slug]]` for resilient cross-references
    - Frontmatter parsing with layout field ignored
@@ -295,12 +290,11 @@ upgrade-insecure-requests
    - Test both light and dark modes
 
 2. **Adding Interactive Demos**:
-   - Create HTML file with proper structure
-   - Use `{% include_relative demo.html %}` for iframe embedding
-   - Use `{% include_integrated_relative demo.html %}` for direct embedding
-   - Include dark mode CSS/JS
+   - Create TypeScript demo in `mathnotes/demos/`
+   - Register demo in `demos-framework/src/main.ts`
+   - Use `{% include_demo "demo-name" %}` in markdown files
+   - Legacy: Use `{% include_relative demo.html %}` for iframe embedding (being phased out)
    - Test CSP nonce handling
-   - TypeScript demos go in `mathnotes/demos/` and are built with Vite
 
 3. **Testing**:
    - Run tests before committing: `make test`

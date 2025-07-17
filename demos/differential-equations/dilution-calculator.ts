@@ -1,5 +1,6 @@
 import type { DemoConfig, DemoInstance } from '@framework/types';
 
+// Dilution calculator demo
 interface DilutionParameters {
   solutionStartingVolume: number;
   solutionStartingMass: number;
