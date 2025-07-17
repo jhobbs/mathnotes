@@ -6,7 +6,7 @@ description: Sinusoidal oscillatory motion analyzed through differential equatio
 
 # Simple Harmonic Motion
 
-Note: I explore this topic in more mathematical detail in my Ordinary Differential Equations notes on [[Undamped Motion|differential equations/undamped-motion]].
+Note: I explore this topic in more mathematical detail in my Ordinary Differential Equations notes on [[Undamped Motion|differential-equations/undamped-motion]].
 
 Simple Harmonic Motion is sinusoidal periodic motion that repeats perfectly over and over. It is a simplified model of motion of objects like a box bouncing on a spring or a simple pendulum, ignoring dampening forces such as friction and making some other simplifying assumptions.
 

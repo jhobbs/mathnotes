@@ -95,10 +95,10 @@ Mathematical content is organized by subject:
 - `algebra/` - Group theory, rings, fields
 - `calculus/` - Integration, differentiation, limits
 - `real analysis/` - Sequences, series, continuity
-- `complex analysis/` - Complex functions, contour integration
-- `differential equations/` - ODEs, PDEs, solutions
-- `linear algebra/` - Matrices, vector spaces
-- `probability and statistics/` - Distributions, inference
+- `complex-analysis/` - Complex functions, contour integration
+- `differential-equations/` - ODEs, PDEs, solutions
+- `linear-algebra/` - Matrices, vector spaces
+- `probability-and-statistics/` - Distributions, inference
 - And more...
 
 ## Features Overview

@@ -69,6 +69,19 @@ def register_routes(app, url_mapper, markdown_processor):
     @app.route('/mathnotes/')
     def index():
         """Home page listing all sections."""
+        # Map directory names to display names
+        display_names = {
+            'differential-equations': 'Differential Equations',
+            'complex-analysis': 'Complex Analysis',
+            'linear-algebra': 'Linear Algebra',
+            'logic-and-proofs': 'Logic and Proofs',
+            'probability-and-statistics': 'Probability and Statistics',
+            'numerical-analysis': 'Numerical Analysis',
+            'discrete-math': 'Discrete Math',
+            'cellular-automata': 'Cellular Automata',
+            'real-analysis': 'Real Analysis',
+        }
+        
         sections = []
         for section in CONTENT_DIRS:
             path = Path(section)
@@ -77,8 +90,10 @@ def register_routes(app, url_mapper, markdown_processor):
                 if content:
                     # Extract section name without content/ prefix
                     section_name = section.replace('content/', '') if section.startswith('content/') else section
+                    # Use display name if available, otherwise use title case
+                    display_name = display_names.get(section_name, section_name.title())
                     sections.append({
-                        'name': section_name.title(),
+                        'name': display_name,
                         'path': section,
                         'content': content
                     })
@@ -92,10 +107,11 @@ def register_routes(app, url_mapper, markdown_processor):
     def serve_content(filepath):
         """Serve markdown content or static files."""
         # Handle static files using proper send_from_directory with absolute paths
-        if Path(filepath).exists() and Path(filepath).is_file():
+        content_filepath = Path(f"content/{filepath}")
+        if content_filepath.exists() and content_filepath.is_file():
             if filepath.endswith(('.html', '.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg')):
                 import os
-                directory = os.path.dirname(os.path.abspath(filepath))
+                directory = os.path.dirname(os.path.abspath(content_filepath))
                 filename = os.path.basename(filepath)
                 return send_from_directory(directory, filename)
         
@@ -112,7 +128,7 @@ def register_routes(app, url_mapper, markdown_processor):
                 return render_template('page.html', **content)
         
         # Check if it's a directory
-        if Path(filepath).exists() and Path(filepath).is_dir():
+        if Path(f"content/{filepath}").exists() and Path(f"content/{filepath}").is_dir():
             files, subdirs = get_directory_contents(filepath, url_mapper.file_to_canonical)
             return render_template('directory.html', 
                                  directory=filepath,
@@ -122,7 +138,7 @@ def register_routes(app, url_mapper, markdown_processor):
         
         # Check for markdown file (backward compatibility)
         md_path = filepath if filepath.endswith('.md') else f"{filepath}.md"
-        if Path(md_path).exists():
+        if Path(f"content/{md_path}").exists():
             # Redirect to canonical URL if it exists
             md_path_normalized = md_path.replace('\\', '/')
             canonical_url = url_mapper.get_canonical_url(md_path_normalized)
