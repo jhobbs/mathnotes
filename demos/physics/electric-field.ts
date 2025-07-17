@@ -1,6 +1,7 @@
 // Electric field simulation - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
+import { createDemoContainer, P5DemoBase, getResponsiveCanvasSize } from '@demos/common/utils';
 
 interface Particle {
   pos: p5.Vector;
@@ -125,46 +126,35 @@ function arrow(p: p5, x1: number, y1: number, x2: number, y2: number, offset: nu
   p.pop();
 }
 
-export default function initElectricFieldDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
-  let p5Instance: p5 | null = null;
-  let particles: Particle[] = [];
-  let forces: Force[] = [];
-  const numForces = 30;
-  let moveParticles = false;
+class ElectricFieldDemo extends P5DemoBase {
+  private particles: Particle[] = [];
+  private forces: Force[] = [];
+  private numForces = 30;
+  private moveParticles = false;
+  private canvasParent: HTMLElement;
   
-  // Create a div for the canvas
-  const canvasContainer = document.createElement('div');
-  canvasContainer.style.textAlign = 'center';
-  canvasContainer.id = `field-${Date.now()}`;
-  container.appendChild(canvasContainer);
+  constructor(container: HTMLElement, config?: DemoConfig) {
+    super(container, config);
+    const { canvasParent } = createDemoContainer(container, { center: true });
+    this.canvasParent = canvasParent;
+  }
   
-  const sketch = (p: p5) => {
+  protected createSketch(p: p5): void {
     p.setup = () => {
       p.noStroke();
       
       // Responsive sizing
-      let canvasWidth: number, canvasHeight: number;
-      
-      if (p.windowWidth < 768) {
-        // Mobile: use full window width minus small margin with reasonable height
-        canvasWidth = p.windowWidth - 20;
-        canvasHeight = (p.windowWidth - 20) * 0.65;
-      } else {
-        // Desktop: use config or container-based sizing
-        canvasWidth = config?.width || container.offsetWidth - 20 || p.windowWidth * 0.8;
-        canvasHeight = config?.height || canvasWidth * 0.6;
-      }
-      
-      const canvas = p.createCanvas(canvasWidth, canvasHeight);
-      canvas.parent(canvasContainer);
+      const { width, height } = getResponsiveCanvasSize(this.container, this.config, 0.65);
+      const canvas = p.createCanvas(width, height);
+      canvas.parent(this.canvasParent);
       
       p.background(51);
       p.frameRate(60);
       
       // Initialize force field grid
-      for (let i = p.width / numForces; i < p.width; i += p.width / numForces) {
-        for (let j = p.height / numForces; j < p.height; j += p.height / numForces) {
-          forces.push(new ForceImpl(p, i, j));
+      for (let i = p.width / this.numForces; i < p.width; i += p.width / this.numForces) {
+        for (let j = p.height / this.numForces; j < p.height; j += p.height / this.numForces) {
+          this.forces.push(new ForceImpl(p, i, j));
         }
       }
     };
@@ -175,17 +165,17 @@ export default function initElectricFieldDemo(container: HTMLElement, config?: D
       p.noStroke();
       
       // Draw particles
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].paint(p);
+      for (let i = 0; i < this.particles.length; i++) {
+        this.particles[i].paint(p);
       }
       
       // Move particles if enabled
-      if (moveParticles) {
-        for (let i = 0; i < particles.length; i++) {
-          const particlePos = particles[i].p;
-          const particleCharge = particles[i].m;
-          const electroStatic = getElectrostaticForce(p, particles, p.createVector(particlePos.x, particlePos.y), particleCharge);
-          particles[i].addPos(electroStatic);
+      if (this.moveParticles) {
+        for (let i = 0; i < this.particles.length; i++) {
+          const particlePos = this.particles[i].p;
+          const particleCharge = this.particles[i].m;
+          const electroStatic = getElectrostaticForce(p, this.particles, p.createVector(particlePos.x, particlePos.y), particleCharge);
+          this.particles[i].addPos(electroStatic);
         }
       }
       
@@ -193,9 +183,9 @@ export default function initElectricFieldDemo(container: HTMLElement, config?: D
       p.stroke(250);
       p.strokeWeight(2);
       p.colorMode(p.HSB);
-      for (let i = 0; i < forces.length; i++) {
-        forces[i].update(particles);
-        forces[i].paint(p);
+      for (let i = 0; i < this.forces.length; i++) {
+        this.forces[i].update(this.particles);
+        this.forces[i].paint(p);
       }
     };
     
@@ -204,74 +194,38 @@ export default function initElectricFieldDemo(container: HTMLElement, config?: D
       if (p.keyIsDown(p.CONTROL)) {
         sgn = 1; // Positive charge when Ctrl is held
       }
-      particles.push(new ParticleImpl(p, p.mouseX, p.mouseY, sgn * 15));
+      this.particles.push(new ParticleImpl(p, p.mouseX, p.mouseY, sgn * 15));
     };
     
     p.keyPressed = () => {
       if (p.keyCode === 32) { // Spacebar
-        moveParticles = !moveParticles;
+        this.moveParticles = !this.moveParticles;
         return false; // Prevent default behavior
       }
+      return true; // Allow default behavior for other keys
     };
     
     p.windowResized = () => {
-      if (config?.width && config?.height) {
-        // If fixed size is specified, don't resize
-        return;
-      }
-      
-      let canvasWidth: number, canvasHeight: number;
-      
-      if (p.windowWidth < 768) {
-        canvasWidth = p.windowWidth - 20;
-        canvasHeight = (p.windowWidth - 20) * 0.65;
-      } else {
-        canvasWidth = container.offsetWidth - 20 || p.windowWidth * 0.8;
-        canvasHeight = canvasWidth * 0.6;
-      }
-      
-      p.resizeCanvas(canvasWidth, canvasHeight);
+      const { width, height } = getResponsiveCanvasSize(this.container, this.config, 0.65);
+      p.resizeCanvas(width, height);
     };
-  };
+  }
   
-  // Initialize p5 instance
-  p5Instance = new p5(sketch);
-  
-  // Prevent spacebar from scrolling the page
-  const preventSpaceScroll = (event: KeyboardEvent) => {
-    if (event.code === 'Space' || event.keyCode === 32) {
-      event.preventDefault();
-    }
-  };
-  
-  document.addEventListener('keydown', preventSpaceScroll, true);
-  
-  return {
-    cleanup: () => {
-      if (p5Instance) {
-        p5Instance.remove();
-        p5Instance = null;
+  init(): DemoInstance {
+    // Prevent spacebar from scrolling the page
+    const preventSpaceScroll = (event: KeyboardEvent) => {
+      if (event.code === 'Space' || event.keyCode === 32) {
+        event.preventDefault();
       }
-      document.removeEventListener('keydown', preventSpaceScroll, true);
-      container.innerHTML = '';
-    },
+    };
     
-    resize: () => {
-      if (p5Instance && p5Instance.windowResized) {
-        p5Instance.windowResized();
-      }
-    },
+    this.addEventListener(document, 'keydown', preventSpaceScroll as EventListener, { capture: true });
     
-    pause: () => {
-      if (p5Instance) {
-        p5Instance.noLoop();
-      }
-    },
-    
-    resume: () => {
-      if (p5Instance) {
-        p5Instance.loop();
-      }
-    }
-  };
+    return super.init();
+  }
+}
+
+export default function initElectricFieldDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
+  const demo = new ElectricFieldDemo(container, config);
+  return demo.init();
 }
