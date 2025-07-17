@@ -1,0 +1,370 @@
+// Shared utilities for demos
+import p5 from 'p5';
+import type { DemoInstance, DemoConfig } from '@framework/types';
+
+export interface DemoContainerOptions {
+  center?: boolean;
+  id?: string;
+  className?: string;
+}
+
+export interface DemoColors {
+  background: p5.Color;
+  foreground: p5.Color;
+  stroke: p5.Color;
+  fill: p5.Color;
+  text: string;
+  accent: p5.Color;
+  grid?: p5.Color;
+  axis?: p5.Color;
+}
+
+export interface CanvasSize {
+  width: number;
+  height: number;
+}
+
+/**
+ * Creates a standardized demo container with optional centering and ID
+ */
+export function createDemoContainer(
+  container: HTMLElement, 
+  options: DemoContainerOptions = {}
+): { containerEl: HTMLElement; canvasParent: HTMLElement } {
+  const { center = true, id, className } = options;
+  
+  // Create main container
+  const containerEl = document.createElement('div');
+  if (id) containerEl.id = id;
+  if (className) containerEl.className = className;
+  if (center) containerEl.style.textAlign = 'center';
+  
+  // Create canvas parent div
+  const canvasParent = document.createElement('div');
+  canvasParent.style.display = 'inline-block';
+  canvasParent.style.position = 'relative';
+  if (!id) canvasParent.id = `demo-${Date.now()}`;
+  
+  containerEl.appendChild(canvasParent);
+  container.appendChild(containerEl);
+  
+  return { containerEl, canvasParent };
+}
+
+/**
+ * Detects if dark mode is active
+ */
+export function isDarkMode(config?: DemoConfig): boolean {
+  return config?.darkMode ?? 
+    (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+}
+
+/**
+ * Gets standard demo colors based on dark mode
+ */
+export function getDemoColors(p: p5, config?: DemoConfig): DemoColors {
+  const isDark = isDarkMode(config);
+  
+  if (isDark) {
+    return {
+      background: p.color(30, 30, 30),
+      foreground: p.color(220, 220, 220),
+      stroke: p.color(200, 200, 200),
+      fill: p.color(180, 180, 180),
+      text: '#e0e0e0',
+      accent: p.color(100, 150, 255),
+      grid: p.color(60, 60, 60),
+      axis: p.color(150, 150, 150)
+    };
+  } else {
+    return {
+      background: p.color(255, 255, 255),
+      foreground: p.color(30, 30, 30),
+      stroke: p.color(0, 0, 0),
+      fill: p.color(50, 50, 50),
+      text: '#333333',
+      accent: p.color(50, 100, 200),
+      grid: p.color(200, 200, 200),
+      axis: p.color(100, 100, 100)
+    };
+  }
+}
+
+/**
+ * Calculates responsive canvas size
+ */
+export function getResponsiveCanvasSize(
+  container: HTMLElement,
+  config?: DemoConfig,
+  aspectRatio: number = 0.6
+): CanvasSize {
+  // If fixed size is specified in config, use it
+  if (config?.width && config?.height) {
+    return { width: config.width, height: config.height };
+  }
+  
+  const isMobile = window.innerWidth < 768;
+  
+  if (isMobile) {
+    // Mobile: use full window width minus small margin
+    const width = window.innerWidth - 20;
+    const height = width * aspectRatio;
+    return { width, height };
+  } else {
+    // Desktop: use container width or fallback
+    const width = container.offsetWidth - 20 || window.innerWidth * 0.8;
+    const height = width * aspectRatio;
+    return { width, height };
+  }
+}
+
+/**
+ * Adds dark mode CSS styles for demo controls
+ */
+export function addDemoStyles(container: HTMLElement, prefix: string = 'demo'): HTMLStyleElement {
+  const style = document.createElement('style');
+  style.textContent = `
+    .${prefix}-button {
+      padding: 5px 10px;
+      margin: 0 5px;
+      cursor: pointer;
+      background-color: #f0f0f0;
+      color: #333;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      transition: background-color 0.2s;
+    }
+    
+    .${prefix}-button:hover {
+      background-color: #e0e0e0;
+    }
+    
+    .${prefix}-info {
+      color: #333;
+    }
+    
+    .${prefix}-label {
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .${prefix}-button {
+        background-color: #444;
+        color: #e0e0e0;
+        border-color: #666;
+      }
+      
+      .${prefix}-button:hover {
+        background-color: #555;
+      }
+      
+      .${prefix}-info {
+        color: #e0e0e0;
+      }
+      
+      .${prefix}-label {
+        color: #e0e0e0;
+      }
+    }
+    
+    /* Slider styles */
+    input[type="range"].${prefix}-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    
+    input[type="range"].${prefix}-slider::-webkit-slider-track {
+      background: #ddd;
+      height: 6px;
+      border-radius: 3px;
+    }
+    
+    input[type="range"].${prefix}-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      background: #666;
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      margin-top: -5px;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      input[type="range"].${prefix}-slider::-webkit-slider-track {
+        background: #444;
+      }
+      
+      input[type="range"].${prefix}-slider::-webkit-slider-thumb {
+        background: #888;
+      }
+    }
+  `;
+  container.appendChild(style);
+  return style;
+}
+
+/**
+ * Base class for p5.js demos with standard lifecycle management
+ */
+export abstract class P5DemoBase {
+  protected p5Instance: p5 | null = null;
+  protected container: HTMLElement;
+  protected config?: DemoConfig;
+  protected eventListeners: Array<{ target: EventTarget; type: string; listener: EventListener }> = [];
+  
+  constructor(container: HTMLElement, config?: DemoConfig) {
+    this.container = container;
+    this.config = config;
+  }
+  
+  /**
+   * Initialize the demo
+   */
+  init(): DemoInstance {
+    this.p5Instance = new p5(this.createSketch.bind(this));
+    
+    return {
+      cleanup: this.cleanup.bind(this),
+      resize: this.resize.bind(this),
+      pause: this.pause.bind(this),
+      resume: this.resume.bind(this)
+    };
+  }
+  
+  /**
+   * Create the p5 sketch function
+   */
+  protected abstract createSketch(p: p5): void;
+  
+  /**
+   * Add an event listener that will be automatically cleaned up
+   */
+  protected addEventListener(target: EventTarget, type: string, listener: EventListener, options?: AddEventListenerOptions): void {
+    target.addEventListener(type, listener, options);
+    this.eventListeners.push({ target, type, listener });
+  }
+  
+  /**
+   * Clean up the demo
+   */
+  protected cleanup(): void {
+    // Remove p5 instance
+    if (this.p5Instance) {
+      this.p5Instance.remove();
+      this.p5Instance = null;
+    }
+    
+    // Remove all event listeners
+    for (const { target, type, listener } of this.eventListeners) {
+      target.removeEventListener(type, listener);
+    }
+    this.eventListeners = [];
+    
+    // Clear container
+    this.container.innerHTML = '';
+  }
+  
+  /**
+   * Handle window resize
+   */
+  protected resize(): void {
+    if (this.p5Instance && typeof (this.p5Instance as any).windowResized === 'function') {
+      (this.p5Instance as any).windowResized();
+    }
+  }
+  
+  /**
+   * Pause the demo
+   */
+  protected pause(): void {
+    if (this.p5Instance) {
+      this.p5Instance.noLoop();
+    }
+  }
+  
+  /**
+   * Resume the demo
+   */
+  protected resume(): void {
+    if (this.p5Instance) {
+      this.p5Instance.loop();
+    }
+  }
+}
+
+/**
+ * Creates a standardized control panel
+ */
+export function createControlPanel(
+  parent: HTMLElement,
+  options: { id?: string; className?: string } = {}
+): HTMLElement {
+  const panel = document.createElement('div');
+  if (options.id) panel.id = options.id;
+  panel.className = options.className || 'demo-controls';
+  panel.style.marginTop = '20px';
+  panel.style.textAlign = 'center';
+  parent.appendChild(panel);
+  return panel;
+}
+
+/**
+ * Creates a standardized button
+ */
+export function createButton(
+  text: string,
+  parent: HTMLElement,
+  onClick: () => void,
+  className: string = 'demo-button'
+): HTMLButtonElement {
+  const button = document.createElement('button');
+  button.textContent = text;
+  button.className = className;
+  button.addEventListener('click', onClick);
+  parent.appendChild(button);
+  return button;
+}
+
+/**
+ * Creates a slider with label
+ */
+export function createSlider(
+  p: p5,
+  label: string,
+  min: number,
+  max: number,
+  value: number,
+  step: number,
+  parent: HTMLElement,
+  onChange?: () => void,
+  className: string = 'demo'
+): p5.Element {
+  const rowDiv = document.createElement('div');
+  rowDiv.style.marginBottom = '10px';
+  rowDiv.style.display = 'flex';
+  rowDiv.style.alignItems = 'center';
+  rowDiv.style.justifyContent = 'center';
+  rowDiv.style.gap = '10px';
+  parent.appendChild(rowDiv);
+  
+  const labelDiv = document.createElement('div');
+  labelDiv.textContent = label;
+  labelDiv.className = `${className}-label`;
+  labelDiv.style.width = '150px';
+  labelDiv.style.textAlign = 'left';
+  rowDiv.appendChild(labelDiv);
+  
+  const slider = p.createSlider(min, max, value, step);
+  slider.parent(rowDiv);
+  slider.class(`${className}-slider`);
+  slider.style('width: 200px');
+  
+  if (onChange) {
+    (slider as any).input(onChange);
+  }
+  
+  return slider;
+}

@@ -2,120 +2,57 @@
 import p5 from 'p5';
 import * as math from 'mathjs';
 import type { DemoInstance, DemoConfig } from '@framework/types';
+import { createDemoContainer, P5DemoBase, createSlider, isDarkMode } from '@demos/common/utils';
 
-export default function initProjectionDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
-  let p5Instance: p5 | null = null;
+class ProjectionDemo extends P5DemoBase {
+  private canvasParent: HTMLElement;
+  private controlsContainer: HTMLElement;
+  
+  // Sliders
+  private cameraAngleXSlider!: p5.Element;
+  private cameraAngleYSlider!: p5.Element;
+  private cameraAngleZSlider!: p5.Element;
+  private focalSlider!: p5.Element;
+  private translateXSlider!: p5.Element;
+  private translateYSlider!: p5.Element;
+  private translateZSlider!: p5.Element;
+  
+  constructor(container: HTMLElement, config?: DemoConfig) {
+    super(container, config);
+    
+    const { containerEl, canvasParent } = createDemoContainer(container, {
+      center: true
+    });
+    this.canvasParent = canvasParent;
+    
+    // Create controls container
+    this.controlsContainer = document.createElement('div');
+    this.controlsContainer.style.marginTop = '20px';
+    this.controlsContainer.style.width = '100%';
+    this.controlsContainer.style.textAlign = 'center';
+    containerEl.appendChild(this.controlsContainer);
+  }
 
-  // Create the demo container structure
-  const demoContainer = document.createElement('div');
-  demoContainer.style.display = 'flex';
-  demoContainer.style.flexDirection = 'column';
-  demoContainer.style.alignItems = 'center';
-  container.appendChild(demoContainer);
-
-  const sketch = (p: p5) => {
-    let cameraAngleXSlider: p5.Element;
-    let cameraAngleYSlider: p5.Element;
-    let cameraAngleZSlider: p5.Element;
-    let focalSlider: p5.Element;
-    let translateXSlider: p5.Element;
-    let translateYSlider: p5.Element;
-    let translateZSlider: p5.Element;
-
+  protected createSketch(p: p5): void {
     p.setup = () => {
       const canvas = p.createCanvas(p.windowWidth * 0.9, 400);
-      canvas.parent(demoContainer);
-      (canvas as any).canvas.style.display = 'block';
-      (canvas as any).canvas.style.position = 'relative';
-
-      // Create a container for all controls
-      const controlsContainer = p.createDiv();
-      controlsContainer.parent(demoContainer);
-      controlsContainer.style('margin-top: 20px');
-      controlsContainer.style('width: 100%');
-      controlsContainer.style('text-align: center');
-
-      // Helper function to create slider row
-      function createSliderRow(label: string, min: number, max: number, value: number, step: number): p5.Element {
-        const rowDiv = p.createDiv();
-        rowDiv.parent(controlsContainer);
-        rowDiv.style('margin-bottom: 10px');
-        rowDiv.style('display: flex');
-        rowDiv.style('align-items: center');
-        rowDiv.style('justify-content: center');
-        rowDiv.style('gap: 10px');
-        
-        const slider = p.createSlider(min, max, value, step);
-        slider.parent(rowDiv);
-        slider.style('width: 200px');
-        slider.input(() => p.redraw());
-        
-        const labelDiv = p.createDiv(label);
-        labelDiv.parent(rowDiv);
-        labelDiv.style('width: 150px');
-        labelDiv.style('text-align: left');
-        labelDiv.style(`color: ${config?.darkMode ? '#e0e0e0' : '#333'}`);
-        
-        return slider;
-      }
-
+      canvas.parent(this.canvasParent);
+      
       // Create all sliders
-      cameraAngleXSlider = createSliderRow('Camera Angle (X-axis)', -p.PI, p.PI, 0, 0.01);
-      cameraAngleYSlider = createSliderRow('Camera Angle (Y-axis)', -p.PI, p.PI, 0, 0.01);
-      cameraAngleZSlider = createSliderRow('Camera Angle (Z-axis)', -p.PI, p.PI, 0, 0.01);
-      focalSlider = createSliderRow('Focal Length', 1, 30, 15, 0.1);
-      translateXSlider = createSliderRow('Translate X', -200, 200, 0, 1);
-      translateYSlider = createSliderRow('Translate Y', -200, 200, 0, 1);
-      translateZSlider = createSliderRow('Translate Z', -200, 200, 100, 1);
-
-      // Add CSS for slider styling based on dark mode
-      const style = document.createElement('style');
-      style.textContent = `
-        input[type="range"] {
-          -webkit-appearance: none;
-          appearance: none;
-          background: transparent;
-          cursor: pointer;
-        }
-        
-        input[type="range"]::-webkit-slider-track {
-          background: ${config?.darkMode ? '#444' : '#ddd'};
-          height: 6px;
-          border-radius: 3px;
-        }
-        
-        input[type="range"]::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          background: ${config?.darkMode ? '#888' : '#666'};
-          height: 16px;
-          width: 16px;
-          border-radius: 50%;
-          margin-top: -5px;
-        }
-        
-        input[type="range"]::-moz-range-track {
-          background: ${config?.darkMode ? '#444' : '#ddd'};
-          height: 6px;
-          border-radius: 3px;
-        }
-        
-        input[type="range"]::-moz-range-thumb {
-          background: ${config?.darkMode ? '#888' : '#666'};
-          height: 16px;
-          width: 16px;
-          border-radius: 50%;
-          border: none;
-        }
-      `;
-      container.appendChild(style);
-
+      this.cameraAngleXSlider = createSlider(p, 'Camera Angle (X-axis)', -p.PI, p.PI, 0, 0.01, this.controlsContainer, () => p.redraw(), 'projection');
+      this.cameraAngleYSlider = createSlider(p, 'Camera Angle (Y-axis)', -p.PI, p.PI, 0, 0.01, this.controlsContainer, () => p.redraw(), 'projection');
+      this.cameraAngleZSlider = createSlider(p, 'Camera Angle (Z-axis)', -p.PI, p.PI, 0, 0.01, this.controlsContainer, () => p.redraw(), 'projection');
+      this.focalSlider = createSlider(p, 'Focal Length', 1, 30, 15, 0.1, this.controlsContainer, () => p.redraw(), 'projection');
+      this.translateXSlider = createSlider(p, 'Translate X', -200, 200, 0, 1, this.controlsContainer, () => p.redraw(), 'projection');
+      this.translateYSlider = createSlider(p, 'Translate Y', -200, 200, 0, 1, this.controlsContainer, () => p.redraw(), 'projection');
+      this.translateZSlider = createSlider(p, 'Translate Z', -200, 200, 100, 1, this.controlsContainer, () => p.redraw(), 'projection');
+      
       p.noLoop();
     };
 
     p.draw = () => {
       // Check dark mode
-      const isDark = config?.darkMode ?? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      const isDark = isDarkMode(this.config);
       
       if (isDark) {
         p.background(32); // Dark background
@@ -124,9 +61,9 @@ export default function initProjectionDemo(container: HTMLElement, config?: Demo
       }
       
       // Get the camera angle values from the sliders
-      const cameraAngleX = -(cameraAngleXSlider.value() as number);
-      const cameraAngleY = -(cameraAngleYSlider.value() as number);
-      const cameraAngleZ = -(cameraAngleZSlider.value() as number);
+      const cameraAngleX = -(this.cameraAngleXSlider.value() as number);
+      const cameraAngleY = -(this.cameraAngleYSlider.value() as number);
+      const cameraAngleZ = -(this.cameraAngleZSlider.value() as number);
 
       // Define the 4x4 transformation matrices for camera rotation around X, Y, and Z axes
       const cX = p.cos(cameraAngleX);
@@ -157,9 +94,9 @@ export default function initProjectionDemo(container: HTMLElement, config?: Demo
       ]);
 
       // Define the 4x4 transformation matrix for translation
-      const translateX = translateXSlider.value() as number;
-      const translateY = translateYSlider.value() as number;
-      const translateZ = translateZSlider.value() as number;
+      const translateX = this.translateXSlider.value() as number;
+      const translateY = this.translateYSlider.value() as number;
+      const translateZ = this.translateZSlider.value() as number;
       const translationMatrix = math.matrix([
         [1, 0, 0, translateX],
         [0, 1, 0, translateY],
@@ -174,7 +111,7 @@ export default function initProjectionDemo(container: HTMLElement, config?: Demo
       ) as math.Matrix;
 
       // Focal length for perspective projection
-      const focalLength = focalSlider.value() as number;
+      const focalLength = this.focalSlider.value() as number;
 
       // Define the 4x4 perspective projection matrix
       const perspectiveMatrix = math.matrix([
@@ -251,24 +188,23 @@ export default function initProjectionDemo(container: HTMLElement, config?: Demo
     p.windowResized = () => {
       p.resizeCanvas(p.windowWidth * 0.9, 400);
     };
-  };
-
-  // Initialize p5 instance
-  p5Instance = new p5(sketch);
-
-  return {
-    cleanup: () => {
-      if (p5Instance) {
-        p5Instance.remove();
-        p5Instance = null;
+  }
+  
+  init(): DemoInstance {
+    // Add CSS styles for this demo
+    const style = document.createElement('style');
+    style.textContent = `
+      .projection-label {
+        color: ${isDarkMode(this.config) ? '#e0e0e0' : '#333'};
       }
-      container.innerHTML = '';
-    },
+    `;
+    this.container.appendChild(style);
     
-    resize: () => {
-      if (p5Instance && p5Instance.windowResized) {
-        p5Instance.windowResized();
-      }
-    }
-  };
+    return super.init();
+  }
+}
+
+export default function initProjectionDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
+  const demo = new ProjectionDemo(container, config);
+  return demo.init();
 }
