@@ -40,6 +40,29 @@ def create_markdown_instance():
     ])
 
 # URL configuration
+def get_base_url(request=None):
+    """Get the base URL, detecting local development environment."""
+    import os
+    from flask import request as flask_request
+    
+    # Use the provided request or get from Flask context
+    req = request or flask_request
+    
+    # Check if we're in development mode
+    is_development = (
+        os.environ.get('FLASK_ENV') == 'development' or
+        os.environ.get('FLASK_DEBUG') == '1' or
+        (req and ('localhost' in req.host or '127.0.0.1' in req.host))
+    )
+    
+    if is_development and req:
+        # Use the current request's scheme and host for local development
+        return f"{req.scheme}://{req.host}"
+    else:
+        # Use production URL
+        return 'https://www.lacunary.org'
+
+# Legacy constant for backward compatibility (production URL)
 BASE_URL = 'https://www.lacunary.org'
 
 # Static file caching configuration

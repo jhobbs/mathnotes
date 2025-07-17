@@ -5,7 +5,7 @@ Flask routes for the Mathnotes application.
 import os
 from pathlib import Path
 from flask import render_template, send_from_directory, abort, redirect, make_response, Response, request, current_app
-from .config import CONTENT_DIRS, BASE_URL, STATIC_FILE_CACHE_CONFIG
+from .config import CONTENT_DIRS, BASE_URL, STATIC_FILE_CACHE_CONFIG, get_base_url
 from .file_utils import get_directory_contents, get_all_content_for_section
 
 def apply_content_file_caching(response, filepath):
@@ -163,16 +163,19 @@ def register_routes(app, url_mapper, markdown_processor):
         """Generate sitemap.xml for SEO."""
         pages = []
         
+        # Get the appropriate base URL for the current request
+        base_url = get_base_url(request)
+        
         # Add main home page
         pages.append({
-            'loc': BASE_URL,
+            'loc': base_url,
             'changefreq': 'weekly',
             'priority': '1.0'
         })
         
         # Add mathnotes section
         pages.append({
-            'loc': f"{BASE_URL}/mathnotes/",
+            'loc': f"{base_url}/mathnotes/",
             'changefreq': 'weekly',
             'priority': '0.9'
         })
@@ -180,7 +183,7 @@ def register_routes(app, url_mapper, markdown_processor):
         # Add all canonical URLs from the URL mappings
         for canonical_url in url_mapper.url_mappings:
             pages.append({
-                'loc': f"{BASE_URL}/mathnotes/{canonical_url}",
+                'loc': f"{base_url}/mathnotes/{canonical_url}",
                 'changefreq': 'monthly', 
                 'priority': '0.8'
             })
