@@ -100,6 +100,15 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Improve mobile usability and accessibility
   - Consider adding visual feedback for current settings
 
+- **Visual Dilution Process Demo**: Create a p5.js-based animated visualization of the dilution calculator
+  - Convert the existing form-based dilution calculator to include visual representation
+  - Show animated tank/container with inflow and outflow
+  - Visualize concentration changes with color gradients
+  - Display real-time graphs of mass/concentration over time
+  - Use P5DemoBase for consistent demo structure
+  - Keep existing calculator functionality alongside the visualization
+  - Could show particles or color intensity to represent concentration
+
 - **Reorganize Top-Level Sections**: Consolidate sections to align with classical mathematical organization
   - Current structure has too many top-level sections
   - Reorganize into classical mathematical branches: Algebra, Analysis, Topology, Geometry, Logic, etc.
