@@ -2,7 +2,7 @@
 import p5 from 'p5';
 import * as math from 'mathjs';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { createDemoContainer, P5DemoBase, createSlider } from '@demos/common/utils';
+import { createDemoContainer, P5DemoBase, createSlider, addDemoStyles } from '@demos/common/utils';
 
 class ProjectionDemo extends P5DemoBase {
   private canvasParent: HTMLElement;
@@ -20,6 +20,9 @@ class ProjectionDemo extends P5DemoBase {
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
     
+    // Add styles for this demo
+    addDemoStyles(container, 'projection');
+    
     const { containerEl, canvasParent } = createDemoContainer(container, {
       center: true
     });
@@ -35,22 +38,57 @@ class ProjectionDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Use responsive sizing
-      const size = this.getCanvasSize(0.5); // Wider aspect ratio for projection demo
+      // Use responsive sizing with height constraint
+      const size = this.getCanvasSize(0.5, 0.6); // Wider aspect ratio, max 60% viewport height
       const canvas = p.createCanvas(size.width, size.height);
       canvas.parent(this.canvasParent);
       
       // Initialize colors
       this.updateColors(p);
       
-      // Create all sliders
-      this.cameraAngleXSlider = createSlider(p, 'Camera Angle (X-axis)', -p.PI, p.PI, 0, 0.01, this.controlsContainer, () => p.redraw(), 'projection');
-      this.cameraAngleYSlider = createSlider(p, 'Camera Angle (Y-axis)', -p.PI, p.PI, 0, 0.01, this.controlsContainer, () => p.redraw(), 'projection');
-      this.cameraAngleZSlider = createSlider(p, 'Camera Angle (Z-axis)', -p.PI, p.PI, 0, 0.01, this.controlsContainer, () => p.redraw(), 'projection');
-      this.focalSlider = createSlider(p, 'Focal Length', 1, 30, 15, 0.1, this.controlsContainer, () => p.redraw(), 'projection');
-      this.translateXSlider = createSlider(p, 'Translate X', -200, 200, 0, 1, this.controlsContainer, () => p.redraw(), 'projection');
-      this.translateYSlider = createSlider(p, 'Translate Y', -200, 200, 0, 1, this.controlsContainer, () => p.redraw(), 'projection');
-      this.translateZSlider = createSlider(p, 'Translate Z', -200, 200, 100, 1, this.controlsContainer, () => p.redraw(), 'projection');
+      // Create a single row for all controls
+      const controlRow = document.createElement('div');
+      controlRow.style.display = 'flex';
+      controlRow.style.flexWrap = 'wrap';
+      controlRow.style.justifyContent = 'center';
+      controlRow.style.gap = '20px';
+      controlRow.style.alignItems = 'flex-start';
+      this.controlsContainer.appendChild(controlRow);
+      
+      // Camera rotation group
+      const cameraGroup = document.createElement('div');
+      cameraGroup.innerHTML = '<div class="projection-label" style="text-align: center; font-weight: bold; margin-bottom: 5px;">Camera Rotation</div>';
+      controlRow.appendChild(cameraGroup);
+      
+      const cameraSliders = document.createElement('div');
+      cameraSliders.style.display = 'flex';
+      cameraSliders.style.gap = '10px';
+      cameraGroup.appendChild(cameraSliders);
+      
+      // Camera angle sliders (horizontal)
+      this.cameraAngleXSlider = createSlider(p, 'X', -p.PI, p.PI, 0, 0.01, cameraSliders, () => p.redraw(), 'projection');
+      this.cameraAngleYSlider = createSlider(p, 'Y', -p.PI, p.PI, 0, 0.01, cameraSliders, () => p.redraw(), 'projection');
+      this.cameraAngleZSlider = createSlider(p, 'Z', -p.PI, p.PI, 0, 0.01, cameraSliders, () => p.redraw(), 'projection');
+      
+      // Translation group
+      const translateGroup = document.createElement('div');
+      translateGroup.innerHTML = '<div class="projection-label" style="text-align: center; font-weight: bold; margin-bottom: 5px;">Translation</div>';
+      controlRow.appendChild(translateGroup);
+      
+      const translateSliders = document.createElement('div');
+      translateSliders.style.display = 'flex';
+      translateSliders.style.gap = '10px';
+      translateGroup.appendChild(translateSliders);
+      
+      // Translation sliders (horizontal)
+      this.translateXSlider = createSlider(p, 'X', -200, 200, 0, 1, translateSliders, () => p.redraw(), 'projection');
+      this.translateYSlider = createSlider(p, 'Y', -200, 200, 0, 1, translateSliders, () => p.redraw(), 'projection');
+      this.translateZSlider = createSlider(p, 'Z', -200, 200, 100, 1, translateSliders, () => p.redraw(), 'projection');
+      
+      // Focal length (separate)
+      const focalGroup = document.createElement('div');
+      controlRow.appendChild(focalGroup);
+      this.focalSlider = createSlider(p, 'Focal Length', 1, 30, 15, 0.1, focalGroup, () => p.redraw(), 'projection');
       
       p.noLoop();
     };
@@ -181,24 +219,7 @@ class ProjectionDemo extends P5DemoBase {
     };
   }
   
-  init(): DemoInstance {
-    // Add CSS styles for this demo with dark mode support
-    const style = document.createElement('style');
-    style.textContent = `
-      .projection-label {
-        color: #333;
-      }
-      
-      @media (prefers-color-scheme: dark) {
-        .projection-label {
-          color: #e0e0e0;
-        }
-      }
-    `;
-    this.container.appendChild(style);
-    
-    return super.init();
-  }
+  // No need to override init() - styles are added in constructor
 }
 
 export default function initProjectionDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

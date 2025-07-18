@@ -187,35 +187,62 @@ export function addDemoStyles(container: HTMLElement, prefix: string = 'demo'): 
     
     /* Slider styles */
     input[type="range"].${prefix}-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      background: transparent;
-      cursor: pointer;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      height: 8px !important;
+      background: #d0d0d0 !important;
+      border-radius: 4px !important;
+      outline: none !important;
+      cursor: pointer !important;
     }
     
-    input[type="range"].${prefix}-slider::-webkit-slider-track {
-      background: #ddd;
+    /* Webkit browsers (Chrome, Safari, Edge) */
+    input[type="range"].${prefix}-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #4a7ba7;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    
+    /* Firefox */
+    input[type="range"].${prefix}-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: #4a7ba7;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    
+    input[type="range"].${prefix}-slider::-moz-range-track {
+      background: #d0d0d0;
       height: 6px;
       border-radius: 3px;
     }
     
-    input[type="range"].${prefix}-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      background: #666;
-      height: 16px;
-      width: 16px;
-      border-radius: 50%;
-      margin-top: -5px;
-    }
-    
     @media (prefers-color-scheme: dark) {
-      input[type="range"].${prefix}-slider::-webkit-slider-track {
-        background: #444;
+      input[type="range"].${prefix}-slider {
+        background: #5a5a5a !important;
       }
       
       input[type="range"].${prefix}-slider::-webkit-slider-thumb {
-        background: #888;
+        background: #6496ff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      }
+      
+      input[type="range"].${prefix}-slider::-moz-range-thumb {
+        background: #6496ff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      }
+      
+      input[type="range"].${prefix}-slider::-moz-range-track {
+        background: #5a5a5a;
       }
     }
   `;
@@ -427,22 +454,22 @@ export function createSlider(
   const rowDiv = document.createElement('div');
   rowDiv.style.marginBottom = '10px';
   rowDiv.style.display = 'flex';
+  rowDiv.style.flexDirection = 'column';
   rowDiv.style.alignItems = 'center';
-  rowDiv.style.justifyContent = 'center';
-  rowDiv.style.gap = '10px';
+  rowDiv.style.gap = '5px';
   parent.appendChild(rowDiv);
   
   const labelDiv = document.createElement('div');
   labelDiv.textContent = label;
   labelDiv.className = `${className}-label`;
-  labelDiv.style.width = '150px';
-  labelDiv.style.textAlign = 'left';
+  labelDiv.style.textAlign = 'center';
+  labelDiv.style.fontSize = '14px';
   rowDiv.appendChild(labelDiv);
   
   const slider = p.createSlider(min, max, value, step);
   slider.parent(rowDiv);
   slider.class(`${className}-slider`);
-  slider.style('width: 200px');
+  slider.style('width: 120px');
   
   if (onChange) {
     (slider as any).input(onChange);
