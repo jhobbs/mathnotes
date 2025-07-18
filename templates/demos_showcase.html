@@ -122,63 +122,151 @@
     <p>Explore mathematical concepts through interactive visualizations</p>
   </div>
   
-  {% for category, demos in demos_by_category.items() %}
-  <section class="category-section">
-    <h2 class="category-title">{{ category }}</h2>
-    <div class="demos-grid">
-      {% for demo in demos %}
-      <div class="demo-card">
-        <h3>{{ demo.title }}</h3>
-        <div class="demo-container">
-          <div class="demo-loading" id="loading-{{ loop.index0 }}-{{ loop.index }}">
-            Loading demo...
-          </div>
-          <div class="demo-component" 
-               data-demo="{{ demo.name }}" 
-               id="demo-{{ loop.index0 }}-{{ loop.index }}"
-               style="display: none;">
-          </div>
-        </div>
-      </div>
-      {% endfor %}
+  <div id="demos-content">
+    <div class="demo-loading" style="text-align: center; padding: 50px;">
+      Loading demo registry...
     </div>
-  </section>
-  {% endfor %}
+  </div>
 </div>
 
 <script nonce="{{ csp_nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
-  // First make all demo containers visible but empty
-  const demoDivs = document.querySelectorAll('.demo-component');
-  demoDivs.forEach(function(div) {
-    div.style.display = 'block';
-    div.style.minHeight = '300px';
-  });
+  // Wait for demo registry to be available
+  function checkAndLoadDemos() {
+    if (window.demoRegistry) {
+      // Load all demos to get their metadata
+      loadAllMetadata().then(loadDemosFromRegistry);
+    } else {
+      setTimeout(checkAndLoadDemos, 100);
+    }
+  }
   
-  // Wait for main.ts to initialize
-  setTimeout(function() {
-    // Hide loading indicators
-    const loadingDivs = document.querySelectorAll('.demo-loading');
-    loadingDivs.forEach(function(div) {
-      div.style.display = 'none';
+  async function loadAllMetadata() {
+    const demoNames = Object.keys(window.demoRegistry);
+    const loadPromises = demoNames.map(async (name) => {
+      try {
+        const module = await window.demoRegistry[name]();
+        if (module.metadata) {
+          window.demoMetadata[name] = module.metadata;
+        }
+      } catch (error) {
+        console.error(`Failed to load metadata for ${name}:`, error);
+      }
+    });
+    await Promise.all(loadPromises);
+  }
+  
+  function loadDemosFromRegistry() {
+    const demosContent = document.getElementById('demos-content');
+    demosContent.innerHTML = ''; // Clear loading message
+    
+    // Get all demo names from registry
+    const demoNames = Object.keys(window.demoRegistry);
+    
+    // Group demos by category
+    const demosByCategory = {};
+    demoNames.forEach(function(name) {
+      const metadata = window.demoMetadata[name] || { 
+        title: name.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        category: 'Other'
+      };
+      
+      if (!demosByCategory[metadata.category]) {
+        demosByCategory[metadata.category] = [];
+      }
+      
+      demosByCategory[metadata.category].push({
+        name: name,
+        title: metadata.title,
+        description: metadata.description
+      });
     });
     
-    // Trigger resize events to help demos calculate proper dimensions
-    window.dispatchEvent(new Event('resize'));
-    
-    // Check if any demos failed to load
-    setTimeout(function() {
-      demoDivs.forEach(function(div) {
-        // Check if demo has any content
-        if (div.children.length === 0) {
-          const errorDiv = document.createElement('div');
-          errorDiv.className = 'demo-error';
-          errorDiv.textContent = 'Failed to load demo: ' + div.dataset.demo;
-          div.appendChild(errorDiv);
+    // Create sections for each category
+    Object.keys(demosByCategory).sort().forEach(function(category) {
+      const section = document.createElement('section');
+      section.className = 'category-section';
+      
+      const title = document.createElement('h2');
+      title.className = 'category-title';
+      title.textContent = category;
+      section.appendChild(title);
+      
+      const grid = document.createElement('div');
+      grid.className = 'demos-grid';
+      
+      demosByCategory[category].forEach(function(demo, index) {
+        const card = document.createElement('div');
+        card.className = 'demo-card';
+        
+        const demoTitle = document.createElement('h3');
+        demoTitle.textContent = demo.title;
+        card.appendChild(demoTitle);
+        
+        if (demo.description) {
+          const desc = document.createElement('p');
+          desc.style.fontSize = '0.9em';
+          desc.style.color = 'var(--text-secondary)';
+          desc.style.marginBottom = '10px';
+          desc.textContent = demo.description;
+          card.appendChild(desc);
         }
+        
+        const container = document.createElement('div');
+        container.className = 'demo-container';
+        
+        const demoDiv = document.createElement('div');
+        demoDiv.className = 'demo-component';
+        demoDiv.setAttribute('data-demo', demo.name);
+        demoDiv.style.minHeight = '300px';
+        container.appendChild(demoDiv);
+        
+        card.appendChild(container);
+        grid.appendChild(card);
       });
-    }, 3000);
-  }, 1500);
+      
+      section.appendChild(grid);
+      demosContent.appendChild(section);
+    });
+    
+    // Now initialize all the demos that were created
+    // The main.ts DOMContentLoaded handler should pick them up
+    // But we need to trigger it since the page already loaded
+    const demoContainers = document.querySelectorAll('.demo-component[data-demo]');
+    demoContainers.forEach(async (container) => {
+      const demoName = container.dataset.demo;
+      if (!demoName || !window.demoRegistry[demoName]) {
+        console.error(`Demo "${demoName}" not found in registry`);
+        return;
+      }
+      
+      try {
+        const module = await window.demoRegistry[demoName]();
+        const config = {
+          darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        };
+        
+        const instance = module.default(container, config);
+        
+        // Store instance for cleanup
+        container.__demoInstance = instance;
+        
+        // Handle cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+          instance.cleanup();
+        });
+      } catch (error) {
+        console.error(`Failed to load demo "${demoName}":`, error);
+      }
+    });
+    
+    // Trigger resize after demos are loaded
+    setTimeout(function() {
+      window.dispatchEvent(new Event('resize'));
+    }, 1000);
+  }
+  
+  checkAndLoadDemos();
 });
 </script>
 {% endblock %}

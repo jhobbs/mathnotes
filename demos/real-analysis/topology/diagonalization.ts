@@ -463,6 +463,12 @@ class DiagonalizationDemo extends P5DemoBase {
   }
 }
 
+export const metadata = {
+  title: "Cantor's Diagonalization",
+  category: 'Real Analysis',
+  description: "Interactive demonstration of Cantor's diagonal argument proving the uncountability of real numbers"
+};
+
 export default function createDiagonalizationDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const demo = new DiagonalizationDemo(container, config);
   return demo.init();

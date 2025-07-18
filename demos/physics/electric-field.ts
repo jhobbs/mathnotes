@@ -242,6 +242,12 @@ class ElectricFieldDemo extends P5DemoBase {
   }
 }
 
+export const metadata = {
+  title: 'Electric Field',
+  category: 'Physics',
+  description: 'Interactive simulation of electric field lines and charged particles'
+};
+
 export default function initElectricFieldDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const demo = new ElectricFieldDemo(container, config);
   return demo.init();

@@ -327,6 +327,12 @@ class TurntableDemo extends P5DemoBase {
   }
 }
 
+export const metadata = {
+  title: 'Turntable',
+  category: 'Differential Equations',
+  description: 'Simulation of a turntable system demonstrating rotational dynamics and Coriolis effects'
+};
+
 export default function createTurntableDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const demo = new TurntableDemo(container, config);
   return demo.init();

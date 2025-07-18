@@ -325,6 +325,12 @@ class GameOfLifeDemo extends P5DemoBase {
   }
 }
 
+export const metadata = {
+  title: "Conway's Game of Life",
+  category: 'Cellular Automata',
+  description: 'Interactive simulation of the classic cellular automaton demonstrating emergent behavior'
+};
+
 export default function initGameOfLifeDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const demo = new GameOfLifeDemo(container, config);
   return demo.init();

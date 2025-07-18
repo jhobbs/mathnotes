@@ -184,6 +184,12 @@ class PendulumDemo extends P5DemoBase {
   }
 }
 
+export const metadata = {
+  title: 'Pendulum Motion',
+  category: 'Differential Equations',
+  description: 'Interactive simulation of pendulum dynamics with damping and forcing'
+};
+
 export default function createPendulumDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const demo = new PendulumDemo(container, config);
   return demo.init();

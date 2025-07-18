@@ -92,6 +92,12 @@ function calculateResults(parameters: DilutionParameters): DilutionResults {
   return results;
 }
 
+export const metadata = {
+  title: 'Dilution Calculator',
+  category: 'Differential Equations',
+  description: 'Interactive calculator for dilution processes using differential equations'
+};
+
 export default function createDilutionCalculatorDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   // Create the HTML structure
   container.innerHTML = `

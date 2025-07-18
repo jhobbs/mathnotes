@@ -283,6 +283,12 @@ class CountableUnionDemo extends P5DemoBase {
   }
 }
 
+export const metadata = {
+  title: 'Countable Union',
+  category: 'Real Analysis',
+  description: 'Visualization of the diagonal argument proving that countable unions of countable sets are countable'
+};
+
 export default function initCountableUnionDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const demo = new CountableUnionDemo(container, config);
   return demo.init();
