@@ -235,3 +235,8 @@ grep -r "registerDemo" mathnotes/demos-framework/src/main.ts
 # Check for CSP violations
 # Open browser console and look for CSP errors
 ```
+
+## Testing Workflow
+
+### Docker Testing
+- you have to use docker to test
