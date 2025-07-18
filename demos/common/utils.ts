@@ -273,6 +273,31 @@ export function addDemoStyles(container: HTMLElement, prefix: string = 'demo'): 
         color: #e0e0e0;
       }
     }
+    
+    /* Select dropdown styles */
+    .${prefix}-select {
+      padding: 5px 10px;
+      margin: 0 5px;
+      cursor: pointer;
+      background-color: #f0f0f0;
+      color: #333;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .${prefix}-select {
+        background-color: #444;
+        color: #e0e0e0;
+        border-color: #666;
+      }
+      
+      .${prefix}-select option {
+        background-color: #444;
+        color: #e0e0e0;
+      }
+    }
   `;
   container.appendChild(style);
   return style;
