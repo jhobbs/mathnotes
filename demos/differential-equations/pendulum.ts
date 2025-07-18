@@ -1,7 +1,7 @@
 // Pendulum Demo - Simple harmonic motion of a pendulum
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
-import { P5DemoBase, createDemoContainer, addDemoStyles, createSlider } from '@framework';
+import { P5DemoBase } from '@framework';
 
 class PendulumDemo extends P5DemoBase {
 
@@ -24,58 +24,41 @@ class PendulumDemo extends P5DemoBase {
   private start_time!: number;
   
   // UI elements
-  private canvasParent: HTMLElement;
-  private controlsDiv: HTMLElement;
   private infoDiv: HTMLElement;
   
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
-    
-    // Add styles
-    addDemoStyles(container, 'pendulum');
-    
-    // Create container structure
-    const { containerEl, canvasParent } = createDemoContainer(container, {
-      center: true,
-      id: 'pendulum-container'
-    });
-    this.canvasParent = canvasParent;
-    
-    // Create controls container
-    this.controlsDiv = document.createElement('div');
-    this.controlsDiv.id = 'pendulum-controls';
-    this.controlsDiv.style.marginTop = '20px';
-    this.controlsDiv.style.textAlign = 'center';
-    containerEl.appendChild(this.controlsDiv);
-    
-    // Create info display
-    this.infoDiv = document.createElement('div');
-    this.infoDiv.style.marginTop = '20px';
-    this.infoDiv.style.textAlign = 'center';
-    this.infoDiv.innerHTML = `
-      <div id="wire-length-display" class="pendulum-info"></div>
-      <div id="period-display" class="pendulum-info"></div>
-    `;
-    containerEl.appendChild(this.infoDiv);
+  }
+  
+  protected getStylePrefix(): string {
+    return 'pendulum';
+  }
+  
+  protected getContainerId(): string {
+    return 'pendulum-container';
   }
 
   protected createSketch(p: p5): void {
-    const setupSliders = () => {
-      // Create horizontal layout for sliders
+    const setupSliders = (p: p5) => {
+      // Create control panel with horizontal layout
+      const panel = this.createControlPanel();
       const sliderRow = document.createElement('div');
       sliderRow.style.display = 'flex';
       sliderRow.style.justifyContent = 'center';
       sliderRow.style.gap = '20px';
-      this.controlsDiv.appendChild(sliderRow);
+      panel.appendChild(sliderRow);
       
       // Wire length control
-      this.lengthSlider = createSlider(p, 'Wire Length', 0, 20, 5, 0, sliderRow, () => this.redo(), 'pendulum');
+      this.lengthSlider = this.createSlider(p, 'Wire Length', 0, 20, 5, 0, () => this.redo());
+      sliderRow.appendChild(this.lengthSlider.parent());
       
       // Angular velocity control
-      this.angularVelocitySlider = createSlider(p, 'Starting Angular Velocity', 0, 10, 0, 0, sliderRow, () => this.redo(), 'pendulum');
+      this.angularVelocitySlider = this.createSlider(p, 'Starting Angular Velocity', 0, 10, 0, 0, () => this.redo());
+      sliderRow.appendChild(this.angularVelocitySlider.parent());
       
       // Starting angle control  
-      this.angleSlider = createSlider(p, 'Starting Angle', 0, p.PI, p.PI / 4, p.PI / 32, sliderRow, () => this.redo(), 'pendulum');
+      this.angleSlider = this.createSlider(p, 'Starting Angle', 0, p.PI, p.PI / 4, p.PI / 32, () => this.redo());
+      sliderRow.appendChild(this.angleSlider.parent());
     };
 
     const getTime = (): number => {
@@ -148,14 +131,23 @@ class PendulumDemo extends P5DemoBase {
 
     p.setup = () => {
       // Use responsive sizing with square aspect ratio
-      const size = this.getCanvasSize(1.0, 0.6);
-      const canvas = p.createCanvas(size.width, size.height);
-      canvas.parent(this.canvasParent);
+      this.createResponsiveCanvas(p, 1.0, 0.6);
       
       // Initialize colors
       this.updateColors(p);
       
-      setupSliders();
+      setupSliders(p);
+      
+      // Create info display
+      this.infoDiv = document.createElement('div');
+      this.infoDiv.style.marginTop = '20px';
+      this.infoDiv.style.textAlign = 'center';
+      this.infoDiv.innerHTML = `
+        <div id="wire-length-display" class="pendulum-info"></div>
+        <div id="period-display" class="pendulum-info"></div>
+      `;
+      this.containerEl!.appendChild(this.infoDiv);
+      
       this.redo();
     };
 
@@ -181,9 +173,8 @@ class PendulumDemo extends P5DemoBase {
       }
     };
     
-    p.windowResized = () => {
-      this.handleResize(p);
-    };
+    // Set up automatic resizing
+    this.setupResponsiveResize(p);
     
     // Color scheme changes are now handled by base class
   }
