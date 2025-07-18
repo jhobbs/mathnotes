@@ -245,6 +245,34 @@ export function addDemoStyles(container: HTMLElement, prefix: string = 'demo'): 
         background: #5a5a5a;
       }
     }
+    
+    /* Radio button styles */
+    .${prefix}-radio {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .${prefix}-radio label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      color: #333;
+      font-size: 14px;
+    }
+    
+    .${prefix}-radio input[type="radio"] {
+      cursor: pointer;
+      margin: 0;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .${prefix}-radio label {
+        color: #e0e0e0;
+      }
+    }
   `;
   container.appendChild(style);
   return style;
