@@ -97,7 +97,7 @@ export function getResponsiveCanvasSize(
   container: HTMLElement,
   config?: DemoConfig,
   aspectRatio: number = 0.6,
-  maxHeightPercent?: number
+  maxHeightPercent: number = 0.8
 ): CanvasSize {
   // If fixed size is specified in config, use it
   if (config?.width && config?.height) {
@@ -111,13 +111,11 @@ export function getResponsiveCanvasSize(
     let width = window.innerWidth - 20;
     let height = width * aspectRatio;
     
-    // Optionally constrain by max height
-    if (maxHeightPercent !== undefined) {
-      const maxHeight = window.innerHeight * maxHeightPercent;
-      if (height > maxHeight) {
-        height = maxHeight;
-        width = height / aspectRatio;
-      }
+    // Constrain by max height
+    const maxHeight = window.innerHeight * maxHeightPercent;
+    if (height > maxHeight) {
+      height = maxHeight;
+      width = height / aspectRatio;
     }
     
     return { width, height };
@@ -126,13 +124,11 @@ export function getResponsiveCanvasSize(
     let width = container.offsetWidth - 20 || window.innerWidth * 0.8;
     let height = width * aspectRatio;
     
-    // Optionally constrain by max height
-    if (maxHeightPercent !== undefined) {
-      const maxHeight = window.innerHeight * maxHeightPercent;
-      if (height > maxHeight) {
-        height = maxHeight;
-        width = height / aspectRatio;
-      }
+    // Constrain by max height
+    const maxHeight = window.innerHeight * maxHeightPercent;
+    if (height > maxHeight) {
+      height = maxHeight;
+      width = height / aspectRatio;
     }
     
     return { width, height };
