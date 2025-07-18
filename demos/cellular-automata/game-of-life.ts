@@ -1,6 +1,7 @@
 // Conway's Game of Life - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
+import { P5DemoBase, addDemoStyles, createControlPanel, createButton, createSlider } from '@demos/common/utils';
 
 interface GameOfLifeState {
   grid: number[][];
@@ -10,106 +11,218 @@ interface GameOfLifeState {
   maxHistory: number;
 }
 
-class GameOfLife {
-  private p: p5;
+class GameOfLifeDemo extends P5DemoBase {
+  // Constants
+  private readonly resolution = 5;
+  
+  // Grid properties
+  private cols!: number;
+  private rows!: number;
+  
+  // State
   private state: GameOfLifeState;
-  private cols: number;
-  private rows: number;
-  private resolution: number = 5;
-  private controls: {
-    toggleBtn: HTMLButtonElement;
-    resetBtn: HTMLButtonElement;
-    initialPopulationSlider: HTMLInputElement;
-    frameRateSlider: HTMLInputElement;
-    initialPopValue: HTMLElement;
-    frameRateValue: HTMLElement;
-    runningStatus: HTMLElement;
-    populationInfo: HTMLElement;
-    rateChangeInfo: HTMLElement;
-    generationInfo: HTMLElement;
-  };
+  
+  // UI Elements
+  private toggleBtn!: HTMLButtonElement;
+  private resetBtn!: HTMLButtonElement;
+  private initialPopulationSlider!: p5.Element;
+  private frameRateSlider!: p5.Element;
+  private runningStatus!: HTMLElement;
+  private populationInfo!: HTMLElement;
+  private rateChangeInfo!: HTMLElement;
+  private generationInfo!: HTMLElement;
 
-  constructor(p: p5, container: HTMLElement) {
-    this.p = p;
-    this.cols = Math.floor(p.width / this.resolution);
-    this.rows = Math.floor(p.height / this.resolution);
+  constructor(container: HTMLElement, config?: DemoConfig) {
+    super(container, config);
     
     this.state = {
-      grid: this.make2DArray(this.cols, this.rows),
+      grid: [],
       running: false,
       generations: 0,
       populationHistory: [],
       maxHistory: 5
     };
-
-    this.setupControls(container);
-    this.resetGrid();
   }
 
-  private setupControls(container: HTMLElement): void {
-    // Create controls container
-    const controlsContainer = document.createElement('div');
-    controlsContainer.className = 'demo-controls';
-    controlsContainer.innerHTML = `
-      <div class="controls">
-        <button id="toggleBtn">Start</button>
-        <button id="resetBtn">Reset</button>
-        <div class="slider-group">
-          <label>Initial Population: <span id="initialPopValue">0.15</span></label>
-          <input type="range" id="initialPopulationSlider" min="0" max="1" step="0.01" value="0.15">
-        </div>
-        <div class="slider-group">
-          <label>Frame Rate: <span id="frameRateValue">10</span></label>
-          <input type="range" id="frameRateSlider" min="1" max="30" step="1" value="10">
-        </div>
-      </div>
-      <div class="info-panel">
-        <div id="runningStatus">Running: No</div>
-        <div id="populationInfo">Population: 0.00%</div>
-        <div id="rateChangeInfo">Rate Change: 0.00</div>
-        <div id="generationInfo">Generation: 0</div>
-      </div>
-    `;
-    
-    container.appendChild(controlsContainer);
-
-    // Get control elements
-    this.controls = {
-      toggleBtn: controlsContainer.querySelector('#toggleBtn') as HTMLButtonElement,
-      resetBtn: controlsContainer.querySelector('#resetBtn') as HTMLButtonElement,
-      initialPopulationSlider: controlsContainer.querySelector('#initialPopulationSlider') as HTMLInputElement,
-      frameRateSlider: controlsContainer.querySelector('#frameRateSlider') as HTMLInputElement,
-      initialPopValue: controlsContainer.querySelector('#initialPopValue') as HTMLElement,
-      frameRateValue: controlsContainer.querySelector('#frameRateValue') as HTMLElement,
-      runningStatus: controlsContainer.querySelector('#runningStatus') as HTMLElement,
-      populationInfo: controlsContainer.querySelector('#populationInfo') as HTMLElement,
-      rateChangeInfo: controlsContainer.querySelector('#rateChangeInfo') as HTMLElement,
-      generationInfo: controlsContainer.querySelector('#generationInfo') as HTMLElement
+  protected createSketch(p: p5): void {
+    p.setup = () => {
+      // Get responsive canvas size
+      const size = this.getCanvasSize(0.75, 0.5);
+      const canvas = p.createCanvas(size.width, size.height);
+      canvas.parent(this.container);
+      
+      // Calculate grid dimensions
+      this.cols = Math.floor(p.width / this.resolution);
+      this.rows = Math.floor(p.height / this.resolution);
+      
+      // Initialize colors
+      this.updateColors(p);
+      
+      // Add shared demo styles
+      addDemoStyles(this.container);
+      
+      // Set up controls
+      this.setupControls(p);
+      
+      // Initialize grid
+      this.state.grid = this.make2DArray(this.cols, this.rows);
+      this.resetGrid(p);
+      
+      // Set initial frame rate
+      p.frameRate(10);
     };
 
-    this.setupEventListeners();
+    p.draw = () => {
+      p.background(this.colors.background);
+      this.updateGrid();
+      
+      let populatedCount = 0;
+      
+      for (let i = 0; i < this.cols; i++) {
+        for (let j = 0; j < this.rows; j++) {
+          const x = i * this.resolution;
+          const y = j * this.resolution;
+          
+          if (this.state.grid[i][j] === 1) {
+            populatedCount++;
+            p.fill(this.colors.foreground);
+            p.stroke(this.colors.background);
+            p.rect(x, y, this.resolution - 1, this.resolution - 1);
+          }
+        }
+      }
+      
+      // Update info displays
+      const totalCells = this.cols * this.rows;
+      const populationPercent = (populatedCount / totalCells) * 100;
+      this.populationInfo.textContent = `Population: ${populationPercent.toFixed(2)}%`;
+      
+      const rateChange = this.calculatePopulationRateChange();
+      this.rateChangeInfo.textContent = `Rate Change: ${rateChange.toFixed(2)}`;
+    };
+
+    p.mousePressed = () => {
+      if (p.mouseX >= 0 && p.mouseX < p.width && 
+          p.mouseY >= 0 && p.mouseY < p.height) {
+        const x = Math.floor(p.mouseX / this.resolution);
+        const y = Math.floor(p.mouseY / this.resolution);
+        
+        if (x >= 0 && x < this.cols && y >= 0 && y < this.rows) {
+          this.state.grid[x][y] = this.state.grid[x][y] ? 0 : 1;
+        }
+      }
+    };
+
+    p.windowResized = () => {
+      if (this.config?.width && this.config?.height) return;
+      
+      const size = this.getCanvasSize(0.75, 0.5);
+      p.resizeCanvas(size.width, size.height);
+      
+      // Update grid dimensions
+      const newCols = Math.floor(p.width / this.resolution);
+      const newRows = Math.floor(p.height / this.resolution);
+      
+      // Create new grid with new dimensions
+      const newGrid = this.make2DArray(newCols, newRows);
+      
+      // Copy old grid values where possible
+      for (let i = 0; i < Math.min(this.cols, newCols); i++) {
+        for (let j = 0; j < Math.min(this.rows, newRows); j++) {
+          newGrid[i][j] = this.state.grid[i][j];
+        }
+      }
+      
+      this.cols = newCols;
+      this.rows = newRows;
+      this.state.grid = newGrid;
+    };
   }
 
-  private setupEventListeners(): void {
-    this.controls.toggleBtn.addEventListener('click', () => {
+  private setupControls(p: p5): void {
+    const controlPanel = createControlPanel(this.container);
+    
+    // Instructions
+    const infoDiv = document.createElement('div');
+    infoDiv.className = 'demo-info';
+    infoDiv.style.textAlign = 'center';
+    infoDiv.style.marginBottom = '20px';
+    infoDiv.textContent = 'Click on cells to toggle them. Click Start to run the simulation.';
+    controlPanel.appendChild(infoDiv);
+    
+    // Main controls row
+    const mainControls = document.createElement('div');
+    mainControls.style.display = 'flex';
+    mainControls.style.justifyContent = 'center';
+    mainControls.style.gap = '20px';
+    mainControls.style.marginBottom = '20px';
+    controlPanel.appendChild(mainControls);
+    
+    // Buttons
+    this.toggleBtn = createButton('Start', mainControls, () => {
       this.state.running = !this.state.running;
-      this.controls.toggleBtn.textContent = this.state.running ? 'Stop' : 'Start';
-      this.controls.runningStatus.textContent = `Running: ${this.state.running ? "Yes" : "No"}`;
+      this.toggleBtn.textContent = this.state.running ? 'Stop' : 'Start';
+      this.runningStatus.textContent = `Running: ${this.state.running ? "Yes" : "No"}`;
     });
+    
+    this.resetBtn = createButton('Reset', mainControls, () => {
+      this.resetGrid(p);
+    });
+    
+    // Sliders row
+    const slidersRow = document.createElement('div');
+    slidersRow.style.display = 'flex';
+    slidersRow.style.justifyContent = 'center';
+    slidersRow.style.gap = '30px';
+    slidersRow.style.marginBottom = '20px';
+    controlPanel.appendChild(slidersRow);
+    
+    // Initial population slider
+    this.initialPopulationSlider = createSlider(
+      p,
+      'Initial Population',
+      0, 1, 0.15, 0.01,
+      slidersRow,
+      undefined,
+      'demo'
+    );
+    
+    // Frame rate slider
+    this.frameRateSlider = createSlider(
+      p,
+      'Frame Rate',
+      1, 30, 10, 1,
+      slidersRow,
+      () => {
+        const frameRate = this.frameRateSlider.value() as number;
+        p.frameRate(frameRate);
+      },
+      'demo'
+    );
+    
+    // Info panel
+    const infoPanel = document.createElement('div');
+    infoPanel.className = 'info-panel';
+    infoPanel.style.display = 'flex';
+    infoPanel.style.justifyContent = 'center';
+    infoPanel.style.gap = '20px';
+    infoPanel.style.flexWrap = 'wrap';
+    controlPanel.appendChild(infoPanel);
+    
+    // Create info displays
+    this.runningStatus = this.createInfoDisplay('Running: No', infoPanel);
+    this.populationInfo = this.createInfoDisplay('Population: 0.00%', infoPanel);
+    this.rateChangeInfo = this.createInfoDisplay('Rate Change: 0.00', infoPanel);
+    this.generationInfo = this.createInfoDisplay('Generation: 0', infoPanel);
+  }
 
-    this.controls.resetBtn.addEventListener('click', () => {
-      this.resetGrid();
-    });
-
-    this.controls.initialPopulationSlider.addEventListener('input', () => {
-      this.controls.initialPopValue.textContent = this.controls.initialPopulationSlider.value;
-    });
-
-    this.controls.frameRateSlider.addEventListener('input', () => {
-      const frameRate = parseInt(this.controls.frameRateSlider.value);
-      this.controls.frameRateValue.textContent = frameRate.toString();
-      this.p.frameRate(frameRate);
-    });
+  private createInfoDisplay(text: string, parent: HTMLElement): HTMLElement {
+    const display = document.createElement('div');
+    display.className = 'demo-info';
+    display.style.fontSize = '14px';
+    display.textContent = text;
+    parent.appendChild(display);
+    return display;
   }
 
   private make2DArray(cols: number, rows: number): number[][] {
@@ -120,19 +233,19 @@ class GameOfLife {
     return arr;
   }
 
-  private resetGrid(): void {
-    const initialPopulation = parseFloat(this.controls.initialPopulationSlider.value);
+  private resetGrid(p: p5): void {
+    const initialPopulation = this.initialPopulationSlider.value() as number;
     
     for (let i = 0; i < this.cols; i++) {
       for (let j = 0; j < this.rows; j++) {
-        this.state.grid[i][j] = this.p.random(1) < initialPopulation ? 1 : 0;
+        this.state.grid[i][j] = p.random(1) < initialPopulation ? 1 : 0;
       }
     }
     
     this.state.populationHistory = [];
     this.state.generations = 0;
     this.updatePopulationHistory();
-    this.controls.generationInfo.textContent = `Generation: ${this.state.generations}`;
+    this.generationInfo.textContent = `Generation: ${this.state.generations}`;
   }
 
   private updatePopulationHistory(): void {
@@ -201,163 +314,17 @@ class GameOfLife {
     this.state.grid = next;
     this.updatePopulationHistory();
     this.state.generations++;
-    this.controls.generationInfo.textContent = `Generation: ${this.state.generations}`;
+    this.generationInfo.textContent = `Generation: ${this.state.generations}`;
   }
 
-  public draw(): void {
-    this.p.background(0);
-    this.updateGrid();
-
-    let populatedCount = 0;
-
-    for (let i = 0; i < this.cols; i++) {
-      for (let j = 0; j < this.rows; j++) {
-        const x = i * this.resolution;
-        const y = j * this.resolution;
-        
-        if (this.state.grid[i][j] === 1) {
-          populatedCount++;
-          this.p.fill(255);
-          this.p.stroke(0);
-          this.p.rect(x, y, this.resolution - 1, this.resolution - 1);
-        }
-      }
+  protected onColorSchemeChange(isDark: boolean): void {
+    if (this.p5Instance) {
+      this.p5Instance.redraw();
     }
-
-    // Update info displays
-    const totalCells = this.cols * this.rows;
-    const populationPercent = (populatedCount / totalCells) * 100;
-    this.controls.populationInfo.textContent = `Population: ${populationPercent.toFixed(2)}%`;
-
-    const rateChange = this.calculatePopulationRateChange();
-    this.controls.rateChangeInfo.textContent = `Rate Change: ${rateChange.toFixed(2)}`;
-  }
-
-  public mousePressed(): void {
-    if (this.p.mouseX >= 0 && this.p.mouseX < this.p.width && 
-        this.p.mouseY >= 0 && this.p.mouseY < this.p.height) {
-      const x = Math.floor(this.p.mouseX / this.resolution);
-      const y = Math.floor(this.p.mouseY / this.resolution);
-      
-      if (x >= 0 && x < this.cols && y >= 0 && y < this.rows) {
-        this.state.grid[x][y] = this.state.grid[x][y] ? 0 : 1;
-      }
-    }
-  }
-
-  public resize(width: number, height: number): void {
-    this.cols = Math.floor(width / this.resolution);
-    this.rows = Math.floor(height / this.resolution);
-    
-    // Create new grid with new dimensions
-    const newGrid = this.make2DArray(this.cols, this.rows);
-    
-    // Copy old grid values where possible
-    for (let i = 0; i < Math.min(this.state.grid.length, this.cols); i++) {
-      for (let j = 0; j < Math.min(this.state.grid[0].length, this.rows); j++) {
-        newGrid[i][j] = this.state.grid[i][j];
-      }
-    }
-    
-    this.state.grid = newGrid;
   }
 }
 
 export default function initGameOfLifeDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
-  let p5Instance: p5 | null = null;
-  let gameOfLife: GameOfLife | null = null;
-  
-  // Create canvas container
-  const canvasContainer = document.createElement('div');
-  canvasContainer.style.textAlign = 'center';
-  canvasContainer.className = 'demo-canvas-container';
-  container.appendChild(canvasContainer);
-
-  const sketch = (p: p5) => {
-    p.setup = () => {
-      // Responsive sizing
-      let canvasWidth: number, canvasHeight: number;
-      
-      if (p.windowWidth < 768) {
-        canvasWidth = p.windowWidth - 20;
-        canvasHeight = Math.min(400, (p.windowWidth - 20) * 0.75);
-      } else {
-        canvasWidth = config?.width || container.offsetWidth - 20 || 600;
-        canvasHeight = config?.height || 400;
-      }
-      
-      const canvas = p.createCanvas(canvasWidth, canvasHeight);
-      canvas.parent(canvasContainer);
-      
-      p.frameRate(10);
-      
-      gameOfLife = new GameOfLife(p, container);
-    };
-
-    p.draw = () => {
-      if (gameOfLife) {
-        gameOfLife.draw();
-      }
-    };
-
-    p.mousePressed = () => {
-      if (gameOfLife) {
-        gameOfLife.mousePressed();
-      }
-    };
-
-    p.windowResized = () => {
-      if (config?.width && config?.height) {
-        return;
-      }
-      
-      let canvasWidth: number, canvasHeight: number;
-      
-      if (p.windowWidth < 768) {
-        canvasWidth = p.windowWidth - 20;
-        canvasHeight = Math.min(400, (p.windowWidth - 20) * 0.75);
-      } else {
-        canvasWidth = container.offsetWidth - 20 || 600;
-        canvasHeight = 400;
-      }
-      
-      p.resizeCanvas(canvasWidth, canvasHeight);
-      
-      if (gameOfLife) {
-        gameOfLife.resize(canvasWidth, canvasHeight);
-      }
-    };
-  };
-
-  // Initialize p5 instance
-  p5Instance = new p5(sketch);
-
-  return {
-    cleanup: () => {
-      if (p5Instance) {
-        p5Instance.remove();
-        p5Instance = null;
-      }
-      gameOfLife = null;
-      container.innerHTML = '';
-    },
-    
-    resize: () => {
-      if (p5Instance && p5Instance.windowResized) {
-        p5Instance.windowResized();
-      }
-    },
-    
-    pause: () => {
-      if (p5Instance) {
-        p5Instance.noLoop();
-      }
-    },
-    
-    resume: () => {
-      if (p5Instance) {
-        p5Instance.loop();
-      }
-    }
-  };
+  const demo = new GameOfLifeDemo(container, config);
+  return demo.init();
 }
