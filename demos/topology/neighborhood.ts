@@ -1,13 +1,7 @@
 // Neighborhood demo - Interactive visualization for metric spaces
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { 
-  createDemoContainer, 
-  P5DemoBase, 
-  addDemoStyles,
-  createControlPanel,
-  createButton 
-} from '@framework';
+import { P5DemoBase } from '@framework';
 
 interface Neighborhood {
   center: p5.Vector;
@@ -31,51 +25,45 @@ class NeighborhoodDemo extends P5DemoBase {
   private innerColor!: p5.Color;
   
   // UI elements
-  private canvasParent: HTMLElement;
   private info: HTMLElement;
   
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
-    
-    // Add styles
-    addDemoStyles(container, 'neighborhood');
-    
-    // Create container structure
-    const { containerEl, canvasParent } = createDemoContainer(container, {
-      center: true,
-      id: 'neighborhood-container'
-    });
-    this.canvasParent = canvasParent;
-    
-    // Create controls
-    const controls = createControlPanel(containerEl);
-    createButton('Reset', controls, () => this.resetDemo(), 'neighborhood-button');
-    createButton('Toggle Zoom', controls, () => this.toggleZoom(), 'neighborhood-button');
-    
-    // Create info section
-    this.info = document.createElement('div');
-    this.info.id = 'info';
-    this.info.className = 'neighborhood-info';
-    this.info.style.marginTop = '20px';
-    this.info.innerHTML = `
-      <h3>Every Neighborhood is Open</h3>
-      <p>This demonstration shows that every neighborhood in a metric space is an open set.</p>
-      <p class="instruction">Click and drag to create a neighborhood.</p>
-      <p>A set is <strong>open</strong> if every point in the set is an interior point. A point is an <strong>interior point</strong> if there exists a neighborhood around it that is entirely contained within the set.</p>
-      <p style="font-size: 0.9em; opacity: 0.8;">Use trackpad/mouse wheel to zoom in and out</p>
-    `;
-    containerEl.appendChild(this.info);
+  }
+  
+  protected getStylePrefix(): string {
+    return 'neighborhood';
+  }
+  
+  protected getContainerId(): string {
+    return 'neighborhood-container';
   }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
       // Use responsive sizing with square aspect ratio
-      const size = this.getCanvasSize(1.0); // Uses default 80% viewport height
-      const canvas = p.createCanvas(size.width, size.height);
-      canvas.parent(this.canvasParent);
+      this.createResponsiveCanvas(p, 1.0);
       
       // Set up colors
       this.updateColors(p);
+      
+      // Create controls
+      this.createButton('Reset', () => this.resetDemo());
+      this.createButton('Toggle Zoom', () => this.toggleZoom());
+      
+      // Create info section
+      this.info = document.createElement('div');
+      this.info.id = 'info';
+      this.info.className = 'neighborhood-info';
+      this.info.style.marginTop = '20px';
+      this.info.innerHTML = `
+        <h3>Every Neighborhood is Open</h3>
+        <p>This demonstration shows that every neighborhood in a metric space is an open set.</p>
+        <p class="instruction">Click and drag to create a neighborhood.</p>
+        <p>A set is <strong>open</strong> if every point in the set is an interior point. A point is an <strong>interior point</strong> if there exists a neighborhood around it that is entirely contained within the set.</p>
+        <p style="font-size: 0.9em; opacity: 0.8;">Use trackpad/mouse wheel to zoom in and out</p>
+      `;
+      this.containerEl!.appendChild(this.info);
       
       p.smooth();
     };
@@ -127,12 +115,8 @@ class NeighborhoodDemo extends P5DemoBase {
     p.mouseDragged = () => this.handleMouseDragged(p);
     p.mouseReleased = () => this.handleMouseReleased(p);
     p.mouseWheel = (event: any) => this.handleMouseWheel(p, event);
-    p.windowResized = () => {
-      this.handleResize(p, () => {
-        // Keep square aspect ratio
-        this.aspectRatio = 1.0;
-      });
-    };
+    // Set up automatic resizing
+    this.setupResponsiveResize(p);
   }
   
   protected updateColors(p: p5): void {
