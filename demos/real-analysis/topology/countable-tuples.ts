@@ -1,10 +1,9 @@
 // Countable Tuples Demo - Shows B_n sets are countable for any n
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
-import { createDemoContainer, P5DemoBase } from '@framework';
+import { P5DemoBase } from '@framework';
 
 class CountableTuplesDemo extends P5DemoBase {
-  private canvasParent: HTMLElement;
   private infoDiv: HTMLElement;
 
   // Configuration Constants
@@ -54,11 +53,12 @@ class CountableTuplesDemo extends P5DemoBase {
   // Performance optimization: cache generated tuples
   private cachedTuples = new Map<string, number[][]>();
   
+  protected getStylePrefix(): string {
+    return 'countable-tuples';
+  }
+  
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
-    
-    const { containerEl, canvasParent } = createDemoContainer(container, { center: true });
-    this.canvasParent = canvasParent;
     
     // Create info panel
     this.infoDiv = document.createElement('div');
@@ -68,7 +68,7 @@ class CountableTuplesDemo extends P5DemoBase {
       <h3>Countable n-tuples from Countable Set</h3>
       <p>This animation illustrates the proof that B_n (the set of all n-tuples from a countable set A) is countable for any n.</p>
     `;
-    containerEl.appendChild(this.infoDiv);
+    this.container.appendChild(this.infoDiv);
   }
 
   // Unicode helpers
@@ -84,13 +84,10 @@ class CountableTuplesDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Get responsive canvas size
-      const size = this.getCanvasSize(0.66);
-      this.canvasWidth = size.width;
-      this.canvasHeight = size.height;
-      
-      const canvas = p.createCanvas(this.canvasWidth, this.canvasHeight);
-      canvas.parent(this.canvasParent);
+      // Create responsive canvas
+      this.createResponsiveCanvas(p, 0.66);
+      this.canvasWidth = p.width;
+      this.canvasHeight = p.height;
       
       // Initialize colors
       this.updateColors(p);
@@ -121,17 +118,16 @@ class CountableTuplesDemo extends P5DemoBase {
       this.drawCardinalityEquation(p, visibleColumns);
     };
 
-    p.windowResized = () => {
-      this.handleResize(p, (size) => {
-        this.canvasWidth = size.width;
-        this.canvasHeight = size.height;
-        this.centerY = this.canvasHeight / 2;
-        
-        // Recalculate columns that fit
-        const availableWidth = this.canvasWidth - this.CONFIG.START_X * 2;
-        this.maxVisibleColumns = Math.max(4, Math.floor(availableWidth / this.CONFIG.COLUMN_SPACING));
-      });
-    };
+    // Set up responsive resize
+    this.setupResponsiveResize(p, 0.66, () => {
+      this.canvasWidth = p.width;
+      this.canvasHeight = p.height;
+      this.centerY = this.canvasHeight / 2;
+      
+      // Recalculate columns that fit
+      const availableWidth = this.canvasWidth - this.CONFIG.START_X * 2;
+      this.maxVisibleColumns = Math.max(4, Math.floor(availableWidth / this.CONFIG.COLUMN_SPACING));
+    });
   }
 
   // Animation Logic

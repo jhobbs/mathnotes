@@ -1,7 +1,7 @@
 // Turntable Demo - Bug walking on a rotating turntable
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
-import { P5DemoBase, createControlPanel, createSlider, addDemoStyles } from '@framework';
+import { P5DemoBase } from '@framework';
 
 class TurntableDemo extends P5DemoBase {
   // Constants
@@ -33,20 +33,17 @@ class TurntableDemo extends P5DemoBase {
   private bugColor!: p5.Color;
   private historyColor!: p5.Color;
 
+  protected getStylePrefix(): string {
+    return 'turntable';
+  }
+
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Get responsive canvas size with square aspect ratio
-      const size = this.getCanvasSize(1.0, 0.8);
-      const canvasSize = Math.min(size.width, size.height, this.TABLE_SIZE);
-      
-      const canvas = p.createCanvas(canvasSize, canvasSize);
-      canvas.parent(this.container);
+      // Create responsive canvas with square aspect ratio
+      this.createResponsiveCanvas(p, 1.0);
       
       // Initialize colors
       this.updateColors(p);
-      
-      // Add shared demo styles
-      addDemoStyles(this.container);
       
       // Set up controls
       this.setupControls(p);
@@ -73,14 +70,8 @@ class TurntableDemo extends P5DemoBase {
       }
     };
 
-    p.windowResized = () => {
-      // Only respond to window resize if no fixed dimensions
-      if (this.config?.width && this.config?.height) return;
-      
-      const size = this.getCanvasSize(1.0, 0.8);
-      const canvasSize = Math.min(size.width, size.height, this.TABLE_SIZE);
-      p.resizeCanvas(canvasSize, canvasSize);
-    };
+    // Set up responsive resize
+    this.setupResponsiveResize(p, 1.0);
   }
 
   protected updateColors(p: p5): void {
@@ -100,7 +91,7 @@ class TurntableDemo extends P5DemoBase {
   }
 
   private setupControls(p: p5): void {
-    const controlPanel = createControlPanel(this.container, { className: 'turntable-controls' });
+    const controlPanel = this.createControlPanel();
     
     // Create a row for sliders
     const sliderRow = document.createElement('div');
@@ -111,34 +102,28 @@ class TurntableDemo extends P5DemoBase {
     controlPanel.appendChild(sliderRow);
     
     // Bug locomotive speed slider
-    this.locomotiveSlider = createSlider(
+    this.locomotiveSlider = this.createSlider(
       p,
       'Bug locomotive speed',
-      0, 3, 0, 0,
-      sliderRow,
-      undefined,
-      'demo'
+      0, 3, 0, 0
     );
+    sliderRow.appendChild(this.locomotiveSlider.parent());
     
     // Record angular velocity slider
-    this.angularVelocitySlider = createSlider(
+    this.angularVelocitySlider = this.createSlider(
       p,
       'Record angular velocity',
-      0, 10, 0, 0,
-      sliderRow,
-      undefined,
-      'demo'
+      0, 10, 0, 0
     );
+    sliderRow.appendChild(this.angularVelocitySlider.parent());
     
     // Start position slider
-    this.rhoSlider = createSlider(
+    this.rhoSlider = this.createSlider(
       p,
       'Start position',
-      0, 2 * p.PI, 0, p.PI / 32,
-      sliderRow,
-      undefined,
-      'demo'
+      0, 2 * p.PI, 0, p.PI / 32
     );
+    sliderRow.appendChild(this.rhoSlider.parent());
     
     // Mode radio buttons in separate row
     const radioRow = document.createElement('div');
@@ -155,11 +140,11 @@ class TurntableDemo extends P5DemoBase {
     
     // Apply shared radio button styles
     const radioContainer = this.modeRadio.elt as HTMLElement;
-    radioContainer.className = 'demo-radio';
+    radioContainer.className = `${this.getStylePrefix()}-radio demo-radio`;
     
     // Add instructions
     const infoDiv = document.createElement('div');
-    infoDiv.className = 'demo-info';
+    infoDiv.className = `${this.getStylePrefix()}-info demo-info`;
     infoDiv.style.marginTop = '20px';
     infoDiv.style.textAlign = 'center';
     infoDiv.style.color = this.colors.text;
