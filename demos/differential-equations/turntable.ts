@@ -71,7 +71,7 @@ class TurntableDemo extends P5DemoBase {
     };
 
     // Set up responsive resize
-    this.setupResponsiveResize(p, 1.0);
+    this.setupResponsiveResize(p);
   }
 
   protected updateColors(p: p5): void {

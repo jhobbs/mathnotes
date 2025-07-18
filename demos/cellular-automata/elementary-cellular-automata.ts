@@ -58,12 +58,13 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       // Create controls container first
       this.setupControls();
       
-      // Calculate grid dimensions
-      this.cols = p.floor((this.canvasContainer.offsetWidth - this.gridOffsetX) / this.cellSize);
+      // Calculate grid dimensions with fallback for hidden containers
+      const containerWidth = this.canvasContainer.offsetWidth || 600; // Default width if container is hidden
+      this.cols = p.floor((containerWidth - this.gridOffsetX) / this.cellSize);
       this.rows = p.floor(400 / this.cellSize);
       
       // Create canvas
-      const canvas = p.createCanvas(this.canvasContainer.offsetWidth, this.rows * this.cellSize);
+      const canvas = p.createCanvas(containerWidth, this.rows * this.cellSize);
       canvas.parent(this.canvasContainer);
       
       // Initialize colors
@@ -125,8 +126,9 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     };
 
     p.windowResized = () => {
-      this.cols = p.floor((this.canvasContainer.offsetWidth - this.gridOffsetX) / this.cellSize);
-      p.resizeCanvas(this.canvasContainer.offsetWidth, this.rows * this.cellSize);
+      const containerWidth = this.canvasContainer.offsetWidth || 600;
+      this.cols = p.floor((containerWidth - this.gridOffsetX) / this.cellSize);
+      p.resizeCanvas(containerWidth, this.rows * this.cellSize);
       
       // Reset simulation with new dimensions
       this.grid = this.create2DArray(this.cols, this.rows);
