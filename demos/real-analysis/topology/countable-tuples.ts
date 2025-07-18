@@ -538,6 +538,12 @@ class CountableTuplesDemo extends P5DemoBase {
   }
 }
 
+export const metadata = {
+  title: 'Countable Tuples',
+  category: 'Real Analysis',
+  description: 'Visualization showing that the set of all finite tuples of natural numbers is countable'
+};
+
 export default function createCountableTuplesDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const demo = new CountableTuplesDemo(container, config);
   return demo.init();

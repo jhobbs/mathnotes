@@ -3,8 +3,21 @@
 
 import type { DemoConfig, DemoInstance } from './types';
 
+// Demo metadata type
+interface DemoMetadata {
+  title: string;
+  category: string;
+  description?: string;
+}
+
+// Demo module type
+interface DemoModule {
+  default: (container: HTMLElement, config?: DemoConfig) => DemoInstance;
+  metadata?: DemoMetadata;
+}
+
 // Demo registry - will be populated as demos are converted
-const demoRegistry: Record<string, () => Promise<{ default: (container: HTMLElement, config?: DemoConfig) => DemoInstance }>> = {
+const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'electric-field': () => import('@demos/physics/electric-field'),
   'neighborhood': () => import('@demos/topology/neighborhood'),
   'projection': () => import('@demos/graphics/projection'),
@@ -18,8 +31,12 @@ const demoRegistry: Record<string, () => Promise<{ default: (container: HTMLElem
   'cellular-automata/elementary-cellular-automata': () => import('@demos/cellular-automata/elementary-cellular-automata')
 };
 
-// Expose registry globally for inline scripts
+// Store for loaded metadata
+const demoMetadata: Record<string, DemoMetadata> = {};
+
+// Expose registry and metadata globally for inline scripts
 (window as any).demoRegistry = demoRegistry;
+(window as any).demoMetadata = demoMetadata;
 
 // Initialize demos on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -34,6 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     try {
       const module = await demoRegistry[demoName]();
+      
+      // Store metadata if available
+      if (module.metadata) {
+        demoMetadata[demoName] = module.metadata;
+      }
+      
       const config: DemoConfig = {
         darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
         width: container.dataset.width ? parseInt(container.dataset.width) : undefined,

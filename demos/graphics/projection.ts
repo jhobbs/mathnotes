@@ -209,6 +209,12 @@ class ProjectionDemo extends P5DemoBase {
   }
 }
 
+export const metadata = {
+  title: '3D Projection',
+  category: 'Graphics',
+  description: 'Interactive demonstration of 3D perspective projection using transformation matrices'
+};
+
 export default function initProjectionDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const demo = new ProjectionDemo(container, config);
   return demo.init();

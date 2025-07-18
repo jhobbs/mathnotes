@@ -434,6 +434,12 @@ class NeighborhoodDemo extends P5DemoBase {
   }
 }
 
+export const metadata = {
+  title: 'Neighborhood in Metric Spaces',
+  category: 'Topology',
+  description: 'Interactive visualization demonstrating that every neighborhood in a metric space is an open set'
+};
+
 export default function initNeighborhoodDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const demo = new NeighborhoodDemo(container, config);
   return demo.init();

@@ -487,6 +487,12 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   }
 }
 
+export const metadata = {
+  title: 'Elementary Cellular Automata',
+  category: 'Cellular Automata',
+  description: 'Exploration of Wolfram\'s elementary cellular automata rules and their emergent patterns'
+};
+
 export default function(container: HTMLElement, config?: DemoConfig): DemoInstance {
   const demo = new ElementaryCellularAutomataDemo(container, config);
   return demo.init();
