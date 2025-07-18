@@ -4,7 +4,6 @@ import type { DemoInstance, DemoConfig } from '@framework/types';
 import { 
   createDemoContainer, 
   P5DemoBase, 
-  getDemoColors, 
   addDemoStyles,
   createControlPanel,
   createButton 
@@ -27,8 +26,7 @@ class NeighborhoodDemo extends P5DemoBase {
   private readonly minZoom = 0.5;
   private readonly maxZoom = 100;
   
-  // Colors
-  private colors!: ReturnType<typeof getDemoColors>;
+  // Custom colors
   private outerColor!: p5.Color;
   private innerColor!: p5.Color;
   
@@ -71,7 +69,9 @@ class NeighborhoodDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      const canvas = p.createCanvas(600, 600);
+      // Use responsive sizing with square aspect ratio and height constraint
+      const size = this.getCanvasSize(1.0, 0.6); // Max 60% of viewport height
+      const canvas = p.createCanvas(size.width, size.height);
       canvas.parent(this.canvasParent);
       
       // Set up colors
@@ -120,15 +120,7 @@ class NeighborhoodDemo extends P5DemoBase {
       this.updateInstruction();
     };
 
-    // Listen for color scheme changes
-    if (window.matchMedia) {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const colorChangeListener = () => {
-        this.config = { ...this.config, darkMode: mediaQuery.matches };
-        this.updateColors(p);
-      };
-      this.addEventListener(mediaQuery, 'change', colorChangeListener);
-    }
+    // Color scheme changes are now handled by base class
     
     // All the p5 methods that need access to instance variables
     p.mousePressed = () => this.handleMousePressed(p);
@@ -136,12 +128,15 @@ class NeighborhoodDemo extends P5DemoBase {
     p.mouseReleased = () => this.handleMouseReleased(p);
     p.mouseWheel = (event: any) => this.handleMouseWheel(p, event);
     p.windowResized = () => {
-      // Canvas is fixed size in this demo
+      this.handleResize(p, () => {
+        // Keep square aspect ratio
+        this.aspectRatio = 1.0;
+      });
     };
   }
   
-  private updateColors(p: p5): void {
-    this.colors = getDemoColors(p, this.config);
+  protected updateColors(p: p5): void {
+    super.updateColors(p);
     // Use accent color with transparency for outer neighborhood
     const accentColor = this.colors.accent as any;
     this.outerColor = p.color(accentColor.levels[0], accentColor.levels[1], accentColor.levels[2], 80);
@@ -153,14 +148,16 @@ class NeighborhoodDemo extends P5DemoBase {
     p.stroke(this.colors.grid || this.colors.stroke);
     p.strokeWeight(0.5 / this.zoomLevel);
     
-    const gridSize = 50;
+    // Scale grid size based on canvas size to maintain consistent units
+    // Original: 600px canvas, 50px grid = 12 units wide (-6 to 6)
+    const gridSize = p.width / 12;
     
     // Calculate the visible world bounds
     const viewBounds = {
-      left: -p.width / this.zoomLevel,
-      right: p.width / this.zoomLevel,
-      top: -p.height / this.zoomLevel,
-      bottom: p.height / this.zoomLevel
+      left: -p.width / 2 / this.zoomLevel,
+      right: p.width / 2 / this.zoomLevel,
+      top: -p.height / 2 / this.zoomLevel,
+      bottom: p.height / 2 / this.zoomLevel
     };
     
     if (this.isZoomed && this.zoomCenter) {
@@ -194,10 +191,10 @@ class NeighborhoodDemo extends P5DemoBase {
     
     // Calculate the visible world bounds
     const viewBounds = {
-      left: -p.width / this.zoomLevel,
-      right: p.width / this.zoomLevel,
-      top: -p.height / this.zoomLevel,
-      bottom: p.height / this.zoomLevel
+      left: -p.width / 2 / this.zoomLevel,
+      right: p.width / 2 / this.zoomLevel,
+      top: -p.height / 2 / this.zoomLevel,
+      bottom: p.height / 2 / this.zoomLevel
     };
     
     if (this.isZoomed && this.zoomCenter) {
@@ -219,12 +216,13 @@ class NeighborhoodDemo extends P5DemoBase {
     if (this.zoomLevel < 2) {
       p.fill(this.colors.text);
       p.noStroke();
+      const gridSize = p.width / 12;
       p.textAlign(p.RIGHT, p.TOP);
-      p.text('5', p.width/2 - 10, 10);
-      p.text('-5', -p.width/2 + 30, 10);
+      p.text('5', 5 * gridSize + 10, 10);
+      p.text('-5', -5 * gridSize + 10, 10);
       p.textAlign(p.LEFT, p.BOTTOM);
-      p.text('5', 10, -p.height/2 + 20);
-      p.text('-5', 10, p.height/2 - 10);
+      p.text('5', 10, -5 * gridSize + 10);
+      p.text('-5', 10, 5 * gridSize - 10);
     }
   }
 
