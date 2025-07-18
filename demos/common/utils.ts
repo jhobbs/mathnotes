@@ -96,7 +96,8 @@ export function getDemoColors(p: p5, config?: DemoConfig): DemoColors {
 export function getResponsiveCanvasSize(
   container: HTMLElement,
   config?: DemoConfig,
-  aspectRatio: number = 0.6
+  aspectRatio: number = 0.6,
+  maxHeightPercent?: number
 ): CanvasSize {
   // If fixed size is specified in config, use it
   if (config?.width && config?.height) {
@@ -107,13 +108,33 @@ export function getResponsiveCanvasSize(
   
   if (isMobile) {
     // Mobile: use full window width minus small margin
-    const width = window.innerWidth - 20;
-    const height = width * aspectRatio;
+    let width = window.innerWidth - 20;
+    let height = width * aspectRatio;
+    
+    // Optionally constrain by max height
+    if (maxHeightPercent !== undefined) {
+      const maxHeight = window.innerHeight * maxHeightPercent;
+      if (height > maxHeight) {
+        height = maxHeight;
+        width = height / aspectRatio;
+      }
+    }
+    
     return { width, height };
   } else {
     // Desktop: use container width or fallback
-    const width = container.offsetWidth - 20 || window.innerWidth * 0.8;
-    const height = width * aspectRatio;
+    let width = container.offsetWidth - 20 || window.innerWidth * 0.8;
+    let height = width * aspectRatio;
+    
+    // Optionally constrain by max height
+    if (maxHeightPercent !== undefined) {
+      const maxHeight = window.innerHeight * maxHeightPercent;
+      if (height > maxHeight) {
+        height = maxHeight;
+        width = height / aspectRatio;
+      }
+    }
+    
     return { width, height };
   }
 }
@@ -215,15 +236,28 @@ export abstract class P5DemoBase {
   protected config?: DemoConfig;
   protected eventListeners: Array<{ target: EventTarget; type: string; listener: EventListener }> = [];
   
+  // Dark mode support
+  protected isDarkMode: boolean = false;
+  protected colors!: DemoColors;
+  private colorSchemeQuery?: MediaQueryList;
+  
+  // Canvas sizing (no defaults - let demos decide)
+  protected canvasSize?: CanvasSize;
+  protected aspectRatio?: number;
+  
   constructor(container: HTMLElement, config?: DemoConfig) {
     this.container = container;
     this.config = config;
+    this.isDarkMode = isDarkMode(config);
   }
   
   /**
    * Initialize the demo
    */
   init(): DemoInstance {
+    // Set up dark mode listener before creating p5 instance
+    this.setupColorSchemeListener();
+    
     this.p5Instance = new p5(this.createSketch.bind(this));
     
     return {
@@ -238,6 +272,58 @@ export abstract class P5DemoBase {
    * Create the p5 sketch function
    */
   protected abstract createSketch(p: p5): void;
+  
+  /**
+   * Update colors based on current dark mode state
+   * Override this to customize colors for your demo
+   */
+  protected updateColors(p: p5): void {
+    this.colors = getDemoColors(p, this.config);
+  }
+  
+  /**
+   * Set up automatic dark mode detection
+   */
+  private setupColorSchemeListener(): void {
+    if (window.matchMedia) {
+      this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const listener = (e: MediaQueryListEvent) => {
+        this.isDarkMode = e.matches;
+        if (this.p5Instance) {
+          this.updateColors(this.p5Instance);
+          this.onColorSchemeChange?.(this.isDarkMode);
+        }
+      };
+      this.addEventListener(this.colorSchemeQuery, 'change', listener as EventListener);
+    }
+  }
+  
+  /**
+   * Optional callback when color scheme changes
+   */
+  protected onColorSchemeChange?(isDark: boolean): void;
+  
+  /**
+   * Get responsive canvas size with optional aspect ratio and height constraint
+   */
+  protected getCanvasSize(aspectRatio?: number, maxHeightPercent?: number): CanvasSize {
+    // Use provided aspect ratio, or stored one, or default to 0.67
+    const ratio = aspectRatio ?? this.aspectRatio ?? 0.67;
+    if (aspectRatio !== undefined) {
+      this.aspectRatio = aspectRatio;
+    }
+    this.canvasSize = getResponsiveCanvasSize(this.container, this.config, ratio, maxHeightPercent);
+    return this.canvasSize;
+  }
+  
+  /**
+   * Handle responsive resizing with optional callback
+   */
+  protected handleResize(p: p5, onResize?: (size: CanvasSize) => void): void {
+    const newSize = this.getCanvasSize();
+    p.resizeCanvas(newSize.width, newSize.height);
+    onResize?.(newSize);
+  }
   
   /**
    * Add an event listener that will be automatically cleaned up
