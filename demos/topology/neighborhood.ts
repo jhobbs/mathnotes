@@ -7,7 +7,7 @@ import {
   addDemoStyles,
   createControlPanel,
   createButton 
-} from '@demos/common/utils';
+} from '@framework';
 
 interface Neighborhood {
   center: p5.Vector;

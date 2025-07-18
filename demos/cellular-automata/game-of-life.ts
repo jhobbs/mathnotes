@@ -1,7 +1,7 @@
 // Conway's Game of Life - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { P5DemoBase, addDemoStyles, createControlPanel, createButton, createSlider } from '@demos/common/utils';
+import { P5DemoBase, addDemoStyles, createControlPanel, createButton, createSlider } from '@framework';
 
 interface GameOfLifeState {
   grid: number[][];

@@ -1,7 +1,7 @@
 // Elementary Cellular Automata - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { P5DemoBase, addDemoStyles, createControlPanel } from '@demos/common/utils';
+import { P5DemoBase, addDemoStyles, createControlPanel } from '@framework';
 
 interface Rule {
   pattern: string;

@@ -1,0 +1,135 @@
+import p5 from 'p5';
+import type { DemoConfig } from './types';
+
+export interface DemoContainerOptions {
+  center?: boolean;
+  id?: string;
+  className?: string;
+}
+
+export interface DemoColors {
+  background: p5.Color;
+  foreground: p5.Color;
+  stroke: p5.Color;
+  fill: p5.Color;
+  text: string;
+  accent: p5.Color;
+  grid?: p5.Color;
+  axis?: p5.Color;
+}
+
+export interface CanvasSize {
+  width: number;
+  height: number;
+}
+
+/**
+ * Creates a standardized demo container with optional centering and ID
+ */
+export function createDemoContainer(
+  container: HTMLElement, 
+  options: DemoContainerOptions = {}
+): { containerEl: HTMLElement; canvasParent: HTMLElement } {
+  const { center = true, id, className } = options;
+  
+  // Create main container
+  const containerEl = document.createElement('div');
+  if (id) containerEl.id = id;
+  if (className) containerEl.className = className;
+  if (center) containerEl.style.textAlign = 'center';
+  
+  // Create canvas parent div
+  const canvasParent = document.createElement('div');
+  canvasParent.style.display = 'inline-block';
+  canvasParent.style.position = 'relative';
+  if (!id) canvasParent.id = `demo-${Date.now()}`;
+  
+  containerEl.appendChild(canvasParent);
+  container.appendChild(containerEl);
+  
+  return { containerEl, canvasParent };
+}
+
+/**
+ * Detects if dark mode is active
+ */
+export function isDarkMode(config?: DemoConfig): boolean {
+  return config?.darkMode ?? 
+    (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+}
+
+/**
+ * Gets standard demo colors based on dark mode
+ */
+export function getDemoColors(p: p5, config?: DemoConfig): DemoColors {
+  const isDark = isDarkMode(config);
+  
+  if (isDark) {
+    return {
+      background: p.color(30, 30, 30),
+      foreground: p.color(220, 220, 220),
+      stroke: p.color(200, 200, 200),
+      fill: p.color(180, 180, 180),
+      text: '#e0e0e0',
+      accent: p.color(100, 150, 255),
+      grid: p.color(60, 60, 60),
+      axis: p.color(150, 150, 150)
+    };
+  } else {
+    return {
+      background: p.color(255, 255, 255),
+      foreground: p.color(30, 30, 30),
+      stroke: p.color(0, 0, 0),
+      fill: p.color(50, 50, 50),
+      text: '#333333',
+      accent: p.color(50, 100, 200),
+      grid: p.color(200, 200, 200),
+      axis: p.color(100, 100, 100)
+    };
+  }
+}
+
+/**
+ * Calculates responsive canvas size
+ */
+export function getResponsiveCanvasSize(
+  container: HTMLElement,
+  config?: DemoConfig,
+  aspectRatio: number = 0.6,
+  maxHeightPercent: number = 0.8
+): CanvasSize {
+  // If fixed size is specified in config, use it
+  if (config?.width && config?.height) {
+    return { width: config.width, height: config.height };
+  }
+  
+  const isMobile = window.innerWidth < 768;
+  
+  if (isMobile) {
+    // Mobile: use full window width minus small margin
+    let width = window.innerWidth - 20;
+    let height = width * aspectRatio;
+    
+    // Constrain by max height
+    const maxHeight = window.innerHeight * maxHeightPercent;
+    if (height > maxHeight) {
+      height = maxHeight;
+      width = height / aspectRatio;
+    }
+    
+    return { width, height };
+  } else {
+    // Desktop: use container width or fallback
+    let width = container.offsetWidth - 20 || window.innerWidth * 0.8;
+    let height = width * aspectRatio;
+    
+    // Constrain by max height
+    const maxHeight = window.innerHeight * maxHeightPercent;
+    if (height > maxHeight) {
+      height = maxHeight;
+      width = height / aspectRatio;
+    }
+    
+    return { width, height };
+  }
+}

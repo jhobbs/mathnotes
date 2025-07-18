@@ -5,7 +5,7 @@ import {
   createDemoContainer, 
   P5DemoBase, 
   addDemoStyles 
-} from '@demos/common/utils';
+} from '@framework';
 
 class CountableUnionDemo extends P5DemoBase {
   // Configuration
