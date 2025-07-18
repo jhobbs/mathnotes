@@ -1,7 +1,7 @@
 // Turntable Demo - Bug walking on a rotating turntable
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
-import { P5DemoBase, createControlPanel, createSlider, addDemoStyles } from '@demos/common/utils';
+import { P5DemoBase, createControlPanel, createSlider, addDemoStyles } from '@framework';
 
 class TurntableDemo extends P5DemoBase {
   // Constants

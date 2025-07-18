@@ -1,7 +1,7 @@
 // Electric field simulation - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { createDemoContainer, P5DemoBase, getResponsiveCanvasSize } from '@demos/common/utils';
+import { createDemoContainer, P5DemoBase, getResponsiveCanvasSize } from '@framework';
 
 interface Particle {
   pos: p5.Vector;

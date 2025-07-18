@@ -1,7 +1,7 @@
 // Countable Tuples Demo - Shows B_n sets are countable for any n
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
-import { createDemoContainer, P5DemoBase } from '@demos/common/utils';
+import { createDemoContainer, P5DemoBase } from '@framework';
 
 class CountableTuplesDemo extends P5DemoBase {
   private canvasParent: HTMLElement;

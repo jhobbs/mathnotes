@@ -6,7 +6,7 @@ import {
   createDemoContainer,
   createControlPanel,
   createButton
-} from '@demos/common/utils';
+} from '@framework';
 
 interface ConstructedSequence {
   digits: number[];

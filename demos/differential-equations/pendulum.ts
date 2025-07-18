@@ -1,7 +1,7 @@
 // Pendulum Demo - Simple harmonic motion of a pendulum
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
-import { P5DemoBase, createDemoContainer, addDemoStyles, createSlider } from '@demos/common/utils';
+import { P5DemoBase, createDemoContainer, addDemoStyles, createSlider } from '@framework';
 
 class PendulumDemo extends P5DemoBase {
 

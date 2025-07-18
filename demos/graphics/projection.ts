@@ -2,7 +2,7 @@
 import p5 from 'p5';
 import * as math from 'mathjs';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { createDemoContainer, P5DemoBase, createSlider, addDemoStyles } from '@demos/common/utils';
+import { createDemoContainer, P5DemoBase, createSlider, addDemoStyles } from '@framework';
 
 class ProjectionDemo extends P5DemoBase {
   private canvasParent: HTMLElement;
