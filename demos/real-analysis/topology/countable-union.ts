@@ -99,7 +99,7 @@ class CountableUnionDemo extends P5DemoBase {
     };
 
     // Set up responsive resize
-    this.setupResponsiveResize(p, 1.0, () => {
+    this.setupResponsiveResize(p, () => {
       this.cellSize = (p.width - 2 * this.margin) / this.gridSize;
     });
   }

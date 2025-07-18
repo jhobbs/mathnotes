@@ -191,7 +191,7 @@ class DiagonalizationDemo extends P5DemoBase {
     // Set up responsive resize
     const contentHeight = 30 + 80 + this.NUM_SEQUENCES * this.CELL_SIZE + 20 + 80 + this.CELL_SIZE + 30 + 50;
     const aspectRatio = contentHeight / 600;
-    this.setupResponsiveResize(p, aspectRatio, () => {
+    this.setupResponsiveResize(p, () => {
       p.resizeCanvas(p.width, contentHeight);
     });
 

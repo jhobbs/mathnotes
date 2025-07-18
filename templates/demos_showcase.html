@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Interactive Demos Showcase - {{ config.SITE_TITLE }}{% endblock %}
+
+{% block head %}
+<style>
+  .demos-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .demos-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .demos-header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+  }
+  
+  .demos-header p {
+    font-size: 1.2em;
+    color: var(--text-secondary);
+  }
+  
+  .category-section {
+    margin-bottom: 40px;
+  }
+  
+  .category-title {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .demos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+  }
+  
+  .demo-card {
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-height: 200px;
+  }
+  
+  .demo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .demo-card h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+  }
+  
+  .demo-container {
+    margin: 20px 0;
+    min-height: 300px;
+    min-width: 300px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 10px;
+    background: var(--background-secondary);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .demo-loading {
+    text-align: center;
+    padding: 50px;
+    color: var(--text-secondary);
+  }
+  
+  .demo-error {
+    text-align: center;
+    padding: 20px;
+    color: var(--error-color, #d32f2f);
+    background: var(--error-background, #ffebee);
+    border-radius: 4px;
+    margin: 10px 0;
+  }
+  
+  /* Dark mode variables */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --card-background: #2a2a2a;
+      --border-color: #444;
+      --border-light: #333;
+      --background-secondary: #1a1a1a;
+      --text-secondary: #b0b0b0;
+      --error-background: #2d1515;
+    }
+  }
+  
+  /* Light mode variables */
+  @media (prefers-color-scheme: light) {
+    :root {
+      --card-background: #ffffff;
+      --border-color: #e0e0e0;
+      --border-light: #f0f0f0;
+      --background-secondary: #fafafa;
+      --text-secondary: #666;
+      --error-background: #ffebee;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="demos-container">
+  <div class="demos-header">
+    <h1>Interactive Demos Showcase</h1>
+    <p>Explore mathematical concepts through interactive visualizations</p>
+  </div>
+  
+  {% for category, demos in demos_by_category.items() %}
+  <section class="category-section">
+    <h2 class="category-title">{{ category }}</h2>
+    <div class="demos-grid">
+      {% for demo in demos %}
+      <div class="demo-card">
+        <h3>{{ demo.title }}</h3>
+        <div class="demo-container">
+          <div class="demo-loading" id="loading-{{ loop.index0 }}-{{ loop.index }}">
+            Loading demo...
+          </div>
+          <div class="demo-component" 
+               data-demo="{{ demo.name }}" 
+               id="demo-{{ loop.index0 }}-{{ loop.index }}"
+               style="display: none;">
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+</div>
+
+<script nonce="{{ csp_nonce }}">
+document.addEventListener('DOMContentLoaded', function() {
+  // First make all demo containers visible but empty
+  const demoDivs = document.querySelectorAll('.demo-component');
+  demoDivs.forEach(function(div) {
+    div.style.display = 'block';
+    div.style.minHeight = '300px';
+  });
+  
+  // Wait for main.ts to initialize
+  setTimeout(function() {
+    // Hide loading indicators
+    const loadingDivs = document.querySelectorAll('.demo-loading');
+    loadingDivs.forEach(function(div) {
+      div.style.display = 'none';
+    });
+    
+    // Trigger resize events to help demos calculate proper dimensions
+    window.dispatchEvent(new Event('resize'));
+    
+    // Check if any demos failed to load
+    setTimeout(function() {
+      demoDivs.forEach(function(div) {
+        // Check if demo has any content
+        if (div.children.length === 0) {
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'demo-error';
+          errorDiv.textContent = 'Failed to load demo: ' + div.dataset.demo;
+          div.appendChild(errorDiv);
+        }
+      });
+    }, 3000);
+  }, 1500);
+});
+</script>
+{% endblock %}

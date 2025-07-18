@@ -119,7 +119,7 @@ class CountableTuplesDemo extends P5DemoBase {
     };
 
     // Set up responsive resize
-    this.setupResponsiveResize(p, 0.66, () => {
+    this.setupResponsiveResize(p, () => {
       this.canvasWidth = p.width;
       this.canvasHeight = p.height;
       this.centerY = this.canvasHeight / 2;

@@ -217,7 +217,7 @@ class ElectricFieldDemo extends P5DemoBase {
     };
     
     // Set up responsive resize
-    this.setupResponsiveResize(p, 0.65, () => {
+    this.setupResponsiveResize(p, () => {
       // Reinitialize force field grid with new dimensions
       this.forces = [];
       for (let i = p.width / this.numForces; i < p.width; i += p.width / this.numForces) {

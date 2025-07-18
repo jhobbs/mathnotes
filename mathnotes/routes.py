@@ -214,6 +214,34 @@ def register_routes(app, url_mapper, markdown_processor):
         response.headers["Content-Type"] = "application/xml"
         return response
 
+    @app.route("/demos")
+    def demos_showcase():
+        """Display all available interactive demos."""
+        # Define demo metadata
+        demos = [
+            {'name': 'electric-field', 'title': 'Electric Field', 'category': 'Physics'},
+            {'name': 'neighborhood', 'title': 'Neighborhood in Metric Spaces', 'category': 'Topology'},
+            {'name': 'projection', 'title': '3D Projection', 'category': 'Graphics'},
+            {'name': 'countable-union', 'title': 'Countable Union', 'category': 'Real Analysis'},
+            {'name': 'countable-tuples', 'title': 'Countable Tuples', 'category': 'Real Analysis'},
+            {'name': 'diagonalization', 'title': "Cantor's Diagonalization", 'category': 'Real Analysis'},
+            {'name': 'turntable', 'title': 'Turntable (Differential Equations)', 'category': 'Differential Equations'},
+            {'name': 'pendulum', 'title': 'Pendulum Motion', 'category': 'Differential Equations'},
+            {'name': 'dilution-calculator', 'title': 'Dilution Calculator', 'category': 'Differential Equations'},
+            {'name': 'cellular-automata/game-of-life', 'title': "Conway's Game of Life", 'category': 'Cellular Automata'},
+            {'name': 'cellular-automata/elementary-cellular-automata', 'title': 'Elementary Cellular Automata', 'category': 'Cellular Automata'}
+        ]
+        
+        # Group demos by category
+        demos_by_category = {}
+        for demo in demos:
+            category = demo['category']
+            if category not in demos_by_category:
+                demos_by_category[category] = []
+            demos_by_category[category].append(demo)
+        
+        return render_template("demos_showcase.html", demos_by_category=demos_by_category)
+
     @app.errorhandler(404)
     def page_not_found(e):
         """Handle 404 errors."""
