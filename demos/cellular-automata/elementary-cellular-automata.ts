@@ -1,27 +1,18 @@
 // Elementary Cellular Automata - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
+import { P5DemoBase, addDemoStyles, createControlPanel } from '@demos/common/utils';
 
 interface Rule {
   pattern: string;
   result: number;
 }
 
-export default function(container: HTMLElement, config?: DemoConfig): DemoInstance {
-  let p5Instance: p5;
-  let cellSize = 5;
-  let cols: number;
-  let rows: number;
-  let grid: number[][];
-  let running = false;
-  let currentRow = 0;
-  let lastToggleTime = 0;
-  let toroidal = false;
-  let gridOffsetX = 120;
-  let isDarkMode = config?.darkMode || false;
-
-  // Rule configuration
-  const RULES: Rule[] = [
+class ElementaryCellularAutomataDemo extends P5DemoBase {
+  // Constants
+  private readonly cellSize = 5;
+  private readonly gridOffsetX = 120;
+  private readonly RULES: Rule[] = [
     { pattern: "111", result: 0 },
     { pattern: "110", result: 0 },
     { pattern: "101", result: 0 },
@@ -32,53 +23,280 @@ export default function(container: HTMLElement, config?: DemoConfig): DemoInstan
     { pattern: "000", result: 0 }
   ];
 
-  // Create controls container
-  const controlsContainer = document.createElement('div');
-  controlsContainer.className = 'elementary-demo-container';
-  controlsContainer.innerHTML = `
-    <div class="demo-info">Click first row to edit.</div>
-    <div class="controls">
-      <div class="control-row">
-        <label for="fillRate">Initial fill rate:</label>
-        <select id="fillRate">
-          <option value="1">1 pixel</option>
-          <option value="0.25">25%</option>
-          <option value="0.5">50%</option>
-          <option value="0.75">75%</option>
-          <option value="1.0">100%</option>
-        </select>
-        <button id="startButton">Start</button>
-        <button id="resetButton">Reset</button>
-      </div>
-      <div class="control-row" id="toroidal-container">
-        <!-- Toroidal checkbox will be placed here -->
-      </div>
-      <div class="control-row" id="entropy-container">
-        <!-- Entropy displays will be placed here -->
-      </div>
-      <div class="control-row" id="rule-container">
-        <!-- Rule input will be placed here -->
-      </div>
-    </div>
-    <div id="canvas-container"></div>
-  `;
-  container.appendChild(controlsContainer);
+  // Grid properties
+  private cols!: number;
+  private rows!: number;
+  private grid!: number[][];
+  
+  // State
+  private running = false;
+  private currentRow = 0;
+  private lastToggleTime = 0;
+  private toroidal = false;
 
-  // Get DOM elements
-  const canvasContainer = controlsContainer.querySelector('#canvas-container') as HTMLElement;
-  const fillRateSelect = controlsContainer.querySelector('#fillRate') as HTMLSelectElement;
-  const startButton = controlsContainer.querySelector('#startButton') as HTMLButtonElement;
-  const resetButton = controlsContainer.querySelector('#resetButton') as HTMLButtonElement;
+  // UI Elements
+  private controlsContainer!: HTMLElement;
+  private fillRateSelect!: HTMLSelectElement;
+  private startButton!: HTMLButtonElement;
+  private resetButton!: HTMLButtonElement;
+  private toroidCheckbox!: p5.Element;
+  private entDiv!: p5.Element;
+  private colEntDiv!: p5.Element;
+  private ruleInput!: p5.Element;
+  private ruleNumber: number = 30;
 
-  // P5 elements
-  let toroidCheckbox: p5.Element;
-  let entDiv: p5.Element;
-  let colEntDiv: p5.Element;
-  let ruleLabel: p5.Element;
-  let ruleInput: p5.Element;
+  protected createSketch(p: p5): void {
+    p.setup = () => {
+      // Create controls container first
+      this.setupControls();
+      
+      // Calculate grid dimensions
+      const canvasContainer = this.controlsContainer.querySelector('#canvas-container') as HTMLElement;
+      this.cols = p.floor((canvasContainer.offsetWidth - this.gridOffsetX) / this.cellSize);
+      this.rows = p.floor(400 / this.cellSize);
+      
+      // Create canvas
+      const canvas = p.createCanvas(canvasContainer.offsetWidth, this.rows * this.cellSize);
+      canvas.parent(canvasContainer);
+      
+      // Initialize colors
+      this.updateColors(p);
+      
+      // Set up P5 controls
+      this.setupP5Controls(p);
+      
+      // Create rule input in the left margin
+      this.setupRuleInput(p, canvas);
+      
+      // Initialize
+      p.background(this.colors.background);
+      p.frameRate(120);
+      this.grid = this.create2DArray(this.cols, this.rows);
+      this.updateRulesFromNumber(this.ruleNumber);
+      this.initializeFirstRow(p);
+      this.drawRow(p, 0);
+      this.currentRow = 0;
+      p.noLoop();
+      
+      // Auto-start after 1 second
+      setTimeout(() => {
+        this.startButton.click();
+      }, 1000);
+    };
 
-  // Helper functions
-  function create2DArray(cols: number, rows: number): number[][] {
+    p.draw = () => {
+      if (this.running) {
+        this.generate(p);
+        this.drawRow(p, this.currentRow);
+      }
+      this.drawRulesVisuals(p);
+      
+      // Update entropy displays
+      const ent = this.computeEntropy();
+      this.entDiv.html("H<sub>r</sub>: " + p.nf(ent, 1, 2) + "b");
+      const colEnt = this.computeColEntropy();
+      this.colEntDiv.html("H<sub>c</sub>: " + p.nf(colEnt, 1, 2) + "b");
+    };
+
+    p.mousePressed = () => {
+      if (p.millis() - this.lastToggleTime < 300) return;
+      this.lastToggleTime = p.millis();
+    
+      // Check if click is within left margin for rule demo boxes
+      if (p.mouseX < this.gridOffsetX) {
+        this.handleRuleClick(p);
+        return;
+      }
+    
+      // Otherwise, check for clicks on first row of grid
+      const x = p.floor((p.mouseX - this.gridOffsetX) / this.cellSize);
+      const y = p.floor(p.mouseY / this.cellSize);
+      if (y === 0 && x >= 0 && x < this.cols) {
+        this.grid[x][y] = this.grid[x][y] === 1 ? 0 : 1;
+        this.drawRow(p, 0);
+      }
+    };
+
+    p.windowResized = () => {
+      const canvasContainer = this.controlsContainer.querySelector('#canvas-container') as HTMLElement;
+      this.cols = p.floor((canvasContainer.offsetWidth - this.gridOffsetX) / this.cellSize);
+      p.resizeCanvas(canvasContainer.offsetWidth, this.rows * this.cellSize);
+      
+      // Reset simulation with new dimensions
+      this.grid = this.create2DArray(this.cols, this.rows);
+      this.initializeFirstRow(p);
+      p.background(this.colors.background);
+      this.drawRow(p, 0);
+      this.currentRow = 0;
+      this.running = false;
+      p.noLoop();
+    };
+  }
+
+  private setupControls(): void {
+    // Create container for canvas
+    this.controlsContainer = document.createElement('div');
+    this.controlsContainer.className = 'elementary-demo-container';
+    this.controlsContainer.innerHTML = `<div id="canvas-container" style="position: relative;"></div>`;
+    this.container.appendChild(this.controlsContainer);
+
+    // Add shared demo styles
+    addDemoStyles(this.container);
+
+    // Create control panel below canvas
+    const controlPanel = createControlPanel(this.container);
+    
+    // Add instructions
+    const infoDiv = document.createElement('div');
+    infoDiv.className = 'demo-info';
+    infoDiv.style.textAlign = 'center';
+    infoDiv.style.marginBottom = '20px';
+    infoDiv.textContent = 'Click first row to edit. Click rule boxes on left to modify.';
+    controlPanel.appendChild(infoDiv);
+    
+    // Main controls row
+    const mainControls = document.createElement('div');
+    mainControls.style.display = 'flex';
+    mainControls.style.justifyContent = 'center';
+    mainControls.style.alignItems = 'center';
+    mainControls.style.gap = '10px';
+    mainControls.style.marginBottom = '10px';
+    controlPanel.appendChild(mainControls);
+    
+    // Fill rate label and select
+    const fillLabel = document.createElement('label');
+    fillLabel.htmlFor = 'fillRate';
+    fillLabel.textContent = 'Initial fill rate:';
+    mainControls.appendChild(fillLabel);
+    
+    this.fillRateSelect = document.createElement('select');
+    this.fillRateSelect.id = 'fillRate';
+    this.fillRateSelect.className = 'demo-select';
+    this.fillRateSelect.innerHTML = `
+      <option value="1">1 pixel</option>
+      <option value="0.25">25%</option>
+      <option value="0.5">50%</option>
+      <option value="0.75">75%</option>
+      <option value="1.0">100%</option>
+    `;
+    mainControls.appendChild(this.fillRateSelect);
+    
+    // Buttons
+    this.startButton = document.createElement('button');
+    this.startButton.className = 'demo-button';
+    this.startButton.textContent = 'Start';
+    mainControls.appendChild(this.startButton);
+    
+    this.resetButton = document.createElement('button');
+    this.resetButton.className = 'demo-button';
+    this.resetButton.textContent = 'Reset';
+    mainControls.appendChild(this.resetButton);
+    
+    // Create containers for P5 elements
+    const toroidalContainer = document.createElement('div');
+    toroidalContainer.id = 'toroidal-container';
+    toroidalContainer.style.textAlign = 'center';
+    toroidalContainer.style.marginBottom = '10px';
+    controlPanel.appendChild(toroidalContainer);
+    
+    const entropyContainer = document.createElement('div');
+    entropyContainer.id = 'entropy-container';
+    entropyContainer.style.textAlign = 'center';
+    entropyContainer.style.marginBottom = '10px';
+    controlPanel.appendChild(entropyContainer);
+
+    // Set up button event handlers
+    this.setupButtonHandlers();
+  }
+
+  private setupP5Controls(p: p5): void {
+    const toroidalContainer = this.container.querySelector('#toroidal-container') as HTMLElement;
+    const entropyContainer = this.container.querySelector('#entropy-container') as HTMLElement;
+    
+    this.toroidCheckbox = p.createCheckbox('Toroidal', this.toroidal);
+    this.toroidCheckbox.parent(toroidalContainer);
+    this.toroidCheckbox.changed(() => {
+      this.toroidal = this.toroidCheckbox.checked();
+    });
+    
+    this.entDiv = p.createDiv("");
+    this.entDiv.parent(entropyContainer);
+    this.entDiv.style('color', 'var(--text-color)');
+    this.entDiv.style('display', 'inline-block');
+    this.entDiv.style('margin-right', '20px');
+    
+    this.colEntDiv = p.createDiv("");
+    this.colEntDiv.parent(entropyContainer);
+    this.colEntDiv.style('color', 'var(--text-color)');
+    this.colEntDiv.style('display', 'inline-block');
+  }
+
+  private setupRuleInput(p: p5, canvas: p5.Renderer): void {
+    // Get the canvas container to position relative to it
+    const canvasContainer = this.controlsContainer.querySelector('#canvas-container') as HTMLElement;
+    
+    // Create a div for the rule input that will be positioned over the canvas
+    const ruleDiv = p.createDiv('Rule: ');
+    ruleDiv.parent(canvasContainer);
+    ruleDiv.position(10, 5);
+    ruleDiv.style('color', this.colors.text);
+    ruleDiv.style('font-size', '14px');
+    ruleDiv.style('position', 'absolute');
+    ruleDiv.style('z-index', '10');
+    
+    this.ruleInput = p.createInput(this.ruleNumber.toString());
+    this.ruleInput.parent(ruleDiv);
+    this.ruleInput.size(40);
+    this.ruleInput.style('margin-left', '5px');
+    this.ruleInput.style('font-size', '14px');
+    this.ruleInput.style('padding', '2px 5px');
+    this.ruleInput.style('border', '1px solid ' + (this.isDarkMode ? '#666' : '#ccc'));
+    this.ruleInput.style('background-color', this.isDarkMode ? '#444' : '#f0f0f0');
+    this.ruleInput.style('color', this.colors.text);
+    
+    // Handle input changes
+    this.ruleInput.input(() => {
+      const value = this.ruleInput.value() as string;
+      const num = parseInt(value);
+      if (!isNaN(num) && num >= 0 && num <= 255) {
+        this.updateRulesFromNumber(num);
+        if (this.p5Instance) {
+          this.drawRulesVisuals(this.p5Instance);
+        }
+      }
+    });
+  }
+
+  private setupButtonHandlers(): void {
+    this.addEventListener(this.startButton, 'click', () => {
+      if (!this.p5Instance) return;
+      
+      this.resetBelowFirst(this.p5Instance);
+      this.running = true;
+      this.p5Instance.loop();
+    });
+    
+    this.startButton.innerText = "Redraw";
+
+    this.addEventListener(this.resetButton, 'click', () => {
+      if (!this.p5Instance) return;
+      
+      this.grid = this.create2DArray(this.cols, this.rows);
+      this.initializeFirstRow(this.p5Instance);
+      this.p5Instance.background(this.colors.background);
+      this.drawRow(this.p5Instance, 0);
+      this.currentRow = 0;
+      this.running = false;
+      
+      // Auto-restart after reset
+      setTimeout(() => {
+        this.startButton.click();
+      }, 1000);
+      this.p5Instance.noLoop();
+    });
+  }
+
+  private create2DArray(cols: number, rows: number): number[][] {
     const arr = new Array(cols);
     for (let i = 0; i < cols; i++) {
       arr[i] = new Array(rows).fill(0);
@@ -86,361 +304,192 @@ export default function(container: HTMLElement, config?: DemoConfig): DemoInstan
     return arr;
   }
 
-  function updateRulesFromNumber(num: string | number): void {
+  private updateRulesFromNumber(num: string | number): void {
     const ruleNum = typeof num === 'string' ? parseInt(num) : num;
     if (isNaN(ruleNum) || ruleNum < 0 || ruleNum > 255) return;
+    this.ruleNumber = ruleNum;
     const bin = ruleNum.toString(2).padStart(8, '0');
-    for (let i = 0; i < RULES.length; i++) {
-      RULES[i].result = parseInt(bin[i]);
+    for (let i = 0; i < this.RULES.length; i++) {
+      this.RULES[i].result = parseInt(bin[i]);
     }
   }
 
-  function rules(left: number, me: number, right: number): number {
+  private rules(left: number, me: number, right: number): number {
     const s = '' + left + me + right;
-    for (let i = 0; i < RULES.length; i++) {
-      if (RULES[i].pattern === s) return RULES[i].result;
+    for (let i = 0; i < this.RULES.length; i++) {
+      if (this.RULES[i].pattern === s) return this.RULES[i].result;
     }
     return 0;
   }
 
-  // Create P5.js sketch
-  const sketch = (p: p5) => {
-    function initializeFirstRow(): void {
-      const fillValue = fillRateSelect.value;
-      
-      // Clear first row
-      for (let i = 0; i < cols; i++) {
-        grid[i][0] = 0;
-      }
-      
-      if (fillValue === "1") {
-        // Single pixel in the middle
-        grid[p.floor(cols / 2)][0] = 1;
-      } else {
-        // Random fill with specified percentage
-        const fillRate = parseFloat(fillValue);
-        for (let i = 0; i < cols; i++) {
-          grid[i][0] = p.random() < fillRate ? 1 : 0;
-        }
-      }
-    }
-
-    function resetBelowFirst(): void {
-      for (let i = 0; i < cols; i++) {
-        for (let j = 1; j < rows; j++) {
-          grid[i][j] = 0;
-        }
-      }
-      p.background(isDarkMode ? 30 : 240);
-      drawRow(0);
-      currentRow = 0;
-    }
-
-    function computeEntropy(): number {
-      if (currentRow < 0) return 0;
-      const counts: { [key: string]: number } = {};
-      for (let r = 0; r <= currentRow; r++) {
-        let rowString = "";
-        for (let c = 0; c < cols; c++) {
-          rowString += grid[c][r];
-        }
-        counts[rowString] = (counts[rowString] || 0) + 1;
-      }
-      const total = currentRow + 1;
-      let entropy = 0;
-      for (const key in counts) {
-        const prob = counts[key] / total;
-        entropy -= prob * Math.log(prob) / Math.log(2);
-      }
-      return entropy;
-    }
-
-    function computeColEntropy(): number {
-      const counts: { [key: string]: number } = {};
-      for (let c = 0; c < cols; c++) {
-        let colString = "";
-        for (let r = 0; r <= currentRow; r++) {
-          colString += grid[c][r];
-        }
-        counts[colString] = (counts[colString] || 0) + 1;
-      }
-      const total = cols;
-      let entropy = 0;
-      for (const key in counts) {
-        const prob = counts[key] / total;
-        entropy -= prob * Math.log(prob) / Math.log(2);
-      }
-      return entropy;
-    }
-
-    function drawRow(rowIndex: number): void {
-      for (let i = 0; i < cols; i++) {
-        const x = gridOffsetX + i * cellSize;
-        const y = rowIndex * cellSize;
-        if (grid[i][rowIndex] === 1) {
-          p.fill(isDarkMode ? 255 : 0); // Light for active cells in dark mode
-        } else {
-          p.fill(isDarkMode ? 30 : 255); // Dark background for inactive cells in dark mode
-        }
-        p.stroke(isDarkMode ? 100 : 200);
-        p.rect(x, y, cellSize, cellSize);
-      }
-    }
-
-    function drawRulesVisuals(): void {
-      p.noStroke();
-      p.fill(isDarkMode ? 30 : 240);
-      p.rect(0, 0, gridOffsetX, p.height);
-      
-      const ruleBoxSize = 15;
-      const startX = 10;
-      const startY = 130;
-      const spacingY = ruleBoxSize * 2 + 10;
-      
-      for (let i = 0; i < RULES.length; i++) {
-        const { pattern, result } = RULES[i];
-        const posY = startY + i * spacingY;
-        for (let j = 0; j < 3; j++) {
-          const posX = startX + j * (ruleBoxSize + 2);
-          (pattern[j] === "1") ? p.fill(isDarkMode ? 255 : 0) : p.fill(isDarkMode ? 30 : 255);
-          p.stroke(isDarkMode ? 100 : 200);
-          p.rect(posX, posY, ruleBoxSize, ruleBoxSize);
-        }
-        const centerX = startX + ((ruleBoxSize + 2) * 1);
-        const posY2 = posY + ruleBoxSize + 2;
-        (result === 1) ? p.fill(isDarkMode ? 255 : 0) : p.fill(isDarkMode ? 30 : 255);
-        p.stroke(isDarkMode ? 100 : 200);
-        p.rect(centerX, posY2, ruleBoxSize, ruleBoxSize);
-      }
-    }
-
-    function generate(): void {
-      if (currentRow >= rows - 1) {
-        running = false;
-        p.noLoop();
-        return;
-      }
-      const nextRow = currentRow + 1;
-      for (let i = 0; i < cols; i++) {
-        const left = toroidal ? grid[(i - 1 + cols) % cols][currentRow] : ((i - 1) < 0 ? 0 : grid[i - 1][currentRow]);
-        const me = grid[i][currentRow];
-        const right = toroidal ? grid[(i + 1) % cols][currentRow] : ((i + 1) >= cols ? 0 : grid[i + 1][currentRow]);
-        grid[i][nextRow] = rules(left, me, right);
-      }
-      currentRow++;
-    }
-
-    p.setup = function() {
-      // Create controls in their designated containers
-      const toroidalContainer = controlsContainer.querySelector('#toroidal-container') as HTMLElement;
-      const entropyContainer = controlsContainer.querySelector('#entropy-container') as HTMLElement;
-      const ruleContainer = controlsContainer.querySelector('#rule-container') as HTMLElement;
-      
-      toroidCheckbox = p.createCheckbox('Toroidal', toroidal);
-      toroidCheckbox.parent(toroidalContainer);
-      toroidCheckbox.changed(() => {
-        toroidal = toroidCheckbox.checked();
-      });
-      
-      entDiv = p.createDiv("");
-      entDiv.parent(entropyContainer);
-      entDiv.style('color', 'var(--text-color)');
-      entDiv.style('display', 'inline-block');
-      entDiv.style('margin-right', '20px');
-      
-      colEntDiv = p.createDiv("");
-      colEntDiv.parent(entropyContainer);
-      colEntDiv.style('color', 'var(--text-color)');
-      colEntDiv.style('display', 'inline-block');
-      
-      ruleLabel = p.createDiv("Rule:");
-      ruleLabel.parent(ruleContainer);
-      ruleLabel.style('display', 'inline-block');
-      ruleLabel.style('margin-right', '10px');
-      
-      ruleInput = p.createInput("30");
-      ruleInput.parent(ruleContainer);
-      ruleInput.style('display', 'inline-block');
-      ruleInput.size(80);
-      ruleInput.input(() => {
-        updateRulesFromNumber(ruleInput.value());
-        drawRulesVisuals();
-      });
-      updateRulesFromNumber("30");
-
-      cols = p.floor((canvasContainer.offsetWidth - gridOffsetX) / cellSize);
-      rows = p.floor(400 / cellSize);
-      const canvas = p.createCanvas(canvasContainer.offsetWidth, rows * cellSize);
-      canvas.parent(canvasContainer);
-      
-      // Update dark mode and set background
-      p.background(isDarkMode ? 30 : 240);
-      p.frameRate(120);
-      grid = create2DArray(cols, rows);
-      initializeFirstRow();
-      drawRow(0);
-      currentRow = 0;
-      p.noLoop();
-      
-      // Auto-start after 1 second
-      setTimeout(() => {
-        startButton.click();
-      }, 1000);
-    };
-
-    p.draw = function() {
-      if (running) {
-        generate();
-        drawRow(currentRow);
-      }
-      drawRulesVisuals();
-      // Update entropy displays
-      const ent = computeEntropy();
-      entDiv.html("H<sub>r</sub>: " + p.nf(ent, 1, 2) + "b");
-      const colEnt = computeColEntropy();
-      colEntDiv.html("H<sub>c</sub>: " + p.nf(colEnt, 1, 2) + "b");
-    };
-
-    p.mousePressed = function() {
-      if (p.millis() - lastToggleTime < 300) return;
-      lastToggleTime = p.millis();
-    
-      // Check if click is within left margin for rule demo boxes
-      if (p.mouseX < gridOffsetX) {
-        const ruleBoxSize = 15;
-        const startX = 10;
-        const startY = 130;
-        const spacingY = ruleBoxSize * 2 + 10;
-        for (let i = 0; i < RULES.length; i++) {
-          const boxX = startX + ((ruleBoxSize + 2) * 1);
-          const boxY = startY + i * spacingY + ruleBoxSize + 2;
-          if (p.mouseX >= boxX && p.mouseX <= boxX + ruleBoxSize &&
-              p.mouseY >= boxY && p.mouseY <= boxY + ruleBoxSize) {
-            RULES[i].result = RULES[i].result === 1 ? 0 : 1;
-            const binaryString = RULES.map(rule => rule.result).join('');
-            const newRuleNum = parseInt(binaryString, 2);
-            ruleInput.value(newRuleNum.toString());
-            drawRulesVisuals();
-            return;
-          }
-        }
-        return;
-      }
-    
-      // Otherwise, check for clicks on first row of grid
-      const x = p.floor((p.mouseX - gridOffsetX) / cellSize);
-      const y = p.floor(p.mouseY / cellSize);
-      if (y === 0 && x >= 0 && x < cols) {
-        grid[x][y] = grid[x][y] === 1 ? 0 : 1;
-        drawRow(0);
-      }
-    };
-
-    p.windowResized = function() {
-      cols = p.floor((canvasContainer.offsetWidth - gridOffsetX) / cellSize);
-      p.resizeCanvas(canvasContainer.offsetWidth, rows * cellSize);
-      // Reset simulation with new dimensions
-      grid = create2DArray(cols, rows);
-      initializeFirstRow();
-      p.background(isDarkMode ? 30 : 240);
-      drawRow(0);
-      currentRow = 0;
-      running = false;
-      p.noLoop();
-    };
-  };
-
-  // Button event handlers
-  startButton.addEventListener('click', () => {
-    const resetBelowFirst = () => {
-      for (let i = 0; i < cols; i++) {
-        for (let j = 1; j < rows; j++) {
-          grid[i][j] = 0;
-        }
-      }
-      p5Instance.background(isDarkMode ? 30 : 240);
-      const drawRow = (rowIndex: number) => {
-        for (let i = 0; i < cols; i++) {
-          const x = gridOffsetX + i * cellSize;
-          const y = rowIndex * cellSize;
-          if (grid[i][rowIndex] === 1) {
-            p5Instance.fill(isDarkMode ? 255 : 0);
-          } else {
-            p5Instance.fill(isDarkMode ? 30 : 255);
-          }
-          p5Instance.stroke(isDarkMode ? 100 : 200);
-          p5Instance.rect(x, y, cellSize, cellSize);
-        }
-      };
-      drawRow(0);
-      currentRow = 0;
-    };
-    
-    resetBelowFirst();
-    running = true;
-    p5Instance.loop();
-  });
-  
-  startButton.innerText = "Redraw";
-
-  resetButton.addEventListener('click', () => {
-    grid = create2DArray(cols, rows);
-    const fillValue = fillRateSelect.value;
+  private initializeFirstRow(p: p5): void {
+    const fillValue = this.fillRateSelect.value;
     
     // Clear first row
-    for (let i = 0; i < cols; i++) {
-      grid[i][0] = 0;
+    for (let i = 0; i < this.cols; i++) {
+      this.grid[i][0] = 0;
     }
     
     if (fillValue === "1") {
-      grid[Math.floor(cols / 2)][0] = 1;
+      // Single pixel in the middle
+      this.grid[p.floor(this.cols / 2)][0] = 1;
     } else {
+      // Random fill with specified percentage
       const fillRate = parseFloat(fillValue);
-      for (let i = 0; i < cols; i++) {
-        grid[i][0] = p5Instance.random() < fillRate ? 1 : 0;
+      for (let i = 0; i < this.cols; i++) {
+        this.grid[i][0] = p.random() < fillRate ? 1 : 0;
       }
     }
+  }
+
+  private resetBelowFirst(p: p5): void {
+    for (let i = 0; i < this.cols; i++) {
+      for (let j = 1; j < this.rows; j++) {
+        this.grid[i][j] = 0;
+      }
+    }
+    p.background(this.colors.background);
+    this.drawRow(p, 0);
+    this.currentRow = 0;
+  }
+
+  private computeEntropy(): number {
+    if (this.currentRow < 0) return 0;
+    const counts: { [key: string]: number } = {};
+    for (let r = 0; r <= this.currentRow; r++) {
+      let rowString = "";
+      for (let c = 0; c < this.cols; c++) {
+        rowString += this.grid[c][r];
+      }
+      counts[rowString] = (counts[rowString] || 0) + 1;
+    }
+    const total = this.currentRow + 1;
+    let entropy = 0;
+    for (const key in counts) {
+      const prob = counts[key] / total;
+      entropy -= prob * Math.log(prob) / Math.log(2);
+    }
+    return entropy;
+  }
+
+  private computeColEntropy(): number {
+    const counts: { [key: string]: number } = {};
+    for (let c = 0; c < this.cols; c++) {
+      let colString = "";
+      for (let r = 0; r <= this.currentRow; r++) {
+        colString += this.grid[c][r];
+      }
+      counts[colString] = (counts[colString] || 0) + 1;
+    }
+    const total = this.cols;
+    let entropy = 0;
+    for (const key in counts) {
+      const prob = counts[key] / total;
+      entropy -= prob * Math.log(prob) / Math.log(2);
+    }
+    return entropy;
+  }
+
+  private drawRow(p: p5, rowIndex: number): void {
+    for (let i = 0; i < this.cols; i++) {
+      const x = this.gridOffsetX + i * this.cellSize;
+      const y = rowIndex * this.cellSize;
+      if (this.grid[i][rowIndex] === 1) {
+        p.fill(this.colors.foreground);
+      } else {
+        p.fill(this.colors.background);
+      }
+      p.stroke(this.isDarkMode ? p.color(100) : p.color(200));
+      p.rect(x, y, this.cellSize, this.cellSize);
+    }
+  }
+
+  private drawRulesVisuals(p: p5): void {
+    p.noStroke();
+    p.fill(this.colors.background);
+    p.rect(0, 0, this.gridOffsetX, p.height);
     
-    p5Instance.background(isDarkMode ? 30 : 240);
-    const drawRow = (rowIndex: number) => {
-      for (let i = 0; i < cols; i++) {
-        const x = gridOffsetX + i * cellSize;
-        const y = rowIndex * cellSize;
-        if (grid[i][rowIndex] === 1) {
-          p5Instance.fill(isDarkMode ? 255 : 0);
-        } else {
-          p5Instance.fill(isDarkMode ? 30 : 255);
+    const ruleBoxSize = 15;
+    const startX = 10;
+    const startY = 50;
+    const spacingY = ruleBoxSize * 2 + 10;
+    
+    for (let i = 0; i < this.RULES.length; i++) {
+      const { pattern, result } = this.RULES[i];
+      const posY = startY + i * spacingY;
+      for (let j = 0; j < 3; j++) {
+        const posX = startX + j * (ruleBoxSize + 2);
+        (pattern[j] === "1") ? p.fill(this.colors.foreground) : p.fill(this.colors.background);
+        p.stroke(this.isDarkMode ? p.color(100) : p.color(200));
+        p.rect(posX, posY, ruleBoxSize, ruleBoxSize);
+      }
+      const centerX = startX + ((ruleBoxSize + 2) * 1);
+      const posY2 = posY + ruleBoxSize + 2;
+      (result === 1) ? p.fill(this.colors.foreground) : p.fill(this.colors.background);
+      p.stroke(this.isDarkMode ? p.color(100) : p.color(200));
+      p.rect(centerX, posY2, ruleBoxSize, ruleBoxSize);
+    }
+  }
+
+  private generate(p: p5): void {
+    if (this.currentRow >= this.rows - 1) {
+      this.running = false;
+      p.noLoop();
+      return;
+    }
+    const nextRow = this.currentRow + 1;
+    for (let i = 0; i < this.cols; i++) {
+      const left = this.toroidal ? 
+        this.grid[(i - 1 + this.cols) % this.cols][this.currentRow] : 
+        ((i - 1) < 0 ? 0 : this.grid[i - 1][this.currentRow]);
+      const me = this.grid[i][this.currentRow];
+      const right = this.toroidal ? 
+        this.grid[(i + 1) % this.cols][this.currentRow] : 
+        ((i + 1) >= this.cols ? 0 : this.grid[i + 1][this.currentRow]);
+      this.grid[i][nextRow] = this.rules(left, me, right);
+    }
+    this.currentRow++;
+  }
+
+  private handleRuleClick(p: p5): void {
+    const ruleBoxSize = 15;
+    const startX = 10;
+    const startY = 50;
+    const spacingY = ruleBoxSize * 2 + 10;
+    
+    for (let i = 0; i < this.RULES.length; i++) {
+      const boxX = startX + ((ruleBoxSize + 2) * 1);
+      const boxY = startY + i * spacingY + ruleBoxSize + 2;
+      if (p.mouseX >= boxX && p.mouseX <= boxX + ruleBoxSize &&
+          p.mouseY >= boxY && p.mouseY <= boxY + ruleBoxSize) {
+        this.RULES[i].result = this.RULES[i].result === 1 ? 0 : 1;
+        const binaryString = this.RULES.map(rule => rule.result).join('');
+        this.ruleNumber = parseInt(binaryString, 2);
+        // Update the input field
+        if (this.ruleInput) {
+          this.ruleInput.value(this.ruleNumber.toString());
         }
-        p5Instance.stroke(isDarkMode ? 100 : 200);
-        p5Instance.rect(x, y, cellSize, cellSize);
+        this.drawRulesVisuals(p);
+        return;
       }
-    };
-    drawRow(0);
-    currentRow = 0;
-    running = false;
-    
-    // Auto-restart after reset
-    setTimeout(() => {
-      startButton.click();
-    }, 1000);
-    p5Instance.noLoop();
-  });
-
-  // Initialize P5.js instance
-  p5Instance = new p5(sketch);
-
-  // Listen for theme changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    isDarkMode = e.matches;
-    if (p5Instance) {
-      p5Instance.background(isDarkMode ? 30 : 240);
-      p5Instance.redraw();
     }
-  });
+  }
 
-  return {
-    cleanup: () => {
-      p5Instance.remove();
+  protected onColorSchemeChange(isDark: boolean): void {
+    if (this.p5Instance) {
+      this.p5Instance.background(this.colors.background);
+      this.p5Instance.redraw();
     }
-  };
+    // Update rule input styling
+    if (this.ruleInput) {
+      this.ruleInput.style('border', '1px solid ' + (isDark ? '#666' : '#ccc'));
+      this.ruleInput.style('background-color', isDark ? '#444' : '#f0f0f0');
+      this.ruleInput.style('color', this.colors.text);
+    }
+  }
+}
+
+export default function(container: HTMLElement, config?: DemoConfig): DemoInstance {
+  const demo = new ElementaryCellularAutomataDemo(container, config);
+  return demo.init();
 }
