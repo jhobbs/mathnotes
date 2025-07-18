@@ -4,7 +4,6 @@ import type { DemoInstance, DemoConfig } from '@framework/types';
 import { 
   createDemoContainer, 
   P5DemoBase, 
-  getDemoColors, 
   addDemoStyles 
 } from '@demos/common/utils';
 
@@ -19,8 +18,7 @@ class CountableUnionDemo extends P5DemoBase {
   private readonly animationSpeed = 0.03;
   private linePoints: Array<{x: number, y: number, isDiagonalStart: boolean}> = [];
   
-  // Colors
-  private colors!: ReturnType<typeof getDemoColors>;
+  // Animation state
   
   // UI elements
   private canvasParent: HTMLElement;
@@ -85,23 +83,12 @@ class CountableUnionDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Responsive sizing
-      let canvasWidth: number, canvasHeight: number;
-      
-      if (p.windowWidth < 768) {
-        // Mobile: use full window width minus margin with square aspect
-        canvasWidth = p.windowWidth - 40;
-        canvasHeight = canvasWidth;
-      } else {
-        // Desktop: use config or container-based sizing
-        canvasWidth = this.config?.width || this.canvasParent.offsetWidth || 600;
-        canvasHeight = this.config?.height || canvasWidth;
-      }
-      
-      const canvas = p.createCanvas(canvasWidth, canvasHeight);
+      // Use responsive sizing with square aspect ratio
+      const size = this.getCanvasSize(1.0); // Uses default 80% viewport height
+      const canvas = p.createCanvas(size.width, size.height);
       canvas.parent(this.canvasParent);
       
-      this.cellSize = (canvasWidth - 2 * this.margin) / this.gridSize;
+      this.cellSize = (size.width - 2 * this.margin) / this.gridSize;
       
       // Set up colors
       this.updateColors(p);
@@ -127,37 +114,17 @@ class CountableUnionDemo extends P5DemoBase {
     };
 
     p.windowResized = () => {
-      // Only respond to window resize if no fixed dimensions
-      if (this.config?.width && this.config?.height) return;
-      
-      // Responsive sizing
-      let canvasWidth: number, canvasHeight: number;
-      
-      if (p.windowWidth < 768) {
-        canvasWidth = p.windowWidth - 40;
-        canvasHeight = canvasWidth;
-      } else {
-        canvasWidth = this.canvasParent.offsetWidth || 600;
-        canvasHeight = canvasWidth;
-      }
-      
-      p.resizeCanvas(canvasWidth, canvasHeight);
-      this.cellSize = (canvasWidth - 2 * this.margin) / this.gridSize;
+      this.handleResize(p, (size) => {
+        this.cellSize = (size.width - 2 * this.margin) / this.gridSize;
+      });
     };
     
-    // Listen for color scheme changes
-    if (window.matchMedia) {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const colorChangeListener = () => {
-        this.config = { ...this.config, darkMode: mediaQuery.matches };
-        this.updateColors(p);
-      };
-      this.addEventListener(mediaQuery, 'change', colorChangeListener);
-    }
+    // Color scheme changes are now handled by base class
   }
   
-  private updateColors(p: p5): void {
-    this.colors = getDemoColors(p, this.config);
+  // Override base class method to customize colors if needed
+  protected updateColors(p: p5): void {
+    super.updateColors(p);
   }
 
   private drawGrid(p: p5): void {

@@ -2,8 +2,6 @@ import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
 import { 
   P5DemoBase,
-  getDemoColors,
-  getResponsiveCanvasSize,
   addDemoStyles,
   createDemoContainer,
   createControlPanel,
@@ -35,8 +33,7 @@ class DiagonalizationDemo extends P5DemoBase {
   private startingSequenceNumber = 1;
   private startingPositionNumber = 1;
 
-  // Colors
-  private colors!: ReturnType<typeof getDemoColors>;
+  // Animation state and UI
 
   // UI elements
   private canvasParent: HTMLElement;
@@ -170,12 +167,14 @@ class DiagonalizationDemo extends P5DemoBase {
                           30 + // Position labels
                           50; // Bottom labels
       
-      const { width } = getResponsiveCanvasSize(this.container, this.config, contentHeight/600);
-      const canvas = p.createCanvas(width, contentHeight);
+      // Use responsive sizing with calculated aspect ratio
+      const aspectRatio = contentHeight / 600;
+      const size = this.getCanvasSize(aspectRatio);
+      const canvas = p.createCanvas(size.width, contentHeight);
       canvas.parent(this.canvasParent);
       
       // Set up colors
-      this.colors = getDemoColors(p, this.config);
+      this.updateColors(p);
       
       this.generateNewSequences();
     };
@@ -204,13 +203,13 @@ class DiagonalizationDemo extends P5DemoBase {
     };
 
     p.windowResized = () => {
-      // Only respond to window resize if no fixed dimensions
-      if (this.config?.width && this.config?.height) return;
-      
       // Recalculate content height
       const contentHeight = 30 + 80 + this.NUM_SEQUENCES * this.CELL_SIZE + 20 + 80 + this.CELL_SIZE + 30 + 50;
-      const { width } = getResponsiveCanvasSize(this.container, this.config, contentHeight/600);
-      p.resizeCanvas(width, contentHeight);
+      const aspectRatio = contentHeight / 600;
+      
+      this.handleResize(p, (size) => {
+        p.resizeCanvas(size.width, contentHeight);
+      });
     };
 
     const drawSequenceTable = (p: p5) => {
@@ -477,15 +476,7 @@ class DiagonalizationDemo extends P5DemoBase {
       }
     };
 
-    // Listen for color scheme changes
-    if (window.matchMedia) {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const colorChangeListener = () => {
-        this.config = { ...this.config, darkMode: mediaQuery.matches };
-        this.colors = getDemoColors(p, this.config);
-      };
-      this.addEventListener(mediaQuery, 'change', colorChangeListener);
-    }
+    // Color scheme changes are now handled by base class
   }
 }
 

@@ -1,7 +1,7 @@
 // Countable Tuples Demo - Shows B_n sets are countable for any n
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
-import { createDemoContainer, P5DemoBase, getDemoColors, getResponsiveCanvasSize } from '@demos/common/utils';
+import { createDemoContainer, P5DemoBase } from '@demos/common/utils';
 
 class CountableTuplesDemo extends P5DemoBase {
   private canvasParent: HTMLElement;
@@ -49,7 +49,7 @@ class CountableTuplesDemo extends P5DemoBase {
   private centerY!: number;
   private animationStartTime!: number;
   private maxVisibleColumns = 4;
-  private colors!: ReturnType<typeof getDemoColors>;
+  // Animation state
   
   // Performance optimization: cache generated tuples
   private cachedTuples = new Map<string, number[][]>();
@@ -85,15 +85,15 @@ class CountableTuplesDemo extends P5DemoBase {
   protected createSketch(p: p5): void {
     p.setup = () => {
       // Get responsive canvas size
-      const { width, height } = getResponsiveCanvasSize(this.container, this.config, 0.66);
-      this.canvasWidth = width;
-      this.canvasHeight = height;
+      const size = this.getCanvasSize(0.66);
+      this.canvasWidth = size.width;
+      this.canvasHeight = size.height;
       
       const canvas = p.createCanvas(this.canvasWidth, this.canvasHeight);
       canvas.parent(this.canvasParent);
       
       // Initialize colors
-      this.colors = getDemoColors(p, this.config);
+      this.updateColors(p);
       
       // Calculate how many columns can fit based on available width
       const availableWidth = this.canvasWidth - this.CONFIG.START_X * 2;
@@ -122,16 +122,15 @@ class CountableTuplesDemo extends P5DemoBase {
     };
 
     p.windowResized = () => {
-      const { width, height } = getResponsiveCanvasSize(this.container, this.config, 0.66);
-      this.canvasWidth = width;
-      this.canvasHeight = height;
-      
-      p.resizeCanvas(this.canvasWidth, this.canvasHeight);
-      this.centerY = this.canvasHeight / 2;
-      
-      // Recalculate columns that fit
-      const availableWidth = this.canvasWidth - this.CONFIG.START_X * 2;
-      this.maxVisibleColumns = Math.max(4, Math.floor(availableWidth / this.CONFIG.COLUMN_SPACING));
+      this.handleResize(p, (size) => {
+        this.canvasWidth = size.width;
+        this.canvasHeight = size.height;
+        this.centerY = this.canvasHeight / 2;
+        
+        // Recalculate columns that fit
+        const availableWidth = this.canvasWidth - this.CONFIG.START_X * 2;
+        this.maxVisibleColumns = Math.max(4, Math.floor(availableWidth / this.CONFIG.COLUMN_SPACING));
+      });
     };
   }
 

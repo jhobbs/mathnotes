@@ -69,8 +69,8 @@ class NeighborhoodDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Use responsive sizing with square aspect ratio and height constraint
-      const size = this.getCanvasSize(1.0, 0.6); // Max 60% of viewport height
+      // Use responsive sizing with square aspect ratio
+      const size = this.getCanvasSize(1.0); // Uses default 80% viewport height
       const canvas = p.createCanvas(size.width, size.height);
       canvas.parent(this.canvasParent);
       
