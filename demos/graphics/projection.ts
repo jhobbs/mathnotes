@@ -2,7 +2,7 @@
 import p5 from 'p5';
 import * as math from 'mathjs';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { createDemoContainer, P5DemoBase, createSlider, isDarkMode } from '@demos/common/utils';
+import { createDemoContainer, P5DemoBase, createSlider } from '@demos/common/utils';
 
 class ProjectionDemo extends P5DemoBase {
   private canvasParent: HTMLElement;
@@ -35,8 +35,13 @@ class ProjectionDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      const canvas = p.createCanvas(p.windowWidth * 0.9, 400);
+      // Use responsive sizing
+      const size = this.getCanvasSize(0.5); // Wider aspect ratio for projection demo
+      const canvas = p.createCanvas(size.width, size.height);
       canvas.parent(this.canvasParent);
+      
+      // Initialize colors
+      this.updateColors(p);
       
       // Create all sliders
       this.cameraAngleXSlider = createSlider(p, 'Camera Angle (X-axis)', -p.PI, p.PI, 0, 0.01, this.controlsContainer, () => p.redraw(), 'projection');
@@ -51,14 +56,8 @@ class ProjectionDemo extends P5DemoBase {
     };
 
     p.draw = () => {
-      // Check dark mode
-      const isDark = isDarkMode(this.config);
-      
-      if (isDark) {
-        p.background(32); // Dark background
-      } else {
-        p.background(220); // Light background
-      }
+      // Use theme-aware background
+      p.background(this.colors.background);
       
       // Get the camera angle values from the sliders
       const cameraAngleX = -(this.cameraAngleXSlider.value() as number);
@@ -139,12 +138,8 @@ class ProjectionDemo extends P5DemoBase {
         math.matrix([30, 30, 100, 1])    // Mouth right
       ];
 
-      // Set colors based on dark mode
-      if (isDark) {
-        p.fill(200); // Light gray for dark mode
-      } else {
-        p.fill(0); // Black for light mode
-      }
+      // Use theme-aware colors
+      p.fill(this.colors.foreground);
       p.noStroke();
 
       // Apply matrix multiplication to each point and draw the resulting points
@@ -159,11 +154,7 @@ class ProjectionDemo extends P5DemoBase {
       }
 
       // Draw a dense bounding box around the face
-      if (isDark) {
-        p.stroke(200); // Light gray for dark mode
-      } else {
-        p.stroke(0); // Black for light mode
-      }
+      p.stroke(this.colors.stroke);
       p.noFill();
       const boundingBoxPoints: math.Matrix[] = [];
       const halfSize = 120;
@@ -186,16 +177,22 @@ class ProjectionDemo extends P5DemoBase {
     };
 
     p.windowResized = () => {
-      p.resizeCanvas(p.windowWidth * 0.9, 400);
+      this.handleResize(p);
     };
   }
   
   init(): DemoInstance {
-    // Add CSS styles for this demo
+    // Add CSS styles for this demo with dark mode support
     const style = document.createElement('style');
     style.textContent = `
       .projection-label {
-        color: ${isDarkMode(this.config) ? '#e0e0e0' : '#333'};
+        color: #333;
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        .projection-label {
+          color: #e0e0e0;
+        }
       }
     `;
     this.container.appendChild(style);
