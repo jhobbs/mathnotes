@@ -2,12 +2,9 @@
 import p5 from 'p5';
 import * as math from 'mathjs';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { createDemoContainer, P5DemoBase, createSlider, addDemoStyles } from '@framework';
+import { P5DemoBase } from '@framework';
 
 class ProjectionDemo extends P5DemoBase {
-  private canvasParent: HTMLElement;
-  private controlsContainer: HTMLElement;
-  
   // Sliders
   private cameraAngleXSlider!: p5.Element;
   private cameraAngleYSlider!: p5.Element;
@@ -17,34 +14,20 @@ class ProjectionDemo extends P5DemoBase {
   private translateYSlider!: p5.Element;
   private translateZSlider!: p5.Element;
   
-  constructor(container: HTMLElement, config?: DemoConfig) {
-    super(container, config);
-    
-    // Add styles for this demo
-    addDemoStyles(container, 'projection');
-    
-    const { containerEl, canvasParent } = createDemoContainer(container, {
-      center: true
-    });
-    this.canvasParent = canvasParent;
-    
-    // Create controls container
-    this.controlsContainer = document.createElement('div');
-    this.controlsContainer.style.marginTop = '20px';
-    this.controlsContainer.style.width = '100%';
-    this.controlsContainer.style.textAlign = 'center';
-    containerEl.appendChild(this.controlsContainer);
+  protected getStylePrefix(): string {
+    return 'projection';
   }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Use responsive sizing with height constraint
-      const size = this.getCanvasSize(0.5, 0.6); // Wider aspect ratio, max 60% viewport height
-      const canvas = p.createCanvas(size.width, size.height);
-      canvas.parent(this.canvasParent);
+      // Create responsive canvas with wider aspect ratio
+      this.createResponsiveCanvas(p, 0.5);
       
       // Initialize colors
       this.updateColors(p);
+      
+      // Create control panel
+      const controlPanel = this.createControlPanel();
       
       // Create a single row for all controls
       const controlRow = document.createElement('div');
@@ -53,11 +36,11 @@ class ProjectionDemo extends P5DemoBase {
       controlRow.style.justifyContent = 'center';
       controlRow.style.gap = '20px';
       controlRow.style.alignItems = 'flex-start';
-      this.controlsContainer.appendChild(controlRow);
+      controlPanel.appendChild(controlRow);
       
       // Camera rotation group
       const cameraGroup = document.createElement('div');
-      cameraGroup.innerHTML = '<div class="projection-label" style="text-align: center; font-weight: bold; margin-bottom: 5px;">Camera Rotation</div>';
+      cameraGroup.innerHTML = `<div class="${this.getStylePrefix()}-label" style="text-align: center; font-weight: bold; margin-bottom: 5px;">Camera Rotation</div>`;
       controlRow.appendChild(cameraGroup);
       
       const cameraSliders = document.createElement('div');
@@ -66,13 +49,16 @@ class ProjectionDemo extends P5DemoBase {
       cameraGroup.appendChild(cameraSliders);
       
       // Camera angle sliders (horizontal)
-      this.cameraAngleXSlider = createSlider(p, 'X', -p.PI, p.PI, 0, 0.01, cameraSliders, () => p.redraw(), 'projection');
-      this.cameraAngleYSlider = createSlider(p, 'Y', -p.PI, p.PI, 0, 0.01, cameraSliders, () => p.redraw(), 'projection');
-      this.cameraAngleZSlider = createSlider(p, 'Z', -p.PI, p.PI, 0, 0.01, cameraSliders, () => p.redraw(), 'projection');
+      this.cameraAngleXSlider = this.createSlider(p, 'X', -p.PI, p.PI, 0, 0.01, () => p.redraw());
+      cameraSliders.appendChild(this.cameraAngleXSlider.parent());
+      this.cameraAngleYSlider = this.createSlider(p, 'Y', -p.PI, p.PI, 0, 0.01, () => p.redraw());
+      cameraSliders.appendChild(this.cameraAngleYSlider.parent());
+      this.cameraAngleZSlider = this.createSlider(p, 'Z', -p.PI, p.PI, 0, 0.01, () => p.redraw());
+      cameraSliders.appendChild(this.cameraAngleZSlider.parent());
       
       // Translation group
       const translateGroup = document.createElement('div');
-      translateGroup.innerHTML = '<div class="projection-label" style="text-align: center; font-weight: bold; margin-bottom: 5px;">Translation</div>';
+      translateGroup.innerHTML = `<div class="${this.getStylePrefix()}-label" style="text-align: center; font-weight: bold; margin-bottom: 5px;">Translation</div>`;
       controlRow.appendChild(translateGroup);
       
       const translateSliders = document.createElement('div');
@@ -81,14 +67,18 @@ class ProjectionDemo extends P5DemoBase {
       translateGroup.appendChild(translateSliders);
       
       // Translation sliders (horizontal)
-      this.translateXSlider = createSlider(p, 'X', -200, 200, 0, 1, translateSliders, () => p.redraw(), 'projection');
-      this.translateYSlider = createSlider(p, 'Y', -200, 200, 0, 1, translateSliders, () => p.redraw(), 'projection');
-      this.translateZSlider = createSlider(p, 'Z', -200, 200, 100, 1, translateSliders, () => p.redraw(), 'projection');
+      this.translateXSlider = this.createSlider(p, 'X', -200, 200, 0, 1, () => p.redraw());
+      translateSliders.appendChild(this.translateXSlider.parent());
+      this.translateYSlider = this.createSlider(p, 'Y', -200, 200, 0, 1, () => p.redraw());
+      translateSliders.appendChild(this.translateYSlider.parent());
+      this.translateZSlider = this.createSlider(p, 'Z', -200, 200, 100, 1, () => p.redraw());
+      translateSliders.appendChild(this.translateZSlider.parent());
       
       // Focal length (separate)
       const focalGroup = document.createElement('div');
       controlRow.appendChild(focalGroup);
-      this.focalSlider = createSlider(p, 'Focal Length', 1, 30, 15, 0.1, focalGroup, () => p.redraw(), 'projection');
+      this.focalSlider = this.createSlider(p, 'Focal Length', 1, 30, 15, 0.1, () => p.redraw());
+      focalGroup.appendChild(this.focalSlider.parent());
       
       p.noLoop();
     };
@@ -214,12 +204,9 @@ class ProjectionDemo extends P5DemoBase {
       }
     };
 
-    p.windowResized = () => {
-      this.handleResize(p);
-    };
+    // Set up responsive resize
+    this.setupResponsiveResize(p);
   }
-  
-  // No need to override init() - styles are added in constructor
 }
 
 export default function initProjectionDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

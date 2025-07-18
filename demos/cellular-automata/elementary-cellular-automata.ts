@@ -1,7 +1,7 @@
 // Elementary Cellular Automata - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { P5DemoBase, addDemoStyles, createControlPanel } from '@framework';
+import { P5DemoBase } from '@framework';
 
 interface Rule {
   pattern: string;
@@ -35,7 +35,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   private toroidal = false;
 
   // UI Elements
-  private controlsContainer!: HTMLElement;
+  private canvasContainer!: HTMLElement;
   private fillRateSelect!: HTMLSelectElement;
   private startButton!: HTMLButtonElement;
   private resetButton!: HTMLButtonElement;
@@ -44,6 +44,14 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   private colEntDiv!: p5.Element;
   private ruleInput!: p5.Element;
   private ruleNumber: number = 30;
+  
+  protected getStylePrefix(): string {
+    return 'elementary-ca';
+  }
+  
+  protected shouldCenterCanvas(): boolean {
+    return false;
+  }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
@@ -51,13 +59,12 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       this.setupControls();
       
       // Calculate grid dimensions
-      const canvasContainer = this.controlsContainer.querySelector('#canvas-container') as HTMLElement;
-      this.cols = p.floor((canvasContainer.offsetWidth - this.gridOffsetX) / this.cellSize);
+      this.cols = p.floor((this.canvasContainer.offsetWidth - this.gridOffsetX) / this.cellSize);
       this.rows = p.floor(400 / this.cellSize);
       
       // Create canvas
-      const canvas = p.createCanvas(canvasContainer.offsetWidth, this.rows * this.cellSize);
-      canvas.parent(canvasContainer);
+      const canvas = p.createCanvas(this.canvasContainer.offsetWidth, this.rows * this.cellSize);
+      canvas.parent(this.canvasContainer);
       
       // Initialize colors
       this.updateColors(p);
@@ -118,9 +125,8 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     };
 
     p.windowResized = () => {
-      const canvasContainer = this.controlsContainer.querySelector('#canvas-container') as HTMLElement;
-      this.cols = p.floor((canvasContainer.offsetWidth - this.gridOffsetX) / this.cellSize);
-      p.resizeCanvas(canvasContainer.offsetWidth, this.rows * this.cellSize);
+      this.cols = p.floor((this.canvasContainer.offsetWidth - this.gridOffsetX) / this.cellSize);
+      p.resizeCanvas(this.canvasContainer.offsetWidth, this.rows * this.cellSize);
       
       // Reset simulation with new dimensions
       this.grid = this.create2DArray(this.cols, this.rows);
@@ -135,20 +141,17 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
 
   private setupControls(): void {
     // Create container for canvas
-    this.controlsContainer = document.createElement('div');
-    this.controlsContainer.className = 'elementary-demo-container';
-    this.controlsContainer.innerHTML = `<div id="canvas-container" style="position: relative;"></div>`;
-    this.container.appendChild(this.controlsContainer);
-
-    // Add shared demo styles
-    addDemoStyles(this.container);
+    this.canvasContainer = document.createElement('div');
+    this.canvasContainer.style.position = 'relative';
+    this.canvasContainer.style.marginBottom = '20px';
+    this.containerEl!.appendChild(this.canvasContainer);
 
     // Create control panel below canvas
-    const controlPanel = createControlPanel(this.container);
+    const controlPanel = this.createControlPanel();
     
     // Add instructions
     const infoDiv = document.createElement('div');
-    infoDiv.className = 'demo-info';
+    infoDiv.className = `${this.getStylePrefix()}-info`;
     infoDiv.style.textAlign = 'center';
     infoDiv.style.marginBottom = '20px';
     infoDiv.textContent = 'Click first row to edit. Click rule boxes on left to modify.';
@@ -171,7 +174,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     
     this.fillRateSelect = document.createElement('select');
     this.fillRateSelect.id = 'fillRate';
-    this.fillRateSelect.className = 'demo-select';
+    this.fillRateSelect.className = `${this.getStylePrefix()}-select`;
     this.fillRateSelect.innerHTML = `
       <option value="1">1 pixel</option>
       <option value="0.25">25%</option>
@@ -182,14 +185,10 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     mainControls.appendChild(this.fillRateSelect);
     
     // Buttons
-    this.startButton = document.createElement('button');
-    this.startButton.className = 'demo-button';
-    this.startButton.textContent = 'Start';
+    this.startButton = this.createButton('Start', () => {});
     mainControls.appendChild(this.startButton);
     
-    this.resetButton = document.createElement('button');
-    this.resetButton.className = 'demo-button';
-    this.resetButton.textContent = 'Reset';
+    this.resetButton = this.createButton('Reset', () => {});
     mainControls.appendChild(this.resetButton);
     
     // Create containers for P5 elements
@@ -232,12 +231,9 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   }
 
   private setupRuleInput(p: p5, canvas: p5.Renderer): void {
-    // Get the canvas container to position relative to it
-    const canvasContainer = this.controlsContainer.querySelector('#canvas-container') as HTMLElement;
-    
     // Create a div for the rule input that will be positioned over the canvas
     const ruleDiv = p.createDiv('Rule: ');
-    ruleDiv.parent(canvasContainer);
+    ruleDiv.parent(this.canvasContainer);
     ruleDiv.position(10, 5);
     ruleDiv.style('color', this.colors.text);
     ruleDiv.style('font-size', '14px');

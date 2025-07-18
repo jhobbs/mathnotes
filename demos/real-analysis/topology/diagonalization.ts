@@ -1,12 +1,6 @@
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
-import { 
-  P5DemoBase,
-  addDemoStyles,
-  createDemoContainer,
-  createControlPanel,
-  createButton
-} from '@framework';
+import { P5DemoBase } from '@framework';
 
 interface ConstructedSequence {
   digits: number[];
@@ -33,44 +27,17 @@ class DiagonalizationDemo extends P5DemoBase {
   private startingSequenceNumber = 1;
   private startingPositionNumber = 1;
 
-  // Animation state and UI
-
   // UI elements
-  private canvasParent: HTMLElement;
   private infoDiv: HTMLElement;
   private bottomInfo: HTMLElement;
   private generateNewSequences!: () => void;
 
+  protected getStylePrefix(): string {
+    return 'diagonalization';
+  }
+
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
-
-    // Add styles
-    addDemoStyles(container, 'diagonalization');
-
-    // Create container structure
-    const { containerEl, canvasParent } = createDemoContainer(container, {
-      center: true,
-      id: 'diagonalization-container'
-    });
-    this.canvasParent = canvasParent;
-
-    // Create info section
-    this.infoDiv = document.createElement('div');
-    this.infoDiv.style.textAlign = 'center';
-    this.infoDiv.innerHTML = `
-      <h3>Cantor's Diagonalization Proof</h3>
-      <p>This animation demonstrates how we construct a new binary sequence that differs from every sequence in our countable list, proving that the set of all binary sequences is uncountable.</p>
-    `;
-    containerEl.insertBefore(this.infoDiv, canvasParent);
-
-    // Create controls
-    const controls = createControlPanel(containerEl);
-    createButton('Reset', controls, () => this.generateNewSequences?.(), 'diagonalization-button');
-
-    this.bottomInfo = document.createElement('p');
-    this.bottomInfo.innerHTML = '<strong>Key insight:</strong> The constructed sequence (bottom row) differs from sequence <em>n</em> in position <em>n</em>, ensuring it\'s not in our original list, even though our original list is countably infinite.';
-    this.bottomInfo.style.textAlign = 'center';
-    containerEl.appendChild(this.bottomInfo);
   }
 
   protected createSketch(p: p5): void {
@@ -157,24 +124,43 @@ class DiagonalizationDemo extends P5DemoBase {
     };
 
     p.setup = () => {
+      // Create info section
+      this.infoDiv = document.createElement('div');
+      this.infoDiv.style.textAlign = 'center';
+      this.infoDiv.innerHTML = `
+        <h3>Cantor's Diagonalization Proof</h3>
+        <p>This animation demonstrates how we construct a new binary sequence that differs from every sequence in our countable list, proving that the set of all binary sequences is uncountable.</p>
+      `;
+      this.containerEl!.insertBefore(this.infoDiv, this.containerEl!.firstChild);
+
       // Calculate height based on content
-      const contentHeight = 30 + // Title
-                          80 + // Top margin
-                          this.NUM_SEQUENCES * this.CELL_SIZE + // Sequence table
+      // NUM_SEQUENCES = 8, CELL_SIZE = 40
+      const contentHeight = 80 + // Top margin
+                          this.NUM_SEQUENCES * this.CELL_SIZE + // 8 * 40 = 320 for sequence table
                           20 + // Ellipsis
                           80 + // Space between tables
-                          this.CELL_SIZE + // Constructed sequence
+                          this.CELL_SIZE + // 40 for constructed sequence
                           30 + // Position labels
                           50; // Bottom labels
+      // Total: 80 + 320 + 20 + 80 + 40 + 30 + 50 = 620 pixels
       
-      // Use responsive sizing with calculated aspect ratio
-      const aspectRatio = contentHeight / 600;
-      const size = this.getCanvasSize(aspectRatio);
-      const canvas = p.createCanvas(size.width, contentHeight);
-      canvas.parent(this.canvasParent);
+      // Calculate proper aspect ratio (height/width)
+      // For a typical width of 800px, aspect ratio would be 620/800 = 0.775
+      const aspectRatio = 0.775;
+      
+      // Use responsive sizing with proper aspect ratio
+      this.createResponsiveCanvas(p, aspectRatio);
       
       // Set up colors
       this.updateColors(p);
+      
+      // Create controls
+      this.createButton('Reset', () => this.generateNewSequences());
+
+      this.bottomInfo = document.createElement('p');
+      this.bottomInfo.innerHTML = '<strong>Key insight:</strong> The constructed sequence (bottom row) differs from sequence <em>n</em> in position <em>n</em>, ensuring it\'s not in our original list, even though our original list is countably infinite.';
+      this.bottomInfo.style.textAlign = 'center';
+      this.containerEl!.appendChild(this.bottomInfo);
       
       this.generateNewSequences();
     };
@@ -202,15 +188,12 @@ class DiagonalizationDemo extends P5DemoBase {
       handleAnimation(p);
     };
 
-    p.windowResized = () => {
-      // Recalculate content height
-      const contentHeight = 30 + 80 + this.NUM_SEQUENCES * this.CELL_SIZE + 20 + 80 + this.CELL_SIZE + 30 + 50;
-      const aspectRatio = contentHeight / 600;
-      
-      this.handleResize(p, (size) => {
-        p.resizeCanvas(size.width, contentHeight);
-      });
-    };
+    // Set up responsive resize
+    const contentHeight = 30 + 80 + this.NUM_SEQUENCES * this.CELL_SIZE + 20 + 80 + this.CELL_SIZE + 30 + 50;
+    const aspectRatio = contentHeight / 600;
+    this.setupResponsiveResize(p, aspectRatio, () => {
+      p.resizeCanvas(p.width, contentHeight);
+    });
 
     const drawSequenceTable = (p: p5) => {
       const startX = (p.width - this.SEQUENCE_LENGTH * this.CELL_SIZE) / 2;

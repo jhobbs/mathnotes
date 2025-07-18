@@ -1,7 +1,7 @@
 // Electric field simulation - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { createDemoContainer, P5DemoBase, getResponsiveCanvasSize } from '@framework';
+import { P5DemoBase } from '@framework';
 
 interface Particle {
   pos: p5.Vector;
@@ -131,22 +131,33 @@ class ElectricFieldDemo extends P5DemoBase {
   private forces: Force[] = [];
   private numForces = 30;
   private moveParticles = false;
-  private canvasParent: HTMLElement;
+  
+  protected getStylePrefix(): string {
+    return 'electric-field';
+  }
   
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
-    const { canvasParent } = createDemoContainer(container, { center: true });
-    this.canvasParent = canvasParent;
+    
+    // Add instructions
+    const instructionsDiv = document.createElement('div');
+    instructionsDiv.className = `${this.getStylePrefix()}-instructions demo-info`;
+    instructionsDiv.style.marginTop = '20px';
+    instructionsDiv.style.textAlign = 'center';
+    instructionsDiv.innerHTML = `
+      <p><strong>Instructions:</strong> Click to place negative charges (blue). 
+      Ctrl+Click to place positive charges (red). 
+      Press spacebar to toggle particle movement.</p>
+    `;
+    this.container.appendChild(instructionsDiv);
   }
   
   protected createSketch(p: p5): void {
     p.setup = () => {
       p.noStroke();
       
-      // Responsive sizing
-      const { width, height } = getResponsiveCanvasSize(this.container, this.config, 0.65);
-      const canvas = p.createCanvas(width, height);
-      canvas.parent(this.canvasParent);
+      // Create responsive canvas
+      this.createResponsiveCanvas(p, 0.65);
       
       p.background(51);
       p.frameRate(60);
@@ -205,10 +216,16 @@ class ElectricFieldDemo extends P5DemoBase {
       return true; // Allow default behavior for other keys
     };
     
-    p.windowResized = () => {
-      const { width, height } = getResponsiveCanvasSize(this.container, this.config, 0.65);
-      p.resizeCanvas(width, height);
-    };
+    // Set up responsive resize
+    this.setupResponsiveResize(p, 0.65, () => {
+      // Reinitialize force field grid with new dimensions
+      this.forces = [];
+      for (let i = p.width / this.numForces; i < p.width; i += p.width / this.numForces) {
+        for (let j = p.height / this.numForces; j < p.height; j += p.height / this.numForces) {
+          this.forces.push(new ForceImpl(p, i, j));
+        }
+      }
+    });
   }
   
   init(): DemoInstance {

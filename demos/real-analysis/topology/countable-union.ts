@@ -1,11 +1,7 @@
 // Countable Union Demo - Shows diagonal traversal of countable union
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { 
-  createDemoContainer, 
-  P5DemoBase, 
-  addDemoStyles 
-} from '@framework';
+import { P5DemoBase } from '@framework';
 
 class CountableUnionDemo extends P5DemoBase {
   // Configuration
@@ -18,29 +14,20 @@ class CountableUnionDemo extends P5DemoBase {
   private readonly animationSpeed = 0.03;
   private linePoints: Array<{x: number, y: number, isDiagonalStart: boolean}> = [];
   
-  // Animation state
-  
   // UI elements
-  private canvasParent: HTMLElement;
   private info: HTMLElement;
+  
+  protected getStylePrefix(): string {
+    return 'countable-union';
+  }
   
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
     
-    // Add styles
-    addDemoStyles(container, 'countable-union');
-    
-    // Create container structure
-    const { containerEl, canvasParent } = createDemoContainer(container, {
-      center: true,
-      id: 'countable-union-container'
-    });
-    this.canvasParent = canvasParent;
-    
     // Create info section
     this.info = document.createElement('div');
     this.info.id = 'info';
-    this.info.className = 'countable-union-info';
+    this.info.className = `${this.getStylePrefix()}-info`;
     this.info.style.marginTop = '20px';
     this.info.style.textAlign = 'center';
     this.info.innerHTML = `
@@ -48,7 +35,7 @@ class CountableUnionDemo extends P5DemoBase {
       <p>This animation shows how elements from countably many countable sets (E<sub>n</sub>) 
       can be enumerated using diagonal traversal, proving that a countable union of countable sets is countable.</p>
     `;
-    containerEl.appendChild(this.info);
+    this.container.appendChild(this.info);
     
     // Generate diagonal traversal path
     this.generateTraversalPath();
@@ -83,12 +70,10 @@ class CountableUnionDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Use responsive sizing with square aspect ratio
-      const size = this.getCanvasSize(1.0); // Uses default 80% viewport height
-      const canvas = p.createCanvas(size.width, size.height);
-      canvas.parent(this.canvasParent);
+      // Create responsive canvas with square aspect ratio
+      this.createResponsiveCanvas(p, 1.0);
       
-      this.cellSize = (size.width - 2 * this.margin) / this.gridSize;
+      this.cellSize = (p.width - 2 * this.margin) / this.gridSize;
       
       // Set up colors
       this.updateColors(p);
@@ -113,13 +98,10 @@ class CountableUnionDemo extends P5DemoBase {
       this.updateAnimation();
     };
 
-    p.windowResized = () => {
-      this.handleResize(p, (size) => {
-        this.cellSize = (size.width - 2 * this.margin) / this.gridSize;
-      });
-    };
-    
-    // Color scheme changes are now handled by base class
+    // Set up responsive resize
+    this.setupResponsiveResize(p, 1.0, () => {
+      this.cellSize = (p.width - 2 * this.margin) / this.gridSize;
+    });
   }
   
   // Override base class method to customize colors if needed

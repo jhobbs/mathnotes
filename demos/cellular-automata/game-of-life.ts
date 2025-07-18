@@ -1,7 +1,7 @@
 // Conway's Game of Life - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { P5DemoBase, addDemoStyles, createControlPanel, createButton, createSlider } from '@framework';
+import { P5DemoBase } from '@framework';
 
 interface GameOfLifeState {
   grid: number[][];
@@ -43,13 +43,15 @@ class GameOfLifeDemo extends P5DemoBase {
       maxHistory: 5
     };
   }
+  
+  protected getStylePrefix(): string {
+    return 'game-of-life';
+  }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Get responsive canvas size
-      const size = this.getCanvasSize(0.75, 0.5);
-      const canvas = p.createCanvas(size.width, size.height);
-      canvas.parent(this.container);
+      // Create responsive canvas
+      this.createResponsiveCanvas(p, 0.75, 0.5);
       
       // Calculate grid dimensions
       this.cols = Math.floor(p.width / this.resolution);
@@ -57,9 +59,6 @@ class GameOfLifeDemo extends P5DemoBase {
       
       // Initialize colors
       this.updateColors(p);
-      
-      // Add shared demo styles
-      addDemoStyles(this.container);
       
       // Set up controls
       this.setupControls(p);
@@ -113,15 +112,11 @@ class GameOfLifeDemo extends P5DemoBase {
       }
     };
 
-    p.windowResized = () => {
-      if (this.config?.width && this.config?.height) return;
-      
-      const size = this.getCanvasSize(0.75, 0.5);
-      p.resizeCanvas(size.width, size.height);
-      
+    // Set up automatic resizing with custom handler
+    this.setupResponsiveResize(p, (size) => {
       // Update grid dimensions
-      const newCols = Math.floor(p.width / this.resolution);
-      const newRows = Math.floor(p.height / this.resolution);
+      const newCols = Math.floor(size.width / this.resolution);
+      const newRows = Math.floor(size.height / this.resolution);
       
       // Create new grid with new dimensions
       const newGrid = this.make2DArray(newCols, newRows);
@@ -136,15 +131,15 @@ class GameOfLifeDemo extends P5DemoBase {
       this.cols = newCols;
       this.rows = newRows;
       this.state.grid = newGrid;
-    };
+    });
   }
 
   private setupControls(p: p5): void {
-    const controlPanel = createControlPanel(this.container);
+    const controlPanel = this.createControlPanel();
     
     // Instructions
     const infoDiv = document.createElement('div');
-    infoDiv.className = 'demo-info';
+    infoDiv.className = `${this.getStylePrefix()}-info`;
     infoDiv.style.textAlign = 'center';
     infoDiv.style.marginBottom = '20px';
     infoDiv.textContent = 'Click on cells to toggle them. Click Start to run the simulation.';
@@ -159,15 +154,17 @@ class GameOfLifeDemo extends P5DemoBase {
     controlPanel.appendChild(mainControls);
     
     // Buttons
-    this.toggleBtn = createButton('Start', mainControls, () => {
+    this.toggleBtn = this.createButton('Start', () => {
       this.state.running = !this.state.running;
       this.toggleBtn.textContent = this.state.running ? 'Stop' : 'Start';
       this.runningStatus.textContent = `Running: ${this.state.running ? "Yes" : "No"}`;
     });
+    mainControls.appendChild(this.toggleBtn);
     
-    this.resetBtn = createButton('Reset', mainControls, () => {
+    this.resetBtn = this.createButton('Reset', () => {
       this.resetGrid(p);
     });
+    mainControls.appendChild(this.resetBtn);
     
     // Sliders row
     const slidersRow = document.createElement('div');
@@ -177,28 +174,32 @@ class GameOfLifeDemo extends P5DemoBase {
     slidersRow.style.marginBottom = '20px';
     controlPanel.appendChild(slidersRow);
     
+    // Create sliders in temporary div, then move to slidersRow
+    const tempDiv = document.createElement('div');
+    controlPanel.appendChild(tempDiv);
+    
     // Initial population slider
-    this.initialPopulationSlider = createSlider(
+    this.initialPopulationSlider = this.createSlider(
       p,
       'Initial Population',
-      0, 1, 0.15, 0.01,
-      slidersRow,
-      undefined,
-      'demo'
+      0, 1, 0.15, 0.01
     );
+    slidersRow.appendChild(this.initialPopulationSlider.parent());
     
     // Frame rate slider
-    this.frameRateSlider = createSlider(
+    this.frameRateSlider = this.createSlider(
       p,
       'Frame Rate',
       1, 30, 10, 1,
-      slidersRow,
       () => {
         const frameRate = this.frameRateSlider.value() as number;
         p.frameRate(frameRate);
-      },
-      'demo'
+      }
     );
+    slidersRow.appendChild(this.frameRateSlider.parent());
+    
+    // Remove temp div
+    controlPanel.removeChild(tempDiv);
     
     // Info panel
     const infoPanel = document.createElement('div');
@@ -218,7 +219,7 @@ class GameOfLifeDemo extends P5DemoBase {
 
   private createInfoDisplay(text: string, parent: HTMLElement): HTMLElement {
     const display = document.createElement('div');
-    display.className = 'demo-info';
+    display.className = `${this.getStylePrefix()}-info`;
     display.style.fontSize = '14px';
     display.textContent = text;
     parent.appendChild(display);
