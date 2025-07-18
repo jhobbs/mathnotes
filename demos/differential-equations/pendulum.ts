@@ -1,100 +1,92 @@
 // Pendulum Demo - Simple harmonic motion of a pendulum
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
+import { P5DemoBase, createDemoContainer, addDemoStyles, createSlider } from '@demos/common/utils';
 
-export default function createPendulumDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
-  let sketch: p5 | null = null;
+class PendulumDemo extends P5DemoBase {
 
   // Constants
-  const TABLE_SIZE = 600;
-  const PIVOT_X = 0;
-  const PIVOT_Y = TABLE_SIZE * 0.3;
-  const PIVOT_RADIUS = 2;
-  const BOB_RADIUS = 20;
-  const PIXELS_PER_FOOT = 20;
-  const G = 32; // gravitational constant in ft/s^2
+  private readonly PIVOT_X = 0;
+  private readonly PIVOT_Y_RATIO = 0.4; // 40% down from center (closer to top)"
+  private readonly PIVOT_RADIUS = 2;
+  private readonly BOB_RADIUS = 20;
+  private readonly PIXELS_PER_FOOT = 20;
+  private readonly G = 32; // gravitational constant in ft/s^2
 
   // State variables
-  let lengthSlider: p5.Element;
-  let angularVelocitySlider: p5.Element;
-  let angleSlider: p5.Element;
+  private lengthSlider!: p5.Element;
+  private angularVelocitySlider!: p5.Element;
+  private angleSlider!: p5.Element;
   
-  let initial_bob_theta: number;
-  let wire_length: number;
-  let omega_naught: number;
-  let start_time: number;
+  private initial_bob_theta!: number;
+  private wire_length!: number;
+  private omega_naught!: number;
+  private start_time!: number;
+  
+  // UI elements
+  private canvasParent: HTMLElement;
+  private controlsDiv: HTMLElement;
+  private infoDiv: HTMLElement;
+  
+  constructor(container: HTMLElement, config?: DemoConfig) {
+    super(container, config);
+    
+    // Add styles
+    addDemoStyles(container, 'pendulum');
+    
+    // Create container structure
+    const { containerEl, canvasParent } = createDemoContainer(container, {
+      center: true,
+      id: 'pendulum-container'
+    });
+    this.canvasParent = canvasParent;
+    
+    // Create controls container
+    this.controlsDiv = document.createElement('div');
+    this.controlsDiv.id = 'pendulum-controls';
+    this.controlsDiv.style.marginTop = '20px';
+    this.controlsDiv.style.textAlign = 'center';
+    containerEl.appendChild(this.controlsDiv);
+    
+    // Create info display
+    this.infoDiv = document.createElement('div');
+    this.infoDiv.style.marginTop = '20px';
+    this.infoDiv.style.textAlign = 'center';
+    this.infoDiv.innerHTML = `
+      <div id="wire-length-display" class="pendulum-info"></div>
+      <div id="period-display" class="pendulum-info"></div>
+    `;
+    containerEl.appendChild(this.infoDiv);
+  }
 
-  // Dark mode detection helper
-  const isDarkMode = () => config?.darkMode ?? false;
-
-  // Color helpers
-  const getBackgroundColor = (p: p5) => isDarkMode() ? p.color(30, 30, 30) : p.color(255, 255, 255);
-  const getStrokeColor = (p: p5) => isDarkMode() ? p.color(200, 200, 200) : p.color(0, 0, 0);
-  const getFillColor = (p: p5) => isDarkMode() ? p.color(180, 180, 180) : p.color(50, 50, 50);
-  const getTextColor = () => isDarkMode() ? '#e0e0e0' : '#000000';
-
-  const createSketch = (p: p5) => {
+  protected createSketch(p: p5): void {
     const setupSliders = () => {
-      const controlsDiv = document.getElementById('pendulum-controls');
-      if (!controlsDiv) return;
+      // Create horizontal layout for sliders
+      const sliderRow = document.createElement('div');
+      sliderRow.style.display = 'flex';
+      sliderRow.style.justifyContent = 'center';
+      sliderRow.style.gap = '20px';
+      this.controlsDiv.appendChild(sliderRow);
       
       // Wire length control
-      const lengthDiv = p.createDiv('');
-      lengthDiv.parent(controlsDiv);
-      lengthDiv.style('display', 'inline-block');
-      lengthDiv.style('margin-right', '20px');
+      this.lengthSlider = createSlider(p, 'Wire Length', 0, 20, 5, 0, sliderRow, () => this.redo(), 'pendulum');
       
-      const lengthLabel = p.createDiv('Wire Length:');
-      lengthLabel.parent(lengthDiv);
-      lengthLabel.style('color', getTextColor());
-      lengthLabel.style('margin-bottom', '5px');
-      
-      lengthSlider = p.createSlider(0, 20, 5, 0);
-      lengthSlider.parent(lengthDiv);
-      lengthSlider.style('width', '120px');
-      lengthSlider.input(() => redo());
-
       // Angular velocity control
-      const velocityDiv = p.createDiv('');
-      velocityDiv.parent(controlsDiv);
-      velocityDiv.style('display', 'inline-block');
-      velocityDiv.style('margin-right', '20px');
+      this.angularVelocitySlider = createSlider(p, 'Starting Angular Velocity', 0, 10, 0, 0, sliderRow, () => this.redo(), 'pendulum');
       
-      const velocityLabel = p.createDiv('Starting Angular Velocity:');
-      velocityLabel.parent(velocityDiv);
-      velocityLabel.style('color', getTextColor());
-      velocityLabel.style('margin-bottom', '5px');
-      
-      angularVelocitySlider = p.createSlider(0, 10, 0, 0);
-      angularVelocitySlider.parent(velocityDiv);
-      angularVelocitySlider.style('width', '120px');
-      angularVelocitySlider.input(() => redo());
-
-      // Starting angle control
-      const angleDiv = p.createDiv('');
-      angleDiv.parent(controlsDiv);
-      angleDiv.style('display', 'inline-block');
-      
-      const angleLabel = p.createDiv('Starting Angle:');
-      angleLabel.parent(angleDiv);
-      angleLabel.style('color', getTextColor());
-      angleLabel.style('margin-bottom', '5px');
-      
-      angleSlider = p.createSlider(0, p.PI, p.PI / 4, p.PI / 32);
-      angleSlider.parent(angleDiv);
-      angleSlider.style('width', '120px');
-      angleSlider.input(() => redo());
+      // Starting angle control  
+      this.angleSlider = createSlider(p, 'Starting Angle', 0, p.PI, p.PI / 4, p.PI / 32, sliderRow, () => this.redo(), 'pendulum');
     };
 
     const getTime = (): number => {
-      return (Date.now() - start_time) / 1000;
+      return (Date.now() - this.start_time) / 1000;
     };
 
-    const redo = () => {
-      initial_bob_theta = angleSlider.value();
-      wire_length = lengthSlider.value();
-      omega_naught = angularVelocitySlider.value();
-      start_time = Date.now();
+    this.redo = () => {
+      this.initial_bob_theta = this.angleSlider.value() as number;
+      this.wire_length = this.lengthSlider.value() as number;
+      this.omega_naught = this.angularVelocitySlider.value() as number;
+      this.start_time = Date.now();
     };
 
     const updateInfo = () => {
@@ -102,69 +94,78 @@ export default function createPendulumDemo(container: HTMLElement, config?: Demo
       const periodDisplay = document.getElementById('period-display');
       
       if (lengthDisplay) {
-        lengthDisplay.textContent = `Wire length: ${wire_length.toFixed(2)} ft`;
-        lengthDisplay.style.color = getTextColor();
+        lengthDisplay.textContent = `Wire length: ${this.wire_length.toFixed(2)} ft`;
       }
       
       if (periodDisplay) {
-        periodDisplay.textContent = `Period: ${(2 * p.PI * p.sqrt(wire_length / G)).toFixed(2)} sec`;
-        periodDisplay.style.color = getTextColor();
+        periodDisplay.textContent = `Period: ${(2 * p.PI * p.sqrt(this.wire_length / this.G)).toFixed(2)} sec`;
       }
     };
 
     const getBobPosition = (): p5.Vector => {
       const amplitude = p.sqrt(
-        p.pow(initial_bob_theta, 2) + 
-        (wire_length / G) * p.pow(omega_naught, 2)
+        p.pow(this.initial_bob_theta, 2) + 
+        (this.wire_length / this.G) * p.pow(this.omega_naught, 2)
       );
       
       const phase = p.atan2(
-        omega_naught * p.sqrt(wire_length / G), 
-        initial_bob_theta
+        this.omega_naught * p.sqrt(this.wire_length / this.G), 
+        this.initial_bob_theta
       );
       
       const bob_theta = amplitude * p.cos(
-        p.sqrt(G / wire_length) * getTime() - phase
+        p.sqrt(this.G / this.wire_length) * getTime() - phase
       );
       
-      const bob_x = PIVOT_X + wire_length * PIXELS_PER_FOOT * p.sin(bob_theta);
-      const bob_y = PIVOT_Y - wire_length * PIXELS_PER_FOOT * p.cos(bob_theta);
+      const pivotY = p.height * this.PIVOT_Y_RATIO;
+      const bob_x = this.PIVOT_X + this.wire_length * this.PIXELS_PER_FOOT * p.sin(bob_theta);
+      const bob_y = pivotY - this.wire_length * this.PIXELS_PER_FOOT * p.cos(bob_theta);
       
       return p.createVector(bob_x, bob_y);
     };
 
     const drawPivot = () => {
-      p.fill(getFillColor(p));
-      p.circle(PIVOT_X, PIVOT_Y, PIVOT_RADIUS * 2);
+      p.fill(this.colors.fill);
+      const pivotY = p.height * this.PIVOT_Y_RATIO;
+      p.circle(this.PIVOT_X, pivotY, this.PIVOT_RADIUS * 2);
     };
 
     const drawWire = () => {
       const bobPosition = getBobPosition();
-      p.stroke(getStrokeColor(p));
+      const pivotY = p.height * this.PIVOT_Y_RATIO;
+      p.stroke(this.colors.stroke);
       p.strokeWeight(2);
-      p.line(PIVOT_X, PIVOT_Y, bobPosition.x, bobPosition.y);
+      p.line(this.PIVOT_X, pivotY, bobPosition.x, bobPosition.y);
     };
 
     const drawBob = () => {
       const bobPosition = getBobPosition();
-      p.fill(getFillColor(p));
-      p.circle(bobPosition.x, bobPosition.y, BOB_RADIUS * 2);
+      p.fill(this.colors.fill);
+      p.stroke(this.colors.stroke);
+      p.strokeWeight(1);
+      p.circle(bobPosition.x, bobPosition.y, this.BOB_RADIUS * 2);
     };
 
     p.setup = () => {
-      const canvas = p.createCanvas(TABLE_SIZE, TABLE_SIZE);
-      canvas.parent(container.querySelector('#pendulum-canvas') || container);
+      // Use responsive sizing with square aspect ratio
+      const size = this.getCanvasSize(1.0, 0.6);
+      const canvas = p.createCanvas(size.width, size.height);
+      canvas.parent(this.canvasParent);
+      
+      // Initialize colors
+      this.updateColors(p);
+      
       setupSliders();
-      redo();
+      this.redo();
     };
 
     p.draw = () => {
-      p.background(getBackgroundColor(p));
+      p.background(this.colors.background);
       updateInfo();
       
       p.push();
       // Use the center as origin and orient the upward direction as positive y
-      p.translate(TABLE_SIZE / 2, TABLE_SIZE / 2);
+      p.translate(p.width / 2, p.height / 2);
       p.scale(1, -1);
       
       drawPivot();
@@ -176,27 +177,23 @@ export default function createPendulumDemo(container: HTMLElement, config?: Demo
 
     p.keyPressed = () => {
       if (p.keyCode === 90) { // 'z' key
-        redo();
+        this.redo();
       }
     };
+    
+    p.windowResized = () => {
+      this.handleResize(p);
+    };
+    
+    // Color scheme changes are now handled by base class
+  }
+  
+  private redo(): void {
+    // Defined inside createSketch
+  }
+}
 
-    // Update colors when color scheme changes
-    if (window.matchMedia) {
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        config = { ...config, darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches };
-      });
-    }
-  };
-
-  // Create and start the sketch
-  sketch = new p5(createSketch);
-
-  return {
-    cleanup: () => {
-      if (sketch) {
-        sketch.remove();
-        sketch = null;
-      }
-    }
-  };
+export default function createPendulumDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
+  const demo = new PendulumDemo(container, config);
+  return demo.init();
 }
