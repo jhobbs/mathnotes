@@ -33,11 +33,8 @@ class NeighborhoodDemo extends P5DemoBase {
   private innerColor!: p5.Color;
   
   // UI elements
-  private containerEl: HTMLElement;
   private canvasParent: HTMLElement;
   private info: HTMLElement;
-  private resetBtn: HTMLButtonElement;
-  private zoomToggle: HTMLButtonElement;
   
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
@@ -50,13 +47,12 @@ class NeighborhoodDemo extends P5DemoBase {
       center: true,
       id: 'neighborhood-container'
     });
-    this.containerEl = containerEl;
     this.canvasParent = canvasParent;
     
     // Create controls
     const controls = createControlPanel(containerEl);
-    this.resetBtn = createButton('Reset', controls, () => this.resetDemo(), 'neighborhood-button');
-    this.zoomToggle = createButton('Toggle Zoom', controls, () => this.toggleZoom(), 'neighborhood-button');
+    createButton('Reset', controls, () => this.resetDemo(), 'neighborhood-button');
+    createButton('Toggle Zoom', controls, () => this.toggleZoom(), 'neighborhood-button');
     
     // Create info section
     this.info = document.createElement('div');

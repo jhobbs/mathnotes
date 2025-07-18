@@ -1,4 +1,3 @@
-// Cantor's Diagonalization Demo
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
 
