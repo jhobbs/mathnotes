@@ -1,32 +1,64 @@
 // Countable Union Demo - Shows diagonal traversal of countable union
 import p5 from 'p5';
-import type { DemoConfig, DemoInstance } from '@framework/types';
+import type { DemoInstance, DemoConfig } from '@framework/types';
+import { 
+  createDemoContainer, 
+  P5DemoBase, 
+  getDemoColors, 
+  addDemoStyles 
+} from '@demos/common/utils';
 
-export default function createCountableUnionDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
-  let sketch: p5 | null = null;
-
+class CountableUnionDemo extends P5DemoBase {
   // Configuration
-  const gridSize = 10; // Grid dimensions (10x10)
-  let cellSize: number;
-  const margin = 60;
-  let traversalPath: Array<{n: number, m: number, isDiagonalStart: boolean}> = [];
-  let currentIndex = 0;
-  let animationProgress = 0;
-  const animationSpeed = 0.03;
-  let linePoints: Array<{x: number, y: number, isDiagonalStart: boolean}> = [];
-
-  // Dark mode detection helper
-  const isDarkMode = () => config?.darkMode ?? false;
-
-  // Color helpers
-  const getBackgroundColor = (p: p5) => isDarkMode() ? p.color(15, 15, 15) : p.color(255, 255, 255);
-  const getTextColor = (p: p5) => isDarkMode() ? p.color(230, 230, 230) : p.color(0, 0, 0);
-  const getStrokeColor = (p: p5) => isDarkMode() ? p.color(100, 100, 100) : p.color(0, 0, 0);
-  const getHighlightColor = (p: p5) => isDarkMode() ? p.color(88, 166, 255) : p.color(3, 102, 214);
+  private readonly gridSize = 10; // Grid dimensions (10x10)
+  private cellSize!: number;
+  private readonly margin = 60;
+  private traversalPath: Array<{n: number, m: number, isDiagonalStart: boolean}> = [];
+  private currentIndex = 0;
+  private animationProgress = 0;
+  private readonly animationSpeed = 0.03;
+  private linePoints: Array<{x: number, y: number, isDiagonalStart: boolean}> = [];
+  
+  // Colors
+  private colors!: ReturnType<typeof getDemoColors>;
+  
+  // UI elements
+  private canvasParent: HTMLElement;
+  private info: HTMLElement;
+  
+  constructor(container: HTMLElement, config?: DemoConfig) {
+    super(container, config);
+    
+    // Add styles
+    addDemoStyles(container, 'countable-union');
+    
+    // Create container structure
+    const { containerEl, canvasParent } = createDemoContainer(container, {
+      center: true,
+      id: 'countable-union-container'
+    });
+    this.canvasParent = canvasParent;
+    
+    // Create info section
+    this.info = document.createElement('div');
+    this.info.id = 'info';
+    this.info.className = 'countable-union-info';
+    this.info.style.marginTop = '20px';
+    this.info.style.textAlign = 'center';
+    this.info.innerHTML = `
+      <h3>Diagonal Traversal of Countable Union</h3>
+      <p>This animation shows how elements from countably many countable sets (E<sub>n</sub>) 
+      can be enumerated using diagonal traversal, proving that a countable union of countable sets is countable.</p>
+    `;
+    containerEl.appendChild(this.info);
+    
+    // Generate diagonal traversal path
+    this.generateTraversalPath();
+  }
 
   // Generate diagonal traversal path
-  const generateTraversalPath = () => {
-    traversalPath = [];
+  private generateTraversalPath(): void {
+    this.traversalPath = [];
     
     // Generate diagonal traversal order
     // Stop after completing the diagonal that starts at E_10,1
@@ -39,8 +71,8 @@ export default function createCountableUnionDemo(container: HTMLElement, config?
       for (let col = 1; col < sum; col++) {
         const row = sum - col;
         
-        if (row >= 1 && row <= gridSize && col >= 1 && col <= gridSize) {
-          traversalPath.push({
+        if (row >= 1 && row <= this.gridSize && col >= 1 && col <= this.gridSize) {
+          this.traversalPath.push({
             n: row - 1, // Convert to 0-indexed (row)
             m: col - 1, // Convert to 0-indexed (col)
             isDiagonalStart: diagonalStart
@@ -49,9 +81,9 @@ export default function createCountableUnionDemo(container: HTMLElement, config?
         }
       }
     }
-  };
+  }
 
-  const createSketch = (p: p5) => {
+  protected createSketch(p: p5): void {
     p.setup = () => {
       // Responsive sizing
       let canvasWidth: number, canvasHeight: number;
@@ -62,41 +94,41 @@ export default function createCountableUnionDemo(container: HTMLElement, config?
         canvasHeight = canvasWidth;
       } else {
         // Desktop: use config or container-based sizing
-        canvasWidth = config?.width || container.offsetWidth - 40 || 600;
-        canvasHeight = config?.height || canvasWidth;
+        canvasWidth = this.config?.width || this.canvasParent.offsetWidth || 600;
+        canvasHeight = this.config?.height || canvasWidth;
       }
       
       const canvas = p.createCanvas(canvasWidth, canvasHeight);
-      canvas.parent(container);
+      canvas.parent(this.canvasParent);
       
-      cellSize = (canvasWidth - 2 * margin) / gridSize;
+      this.cellSize = (canvasWidth - 2 * this.margin) / this.gridSize;
       
-      // Generate diagonal traversal path
-      generateTraversalPath();
+      // Set up colors
+      this.updateColors(p);
       
       p.textAlign(p.CENTER, p.CENTER);
       p.strokeWeight(2);
     };
 
     p.draw = () => {
-      p.background(getBackgroundColor(p));
+      p.background(this.colors.background);
       
       // Draw grid
-      drawGrid(p);
+      this.drawGrid(p);
       
       // Draw axis labels and indicators
-      drawLabels(p);
+      this.drawLabels(p);
       
       // Animate traversal line
-      drawTraversalLine(p);
+      this.drawTraversalLine(p);
       
       // Update animation
-      updateAnimation();
+      this.updateAnimation();
     };
 
     p.windowResized = () => {
       // Only respond to window resize if no fixed dimensions
-      if (config?.width && config?.height) return;
+      if (this.config?.width && this.config?.height) return;
       
       // Responsive sizing
       let canvasWidth: number, canvasHeight: number;
@@ -105,214 +137,204 @@ export default function createCountableUnionDemo(container: HTMLElement, config?
         canvasWidth = p.windowWidth - 40;
         canvasHeight = canvasWidth;
       } else {
-        canvasWidth = container.offsetWidth - 40 || 600;
+        canvasWidth = this.canvasParent.offsetWidth || 600;
         canvasHeight = canvasWidth;
       }
       
       p.resizeCanvas(canvasWidth, canvasHeight);
-      cellSize = (canvasWidth - 2 * margin) / gridSize;
+      this.cellSize = (canvasWidth - 2 * this.margin) / this.gridSize;
     };
+    
+    // Listen for color scheme changes
+    if (window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const colorChangeListener = () => {
+        this.config = { ...this.config, darkMode: mediaQuery.matches };
+        this.updateColors(p);
+      };
+      this.addEventListener(mediaQuery, 'change', colorChangeListener);
+    }
+  }
+  
+  private updateColors(p: p5): void {
+    this.colors = getDemoColors(p, this.config);
+  }
 
-    const drawGrid = (p: p5) => {
-      for (let n = 0; n < gridSize; n++) {
-        for (let m = 0; m < gridSize; m++) {
-          const x = margin + m * cellSize + cellSize / 2;
-          const y = margin + n * cellSize + cellSize / 2;
-          
-          // Draw cell
-          p.noFill();
-          p.stroke(getStrokeColor(p));
-          p.strokeWeight(1);
-          p.rect(x - cellSize/2, y - cellSize/2, cellSize, cellSize);
-          
-          // Draw label with subscripts
-          p.fill(getTextColor(p));
-          p.noStroke();
-          p.textSize(cellSize * 0.3);
-          drawSubscriptText(p, 'E', n + 1, m + 1, x, y);
-        }
-      }
-      
-      // Draw ellipsis to indicate infinite continuation
-      p.textSize(20);
-      p.fill(getTextColor(p));
-      p.noStroke();
-      
-      // Right edge ellipsis
-      p.text('...', margin + gridSize * cellSize + cellSize/2, p.height / 2);
-      
-      // Bottom edge ellipsis
-      p.text('...', p.width / 2, margin + gridSize * cellSize + cellSize/2);
-      
-      // Bottom-right corner ellipsis
-      p.text('...', margin + gridSize * cellSize + cellSize/2, margin + gridSize * cellSize + cellSize/2);
-    };
-
-    const drawLabels = (p: p5) => {
-      p.textSize(16);
-      p.fill(getTextColor(p));
-      p.noStroke();
-      
-      // Set label (vertical)
-      p.push();
-      p.translate(margin / 2, p.height / 2);
-      p.rotate(-p.PI / 2);
-      p.text('Set number (n)', 0, 0);
-      p.pop();
-      
-      // Element label (horizontal)
-      p.text('Element index (m)', p.width / 2, p.height - margin / 2);
-      
-      // Add infinity symbols
-      p.textSize(14);
-      p.text('→ ∞', margin + gridSize * cellSize + cellSize, p.height - margin / 2);
-      p.text('↓ ∞', margin / 2, margin + gridSize * cellSize + cellSize);
-    };
-
-    const drawSubscriptText = (p: p5, base: string, sub1: number, sub2: number, x: number, y: number) => {
-      const baseSize = cellSize * 0.5;
-      const subSize = baseSize * 0.5;
-      
-      p.textSize(baseSize);
-      
-      // Draw base
-      p.text(base, x - cellSize * 0.2, y - cellSize * 0.1);
-      
-      // Draw subscripts
-      p.textSize(subSize);
-      p.text(sub1 + ',' + sub2, x + cellSize * 0.12, y + cellSize * 0.12);
-    };
-
-    const drawTraversalLine = (p: p5) => {
-      p.noFill();
-      
-      // Use theme-appropriate highlight color
-      p.stroke(getHighlightColor(p));
-      p.strokeWeight(3);
-      
-      // Draw completed path segments
-      for (let i = 1; i < linePoints.length; i++) {
-        const prev = linePoints[i - 1];
-        const curr = linePoints[i];
+  private drawGrid(p: p5): void {
+    for (let n = 0; n < this.gridSize; n++) {
+      for (let m = 0; m < this.gridSize; m++) {
+        const x = this.margin + m * this.cellSize + this.cellSize / 2;
+        const y = this.margin + n * this.cellSize + this.cellSize / 2;
         
-        // Check if this is a diagonal transition
-        if (curr.isDiagonalStart && i > 0) {
-          // Draw dashed line for diagonal transitions
-          p.drawingContext.setLineDash([5, 5]);
-        } else {
-          // Solid line within diagonals
-          p.drawingContext.setLineDash([]);
-        }
+        // Draw cell
+        p.noFill();
+        p.stroke(this.colors.stroke);
+        p.strokeWeight(1);
+        p.rect(x - this.cellSize/2, y - this.cellSize/2, this.cellSize, this.cellSize);
         
-        p.line(prev.x, prev.y, curr.x, curr.y);
-      }
-      
-      // Reset to solid line
-      p.drawingContext.setLineDash([]);
-      
-      // Draw animated segment
-      if (currentIndex > 0 && currentIndex < traversalPath.length) {
-        const prev = traversalPath[currentIndex - 1];
-        const curr = traversalPath[currentIndex];
-        
-        const x1 = margin + prev.m * cellSize + cellSize / 2;
-        const y1 = margin + prev.n * cellSize + cellSize / 2;
-        const x2 = margin + curr.m * cellSize + cellSize / 2;
-        const y2 = margin + curr.n * cellSize + cellSize / 2;
-        
-        // Use dashed line if transitioning to new diagonal
-        if (curr.isDiagonalStart) {
-          p.drawingContext.setLineDash([5, 5]);
-        } else {
-          p.drawingContext.setLineDash([]);
-        }
-        
-        const x = p.lerp(x1, x2, animationProgress);
-        const y = p.lerp(y1, y2, animationProgress);
-        
-        if (linePoints.length > 0) {
-          p.line(linePoints[linePoints.length - 1].x, linePoints[linePoints.length - 1].y, x, y);
-        }
-      }
-      
-      // Reset dash
-      p.drawingContext.setLineDash([]);
-      
-      // Highlight current element
-      if (currentIndex < traversalPath.length) {
-        const curr = traversalPath[currentIndex];
-        const x = margin + curr.m * cellSize + cellSize / 2;
-        const y = margin + curr.n * cellSize + cellSize / 2;
-        
-        // Use theme-appropriate highlight color
-        p.fill(getHighlightColor(p));
+        // Draw label with subscripts
+        p.fill(this.colors.text);
         p.noStroke();
-        p.circle(x, y, cellSize * 0.3);
-        
-        // Show current element number
-        p.fill(getBackgroundColor(p));
-        p.textSize(cellSize * 0.3);
-        p.text(currentIndex + 1, x, y);
-      }
-    };
-
-    const updateAnimation = () => {
-      animationProgress += animationSpeed;
-      if (animationProgress >= 1) {
-        animationProgress = 0;
-        currentIndex = (currentIndex + 1) % traversalPath.length;
-        
-        // Add current point to line history
-        if (currentIndex > 0) {
-          const curr = traversalPath[currentIndex - 1];
-          const x = margin + curr.m * cellSize + cellSize / 2;
-          const y = margin + curr.n * cellSize + cellSize / 2;
-          linePoints.push({
-            x: x, 
-            y: y,
-            isDiagonalStart: curr.isDiagonalStart
-          });
-          
-          // Keep only recent points for performance
-          if (linePoints.length > traversalPath.length) {
-            linePoints.shift();
-          }
-        }
-        
-        // Reset when complete
-        if (currentIndex === 0) {
-          linePoints = [];
-        }
-      }
-    };
-  };
-
-  // Create info panel
-  const infoDiv = document.createElement('div');
-  infoDiv.style.marginTop = '20px';
-  infoDiv.style.textAlign = 'center';
-  infoDiv.innerHTML = `
-    <h3>Diagonal Traversal of Countable Union</h3>
-    <p>This animation shows how elements from countably many countable sets (E<sub>n</sub>) 
-    can be enumerated using diagonal traversal, proving that a countable union of countable sets is countable.</p>
-  `;
-  container.appendChild(infoDiv);
-
-  // Create and start sketch
-  sketch = new p5(createSketch);
-
-  return {
-    cleanup: () => {
-      if (sketch) {
-        sketch.remove();
-        sketch = null;
-      }
-      container.innerHTML = '';
-    },
-    resize: () => {
-      if (sketch && sketch.windowResized) {
-        sketch.windowResized();
+        p.textSize(this.cellSize * 0.3);
+        this.drawSubscriptText(p, 'E', n + 1, m + 1, x, y);
       }
     }
-  };
+    
+    // Draw ellipsis to indicate infinite continuation
+    p.textSize(20);
+    p.fill(this.colors.text);
+    p.noStroke();
+    
+    // Right edge ellipsis
+    p.text('...', this.margin + this.gridSize * this.cellSize + this.cellSize/2, p.height / 2);
+    
+    // Bottom edge ellipsis
+    p.text('...', p.width / 2, this.margin + this.gridSize * this.cellSize + this.cellSize/2);
+    
+    // Bottom-right corner ellipsis
+    p.text('...', this.margin + this.gridSize * this.cellSize + this.cellSize/2, this.margin + this.gridSize * this.cellSize + this.cellSize/2);
+  }
+
+  private drawLabels(p: p5): void {
+    p.textSize(16);
+    p.fill(this.colors.text);
+    p.noStroke();
+    
+    // Set label (vertical)
+    p.push();
+    p.translate(this.margin / 2, p.height / 2);
+    p.rotate(-p.PI / 2);
+    p.text('Set number (n)', 0, 0);
+    p.pop();
+    
+    // Element label (horizontal)
+    p.text('Element index (m)', p.width / 2, p.height - this.margin / 2);
+    
+    // Add infinity symbols
+    p.textSize(14);
+    p.text('→ ∞', this.margin + this.gridSize * this.cellSize + this.cellSize, p.height - this.margin / 2);
+    p.text('↓ ∞', this.margin / 2, this.margin + this.gridSize * this.cellSize + this.cellSize);
+  }
+
+  private drawSubscriptText(p: p5, base: string, sub1: number, sub2: number, x: number, y: number): void {
+    const baseSize = this.cellSize * 0.5;
+    const subSize = baseSize * 0.5;
+    
+    p.textSize(baseSize);
+    
+    // Draw base
+    p.text(base, x - this.cellSize * 0.2, y - this.cellSize * 0.1);
+    
+    // Draw subscripts
+    p.textSize(subSize);
+    p.text(sub1 + ',' + sub2, x + this.cellSize * 0.12, y + this.cellSize * 0.12);
+  }
+
+  private drawTraversalLine(p: p5): void {
+    p.noFill();
+    
+    // Use theme-appropriate highlight color
+    p.stroke(this.colors.accent);
+    p.strokeWeight(3);
+    
+    // Draw completed path segments
+    for (let i = 1; i < this.linePoints.length; i++) {
+      const prev = this.linePoints[i - 1];
+      const curr = this.linePoints[i];
+      
+      // Check if this is a diagonal transition
+      if (curr.isDiagonalStart && i > 0) {
+        // Draw dashed line for diagonal transitions
+        p.drawingContext.setLineDash([5, 5]);
+      } else {
+        // Solid line within diagonals
+        p.drawingContext.setLineDash([]);
+      }
+      
+      p.line(prev.x, prev.y, curr.x, curr.y);
+    }
+    
+    // Reset to solid line
+    p.drawingContext.setLineDash([]);
+    
+    // Draw animated segment
+    if (this.currentIndex > 0 && this.currentIndex < this.traversalPath.length) {
+      const prev = this.traversalPath[this.currentIndex - 1];
+      const curr = this.traversalPath[this.currentIndex];
+      
+      const x1 = this.margin + prev.m * this.cellSize + this.cellSize / 2;
+      const y1 = this.margin + prev.n * this.cellSize + this.cellSize / 2;
+      const x2 = this.margin + curr.m * this.cellSize + this.cellSize / 2;
+      const y2 = this.margin + curr.n * this.cellSize + this.cellSize / 2;
+      
+      // Use dashed line if transitioning to new diagonal
+      if (curr.isDiagonalStart) {
+        p.drawingContext.setLineDash([5, 5]);
+      } else {
+        p.drawingContext.setLineDash([]);
+      }
+      
+      const x = p.lerp(x1, x2, this.animationProgress);
+      const y = p.lerp(y1, y2, this.animationProgress);
+      
+      if (this.linePoints.length > 0) {
+        p.line(this.linePoints[this.linePoints.length - 1].x, this.linePoints[this.linePoints.length - 1].y, x, y);
+      }
+    }
+    
+    // Reset dash
+    p.drawingContext.setLineDash([]);
+    
+    // Highlight current element
+    if (this.currentIndex < this.traversalPath.length) {
+      const curr = this.traversalPath[this.currentIndex];
+      const x = this.margin + curr.m * this.cellSize + this.cellSize / 2;
+      const y = this.margin + curr.n * this.cellSize + this.cellSize / 2;
+      
+      // Use theme-appropriate highlight color
+      p.fill(this.colors.accent);
+      p.noStroke();
+      p.circle(x, y, this.cellSize * 0.3);
+      
+      // Show current element number
+      p.fill(this.colors.background);
+      p.textSize(this.cellSize * 0.3);
+      p.text(this.currentIndex + 1, x, y);
+    }
+  }
+
+  private updateAnimation(): void {
+    this.animationProgress += this.animationSpeed;
+    if (this.animationProgress >= 1) {
+      this.animationProgress = 0;
+      this.currentIndex = (this.currentIndex + 1) % this.traversalPath.length;
+      
+      // Add current point to line history
+      if (this.currentIndex > 0) {
+        const curr = this.traversalPath[this.currentIndex - 1];
+        const x = this.margin + curr.m * this.cellSize + this.cellSize / 2;
+        const y = this.margin + curr.n * this.cellSize + this.cellSize / 2;
+        this.linePoints.push({
+          x: x, 
+          y: y,
+          isDiagonalStart: curr.isDiagonalStart
+        });
+        
+        // Keep only recent points for performance
+        if (this.linePoints.length > this.traversalPath.length) {
+          this.linePoints.shift();
+        }
+      }
+      
+      // Reset when complete
+      if (this.currentIndex === 0) {
+        this.linePoints = [];
+      }
+    }
+  }
+}
+
+export default function initCountableUnionDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
+  const demo = new CountableUnionDemo(container, config);
+  return demo.init();
 }
