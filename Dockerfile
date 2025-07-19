@@ -7,10 +7,8 @@ COPY .git .git
 RUN git describe --always --tags > /version.txt || echo "unknown" > /version.txt
 
 # Stage 2: Build frontend assets
-FROM node:22-alpine AS frontend
+FROM node:24-alpine AS frontend
 WORKDIR /app
-# Upgrade npm to latest version
-RUN npm install -g npm@latest
 COPY package.json ./
 # Don't copy package-lock.json to avoid platform-specific issues
 RUN npm install
@@ -24,11 +22,6 @@ FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
 COPY requirements.txt .
