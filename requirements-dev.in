@@ -1,0 +1,27 @@
+# Development dependencies
+# These are additional dependencies needed for development
+# Use pip-compile to generate requirements-dev.txt with pinned versions
+
+# Include production dependencies
+-r requirements.in
+
+# Testing
+pytest
+pytest-cov
+pytest-mock
+tox
+
+# Code quality
+black
+flake8
+mypy
+types-Markdown
+
+# Pre-commit hooks
+pre-commit
+
+# Documentation
+pydocstyle
+
+# Dependency management
+pip-tools

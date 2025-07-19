@@ -1,0 +1,11 @@
+# Core production dependencies
+# These are the direct dependencies for the application
+# Use pip-compile to generate requirements.txt with pinned versions
+
+Flask
+Markdown
+python-markdown-math
+PyYAML
+gunicorn
+python-frontmatter
+watchdog
