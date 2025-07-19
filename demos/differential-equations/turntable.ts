@@ -32,6 +32,11 @@ class TurntableDemo extends P5DemoBase {
   // Additional colors for this demo
   private bugColor!: p5.Color;
   private historyColor!: p5.Color;
+  private locomotiveArrowColor!: p5.Color;
+  private rotationalArrowColor!: p5.Color;
+  private combinedArrowColor!: p5.Color;
+  private startPointColor!: p5.Color;
+  private endPointColor!: p5.Color;
 
   protected getStylePrefix(): string {
     return 'turntable';
@@ -41,9 +46,6 @@ class TurntableDemo extends P5DemoBase {
     p.setup = () => {
       // Create responsive canvas with square aspect ratio
       this.createResponsiveCanvas(p, 1.0);
-      
-      // Initialize colors
-      this.updateColors(p);
       
       // Set up controls
       this.setupControls(p);
@@ -76,17 +78,33 @@ class TurntableDemo extends P5DemoBase {
 
   protected updateColors(p: p5): void {
     super.updateColors(p);
-    // Additional colors specific to this demo
-    this.bugColor = this.isDarkMode ? p.color(255, 220, 0) : p.color(255, 204, 0);
-    this.historyColor = this.isDarkMode ? p.color(255, 120, 0) : p.color(255, 100, 0);
+    // Use theme colors instead of hardcoded values
+    this.bugColor = this.colors.accent;
+    
+    // Create a darker version of accent for history
+    p.colorMode(p.HSB);
+    const h = p.hue(this.colors.accent);
+    const s = p.saturation(this.colors.accent);
+    const b = p.brightness(this.colors.accent);
+    this.historyColor = p.color(h, s, b * 0.7);
+    
+    // Arrow colors based on theme
+    this.locomotiveArrowColor = this.colors.accent; // Primary accent
+    this.rotationalArrowColor = p.color((h + 120) % 360, s, b); // Complementary
+    this.combinedArrowColor = p.color((h + 60) % 360, s, b); // Triadic
+    
+    // Start/end points
+    this.startPointColor = p.color((h + 240) % 360, s, b); // Another triadic
+    this.endPointColor = this.rotationalArrowColor; // Reuse complementary
+    
+    p.colorMode(p.RGB);
   }
 
   protected onColorSchemeChange(isDark: boolean): void {
     // Update UI text colors when color scheme changes
-    const textColor = isDark ? '#e0e0e0' : '#000000';
     const labels = this.container.querySelectorAll('.demo-label, .demo-info');
     labels.forEach(label => {
-      (label as HTMLElement).style.color = textColor;
+      (label as HTMLElement).style.color = this.colors.text;
     });
   }
 
@@ -147,13 +165,21 @@ class TurntableDemo extends P5DemoBase {
     infoDiv.className = `${this.getStylePrefix()}-info demo-info`;
     infoDiv.style.marginTop = '20px';
     infoDiv.style.textAlign = 'center';
-    infoDiv.style.color = this.colors.text;
     infoDiv.innerHTML = `
       <p><strong>Instructions:</strong> Press 'z' to reset the animation</p>
-      <p><strong>Arrows:</strong> <span style="color: #0064ff;">Blue</span> = bug's locomotive velocity, 
-      <span style="color: #ff0000;">Red</span> = velocity from turntable rotation, 
-      <span style="color: #ffcc00;">Yellow</span> = combined velocity</p>
+      <p><strong>Arrows:</strong> <span class="locomotive-arrow">Accent</span> = bug's locomotive velocity, 
+      <span class="rotational-arrow">Complementary</span> = velocity from turntable rotation, 
+      <span class="combined-arrow">Triadic</span> = combined velocity</p>
     `;
+    
+    // Add dynamic styles for arrow colors
+    const style = document.createElement('style');
+    style.textContent = `
+      .locomotive-arrow { color: ${this.locomotiveArrowColor.toString()}; font-weight: bold; }
+      .rotational-arrow { color: ${this.rotationalArrowColor.toString()}; font-weight: bold; }
+      .combined-arrow { color: ${this.combinedArrowColor.toString()}; font-weight: bold; }
+    `;
+    this.container.appendChild(style);
     this.container.appendChild(infoDiv);
   }
 
@@ -196,7 +222,7 @@ class TurntableDemo extends P5DemoBase {
 
   private drawBugArrow(p: p5): void {
     const locomotiveMotionVector = this.getLocomotiveMotionVector(p).mult(this.ARROW_SCALAR);
-    p.stroke(0, 100, 255); // Blue
+    p.stroke(this.locomotiveArrowColor);
     p.strokeWeight(2);
     p.line(this.bug_x, this.bug_y, this.bug_x + locomotiveMotionVector.x, this.bug_y + locomotiveMotionVector.y);
     p.strokeWeight(1);
@@ -204,7 +230,7 @@ class TurntableDemo extends P5DemoBase {
 
   private drawRotationArrow(p: p5): void {
     const rotationalMotionVector = this.getRotationalMotionVector(p).mult(this.ARROW_SCALAR);
-    p.stroke(255, 0, 0); // Red
+    p.stroke(this.rotationalArrowColor);
     p.strokeWeight(2);
     p.line(this.bug_x, this.bug_y, this.bug_x + rotationalMotionVector.x, this.bug_y + rotationalMotionVector.y);
     p.strokeWeight(1);
@@ -212,7 +238,7 @@ class TurntableDemo extends P5DemoBase {
 
   private drawCombinedArrow(p: p5): void {
     const combinedMotionVector = this.getCombinedMotionVector(p).mult(this.ARROW_SCALAR);
-    p.stroke(255, 204, 0); // Yellow
+    p.stroke(this.combinedArrowColor);
     p.strokeWeight(2);
     p.line(this.bug_x, this.bug_y, this.bug_x + combinedMotionVector.x, this.bug_y + combinedMotionVector.y);
     p.strokeWeight(1);
@@ -222,14 +248,14 @@ class TurntableDemo extends P5DemoBase {
     const startPoint = this.getStartPoint(p);
     const endPoint = this.getEndPoint(p);
     
-    // Start point (green)
-    p.fill(0, 255, 0);
-    p.stroke(0, 255, 0);
+    // Start point
+    p.fill(this.startPointColor);
+    p.stroke(this.startPointColor);
     p.circle(startPoint.x, startPoint.y, this.BUG_SIZE * 5);
     
-    // End point / Light (red)
-    p.fill(255, 0, 0);
-    p.stroke(255, 0, 0);
+    // End point / Light
+    p.fill(this.endPointColor);
+    p.stroke(this.endPointColor);
     p.circle(endPoint.x, endPoint.y, this.BUG_SIZE * 5);
   }
 

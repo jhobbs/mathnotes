@@ -186,7 +186,8 @@ export default function createDilutionCalculatorDemo(container: HTMLElement, con
     .demo-input:focus {
       outline: none;
       border-color: var(--link-color);
-      box-shadow: 0 0 0 2px rgba(58, 166, 255, 0.2);
+      box-shadow: 0 0 0 2px var(--link-color);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--link-color) 20%, transparent);
     }
 
     .demo-button {
@@ -203,8 +204,8 @@ export default function createDilutionCalculatorDemo(container: HTMLElement, con
     }
 
     .demo-button:hover {
-      background-color: #0056b3;
-      opacity: 0.9;
+      filter: brightness(0.9);
+      opacity: 0.95;
     }
 
     .result-item {
@@ -235,9 +236,6 @@ export default function createDilutionCalculatorDemo(container: HTMLElement, con
         border-color: var(--border-color);
       }
       
-      .demo-button:hover {
-        background-color: #4a90e2;
-      }
     }
 
     @media (max-width: 768px) {

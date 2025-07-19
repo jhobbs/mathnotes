@@ -67,7 +67,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       const canvas = p.createCanvas(containerWidth, this.rows * this.cellSize);
       canvas.parent(this.canvasContainer);
       
-      // Initialize colors
+      // Initialize colors manually since we're not using createResponsiveCanvas
       this.updateColors(p);
       
       // Set up P5 controls
@@ -248,8 +248,8 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     this.ruleInput.style('margin-left', '5px');
     this.ruleInput.style('font-size', '14px');
     this.ruleInput.style('padding', '2px 5px');
-    this.ruleInput.style('border', '1px solid ' + (this.isDarkMode ? '#666' : '#ccc'));
-    this.ruleInput.style('background-color', this.isDarkMode ? '#444' : '#f0f0f0');
+    this.ruleInput.style('border', `1px solid ${this.colors.grid}`);
+    this.ruleInput.style('background-color', this.colors.background.toString());
     this.ruleInput.style('color', this.colors.text);
     
     // Handle input changes
@@ -352,12 +352,14 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   }
 
   private computeEntropy(): number {
-    if (this.currentRow < 0) return 0;
+    if (this.currentRow < 0 || !this.grid) return 0;
     const counts: { [key: string]: number } = {};
     for (let r = 0; r <= this.currentRow; r++) {
       let rowString = "";
       for (let c = 0; c < this.cols; c++) {
-        rowString += this.grid[c][r];
+        if (this.grid[c] && this.grid[c][r] !== undefined) {
+          rowString += this.grid[c][r];
+        }
       }
       counts[rowString] = (counts[rowString] || 0) + 1;
     }
@@ -371,11 +373,14 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   }
 
   private computeColEntropy(): number {
+    if (!this.grid) return 0;
     const counts: { [key: string]: number } = {};
     for (let c = 0; c < this.cols; c++) {
       let colString = "";
       for (let r = 0; r <= this.currentRow; r++) {
-        colString += this.grid[c][r];
+        if (this.grid[c] && this.grid[c][r] !== undefined) {
+          colString += this.grid[c][r];
+        }
       }
       counts[colString] = (counts[colString] || 0) + 1;
     }
@@ -397,7 +402,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       } else {
         p.fill(this.colors.background);
       }
-      p.stroke(this.isDarkMode ? p.color(100) : p.color(200));
+      p.stroke(this.colors.grid);
       p.rect(x, y, this.cellSize, this.cellSize);
     }
   }
@@ -418,13 +423,13 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       for (let j = 0; j < 3; j++) {
         const posX = startX + j * (ruleBoxSize + 2);
         (pattern[j] === "1") ? p.fill(this.colors.foreground) : p.fill(this.colors.background);
-        p.stroke(this.isDarkMode ? p.color(100) : p.color(200));
+        p.stroke(this.colors.grid);
         p.rect(posX, posY, ruleBoxSize, ruleBoxSize);
       }
       const centerX = startX + ((ruleBoxSize + 2) * 1);
       const posY2 = posY + ruleBoxSize + 2;
       (result === 1) ? p.fill(this.colors.foreground) : p.fill(this.colors.background);
-      p.stroke(this.isDarkMode ? p.color(100) : p.color(200));
+      p.stroke(this.colors.grid);
       p.rect(centerX, posY2, ruleBoxSize, ruleBoxSize);
     }
   }
@@ -480,8 +485,8 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     }
     // Update rule input styling
     if (this.ruleInput) {
-      this.ruleInput.style('border', '1px solid ' + (isDark ? '#666' : '#ccc'));
-      this.ruleInput.style('background-color', isDark ? '#444' : '#f0f0f0');
+      this.ruleInput.style('border', `1px solid ${this.colors.grid}`);
+      this.ruleInput.style('background-color', this.colors.background.toString());
       this.ruleInput.style('color', this.colors.text);
     }
   }

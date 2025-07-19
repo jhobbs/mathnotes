@@ -151,9 +151,6 @@ class DiagonalizationDemo extends P5DemoBase {
       // Use responsive sizing with proper aspect ratio
       this.createResponsiveCanvas(p, aspectRatio);
       
-      // Set up colors
-      this.updateColors(p);
-      
       // Create controls
       this.createButton('Reset', () => this.generateNewSequences());
 
@@ -258,9 +255,15 @@ class DiagonalizationDemo extends P5DemoBase {
           if ((i === this.currentStep && j === this.currentStep && 
               isHighlighting && actualPosition === actualSequence) ||
               isShiftHighlight) {
-            p.fill(255, 255, 0); // Bright yellow highlight
+            // Use a bright version of accent color for highlighting
+            const highlightColor = p.color(this.colors.accent.toString());
+            p.colorMode(p.HSB);
+            const h = p.hue(highlightColor);
+            const s = p.saturation(highlightColor);
+            p.fill(h, s * 0.8, 100); // Bright version of accent
+            p.colorMode(p.RGB);
           } else {
-            p.fill(this.colors.grid || p.color(250, 250, 250));
+            p.fill(this.colors.grid);
           }
           
           p.stroke(this.colors.stroke);
@@ -271,7 +274,7 @@ class DiagonalizationDemo extends P5DemoBase {
           if ((i === this.currentStep && j === this.currentStep && 
               isHighlighting && actualPosition === actualSequence) ||
               isShiftHighlight) {
-            p.fill(0); // Black text on yellow
+            p.fill(this.colors.background); // Use background color for text on highlight
           } else {
             p.fill(this.colors.text);
           }
@@ -342,11 +345,24 @@ class DiagonalizationDemo extends P5DemoBase {
         }
         
         if ((j === this.currentStep && isHighlighting) || isShiftHighlight) {
-          p.fill(255, 255, 0); // Bright yellow highlight
+          // Use a bright version of accent color for highlighting
+          const highlightColor = p.color(this.colors.accent.toString());
+          p.colorMode(p.HSB);
+          const h = p.hue(highlightColor);
+          const s = p.saturation(highlightColor);
+          p.fill(h, s * 0.8, 100); // Bright version of accent
+          p.colorMode(p.RGB);
         } else if (this.constructedSequence[j] !== -1) {
-          p.fill(100, 200, 100); // Darker green for better contrast
+          // Use a complementary color for filled cells
+          const accentColor = p.color(this.colors.accent.toString());
+          p.colorMode(p.HSB);
+          const h = p.hue(accentColor);
+          const s = p.saturation(accentColor) * 0.7;
+          const b = p.brightness(accentColor) * 0.8;
+          p.fill((h + 120) % 360, s, b); // Complementary color
+          p.colorMode(p.RGB);
         } else {
-          p.fill(this.colors.grid || p.color(250, 250, 250));
+          p.fill(this.colors.grid);
         }
         
         p.stroke(this.colors.stroke);
@@ -356,7 +372,7 @@ class DiagonalizationDemo extends P5DemoBase {
         // Draw the digit if it exists
         if (this.constructedSequence[j] !== -1) {
           if ((j === this.currentStep && isHighlighting) || isShiftHighlight) {
-            p.fill(0); // Black text on yellow
+            p.fill(this.colors.background); // Use background color for text on highlight
           } else {
             p.fill(this.colors.text);
           }

@@ -121,6 +121,10 @@ export abstract class P5DemoBase {
     if (this.canvasParent) {
       canvas.parent(this.canvasParent);
     }
+    
+    // Initialize colors after canvas creation
+    this.updateColors(p);
+    
     return canvas;
   }
   

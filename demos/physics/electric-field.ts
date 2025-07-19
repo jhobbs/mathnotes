@@ -21,7 +21,7 @@ interface Force {
   mag: p5.Vector;
   
   update(charges: Particle[]): void;
-  paint(p: p5): void;
+  paint(p: p5, colors: any): void;
 }
 
 class ParticleImpl implements Particle {
@@ -35,21 +35,13 @@ class ParticleImpl implements Particle {
     this.charge = charge;
     this.inertia = p.createVector(0, 0);
     
-    if (charge > 0) {
-      this.color = p.color(255, 0, 0); // Red for positive
-    } else {
-      this.color = p.color(0, 0, 255); // Blue for negative
-    }
+    // Color will be set by the demo class using theme colors
+    this.color = p.color(0); // Placeholder
   }
   
   paint(p: p5): void {
-    p.colorMode(p.RGB); // Ensure RGB mode for particle colors
     p.noStroke();
-    if (this.charge > 0) {
-      p.fill(255, 0, 0); // Red for positive
-    } else {
-      p.fill(0, 0, 255); // Blue for negative
-    }
+    p.fill(this.color);
     p.circle(this.pos.x, this.pos.y, p.sqrt(p.abs(this.charge) * 100 / p.PI) - 5);
   }
   
@@ -86,9 +78,14 @@ class ForceImpl implements Force {
     this.mag = getElectrostaticForce(this.p, charges, this.pos, -1);
   }
   
-  paint(p: p5): void {
+  paint(p: p5, colors: any): void {
     const distance = p.dist(this.pos.x, this.pos.y, this.pos.x + this.mag.x * 100, this.pos.y + this.mag.y * 100);
-    p.stroke(p.map(distance, 0, 50, 150, 255), 255, 100);
+    // Use theme colors for the field lines
+    const alpha = p.map(distance, 0, 50, 100, 255);
+    const fieldColor = p.color(colors.grid);
+    fieldColor.setAlpha(alpha);
+    p.stroke(fieldColor);
+    p.fill(fieldColor); // Set fill color for arrow heads
     arrow(p, this.pos.x, this.pos.y, this.pos.x - this.mag.x * 200, this.pos.y - this.mag.y * 200, 3);
   }
 }
@@ -131,6 +128,8 @@ class ElectricFieldDemo extends P5DemoBase {
   private forces: Force[] = [];
   private numForces = 30;
   private moveParticles = false;
+  private positiveColor!: p5.Color;
+  private negativeColor!: p5.Color;
   
   protected getStylePrefix(): string {
     return 'electric-field';
@@ -145,8 +144,8 @@ class ElectricFieldDemo extends P5DemoBase {
     instructionsDiv.style.marginTop = '20px';
     instructionsDiv.style.textAlign = 'center';
     instructionsDiv.innerHTML = `
-      <p><strong>Instructions:</strong> Click to place negative charges (blue). 
-      Ctrl+Click to place positive charges (red). 
+      <p><strong>Instructions:</strong> Click to place negative charges. 
+      Ctrl+Click to place positive charges. 
       Press spacebar to toggle particle movement.</p>
     `;
     this.container.appendChild(instructionsDiv);
@@ -159,7 +158,17 @@ class ElectricFieldDemo extends P5DemoBase {
       // Create responsive canvas
       this.createResponsiveCanvas(p, 0.65);
       
-      p.background(51);
+      // Set up theme colors for charges
+      this.positiveColor = this.colors.accent;
+      // Create a complementary color for negative charges
+      const h = p.hue(this.colors.accent);
+      const s = p.saturation(this.colors.accent);
+      const b = p.brightness(this.colors.accent);
+      p.colorMode(p.HSB);
+      this.negativeColor = p.color((h + 180) % 360, s, b);
+      p.colorMode(p.RGB);
+      
+      p.background(this.colors.background);
       p.frameRate(60);
       
       // Initialize force field grid
@@ -171,8 +180,7 @@ class ElectricFieldDemo extends P5DemoBase {
     };
     
     p.draw = () => {
-      p.colorMode(p.RGB);
-      p.background(51);
+      p.background(this.colors.background);
       p.noStroke();
       
       // Draw particles
@@ -191,12 +199,10 @@ class ElectricFieldDemo extends P5DemoBase {
       }
       
       // Draw force field
-      p.stroke(250);
       p.strokeWeight(2);
-      p.colorMode(p.HSB);
       for (let i = 0; i < this.forces.length; i++) {
         this.forces[i].update(this.particles);
-        this.forces[i].paint(p);
+        this.forces[i].paint(p, this.colors);
       }
     };
     
@@ -205,7 +211,10 @@ class ElectricFieldDemo extends P5DemoBase {
       if (p.keyIsDown(p.CONTROL)) {
         sgn = 1; // Positive charge when Ctrl is held
       }
-      this.particles.push(new ParticleImpl(p, p.mouseX, p.mouseY, sgn * 15));
+      const particle = new ParticleImpl(p, p.mouseX, p.mouseY, sgn * 15);
+      // Set the color based on charge
+      particle.color = sgn > 0 ? this.positiveColor : this.negativeColor;
+      this.particles.push(particle);
     };
     
     p.keyPressed = () => {
