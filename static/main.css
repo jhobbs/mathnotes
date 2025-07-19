@@ -743,3 +743,44 @@ table th {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     }
 }
+
+/* =============================================================================
+   MATHJAX MOBILE OPTIMIZATION
+   ============================================================================= */
+
+/* Fix MathJax font sizing on mobile devices */
+@media (max-width: 768px) {
+    /* Scale up MathJax content on mobile */
+    mjx-container {
+        font-size: 120% !important;
+    }
+    
+    /* Ensure inline math matches surrounding text */
+    mjx-container[display="false"] {
+        font-size: inherit !important;
+        vertical-align: baseline;
+    }
+    
+    /* Handle overflow for wide equations */
+    mjx-container[display="true"] {
+        overflow-x: auto;
+        overflow-y: hidden;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Add padding to scrollable equations */
+    mjx-container[display="true"] mjx-math {
+        padding: 0.5em 0;
+    }
+    
+    /* Ensure MathJax doesn't get too small */
+    .mjx-chtml {
+        min-font-size: 16px !important;
+    }
+    
+    /* Fix alignment issues */
+    mjx-container {
+        vertical-align: middle !important;
+    }
+}
