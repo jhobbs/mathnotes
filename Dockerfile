@@ -18,7 +18,7 @@ COPY demos ./demos
 RUN npm run build
 
 # Stage 3: Build the actual application
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Set working directory
 WORKDIR /app
