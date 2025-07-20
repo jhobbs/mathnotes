@@ -10,8 +10,8 @@ interface Rule {
 
 class ElementaryCellularAutomataDemo extends P5DemoBase {
   // Constants
-  private readonly cellSize = 5;
-  private readonly gridOffsetX = 120;
+  private readonly cellSize: number = 5;
+  private readonly gridOffsetX: number = 120;
   private readonly RULES: Rule[] = [
     { pattern: "111", result: 0 },
     { pattern: "110", result: 0 },
@@ -35,7 +35,6 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   private toroidal = false;
 
   // UI Elements
-  private canvasContainer!: HTMLElement;
   private fillRateSelect!: HTMLSelectElement;
   private startButton!: HTMLButtonElement;
   private resetButton!: HTMLButtonElement;
@@ -50,36 +49,38 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   }
   
   protected shouldCenterCanvas(): boolean {
-    return false;
+    return true;
   }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
+      
       // Create controls container first
       this.setupControls();
       
-      // Calculate grid dimensions with fallback for hidden containers
-      const containerWidth = this.canvasContainer.offsetWidth || 600; // Default width if container is hidden
-      this.cols = p.floor((containerWidth - this.gridOffsetX) / this.cellSize);
-      this.rows = p.floor(400 / this.cellSize);
+      // Create responsive canvas
+      // Use aspectRatio=0 for full width, with 70% max height
+      this.createResponsiveCanvas(p, 0, 0.7);
       
-      // Create canvas
-      const canvas = p.createCanvas(containerWidth, this.rows * this.cellSize);
-      canvas.parent(this.canvasContainer);
+      // Calculate grid dimensions based on canvas size
+      const availableWidth = Math.max(this.cellSize, p.width - this.gridOffsetX);
+      const availableHeight = Math.max(this.cellSize, p.height);
+      this.cols = Math.floor(availableWidth / this.cellSize);
+      this.rows = Math.floor(availableHeight / this.cellSize);
       
-      // Initialize colors manually since we're not using createResponsiveCanvas
-      this.updateColors(p);
       
       // Set up P5 controls
       this.setupP5Controls(p);
       
       // Create rule input in the left margin
-      this.setupRuleInput(p, canvas);
+      this.setupRuleInput(p);
       
       // Initialize
       p.background(this.colors.background);
       p.frameRate(120);
+      
       this.grid = this.create2DArray(this.cols, this.rows);
+      
       this.updateRulesFromNumber(this.ruleNumber);
       this.initializeFirstRow(p);
       this.drawRow(p, 0);
@@ -125,10 +126,13 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       }
     };
 
-    p.windowResized = () => {
-      const containerWidth = this.canvasContainer.offsetWidth || 600;
-      this.cols = p.floor((containerWidth - this.gridOffsetX) / this.cellSize);
-      p.resizeCanvas(containerWidth, this.rows * this.cellSize);
+    // Set up responsive resize
+    this.setupResponsiveResize(p, (size) => {
+      // Recalculate grid dimensions
+      const availableWidth = Math.max(this.cellSize, size.width - this.gridOffsetX);
+      const availableHeight = Math.max(this.cellSize, size.height);
+      this.cols = Math.floor(availableWidth / this.cellSize);
+      this.rows = Math.floor(availableHeight / this.cellSize);
       
       // Reset simulation with new dimensions
       this.grid = this.create2DArray(this.cols, this.rows);
@@ -138,16 +142,10 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       this.currentRow = 0;
       this.running = false;
       p.noLoop();
-    };
+    });
   }
 
   private setupControls(): void {
-    // Create container for canvas
-    this.canvasContainer = document.createElement('div');
-    this.canvasContainer.style.position = 'relative';
-    this.canvasContainer.style.marginBottom = '20px';
-    this.containerEl!.appendChild(this.canvasContainer);
-
     // Create control panel below canvas
     const controlPanel = this.createControlPanel();
     
@@ -232,10 +230,10 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     this.colEntDiv.style('display', 'inline-block');
   }
 
-  private setupRuleInput(p: p5, canvas: p5.Renderer): void {
+  private setupRuleInput(p: p5): void {
     // Create a div for the rule input that will be positioned over the canvas
     const ruleDiv = p.createDiv('Rule: ');
-    ruleDiv.parent(this.canvasContainer);
+    ruleDiv.parent(this.canvasParent || this.containerEl);
     ruleDiv.position(10, 5);
     ruleDiv.style('color', this.colors.text);
     ruleDiv.style('font-size', '14px');
@@ -295,9 +293,17 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   }
 
   private create2DArray(cols: number, rows: number): number[][] {
-    const arr = new Array(cols);
-    for (let i = 0; i < cols; i++) {
-      arr[i] = new Array(rows).fill(0);
+    // Ensure valid dimensions
+    if (!Number.isFinite(cols) || !Number.isFinite(rows)) {
+      throw new Error(`Invalid array dimensions: cols=${cols}, rows=${rows}`);
+    }
+    
+    const safeCols = Math.max(1, Math.floor(cols));
+    const safeRows = Math.max(1, Math.floor(rows));
+    
+    const arr = new Array(safeCols);
+    for (let i = 0; i < safeCols; i++) {
+      arr[i] = new Array(safeRows).fill(0);
     }
     return arr;
   }
