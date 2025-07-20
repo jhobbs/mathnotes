@@ -17,12 +17,13 @@ class ProjectionDemo extends P5DemoBase {
   protected getStylePrefix(): string {
     return 'projection';
   }
+  
+  protected getAspectRatio(): number {
+    return 0.5;
+  }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Use default setup with wider aspect ratio
-      this.defaultSetup(p, 0.5);
-      
       // Create control panel
       const controlPanel = this.createControlPanel();
       

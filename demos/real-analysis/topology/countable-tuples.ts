@@ -57,6 +57,10 @@ class CountableTuplesDemo extends P5DemoBase {
     return 'countable-tuples';
   }
   
+  protected getAspectRatio(): number {
+    return 0.66; // Default aspect ratio
+  }
+  
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
     
@@ -84,8 +88,6 @@ class CountableTuplesDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Create responsive canvas
-      this.defaultSetup(p, 0.66);
       this.canvasWidth = p.width;
       this.canvasHeight = p.height;
       

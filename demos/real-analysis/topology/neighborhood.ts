@@ -38,11 +38,13 @@ class NeighborhoodDemo extends P5DemoBase {
   protected getContainerId(): string {
     return 'neighborhood-container';
   }
+  
+  protected getAspectRatio(): number {
+    return 1.0; // Square aspect ratio
+  }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Use responsive sizing with square aspect ratio
-      this.defaultSetup(p, 1.0);
       
       // Create controls
       this.createButton('Reset', () => this.resetDemo());

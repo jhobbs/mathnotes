@@ -37,6 +37,14 @@ class PendulumDemo extends P5DemoBase {
   protected getContainerId(): string {
     return 'pendulum-container';
   }
+  
+  protected getAspectRatio(): number {
+    return 1.0;
+  }
+  
+  protected getMaxHeightPercent(): number {
+    return 0.6;
+  }
 
   protected createSketch(p: p5): void {
     const setupSliders = (p: p5) => {
@@ -130,9 +138,6 @@ class PendulumDemo extends P5DemoBase {
     };
 
     p.setup = () => {
-      // Use default setup with square aspect ratio and height limit
-      this.defaultSetup(p, 1.0, 0.6);
-      
       setupSliders(p);
       
       // Create info display

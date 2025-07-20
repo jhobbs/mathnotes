@@ -51,16 +51,20 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   protected shouldCenterCanvas(): boolean {
     return true;
   }
+  
+  protected getAspectRatio(): number {
+    return 0; // Full width
+  }
+  
+  protected getMaxHeightPercent(): number {
+    return 0.7; // 70% max height
+  }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
       
       // Create controls container first
       this.setupControls();
-      
-      // Create responsive canvas
-      // Use aspectRatio=0 for full width, with 70% max height
-      this.defaultSetup(p, 0, 0.7);
       
       // Calculate grid dimensions based on canvas size
       const availableWidth = Math.max(this.cellSize, p.width - this.gridOffsetX);

@@ -135,6 +135,10 @@ class ElectricFieldDemo extends P5DemoBase {
     return 'electric-field';
   }
   
+  protected getAspectRatio(): number {
+    return 0.65;
+  }
+  
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
     
@@ -154,9 +158,6 @@ class ElectricFieldDemo extends P5DemoBase {
   protected createSketch(p: p5): void {
     p.setup = () => {
       p.noStroke();
-      
-      // Use default setup with custom aspect ratio
-      this.defaultSetup(p, 0.65);
       
       // Set up theme colors for charges
       this.positiveColor = this.colors.accent;
