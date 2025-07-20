@@ -64,6 +64,12 @@ make build-frontend
 
 # Development with Vite HMR (integrated with Flask)
 make dev-frontend
+
+# Test a specific page for JavaScript errors
+./scripts/crawl-dev.sh --single-page "http://web-dev:5000/mathnotes/page-slug"
+
+# Test framework changes by crawling entire site
+./scripts/crawl-dev.sh "http://web-dev:5000"
 ```
 
 ### Deployment

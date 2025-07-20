@@ -9,7 +9,7 @@ import process from 'node:process';
 const argv = process.argv.slice(2);
 const startUrl = argv[0];
 if (!startUrl) {
-  console.error('Usage: node scripts/crawler.js <start-url> [--max-depth N] [--headless false] [--verbose true] [--log-skipped true]');
+  console.error('Usage: node scripts/crawler.js <start-url> [--max-depth N] [--headless false] [--verbose true] [--log-skipped true] [--single-page true]');
   process.exit(1);
 }
 function flag(name, def = undefined) {
@@ -21,6 +21,7 @@ const MAX_DEPTH = Number(flag('max-depth', Infinity));
 const HEADLESS  = flag('headless', 'true') !== 'false'; // default true
 const VERBOSE   = flag('verbose', 'false') === 'true'; // default false
 const LOG_SKIPPED = flag('log-skipped', 'false') === 'true'; // default false
+const SINGLE_PAGE = flag('single-page', 'false') === 'true'; // default false
 
 /* ---------- constants ---------- */
 const origin = new URL(startUrl).origin;
@@ -45,7 +46,10 @@ const skippedUrls = LOG_SKIPPED ? {
 
 /* ---------- startup ---------- */
 console.log(`Starting crawler at ${startUrl}`);
-console.log(`Options: max-depth=${MAX_DEPTH}, headless=${HEADLESS}, verbose=${VERBOSE}, log-skipped=${LOG_SKIPPED}`);
+console.log(`Options: max-depth=${MAX_DEPTH}, headless=${HEADLESS}, verbose=${VERBOSE}, log-skipped=${LOG_SKIPPED}, single-page=${SINGLE_PAGE}`);
+if (SINGLE_PAGE) {
+  console.log('Running in single-page mode - will not follow links');
+}
 console.log('');
 
 /* ---------- browser ---------- */
@@ -240,44 +244,50 @@ while (queue.length && !errored) {
     break;
   }
 
-  // harvest same‑origin links
-  const links = await page.$$eval('a[href]', as =>
-    as.map(a => a.href).filter(Boolean)
-  );
+  // harvest same‑origin links (unless in single-page mode)
+  if (!SINGLE_PAGE) {
+    const links = await page.$$eval('a[href]', as =>
+      as.map(a => a.href).filter(Boolean)
+    );
 
-  for (const link of links) {
-    try {
-      const u = new URL(link);
-      const cleanUrl = u.href.split('#')[0]; // Remove fragment
-      
-      if (u.origin !== origin) {
-        // Different origin - skip
-        if (LOG_SKIPPED) {
-          console.log(`   Skipping external URL: ${link}`);
-          skippedUrls.external.add(link);
+    for (const link of links) {
+      try {
+        const u = new URL(link);
+        const cleanUrl = u.href.split('#')[0]; // Remove fragment
+        
+        if (u.origin !== origin) {
+          // Different origin - skip
+          if (LOG_SKIPPED) {
+            console.log(`   Skipping external URL: ${link}`);
+            skippedUrls.external.add(link);
+          }
+        } else if (visited.has(cleanUrl)) {
+          // Already visited - skip
+          if (LOG_SKIPPED) {
+            console.log(`   Skipping already visited: ${cleanUrl}`);
+            skippedUrls.alreadyVisited.add(cleanUrl);
+          }
+        } else if (depth + 1 > MAX_DEPTH) {
+          // Would exceed max depth - skip
+          if (LOG_SKIPPED) {
+            console.log(`   Skipping due to max depth: ${cleanUrl}`);
+            skippedUrls.maxDepth.add(cleanUrl);
+          }
+        } else {
+          // Add to queue
+          queue.push({ url: cleanUrl, depth: depth + 1 });
         }
-      } else if (visited.has(cleanUrl)) {
-        // Already visited - skip
+      } catch (e) { 
+        // Malformed URL - skip
         if (LOG_SKIPPED) {
-          console.log(`   Skipping already visited: ${cleanUrl}`);
-          skippedUrls.alreadyVisited.add(cleanUrl);
+          console.log(`   Skipping malformed URL: ${link}`);
+          skippedUrls.malformed.add(link);
         }
-      } else if (depth + 1 > MAX_DEPTH) {
-        // Would exceed max depth - skip
-        if (LOG_SKIPPED) {
-          console.log(`   Skipping due to max depth: ${cleanUrl}`);
-          skippedUrls.maxDepth.add(cleanUrl);
-        }
-      } else {
-        // Add to queue
-        queue.push({ url: cleanUrl, depth: depth + 1 });
       }
-    } catch (e) { 
-      // Malformed URL - skip
-      if (LOG_SKIPPED) {
-        console.log(`   Skipping malformed URL: ${link}`);
-        skippedUrls.malformed.add(link);
-      }
+    }
+  } else {
+    if (VERBOSE) {
+      console.log('   Skipping link harvesting in single-page mode');
     }
   }
   
@@ -304,10 +314,10 @@ while (queue.length && !errored) {
 
 await browser.close();
 
-console.log(`\nVisited ${visited.size} pages`);
+console.log(`\nVisited ${visited.size} page${visited.size !== 1 ? 's' : ''}`);
 
-// Show skipped URL summary if enabled
-if (LOG_SKIPPED && skippedUrls) {
+// Show skipped URL summary if enabled (and not in single-page mode)
+if (LOG_SKIPPED && skippedUrls && !SINGLE_PAGE) {
   console.log('\nSkipped URLs summary:');
   if (skippedUrls.external.size > 0) {
     console.log(`  External URLs: ${skippedUrls.external.size}`);
