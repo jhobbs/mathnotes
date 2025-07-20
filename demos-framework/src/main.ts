@@ -1,6 +1,8 @@
 // Main entry point for Vite
 // This file will handle dynamic imports of demo modules
 
+console.log('[Demo Framework] main.ts loaded');
+
 import type { DemoConfig, DemoInstance } from './types';
 
 // Demo metadata type
@@ -35,12 +37,15 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
 const demoMetadata: Record<string, DemoMetadata> = {};
 
 // Expose registry and metadata globally for inline scripts
+console.log('[Demo Framework] Exposing registry to window');
 (window as any).demoRegistry = demoRegistry;
 (window as any).demoMetadata = demoMetadata;
 
 // Initialize demos on page load
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('[Demo Framework] DOMContentLoaded fired');
   const demoContainers = document.querySelectorAll<HTMLElement>('.demo-component[data-demo]');
+  console.log('[Demo Framework] Found demo containers:', demoContainers.length);
   
   demoContainers.forEach(async (container) => {
     const demoName = container.dataset.demo;
@@ -49,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
+    console.log(`[Demo Framework] Loading demo: ${demoName}`);
     try {
       const module = await demoRegistry[demoName]();
       

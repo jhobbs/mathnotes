@@ -1,0 +1,12 @@
+{
+  "name": "mathnotes-playwright-tests",
+  "version": "1.0.0",
+  "description": "Playwright testing for mathnotes",
+  "type": "module",
+  "scripts": {
+    "crawl": "node scripts/crawler.js"
+  },
+  "dependencies": {
+    "playwright": "^1.54.0"
+  }
+}

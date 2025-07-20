@@ -12,6 +12,7 @@ This package provides a web interface for mathematics content with features like
 __version__ = "1.0.0"
 
 from flask import Flask
+import logging
 from .config import (
     SITE_TITLE,
     SITE_DESCRIPTION,
@@ -86,5 +87,13 @@ def create_app(config=None):
 
     # Register routes
     register_routes(app, url_mapper, markdown_processor)
+
+    # Configure logging if in production (gunicorn will handle this)
+    # In development, Flask's default logger will work
+    if not app.debug:
+        # Configure app logger to use the same format as gunicorn
+        gunicorn_logger = logging.getLogger('gunicorn.error')
+        app.logger.handlers = gunicorn_logger.handlers
+        app.logger.setLevel(gunicorn_logger.level)
 
     return app
