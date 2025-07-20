@@ -16,6 +16,7 @@ export async function initMathJax() {
       inlineMath: [['$', '$'], ['\\(', '\\)']],
       displayMath: [['$$', '$$'], ['\\[', '\\]']],
       processEscapes: true,
+      packages: {'[+]': ['enclose']},
       macros: {
         vec: ['\\mathbf{#1}', 1]
       }
@@ -34,8 +35,8 @@ export async function initMathJax() {
 
   // Load MathJax
   try {
-    // The MathJax npm package requires the .js extension
-    await import('mathjax/es5/tex-mml-chtml.js');
+    // Use the full build which includes all extensions
+    await import('mathjax/es5/tex-chtml-full.js');
     
     // Wait a bit for MathJax to fully initialize
     await new Promise(resolve => setTimeout(resolve, 100));

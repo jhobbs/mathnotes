@@ -40,4 +40,4 @@ COPY --from=frontend /app/static/dist ./static/dist
 EXPOSE 5000
 
 # Run the application with gunicorn using the WSGI entry point
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "info", "wsgi:application"]
