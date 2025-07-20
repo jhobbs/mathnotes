@@ -38,8 +38,9 @@ def add_security_headers(response):
 
     # In development, also allow Vite dev server
     if is_development:
-        script_src += " http://localhost:5173"
-        connect_src += " http://localhost:5173 ws://localhost:5173"
+        # Allow various hostnames that might be used (no HTTPS in dev)
+        script_src += " http://localhost:5173 http://vite:5173 http://127.0.0.1:5173"
+        connect_src += " http://localhost:5173 ws://localhost:5173 http://vite:5173 ws://vite:5173 http://127.0.0.1:5173 ws://127.0.0.1:5173"
 
     csp_directives = [
         "default-src 'self'",
