@@ -55,10 +55,63 @@ console.log('');
 
 /* ---------- browser ---------- */
 const browser = await chromium.launch({ headless: HEADLESS });
+
+// Create context with route handler for caching
 const context = await browser.newContext({ 
   ignoreHTTPSErrors: true,
   // Disable upgrade-insecure-requests behavior
   bypassCSP: true
+});
+
+// Set up resource caching
+const resourceCache = new Map();
+const CACHE_EXTENSIONS = ['.woff', '.woff2', '.ttf', '.otf', '.eot', '.css', '.js', '.ts'];
+
+await context.route('**/*', async (route, request) => {
+  const url = request.url();
+  const shouldCache = CACHE_EXTENSIONS.some(ext => url.includes(ext));
+  
+  if (shouldCache && resourceCache.has(url)) {
+    // Serve from cache
+    const cached = resourceCache.get(url);
+    if (VERBOSE) {
+      console.log(`   📦 Serving from cache: ${url.split('/').pop()}`);
+    }
+    await route.fulfill({
+      status: cached.status,
+      headers: cached.headers,
+      body: cached.body,
+      contentType: cached.contentType
+    });
+  } else if (shouldCache) {
+    // Fetch and cache
+    const response = await route.fetch();
+    const body = await response.body();
+    const headers = response.headers();
+    
+    if (response.status() === 200) {
+      // Store in cache
+      resourceCache.set(url, {
+        status: response.status(),
+        headers: headers,
+        body: body,
+        contentType: headers['content-type']
+      });
+      if (VERBOSE) {
+        console.log(`   💾 Cached: ${url.split('/').pop()}`);
+      }
+    }
+    
+    // Fulfill the request with the fetched response
+    await route.fulfill({
+      status: response.status(),
+      headers: headers,
+      body: body
+    });
+  } else {
+    // Not cacheable, just continue normally
+    await route.continue();
+  }
 });
 
 // Track errors we've already reported to avoid duplicates
@@ -181,8 +234,7 @@ function setupPageHandlers(page) {
 
 /* ---------- crawl function ---------- */
 async function crawlPage(url, depth) {
-  if (visited.has(url) || depth > MAX_DEPTH) return [];
-  visited.add(url);
+  if (depth > MAX_DEPTH) return [];
 
   console.log(`Visiting ${url}`);
   
@@ -271,8 +323,10 @@ async function crawlPage(url, depth) {
               skippedUrls.maxDepth.add(cleanUrl);
             }
           } else {
-            // Add to list of new URLs
-            newUrls.push({ url: cleanUrl, depth: depth + 1 });
+            // Add to list of new URLs (will be checked again in processQueue)
+            if (!visited.has(cleanUrl)) {
+              newUrls.push({ url: cleanUrl, depth: depth + 1 });
+            }
           }
         } catch (e) { 
           // Malformed URL - skip
@@ -327,6 +381,10 @@ async function processQueue() {
       const item = queue[nextQueueIndex++];
       if (!item) break;
       
+      // Skip if already visited or being visited
+      if (visited.has(item.url)) continue;
+      visited.add(item.url);
+      
       const crawlPromise = crawlPage(item.url, item.depth)
         .then(newUrls => {
           // Add discovered URLs to queue
@@ -357,6 +415,17 @@ await processQueue();
 await browser.close();
 
 console.log(`\nVisited ${visited.size} page${visited.size !== 1 ? 's' : ''}`);
+
+// Show cache statistics
+if (VERBOSE && resourceCache.size > 0) {
+  console.log(`\nCache statistics:`);
+  console.log(`  Cached resources: ${resourceCache.size}`);
+  let totalSize = 0;
+  for (const [url, data] of resourceCache) {
+    totalSize += data.body.length;
+  }
+  console.log(`  Total cache size: ${(totalSize / 1024 / 1024).toFixed(2)} MB`);
+}
 
 // Show skipped URL summary if enabled (and not in single-page mode)
 if (LOG_SKIPPED && skippedUrls && !SINGLE_PAGE) {
