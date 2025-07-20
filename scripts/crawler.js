@@ -9,7 +9,7 @@ import process from 'node:process';
 const argv = process.argv.slice(2);
 const startUrl = argv[0];
 if (!startUrl) {
-  console.error('Usage: node scripts/crawler.js <start-url> [--max-depth N] [--headless false] [--verbose true] [--log-skipped true] [--single-page true]');
+  console.error('Usage: node scripts/crawler.js <start-url> [--max-depth N] [--headless false] [--verbose true] [--log-skipped true] [--single-page true] [--concurrency N]');
   process.exit(1);
 }
 function flag(name, def = undefined) {
@@ -22,6 +22,7 @@ const HEADLESS  = flag('headless', 'true') !== 'false'; // default true
 const VERBOSE   = flag('verbose', 'false') === 'true'; // default false
 const LOG_SKIPPED = flag('log-skipped', 'false') === 'true'; // default false
 const SINGLE_PAGE = flag('single-page', 'false') === 'true'; // default false
+const CONCURRENCY = Number(flag('concurrency', 10)); // default 5 parallel pages
 
 /* ---------- constants ---------- */
 const origin = new URL(startUrl).origin;
@@ -46,7 +47,7 @@ const skippedUrls = LOG_SKIPPED ? {
 
 /* ---------- startup ---------- */
 console.log(`Starting crawler at ${startUrl}`);
-console.log(`Options: max-depth=${MAX_DEPTH}, headless=${HEADLESS}, verbose=${VERBOSE}, log-skipped=${LOG_SKIPPED}, single-page=${SINGLE_PAGE}`);
+console.log(`Options: max-depth=${MAX_DEPTH}, headless=${HEADLESS}, verbose=${VERBOSE}, log-skipped=${LOG_SKIPPED}, single-page=${SINGLE_PAGE}, concurrency=${CONCURRENCY}`);
 if (SINGLE_PAGE) {
   console.log('Running in single-page mode - will not follow links');
 }
@@ -178,10 +179,9 @@ function setupPageHandlers(page) {
   }
 }
 
-/* ---------- crawl loop ---------- */
-while (queue.length && !errored) {
-  const { url, depth } = queue.shift();
-  if (visited.has(url) || depth > MAX_DEPTH) continue;
+/* ---------- crawl function ---------- */
+async function crawlPage(url, depth) {
+  if (visited.has(url) || depth > MAX_DEPTH) return [];
   visited.add(url);
 
   console.log(`Visiting ${url}`);
@@ -212,6 +212,8 @@ while (queue.length && !errored) {
     page.once('load', () => console.log('   ✓ Page load event fired'));
   }
   
+  const newUrls = [];
+  
   try {
     const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 5_000 });
     if (VERBOSE) {
@@ -236,59 +238,59 @@ while (queue.length && !errored) {
     // Check if any errors occurred during the wait
     if (errored) {
       console.log('   ❌ Error detected during page stabilization');
-      break;
+      return [];
+    }
+    
+    // harvest same‑origin links (unless in single-page mode)
+    if (!SINGLE_PAGE) {
+      const links = await page.$$eval('a[href]', as =>
+        as.map(a => a.href).filter(Boolean)
+      );
+
+      for (const link of links) {
+        try {
+          const u = new URL(link);
+          const cleanUrl = u.href.split('#')[0]; // Remove fragment
+          
+          if (u.origin !== origin) {
+            // Different origin - skip
+            if (LOG_SKIPPED) {
+              console.log(`   Skipping external URL: ${link}`);
+              skippedUrls.external.add(link);
+            }
+          } else if (visited.has(cleanUrl)) {
+            // Already visited - skip
+            if (LOG_SKIPPED) {
+              console.log(`   Skipping already visited: ${cleanUrl}`);
+              skippedUrls.alreadyVisited.add(cleanUrl);
+            }
+          } else if (depth + 1 > MAX_DEPTH) {
+            // Would exceed max depth - skip
+            if (LOG_SKIPPED) {
+              console.log(`   Skipping due to max depth: ${cleanUrl}`);
+              skippedUrls.maxDepth.add(cleanUrl);
+            }
+          } else {
+            // Add to list of new URLs
+            newUrls.push({ url: cleanUrl, depth: depth + 1 });
+          }
+        } catch (e) { 
+          // Malformed URL - skip
+          if (LOG_SKIPPED) {
+            console.log(`   Skipping malformed URL: ${link}`);
+            skippedUrls.malformed.add(link);
+          }
+        }
+      }
+    } else {
+      if (VERBOSE) {
+        console.log('   Skipping link harvesting in single-page mode');
+      }
     }
   } catch (navErr) {
     console.error(`\n❌ Navigation error on ${url}\n   ${navErr.message}`);
     errored = true;
-    break;
-  }
-
-  // harvest same‑origin links (unless in single-page mode)
-  if (!SINGLE_PAGE) {
-    const links = await page.$$eval('a[href]', as =>
-      as.map(a => a.href).filter(Boolean)
-    );
-
-    for (const link of links) {
-      try {
-        const u = new URL(link);
-        const cleanUrl = u.href.split('#')[0]; // Remove fragment
-        
-        if (u.origin !== origin) {
-          // Different origin - skip
-          if (LOG_SKIPPED) {
-            console.log(`   Skipping external URL: ${link}`);
-            skippedUrls.external.add(link);
-          }
-        } else if (visited.has(cleanUrl)) {
-          // Already visited - skip
-          if (LOG_SKIPPED) {
-            console.log(`   Skipping already visited: ${cleanUrl}`);
-            skippedUrls.alreadyVisited.add(cleanUrl);
-          }
-        } else if (depth + 1 > MAX_DEPTH) {
-          // Would exceed max depth - skip
-          if (LOG_SKIPPED) {
-            console.log(`   Skipping due to max depth: ${cleanUrl}`);
-            skippedUrls.maxDepth.add(cleanUrl);
-          }
-        } else {
-          // Add to queue
-          queue.push({ url: cleanUrl, depth: depth + 1 });
-        }
-      } catch (e) { 
-        // Malformed URL - skip
-        if (LOG_SKIPPED) {
-          console.log(`   Skipping malformed URL: ${link}`);
-          skippedUrls.malformed.add(link);
-        }
-      }
-    }
-  } else {
-    if (VERBOSE) {
-      console.log('   Skipping link harvesting in single-page mode');
-    }
+    return [];
   }
   
   // Ensure page unloads properly before closing
@@ -310,7 +312,47 @@ while (queue.length && !errored) {
   if (VERBOSE) {
     console.log('   ✓ Page closed');
   }
+  
+  return newUrls;
 }
+
+/* ---------- concurrent crawl loop ---------- */
+const inProgress = new Set();
+let nextQueueIndex = 0;
+
+async function processQueue() {
+  while ((queue.length > nextQueueIndex || inProgress.size > 0) && !errored) {
+    // Start new crawls up to concurrency limit
+    while (inProgress.size < CONCURRENCY && nextQueueIndex < queue.length && !errored) {
+      const item = queue[nextQueueIndex++];
+      if (!item) break;
+      
+      const crawlPromise = crawlPage(item.url, item.depth)
+        .then(newUrls => {
+          // Add discovered URLs to queue
+          queue.push(...newUrls);
+          inProgress.delete(crawlPromise);
+        })
+        .catch(err => {
+          console.error(`\n❌ Unexpected error crawling ${item.url}: ${err.message}`);
+          errored = true;
+          inProgress.delete(crawlPromise);
+        });
+      
+      inProgress.add(crawlPromise);
+    }
+    
+    // Wait for at least one crawl to complete
+    if (inProgress.size > 0) {
+      await Promise.race(inProgress);
+    }
+  }
+  
+  // Wait for all remaining crawls to complete
+  await Promise.all(inProgress);
+}
+
+await processQueue();
 
 await browser.close();
 
