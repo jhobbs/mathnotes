@@ -1,6 +1,6 @@
 // Countable Union Demo - Shows diagonal traversal of countable union
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig } from '@framework/types';
+import type { DemoInstance, DemoConfig, CanvasSize } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 class CountableUnionDemo extends P5DemoBase {
@@ -71,12 +71,9 @@ class CountableUnionDemo extends P5DemoBase {
   protected createSketch(p: p5): void {
     p.setup = () => {
       // Create responsive canvas with square aspect ratio
-      this.createResponsiveCanvas(p, 1.0);
+      this.defaultSetup(p, 1.0);
       
       this.cellSize = (p.width - 2 * this.margin) / this.gridSize;
-      
-      // Set up colors
-      this.updateColors(p);
       
       p.textAlign(p.CENTER, p.CENTER);
       p.strokeWeight(2);
@@ -98,10 +95,6 @@ class CountableUnionDemo extends P5DemoBase {
       this.updateAnimation();
     };
 
-    // Set up responsive resize
-    this.setupResponsiveResize(p, () => {
-      this.cellSize = (p.width - 2 * this.margin) / this.gridSize;
-    });
   }
   
   // Override base class method to customize colors if needed
@@ -280,6 +273,10 @@ class CountableUnionDemo extends P5DemoBase {
         this.linePoints = [];
       }
     }
+  }
+
+  protected onResize(p: p5, size: CanvasSize): void {
+    this.cellSize = (p.width - 2 * this.margin) / this.gridSize;
   }
 }
 

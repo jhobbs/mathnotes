@@ -155,8 +155,8 @@ class ElectricFieldDemo extends P5DemoBase {
     p.setup = () => {
       p.noStroke();
       
-      // Create responsive canvas
-      this.createResponsiveCanvas(p, 0.65);
+      // Use default setup with custom aspect ratio
+      this.defaultSetup(p, 0.65);
       
       // Set up theme colors for charges
       this.positiveColor = this.colors.accent;
@@ -225,18 +225,18 @@ class ElectricFieldDemo extends P5DemoBase {
       return true; // Allow default behavior for other keys
     };
     
-    // Set up responsive resize
-    this.setupResponsiveResize(p, () => {
-      // Reinitialize force field grid with new dimensions
-      this.forces = [];
-      for (let i = p.width / this.numForces; i < p.width; i += p.width / this.numForces) {
-        for (let j = p.height / this.numForces; j < p.height; j += p.height / this.numForces) {
-          this.forces.push(new ForceImpl(p, i, j));
-        }
-      }
-    });
   }
   
+  protected onResize(p: p5, size: CanvasSize): void {
+    // Reinitialize force field grid with new dimensions
+    this.forces = [];
+    for (let i = p.width / this.numForces; i < p.width; i += p.width / this.numForces) {
+      for (let j = p.height / this.numForces; j < p.height; j += p.height / this.numForces) {
+        this.forces.push(new ForceImpl(p, i, j));
+      }
+    }
+  }
+
   init(): DemoInstance {
     // Prevent spacebar from scrolling the page
     const preventSpaceScroll = (event: KeyboardEvent) => {

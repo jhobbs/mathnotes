@@ -1,6 +1,6 @@
 // Neighborhood demo - Interactive visualization for metric spaces
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig } from '@framework/types';
+import type { DemoInstance, DemoConfig, CanvasSize } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 interface Neighborhood {
@@ -42,10 +42,7 @@ class NeighborhoodDemo extends P5DemoBase {
   protected createSketch(p: p5): void {
     p.setup = () => {
       // Use responsive sizing with square aspect ratio
-      this.createResponsiveCanvas(p, 1.0);
-      
-      // Set up colors
-      this.updateColors(p);
+      this.defaultSetup(p, 1.0);
       
       // Create controls
       this.createButton('Reset', () => this.resetDemo());
@@ -115,8 +112,6 @@ class NeighborhoodDemo extends P5DemoBase {
     p.mouseDragged = () => this.handleMouseDragged(p);
     p.mouseReleased = () => this.handleMouseReleased(p);
     p.mouseWheel = (event: any) => this.handleMouseWheel(p, event);
-    // Set up automatic resizing
-    this.setupResponsiveResize(p);
   }
   
   protected updateColors(p: p5): void {

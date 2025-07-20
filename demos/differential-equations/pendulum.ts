@@ -130,11 +130,8 @@ class PendulumDemo extends P5DemoBase {
     };
 
     p.setup = () => {
-      // Use responsive sizing with square aspect ratio
-      this.createResponsiveCanvas(p, 1.0, 0.6);
-      
-      // Initialize colors
-      this.updateColors(p);
+      // Use default setup with square aspect ratio and height limit
+      this.defaultSetup(p, 1.0, 0.6);
       
       setupSliders(p);
       
@@ -172,11 +169,6 @@ class PendulumDemo extends P5DemoBase {
         this.redo();
       }
     };
-    
-    // Set up automatic resizing
-    this.setupResponsiveResize(p);
-    
-    // Color scheme changes are now handled by base class
   }
   
   private redo(): void {

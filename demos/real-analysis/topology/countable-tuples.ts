@@ -1,6 +1,6 @@
 // Countable Tuples Demo - Shows B_n sets are countable for any n
 import p5 from 'p5';
-import type { DemoConfig, DemoInstance } from '@framework/types';
+import type { DemoConfig, DemoInstance, CanvasSize } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 class CountableTuplesDemo extends P5DemoBase {
@@ -85,12 +85,9 @@ class CountableTuplesDemo extends P5DemoBase {
   protected createSketch(p: p5): void {
     p.setup = () => {
       // Create responsive canvas
-      this.createResponsiveCanvas(p, 0.66);
+      this.defaultSetup(p, 0.66);
       this.canvasWidth = p.width;
       this.canvasHeight = p.height;
-      
-      // Initialize colors
-      this.updateColors(p);
       
       // Calculate how many columns can fit based on available width
       const availableWidth = this.canvasWidth - this.CONFIG.START_X * 2;
@@ -118,16 +115,6 @@ class CountableTuplesDemo extends P5DemoBase {
       this.drawCardinalityEquation(p, visibleColumns);
     };
 
-    // Set up responsive resize
-    this.setupResponsiveResize(p, () => {
-      this.canvasWidth = p.width;
-      this.canvasHeight = p.height;
-      this.centerY = this.canvasHeight / 2;
-      
-      // Recalculate columns that fit
-      const availableWidth = this.canvasWidth - this.CONFIG.START_X * 2;
-      this.maxVisibleColumns = Math.max(4, Math.floor(availableWidth / this.CONFIG.COLUMN_SPACING));
-    });
   }
 
   // Animation Logic
@@ -535,6 +522,16 @@ class CountableTuplesDemo extends P5DemoBase {
 
   private isInVerticalBounds(y: number): boolean {
     return y > 100 && y < this.canvasHeight - 100;
+  }
+
+  protected onResize(p: p5, size: CanvasSize): void {
+    this.canvasWidth = p.width;
+    this.canvasHeight = p.height;
+    this.centerY = this.canvasHeight / 2;
+    
+    // Recalculate columns that fit
+    const availableWidth = this.canvasWidth - this.CONFIG.START_X * 2;
+    this.maxVisibleColumns = Math.max(4, Math.floor(availableWidth / this.CONFIG.COLUMN_SPACING));
   }
 }
 

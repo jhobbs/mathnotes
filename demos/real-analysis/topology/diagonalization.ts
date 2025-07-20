@@ -1,5 +1,5 @@
 import p5 from 'p5';
-import type { DemoConfig, DemoInstance } from '@framework/types';
+import type { DemoConfig, DemoInstance, CanvasSize } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 interface ConstructedSequence {
@@ -149,7 +149,7 @@ class DiagonalizationDemo extends P5DemoBase {
       const aspectRatio = 0.775;
       
       // Use responsive sizing with proper aspect ratio
-      this.createResponsiveCanvas(p, aspectRatio);
+      this.defaultSetup(p, aspectRatio);
       
       // Create controls
       this.createButton('Reset', () => this.generateNewSequences());
@@ -185,12 +185,6 @@ class DiagonalizationDemo extends P5DemoBase {
       handleAnimation(p);
     };
 
-    // Set up responsive resize
-    const contentHeight = 30 + 80 + this.NUM_SEQUENCES * this.CELL_SIZE + 20 + 80 + this.CELL_SIZE + 30 + 50;
-    const aspectRatio = contentHeight / 600;
-    this.setupResponsiveResize(p, () => {
-      p.resizeCanvas(p.width, contentHeight);
-    });
 
     const drawSequenceTable = (p: p5) => {
       const startX = (p.width - this.SEQUENCE_LENGTH * this.CELL_SIZE) / 2;
@@ -476,6 +470,11 @@ class DiagonalizationDemo extends P5DemoBase {
     };
 
     // Color scheme changes are now handled by base class
+  }
+
+  protected onResize(p: p5, size: CanvasSize): void {
+    const contentHeight = 30 + 80 + this.NUM_SEQUENCES * this.CELL_SIZE + 20 + 80 + this.CELL_SIZE + 30 + 50;
+    p.resizeCanvas(p.width, contentHeight);
   }
 }
 

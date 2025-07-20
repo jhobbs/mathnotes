@@ -50,8 +50,8 @@ class GameOfLifeDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Create responsive canvas
-      this.createResponsiveCanvas(p, 0.75, 0.5);
+      // Use default setup with custom aspect ratio and height limit
+      this.defaultSetup(p, 0.75, 0.5);
       
       // Calculate grid dimensions
       this.cols = Math.floor(p.width / this.resolution);
@@ -112,13 +112,14 @@ class GameOfLifeDemo extends P5DemoBase {
       }
     };
 
-    // Set up automatic resizing with custom handler
-    this.setupResponsiveResize(p, (size) => {
-      // Update grid dimensions
-      const newCols = Math.floor(size.width / this.resolution);
-      const newRows = Math.floor(size.height / this.resolution);
-      
-      // Create new grid with new dimensions
+  }
+  
+  protected onResize(p: p5, size: CanvasSize): void {
+    // Update grid dimensions
+    const newCols = Math.floor(size.width / this.resolution);
+    const newRows = Math.floor(size.height / this.resolution);
+    
+    // Create new grid with new dimensions
       const newGrid = this.make2DArray(newCols, newRows);
       
       // Copy old grid values where possible
@@ -131,7 +132,6 @@ class GameOfLifeDemo extends P5DemoBase {
       this.cols = newCols;
       this.rows = newRows;
       this.state.grid = newGrid;
-    });
   }
 
   private setupControls(p: p5): void {
