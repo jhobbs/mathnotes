@@ -41,11 +41,13 @@ class TurntableDemo extends P5DemoBase {
   protected getStylePrefix(): string {
     return 'turntable';
   }
+  
+  protected getAspectRatio(): number {
+    return 1.0; // Square aspect ratio
+  }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Create responsive canvas with square aspect ratio
-      this.defaultSetup(p, 1.0);
       
       // Set up controls
       this.setupControls(p);

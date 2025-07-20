@@ -47,12 +47,17 @@ class GameOfLifeDemo extends P5DemoBase {
   protected getStylePrefix(): string {
     return 'game-of-life';
   }
+  
+  protected getAspectRatio(): number {
+    return 0.75;
+  }
+  
+  protected getMaxHeightPercent(): number {
+    return 0.5;
+  }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Use default setup with custom aspect ratio and height limit
-      this.defaultSetup(p, 0.75, 0.5);
-      
       // Calculate grid dimensions
       this.cols = Math.floor(p.width / this.resolution);
       this.rows = Math.floor(p.height / this.resolution);

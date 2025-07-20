@@ -35,6 +35,10 @@ class DiagonalizationDemo extends P5DemoBase {
   protected getStylePrefix(): string {
     return 'diagonalization';
   }
+  
+  protected getAspectRatio(): number {
+    return 0.775; // Calculated for the content height
+  }
 
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
@@ -133,23 +137,7 @@ class DiagonalizationDemo extends P5DemoBase {
       `;
       this.containerEl!.insertBefore(this.infoDiv, this.containerEl!.firstChild);
 
-      // Calculate height based on content
-      // NUM_SEQUENCES = 8, CELL_SIZE = 40
-      const contentHeight = 80 + // Top margin
-                          this.NUM_SEQUENCES * this.CELL_SIZE + // 8 * 40 = 320 for sequence table
-                          20 + // Ellipsis
-                          80 + // Space between tables
-                          this.CELL_SIZE + // 40 for constructed sequence
-                          30 + // Position labels
-                          50; // Bottom labels
-      // Total: 80 + 320 + 20 + 80 + 40 + 30 + 50 = 620 pixels
-      
-      // Calculate proper aspect ratio (height/width)
-      // For a typical width of 800px, aspect ratio would be 620/800 = 0.775
-      const aspectRatio = 0.775;
-      
-      // Use responsive sizing with proper aspect ratio
-      this.defaultSetup(p, aspectRatio);
+      // Canvas is now automatically created by base class
       
       // Create controls
       this.createButton('Reset', () => this.generateNewSequences());

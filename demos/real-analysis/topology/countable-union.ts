@@ -21,6 +21,10 @@ class CountableUnionDemo extends P5DemoBase {
     return 'countable-union';
   }
   
+  protected getAspectRatio(): number {
+    return 1.0; // Square aspect ratio
+  }
+  
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config);
     
@@ -70,8 +74,6 @@ class CountableUnionDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Create responsive canvas with square aspect ratio
-      this.defaultSetup(p, 1.0);
       
       this.cellSize = (p.width - 2 * this.margin) / this.gridSize;
       

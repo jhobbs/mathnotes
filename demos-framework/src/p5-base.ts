@@ -49,7 +49,30 @@ export abstract class P5DemoBase {
     // Set up dark mode listener before creating p5 instance
     this.setupColorSchemeListener();
     
-    this.p5Instance = new p5(this.createSketch.bind(this));
+    // Create the p5 instance with our wrapped sketch
+    this.p5Instance = new p5((p: p5) => {
+      // Let the demo configure the sketch first
+      this.createSketch(p);
+      
+      // Store the original setup if provided
+      const userSetup = p.setup;
+      
+      // Override p5 setup to include our base functionality
+      p.setup = () => {
+        // Create responsive canvas with default or specified aspect ratio
+        const aspectRatio = this.getAspectRatio();
+        const maxHeight = this.getMaxHeightPercent();
+        this.createResponsiveCanvas(p, aspectRatio, maxHeight);
+        
+        // Set up automatic resizing by default
+        this.setupResponsiveResize(p, (size) => this.onResize(p, size));
+        
+        // Call the demo's setup if provided
+        if (userSetup) {
+          userSetup.call(p);
+        }
+      };
+    });
     
     return {
       cleanup: this.cleanup.bind(this),
@@ -61,21 +84,26 @@ export abstract class P5DemoBase {
   
   /**
    * Create the p5 sketch function
+   * The base class will automatically handle canvas creation and resizing
    */
   protected abstract createSketch(p: p5): void;
   
   /**
-   * Default setup implementation that creates a responsive canvas
-   * Override this to customize setup behavior
+   * Get the aspect ratio for the canvas
+   * Override to use a different aspect ratio
    */
-  protected defaultSetup(p: p5, aspectRatio: number = 0.67, maxHeightPercent?: number): p5.Renderer {
-    const canvas = this.createResponsiveCanvas(p, aspectRatio, maxHeightPercent);
-    
-    // Set up automatic resizing by default
-    this.setupResponsiveResize(p, (size) => this.onResize(p, size));
-    
-    return canvas;
+  protected getAspectRatio(): number {
+    return 0.67;
   }
+  
+  /**
+   * Get the maximum height as a percentage of viewport
+   * Override to limit canvas height
+   */
+  protected getMaxHeightPercent(): number | undefined {
+    return undefined;
+  }
+  
   
   /**
    * Called when the window is resized
