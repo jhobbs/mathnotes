@@ -47,10 +47,59 @@ const context = await browser.newContext({
   bypassCSP: true
 });
 
+// Track errors we've already reported to avoid duplicates
+const reportedErrors = new Set();
+
 // Function to set up event handlers for a page
 function setupPageHandlers(page) {
-  page.on('pageerror', err => {
-    console.error(`\n❌ JS error on ${page.url()}\n   ${err.message}`);
+  page.on('pageerror', async err => {
+    // Create a unique key for this error
+    const errorKey = `${err.message}::${err.stack?.split('\n')[1] || ''}`;
+    
+    // Skip if we've already reported this exact error
+    if (reportedErrors.has(errorKey)) {
+      return;
+    }
+    reportedErrors.add(errorKey);
+    console.error(`\n❌ JS error on ${page.url()}`);
+    console.error(`   Message: ${err.message}`);
+    if (err.stack) {
+      console.error(`   Stack trace:`);
+      err.stack.split('\n').forEach(line => {
+        console.error(`     ${line}`);
+      });
+    }
+    
+    // Try to get more context about what scripts are loaded
+    try {
+      const scripts = await page.$$eval('script[src]', scripts => 
+        scripts.map(s => s.src).filter(src => !src.includes('about:blank'))
+      );
+      
+      // Check if error is from main.js (minified)
+      if (err.stack && err.stack.includes('/static/dist/main.js')) {
+        console.error(`   Note: Error is in minified main.js - likely from demo framework or utilities`);
+      }
+      
+      // Check for demo containers on the page
+      const demoInfo = await page.$$eval('.demo-container', demos => 
+        demos.map(d => d.getAttribute('data-demo') || 'unknown')
+      );
+      if (demoInfo.length > 0) {
+        console.error(`   Active demos on page: ${demoInfo.join(', ')}`);
+      }
+      
+      // Only show loaded scripts in verbose mode
+      if (VERBOSE && scripts.length > 0) {
+        console.error(`   Loaded scripts:`);
+        scripts.forEach(src => {
+          console.error(`     - ${src}`);
+        });
+      }
+    } catch (e) {
+      // Page might be navigating, ignore
+    }
+    
     errored = true;
   });
 
@@ -67,7 +116,34 @@ function setupPageHandlers(page) {
     
     if (msg.type() !== 'error') return;
     if (IGNORE_PATTERNS.some(rx => rx.test(msg.text()))) return;
-    console.error(`\n❌ Console error on ${page.url()}\n   ${msg.text()}`);
+    
+    console.error(`\n❌ Console error on ${page.url()}`);
+    console.error(`   Message: ${msg.text()}`);
+    
+    // Try to get stack trace from console args
+    const args = msg.args();
+    if (args.length > 0) {
+      args.forEach(async (arg, i) => {
+        try {
+          const value = await arg.jsonValue();
+          if (value && typeof value === 'object' && value.stack) {
+            console.error(`   Stack trace:`);
+            value.stack.split('\n').forEach(line => {
+              console.error(`     ${line}`);
+            });
+          }
+        } catch (e) {
+          // Ignore if we can't get the value
+        }
+      });
+    }
+    
+    // Try to get location info
+    if (msg.location()) {
+      const loc = msg.location();
+      console.error(`   Location: ${loc.url}:${loc.lineNumber}:${loc.columnNumber}`);
+    }
+    
     errored = true;
   });
 
@@ -96,6 +172,9 @@ while (queue.length && !errored) {
   visited.add(url);
 
   console.log(`Visiting ${url}`);
+  
+  // Clear reported errors for this new page
+  reportedErrors.clear();
   
   // Create a new page for each URL (complete isolation)
   const page = await context.newPage();
@@ -171,15 +250,6 @@ while (queue.length && !errored) {
     console.log('   ⏳ Triggering page unload...');
   }
   
-  // Set up unload error detection
-  let unloadError = false;
-  const unloadErrorHandler = (err) => {
-    console.error(`\n❌ Error during page unload: ${err.message}`);
-    errored = true;
-    unloadError = true;
-  };
-  page.once('pageerror', unloadErrorHandler);
-  
   try {
     // Navigate to about:blank to force unload events
     await page.goto('about:blank', { timeout: 1000 });
@@ -187,11 +257,6 @@ while (queue.length && !errored) {
     await new Promise(resolve => setTimeout(resolve, 100));
   } catch (err) {
     // Ignore navigation errors during unload
-  }
-  
-  // Check if any errors occurred during unload
-  if (unloadError) {
-    console.log('   ❌ Error detected during page unload');
   }
   
   // Close the page to free resources and ensure complete isolation
