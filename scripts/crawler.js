@@ -9,7 +9,7 @@ import process from 'node:process';
 const argv = process.argv.slice(2);
 const startUrl = argv[0];
 if (!startUrl) {
-  console.error('Usage: node scripts/crawler.js <start-url> [--max-depth N] [--headless false]');
+  console.error('Usage: node scripts/crawler.js <start-url> [--max-depth N] [--headless false] [--verbose true]');
   process.exit(1);
 }
 function flag(name, def = undefined) {
@@ -19,6 +19,7 @@ function flag(name, def = undefined) {
 }
 const MAX_DEPTH = Number(flag('max-depth', Infinity));
 const HEADLESS  = flag('headless', 'true') !== 'false'; // default true
+const VERBOSE   = flag('verbose', 'false') === 'true'; // default false
 
 /* ---------- constants ---------- */
 const origin = new URL(startUrl).origin;
@@ -32,6 +33,11 @@ const IGNORE_PATTERNS = [
 const queue   = [{ url: startUrl, depth: 0 }];
 const visited = new Set();
 let   errored = false;
+
+/* ---------- startup ---------- */
+console.log(`Starting crawler at ${startUrl}`);
+console.log(`Options: max-depth=${MAX_DEPTH}, headless=${HEADLESS}, verbose=${VERBOSE}`);
+console.log('');
 
 /* ---------- browser ---------- */
 const browser = await chromium.launch({ headless: HEADLESS });
@@ -49,13 +55,13 @@ function setupPageHandlers(page) {
   });
 
   page.on('console', msg => {
-    // Log [Demo Framework] messages regardless of type
-    if (msg.text().includes('[Demo Framework]')) {
+    // In verbose mode, log Demo Framework messages
+    if (VERBOSE && msg.text().includes('[Demo Framework]')) {
       console.log(`\n🔧 Demo Framework: ${msg.text()}`);
     }
     
-    // Also log warnings and errors for debugging
-    if (msg.type() === 'warning') {
+    // In verbose mode, log warnings
+    if (VERBOSE && msg.type() === 'warning') {
       console.log(`\n⚠️  Console warning: ${msg.text()}`);
     }
     
@@ -67,16 +73,20 @@ function setupPageHandlers(page) {
 
   // Log failed requests
   page.on('requestfailed', request => {
-    console.log(`\n❌ Request failed: ${request.url()}\n   Reason: ${request.failure()?.errorText}`);
-  });
-
-  // Log all requests to see what's being loaded
-  page.on('request', request => {
-    const resourceType = request.resourceType();
-    if (resourceType === 'script' || resourceType === 'document') {
-      console.log(`   → Loading ${resourceType}: ${request.url()}`);
+    if (VERBOSE) {
+      console.log(`\n❌ Request failed: ${request.url()}\n   Reason: ${request.failure()?.errorText}`);
     }
   });
+
+  // In verbose mode, log all requests
+  if (VERBOSE) {
+    page.on('request', request => {
+      const resourceType = request.resourceType();
+      if (resourceType === 'script' || resourceType === 'document') {
+        console.log(`   → Loading ${resourceType}: ${request.url()}`);
+      }
+    });
+  }
 }
 
 /* ---------- crawl loop ---------- */
@@ -85,40 +95,50 @@ while (queue.length && !errored) {
   if (visited.has(url) || depth > MAX_DEPTH) continue;
   visited.add(url);
 
-  console.log(`🔍  Visiting ${url}`);
+  console.log(`Visiting ${url}`);
   
   // Create a new page for each URL (complete isolation)
   const page = await context.newPage();
   setupPageHandlers(page);
   
-  // Set up event listeners before navigation
-  page.once('response', response => {
-    if (response.url() === url && response.status() === 200) {
-      console.log('   ✓ Main page fetched');
-      // Log relevant headers
-      const headers = response.headers();
-      if (headers['content-security-policy']) {
-        console.log(`   CSP: ${headers['content-security-policy']}`);
+  // In verbose mode, set up detailed event listeners
+  if (VERBOSE) {
+    page.once('response', response => {
+      if (response.url() === url && response.status() === 200) {
+        console.log('   ✓ Main page fetched');
+        // Log relevant headers
+        const headers = response.headers();
+        if (headers['content-security-policy']) {
+          console.log(`   CSP: ${headers['content-security-policy']}`);
+        }
+        if (headers['location']) {
+          console.log(`   Location: ${headers['location']}`);
+        }
       }
-      if (headers['location']) {
-        console.log(`   Location: ${headers['location']}`);
-      }
-    }
-  });
-  page.once('domcontentloaded', () => console.log('   ✓ DOMContentLoaded event fired'));
-  page.once('load', () => console.log('   ✓ Page load event fired'));
+    });
+    page.once('domcontentloaded', () => console.log('   ✓ DOMContentLoaded event fired'));
+    page.once('load', () => console.log('   ✓ Page load event fired'));
+  }
   
   try {
     const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 5_000 });
-    console.log(`   ✓ Navigation complete (status: ${response?.status()})`);
+    if (VERBOSE) {
+      console.log(`   ✓ Navigation complete (status: ${response?.status()})`);
+    }
     
     // Wait for page to be idle or 2 seconds, whichever comes first
-    console.log('   ⏳ Waiting for page to stabilize...');
+    if (VERBOSE) {
+      console.log('   ⏳ Waiting for page to stabilize...');
+    }
     try {
       await page.waitForLoadState('networkidle', { timeout: 2_000 });
-      console.log('   ✓ Page is idle');
+      if (VERBOSE) {
+        console.log('   ✓ Page is idle');
+      }
     } catch (timeoutErr) {
-      console.log('   ⏱️  2 second timeout reached, continuing');
+      if (VERBOSE) {
+        console.log('   ⏱️  2 second timeout reached, continuing');
+      }
     }
     
     // Check if any errors occurred during the wait
@@ -147,7 +167,9 @@ while (queue.length && !errored) {
   }
   
   // Ensure page unloads properly before closing
-  console.log('   ⏳ Triggering page unload...');
+  if (VERBOSE) {
+    console.log('   ⏳ Triggering page unload...');
+  }
   
   // Set up unload error detection
   let unloadError = false;
@@ -174,14 +196,18 @@ while (queue.length && !errored) {
   
   // Close the page to free resources and ensure complete isolation
   await page.close();
-  console.log('   ✓ Page closed');
+  if (VERBOSE) {
+    console.log('   ✓ Page closed');
+  }
 }
 
 await browser.close();
+
+console.log(`\nVisited ${visited.size} pages`);
 if (errored) {
-  console.error('\n🛑 Crawl aborted on first JavaScript error.');
+  console.error('🛑 Crawl aborted due to JavaScript error');
   process.exit(1);
 } else {
-  console.log('\n✅ Crawl complete – no JavaScript errors found.');
+  console.log('✅ Crawl complete – no JavaScript errors found');
 }
 
