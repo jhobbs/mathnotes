@@ -31,3 +31,17 @@ services:
     environment:
       - NODE_ENV=development
     command: sh -c "npm install && mkdir -p static/dist/fonts/mathjax/woff-v2 && cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/*.woff static/dist/fonts/mathjax/woff-v2/ && npm run dev -- --host 0.0.0.0"
+
+  crawler:
+    build:
+      context: .
+      dockerfile: Dockerfile.playwright
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    # Don't run automatically, use docker-compose run
+    command: echo "Crawler ready. Use 'docker-compose -f docker-compose.dev.yml run --rm crawler node scripts/crawler.js <url>' to run"
+    profiles:
+      - tools

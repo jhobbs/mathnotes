@@ -12,7 +12,7 @@
     
     <!-- MathJax initialization -->
     {% if is_development %}
-    <script type="module" src="http://localhost:5173/static/dist/demos-framework/src/mathjax-entry.ts"></script>
+    <script type="module" src="{{ vite_url }}/static/dist/demos-framework/src/mathjax-entry.ts"></script>
     {% else %}
     <script type="module" src="{{ url_for('static', filename='dist/mathjax.js') }}"></script>
     {% endif %}
@@ -119,7 +119,7 @@
     
     {% if is_development %}
     <!-- Vite development server -->
-    <script type="module" src="http://localhost:5173/static/dist/demos-framework/src/main.ts"></script>
+    <script type="module" src="{{ vite_url }}/static/dist/demos-framework/src/main.ts"></script>
     {% else %}
     <!-- Production build -->
     <script type="module" src="{{ url_for('static', filename='dist/main.js') }}"></script>

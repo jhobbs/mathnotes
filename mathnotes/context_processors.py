@@ -51,7 +51,25 @@ def inject_version():
 
 def inject_env():
     """Add environment info to all templates."""
-    return {"is_development": os.environ.get("FLASK_ENV") == "development"}
+    is_development = os.environ.get("FLASK_ENV") == "development"
+    
+    # Determine Vite URL based on the request host
+    vite_url = "http://localhost:5173"
+    
+    if is_development and request:
+        request_host = request.headers.get("Host", "localhost:5000").split(":")[0]
+        
+        # If accessed via localhost or 127.0.0.1, keep using localhost
+        if request_host in ["localhost", "127.0.0.1"]:
+            vite_url = "http://localhost:5173"
+        else:
+            # For Docker service names (web-dev, etc), use vite service
+            vite_url = "http://vite:5173"
+    
+    return {
+        "is_development": is_development,
+        "vite_url": vite_url
+    }
 
 
 def inject_base_url():

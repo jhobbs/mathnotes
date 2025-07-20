@@ -9,7 +9,7 @@ import process from 'node:process';
 const argv = process.argv.slice(2);
 const startUrl = argv[0];
 if (!startUrl) {
-  console.error('Usage: node scripts/crawler.js <start-url> [--max-depth N] [--headless false] [--verbose true]');
+  console.error('Usage: node scripts/crawler.js <start-url> [--max-depth N] [--headless false] [--verbose true] [--log-skipped true]');
   process.exit(1);
 }
 function flag(name, def = undefined) {
@@ -20,6 +20,7 @@ function flag(name, def = undefined) {
 const MAX_DEPTH = Number(flag('max-depth', Infinity));
 const HEADLESS  = flag('headless', 'true') !== 'false'; // default true
 const VERBOSE   = flag('verbose', 'false') === 'true'; // default false
+const LOG_SKIPPED = flag('log-skipped', 'false') === 'true'; // default false
 
 /* ---------- constants ---------- */
 const origin = new URL(startUrl).origin;
@@ -34,9 +35,17 @@ const queue   = [{ url: startUrl, depth: 0 }];
 const visited = new Set();
 let   errored = false;
 
+// Track skipped URLs if logging is enabled
+const skippedUrls = LOG_SKIPPED ? {
+  external: new Set(),
+  alreadyVisited: new Set(),
+  maxDepth: new Set(),
+  malformed: new Set()
+} : null;
+
 /* ---------- startup ---------- */
 console.log(`Starting crawler at ${startUrl}`);
-console.log(`Options: max-depth=${MAX_DEPTH}, headless=${HEADLESS}, verbose=${VERBOSE}`);
+console.log(`Options: max-depth=${MAX_DEPTH}, headless=${HEADLESS}, verbose=${VERBOSE}, log-skipped=${LOG_SKIPPED}`);
 console.log('');
 
 /* ---------- browser ---------- */
@@ -239,10 +248,37 @@ while (queue.length && !errored) {
   for (const link of links) {
     try {
       const u = new URL(link);
-      if (u.origin === origin && !visited.has(u.href)) {
-        queue.push({ url: u.href.split('#')[0], depth: depth + 1 });
+      const cleanUrl = u.href.split('#')[0]; // Remove fragment
+      
+      if (u.origin !== origin) {
+        // Different origin - skip
+        if (LOG_SKIPPED) {
+          console.log(`   Skipping external URL: ${link}`);
+          skippedUrls.external.add(link);
+        }
+      } else if (visited.has(cleanUrl)) {
+        // Already visited - skip
+        if (LOG_SKIPPED) {
+          console.log(`   Skipping already visited: ${cleanUrl}`);
+          skippedUrls.alreadyVisited.add(cleanUrl);
+        }
+      } else if (depth + 1 > MAX_DEPTH) {
+        // Would exceed max depth - skip
+        if (LOG_SKIPPED) {
+          console.log(`   Skipping due to max depth: ${cleanUrl}`);
+          skippedUrls.maxDepth.add(cleanUrl);
+        }
+      } else {
+        // Add to queue
+        queue.push({ url: cleanUrl, depth: depth + 1 });
       }
-    } catch { /* skip malformed URLs */ }
+    } catch (e) { 
+      // Malformed URL - skip
+      if (LOG_SKIPPED) {
+        console.log(`   Skipping malformed URL: ${link}`);
+        skippedUrls.malformed.add(link);
+      }
+    }
   }
   
   // Ensure page unloads properly before closing
@@ -269,6 +305,30 @@ while (queue.length && !errored) {
 await browser.close();
 
 console.log(`\nVisited ${visited.size} pages`);
+
+// Show skipped URL summary if enabled
+if (LOG_SKIPPED && skippedUrls) {
+  console.log('\nSkipped URLs summary:');
+  if (skippedUrls.external.size > 0) {
+    console.log(`  External URLs: ${skippedUrls.external.size}`);
+    if (VERBOSE) {
+      skippedUrls.external.forEach(url => console.log(`    - ${url}`));
+    }
+  }
+  if (skippedUrls.alreadyVisited.size > 0) {
+    console.log(`  Already visited: ${skippedUrls.alreadyVisited.size}`);
+  }
+  if (skippedUrls.maxDepth.size > 0) {
+    console.log(`  Max depth exceeded: ${skippedUrls.maxDepth.size}`);
+  }
+  if (skippedUrls.malformed.size > 0) {
+    console.log(`  Malformed URLs: ${skippedUrls.malformed.size}`);
+    if (VERBOSE) {
+      skippedUrls.malformed.forEach(url => console.log(`    - ${url}`));
+    }
+  }
+}
+
 if (errored) {
   console.error('🛑 Crawl aborted due to JavaScript error');
   process.exit(1);

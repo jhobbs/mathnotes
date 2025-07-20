@@ -301,10 +301,15 @@ export default function createDilutionCalculatorDemo(container: HTMLElement, con
     }
   });
 
-  // Cleanup function
-  return () => {
-    if (style.parentNode) {
-      style.parentNode.removeChild(style);
-    }
+  // Return DemoInstance
+  return {
+    cleanup: () => {
+      if (style.parentNode) {
+        style.parentNode.removeChild(style);
+      }
+    },
+    pause: () => {}, // No animation to pause
+    resume: () => {}, // No animation to resume
+    resize: () => {} // No canvas to resize
   };
 }
