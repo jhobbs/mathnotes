@@ -1,6 +1,6 @@
 // Turntable Demo - Bug walking on a rotating turntable
 import p5 from 'p5';
-import type { DemoConfig, DemoInstance } from '@framework/types';
+import type { DemoConfig, DemoInstance, CanvasSize } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 class TurntableDemo extends P5DemoBase {
@@ -45,7 +45,7 @@ class TurntableDemo extends P5DemoBase {
   protected createSketch(p: p5): void {
     p.setup = () => {
       // Create responsive canvas with square aspect ratio
-      this.createResponsiveCanvas(p, 1.0);
+      this.defaultSetup(p, 1.0);
       
       // Set up controls
       this.setupControls(p);
@@ -72,8 +72,6 @@ class TurntableDemo extends P5DemoBase {
       }
     };
 
-    // Set up responsive resize
-    this.setupResponsiveResize(p);
   }
 
   protected updateColors(p: p5): void {

@@ -1,6 +1,6 @@
 // Elementary Cellular Automata - TypeScript module version
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig } from '@framework/types';
+import type { DemoInstance, DemoConfig, CanvasSize } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 interface Rule {
@@ -60,7 +60,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       
       // Create responsive canvas
       // Use aspectRatio=0 for full width, with 70% max height
-      this.createResponsiveCanvas(p, 0, 0.7);
+      this.defaultSetup(p, 0, 0.7);
       
       // Calculate grid dimensions based on canvas size
       const availableWidth = Math.max(this.cellSize, p.width - this.gridOffsetX);
@@ -126,23 +126,6 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       }
     };
 
-    // Set up responsive resize
-    this.setupResponsiveResize(p, (size) => {
-      // Recalculate grid dimensions
-      const availableWidth = Math.max(this.cellSize, size.width - this.gridOffsetX);
-      const availableHeight = Math.max(this.cellSize, size.height);
-      this.cols = Math.floor(availableWidth / this.cellSize);
-      this.rows = Math.floor(availableHeight / this.cellSize);
-      
-      // Reset simulation with new dimensions
-      this.grid = this.create2DArray(this.cols, this.rows);
-      this.initializeFirstRow(p);
-      p.background(this.colors.background);
-      this.drawRow(p, 0);
-      this.currentRow = 0;
-      this.running = false;
-      p.noLoop();
-    });
   }
 
   private setupControls(): void {
@@ -495,6 +478,23 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       this.ruleInput.style('background-color', this.colors.background.toString());
       this.ruleInput.style('color', this.colors.text);
     }
+  }
+
+  protected onResize(p: p5, size: CanvasSize): void {
+    // Recalculate grid dimensions
+    const availableWidth = Math.max(this.cellSize, size.width - this.gridOffsetX);
+    const availableHeight = Math.max(this.cellSize, size.height);
+    this.cols = Math.floor(availableWidth / this.cellSize);
+    this.rows = Math.floor(availableHeight / this.cellSize);
+    
+    // Reset simulation with new dimensions
+    this.grid = this.create2DArray(this.cols, this.rows);
+    this.initializeFirstRow(p);
+    p.background(this.colors.background);
+    this.drawRow(p, 0);
+    this.currentRow = 0;
+    this.running = false;
+    p.noLoop();
   }
 }
 

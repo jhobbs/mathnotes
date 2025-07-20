@@ -20,11 +20,8 @@ class ProjectionDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Create responsive canvas with wider aspect ratio
-      this.createResponsiveCanvas(p, 0.5);
-      
-      // Initialize colors
-      this.updateColors(p);
+      // Use default setup with wider aspect ratio
+      this.defaultSetup(p, 0.5);
       
       // Create control panel
       const controlPanel = this.createControlPanel();
@@ -203,9 +200,6 @@ class ProjectionDemo extends P5DemoBase {
         p.circle(projectedX + p.width / 2, projectedY + p.height / 2, 5 / w);
       }
     };
-
-    // Set up responsive resize
-    this.setupResponsiveResize(p);
   }
 }
 

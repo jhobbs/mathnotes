@@ -65,6 +65,28 @@ export abstract class P5DemoBase {
   protected abstract createSketch(p: p5): void;
   
   /**
+   * Default setup implementation that creates a responsive canvas
+   * Override this to customize setup behavior
+   */
+  protected defaultSetup(p: p5, aspectRatio: number = 0.67, maxHeightPercent?: number): p5.Renderer {
+    const canvas = this.createResponsiveCanvas(p, aspectRatio, maxHeightPercent);
+    
+    // Set up automatic resizing by default
+    this.setupResponsiveResize(p, (size) => this.onResize(p, size));
+    
+    return canvas;
+  }
+  
+  /**
+   * Called when the window is resized
+   * Override this to handle resize events in your demo
+   */
+  protected onResize(p: p5, size: CanvasSize): void {
+    // Default implementation does nothing
+    // Override in subclasses to handle resize
+  }
+  
+  /**
    * Set up the container structure
    * Override to customize container setup
    */
