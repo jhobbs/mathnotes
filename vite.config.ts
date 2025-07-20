@@ -13,10 +13,6 @@ function requestLogger(): Plugin {
         const method = req.method;
         const url = req.url;
         
-        // Log the host header for debugging
-        if (req.headers.host && req.headers.host !== 'localhost:5173') {
-          console.log(`[Vite] Request from host: ${req.headers.host}`);
-        }
         
         // Fix host header if it's coming from Docker network
         if (req.headers.host === 'vite:5173') {
