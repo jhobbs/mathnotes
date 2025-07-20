@@ -105,6 +105,15 @@ export function getResponsiveCanvasSize(
   
   const isMobile = window.innerWidth < 768;
   
+  // Special case: aspectRatio of 0 means use full width with height constraint
+  if (aspectRatio === 0) {
+    const width = isMobile 
+      ? window.innerWidth - 20
+      : container.offsetWidth - 20 || window.innerWidth * 0.8;
+    const height = window.innerHeight * maxHeightPercent;
+    return { width, height };
+  }
+  
   if (isMobile) {
     // Mobile: use full window width minus small margin
     let width = window.innerWidth - 20;
