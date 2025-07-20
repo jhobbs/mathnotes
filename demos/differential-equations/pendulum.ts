@@ -1,6 +1,6 @@
 // Pendulum Demo - Simple harmonic motion of a pendulum
 import p5 from 'p5';
-import type { DemoConfig, DemoInstance } from '@framework/types';
+import type { DemoConfig, DemoInstance, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 class PendulumDemo extends P5DemoBase {
@@ -27,7 +27,7 @@ class PendulumDemo extends P5DemoBase {
   private infoDiv: HTMLElement;
   
   constructor(container: HTMLElement, config?: DemoConfig) {
-    super(container, config);
+    super(container, config, metadata);
   }
   
   protected getStylePrefix(): string {
@@ -181,7 +181,7 @@ class PendulumDemo extends P5DemoBase {
   }
 }
 
-export const metadata = {
+export const metadata: DemoMetadata = {
   title: 'Pendulum Motion',
   category: 'Differential Equations',
   description: 'Interactive simulation of pendulum dynamics with damping and forcing'

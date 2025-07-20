@@ -1,9 +1,12 @@
 // Turntable Demo - Bug walking on a rotating turntable
 import p5 from 'p5';
-import type { DemoConfig, DemoInstance, CanvasSize } from '@framework/types';
+import type { DemoConfig, DemoInstance, CanvasSize, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 class TurntableDemo extends P5DemoBase {
+  constructor(container: HTMLElement, config?: DemoConfig) {
+    super(container, config, metadata);
+  }
   // Constants
   private readonly TABLE_SIZE = 600;
   private readonly RECORD_RADIUS = 200;
@@ -98,6 +101,9 @@ class TurntableDemo extends P5DemoBase {
     this.endPointColor = this.rotationalArrowColor; // Reuse complementary
     
     p.colorMode(p.RGB);
+    
+    // Update the arrow styles to match new colors
+    this.updateArrowStyles();
   }
 
   protected onColorSchemeChange(isDark: boolean): void {
@@ -106,6 +112,28 @@ class TurntableDemo extends P5DemoBase {
     labels.forEach(label => {
       (label as HTMLElement).style.color = this.colors.text;
     });
+    
+    // Update arrow styles with new colors
+    this.updateArrowStyles();
+  }
+  
+  private updateArrowStyles(): void {
+    // Create style element if it doesn't exist
+    let style = this.container.querySelector('#turntable-arrow-styles') as HTMLStyleElement;
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'turntable-arrow-styles';
+      this.container.appendChild(style);
+    }
+    
+    // Update the styles with current colors
+    if (this.locomotiveArrowColor && this.rotationalArrowColor && this.combinedArrowColor) {
+      style.textContent = `
+        .locomotive-arrow { color: ${this.locomotiveArrowColor.toString()}; font-weight: bold; }
+        .rotational-arrow { color: ${this.rotationalArrowColor.toString()}; font-weight: bold; }
+        .combined-arrow { color: ${this.combinedArrowColor.toString()}; font-weight: bold; }
+      `;
+    }
   }
 
   private setupControls(p: p5): void {
@@ -160,27 +188,8 @@ class TurntableDemo extends P5DemoBase {
     const radioContainer = this.modeRadio.elt as HTMLElement;
     radioContainer.className = `${this.getStylePrefix()}-radio demo-radio`;
     
-    // Add instructions
-    const infoDiv = document.createElement('div');
-    infoDiv.className = `${this.getStylePrefix()}-info demo-info`;
-    infoDiv.style.marginTop = '20px';
-    infoDiv.style.textAlign = 'center';
-    infoDiv.innerHTML = `
-      <p><strong>Instructions:</strong> Press 'z' to reset the animation</p>
-      <p><strong>Arrows:</strong> <span class="locomotive-arrow">Accent</span> = bug's locomotive velocity, 
-      <span class="rotational-arrow">Complementary</span> = velocity from turntable rotation, 
-      <span class="combined-arrow">Triadic</span> = combined velocity</p>
-    `;
-    
-    // Add dynamic styles for arrow colors
-    const style = document.createElement('style');
-    style.textContent = `
-      .locomotive-arrow { color: ${this.locomotiveArrowColor.toString()}; font-weight: bold; }
-      .rotational-arrow { color: ${this.rotationalArrowColor.toString()}; font-weight: bold; }
-      .combined-arrow { color: ${this.combinedArrowColor.toString()}; font-weight: bold; }
-    `;
-    this.container.appendChild(style);
-    this.container.appendChild(infoDiv);
+    // Instructions are now handled by metadata.instructions
+    // Dynamic styles for arrow colors will be added after colors are initialized
   }
 
   private redo(p: p5): void {
@@ -353,10 +362,14 @@ class TurntableDemo extends P5DemoBase {
   }
 }
 
-export const metadata = {
+export const metadata: DemoMetadata = {
   title: 'Turntable',
   category: 'Differential Equations',
-  description: 'Simulation of a turntable system demonstrating rotational dynamics and Coriolis effects'
+  description: 'Simulation of a turntable system demonstrating rotational dynamics and Coriolis effects',
+  instructions: `<p><strong>Instructions:</strong> Press 'z' to reset the animation</p>
+    <p><strong>Arrows:</strong> <span class="locomotive-arrow">Accent</span> = bug's locomotive velocity, 
+    <span class="rotational-arrow">Complementary</span> = velocity from turntable rotation, 
+    <span class="combined-arrow">Triadic</span> = combined velocity</p>`
 };
 
 export default function createTurntableDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

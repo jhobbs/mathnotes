@@ -1,6 +1,6 @@
 // Elementary Cellular Automata - TypeScript module version
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig, CanvasSize } from '@framework/types';
+import type { DemoInstance, DemoConfig, CanvasSize, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 interface Rule {
@@ -9,6 +9,9 @@ interface Rule {
 }
 
 class ElementaryCellularAutomataDemo extends P5DemoBase {
+  constructor(container: HTMLElement, config?: DemoConfig) {
+    super(container, config, metadata);
+  }
   // Constants
   private readonly cellSize: number = 5;
   private readonly gridOffsetX: number = 120;
@@ -136,13 +139,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     // Create control panel below canvas
     const controlPanel = this.createControlPanel();
     
-    // Add instructions
-    const infoDiv = document.createElement('div');
-    infoDiv.className = `${this.getStylePrefix()}-info`;
-    infoDiv.style.textAlign = 'center';
-    infoDiv.style.marginBottom = '20px';
-    infoDiv.textContent = 'Click first row to edit. Click rule boxes on left to modify.';
-    controlPanel.appendChild(infoDiv);
+    // Instructions are now handled by metadata.instructions
     
     // Main controls row
     const mainControls = document.createElement('div');
@@ -502,10 +499,11 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   }
 }
 
-export const metadata = {
+export const metadata: DemoMetadata = {
   title: 'Elementary Cellular Automata',
   category: 'Cellular Automata',
-  description: 'Exploration of Wolfram\'s elementary cellular automata rules and their emergent patterns'
+  description: 'Exploration of Wolfram\'s elementary cellular automata rules and their emergent patterns',
+  instructions: 'Click first row to edit. Click rule boxes on left to modify.'
 };
 
 export default function(container: HTMLElement, config?: DemoConfig): DemoInstance {

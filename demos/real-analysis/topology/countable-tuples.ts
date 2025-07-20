@@ -1,10 +1,9 @@
 // Countable Tuples Demo - Shows B_n sets are countable for any n
 import p5 from 'p5';
-import type { DemoConfig, DemoInstance, CanvasSize } from '@framework/types';
+import type { DemoConfig, DemoInstance, CanvasSize, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 class CountableTuplesDemo extends P5DemoBase {
-  private infoDiv: HTMLElement;
 
   // Configuration Constants
   private readonly CONFIG = {
@@ -62,17 +61,7 @@ class CountableTuplesDemo extends P5DemoBase {
   }
   
   constructor(container: HTMLElement, config?: DemoConfig) {
-    super(container, config);
-    
-    // Create info panel
-    this.infoDiv = document.createElement('div');
-    this.infoDiv.style.marginTop = '20px';
-    this.infoDiv.style.textAlign = 'center';
-    this.infoDiv.innerHTML = `
-      <h3>Countable n-tuples from Countable Set</h3>
-      <p>This animation illustrates the proof that B_n (the set of all n-tuples from a countable set A) is countable for any n.</p>
-    `;
-    this.container.appendChild(this.infoDiv);
+    super(container, config, metadata);
   }
 
   // Unicode helpers
@@ -537,10 +526,12 @@ class CountableTuplesDemo extends P5DemoBase {
   }
 }
 
-export const metadata = {
+export const metadata: DemoMetadata = {
   title: 'Countable Tuples',
   category: 'Real Analysis',
-  description: 'Visualization showing that the set of all finite tuples of natural numbers is countable'
+  description: 'Visualization showing that the set of all finite tuples of natural numbers is countable',
+  instructions: `<h3>Countable n-tuples from Countable Set</h3>
+    <p>This animation illustrates the proof that B_n (the set of all n-tuples from a countable set A) is countable for any n.</p>`
 };
 
 export default function createCountableTuplesDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

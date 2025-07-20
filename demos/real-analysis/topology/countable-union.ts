@@ -1,6 +1,6 @@
 // Countable Union Demo - Shows diagonal traversal of countable union
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig, CanvasSize } from '@framework/types';
+import type { DemoInstance, DemoConfig, CanvasSize, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 class CountableUnionDemo extends P5DemoBase {
@@ -14,9 +14,6 @@ class CountableUnionDemo extends P5DemoBase {
   private readonly animationSpeed = 0.03;
   private linePoints: Array<{x: number, y: number, isDiagonalStart: boolean}> = [];
   
-  // UI elements
-  private info: HTMLElement;
-  
   protected getStylePrefix(): string {
     return 'countable-union';
   }
@@ -26,20 +23,7 @@ class CountableUnionDemo extends P5DemoBase {
   }
   
   constructor(container: HTMLElement, config?: DemoConfig) {
-    super(container, config);
-    
-    // Create info section
-    this.info = document.createElement('div');
-    this.info.id = 'info';
-    this.info.className = `${this.getStylePrefix()}-info`;
-    this.info.style.marginTop = '20px';
-    this.info.style.textAlign = 'center';
-    this.info.innerHTML = `
-      <h3>Diagonal Traversal of Countable Union</h3>
-      <p>This animation shows how elements from countably many countable sets (E<sub>n</sub>) 
-      can be enumerated using diagonal traversal, proving that a countable union of countable sets is countable.</p>
-    `;
-    this.container.appendChild(this.info);
+    super(container, config, metadata);
     
     // Generate diagonal traversal path
     this.generateTraversalPath();
@@ -282,10 +266,13 @@ class CountableUnionDemo extends P5DemoBase {
   }
 }
 
-export const metadata = {
+export const metadata: DemoMetadata = {
   title: 'Countable Union',
   category: 'Real Analysis',
-  description: 'Visualization of the diagonal argument proving that countable unions of countable sets are countable'
+  description: 'Visualization of the diagonal argument proving that countable unions of countable sets are countable',
+  instructions: `<h3>Diagonal Traversal of Countable Union</h3>
+    <p>This animation shows how elements from countably many countable sets (E<sub>n</sub>) 
+    can be enumerated using diagonal traversal, proving that a countable union of countable sets is countable.</p>`
 };
 
 export default function initCountableUnionDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

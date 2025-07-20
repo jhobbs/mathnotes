@@ -1,10 +1,13 @@
 // Projection demo - Interactive visualization of projective transformations
 import p5 from 'p5';
 import * as math from 'mathjs';
-import type { DemoInstance, DemoConfig } from '@framework/types';
+import type { DemoInstance, DemoConfig, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 class ProjectionDemo extends P5DemoBase {
+  constructor(container: HTMLElement, config?: DemoConfig) {
+    super(container, config, metadata);
+  }
   // Sliders
   private cameraAngleXSlider!: p5.Element;
   private cameraAngleYSlider!: p5.Element;
@@ -204,7 +207,7 @@ class ProjectionDemo extends P5DemoBase {
   }
 }
 
-export const metadata = {
+export const metadata: DemoMetadata = {
   title: '3D Projection',
   category: 'Graphics',
   description: 'Interactive demonstration of 3D perspective projection using transformation matrices'
