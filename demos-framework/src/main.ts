@@ -21,7 +21,7 @@ interface DemoModule {
 // Demo registry - will be populated as demos are converted
 const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'electric-field': () => import('@demos/physics/electric-field'),
-  'neighborhood': () => import('@demos/topology/neighborhood'),
+  'neighborhood': () => import('@demos/real-analysis/topology/neighborhood'),
   'projection': () => import('@demos/graphics/projection'),
   'countable-union': () => import('@demos/real-analysis/topology/countable-union'),
   'countable-tuples': () => import('@demos/real-analysis/topology/countable-tuples'),

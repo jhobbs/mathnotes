@@ -25,6 +25,7 @@ If no URL is provided, starts from the homepage.
 
 <function_calls>
 <invoke name="Bash">
+<parameter name="timeout">600000</parameter>
 <parameter name="command">
 # Parse arguments
 URL=""
