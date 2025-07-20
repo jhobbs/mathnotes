@@ -1,5 +1,5 @@
 import p5 from 'p5';
-import type { DemoConfig, DemoInstance, CanvasSize } from '@framework/types';
+import type { DemoConfig, DemoInstance, CanvasSize, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 interface ConstructedSequence {
@@ -28,7 +28,6 @@ class DiagonalizationDemo extends P5DemoBase {
   private startingPositionNumber = 1;
 
   // UI elements
-  private infoDiv: HTMLElement;
   private bottomInfo: HTMLElement;
   private generateNewSequences!: () => void;
 
@@ -41,7 +40,7 @@ class DiagonalizationDemo extends P5DemoBase {
   }
 
   constructor(container: HTMLElement, config?: DemoConfig) {
-    super(container, config);
+    super(container, config, metadata);
   }
 
   protected createSketch(p: p5): void {
@@ -128,14 +127,7 @@ class DiagonalizationDemo extends P5DemoBase {
     };
 
     p.setup = () => {
-      // Create info section
-      this.infoDiv = document.createElement('div');
-      this.infoDiv.style.textAlign = 'center';
-      this.infoDiv.innerHTML = `
-        <h3>Cantor's Diagonalization Proof</h3>
-        <p>This animation demonstrates how we construct a new binary sequence that differs from every sequence in our countable list, proving that the set of all binary sequences is uncountable.</p>
-      `;
-      this.containerEl!.insertBefore(this.infoDiv, this.containerEl!.firstChild);
+      // Info section is now handled by metadata
 
       // Canvas is now automatically created by base class
       
@@ -466,10 +458,11 @@ class DiagonalizationDemo extends P5DemoBase {
   }
 }
 
-export const metadata = {
+export const metadata: DemoMetadata = {
   title: "Cantor's Diagonalization",
   category: 'Real Analysis',
-  description: "Interactive demonstration of Cantor's diagonal argument proving the uncountability of real numbers"
+  description: "Interactive demonstration of Cantor's diagonal argument proving the uncountability of real numbers",
+  instructions: "<h3>Cantor's Diagonalization Proof</h3><p>This animation demonstrates how we construct a new binary sequence that differs from every sequence in our countable list, proving that the set of all binary sequences is uncountable.</p>"
 };
 
 export default function createDiagonalizationDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

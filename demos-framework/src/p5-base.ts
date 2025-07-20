@@ -7,6 +7,14 @@ import { addDemoStyles, createControlPanel, createButton, createSlider } from '.
 /**
  * Base class for p5.js demos with standard lifecycle management
  */
+// Demo metadata interface
+export interface DemoMetadata {
+  title: string;
+  category: string;
+  description: string;
+  instructions?: string | (() => string);
+}
+
 export abstract class P5DemoBase {
   protected p5Instance: p5 | null = null;
   protected container: HTMLElement;
@@ -27,10 +35,15 @@ export abstract class P5DemoBase {
   protected canvasParent?: HTMLElement;
   protected controlPanel?: HTMLElement;
   protected styleElement?: HTMLStyleElement;
+  protected instructionsEl?: HTMLElement;
   
-  constructor(container: HTMLElement, config?: DemoConfig) {
+  // Demo metadata
+  protected metadata?: DemoMetadata;
+  
+  constructor(container: HTMLElement, config?: DemoConfig, metadata?: DemoMetadata) {
     this.container = container;
     this.config = config;
+    this.metadata = metadata;
     this.isDarkMode = isDarkMode(config);
   }
   
@@ -44,6 +57,11 @@ export abstract class P5DemoBase {
     // Add styles if enabled
     if (this.shouldAddStyles()) {
       this.styleElement = addDemoStyles(this.container, this.getStylePrefix());
+    }
+    
+    // Add instructions if provided
+    if (this.shouldShowInstructions()) {
+      this.setupInstructions();
     }
     
     // Set up dark mode listener before creating p5 instance
@@ -159,6 +177,51 @@ export abstract class P5DemoBase {
    */
   protected getContainerId(): string | undefined {
     return undefined;
+  }
+  
+  /**
+   * Whether to show instructions
+   * Override to disable automatic instruction display
+   */
+  protected shouldShowInstructions(): boolean {
+    return true;
+  }
+  
+  /**
+   * Get instructions content
+   * Override to provide custom instructions
+   */
+  protected getInstructions(): string | null {
+    if (this.metadata?.instructions) {
+      return typeof this.metadata.instructions === 'function' 
+        ? this.metadata.instructions() 
+        : this.metadata.instructions;
+    }
+    return null;
+  }
+  
+  /**
+   * Set up instructions display
+   */
+  protected setupInstructions(): void {
+    const instructions = this.getInstructions();
+    if (!instructions) return;
+    
+    this.instructionsEl = document.createElement('div');
+    this.instructionsEl.className = `${this.getStylePrefix()}-instructions demo-info`;
+    this.instructionsEl.style.marginTop = '20px';
+    this.instructionsEl.style.textAlign = 'center';
+    this.instructionsEl.innerHTML = instructions;
+    this.container.appendChild(this.instructionsEl);
+  }
+  
+  /**
+   * Update instructions dynamically
+   */
+  protected updateInstructions(content: string): void {
+    if (this.instructionsEl) {
+      this.instructionsEl.innerHTML = content;
+    }
   }
   
   /**
@@ -308,6 +371,7 @@ export abstract class P5DemoBase {
     this.canvasParent = undefined;
     this.controlPanel = undefined;
     this.styleElement = undefined;
+    this.instructionsEl = undefined;
   }
   
   /**

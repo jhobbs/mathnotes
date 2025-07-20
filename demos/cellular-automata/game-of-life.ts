@@ -1,6 +1,6 @@
 // Conway's Game of Life - TypeScript module version
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig } from '@framework/types';
+import type { DemoInstance, DemoConfig, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 interface GameOfLifeState {
@@ -33,7 +33,7 @@ class GameOfLifeDemo extends P5DemoBase {
   private generationInfo!: HTMLElement;
 
   constructor(container: HTMLElement, config?: DemoConfig) {
-    super(container, config);
+    super(container, config, metadata);
     
     this.state = {
       grid: [],
@@ -142,13 +142,7 @@ class GameOfLifeDemo extends P5DemoBase {
   private setupControls(p: p5): void {
     const controlPanel = this.createControlPanel();
     
-    // Instructions
-    const infoDiv = document.createElement('div');
-    infoDiv.className = `${this.getStylePrefix()}-info`;
-    infoDiv.style.textAlign = 'center';
-    infoDiv.style.marginBottom = '20px';
-    infoDiv.textContent = 'Click on cells to toggle them. Click Start to run the simulation.';
-    controlPanel.appendChild(infoDiv);
+    // Instructions are now handled by metadata.instructions
     
     // Main controls row
     const mainControls = document.createElement('div');
@@ -330,10 +324,11 @@ class GameOfLifeDemo extends P5DemoBase {
   }
 }
 
-export const metadata = {
+export const metadata: DemoMetadata = {
   title: "Conway's Game of Life",
   category: 'Cellular Automata',
-  description: 'Interactive simulation of the classic cellular automaton demonstrating emergent behavior'
+  description: 'Interactive simulation of the classic cellular automaton demonstrating emergent behavior',
+  instructions: 'Click on cells to toggle them. Click Start to run the simulation.'
 };
 
 export default function initGameOfLifeDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

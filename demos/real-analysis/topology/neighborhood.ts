@@ -1,6 +1,6 @@
 // Neighborhood demo - Interactive visualization for metric spaces
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig, CanvasSize } from '@framework/types';
+import type { DemoInstance, DemoConfig, CanvasSize, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 interface Neighborhood {
@@ -24,11 +24,8 @@ class NeighborhoodDemo extends P5DemoBase {
   private outerColor!: p5.Color;
   private innerColor!: p5.Color;
   
-  // UI elements
-  private info: HTMLElement;
-  
   constructor(container: HTMLElement, config?: DemoConfig) {
-    super(container, config);
+    super(container, config, metadata);
   }
   
   protected getStylePrefix(): string {
@@ -50,19 +47,7 @@ class NeighborhoodDemo extends P5DemoBase {
       this.createButton('Reset', () => this.resetDemo());
       this.createButton('Toggle Zoom', () => this.toggleZoom());
       
-      // Create info section
-      this.info = document.createElement('div');
-      this.info.id = 'info';
-      this.info.className = 'neighborhood-info';
-      this.info.style.marginTop = '20px';
-      this.info.innerHTML = `
-        <h3>Every Neighborhood is Open</h3>
-        <p>This demonstration shows that every neighborhood in a metric space is an open set.</p>
-        <p class="instruction">Click and drag to create a neighborhood.</p>
-        <p>A set is <strong>open</strong> if every point in the set is an interior point. A point is an <strong>interior point</strong> if there exists a neighborhood around it that is entirely contained within the set.</p>
-        <p style="font-size: 0.9em; opacity: 0.8;">Use trackpad/mouse wheel to zoom in and out</p>
-      `;
-      this.containerEl!.appendChild(this.info);
+      // Info section is now handled by base class
       
       p.smooth();
     };
@@ -370,23 +355,25 @@ class NeighborhoodDemo extends P5DemoBase {
   }
 
   private updateInstruction(): void {
-    const instruction = this.info.querySelector('.instruction');
-    if (!instruction) return;
+    let instructionText = '';
     
     switch(this.state) {
       case 'waiting':
-        instruction.textContent = 'Click and drag to create a neighborhood.';
+        instructionText = 'Click and drag to create a neighborhood.';
         break;
       case 'dragging_outer':
-        instruction.textContent = 'Release to set the neighborhood radius.';
+        instructionText = 'Release to set the neighborhood radius.';
         break;
       case 'waiting_inner':
-        instruction.textContent = 'Click inside the neighborhood to show it contains interior points.';
+        instructionText = 'Click inside the neighborhood to show it contains interior points.';
         break;
       case 'complete':
-        instruction.textContent = 'Click more points inside the neighborhood to show they are all interior points. Every point in a neighborhood is interior, so neighborhoods are open!';
+        instructionText = 'Click more points inside the neighborhood to show they are all interior points. Every point in a neighborhood is interior, so neighborhoods are open!';
         break;
     }
+    
+    // Use the base class method to update instructions
+    this.updateInstructions(`<p class="instruction">${instructionText}</p>`);
   }
 
   private handleMouseWheel(p: p5, event: any): boolean {
@@ -431,10 +418,15 @@ class NeighborhoodDemo extends P5DemoBase {
   }
 }
 
-export const metadata = {
+export const metadata: DemoMetadata = {
   title: 'Neighborhood in Metric Spaces',
   category: 'Topology',
-  description: 'Interactive visualization demonstrating that every neighborhood in a metric space is an open set'
+  description: 'Interactive visualization demonstrating that every neighborhood in a metric space is an open set',
+  instructions: `<h3>Every Neighborhood is Open</h3>
+    <p>This demonstration shows that every neighborhood in a metric space is an open set.</p>
+    <p class="instruction">Click and drag to create a neighborhood.</p>
+    <p>A set is <strong>open</strong> if every point in the set is an interior point. A point is an <strong>interior point</strong> if there exists a neighborhood around it that is entirely contained within the set.</p>
+    <p style="font-size: 0.9em; opacity: 0.8;">Use trackpad/mouse wheel to zoom in and out</p>`
 };
 
 export default function initNeighborhoodDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

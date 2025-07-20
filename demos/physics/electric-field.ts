@@ -1,7 +1,7 @@
 // Electric field simulation - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { P5DemoBase } from '@framework';
+import { P5DemoBase, type DemoMetadata } from '@framework';
 
 interface Particle {
   pos: p5.Vector;
@@ -140,19 +140,7 @@ class ElectricFieldDemo extends P5DemoBase {
   }
   
   constructor(container: HTMLElement, config?: DemoConfig) {
-    super(container, config);
-    
-    // Add instructions
-    const instructionsDiv = document.createElement('div');
-    instructionsDiv.className = `${this.getStylePrefix()}-instructions demo-info`;
-    instructionsDiv.style.marginTop = '20px';
-    instructionsDiv.style.textAlign = 'center';
-    instructionsDiv.innerHTML = `
-      <p><strong>Instructions:</strong> Click to place negative charges. 
-      Ctrl+Click to place positive charges. 
-      Press spacebar to toggle particle movement.</p>
-    `;
-    this.container.appendChild(instructionsDiv);
+    super(container, config, metadata);
   }
   
   protected createSketch(p: p5): void {
@@ -252,10 +240,15 @@ class ElectricFieldDemo extends P5DemoBase {
   }
 }
 
-export const metadata = {
+export const metadata: DemoMetadata = {
   title: 'Electric Field',
   category: 'Physics',
-  description: 'Interactive simulation of electric field lines and charged particles'
+  description: 'Interactive simulation of electric field lines and charged particles',
+  instructions: `
+    <p><strong>Instructions:</strong> Click to place negative charges. 
+    Ctrl+Click to place positive charges. 
+    Press spacebar to toggle particle movement.</p>
+  `
 };
 
 export default function initElectricFieldDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
