@@ -63,7 +63,7 @@ body {
 
 header {
     border-bottom: 1px solid var(--border-color);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     padding-bottom: 1rem;
 }
 
@@ -79,6 +79,23 @@ header a {
 
 main {
     min-height: 70vh;
+}
+
+/* Remove default margins from article */
+article {
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure first element in main has minimal top spacing */
+main > *:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* Ensure first heading in article has minimal top spacing */
+article > h1:first-child {
+    margin-top: 0;
 }
 
 footer {
@@ -112,6 +129,15 @@ a {
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
     color: var(--header-color);
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* First heading after header should have less margin */
+main > h1:first-child,
+main > article > h1:first-child,
+main > .content > h1:first-child {
+    margin-top: 0.5rem;
 }
 
 /* Images */
@@ -704,8 +730,10 @@ table th {
     z-index: 100;
     display: flex;
     justify-content: flex-end;
-    margin: 1rem 0;
+    margin: 0;
     padding: 0 1rem;
+    float: right;
+    width: auto;
 }
 
 .math-content-toggle {
