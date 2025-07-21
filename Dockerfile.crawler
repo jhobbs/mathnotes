@@ -1,0 +1,17 @@
+# Dockerfile.playwright  – Playwright 1.54 on Ubuntu 24.04 (noble)
+FROM mcr.microsoft.com/playwright:v1.54.0-noble
+
+WORKDIR /usr/src/app
+
+# 1️⃣ Copy and install crawler dependencies
+COPY crawler/package.json ./package.json
+RUN npm install
+
+# 2️⃣ Copy the crawler directory
+COPY crawler ./crawler
+
+# 3️⃣ Set working directory to crawler
+WORKDIR /usr/src/app/crawler
+
+# 4️⃣ Default entry point
+CMD ["npx", "tsx", "crawler.ts", "http://localhost:5000"]

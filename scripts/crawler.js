@@ -9,7 +9,7 @@ import process from 'node:process';
 const argv = process.argv.slice(2);
 const startUrl = argv[0];
 if (!startUrl) {
-  console.error('Usage: node scripts/crawler.js <start-url> [--max-depth N] [--headless false] [--verbose true] [--log-skipped true] [--single-page true] [--concurrency N]');
+  console.error('Usage: node scripts/crawler.js <start-url> [--max-depth N] [--headless false] [--verbose true] [--log-skipped true] [--single-page true] [--concurrency N] [--show-probe true]');
   process.exit(1);
 }
 function flag(name, def = undefined) {
@@ -23,6 +23,7 @@ const VERBOSE   = flag('verbose', 'false') === 'true'; // default false
 const LOG_SKIPPED = flag('log-skipped', 'false') === 'true'; // default false
 const SINGLE_PAGE = flag('single-page', 'false') === 'true'; // default false
 const CONCURRENCY = Number(flag('concurrency', 10)); // default 5 parallel pages
+const SHOW_PROBE = flag('show-probe', 'true') === 'true'; // default true
 
 /* ---------- constants ---------- */
 const origin = new URL(startUrl).origin;
@@ -47,7 +48,7 @@ const skippedUrls = LOG_SKIPPED ? {
 
 /* ---------- startup ---------- */
 console.log(`Starting crawler at ${startUrl}`);
-console.log(`Options: max-depth=${MAX_DEPTH}, headless=${HEADLESS}, verbose=${VERBOSE}, log-skipped=${LOG_SKIPPED}, single-page=${SINGLE_PAGE}, concurrency=${CONCURRENCY}`);
+console.log(`Options: max-depth=${MAX_DEPTH}, headless=${HEADLESS}, verbose=${VERBOSE}, log-skipped=${LOG_SKIPPED}, single-page=${SINGLE_PAGE}, concurrency=${CONCURRENCY}, show-probe=${SHOW_PROBE}`);
 if (SINGLE_PAGE) {
   console.log('Running in single-page mode - will not follow links');
 }
@@ -171,9 +172,9 @@ function setupPageHandlers(page) {
   });
 
   page.on('console', msg => {
-    // In verbose mode, log Demo Framework messages
-    if (VERBOSE && msg.text().includes('[Demo Framework]')) {
-      console.log(`\n🔧 Demo Framework: ${msg.text()}`);
+    // Show probe messages when flag is set
+    if (SHOW_PROBE && msg.text().includes('[probe]')) {
+      console.log(`\n${msg.text()}`);
     }
     
     // In verbose mode, log warnings

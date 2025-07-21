@@ -35,7 +35,7 @@ services:
   crawler:
     build:
       context: .
-      dockerfile: Dockerfile.playwright
+      dockerfile: Dockerfile.crawler
     volumes:
       - .:/app
       - /app/node_modules

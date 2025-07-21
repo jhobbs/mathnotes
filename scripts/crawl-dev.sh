@@ -6,10 +6,10 @@ if [ "$1" = "--single-page" ] || [ "$1" = "-s" ]; then
     # Single page mode - second argument is the URL
     URL="${2:-http://web-dev:5000}"
     shift 2
-    docker-compose -f docker-compose.dev.yml run --rm crawler node scripts/crawler.js "$URL" --single-page true "$@"
+    docker-compose -f docker-compose.dev.yml run --rm crawler npx tsx crawler.ts "$URL" --single-page true "$@"
 else
     # Default to crawling the dev server
     URL="${1:-http://web-dev:5000}"
     shift
-    docker-compose -f docker-compose.dev.yml run --rm crawler node scripts/crawler.js "$URL" "$@"
+    docker-compose -f docker-compose.dev.yml run --rm crawler npx tsx crawler.ts "$URL" "$@"
 fi
