@@ -26,7 +26,10 @@
 </head>
 <body>
     <header>
-        <h1><a href="{{ url_for('index') }}">{{ config.SITE_TITLE }}</a></h1>
+        <div class="header-content">
+            <h1><a href="{{ url_for('index') }}">{{ config.SITE_TITLE }}</a></h1>
+            {% block header_extra %}{% endblock %}
+        </div>
     </header>
     
     <main>
