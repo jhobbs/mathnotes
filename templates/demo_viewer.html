@@ -4,55 +4,58 @@
 
 {% block extra_head %}
 <style>
-  /* Header navigation styles */
+  /* Hide the header completely */
   header {
-    margin-bottom: 0.5rem !important;
+    display: none !important;
   }
   
-  /* Reduce footer spacing */
+  /* Remove main top margin since no header */
+  main {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Customize footer for navigation */
   footer {
     margin-top: 1rem !important;
-  }
-  
-  .header-content {
     display: flex;
     align-items: center;
-    gap: 30px;
+    justify-content: space-between;
+    padding: 1rem 20px;
   }
   
-  .header-content h1 {
-    margin: 0;
-    flex: 0 0 auto;
-  }
-  
-  .header-nav-controls {
-    display: inline-flex;
+  .footer-nav-controls {
+    display: flex;
     align-items: center;
     gap: 15px;
     white-space: nowrap;
-    flex: 0 0 auto;
   }
   
-  .header-demo-info {
+  .footer-demo-info {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-left: auto;
     white-space: nowrap;
     font-size: 0.9em;
-    flex: 1 1 auto;
-    justify-content: flex-end;
   }
   
-  #header-demo-title {
+  #footer-demo-title {
     font-weight: 600;
-    color: var(--header-color);
+    color: var(--footer-color);
+  }
+  
+  .footer-copyright {
+    font-size: 0.85em;
+    color: var(--footer-color);
+  }
+  
+  .footer-copyright p {
+    margin: 0;
   }
   
   .viewer-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 10px 20px;
+    padding: 5px 20px 10px 20px;
   }
   
   .nav-button {
@@ -94,7 +97,7 @@
   /* Match the embedded demo component styles */
   .demo-component {
     position: relative;
-    margin: 0.5rem 0 0.25rem 0;
+    margin: 0;
     width: 100%;
     box-sizing: border-box;
   }
@@ -172,15 +175,6 @@
   }
 </style>
 {% endblock %}
-
-{% block header_extra %}<div class="header-nav-controls">
-  <button id="prev-button" class="nav-button">← Prev</button>
-  <span class="demo-counter" id="demo-counter">Loading...</span>
-  <button id="next-button" class="nav-button">Next →</button>
-</div>
-<div class="header-demo-info">
-  <span id="header-demo-title"></span>
-</div>{% endblock %}
 
 {% block content %}
 <div class="viewer-container">
@@ -290,8 +284,8 @@ async function loadDemo(index) {
   const demo = demoList[index];
   const content = document.getElementById('demo-content');
   
-  // Update header info
-  document.getElementById('header-demo-title').textContent = demo.metadata.title;
+  // Update footer info
+  document.getElementById('footer-demo-title').textContent = demo.metadata.title;
   
   // Create demo container (no info box needed)
   content.innerHTML = `
@@ -346,4 +340,18 @@ window.addEventListener('beforeunload', () => {
   cleanupCurrentDemo();
 });
 </script>
+{% endblock %}
+
+{% block footer %}
+<div class="footer-nav-controls">
+  <button id="prev-button" class="nav-button">← Prev</button>
+  <span class="demo-counter" id="demo-counter">Loading...</span>
+  <button id="next-button" class="nav-button">Next →</button>
+</div>
+<div class="footer-demo-info">
+  <span id="footer-demo-title"></span>
+</div>
+<div class="footer-copyright">
+  <p>&copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: <a href="https://github.com/jhobbs/mathnotes/commit/{{ app_version }}" target="_blank" rel="noopener">{{ app_version }}</a></p>
+</div>
 {% endblock %}
