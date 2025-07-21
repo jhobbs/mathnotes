@@ -270,8 +270,7 @@ export const metadata: DemoMetadata = {
   title: 'Countable Union',
   category: 'Real Analysis',
   description: 'Visualization of the diagonal argument proving that countable unions of countable sets are countable',
-  instructions: `<h3>Diagonal Traversal of Countable Union</h3>
-    <p>This animation shows how elements from countably many countable sets (E<sub>n</sub>) 
+  instructions: `<p>This animation shows how elements from countably many countable sets (E<sub>n</sub>) 
     can be enumerated using diagonal traversal, proving that a countable union of countable sets is countable.</p>`
 };
 

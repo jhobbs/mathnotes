@@ -530,8 +530,7 @@ export const metadata: DemoMetadata = {
   title: 'Countable Tuples',
   category: 'Real Analysis',
   description: 'Visualization showing that the set of all finite tuples of natural numbers is countable',
-  instructions: `<h3>Countable n-tuples from Countable Set</h3>
-    <p>This animation illustrates the proof that B_n (the set of all n-tuples from a countable set A) is countable for any n.</p>`
+  instructions: `<p>This animation illustrates the proof that B_n (the set of all n-tuples from a countable set A) is countable for any n.</p>`
 };
 
 export default function createCountableTuplesDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

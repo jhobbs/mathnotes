@@ -422,11 +422,7 @@ export const metadata: DemoMetadata = {
   title: 'Neighborhood in Metric Spaces',
   category: 'Topology',
   description: 'Interactive visualization demonstrating that every neighborhood in a metric space is an open set',
-  instructions: `<h3>Every Neighborhood is Open</h3>
-    <p>This demonstration shows that every neighborhood in a metric space is an open set.</p>
-    <p class="instruction">Click and drag to create a neighborhood.</p>
-    <p>A set is <strong>open</strong> if every point in the set is an interior point. A point is an <strong>interior point</strong> if there exists a neighborhood around it that is entirely contained within the set.</p>
-    <p style="font-size: 0.9em; opacity: 0.8;">Use trackpad/mouse wheel to zoom in and out</p>`
+  instructions: `<p class="instruction">Click and drag to create a neighborhood.</p>`
 };
 
 export default function initNeighborhoodDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

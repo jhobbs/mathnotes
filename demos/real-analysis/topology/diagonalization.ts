@@ -134,11 +134,6 @@ class DiagonalizationDemo extends P5DemoBase {
       // Create controls
       this.createButton('Reset', () => this.generateNewSequences());
 
-      this.bottomInfo = document.createElement('p');
-      this.bottomInfo.innerHTML = '<strong>Key insight:</strong> The constructed sequence (bottom row) differs from sequence <em>n</em> in position <em>n</em>, ensuring it\'s not in our original list, even though our original list is countably infinite.';
-      this.bottomInfo.style.textAlign = 'center';
-      this.containerEl!.appendChild(this.bottomInfo);
-      
       this.generateNewSequences();
     };
 
@@ -462,7 +457,7 @@ export const metadata: DemoMetadata = {
   title: "Cantor's Diagonalization",
   category: 'Real Analysis',
   description: "Interactive demonstration of Cantor's diagonal argument proving the uncountability of real numbers",
-  instructions: "<h3>Cantor's Diagonalization Proof</h3><p>This animation demonstrates how we construct a new binary sequence that differs from every sequence in our countable list, proving that the set of all binary sequences is uncountable.</p>"
+  instructions: "<p>This animation demonstrates how we construct a new binary sequence that differs from every sequence in our countable list, proving that the set of all binary sequences is uncountable.</p>"
 };
 
 export default function createDiagonalizationDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
