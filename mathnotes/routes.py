@@ -220,6 +220,11 @@ def register_routes(app, url_mapper, markdown_processor):
         # The template will dynamically load demos from the JS registry
         return render_template("demos_showcase.html")
 
+    @app.route("/demo-viewer")
+    def demo_viewer():
+        """Display one demo at a time with navigation."""
+        return render_template("demo_viewer.html")
+
     @app.errorhandler(404)
     def page_not_found(e):
         """Handle 404 errors."""

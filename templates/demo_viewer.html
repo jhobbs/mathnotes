@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+
+{% block title %}Demo Viewer - {{ config.SITE_TITLE }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Header navigation styles */
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  
+  .header-content h1 {
+    margin: 0;
+    flex: 0 0 auto;
+  }
+  
+  .header-nav-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+  
+  .viewer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 20px 20px;
+  }
+  
+  .nav-button {
+    background: var(--button-background);
+    color: var(--button-text);
+    border: 1px solid var(--border-color);
+    padding: 2px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.75em;
+    transition: background 0.2s;
+    white-space: nowrap;
+    height: 24px;
+    line-height: 20px;
+    margin: 0;
+    font-family: inherit;
+  }
+  
+  .nav-button:hover:not(:disabled) {
+    background: var(--button-hover);
+  }
+  
+  .nav-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .demo-counter {
+    font-size: 0.75em;
+    color: var(--text-secondary);
+    text-align: center;
+    white-space: nowrap;
+    margin: 0;
+    line-height: 24px;
+  }
+  
+  .current-demo-info {
+    padding: 0 0 12px 0;
+    margin-bottom: 12px;
+  }
+  
+  .demo-title {
+    font-size: 1.2em;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  
+  .demo-category {
+    color: var(--text-secondary);
+    font-size: 0.85em;
+    margin-bottom: 6px;
+  }
+  
+  .demo-description {
+    margin-bottom: 0;
+    line-height: 1.5;
+    font-size: 0.9em;
+  }
+  
+  .demo-display {
+    min-height: 400px;
+    position: relative;
+  }
+  
+  .demo-container {
+    min-height: 350px;
+    position: relative;
+  }
+  
+  .demo-loading {
+    text-align: center;
+    padding: 50px;
+    color: var(--text-secondary);
+  }
+  
+  .demo-error {
+    text-align: center;
+    padding: 20px;
+    color: var(--error-color, #d32f2f);
+    background: var(--error-background, #ffebee);
+    border-radius: 4px;
+  }
+  
+  
+  /* Dark mode variables */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --button-background: #3a3a3a;
+      --button-hover: #4a4a4a;
+      --button-text: #fff;
+      --card-background: #2a2a2a;
+      --border-color: #444;
+      --border-light: #333;
+      --background-secondary: #1a1a1a;
+      --text-secondary: #b0b0b0;
+      --error-background: #2d1515;
+      --info-background: #1a2a3a;
+    }
+  }
+  
+  /* Light mode variables */
+  @media (prefers-color-scheme: light) {
+    :root {
+      --button-background: #f5f5f5;
+      --button-hover: #e0e0e0;
+      --button-text: #333;
+      --card-background: #ffffff;
+      --border-color: #e0e0e0;
+      --border-light: #f0f0f0;
+      --background-secondary: #fafafa;
+      --text-secondary: #666;
+      --error-background: #ffebee;
+      --info-background: #e3f2fd;
+    }
+  }
+  
+  /* Ensure navigation stays on one line */
+  @media (max-width: 400px) {
+    .nav-button {
+      font-size: 0.8em;
+      padding: 4px 8px;
+    }
+    .demo-counter {
+      font-size: 0.8em;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block header_extra %}<div class="header-nav-controls">
+  <button id="prev-button" class="nav-button">← Prev</button>
+  <span class="demo-counter" id="demo-counter">Loading...</span>
+  <button id="next-button" class="nav-button">Next →</button>
+</div>{% endblock %}
+
+{% block content %}
+<div class="viewer-container">
+  <div id="demo-content">
+    <div class="demo-loading">Loading demo registry...</div>
+  </div>
+</div>
+
+<script nonce="{{ csp_nonce }}">
+let currentDemoIndex = 0;
+let demoList = [];
+let currentDemoInstance = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Add event listeners for navigation buttons
+  document.getElementById('prev-button').addEventListener('click', () => navigateDemo(-1));
+  document.getElementById('next-button').addEventListener('click', () => navigateDemo(1));
+  
+  // Add keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      navigateDemo(-1);
+    } else if (e.key === 'ArrowRight') {
+      navigateDemo(1);
+    }
+  });
+  
+  // Wait for demo registry to be available
+  checkAndInitialize();
+});
+
+function checkAndInitialize() {
+  if (window.demoRegistry && window.demoMetadata) {
+    initializeDemoViewer();
+  } else {
+    setTimeout(checkAndInitialize, 100);
+  }
+}
+
+async function initializeDemoViewer() {
+  // Load all metadata first
+  await loadAllMetadata();
+  
+  // Get all demos and sort them by category and name
+  const demoNames = Object.keys(window.demoRegistry);
+  demoList = demoNames.map(name => ({
+    name: name,
+    metadata: window.demoMetadata[name] || {
+      title: name.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+      category: 'Other',
+      description: ''
+    }
+  })).sort((a, b) => {
+    // Sort by category first, then by title
+    const catCompare = a.metadata.category.localeCompare(b.metadata.category);
+    if (catCompare !== 0) return catCompare;
+    return a.metadata.title.localeCompare(b.metadata.title);
+  });
+  
+  // Start with the first demo
+  loadDemo(0);
+}
+
+async function loadAllMetadata() {
+  if (!window.demoMetadata) {
+    window.demoMetadata = {};
+  }
+  
+  const demoNames = Object.keys(window.demoRegistry);
+  const loadPromises = demoNames.map(async (name) => {
+    try {
+      const module = await window.demoRegistry[name]();
+      if (module.metadata) {
+        window.demoMetadata[name] = module.metadata;
+      }
+    } catch (error) {
+      console.error(`Failed to load metadata for ${name}:`, error);
+    }
+  });
+  await Promise.all(loadPromises);
+}
+
+function cleanupCurrentDemo() {
+  if (currentDemoInstance && currentDemoInstance.cleanup) {
+    try {
+      currentDemoInstance.cleanup();
+    } catch (error) {
+      console.error('Error cleaning up demo:', error);
+    }
+  }
+  currentDemoInstance = null;
+}
+
+async function loadDemo(index) {
+  // Don't allow going past the last demo
+  if (index >= demoList.length) {
+    return;
+  }
+  
+  // Cleanup previous demo
+  cleanupCurrentDemo();
+  
+  currentDemoIndex = index;
+  updateNavigationButtons();
+  updateCounter();
+  
+  const demo = demoList[index];
+  const content = document.getElementById('demo-content');
+  
+  // Create demo info and container
+  content.innerHTML = `
+    <div class="current-demo-info">
+      <h2 class="demo-title">${demo.metadata.title}</h2>
+      <div class="demo-category">Category: ${demo.metadata.category}</div>
+      ${demo.metadata.description ? `<div class="demo-description">${demo.metadata.description}</div>` : ''}
+    </div>
+    <div class="demo-display">
+      <div class="demo-container">
+        <div class="demo-component" data-demo="${demo.name}"></div>
+      </div>
+    </div>
+  `;
+  
+  // Load and initialize the demo
+  const container = content.querySelector('.demo-component');
+  try {
+    const module = await window.demoRegistry[demo.name]();
+    const config = {
+      darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    };
+    
+    currentDemoInstance = module.default(container, config);
+    
+    // Trigger resize to ensure proper rendering
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 100);
+  } catch (error) {
+    console.error(`Failed to load demo "${demo.name}":`, error);
+    container.innerHTML = `<div class="demo-error">Failed to load demo: ${error.message}</div>`;
+  }
+}
+
+function navigateDemo(direction) {
+  const newIndex = currentDemoIndex + direction;
+  if (newIndex >= 0 && newIndex < demoList.length) {
+    loadDemo(newIndex);
+  }
+}
+
+function updateNavigationButtons() {
+  const prevButton = document.getElementById('prev-button');
+  const nextButton = document.getElementById('next-button');
+  
+  prevButton.disabled = currentDemoIndex === 0;
+  nextButton.disabled = currentDemoIndex >= demoList.length - 1;
+}
+
+function updateCounter() {
+  const counter = document.getElementById('demo-counter');
+  counter.textContent = `Demo ${currentDemoIndex + 1} of ${demoList.length}`;
+}
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+  cleanupCurrentDemo();
+});
+</script>
+{% endblock %}
