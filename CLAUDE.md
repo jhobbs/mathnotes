@@ -241,3 +241,7 @@ grep -r "registerDemo" mathnotes/demos-framework/src/main.ts
 # Check for CSP violations
 # Open browser console and look for CSP errors
 ```
+
+## Debug Techniques
+
+- You can use console.log("[probe] ...") to debug javasript/css/dom stuff in conjunction with the page crawler (./scripts/crawl-dev.sh)

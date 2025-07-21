@@ -4,9 +4,14 @@
   "description": "Playwright testing for mathnotes",
   "type": "module",
   "scripts": {
-    "crawl": "node scripts/crawler.js"
+    "crawl": "tsx crawler.ts"
   },
   "dependencies": {
     "playwright": "^1.54.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
   }
 }

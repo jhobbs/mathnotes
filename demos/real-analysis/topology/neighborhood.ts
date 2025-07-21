@@ -42,6 +42,7 @@ class NeighborhoodDemo extends P5DemoBase {
 
   protected createSketch(p: p5): void {
     p.setup = () => {
+      console.log('[probe] Neighborhood demo setup running');
       
       // Create controls
       this.createButton('Reset', () => this.resetDemo());
