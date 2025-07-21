@@ -87,14 +87,27 @@
     font-size: 0.9em;
   }
   
-  .demo-display {
-    min-height: 400px;
+  
+  /* Match the embedded demo component styles */
+  .demo-component {
     position: relative;
+    margin: 1rem 0 0.25rem 0;
+    width: 100%;
+    box-sizing: border-box;
   }
   
-  .demo-container {
-    min-height: 350px;
-    position: relative;
+  
+  .demo-component canvas {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  /* Ensure the demo content area matches regular pages */
+  #demo-content {
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .demo-loading {
@@ -278,11 +291,7 @@ async function loadDemo(index) {
       <div class="demo-category">Category: ${demo.metadata.category}</div>
       ${demo.metadata.description ? `<div class="demo-description">${demo.metadata.description}</div>` : ''}
     </div>
-    <div class="demo-display">
-      <div class="demo-container">
-        <div class="demo-component" data-demo="${demo.name}"></div>
-      </div>
-    </div>
+    <div class="demo-component" data-demo="${demo.name}"></div>
   `;
   
   // Load and initialize the demo
@@ -293,12 +302,15 @@ async function loadDemo(index) {
       darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
     };
     
-    currentDemoInstance = module.default(container, config);
+    // Wait for the container to be properly laid out
+    // This ensures offsetWidth is correct before initialization
+    await new Promise(resolve => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(resolve);
+      });
+    });
     
-    // Trigger resize to ensure proper rendering
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 100);
+    currentDemoInstance = module.default(container, config);
   } catch (error) {
     console.error(`Failed to load demo "${demo.name}":`, error);
     container.innerHTML = `<div class="demo-error">Failed to load demo: ${error.message}</div>`;
