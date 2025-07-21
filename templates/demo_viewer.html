@@ -5,6 +5,15 @@
 {% block extra_head %}
 <style>
   /* Header navigation styles */
+  header {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Reduce footer spacing */
+  footer {
+    margin-top: 1rem !important;
+  }
+  
   .header-content {
     display: flex;
     align-items: center;
@@ -24,10 +33,26 @@
     flex: 0 0 auto;
   }
   
+  .header-demo-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: auto;
+    white-space: nowrap;
+    font-size: 0.9em;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+  }
+  
+  #header-demo-title {
+    font-weight: 600;
+    color: var(--header-color);
+  }
+  
   .viewer-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px 20px 20px;
+    padding: 10px 20px;
   }
   
   .nav-button {
@@ -64,34 +89,12 @@
     line-height: 24px;
   }
   
-  .current-demo-info {
-    padding: 0 0 12px 0;
-    margin-bottom: 12px;
-  }
-  
-  .demo-title {
-    font-size: 1.2em;
-    margin-bottom: 6px;
-    font-weight: 600;
-  }
-  
-  .demo-category {
-    color: var(--text-secondary);
-    font-size: 0.85em;
-    margin-bottom: 6px;
-  }
-  
-  .demo-description {
-    margin-bottom: 0;
-    line-height: 1.5;
-    font-size: 0.9em;
-  }
   
   
   /* Match the embedded demo component styles */
   .demo-component {
     position: relative;
-    margin: 1rem 0 0.25rem 0;
+    margin: 0.5rem 0 0.25rem 0;
     width: 100%;
     box-sizing: border-box;
   }
@@ -174,6 +177,9 @@
   <button id="prev-button" class="nav-button">← Prev</button>
   <span class="demo-counter" id="demo-counter">Loading...</span>
   <button id="next-button" class="nav-button">Next →</button>
+</div>
+<div class="header-demo-info">
+  <span id="header-demo-title"></span>
 </div>{% endblock %}
 
 {% block content %}
@@ -284,13 +290,11 @@ async function loadDemo(index) {
   const demo = demoList[index];
   const content = document.getElementById('demo-content');
   
-  // Create demo info and container
+  // Update header info
+  document.getElementById('header-demo-title').textContent = demo.metadata.title;
+  
+  // Create demo container (no info box needed)
   content.innerHTML = `
-    <div class="current-demo-info">
-      <h2 class="demo-title">${demo.metadata.title}</h2>
-      <div class="demo-category">Category: ${demo.metadata.category}</div>
-      ${demo.metadata.description ? `<div class="demo-description">${demo.metadata.description}</div>` : ''}
-    </div>
     <div class="demo-component" data-demo="${demo.name}"></div>
   `;
   
