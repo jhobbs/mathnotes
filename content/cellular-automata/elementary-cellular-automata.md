@@ -36,7 +36,7 @@ The demonstration below allows you to explore different elementary cellular auto
 - Adjust the simulation speed
 - See how different initial conditions evolve
 
-{% include_demo "cellular-automata/elementary-cellular-automata" %}
+{% include_demo "elementary-cellular-automata" %}
 
 ## Notable Rules
 

@@ -29,8 +29,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'turntable': () => import('@demos/differential-equations/turntable'),
   'pendulum': () => import('@demos/differential-equations/pendulum'),
   'dilution-calculator': () => import('@demos/differential-equations/dilution-calculator'),
-  'cellular-automata/game-of-life': () => import('@demos/cellular-automata/game-of-life'),
-  'cellular-automata/elementary-cellular-automata': () => import('@demos/cellular-automata/elementary-cellular-automata')
+  'game-of-life': () => import('@demos/cellular-automata/game-of-life'),
+  'elementary-cellular-automata': () => import('@demos/cellular-automata/elementary-cellular-automata')
 };
 
 // Store for loaded metadata
