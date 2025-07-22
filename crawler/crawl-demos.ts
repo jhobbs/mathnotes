@@ -66,7 +66,7 @@ Options:
     verbose: options.verbose,
     logSkipped: false,
     singlePage: true,
-    concurrency: parseInt(options.concurrency),
+    concurrency: 1, // Always use 1 for demo screenshots to avoid conflicts
     showProbe: true,
     ignorePatterns: [
       /^Failed to load resource/i,

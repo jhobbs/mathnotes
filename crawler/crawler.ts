@@ -374,11 +374,13 @@ class Crawler {
     // Set up caching
     await this.setupCaching();
     
-    // Log any failed requests or weird network events
-    this.context.on('requestfailed', request => {
-      console.error(`[REQUEST FAILED] ${request.method()} ${request.url()}`);
-      console.error(`  Failure: ${request.failure()?.errorText}`);
-    });
+    // Log any failed requests or weird network events (only in verbose mode)
+    if (this.config.verbose) {
+      this.context.on('requestfailed', request => {
+        console.error(`[REQUEST FAILED] ${request.method()} ${request.url()}`);
+        console.error(`  Failure: ${request.failure()?.errorText}`);
+      });
+    }
     
     // Plugin: beforeCrawl
     for (const plugin of this.plugins) {
@@ -513,10 +515,12 @@ class Crawler {
       const method = request.method();
       const headers = request.headers();
       
-      // Log all requests for debugging
-      console.log(`[REQUEST] ${method} ${url}`);
-      if (url.includes('localhost') || url.includes('web-dev') || url.includes('127.0.0.1')) {
-        console.log(`  Headers:`, headers);
+      // Log all requests for debugging (only in verbose mode)
+      if (this.config.verbose) {
+        console.log(`[REQUEST] ${method} ${url}`);
+        if (url.includes('localhost') || url.includes('web-dev') || url.includes('127.0.0.1')) {
+          console.log(`  Headers:`, headers);
+        }
       }
       
       // Block any HTTPS requests to local servers
