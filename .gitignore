@@ -13,6 +13,7 @@ coverage.xml
 venv
 
 results.txt
+demo-screenshots/
 
 # Node.js
 node_modules/
