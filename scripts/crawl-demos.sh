@@ -4,6 +4,8 @@
 # Default to web-dev URL when running in Docker
 DEFAULT_URL="http://web-dev:5000"
 
+GEMINI="gemini -m gemini-2.5-flash"
+
 # Check if --help is requested
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "Usage: $0 [options]"
@@ -92,17 +94,26 @@ if [[ "$DESCRIBE" == "true" ]] || [[ -n "$ASK_QUESTION" ]] || [[ "$CHECK_STANDAR
     if [[ -n "$BASE_PATH" ]] && [[ -f "$BASE_PATH" ]]; then
         if [[ "$DESCRIBE" == "true" ]]; then
             # Simple description mode
-            gemini -p "describe what you see in @$BASE_PATH"
+            $GEMINI -p "describe what you see in @$BASE_PATH"
+            GEMINI_EXIT_CODE=$?
         elif [[ "$CHECK_STANDARDS" == "true" ]]; then
             # Check standards mode
             STANDARDS_FILE="/home/jason/mathnotes/DEMO-STANDARD.md"
-            gemini -p "The file @$STANDARDS_FILE contains standards that demos should meet. Does the demo in @$BASE_PATH meet those standards? If not, describe why not, and suggest what changes could be made, based on the nature of the demo, to meet the standard."
+            $GEMINI -p "You're gemini-2.5-flash, a multimodal model. You can read images. The file @$STANDARDS_FILE contains standards that demos should meet. Does the demo in @$BASE_PATH meet those standards? If not, describe why not, and suggest what changes could be made, based on the nature of the demo, to meet the standard."
+            GEMINI_EXIT_CODE=$?
         else
             # Custom question mode - replace placeholders
             QUESTION="$ASK_QUESTION"
             QUESTION="${QUESTION//\$BASE_PATH/$BASE_PATH}"
             QUESTION="${QUESTION//\$FULL_PATH/$FULL_PATH}"
-            gemini -p "$QUESTION"
+            $GEMINI -p "$QUESTION"
+            GEMINI_EXIT_CODE=$?
+        fi
+        
+        # Propagate gemini errors
+        if [[ $GEMINI_EXIT_CODE -ne 0 ]]; then
+            echo "Error: gemini command failed with exit code $GEMINI_EXIT_CODE" >&2
+            exit $GEMINI_EXIT_CODE
         fi
     else
         # If something went wrong, show the error
