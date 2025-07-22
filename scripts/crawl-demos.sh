@@ -15,13 +15,14 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "  -v, --verbose           Verbose output"
     echo "  -c, --concurrency <n>   Number of concurrent pages (default: 1)"
     echo "  -d, --demo <name>       Capture only a specific demo"
+    echo "  --describe              Get AI description of base screenshot after capture"
     echo "  -h, --help              Show this help message"
     echo ""
     echo "Examples:"
     echo "  $0                              # Capture all demo screenshots"
     echo "  $0 -o ./screenshots             # Custom output directory"
     echo "  $0 --demo electric-field        # Capture single demo"
-    echo "  $0 -d cellular-automata/game-of-life"
+    echo "  $0 -d cellular-automata/game-of-life --describe"
     exit 0
 fi
 
@@ -42,12 +43,14 @@ fi
 # Pass all arguments
 DOCKER_CMD="$DOCKER_CMD $@"
 
-# Check if verbose mode is requested
+# Parse options
 VERBOSE=false
+DESCRIBE=false
 for arg in "$@"; do
     if [[ "$arg" == "--verbose" ]] || [[ "$arg" == "-v" ]]; then
         VERBOSE=true
-        break
+    elif [[ "$arg" == "--describe" ]]; then
+        DESCRIBE=true
     fi
 done
 
@@ -58,4 +61,22 @@ if [[ "$VERBOSE" == "true" ]]; then
     echo ""
 fi
 
-eval $DOCKER_CMD
+# Run the crawler and capture output if we need to describe
+if [[ "$DESCRIBE" == "true" ]]; then
+    # Capture the output to parse the base screenshot path
+    OUTPUT=$(eval $DOCKER_CMD 2>&1)
+    
+    # Extract the base screenshot path from the output
+    BASE_PATH=$(echo "$OUTPUT" | grep "^base: " | tail -1 | cut -d' ' -f2)
+    
+    if [[ -n "$BASE_PATH" ]] && [[ -f "$BASE_PATH" ]]; then
+        # Only output the AI description
+        gemini -p "describe what you see in @$BASE_PATH"
+    else
+        # If something went wrong, show the error
+        echo "$OUTPUT" >&2
+        exit 1
+    fi
+else
+    eval $DOCKER_CMD
+fi

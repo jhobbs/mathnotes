@@ -29,7 +29,7 @@ Explore the Game of Life with this interactive demonstration. You can:
 - Adjust the simulation speed and initial population
 - Watch population statistics in real-time
 
-{% include_demo "cellular-automata/game-of-life" %}
+{% include_demo "game-of-life" %}
 
 ## Common Patterns
 
