@@ -35,12 +35,13 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     // Create screenshot directory
     await fs.mkdir(this.screenshotDir, { recursive: true });
     
-    console.log(`[DemoScreenshotPlugin] Will capture demo screenshots to: ${this.screenshotDir}`);
+    if (!this.singleDemo) {
+      console.log(`[DemoScreenshotPlugin] Will capture demo screenshots to: ${this.screenshotDir}`);
+    }
   }
 
   async afterCrawl(crawler: Crawler, results: Map<string, CrawlResult>): Promise<void> {
     // Always create a new page for capturing demos
-    console.log('[DemoScreenshotPlugin] Starting demo screenshot capture...');
     
     const browser = (crawler as any).browser;
     const context = (crawler as any).context;
@@ -63,8 +64,6 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     } finally {
       await page.close();
     }
-    
-    console.log(`[DemoScreenshotPlugin] Captured ${this.captureCount} demo screenshots`);
   }
 
   async afterVisit(page: Page, url: string, depth: number, result: CrawlResult): Promise<void> {
@@ -75,7 +74,6 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
   }
 
   private async discoverDemos(page: Page): Promise<void> {
-    console.log('[DemoScreenshotPlugin] Discovering demos from demo-viewer...');
     
     // Navigate to demo viewer if not already there
     if (!page.url().includes('/demo-viewer')) {
@@ -99,12 +97,10 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
       }));
     });
 
-    console.log(`[DemoScreenshotPlugin] Discovered ${this.demos.length} demos`);
   }
 
   private async captureAllDemos(page: Page): Promise<void> {
     // Navigate to demo viewer once
-    console.log(`[DemoScreenshotPlugin] Navigating to demo viewer: ${this.demoViewerUrl}`);
     await page.goto(this.demoViewerUrl, { waitUntil: 'networkidle' });
     
     // Wait for demo viewer to be ready
@@ -162,7 +158,6 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
         throw new Error(`Demo "${this.singleDemo}" not found. Available demos can be found in demos-framework/src/main.ts`);
       }
       
-      console.log(`[DemoScreenshotPlugin] Found demo "${this.singleDemo}" at index ${foundIndex}`);
       
       // The demo is already loaded from our search, just wait for it to settle
       await page.waitForTimeout(2000);
@@ -183,7 +178,6 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
         return 0;
       });
       
-      console.log(`[DemoScreenshotPlugin] Found ${totalDemos} demos to capture`);
       
       // Capture each demo by navigating through them
       for (let i = 0; i < totalDemos; i++) {
@@ -248,8 +242,6 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
   }
 
   private async captureDemo(page: Page, demo: DemoInfo): Promise<void> {
-    console.log(`[DemoScreenshotPlugin] Capturing demo: ${demo.category}/${demo.id} (${demo.title})`);
-    
     // We're already on the correct demo, no need to navigate again
 
     // The demo.id already contains the full path structure (e.g., "cellular-automata/game-of-life")
@@ -274,7 +266,9 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
         animations: 'disabled'
       });
       this.captureCount++;
-      console.log(`[DemoScreenshotPlugin] Saved screenshot: ${screenshotPath}`);
+      // Convert absolute path to relative path for output
+      const relativePath = screenshotPath.replace(/^.*\/demo-screenshots\//, './demo-screenshots/');
+      console.log(`base: ${relativePath}`);
     } else {
       console.warn(`[DemoScreenshotPlugin] Demo container not found for ${demo.id}`);
     }
@@ -286,6 +280,9 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
       fullPage: true,
       animations: 'disabled'
     });
+    // Convert absolute path to relative path for output
+    const relativeFullPath = fullPagePath.replace(/^.*\/demo-screenshots\//, './demo-screenshots/');
+    console.log(`full: ${relativeFullPath}`);
   }
 }
 

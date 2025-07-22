@@ -1,3 +1,5 @@
+name: mathnotes-prod
+
 services:
   web:
     build: .
