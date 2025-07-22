@@ -149,19 +149,19 @@ class TurntableDemo extends P5DemoBase {
     sliderRow.style.flexWrap = 'wrap';
     controlPanel.appendChild(sliderRow);
     
-    // Bug locomotive speed slider
+    // Bug locomotive speed slider - default to 90% (2.7 out of 3)
     this.locomotiveSlider = this.createSlider(
       p,
       'Bug locomotive speed',
-      0, 3, 0, 0
+      0, 3, 2.7, 0
     );
     sliderRow.appendChild(this.locomotiveSlider.parent());
     
-    // Record angular velocity slider
+    // Record angular velocity slider - default to 15% (1.5 out of 10)
     this.angularVelocitySlider = this.createSlider(
       p,
       'Record angular velocity',
-      0, 10, 0, 0
+      0, 10, 1.5, 0
     );
     sliderRow.appendChild(this.angularVelocitySlider.parent());
     
@@ -183,7 +183,7 @@ class TurntableDemo extends P5DemoBase {
     this.modeRadio.option(this.MODE_TO_CENTER, 'To Center');
     this.modeRadio.option(this.MODE_PARALLEL, 'Parallel to Start');
     this.modeRadio.option(this.MODE_TO_LIGHT, 'To Light');
-    this.modeRadio.selected(this.MODE_PARALLEL);
+    this.modeRadio.selected(this.MODE_TO_LIGHT);
     this.modeRadio.parent(radioRow);
     
     // Apply shared radio button styles
