@@ -72,6 +72,34 @@ make dev-frontend
 ./scripts/crawl-dev.sh "http://web-dev:5000"
 ```
 
+### Demo Screenshots and AI Descriptions
+```bash
+# Capture screenshots of all demos
+./scripts/crawl-demos.sh
+
+# Capture a specific demo
+./scripts/crawl-demos.sh -d electric-field
+./scripts/crawl-demos.sh -d game-of-life
+
+# Get AI description of a demo (useful for documentation)
+./scripts/crawl-demos.sh -d pendulum --describe
+
+# Ask specific questions about demos
+./scripts/crawl-demos.sh -d diagonalization --ask "what mathematical concept is illustrated in @\$BASE_PATH?"
+
+# Compare demo container to full page (check for layout issues)
+./scripts/crawl-demos.sh -d neighborhood --ask "compare @\$BASE_PATH to @\$FULL_PATH. is the demo area visible in the full page?"
+
+# Analyze physics simulations
+./scripts/crawl-demos.sh -d electric-field --ask "describe the physics being simulated in @\$BASE_PATH and suggest improvements"
+```
+
+When implementing or documenting demos, use these commands to:
+- Get textual descriptions of visual demos for accessibility
+- Verify demos render correctly without scrolling issues
+- Document what each demo demonstrates
+- Check for visual bugs or layout problems
+
 ### Deployment
 ```bash
 # Deploy via GitHub Actions (automatic on push to main)

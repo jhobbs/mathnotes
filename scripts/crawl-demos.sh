@@ -16,13 +16,15 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "  -c, --concurrency <n>   Number of concurrent pages (default: 1)"
     echo "  -d, --demo <name>       Capture only a specific demo"
     echo "  --describe              Get AI description of base screenshot after capture"
+    echo "  --ask <question>        Ask a custom question about the screenshots"
     echo "  -h, --help              Show this help message"
     echo ""
     echo "Examples:"
     echo "  $0                              # Capture all demo screenshots"
     echo "  $0 -o ./screenshots             # Custom output directory"
     echo "  $0 --demo electric-field        # Capture single demo"
-    echo "  $0 -d cellular-automata/game-of-life --describe"
+    echo "  $0 -d game-of-life --describe"
+    echo "  $0 -d pendulum --ask 'what physics concepts are illustrated?'"
     exit 0
 fi
 
@@ -46,11 +48,23 @@ DOCKER_CMD="$DOCKER_CMD $@"
 # Parse options
 VERBOSE=false
 DESCRIBE=false
-for arg in "$@"; do
+ASK_QUESTION=""
+
+# Convert arguments to array for easier parsing
+ARGS=("$@")
+
+for ((i=0; i<${#ARGS[@]}; i++)); do
+    arg="${ARGS[i]}"
     if [[ "$arg" == "--verbose" ]] || [[ "$arg" == "-v" ]]; then
         VERBOSE=true
     elif [[ "$arg" == "--describe" ]]; then
         DESCRIBE=true
+    elif [[ "$arg" == "--ask" ]]; then
+        # Get the next argument as the question
+        if [[ $((i + 1)) -lt ${#ARGS[@]} ]]; then
+            ASK_QUESTION="${ARGS[$((i + 1))]}"
+            ((i++)) # Skip the next argument
+        fi
     fi
 done
 
@@ -61,17 +75,26 @@ if [[ "$VERBOSE" == "true" ]]; then
     echo ""
 fi
 
-# Run the crawler and capture output if we need to describe
-if [[ "$DESCRIBE" == "true" ]]; then
-    # Capture the output to parse the base screenshot path
+# Run the crawler and capture output if we need to describe or ask
+if [[ "$DESCRIBE" == "true" ]] || [[ -n "$ASK_QUESTION" ]]; then
+    # Capture the output to parse the screenshot paths
     OUTPUT=$(eval $DOCKER_CMD 2>&1)
     
-    # Extract the base screenshot path from the output
+    # Extract the screenshot paths from the output
     BASE_PATH=$(echo "$OUTPUT" | grep "^base: " | tail -1 | cut -d' ' -f2)
+    FULL_PATH=$(echo "$OUTPUT" | grep "^full: " | tail -1 | cut -d' ' -f2)
     
     if [[ -n "$BASE_PATH" ]] && [[ -f "$BASE_PATH" ]]; then
-        # Only output the AI description
-        gemini -p "describe what you see in @$BASE_PATH"
+        if [[ "$DESCRIBE" == "true" ]]; then
+            # Simple description mode
+            gemini -p "describe what you see in @$BASE_PATH"
+        else
+            # Custom question mode - replace placeholders
+            QUESTION="$ASK_QUESTION"
+            QUESTION="${QUESTION//\$BASE_PATH/$BASE_PATH}"
+            QUESTION="${QUESTION//\$FULL_PATH/$FULL_PATH}"
+            gemini -p "$QUESTION"
+        fi
     else
         # If something went wrong, show the error
         echo "$OUTPUT" >&2
