@@ -37,11 +37,11 @@ services:
       context: .
       dockerfile: Dockerfile.crawler
     volumes:
-      - .:/app
-      - /app/node_modules
+      - ./crawler:/usr/src/app/crawler
+      - /usr/src/app/node_modules
     environment:
       - NODE_ENV=development
     # Don't run automatically, use docker-compose run
-    command: echo "Crawler ready. Use 'docker-compose -f docker-compose.dev.yml run --rm crawler node scripts/crawler.js <url>' to run"
+    command: echo "Crawler ready. Use 'docker-compose -f docker-compose.dev.yml run --rm crawler npx tsx crawler.ts <url>' to run"
     profiles:
       - tools

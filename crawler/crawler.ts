@@ -364,11 +364,21 @@ class Crawler {
     this.browser = await chromium.launch({ headless: this.config.headless });
     this.context = await this.browser.newContext({ 
       ignoreHTTPSErrors: true,
-      bypassCSP: true
+      bypassCSP: true,
+      // Prevent automatic HTTPS upgrades
+      extraHTTPHeaders: {
+        'Upgrade-Insecure-Requests': '0'
+      }
     });
     
     // Set up caching
     await this.setupCaching();
+    
+    // Log any failed requests or weird network events
+    this.context.on('requestfailed', request => {
+      console.error(`[REQUEST FAILED] ${request.method()} ${request.url()}`);
+      console.error(`  Failure: ${request.failure()?.errorText}`);
+    });
     
     // Plugin: beforeCrawl
     for (const plugin of this.plugins) {
@@ -500,6 +510,22 @@ class Crawler {
     
     await this.context.route('**/*', async (route, request) => {
       const url = request.url();
+      const method = request.method();
+      const headers = request.headers();
+      
+      // Log all requests for debugging
+      console.log(`[REQUEST] ${method} ${url}`);
+      if (url.includes('localhost') || url.includes('web-dev') || url.includes('127.0.0.1')) {
+        console.log(`  Headers:`, headers);
+      }
+      
+      // Block any HTTPS requests to local servers
+      if (url.startsWith('https://') && (url.includes('localhost') || url.includes('web-dev') || url.includes('127.0.0.1'))) {
+        console.warn(`[Crawler] Blocking HTTPS request to local server: ${url}`);
+        await route.abort();
+        return;
+      }
+      
       const shouldCache = this.cacheManager.shouldCache(url);
       
       if (shouldCache && this.cacheManager.get(url)) {
@@ -681,5 +707,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
 
+// Import plugins
+import { DemoScreenshotPlugin } from './plugins/DemoScreenshotPlugin.js';
+
 // Export for use as a module
-export { Crawler, CrawlerPlugin, ScreenshotPlugin, type CrawlConfig, type CrawlResult };
+export { Crawler, CrawlerPlugin, ScreenshotPlugin, DemoScreenshotPlugin, type CrawlConfig, type CrawlResult };
