@@ -4,7 +4,7 @@
 # Default to web-dev URL when running in Docker
 DEFAULT_URL="http://web-dev:5000"
 
-GEMINI="gemini -m gemini-2.5-flash"
+GEMINI="gemini" # -m gemini-2.5-flash"
 
 # Check if --help is requested
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then

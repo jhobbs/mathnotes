@@ -250,6 +250,14 @@ table th {
     height: auto;
     display: block;
     margin: 0 auto;
+    border: 2px solid #000000; /* High contrast black border in light mode */
+}
+
+/* Dark mode: white border for high contrast */
+@media (prefers-color-scheme: dark) {
+    .demo-component canvas {
+        border-color: #ffffff;
+    }
 }
 
 /* Mobile optimization for demo components */
