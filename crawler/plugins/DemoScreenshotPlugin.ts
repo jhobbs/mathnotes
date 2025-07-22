@@ -103,56 +103,98 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
   private async captureAllDemos(page: Page): Promise<void> {
     // Navigate to demo viewer once
     console.log(`[DemoScreenshotPlugin] Navigating to demo viewer: ${this.demoViewerUrl}`);
-    console.log(`[DemoScreenshotPlugin] Page URL before navigation: ${page.url()}`);
-    
-    // Add request logger specific to this page
-    page.on('request', request => {
-      const url = request.url();
-      if (url.startsWith('https://')) {
-        console.log(`[DemoScreenshotPlugin] HTTPS request detected: ${url}`);
-        console.log(`  Method: ${request.method()}`);
-        console.log(`  Resource Type: ${request.resourceType()}`);
-      }
-    });
-    
     await page.goto(this.demoViewerUrl, { waitUntil: 'networkidle' });
     
     // Wait for demo viewer to be ready
     await page.waitForFunction(() => {
       // @ts-ignore
-      return window.loadDemo && typeof window.loadDemo === 'function';
+      return window.demoRegistry && Object.keys(window.demoRegistry).length > 0;
     }, { timeout: 30000 });
     
-    // Capture each demo
-    for (const demo of this.demos) {
+    // Wait a bit for the demo viewer to fully initialize
+    await page.waitForTimeout(2000);
+    
+    // Get total number of demos from the demo counter
+    const totalDemos = await page.evaluate(() => {
+      const counterElement = document.querySelector('.demo-counter');
+      if (counterElement) {
+        const match = counterElement.textContent?.match(/\d+ of (\d+)/);
+        return match ? parseInt(match[1]) : 0;
+      }
+      return 0;
+    });
+    
+    console.log(`[DemoScreenshotPlugin] Found ${totalDemos} demos to capture`);
+    
+    // Capture each demo by navigating through them
+    for (let i = 0; i < totalDemos; i++) {
       try {
-        await this.captureDemo(page, demo);
+        // Navigate to demo by index
+        await page.evaluate((index) => {
+          // @ts-ignore
+          if (window.loadDemo) {
+            // @ts-ignore
+            window.loadDemo(index);
+          }
+        }, i);
+        
+        // Wait for demo to load
+        await page.waitForSelector('.demo-component', {
+          state: 'visible',
+          timeout: 10000
+        });
+        
+        // Wait for demo to initialize
+        await page.waitForTimeout(3000);
+        
+        // Get current demo info from DOM
+        const demoInfo = await page.evaluate(() => {
+          // Get demo title from footer
+          const titleElement = document.getElementById('footer-demo-title');
+          const title = titleElement ? titleElement.textContent || 'unknown' : 'unknown';
+          
+          // Get current demo index
+          const counterElement = document.querySelector('.demo-counter');
+          const counterText = counterElement ? counterElement.textContent : '';
+          const match = counterText.match(/(\d+) of \d+/);
+          const index = match ? parseInt(match[1]) - 1 : 0;
+          
+          // The title in the footer usually has format "Category: Demo Title"
+          // Let's parse it to get category
+          let category = 'uncategorized';
+          let demoTitle = title;
+          
+          if (title.includes(':')) {
+            const parts = title.split(':');
+            category = parts[0].trim();
+            demoTitle = parts[1].trim();
+          }
+          
+          // Create a safe ID from the title
+          const id = demoTitle.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+          
+          return {
+            id: id,
+            title: demoTitle,
+            category: category,
+            index: index
+          };
+        });
+        
+        await this.captureDemo(page, demoInfo);
+        
       } catch (error) {
-        console.error(`[DemoScreenshotPlugin] Failed to capture demo ${demo.id}:`, error);
+        console.error(`[DemoScreenshotPlugin] Failed to capture demo at index ${i}:`, error);
       }
     }
   }
 
   private async captureDemo(page: Page, demo: DemoInfo): Promise<void> {
-    console.log(`[DemoScreenshotPlugin] Capturing demo: ${demo.category}/${demo.id}`);
+    console.log(`[DemoScreenshotPlugin] Capturing demo: ${demo.category}/${demo.id} (${demo.title})`);
     
-    // Load the specific demo using the viewer's JavaScript API
-    await page.evaluate((index) => {
-      // @ts-ignore
-      if (window.loadDemo) {
-        // @ts-ignore
-        window.loadDemo(index);
-      }
-    }, demo.index);
-
-    // Wait for demo component to be present and visible
-    await page.waitForSelector('.demo-component', {
-      state: 'visible',
-      timeout: 10000
-    });
-
-    // Wait for demo to fully initialize
-    await page.waitForTimeout(3000);
+    // We're already on the correct demo, no need to navigate again
 
     // Create category directory
     const categoryDir = path.join(this.screenshotDir, demo.category);
@@ -192,5 +234,10 @@ declare global {
       description?: string;
     }>;
     loadDemo: (index: number) => Promise<void>;
+    demoList: Array<{
+      id: string;
+      title: string;
+      category: string;
+    }>;
   }
 }
