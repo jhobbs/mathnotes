@@ -10,6 +10,9 @@ RUN npm install
 # 2️⃣ Copy the crawler directory
 COPY crawler ./crawler
 
+# Ensure plugins directory is included
+COPY crawler/plugins ./crawler/plugins
+
 # 3️⃣ Set working directory to crawler
 WORKDIR /usr/src/app/crawler
 
