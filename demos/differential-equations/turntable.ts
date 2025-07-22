@@ -9,11 +9,11 @@ class TurntableDemo extends P5DemoBase {
   }
   // Constants
   private readonly TABLE_SIZE = 600;
-  private readonly RECORD_RADIUS = 200;
+  private readonly RECORD_RADIUS = 280; // Increased from 200 to fill more canvas
   private readonly ANGULAR_VELOCITY = 0.03;
   private readonly BUG_VELOCITY = 0.3;
-  private readonly BUG_SIZE = 5;
-  private readonly ARROW_SCALAR = 15;
+  private readonly BUG_SIZE = 8; // Increased from 5 for better visibility
+  private readonly ARROW_SCALAR = 20; // Increased from 15 for better visibility
 
   private readonly MODE_TO_CENTER = 'CENTER';
   private readonly MODE_PARALLEL = 'PARALLEL';
@@ -84,12 +84,14 @@ class TurntableDemo extends P5DemoBase {
     // Use theme colors instead of hardcoded values
     this.bugColor = this.colors.accent;
     
-    // Create a darker version of accent for history
+    // Create a darker version of accent for history with better contrast
     p.colorMode(p.HSB);
     const h = p.hue(this.colors.accent);
     const s = p.saturation(this.colors.accent);
     const b = p.brightness(this.colors.accent);
-    this.historyColor = p.color(h, s, b * 0.7);
+    // Adjust opacity based on dark/light mode for better contrast
+    const isDark = this.isDarkMode;
+    this.historyColor = p.color(h, s * 0.8, isDark ? b * 0.5 : b * 0.6);
     
     // Arrow colors based on theme
     this.locomotiveArrowColor = this.colors.accent; // Primary accent
@@ -202,10 +204,21 @@ class TurntableDemo extends P5DemoBase {
   }
 
   private drawRecord(p: p5): void {
+    // Draw turntable with higher contrast
     p.stroke(this.colors.stroke);
-    p.strokeWeight(2);
-    p.fill(this.colors.background);
+    p.strokeWeight(3); // Thicker border for better visibility
+    // Use a contrasting fill color instead of background
+    const isDark = this.isDarkMode;
+    p.fill(isDark ? 255 : 0, isDark ? 255 : 0, isDark ? 255 : 0, 10); // Very subtle fill
     p.circle(0, 0, this.RECORD_RADIUS * 2);
+    
+    // Add concentric circles for visual interest and better sense of rotation
+    p.strokeWeight(1);
+    p.stroke(this.colors.stroke, 100); // Semi-transparent
+    for (let r = 0.3; r < 1; r += 0.2) {
+      p.noFill();
+      p.circle(0, 0, this.RECORD_RADIUS * 2 * r);
+    }
     p.strokeWeight(1);
   }
 
@@ -232,24 +245,45 @@ class TurntableDemo extends P5DemoBase {
   private drawBugArrow(p: p5): void {
     const locomotiveMotionVector = this.getLocomotiveMotionVector(p).mult(this.ARROW_SCALAR);
     p.stroke(this.locomotiveArrowColor);
-    p.strokeWeight(2);
+    p.strokeWeight(3); // Thicker arrows for better visibility
     p.line(this.bug_x, this.bug_y, this.bug_x + locomotiveMotionVector.x, this.bug_y + locomotiveMotionVector.y);
+    // Add arrowhead
+    p.push();
+    p.translate(this.bug_x + locomotiveMotionVector.x, this.bug_y + locomotiveMotionVector.y);
+    p.rotate(p.atan2(locomotiveMotionVector.y, locomotiveMotionVector.x));
+    p.line(0, 0, -5, -3);
+    p.line(0, 0, -5, 3);
+    p.pop();
     p.strokeWeight(1);
   }
 
   private drawRotationArrow(p: p5): void {
     const rotationalMotionVector = this.getRotationalMotionVector(p).mult(this.ARROW_SCALAR);
     p.stroke(this.rotationalArrowColor);
-    p.strokeWeight(2);
+    p.strokeWeight(3); // Thicker arrows for better visibility
     p.line(this.bug_x, this.bug_y, this.bug_x + rotationalMotionVector.x, this.bug_y + rotationalMotionVector.y);
+    // Add arrowhead
+    p.push();
+    p.translate(this.bug_x + rotationalMotionVector.x, this.bug_y + rotationalMotionVector.y);
+    p.rotate(p.atan2(rotationalMotionVector.y, rotationalMotionVector.x));
+    p.line(0, 0, -5, -3);
+    p.line(0, 0, -5, 3);
+    p.pop();
     p.strokeWeight(1);
   }
 
   private drawCombinedArrow(p: p5): void {
     const combinedMotionVector = this.getCombinedMotionVector(p).mult(this.ARROW_SCALAR);
     p.stroke(this.combinedArrowColor);
-    p.strokeWeight(2);
+    p.strokeWeight(3); // Thicker arrows for better visibility
     p.line(this.bug_x, this.bug_y, this.bug_x + combinedMotionVector.x, this.bug_y + combinedMotionVector.y);
+    // Add arrowhead
+    p.push();
+    p.translate(this.bug_x + combinedMotionVector.x, this.bug_y + combinedMotionVector.y);
+    p.rotate(p.atan2(combinedMotionVector.y, combinedMotionVector.x));
+    p.line(0, 0, -5, -3);
+    p.line(0, 0, -5, 3);
+    p.pop();
     p.strokeWeight(1);
   }
 
