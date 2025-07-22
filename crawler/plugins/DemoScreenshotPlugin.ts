@@ -17,8 +17,9 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
   private demos: DemoInfo[] = [];
   private captureCount = 0;
   private baseUrl: string;
+  private singleDemo: string | null;
 
-  constructor(options: { screenshotDir?: string; baseUrl?: string } = {}) {
+  constructor(options: { screenshotDir?: string; baseUrl?: string; singleDemo?: string | null } = {}) {
     this.screenshotDir = options.screenshotDir || './demo-screenshots';
     // Ensure base URL uses the correct protocol and no trailing slash
     this.baseUrl = (options.baseUrl || 'http://localhost:5000').replace(/\/$/, '');
@@ -27,6 +28,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
       this.baseUrl = this.baseUrl.replace(/^https:/, 'http:');
     }
     this.demoViewerUrl = `${this.baseUrl}/demo-viewer`;
+    this.singleDemo = options.singleDemo || null;
   }
 
   async beforeCrawl(crawler: Crawler): Promise<void> {
@@ -111,23 +113,80 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
       return window.demoRegistry && Object.keys(window.demoRegistry).length > 0;
     }, { timeout: 30000 });
     
-    // Wait a bit for the demo viewer to fully initialize
+    // Wait a bit for everything to settle
     await page.waitForTimeout(2000);
     
-    // Get total number of demos from the demo counter
-    const totalDemos = await page.evaluate(() => {
-      const counterElement = document.querySelector('.demo-counter');
-      if (counterElement) {
-        const match = counterElement.textContent?.match(/\d+ of (\d+)/);
-        return match ? parseInt(match[1]) : 0;
+    if (this.singleDemo) {
+      // Find the demo by searching through all demos
+      const foundIndex = await page.evaluate(async (targetDemo) => {
+        // @ts-ignore
+        const demoNames = Object.keys(window.demoRegistry);
+        
+        // Find the demo name
+        let foundName = null;
+        // Try exact match first
+        if (demoNames.includes(targetDemo)) {
+          foundName = targetDemo;
+        } else {
+          // Try partial match (e.g., "electric-field" matches "physics/electric-field")
+          foundName = demoNames.find(name => name.endsWith(targetDemo) || name.endsWith('/' + targetDemo));
+        }
+        
+        if (!foundName) {
+          return -1;
+        }
+        
+        // We need to find which index this demo is at after sorting
+        // Let's load each demo until we find the one we want
+        let currentIndex = 0;
+        const totalDemos = document.querySelector('.demo-counter')?.textContent?.match(/\d+ of (\d+)/)?.[1];
+        const maxDemos = totalDemos ? parseInt(totalDemos) : demoNames.length;
+        
+        for (let i = 0; i < maxDemos; i++) {
+          // @ts-ignore
+          await window.loadDemo(i);
+          await new Promise(resolve => setTimeout(resolve, 500)); // Wait for load
+          
+          const demoComponent = document.querySelector('.demo-component');
+          const currentDemoName = demoComponent?.getAttribute('data-demo');
+          
+          if (currentDemoName === foundName) {
+            return i;
+          }
+        }
+        
+        return -1;
+      }, this.singleDemo);
+      
+      if (foundIndex === -1) {
+        throw new Error(`Demo "${this.singleDemo}" not found. Available demos can be found in demos-framework/src/main.ts`);
       }
-      return 0;
-    });
-    
-    console.log(`[DemoScreenshotPlugin] Found ${totalDemos} demos to capture`);
-    
-    // Capture each demo by navigating through them
-    for (let i = 0; i < totalDemos; i++) {
+      
+      console.log(`[DemoScreenshotPlugin] Found demo "${this.singleDemo}" at index ${foundIndex}`);
+      
+      // The demo is already loaded from our search, just wait for it to settle
+      await page.waitForTimeout(2000);
+      
+      // Get demo info and capture
+      const demoInfo = await this.getDemoInfoFromDOM(page, foundIndex);
+      await this.captureDemo(page, demoInfo);
+      
+    } else {
+      // Capture all demos
+      // Get total number of demos from the demo counter
+      const totalDemos = await page.evaluate(() => {
+        const counterElement = document.querySelector('.demo-counter');
+        if (counterElement) {
+          const match = counterElement.textContent?.match(/\d+ of (\d+)/);
+          return match ? parseInt(match[1]) : 0;
+        }
+        return 0;
+      });
+      
+      console.log(`[DemoScreenshotPlugin] Found ${totalDemos} demos to capture`);
+      
+      // Capture each demo by navigating through them
+      for (let i = 0; i < totalDemos; i++) {
       try {
         // Navigate to demo by index
         await page.evaluate((index) => {
@@ -147,47 +206,45 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
         // Wait for demo to initialize
         await page.waitForTimeout(3000);
         
-        // Get current demo info from DOM and window objects
-        const demoInfo = await page.evaluate(() => {
-          // Get demo title from footer
-          const titleElement = document.getElementById('footer-demo-title');
-          const title = titleElement ? titleElement.textContent || 'unknown' : 'unknown';
-          
-          // Get current demo index
-          const counterElement = document.querySelector('.demo-counter');
-          const counterText = counterElement ? counterElement.textContent : '';
-          const match = counterText.match(/(\d+) of \d+/);
-          const index = match ? parseInt(match[1]) - 1 : 0;
-          
-          // Get the demo name from the data-demo attribute
-          const demoComponent = document.querySelector('.demo-component');
-          const demoName = demoComponent ? demoComponent.getAttribute('data-demo') : null;
-          
-          // Get category from metadata
-          let category = 'uncategorized';
-          let id = demoName || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-          
-          // @ts-ignore
-          if (demoName && window.demoMetadata && window.demoMetadata[demoName]) {
-            // @ts-ignore
-            const metadata = window.demoMetadata[demoName];
-            category = metadata.category || 'uncategorized';
-          }
-          
-          return {
-            id: id,
-            title: title,
-            category: category,
-            index: index
-          };
-        });
-        
+        // Get demo info and capture
+        const demoInfo = await this.getDemoInfoFromDOM(page, i);
         await this.captureDemo(page, demoInfo);
         
       } catch (error) {
         console.error(`[DemoScreenshotPlugin] Failed to capture demo at index ${i}:`, error);
       }
     }
+    }
+  }
+  
+  private async getDemoInfoFromDOM(page: Page, index: number): Promise<DemoInfo> {
+    return await page.evaluate((idx) => {
+      // Get demo title from footer
+      const titleElement = document.getElementById('footer-demo-title');
+      const title = titleElement ? titleElement.textContent || 'unknown' : 'unknown';
+      
+      // Get the demo name from the data-demo attribute
+      const demoComponent = document.querySelector('.demo-component');
+      const demoName = demoComponent ? demoComponent.getAttribute('data-demo') : null;
+      
+      // Get category from metadata
+      let category = 'uncategorized';
+      let id = demoName || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      
+      // @ts-ignore
+      if (demoName && window.demoMetadata && window.demoMetadata[demoName]) {
+        // @ts-ignore
+        const metadata = window.demoMetadata[demoName];
+        category = metadata.category || 'uncategorized';
+      }
+      
+      return {
+        id: id,
+        title: title,
+        category: category,
+        index: idx
+      };
+    }, index);
   }
 
   private async captureDemo(page: Page, demo: DemoInfo): Promise<void> {
@@ -243,9 +300,12 @@ declare global {
     }>;
     loadDemo: (index: number) => Promise<void>;
     demoList: Array<{
-      id: string;
-      title: string;
-      category: string;
+      name: string;
+      metadata: {
+        title: string;
+        category: string;
+        description?: string;
+      };
     }>;
   }
 }

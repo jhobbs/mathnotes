@@ -14,11 +14,14 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "  --show-browser          Show the browser window"
     echo "  -v, --verbose           Verbose output"
     echo "  -c, --concurrency <n>   Number of concurrent pages (default: 1)"
+    echo "  -d, --demo <name>       Capture only a specific demo"
     echo "  -h, --help              Show this help message"
     echo ""
     echo "Examples:"
-    echo "  $0                    # Capture all demo screenshots"
-    echo "  $0 -o ./screenshots   # Custom output directory"
+    echo "  $0                              # Capture all demo screenshots"
+    echo "  $0 -o ./screenshots             # Custom output directory"
+    echo "  $0 --demo electric-field        # Capture single demo"
+    echo "  $0 -d cellular-automata/game-of-life"
     exit 0
 fi
 
