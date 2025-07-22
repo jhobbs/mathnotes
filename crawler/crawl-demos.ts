@@ -13,7 +13,8 @@ async function main() {
     showBrowser: false,
     verbose: false,
     demoOnly: true,
-    concurrency: 1
+    concurrency: 1,
+    singleDemo: null as string | null
   };
   
   // Simple argument parsing
@@ -38,10 +39,14 @@ async function main() {
       case '-c':
         options.concurrency = parseInt(args[++i]) || 1;
         break;
+      case '--demo':
+      case '-d':
+        options.singleDemo = args[++i];
+        break;
       case '--help':
       case '-h':
         console.log(`
-Usage: ./crawl-demos.ts [options]
+Usage: ./crawl-demos.ts [options] [demo-name]
 
 Options:
   -u, --url <url>         Base URL to crawl (default: http://localhost:5000)
@@ -49,7 +54,13 @@ Options:
   --show-browser          Show the browser window
   -v, --verbose           Verbose output
   -c, --concurrency <n>   Number of concurrent pages (default: 1)
+  -d, --demo <name>       Capture only a specific demo (e.g., physics/electric-field)
   -h, --help              Show this help message
+
+Examples:
+  ./crawl-demos.ts                           # Capture all demos
+  ./crawl-demos.ts --demo electric-field     # Capture single demo
+  ./crawl-demos.ts -d cellular-automata/game-of-life
         `);
         process.exit(0);
     }
@@ -59,6 +70,9 @@ Options:
   console.log(`📍 Base URL: ${options.url}`);
   console.log(`📁 Output directory: ${options.output}`);
   console.log(`👁  Mode: ${options.showBrowser ? 'visible' : 'headless'}`);
+  if (options.singleDemo) {
+    console.log(`🎯 Target demo: ${options.singleDemo}`);
+  }
   
   const crawler = new Crawler({
     maxDepth: 0,
@@ -79,7 +93,8 @@ Options:
   // Register the demo screenshot plugin
   const demoPlugin = new DemoScreenshotPlugin({
     screenshotDir: path.resolve(options.output),
-    baseUrl: options.url
+    baseUrl: options.url,
+    singleDemo: options.singleDemo
   });
   crawler.registerPlugin(demoPlugin);
   
