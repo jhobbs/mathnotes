@@ -147,7 +147,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
         // Wait for demo to initialize
         await page.waitForTimeout(3000);
         
-        // Get current demo info from DOM
+        // Get current demo info from DOM and window objects
         const demoInfo = await page.evaluate(() => {
           // Get demo title from footer
           const titleElement = document.getElementById('footer-demo-title');
@@ -159,25 +159,24 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
           const match = counterText.match(/(\d+) of \d+/);
           const index = match ? parseInt(match[1]) - 1 : 0;
           
-          // The title in the footer usually has format "Category: Demo Title"
-          // Let's parse it to get category
+          // Get the demo name from the data-demo attribute
+          const demoComponent = document.querySelector('.demo-component');
+          const demoName = demoComponent ? demoComponent.getAttribute('data-demo') : null;
+          
+          // Get category from metadata
           let category = 'uncategorized';
-          let demoTitle = title;
+          let id = demoName || title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           
-          if (title.includes(':')) {
-            const parts = title.split(':');
-            category = parts[0].trim();
-            demoTitle = parts[1].trim();
+          // @ts-ignore
+          if (demoName && window.demoMetadata && window.demoMetadata[demoName]) {
+            // @ts-ignore
+            const metadata = window.demoMetadata[demoName];
+            category = metadata.category || 'uncategorized';
           }
-          
-          // Create a safe ID from the title
-          const id = demoTitle.toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, '');
           
           return {
             id: id,
-            title: demoTitle,
+            title: title,
             category: category,
             index: index
           };
@@ -196,14 +195,23 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     
     // We're already on the correct demo, no need to navigate again
 
-    // Create category directory
-    const categoryDir = path.join(this.screenshotDir, demo.category);
-    await fs.mkdir(categoryDir, { recursive: true });
+    // The demo.id already contains the full path structure (e.g., "cellular-automata/game-of-life")
+    // Split it to get the directory structure
+    const pathParts = demo.id.split('/');
+    const filename = pathParts[pathParts.length - 1];
+    const categoryPath = pathParts.slice(0, -1).join('/');
+    
+    // If there's no category path in the ID, use the category from metadata
+    const screenshotDir = categoryPath 
+      ? path.join(this.screenshotDir, categoryPath)
+      : path.join(this.screenshotDir, demo.category.toLowerCase().replace(/\s+/g, '-'));
+    
+    await fs.mkdir(screenshotDir, { recursive: true });
 
     // Capture screenshot of the demo container
     const demoContainer = await page.$('.demo-component');
     if (demoContainer) {
-      const screenshotPath = path.join(categoryDir, `${demo.id}.png`);
+      const screenshotPath = path.join(screenshotDir, `${filename}.png`);
       await demoContainer.screenshot({ 
         path: screenshotPath,
         animations: 'disabled'
@@ -215,7 +223,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     }
 
     // Also capture full page screenshot for context
-    const fullPagePath = path.join(categoryDir, `${demo.id}-full.png`);
+    const fullPagePath = path.join(screenshotDir, `${filename}-full.png`);
     await page.screenshot({ 
       path: fullPagePath,
       fullPage: true,
