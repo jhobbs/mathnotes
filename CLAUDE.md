@@ -84,14 +84,14 @@ make dev-frontend
 # Get AI description of a demo (useful for documentation)
 ./scripts/crawl-demos.sh -d pendulum --describe
 
+# Check if a demo meets the standards in DEMO-STANDARD.md
+./scripts/crawl-demos.sh -d pendulum --check-standards
+
 # Ask specific questions about demos
-./scripts/crawl-demos.sh -d diagonalization --ask "what mathematical concept is illustrated in @\$BASE_PATH?"
+./scripts/crawl-demos.sh -d diagonalization --ask "is the widget flombulating properly in @\$BASE_PATH?"
 
 # Compare demo container to full page (check for layout issues)
 ./scripts/crawl-demos.sh -d neighborhood --ask "compare @\$BASE_PATH to @\$FULL_PATH. is the demo area visible in the full page?"
-
-# Analyze physics simulations
-./scripts/crawl-demos.sh -d electric-field --ask "describe the physics being simulated in @\$BASE_PATH and suggest improvements"
 ```
 
 When implementing or documenting demos, use these commands to:
