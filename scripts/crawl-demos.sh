@@ -17,6 +17,7 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "  -d, --demo <name>       Capture only a specific demo"
     echo "  --describe              Get AI description of base screenshot after capture"
     echo "  --ask <question>        Ask a custom question about the screenshots"
+    echo "  --check-standards       Check if demo meets standards in DEMO-STANDARD.md"
     echo "  -h, --help              Show this help message"
     echo ""
     echo "Examples:"
@@ -25,6 +26,7 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "  $0 --demo electric-field        # Capture single demo"
     echo "  $0 -d game-of-life --describe"
     echo "  $0 -d pendulum --ask 'what physics concepts are illustrated?'"
+    echo "  $0 -d pendulum --check-standards"
     exit 0
 fi
 
@@ -49,6 +51,7 @@ DOCKER_CMD="$DOCKER_CMD $@"
 VERBOSE=false
 DESCRIBE=false
 ASK_QUESTION=""
+CHECK_STANDARDS=false
 
 # Convert arguments to array for easier parsing
 ARGS=("$@")
@@ -65,6 +68,8 @@ for ((i=0; i<${#ARGS[@]}; i++)); do
             ASK_QUESTION="${ARGS[$((i + 1))]}"
             ((i++)) # Skip the next argument
         fi
+    elif [[ "$arg" == "--check-standards" ]]; then
+        CHECK_STANDARDS=true
     fi
 done
 
@@ -75,8 +80,8 @@ if [[ "$VERBOSE" == "true" ]]; then
     echo ""
 fi
 
-# Run the crawler and capture output if we need to describe or ask
-if [[ "$DESCRIBE" == "true" ]] || [[ -n "$ASK_QUESTION" ]]; then
+# Run the crawler and capture output if we need to describe or ask or check standards
+if [[ "$DESCRIBE" == "true" ]] || [[ -n "$ASK_QUESTION" ]] || [[ "$CHECK_STANDARDS" == "true" ]]; then
     # Capture the output to parse the screenshot paths
     OUTPUT=$(eval $DOCKER_CMD 2>&1)
     
@@ -88,6 +93,10 @@ if [[ "$DESCRIBE" == "true" ]] || [[ -n "$ASK_QUESTION" ]]; then
         if [[ "$DESCRIBE" == "true" ]]; then
             # Simple description mode
             gemini -p "describe what you see in @$BASE_PATH"
+        elif [[ "$CHECK_STANDARDS" == "true" ]]; then
+            # Check standards mode
+            STANDARDS_FILE="/home/jason/mathnotes/DEMO-STANDARD.md"
+            gemini -p "The file @$STANDARDS_FILE contains standards that demos should meet. Does the demo in @$BASE_PATH meet those standards? If not, describe why not, and suggest what changes could be made, based on the nature of the demo, to meet the standard."
         else
             # Custom question mode - replace placeholders
             QUESTION="$ASK_QUESTION"
