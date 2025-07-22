@@ -1,3 +1,4 @@
+name: mathnotes-dev
 services:
   web-dev:
     build:

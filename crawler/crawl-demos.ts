@@ -66,12 +66,12 @@ Examples:
     }
   }
   
-  console.log('🎨 Demo Screenshot Crawler');
-  console.log(`📍 Base URL: ${options.url}`);
-  console.log(`📁 Output directory: ${options.output}`);
-  console.log(`👁  Mode: ${options.showBrowser ? 'visible' : 'headless'}`);
-  if (options.singleDemo) {
-    console.log(`🎯 Target demo: ${options.singleDemo}`);
+  // Only show banner for full crawl
+  if (!options.singleDemo) {
+    console.log('🎨 Demo Screenshot Crawler');
+    console.log(`📍 Base URL: ${options.url}`);
+    console.log(`📁 Output directory: ${options.output}`);
+    console.log(`👁  Mode: ${options.showBrowser ? 'visible' : 'headless'}`);
   }
   
   const crawler = new Crawler({
@@ -87,7 +87,8 @@ Examples:
       /net::ERR_/i,
       /Cross-Origin-Opener-Policy header has been ignored/i,
     ],
-    cacheExtensions: ['.woff', '.woff2', '.ttf', '.otf', '.eot', '.css', '.js', '.ts']
+    cacheExtensions: ['.woff', '.woff2', '.ttf', '.otf', '.eot', '.css', '.js', '.ts'],
+    quietMode: options.singleDemo && !options.verbose // Only suppress output for single demo when not verbose
   });
   
   // Register the demo screenshot plugin
@@ -102,7 +103,9 @@ Examples:
     const startUrl = options.demoOnly ? `${options.url}/demo-viewer` : options.url;
     const results = await crawler.crawl(startUrl);
     
-    console.log('\n✨ Demo screenshot capture complete!');
+    if (!options.singleDemo) {
+      console.log('\n✨ Demo screenshot capture complete!');
+    }
     
   } catch (error) {
     console.error('❌ Crawl failed:', error);

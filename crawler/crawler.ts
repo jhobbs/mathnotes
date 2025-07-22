@@ -17,6 +17,7 @@ interface CrawlConfig {
   showProbe: boolean;
   ignorePatterns: RegExp[];
   cacheExtensions: string[];
+  quietMode?: boolean; // Suppress standard crawler output
 }
 
 interface QueueItem {
@@ -187,7 +188,9 @@ class PageProcessor {
       }
       
       // Navigate - always show which page we're visiting
-      console.log(`Visiting ${url}`);
+      if (!this.config.quietMode) {
+        console.log(`Visiting ${url}`);
+      }
       
       const response = await page.goto(url, { 
         waitUntil: 'domcontentloaded', 
@@ -388,14 +391,18 @@ class Crawler {
     }
     
     // Start crawling
-    console.log(`Starting crawler at ${startUrl}`);
+    if (!this.config.quietMode) {
+      console.log(`Starting crawler at ${startUrl}`);
+    }
     if (this.config.verbose) {
       console.log(`Options: ${JSON.stringify(this.config, null, 2)}`);
     }
-    if (this.config.singlePage) {
+    if (this.config.singlePage && !this.config.quietMode) {
       console.log('Running in single-page mode - will not follow links');
     }
-    console.log('');
+    if (!this.config.quietMode) {
+      console.log('');
+    }
     
     this.queueManager.add([{ url: startUrl, depth: 0 }]);
     
@@ -575,7 +582,9 @@ class Crawler {
   }
   
   private reportResults(): void {
-    console.log(`\nVisited ${this.visited.size} page${this.visited.size !== 1 ? 's' : ''}`);
+    if (!this.config.quietMode) {
+      console.log(`\nVisited ${this.visited.size} page${this.visited.size !== 1 ? 's' : ''}`);
+    }
     
     // Cache statistics
     if (this.config.verbose && this.cacheManager.size() > 0) {
@@ -612,7 +621,9 @@ class Crawler {
       console.error(`\n🛑 Found ${totalErrors} errors during crawl`);
       process.exit(1);
     } else {
-      console.log('\n✅ Crawl complete – no errors found');
+      if (!this.config.quietMode) {
+        console.log('\n✅ Crawl complete – no errors found');
+      }
     }
   }
 }

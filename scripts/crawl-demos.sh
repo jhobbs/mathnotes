@@ -42,8 +42,20 @@ fi
 # Pass all arguments
 DOCKER_CMD="$DOCKER_CMD $@"
 
-echo "Running demo crawler in Docker..."
-echo "Command: $DOCKER_CMD"
-echo ""
+# Check if verbose mode is requested
+VERBOSE=false
+for arg in "$@"; do
+    if [[ "$arg" == "--verbose" ]] || [[ "$arg" == "-v" ]]; then
+        VERBOSE=true
+        break
+    fi
+done
+
+# Only show output in verbose mode
+if [[ "$VERBOSE" == "true" ]]; then
+    echo "Running demo crawler in Docker..."
+    echo "Command: $DOCKER_CMD"
+    echo ""
+fi
 
 eval $DOCKER_CMD
