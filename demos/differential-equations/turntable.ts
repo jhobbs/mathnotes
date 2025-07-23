@@ -204,21 +204,34 @@ class TurntableDemo extends P5DemoBase {
   }
 
   private drawRecord(p: p5): void {
-    // Draw turntable with higher contrast
-    p.stroke(this.colors.stroke);
-    p.strokeWeight(3); // Thicker border for better visibility
-    // Use a contrasting fill color instead of background
+    // Fill the canvas background area (outside the record)
     const isDark = this.isDarkMode;
-    p.fill(isDark ? 255 : 0, isDark ? 255 : 0, isDark ? 255 : 0, 10); // Very subtle fill
+    if (isDark) {
+      // Light grey background in dark mode
+      p.fill(200, 200, 200);
+      p.noStroke();
+      p.rect(-p.width/2, -p.height/2, p.width, p.height);
+    }
+    
+    // Draw the vinyl record - black in both modes
+    p.fill(0); // Black vinyl
+    p.stroke(isDark ? 255 : 0); // White border in dark mode, black in light mode
+    p.strokeWeight(2);
     p.circle(0, 0, this.RECORD_RADIUS * 2);
     
-    // Add concentric circles for visual interest and better sense of rotation
+    // Add concentric grooves for visual interest
     p.strokeWeight(1);
-    p.stroke(this.colors.stroke, 100); // Semi-transparent
-    for (let r = 0.3; r < 1; r += 0.2) {
-      p.noFill();
+    p.stroke(isDark ? 255 : 128, isDark ? 255 : 128, isDark ? 255 : 128, 80); // Semi-transparent grooves
+    p.noFill();
+    for (let r = 0.3; r < 1; r += 0.15) {
       p.circle(0, 0, this.RECORD_RADIUS * 2 * r);
     }
+    
+    // Center label (hole)
+    p.fill(isDark ? 200 : 255); // Light grey in dark mode, white in light mode
+    p.noStroke();
+    p.circle(0, 0, this.RECORD_RADIUS * 0.2);
+    
     p.strokeWeight(1);
   }
 
