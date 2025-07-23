@@ -75,29 +75,29 @@ make dev-frontend
 ### Demo Screenshots and AI Descriptions
 ```bash
 # Capture screenshots of all demos (both desktop and mobile viewports)
-./scripts/crawl-demos.sh
+./scripts/crawl-demos.py
 
 # Capture a specific demo
-./scripts/crawl-demos.sh -d electric-field
-./scripts/crawl-demos.sh -d game-of-life
+./scripts/crawl-demos.py -d electric-field
+./scripts/crawl-demos.py -d game-of-life
 
 # Capture with specific viewport
-./scripts/crawl-demos.sh --viewport desktop    # Desktop only
-./scripts/crawl-demos.sh --viewport mobile     # Mobile only
-./scripts/crawl-demos.sh -d pendulum --viewport mobile
+./scripts/crawl-demos.py --viewport desktop    # Desktop only
+./scripts/crawl-demos.py --viewport mobile     # Mobile only
+./scripts/crawl-demos.py -d pendulum --viewport mobile
 
 # Get AI description of a demo (useful for documentation)
-./scripts/crawl-demos.sh -d pendulum --describe
-./scripts/crawl-demos.sh -d pendulum --describe --viewport mobile  # Analyze mobile version
+./scripts/crawl-demos.py -d pendulum --describe
+./scripts/crawl-demos.py -d pendulum --describe --viewport mobile  # Analyze mobile version
 
 # Check if a demo meets the standards in DEMO-STANDARD.md
-./scripts/crawl-demos.sh -d pendulum --check-standards
+./scripts/crawl-demos.py -d pendulum --check-standards
 
 # Ask specific questions about demos
-./scripts/crawl-demos.sh -d diagonalization --ask "is the widget flombulating properly in @\$BASE_PATH?"
+./scripts/crawl-demos.py -d diagonalization --ask "is the widget flombulating properly in @\$BASE_PATH?"
 
 # Compare demo container to full page (check for layout issues)
-./scripts/crawl-demos.sh -d neighborhood --ask "compare @\$BASE_PATH to @\$FULL_PATH. is the demo area visible in the full page?"
+./scripts/crawl-demos.py -d neighborhood --ask "compare @\$BASE_PATH to @\$FULL_PATH. is the demo area visible in the full page?"
 ```
 
 When implementing or documenting demos, use these commands to:
