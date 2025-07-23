@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/bash -x
 # Helper script to run the demo screenshot crawler in the Docker network
 
 # Default to web-dev URL when running in Docker
 DEFAULT_URL="http://web-dev:5000"
 
-GEMINI="gemini" # -m gemini-2.5-flash"
+GEMINI="/home/jason/.claude/local/claude --model opus" #/home/jason/.claude/local/claude --model opus" # -m gemini-2.5-flash"
 
 # Check if --help is requested
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
@@ -19,6 +19,7 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "  -d, --demo <name>       Capture only a specific demo"
     echo "  --describe              Get AI description of base screenshot after capture"
     echo "  --ask <question>        Ask a custom question about the screenshots"
+    echo "                          Use \$BASE_PATH, \$FULL_PATH, or \$CANVAS_PATH in questions"
     echo "  --check-standards       Check if demo meets standards in DEMO-STANDARD.md"
     echo "  -h, --help              Show this help message"
     echo ""
@@ -90,6 +91,7 @@ if [[ "$DESCRIBE" == "true" ]] || [[ -n "$ASK_QUESTION" ]] || [[ "$CHECK_STANDAR
     # Extract the screenshot paths from the output
     BASE_PATH=$(echo "$OUTPUT" | grep "^base: " | tail -1 | cut -d' ' -f2)
     FULL_PATH=$(echo "$OUTPUT" | grep "^full: " | tail -1 | cut -d' ' -f2)
+    CANVAS_PATH=$(echo "$OUTPUT" | grep "^canvas: " | tail -1 | cut -d' ' -f2)
     
     if [[ -n "$BASE_PATH" ]] && [[ -f "$BASE_PATH" ]]; then
         if [[ "$DESCRIBE" == "true" ]]; then
@@ -99,13 +101,14 @@ if [[ "$DESCRIBE" == "true" ]] || [[ -n "$ASK_QUESTION" ]] || [[ "$CHECK_STANDAR
         elif [[ "$CHECK_STANDARDS" == "true" ]]; then
             # Check standards mode
             STANDARDS_FILE="/home/jason/mathnotes/DEMO-STANDARD.md"
-            $GEMINI -p "You're gemini-2.5-flash, a multimodal model. You can read images. The file @$STANDARDS_FILE contains standards that demos should meet. Does the demo in @$BASE_PATH meet those standards? If not, describe why not, and suggest what changes could be made, based on the nature of the demo, to meet the standard."
+            $GEMINI -p "You're a multimodal model. You can process images and answer questions about them. The file @$STANDARDS_FILE defines the dashed rectangle as the canvas. Analyze how the drawing elements interact with this specific border. Does the demo in @$CANVAS_PATH meet the standards? Be very thorough and precise in your measurements."
             GEMINI_EXIT_CODE=$?
         else
             # Custom question mode - replace placeholders
             QUESTION="$ASK_QUESTION"
             QUESTION="${QUESTION//\$BASE_PATH/$BASE_PATH}"
             QUESTION="${QUESTION//\$FULL_PATH/$FULL_PATH}"
+            QUESTION="${QUESTION//\$CANVAS_PATH/$CANVAS_PATH}"
             $GEMINI -p "$QUESTION"
             GEMINI_EXIT_CODE=$?
         fi

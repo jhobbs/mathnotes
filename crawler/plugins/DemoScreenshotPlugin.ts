@@ -269,6 +269,18 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
       // Convert absolute path to relative path for output
       const relativePath = screenshotPath.replace(/^.*\/demo-screenshots\//, './demo-screenshots/');
       console.log(`base: ${relativePath}`);
+      
+      // Also capture canvas-only screenshot
+      const canvas = await page.$('.demo-component canvas');
+      if (canvas) {
+        const canvasPath = path.join(screenshotDir, `${filename}-canvas.png`);
+        await canvas.screenshot({ 
+          path: canvasPath,
+          animations: 'disabled'
+        });
+        const relativeCanvasPath = canvasPath.replace(/^.*\/demo-screenshots\//, './demo-screenshots/');
+        console.log(`canvas: ${relativeCanvasPath}`);
+      }
     } else {
       console.warn(`[DemoScreenshotPlugin] Demo container not found for ${demo.id}`);
     }
