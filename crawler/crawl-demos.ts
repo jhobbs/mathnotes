@@ -14,7 +14,8 @@ async function main() {
     verbose: false,
     demoOnly: true,
     concurrency: 1,
-    singleDemo: null as string | null
+    singleDemo: null as string | null,
+    viewports: [] as string[]
   };
   
   // Simple argument parsing
@@ -43,6 +44,17 @@ async function main() {
       case '-d':
         options.singleDemo = args[++i];
         break;
+      case '--viewport':
+      case '-vp':
+        const viewportArg = args[++i];
+        if (viewportArg) {
+          if (viewportArg === 'both') {
+            options.viewports = ['desktop', 'mobile'];
+          } else {
+            options.viewports.push(viewportArg);
+          }
+        }
+        break;
       case '--help':
       case '-h':
         console.log(`
@@ -55,12 +67,14 @@ Options:
   -v, --verbose           Verbose output
   -c, --concurrency <n>   Number of concurrent pages (default: 1)
   -d, --demo <name>       Capture only a specific demo (e.g., physics/electric-field)
+  -vp, --viewport <type>  Viewport to capture: desktop, mobile, or both (default: both)
   -h, --help              Show this help message
 
 Examples:
-  ./crawl-demos.ts                           # Capture all demos
-  ./crawl-demos.ts --demo electric-field     # Capture single demo
-  ./crawl-demos.ts -d cellular-automata/game-of-life
+  ./crawl-demos.ts                           # Capture all demos in both viewports
+  ./crawl-demos.ts --demo electric-field     # Capture single demo in both viewports
+  ./crawl-demos.ts -d cellular-automata/game-of-life --viewport mobile
+  ./crawl-demos.ts --viewport desktop        # Capture all demos in desktop only
         `);
         process.exit(0);
     }
@@ -95,7 +109,8 @@ Examples:
   const demoPlugin = new DemoScreenshotPlugin({
     screenshotDir: path.resolve(options.output),
     baseUrl: options.url,
-    singleDemo: options.singleDemo
+    singleDemo: options.singleDemo,
+    viewports: options.viewports.length > 0 ? options.viewports : undefined
   });
   crawler.registerPlugin(demoPlugin);
   

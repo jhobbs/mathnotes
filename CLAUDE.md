@@ -74,15 +74,21 @@ make dev-frontend
 
 ### Demo Screenshots and AI Descriptions
 ```bash
-# Capture screenshots of all demos
+# Capture screenshots of all demos (both desktop and mobile viewports)
 ./scripts/crawl-demos.sh
 
 # Capture a specific demo
 ./scripts/crawl-demos.sh -d electric-field
 ./scripts/crawl-demos.sh -d game-of-life
 
+# Capture with specific viewport
+./scripts/crawl-demos.sh --viewport desktop    # Desktop only
+./scripts/crawl-demos.sh --viewport mobile     # Mobile only
+./scripts/crawl-demos.sh -d pendulum --viewport mobile
+
 # Get AI description of a demo (useful for documentation)
 ./scripts/crawl-demos.sh -d pendulum --describe
+./scripts/crawl-demos.sh -d pendulum --describe --viewport mobile  # Analyze mobile version
 
 # Check if a demo meets the standards in DEMO-STANDARD.md
 ./scripts/crawl-demos.sh -d pendulum --check-standards

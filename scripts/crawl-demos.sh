@@ -4,7 +4,10 @@
 # Default to web-dev URL when running in Docker
 DEFAULT_URL="http://web-dev:5000"
 
-GEMINI="/home/jason/.claude/local/claude --model opus" #/home/jason/.claude/local/claude --model opus" # -m gemini-2.5-flash"
+#GEMINI="/home/jason/.claude/local/claude --model opus" #/home/jason/.claude/local/claude --model opus" # -m gemini-2.5-flash"
+
+GEMINI="gemini"
+
 
 # Check if --help is requested
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
@@ -17,6 +20,7 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "  -v, --verbose           Verbose output"
     echo "  -c, --concurrency <n>   Number of concurrent pages (default: 1)"
     echo "  -d, --demo <name>       Capture only a specific demo"
+    echo "  -vp, --viewport <type>  Viewport to capture: desktop, mobile, or both (default: both)"
     echo "  --describe              Get AI description of base screenshot after capture"
     echo "  --ask <question>        Ask a custom question about the screenshots"
     echo "                          Use \$BASE_PATH, \$FULL_PATH, or \$CANVAS_PATH in questions"
@@ -24,9 +28,11 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "  -h, --help              Show this help message"
     echo ""
     echo "Examples:"
-    echo "  $0                              # Capture all demo screenshots"
+    echo "  $0                              # Capture all demo screenshots (both viewports)"
     echo "  $0 -o ./screenshots             # Custom output directory"
-    echo "  $0 --demo electric-field        # Capture single demo"
+    echo "  $0 --demo electric-field        # Capture single demo (both viewports)"
+    echo "  $0 -d game-of-life --viewport mobile    # Mobile only"
+    echo "  $0 --viewport desktop           # All demos, desktop only"
     echo "  $0 -d game-of-life --describe"
     echo "  $0 -d pendulum --ask 'what physics concepts are illustrated?'"
     echo "  $0 -d pendulum --check-standards"
@@ -55,6 +61,7 @@ VERBOSE=false
 DESCRIBE=false
 ASK_QUESTION=""
 CHECK_STANDARDS=false
+VIEWPORT_FOR_ANALYSIS="desktop"  # Default viewport for AI analysis
 
 # Convert arguments to array for easier parsing
 ARGS=("$@")
@@ -73,6 +80,17 @@ for ((i=0; i<${#ARGS[@]}; i++)); do
         fi
     elif [[ "$arg" == "--check-standards" ]]; then
         CHECK_STANDARDS=true
+    elif [[ "$arg" == "--viewport" ]] || [[ "$arg" == "-vp" ]]; then
+        # Get the viewport for analysis
+        if [[ $((i + 1)) -lt ${#ARGS[@]} ]]; then
+            viewport_arg="${ARGS[$((i + 1))]}"
+            if [[ "$viewport_arg" == "mobile" ]]; then
+                VIEWPORT_FOR_ANALYSIS="mobile"
+            elif [[ "$viewport_arg" == "desktop" ]]; then
+                VIEWPORT_FOR_ANALYSIS="desktop"
+            fi
+            ((i++)) # Skip the next argument
+        fi
     fi
 done
 
@@ -88,10 +106,10 @@ if [[ "$DESCRIBE" == "true" ]] || [[ -n "$ASK_QUESTION" ]] || [[ "$CHECK_STANDAR
     # Capture the output to parse the screenshot paths
     OUTPUT=$(eval $DOCKER_CMD 2>&1)
     
-    # Extract the screenshot paths from the output
-    BASE_PATH=$(echo "$OUTPUT" | grep "^base: " | tail -1 | cut -d' ' -f2)
-    FULL_PATH=$(echo "$OUTPUT" | grep "^full: " | tail -1 | cut -d' ' -f2)
-    CANVAS_PATH=$(echo "$OUTPUT" | grep "^canvas: " | tail -1 | cut -d' ' -f2)
+    # Extract the screenshot paths from the output based on the viewport
+    BASE_PATH=$(echo "$OUTPUT" | grep "^${VIEWPORT_FOR_ANALYSIS}-base: " | tail -1 | cut -d' ' -f2)
+    FULL_PATH=$(echo "$OUTPUT" | grep "^${VIEWPORT_FOR_ANALYSIS}-full: " | tail -1 | cut -d' ' -f2)
+    CANVAS_PATH=$(echo "$OUTPUT" | grep "^${VIEWPORT_FOR_ANALYSIS}-canvas: " | tail -1 | cut -d' ' -f2)
     
     if [[ -n "$BASE_PATH" ]] && [[ -f "$BASE_PATH" ]]; then
         if [[ "$DESCRIBE" == "true" ]]; then
