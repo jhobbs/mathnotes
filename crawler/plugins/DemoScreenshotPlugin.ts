@@ -10,6 +10,15 @@ interface DemoInfo {
   index: number;
 }
 
+interface ViewportConfig {
+  width: number;
+  height: number;
+  deviceScaleFactor: number;
+  isMobile: boolean;
+  hasTouch: boolean;
+  name: string;
+}
+
 export class DemoScreenshotPlugin implements CrawlerPlugin {
   name = 'DemoScreenshotPlugin';
   private screenshotDir: string;
@@ -18,8 +27,27 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
   private captureCount = 0;
   private baseUrl: string;
   private singleDemo: string | null;
+  private viewports: ViewportConfig[];
 
-  constructor(options: { screenshotDir?: string; baseUrl?: string; singleDemo?: string | null } = {}) {
+  private static readonly DESKTOP_VIEWPORT: ViewportConfig = {
+    width: 1920,
+    height: 1080,
+    deviceScaleFactor: 1,
+    isMobile: false,
+    hasTouch: false,
+    name: 'desktop'
+  };
+
+  private static readonly MOBILE_VIEWPORT: ViewportConfig = {
+    width: 390,
+    height: 844,
+    deviceScaleFactor: 3,
+    isMobile: true,
+    hasTouch: true,
+    name: 'mobile'
+  };
+
+  constructor(options: { screenshotDir?: string; baseUrl?: string; singleDemo?: string | null; viewports?: string[] } = {}) {
     this.screenshotDir = options.screenshotDir || './demo-screenshots';
     // Ensure base URL uses the correct protocol and no trailing slash
     this.baseUrl = (options.baseUrl || 'http://localhost:5000').replace(/\/$/, '');
@@ -29,6 +57,19 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     }
     this.demoViewerUrl = `${this.baseUrl}/demo-viewer`;
     this.singleDemo = options.singleDemo || null;
+    
+    // Parse viewport options
+    if (options.viewports && options.viewports.length > 0) {
+      this.viewports = options.viewports.map(v => {
+        if (v === 'desktop') return DemoScreenshotPlugin.DESKTOP_VIEWPORT;
+        if (v === 'mobile') return DemoScreenshotPlugin.MOBILE_VIEWPORT;
+        if (v === 'both') return [DemoScreenshotPlugin.DESKTOP_VIEWPORT, DemoScreenshotPlugin.MOBILE_VIEWPORT];
+        return DemoScreenshotPlugin.DESKTOP_VIEWPORT;
+      }).flat();
+    } else {
+      // Default to both viewports
+      this.viewports = [DemoScreenshotPlugin.DESKTOP_VIEWPORT, DemoScreenshotPlugin.MOBILE_VIEWPORT];
+    }
   }
 
   async beforeCrawl(crawler: Crawler): Promise<void> {
@@ -41,28 +82,47 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
   }
 
   async afterCrawl(crawler: Crawler, results: Map<string, CrawlResult>): Promise<void> {
-    // Always create a new page for capturing demos
-    
     const browser = (crawler as any).browser;
-    const context = (crawler as any).context;
     
-    // Use the existing context instead of creating a new page directly from browser
-    // This ensures we inherit all the context settings including HTTP headers
-    const page = await context.newPage();
-    try {
-      // If we haven't discovered demos yet, do it now
-      if (this.demos.length === 0) {
-        await this.discoverDemos(page);
+    // Capture screenshots for each viewport
+    for (const viewport of this.viewports) {
+      if (!this.singleDemo) {
+        console.log(`\n📱 Capturing ${viewport.name} screenshots (${viewport.width}x${viewport.height})`);
       }
       
-      // Capture all demos
-      if (this.demos.length > 0) {
-        await this.captureAllDemos(page);
-      } else {
-        console.log('[DemoScreenshotPlugin] No demos found to capture');
+      // Create a new context with the specific viewport settings
+      const context = await browser.newContext({
+        viewport: {
+          width: viewport.width,
+          height: viewport.height
+        },
+        deviceScaleFactor: viewport.deviceScaleFactor,
+        isMobile: viewport.isMobile,
+        hasTouch: viewport.hasTouch,
+        ignoreHTTPSErrors: true,
+        bypassCSP: true,
+        extraHTTPHeaders: {
+          'Upgrade-Insecure-Requests': '0'
+        }
+      });
+      
+      const page = await context.newPage();
+      try {
+        // If we haven't discovered demos yet, do it now
+        if (this.demos.length === 0) {
+          await this.discoverDemos(page);
+        }
+        
+        // Capture all demos for this viewport
+        if (this.demos.length > 0) {
+          await this.captureAllDemosForViewport(page, viewport);
+        } else {
+          console.log('[DemoScreenshotPlugin] No demos found to capture');
+        }
+      } finally {
+        await page.close();
+        await context.close();
       }
-    } finally {
-      await page.close();
     }
   }
 
@@ -99,7 +159,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
 
   }
 
-  private async captureAllDemos(page: Page): Promise<void> {
+  private async captureAllDemosForViewport(page: Page, viewport: ViewportConfig): Promise<void> {
     if (this.singleDemo) {
       // Navigate directly to the specific demo using URL anchor
       await page.goto(`${this.demoViewerUrl}#${this.singleDemo}`, { waitUntil: 'networkidle' });
@@ -125,7 +185,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
       
       // Get demo info and capture
       const demoInfo = await this.getDemoInfoFromDOM(page, 0);
-      await this.captureDemo(page, demoInfo);
+      await this.captureDemo(page, demoInfo, viewport);
       
     } else {
       // First, navigate to demo viewer to get the list of all demos
@@ -160,7 +220,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
           
           // Get demo info and capture
           const demoInfo = await this.getDemoInfoFromDOM(page, 0);
-          await this.captureDemo(page, demoInfo);
+          await this.captureDemo(page, demoInfo, viewport);
           
         } catch (error) {
           console.error(`[DemoScreenshotPlugin] Failed to capture demo ${demoName}:`, error);
@@ -199,7 +259,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     }, index);
   }
 
-  private async captureDemo(page: Page, demo: DemoInfo): Promise<void> {
+  private async captureDemo(page: Page, demo: DemoInfo, viewport: ViewportConfig): Promise<void> {
     // We're already on the correct demo, no need to navigate again
 
     // The demo.id already contains the full path structure (e.g., "cellular-automata/game-of-life")
@@ -218,7 +278,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     // Capture screenshot of the demo container
     const demoContainer = await page.$('.demo-component');
     if (demoContainer) {
-      const screenshotPath = path.join(screenshotDir, `${filename}.png`);
+      const screenshotPath = path.join(screenshotDir, `${filename}-${viewport.name}.png`);
       await demoContainer.screenshot({ 
         path: screenshotPath,
         animations: 'disabled'
@@ -226,25 +286,25 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
       this.captureCount++;
       // Convert absolute path to relative path for output
       const relativePath = screenshotPath.replace(/^.*\/demo-screenshots\//, './demo-screenshots/');
-      console.log(`base: ${relativePath}`);
+      console.log(`${viewport.name}-base: ${relativePath}`);
       
       // Also capture canvas-only screenshot
       const canvas = await page.$('.demo-component canvas');
       if (canvas) {
-        const canvasPath = path.join(screenshotDir, `${filename}-canvas.png`);
+        const canvasPath = path.join(screenshotDir, `${filename}-${viewport.name}-canvas.png`);
         await canvas.screenshot({ 
           path: canvasPath,
           animations: 'disabled'
         });
         const relativeCanvasPath = canvasPath.replace(/^.*\/demo-screenshots\//, './demo-screenshots/');
-        console.log(`canvas: ${relativeCanvasPath}`);
+        console.log(`${viewport.name}-canvas: ${relativeCanvasPath}`);
       }
     } else {
       console.warn(`[DemoScreenshotPlugin] Demo container not found for ${demo.id}`);
     }
 
     // Also capture full page screenshot for context
-    const fullPagePath = path.join(screenshotDir, `${filename}-full.png`);
+    const fullPagePath = path.join(screenshotDir, `${filename}-${viewport.name}-full.png`);
     await page.screenshot({ 
       path: fullPagePath,
       fullPage: true,
@@ -252,7 +312,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     });
     // Convert absolute path to relative path for output
     const relativeFullPath = fullPagePath.replace(/^.*\/demo-screenshots\//, './demo-screenshots/');
-    console.log(`full: ${relativeFullPath}`);
+    console.log(`${viewport.name}-full: ${relativeFullPath}`);
   }
 }
 
