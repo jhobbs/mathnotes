@@ -100,114 +100,72 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
   }
 
   private async captureAllDemos(page: Page): Promise<void> {
-    // Navigate to demo viewer once
-    await page.goto(this.demoViewerUrl, { waitUntil: 'networkidle' });
-    
-    // Wait for demo viewer to be ready
-    await page.waitForFunction(() => {
-      // @ts-ignore
-      return window.demoRegistry && Object.keys(window.demoRegistry).length > 0;
-    }, { timeout: 30000 });
-    
-    // Wait a bit for everything to settle
-    await page.waitForTimeout(2000);
-    
     if (this.singleDemo) {
-      // Find the demo by searching through all demos
-      const foundIndex = await page.evaluate(async (targetDemo) => {
-        // @ts-ignore
-        const demoNames = Object.keys(window.demoRegistry);
-        
-        // Find the demo name
-        let foundName = null;
-        // Try exact match first
-        if (demoNames.includes(targetDemo)) {
-          foundName = targetDemo;
-        } else {
-          // Try partial match (e.g., "electric-field" matches "physics/electric-field")
-          foundName = demoNames.find(name => name.endsWith(targetDemo) || name.endsWith('/' + targetDemo));
-        }
-        
-        if (!foundName) {
-          return -1;
-        }
-        
-        // We need to find which index this demo is at after sorting
-        // Let's load each demo until we find the one we want
-        let currentIndex = 0;
-        const totalDemos = document.querySelector('.demo-counter')?.textContent?.match(/\d+ of (\d+)/)?.[1];
-        const maxDemos = totalDemos ? parseInt(totalDemos) : demoNames.length;
-        
-        for (let i = 0; i < maxDemos; i++) {
-          // @ts-ignore
-          await window.loadDemo(i);
-          await new Promise(resolve => setTimeout(resolve, 500)); // Wait for load
-          
-          const demoComponent = document.querySelector('.demo-component');
-          const currentDemoName = demoComponent?.getAttribute('data-demo');
-          
-          if (currentDemoName === foundName) {
-            return i;
-          }
-        }
-        
-        return -1;
-      }, this.singleDemo);
+      // Navigate directly to the specific demo using URL anchor
+      await page.goto(`${this.demoViewerUrl}#${this.singleDemo}`, { waitUntil: 'networkidle' });
       
-      if (foundIndex === -1) {
+      // Wait for demo to load
+      await page.waitForSelector('.demo-component', {
+        state: 'visible',
+        timeout: 10000
+      });
+      
+      // Wait for demo to initialize
+      await page.waitForTimeout(3000);
+      
+      // Verify the correct demo loaded
+      const loadedDemo = await page.evaluate(() => {
+        const demoComponent = document.querySelector('.demo-component');
+        return demoComponent?.getAttribute('data-demo');
+      });
+      
+      if (!loadedDemo || (!loadedDemo.endsWith(this.singleDemo) && loadedDemo !== this.singleDemo)) {
         throw new Error(`Demo "${this.singleDemo}" not found. Available demos can be found in demos-framework/src/main.ts`);
       }
       
-      
-      // The demo is already loaded from our search, just wait for it to settle
-      await page.waitForTimeout(2000);
-      
       // Get demo info and capture
-      const demoInfo = await this.getDemoInfoFromDOM(page, foundIndex);
+      const demoInfo = await this.getDemoInfoFromDOM(page, 0);
       await this.captureDemo(page, demoInfo);
       
     } else {
-      // Capture all demos
-      // Get total number of demos from the demo counter
-      const totalDemos = await page.evaluate(() => {
-        const counterElement = document.querySelector('.demo-counter');
-        if (counterElement) {
-          const match = counterElement.textContent?.match(/\d+ of (\d+)/);
-          return match ? parseInt(match[1]) : 0;
-        }
-        return 0;
+      // First, navigate to demo viewer to get the list of all demos
+      await page.goto(this.demoViewerUrl, { waitUntil: 'networkidle' });
+      
+      // Wait for demo registry to be ready
+      await page.waitForFunction(() => {
+        // @ts-ignore
+        return window.demoRegistry && Object.keys(window.demoRegistry).length > 0;
+      }, { timeout: 30000 });
+      
+      // Get all demo names
+      const demoNames = await page.evaluate(() => {
+        // @ts-ignore
+        return Object.keys(window.demoRegistry);
       });
       
-      
-      // Capture each demo by navigating through them
-      for (let i = 0; i < totalDemos; i++) {
-      try {
-        // Navigate to demo by index
-        await page.evaluate((index) => {
-          // @ts-ignore
-          if (window.loadDemo) {
-            // @ts-ignore
-            window.loadDemo(index);
-          }
-        }, i);
-        
-        // Wait for demo to load
-        await page.waitForSelector('.demo-component', {
-          state: 'visible',
-          timeout: 10000
-        });
-        
-        // Wait for demo to initialize
-        await page.waitForTimeout(3000);
-        
-        // Get demo info and capture
-        const demoInfo = await this.getDemoInfoFromDOM(page, i);
-        await this.captureDemo(page, demoInfo);
-        
-      } catch (error) {
-        console.error(`[DemoScreenshotPlugin] Failed to capture demo at index ${i}:`, error);
+      // Capture each demo by navigating directly to it
+      for (const demoName of demoNames) {
+        try {
+          // Navigate directly to the demo using URL anchor
+          await page.goto(`${this.demoViewerUrl}#${demoName}`, { waitUntil: 'networkidle' });
+          
+          // Wait for demo to load
+          await page.waitForSelector('.demo-component', {
+            state: 'visible',
+            timeout: 10000
+          });
+          
+          // Wait for demo to initialize
+          await page.waitForTimeout(3000);
+          
+          // Get demo info and capture
+          const demoInfo = await this.getDemoInfoFromDOM(page, 0);
+          await this.captureDemo(page, demoInfo);
+          
+        } catch (error) {
+          console.error(`[DemoScreenshotPlugin] Failed to capture demo ${demoName}:`, error);
+        }
       }
-    }
     }
   }
   
@@ -306,15 +264,6 @@ declare global {
       title?: string;
       category?: string;
       description?: string;
-    }>;
-    loadDemo: (index: number) => Promise<void>;
-    demoList: Array<{
-      name: string;
-      metadata: {
-        title: string;
-        category: string;
-        description?: string;
-      };
     }>;
   }
 }

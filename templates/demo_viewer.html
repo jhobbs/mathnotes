@@ -202,6 +202,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
+  // Listen for hash changes
+  window.addEventListener('hashchange', handleHashChange);
+  
   // Wait for demo registry to be available
   checkAndInitialize();
 });
@@ -234,8 +237,12 @@ async function initializeDemoViewer() {
     return a.metadata.title.localeCompare(b.metadata.title);
   });
   
-  // Start with the first demo
-  loadDemo(0);
+  // Check if there's a hash in the URL
+  const hash = window.location.hash.slice(1); // Remove the #
+  const startIndex = findDemoIndexByName(hash);
+  
+  // Start with the demo from the hash or the first demo
+  loadDemo(startIndex >= 0 ? startIndex : 0);
 }
 
 async function loadAllMetadata() {
@@ -283,6 +290,9 @@ async function loadDemo(index) {
   
   const demo = demoList[index];
   const content = document.getElementById('demo-content');
+  
+  // Update URL hash
+  window.history.replaceState(null, null, '#' + demo.name);
   
   // Update footer info
   document.getElementById('footer-demo-title').textContent = demo.metadata.title;
@@ -333,6 +343,21 @@ function updateNavigationButtons() {
 function updateCounter() {
   const counter = document.getElementById('demo-counter');
   counter.textContent = `Demo ${currentDemoIndex + 1} of ${demoList.length}`;
+}
+
+function findDemoIndexByName(name) {
+  if (!name) return -1;
+  return demoList.findIndex(demo => demo.name === name);
+}
+
+function handleHashChange() {
+  const hash = window.location.hash.slice(1); // Remove the #
+  const index = findDemoIndexByName(hash);
+  
+  // Only load if it's a different demo
+  if (index >= 0 && index !== currentDemoIndex) {
+    loadDemo(index);
+  }
 }
 
 // Cleanup on page unload
