@@ -8,7 +8,7 @@ from openai import OpenAI
 class OpenAIImageAnalyzer:
     """Reusable OpenAI image analysis functionality."""
     
-    def __init__(self, model: str = "gpt-4.1-mini"):
+    def __init__(self, model: str = "gpt-4.1-mini", verbose: bool = False):
         try:
             self.client = OpenAI()
         except Exception as e:
@@ -16,6 +16,7 @@ class OpenAIImageAnalyzer:
                 raise ValueError("OPENAI_API_KEY environment variable not set. Please set it to use OpenAI models.")
             raise
         self.model = model
+        self.verbose = verbose
     
     def create_file(self, file_path: str) -> str:
         """Upload a file to OpenAI and return the file ID."""
@@ -73,12 +74,14 @@ class OpenAIImageAnalyzer:
         """Check how well a demo scales between desktop and mobile."""
         prompt = (
             "Compare the desktop version (first image) and mobile version (second image) "
-            "of this interactive demo. Analyze:\n"
+            "of this interactive demo page. These are full page screenshots showing the demo "
+            "in context with surrounding content. Analyze:\n"
             "1. How well does the demo scale between viewports?\n"
             "2. Are all interactive elements properly visible and accessible in both versions?\n"
             "3. Does the demo maintain its functionality and visual clarity at both sizes?\n"
             "4. Are there any layout issues, overlapping elements, or cut-off content?\n"
             "5. Does the demo make good use of the available space in each viewport?\n"
+            "6. Is the demo properly integrated with the page layout in both versions?\n"
             "Be specific about any scaling issues you observe."
         )
         
