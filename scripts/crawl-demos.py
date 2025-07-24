@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Demo screenshot crawler - Python version
-Captures screenshots of demos in different viewports and optionally analyzes them with AI.
+Captures screenshots of demos in different viewports and optionally analyzes them with OpenAI.
 """
 
 import argparse
@@ -13,26 +13,20 @@ from pathlib import Path
 from typing import Optional, List, Tuple
 import shlex
 
-# Import the OpenAI analyzer if available
-try:
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    # Import using the actual filename with hyphens
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "openai_image_analysis", 
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), "openai-image-analysis.py")
-    )
-    openai_module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(openai_module)
-    OpenAIImageAnalyzer = openai_module.OpenAIImageAnalyzer
-    OPENAI_AVAILABLE = True
-except (ImportError, Exception):
-    OPENAI_AVAILABLE = False
+# Import the OpenAI analyzer
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import importlib.util
+spec = importlib.util.spec_from_file_location(
+    "openai_image_analysis", 
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "openai-image-analysis.py")
+)
+openai_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(openai_module)
+OpenAIImageAnalyzer = openai_module.OpenAIImageAnalyzer
 
 
 class DemoCrawler:
     DEFAULT_URL = "http://web-dev:5000"
-    GEMINI_CMD = "gemini"
     
     def __init__(self):
         self.verbose = False
@@ -41,7 +35,7 @@ class DemoCrawler:
     def parse_args(self) -> argparse.Namespace:
         """Parse command line arguments."""
         parser = argparse.ArgumentParser(
-            description="Capture demo screenshots and optionally analyze with AI",
+            description="Capture demo screenshots and optionally analyze with OpenAI vision models",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog="""
 Examples:
@@ -50,14 +44,12 @@ Examples:
   %(prog)s --demo electric-field        # Capture single demo (both viewports)
   %(prog)s -d game-of-life --viewport mobile    # Mobile only
   %(prog)s --viewport desktop           # All demos, desktop only
-  %(prog)s -d game-of-life --describe   # Get AI description
+  %(prog)s -d game-of-life --describe   # Get AI description with GPT-4.1-mini
   %(prog)s -d pendulum --ask 'what physics concepts are illustrated?'
   %(prog)s -d pendulum --check-standards
   %(prog)s -d electric-field --check-scaling  # Analyze mobile/desktop scaling
-  %(prog)s -d pendulum --describe --model opus  # Use Claude Opus
-  %(prog)s -d game-of-life --check-scaling --model sonnet  # Use Claude Sonnet
-  %(prog)s -d pendulum --check-scaling --model openai  # Use OpenAI GPT-4.1-mini
-  %(prog)s -d diagonalization --describe --model gpt-4.1  # Use OpenAI GPT-4.1
+  %(prog)s -d pendulum --describe --model gpt-4.1  # Use GPT-4.1 instead of default
+  %(prog)s -d game-of-life --check-scaling --model gpt-4.1-mini  # Explicitly use GPT-4.1-mini
             """
         )
         
@@ -86,12 +78,9 @@ Examples:
                           help='Check if demo meets standards in DEMO-STANDARD.md')
         parser.add_argument('--check-scaling', action='store_true',
                           help='Analyze how well demo handles scaling between mobile and desktop')
-        model_choices = ['gemini', 'opus', 'sonnet']
-        if OPENAI_AVAILABLE:
-            model_choices.extend(['openai', 'gpt-4.1-mini', 'gpt-4.1'])
-        parser.add_argument('--model', choices=model_choices,
-                          default='gemini',
-                          help='AI model to use for analysis (default: gemini)')
+        parser.add_argument('--model', choices=['gpt-4.1-mini', 'gpt-4.1'],
+                          default='gpt-4.1-mini',
+                          help='OpenAI model to use for analysis (default: gpt-4.1-mini)')
         
         return parser.parse_args()
     
@@ -197,7 +186,7 @@ Examples:
         return paths
     
     def run_ai_analysis(self, paths: dict, args: argparse.Namespace) -> int:
-        """Run AI analysis on the screenshots."""
+        """Run AI analysis on the screenshots using OpenAI."""
         # Convert all paths to absolute paths
         abs_paths = {}
         for key, path in paths.items():
@@ -206,142 +195,106 @@ Examples:
             else:
                 abs_paths[key] = path
         
-        # Handle OpenAI models
-        if args.model in ['openai', 'gpt-4.1-mini', 'gpt-4.1']:
-            if not OPENAI_AVAILABLE:
-                print("Error: OpenAI module not available", file=sys.stderr)
-                return 1
-            
-            # Use the actual model name, defaulting to gpt-4.1-mini for 'openai'
-            model_name = 'gpt-4.1-mini' if args.model == 'openai' else args.model
-            analyzer = OpenAIImageAnalyzer(model=model_name)
-            
-            try:
-                if args.describe:
-                    base_path = abs_paths.get('base', '')
-                    result = analyzer.describe_demo(base_path)
-                    
-                elif args.check_standards:
-                    canvas_path = abs_paths.get('canvas', '')
-                    # Read standards file if it exists
-                    standards_file = "/home/jason/mathnotes/DEMO-STANDARD.md"
-                    standards_content = None
-                    if os.path.exists(standards_file):
-                        with open(standards_file, 'r') as f:
-                            standards_content = f.read()
-                    result = analyzer.check_demo_standards(canvas_path, standards_content)
-                    
-                elif args.check_scaling:
-                    mobile_base = abs_paths.get('mobile_base', '')
-                    desktop_base = abs_paths.get('desktop_base', '')
-                    result = analyzer.check_demo_scaling(desktop_base, mobile_base)
-                    
-                elif args.ask:
-                    # Custom question - need to handle placeholders
-                    question = args.ask
-                    base_path = abs_paths.get('base', '')
-                    full_path = abs_paths.get('full', '')
-                    canvas_path = abs_paths.get('canvas', '')
-                    
-                    # For OpenAI, we need to handle image references differently
-                    # Extract all @path references and analyze them together
-                    image_paths = []
-                    if '$BASE_PATH' in question or '@' + base_path in question:
+        # Create analyzer with selected model
+        try:
+            analyzer = OpenAIImageAnalyzer(model=args.model)
+        except Exception as e:
+            print(f"Error initializing OpenAI analyzer: {e}", file=sys.stderr)
+            return 1
+        
+        try:
+            if args.describe:
+                base_path = abs_paths.get('base', '')
+                if not base_path or not os.path.exists(base_path):
+                    print(f"Error: Base screenshot not found at {base_path}", file=sys.stderr)
+                    return 1
+                result = analyzer.describe_demo(base_path)
+                
+            elif args.check_standards:
+                canvas_path = abs_paths.get('canvas', '')
+                if not canvas_path or not os.path.exists(canvas_path):
+                    print(f"Error: Canvas screenshot not found at {canvas_path}", file=sys.stderr)
+                    return 1
+                # Read standards file if it exists
+                standards_file = "/home/jason/mathnotes/DEMO-STANDARD.md"
+                standards_content = None
+                if os.path.exists(standards_file):
+                    with open(standards_file, 'r') as f:
+                        standards_content = f.read()
+                result = analyzer.check_demo_standards(canvas_path, standards_content)
+                
+            elif args.check_scaling:
+                mobile_base = abs_paths.get('mobile_base', '')
+                desktop_base = abs_paths.get('desktop_base', '')
+                if not mobile_base or not os.path.exists(mobile_base):
+                    print(f"Error: Mobile screenshot not found at {mobile_base}", file=sys.stderr)
+                    return 1
+                if not desktop_base or not os.path.exists(desktop_base):
+                    print(f"Error: Desktop screenshot not found at {desktop_base}", file=sys.stderr)
+                    return 1
+                result = analyzer.check_demo_scaling(desktop_base, mobile_base)
+                
+            elif args.ask:
+                # Custom question - handle placeholders
+                question = args.ask
+                base_path = abs_paths.get('base', '')
+                full_path = abs_paths.get('full', '')
+                canvas_path = abs_paths.get('canvas', '')
+                
+                # Collect referenced images and update question text
+                image_paths = []
+                image_labels = []
+                
+                if '$BASE_PATH' in question:
+                    if base_path and os.path.exists(base_path):
                         image_paths.append(base_path)
-                        question = question.replace('$BASE_PATH', 'the first image')
-                        question = question.replace(f'@{base_path}', 'the first image')
-                    if '$FULL_PATH' in question or '@' + full_path in question:
-                        image_paths.append(full_path)
-                        img_ref = f'image {len(image_paths)}'
-                        question = question.replace('$FULL_PATH', img_ref)
-                        question = question.replace(f'@{full_path}', img_ref)
-                    if '$CANVAS_PATH' in question or '@' + canvas_path in question:
-                        image_paths.append(canvas_path)
-                        img_ref = f'image {len(image_paths)}'
-                        question = question.replace('$CANVAS_PATH', img_ref)
-                        question = question.replace(f'@{canvas_path}', img_ref)
-                    
-                    if len(image_paths) > 1:
-                        result = analyzer.analyze_multiple_images(image_paths, question)
-                    elif len(image_paths) == 1:
-                        result = analyzer.analyze_single_image(image_paths[0], question)
+                        image_labels.append('base screenshot')
+                        question = question.replace('$BASE_PATH', f'the {image_labels[-1]}')
                     else:
-                        # No images referenced, use base image
-                        result = analyzer.analyze_single_image(base_path, question)
+                        print(f"Warning: Base path referenced but not found: {base_path}", file=sys.stderr)
+                        
+                if '$FULL_PATH' in question:
+                    if full_path and os.path.exists(full_path):
+                        image_paths.append(full_path)
+                        image_labels.append('full page screenshot')
+                        question = question.replace('$FULL_PATH', f'the {image_labels[-1]}')
+                    else:
+                        print(f"Warning: Full path referenced but not found: {full_path}", file=sys.stderr)
+                        
+                if '$CANVAS_PATH' in question:
+                    if canvas_path and os.path.exists(canvas_path):
+                        image_paths.append(canvas_path)
+                        image_labels.append('canvas screenshot')
+                        question = question.replace('$CANVAS_PATH', f'the {image_labels[-1]}')
+                    else:
+                        print(f"Warning: Canvas path referenced but not found: {canvas_path}", file=sys.stderr)
+                
+                # If no specific images referenced, use base image
+                if not image_paths:
+                    if base_path and os.path.exists(base_path):
+                        image_paths = [base_path]
+                    else:
+                        print("Error: No valid screenshot paths found", file=sys.stderr)
+                        return 1
+                
+                # Analyze with appropriate method
+                if len(image_paths) == 1:
+                    result = analyzer.analyze_single_image(image_paths[0], question)
                 else:
-                    return 0
-                
-                print(result)
+                    # Add context about which image is which
+                    if image_labels:
+                        question = f"{question}\n\nImages provided in order: {', '.join(image_labels)}"
+                    result = analyzer.analyze_multiple_images(image_paths, question)
+            else:
+                # No analysis requested
                 return 0
-                
-            except Exception as e:
-                print(f"Error during OpenAI analysis: {e}", file=sys.stderr)
-                return 1
-        
-        # Build the base command for non-OpenAI models
-        if args.model == 'gemini':
-            base_cmd = [self.GEMINI_CMD, '-p']
-        elif args.model == 'opus':
-            base_cmd = ['claude', '--model', 'opus', '-p']
-        elif args.model == 'sonnet':
-            base_cmd = ['claude', '--model', 'sonnet', '-p']
-        
-        if args.describe:
-            # Simple description mode
-            base_path = abs_paths.get('base', '')
-            cmd = base_cmd + [f'describe what you see in @{base_path}']
             
-        elif args.check_standards:
-            # Check standards mode
-            canvas_path = abs_paths.get('canvas', '')
-            standards_file = "/home/jason/mathnotes/DEMO-STANDARD.md"
-            prompt = (
-                "You're a multimodal model. You can process images and answer questions about them. "
-                f"The file @{standards_file} defines the dashed rectangle as the canvas. "
-                "Analyze how the drawing elements interact with this specific border. "
-                f"Does the demo in @{canvas_path} meet the standards? "
-                "Be very thorough and precise in your measurements."
-            )
-            cmd = base_cmd + [prompt]
-            
-        elif args.check_scaling:
-            # Check scaling mode - analyze both mobile and desktop
-            mobile_base = abs_paths.get('mobile_base', '')
-            desktop_base = abs_paths.get('desktop_base', '')
-            
-            prompt = (
-                "You're a multimodal model analyzing responsive web design. "
-                f"Compare the mobile version (@{mobile_base}) and desktop version (@{desktop_base}) "
-                "of this interactive demo. Analyze:\n"
-                "1. How well does the demo scale between viewports?\n"
-                "2. Are all interactive elements properly visible and accessible in both versions?\n"
-                "3. Does the demo maintain its functionality and visual clarity at both sizes?\n"
-                "4. Are there any layout issues, overlapping elements, or cut-off content?\n"
-                "5. Does the demo make good use of the available space in each viewport?\n"
-                "Be specific about any scaling issues you observe."
-            )
-            cmd = base_cmd + [prompt]
-            
-        elif args.ask:
-            # Custom question mode - replace placeholders
-            question = args.ask
-            base_path = abs_paths.get('base', '')
-            full_path = abs_paths.get('full', '')
-            canvas_path = abs_paths.get('canvas', '')
-            question = question.replace('$BASE_PATH', base_path)
-            question = question.replace('$FULL_PATH', full_path)
-            question = question.replace('$CANVAS_PATH', canvas_path)
-            cmd = base_cmd + [question]
-            
-        else:
+            print(result)
             return 0
-        
-        # Run the command
-        if self.verbose:
-            print(f"Running AI analysis: {' '.join(cmd)}")
             
-        result = subprocess.run(cmd)
-        return result.returncode
+        except Exception as e:
+            print(f"Error during OpenAI analysis: {e}", file=sys.stderr)
+            return 1
     
     def run(self) -> int:
         """Main entry point."""
