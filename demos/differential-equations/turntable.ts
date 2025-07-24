@@ -7,13 +7,13 @@ class TurntableDemo extends P5DemoBase {
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
   }
-  // Constants
-  private readonly TABLE_SIZE = 600;
-  private readonly RECORD_RADIUS = 280; // Increased from 200 to fill more canvas
+  // Constants - now dynamically scaled
+  private TABLE_SIZE = 600;
+  private RECORD_RADIUS = 280;
   private readonly ANGULAR_VELOCITY = 0.03;
   private readonly BUG_VELOCITY = 0.3;
-  private readonly BUG_SIZE = 8; // Increased from 5 for better visibility
-  private readonly ARROW_SCALAR = 20; // Increased from 15 for better visibility
+  private BUG_SIZE = 8;
+  private ARROW_SCALAR = 20;
 
   private readonly MODE_TO_CENTER = 'CENTER';
   private readonly MODE_PARALLEL = 'PARALLEL';
@@ -49,8 +49,30 @@ class TurntableDemo extends P5DemoBase {
     return 1.0; // Square aspect ratio
   }
 
+  private updateScaling(p: p5): void {
+    // Base size for scaling calculations
+    const baseSize = 600;
+    const minDimension = Math.min(p.width, p.height);
+    const scaleFactor = minDimension / baseSize;
+    
+    // Scale all size-related constants
+    this.TABLE_SIZE = minDimension;
+    // Leave some padding around the record (90% of available space)
+    this.RECORD_RADIUS = (minDimension * 0.9) / 2;
+    this.BUG_SIZE = Math.max(6, 8 * scaleFactor); // Min size of 6 for visibility
+    // Larger minimum arrow scalar on mobile for better visibility
+    const minArrowScalar = p.width < 768 ? 25 : 15;
+    this.ARROW_SCALAR = Math.max(minArrowScalar, 20 * scaleFactor);
+  }
+
+  protected onResize(p: p5, size: CanvasSize): void {
+    this.updateScaling(p);
+  }
+
   protected createSketch(p: p5): void {
     p.setup = () => {
+      // Update scaling based on canvas size
+      this.updateScaling(p);
       
       // Set up controls
       this.setupControls(p);
@@ -147,6 +169,10 @@ class TurntableDemo extends P5DemoBase {
     sliderRow.style.justifyContent = 'center';
     sliderRow.style.gap = '20px';
     sliderRow.style.flexWrap = 'wrap';
+    // Reduce gap on mobile
+    if (window.innerWidth < 768) {
+      sliderRow.style.gap = '10px';
+    }
     controlPanel.appendChild(sliderRow);
     
     // Bug locomotive speed slider - default to 90% (2.7 out of 3)
@@ -175,7 +201,7 @@ class TurntableDemo extends P5DemoBase {
     
     // Mode radio buttons in separate row
     const radioRow = document.createElement('div');
-    radioRow.style.marginTop = '20px';
+    radioRow.style.marginTop = window.innerWidth < 768 ? '10px' : '20px';
     radioRow.style.textAlign = 'center';
     controlPanel.appendChild(radioRow);
     
@@ -258,14 +284,16 @@ class TurntableDemo extends P5DemoBase {
   private drawBugArrow(p: p5): void {
     const locomotiveMotionVector = this.getLocomotiveMotionVector(p).mult(this.ARROW_SCALAR);
     p.stroke(this.locomotiveArrowColor);
-    p.strokeWeight(3); // Thicker arrows for better visibility
+    const strokeWeight = p.width < 768 ? 4 : 3; // Thicker on mobile
+    p.strokeWeight(strokeWeight);
     p.line(this.bug_x, this.bug_y, this.bug_x + locomotiveMotionVector.x, this.bug_y + locomotiveMotionVector.y);
     // Add arrowhead
     p.push();
     p.translate(this.bug_x + locomotiveMotionVector.x, this.bug_y + locomotiveMotionVector.y);
     p.rotate(p.atan2(locomotiveMotionVector.y, locomotiveMotionVector.x));
-    p.line(0, 0, -5, -3);
-    p.line(0, 0, -5, 3);
+    const arrowSize = p.width < 768 ? 8 : 5;
+    p.line(0, 0, -arrowSize, -arrowSize * 0.6);
+    p.line(0, 0, -arrowSize, arrowSize * 0.6);
     p.pop();
     p.strokeWeight(1);
   }
@@ -273,14 +301,16 @@ class TurntableDemo extends P5DemoBase {
   private drawRotationArrow(p: p5): void {
     const rotationalMotionVector = this.getRotationalMotionVector(p).mult(this.ARROW_SCALAR);
     p.stroke(this.rotationalArrowColor);
-    p.strokeWeight(3); // Thicker arrows for better visibility
+    const strokeWeight = p.width < 768 ? 4 : 3; // Thicker on mobile
+    p.strokeWeight(strokeWeight);
     p.line(this.bug_x, this.bug_y, this.bug_x + rotationalMotionVector.x, this.bug_y + rotationalMotionVector.y);
     // Add arrowhead
     p.push();
     p.translate(this.bug_x + rotationalMotionVector.x, this.bug_y + rotationalMotionVector.y);
     p.rotate(p.atan2(rotationalMotionVector.y, rotationalMotionVector.x));
-    p.line(0, 0, -5, -3);
-    p.line(0, 0, -5, 3);
+    const arrowSize = p.width < 768 ? 8 : 5;
+    p.line(0, 0, -arrowSize, -arrowSize * 0.6);
+    p.line(0, 0, -arrowSize, arrowSize * 0.6);
     p.pop();
     p.strokeWeight(1);
   }
@@ -288,14 +318,16 @@ class TurntableDemo extends P5DemoBase {
   private drawCombinedArrow(p: p5): void {
     const combinedMotionVector = this.getCombinedMotionVector(p).mult(this.ARROW_SCALAR);
     p.stroke(this.combinedArrowColor);
-    p.strokeWeight(3); // Thicker arrows for better visibility
+    const strokeWeight = p.width < 768 ? 4 : 3; // Thicker on mobile
+    p.strokeWeight(strokeWeight);
     p.line(this.bug_x, this.bug_y, this.bug_x + combinedMotionVector.x, this.bug_y + combinedMotionVector.y);
     // Add arrowhead
     p.push();
     p.translate(this.bug_x + combinedMotionVector.x, this.bug_y + combinedMotionVector.y);
     p.rotate(p.atan2(combinedMotionVector.y, combinedMotionVector.x));
-    p.line(0, 0, -5, -3);
-    p.line(0, 0, -5, 3);
+    const arrowSize = p.width < 768 ? 8 : 5;
+    p.line(0, 0, -arrowSize, -arrowSize * 0.6);
+    p.line(0, 0, -arrowSize, arrowSize * 0.6);
     p.pop();
     p.strokeWeight(1);
   }

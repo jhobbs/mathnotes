@@ -18,7 +18,7 @@
     {% endif %}
     
     <!-- Main stylesheet -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}?v=2">
     
     <!-- Main stylesheet loaded above contains all demo styles -->
     
@@ -38,10 +38,30 @@
     
     <footer>
         {% block footer %}
-        <p>&copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: <a href="https://github.com/jhobbs/mathnotes/commit/{{ app_version }}" target="_blank" rel="noopener">{{ app_version }}</a></p>
+        <p>
+            <span class="copyright">&copy; {{ current_year }} Jason Hobbs. All rights reserved.</span>
+            <span class="separator"> | </span>
+            <span class="version">Version: <a href="https://github.com/jhobbs/mathnotes/commit/{{ app_version }}" target="_blank" rel="noopener">{{ app_version }}</a></span>
+        </p>
         {% endblock %}
     </footer>
     
+    <script nonce="{{ csp_nonce }}">
+    // Debug footer CSS on mobile
+    if (window.innerWidth <= 768) {
+        const footer = document.querySelector('footer');
+        const copyright = document.querySelector('.copyright');
+        const separator = document.querySelector('.separator');
+        const version = document.querySelector('.version');
+        
+        console.log('[probe] Footer width:', window.innerWidth);
+        console.log('[probe] Copyright display:', copyright ? getComputedStyle(copyright).display : 'not found');
+        console.log('[probe] Separator display:', separator ? getComputedStyle(separator).display : 'not found');
+        console.log('[probe] Version display:', version ? getComputedStyle(version).display : 'not found');
+        console.log('[probe] Copyright text:', copyright ? copyright.textContent : 'not found');
+        console.log('[probe] Version text:', version ? version.textContent : 'not found');
+    }
+    </script>
     
     <!-- Math content toggle functionality -->
     <script nonce="{{ csp_nonce }}">

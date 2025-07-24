@@ -383,6 +383,73 @@ table th {
     }
 }
 
+/* Footer responsive styles */
+footer {
+    padding: 1rem;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Mobile footer improvements */
+@media (max-width: 768px) {
+    footer {
+        padding: 1rem 0.5rem;
+        width: 100%;
+    }
+    
+    footer p {
+        font-size: 0.875rem;
+        line-height: 1.8;
+        white-space: normal;
+        width: 100%;
+        text-align: center;
+    }
+    
+    /* Hide the separator on mobile */
+    footer .separator {
+        display: none !important;
+    }
+    
+    /* Make copyright and version stack */
+    footer p .copyright,
+    footer p .version {
+        display: block !important;
+        text-align: center;
+        width: 100%;
+        white-space: nowrap;
+    }
+    
+    /* Add some space between the stacked elements */
+    footer .copyright {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Demo control panel mobile optimizations */
+@media (max-width: 768px) {
+    .demo-controls {
+        padding: 0.5rem;
+    }
+    
+    .demo-slider-container {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .demo-label {
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    .demo-radio label {
+        font-size: 0.875rem;
+        margin: 0 0.25rem;
+    }
+}
+
 /* Block reference links */
 .block-reference {
     color: var(--link-color);

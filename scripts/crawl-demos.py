@@ -197,7 +197,7 @@ Examples:
         
         # Create analyzer with selected model
         try:
-            analyzer = OpenAIImageAnalyzer(model=args.model)
+            analyzer = OpenAIImageAnalyzer(model=args.model, verbose=self.verbose)
         except Exception as e:
             print(f"Error initializing OpenAI analyzer: {e}", file=sys.stderr)
             return 1
@@ -224,15 +224,15 @@ Examples:
                 result = analyzer.check_demo_standards(canvas_path, standards_content)
                 
             elif args.check_scaling:
-                mobile_base = abs_paths.get('mobile_base', '')
-                desktop_base = abs_paths.get('desktop_base', '')
-                if not mobile_base or not os.path.exists(mobile_base):
-                    print(f"Error: Mobile screenshot not found at {mobile_base}", file=sys.stderr)
+                mobile_full = abs_paths.get('mobile_full', '')
+                desktop_full = abs_paths.get('desktop_full', '')
+                if not mobile_full or not os.path.exists(mobile_full):
+                    print(f"Error: Mobile full page screenshot not found at {mobile_full}", file=sys.stderr)
                     return 1
-                if not desktop_base or not os.path.exists(desktop_base):
-                    print(f"Error: Desktop screenshot not found at {desktop_base}", file=sys.stderr)
+                if not desktop_full or not os.path.exists(desktop_full):
+                    print(f"Error: Desktop full page screenshot not found at {desktop_full}", file=sys.stderr)
                     return 1
-                result = analyzer.check_demo_scaling(desktop_base, mobile_base)
+                result = analyzer.check_demo_scaling(desktop_full, mobile_full)
                 
             elif args.ask:
                 # Custom question - handle placeholders
@@ -278,6 +278,13 @@ Examples:
                         return 1
                 
                 # Analyze with appropriate method
+                if self.verbose:
+                    print(f"\n=== OpenAI Analysis Request ===", file=sys.stderr)
+                    print(f"Model: {analyzer.model}", file=sys.stderr)
+                    print(f"Images: {image_paths}", file=sys.stderr)
+                    print(f"Prompt: {question}", file=sys.stderr)
+                    print(f"==============================\n", file=sys.stderr)
+                
                 if len(image_paths) == 1:
                     result = analyzer.analyze_single_image(image_paths[0], question)
                 else:
@@ -319,8 +326,8 @@ Examples:
             
             # Validate we have the necessary paths
             if args.check_scaling:
-                # For scaling check, we need both mobile and desktop base paths
-                required_paths = ['mobile_base', 'desktop_base']
+                # For scaling check, we need both mobile and desktop full paths
+                required_paths = ['mobile_full', 'desktop_full']
                 missing_paths = [p for p in required_paths if p not in paths or not os.path.exists(paths.get(p, ''))]
                 
                 if missing_paths:

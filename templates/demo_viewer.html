@@ -17,11 +17,12 @@
   
   /* Customize footer for navigation */
   footer {
-    margin-top: 1rem !important;
+    margin-top: 0.25rem !important;
+    margin-bottom: 0 !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 20px;
+    padding: 0.25rem 20px 0 20px;
   }
   
   .footer-nav-controls {
@@ -44,12 +45,14 @@
   }
   
   .footer-copyright {
-    font-size: 0.85em;
+    font-size: 0.5em;
     color: var(--footer-color);
+    opacity: 0.6;
   }
   
   .footer-copyright p {
     margin: 0;
+    line-height: 1;
   }
   
   .viewer-container {
@@ -171,6 +174,55 @@
     }
     .demo-counter {
       font-size: 0.8em;
+    }
+  }
+  
+  /* Mobile footer improvements for demo viewer */
+  @media (max-width: 768px) {
+    footer {
+      flex-direction: column;
+      gap: 0.25rem;
+      text-align: center;
+      padding: 0.25rem 10px 0 10px;
+      margin-bottom: 0 !important;
+    }
+    
+    .footer-copyright {
+      width: 100%;
+      font-size: 0.45em;
+    }
+    
+    .footer-copyright p {
+      margin: 0;
+      text-align: center;
+      line-height: 1.1;
+    }
+    
+    /* Hide the separator on mobile */
+    .footer-copyright .separator {
+      display: none !important;
+    }
+    
+    /* Make copyright and version stack */
+    .footer-copyright .copyright,
+    .footer-copyright .version {
+      display: block !important;
+      width: 100%;
+      white-space: nowrap;
+    }
+    
+    /* Reduce space between the stacked elements */
+    .footer-copyright .copyright {
+      margin-bottom: 0.1rem;
+    }
+    
+    /* Make nav controls more compact on mobile */
+    .footer-nav-controls {
+      gap: 10px;
+    }
+    
+    .footer-demo-info {
+      font-size: 0.85em;
     }
   }
 </style>
@@ -377,6 +429,10 @@ window.addEventListener('beforeunload', () => {
   <span id="footer-demo-title"></span>
 </div>
 <div class="footer-copyright">
-  <p>&copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: <a href="https://github.com/jhobbs/mathnotes/commit/{{ app_version }}" target="_blank" rel="noopener">{{ app_version }}</a></p>
+  <p>
+    <span class="copyright">&copy; {{ current_year }} Jason Hobbs. All rights reserved.</span>
+    <span class="separator"> | </span>
+    <span class="version">Version: <a href="https://github.com/jhobbs/mathnotes/commit/{{ app_version }}" target="_blank" rel="noopener">{{ app_version }}</a></span>
+  </p>
 </div>
 {% endblock %}
