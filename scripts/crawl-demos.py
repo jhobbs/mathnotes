@@ -13,6 +13,22 @@ from pathlib import Path
 from typing import Optional, List, Tuple
 import shlex
 
+# Import the OpenAI analyzer if available
+try:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    # Import using the actual filename with hyphens
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "openai_image_analysis", 
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "openai-image-analysis.py")
+    )
+    openai_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(openai_module)
+    OpenAIImageAnalyzer = openai_module.OpenAIImageAnalyzer
+    OPENAI_AVAILABLE = True
+except (ImportError, Exception):
+    OPENAI_AVAILABLE = False
+
 
 class DemoCrawler:
     DEFAULT_URL = "http://web-dev:5000"
@@ -37,6 +53,11 @@ Examples:
   %(prog)s -d game-of-life --describe   # Get AI description
   %(prog)s -d pendulum --ask 'what physics concepts are illustrated?'
   %(prog)s -d pendulum --check-standards
+  %(prog)s -d electric-field --check-scaling  # Analyze mobile/desktop scaling
+  %(prog)s -d pendulum --describe --model opus  # Use Claude Opus
+  %(prog)s -d game-of-life --check-scaling --model sonnet  # Use Claude Sonnet
+  %(prog)s -d pendulum --check-scaling --model openai  # Use OpenAI GPT-4.1-mini
+  %(prog)s -d diagonalization --describe --model gpt-4.1  # Use OpenAI GPT-4.1
             """
         )
         
@@ -63,6 +84,14 @@ Examples:
                                'Use $BASE_PATH, $FULL_PATH, or $CANVAS_PATH in questions')
         parser.add_argument('--check-standards', action='store_true',
                           help='Check if demo meets standards in DEMO-STANDARD.md')
+        parser.add_argument('--check-scaling', action='store_true',
+                          help='Analyze how well demo handles scaling between mobile and desktop')
+        model_choices = ['gemini', 'opus', 'sonnet']
+        if OPENAI_AVAILABLE:
+            model_choices.extend(['openai', 'gpt-4.1-mini', 'gpt-4.1'])
+        parser.add_argument('--model', choices=model_choices,
+                          default='gemini',
+                          help='AI model to use for analysis (default: gemini)')
         
         return parser.parse_args()
     
@@ -94,11 +123,18 @@ Examples:
         if args.demo:
             cmd.extend(['--demo', args.demo])
             
-        if args.viewport:
-            cmd.extend(['--viewport', args.viewport])
+        # Handle viewport selection
+        viewport_to_use = args.viewport
+        
+        # Force both viewports for check-scaling mode
+        if args.check_scaling:
+            viewport_to_use = 'both'
+            
+        if viewport_to_use:
+            cmd.extend(['--viewport', viewport_to_use])
             # Set viewport for analysis
-            if args.viewport in ['desktop', 'mobile']:
-                self.viewport_for_analysis = args.viewport
+            if viewport_to_use in ['desktop', 'mobile']:
+                self.viewport_for_analysis = viewport_to_use
         
         return cmd
     
@@ -116,41 +152,148 @@ Examples:
         except subprocess.CalledProcessError as e:
             return e.returncode, str(e)
     
-    def extract_screenshot_paths(self, output: str) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+    def extract_screenshot_paths(self, output: str, check_scaling: bool = False) -> dict:
         """Extract screenshot paths from crawler output."""
-        # Look for viewport-specific paths
-        base_pattern = f"^{self.viewport_for_analysis}-base: (.+)$"
-        full_pattern = f"^{self.viewport_for_analysis}-full: (.+)$"
-        canvas_pattern = f"^{self.viewport_for_analysis}-canvas: (.+)$"
+        paths = {}
         
-        base_path = None
-        full_path = None
-        canvas_path = None
-        
-        for line in output.splitlines():
-            base_match = re.match(base_pattern, line)
-            if base_match:
-                base_path = base_match.group(1)
+        if check_scaling:
+            # Extract both mobile and desktop paths
+            for viewport in ['mobile', 'desktop']:
+                base_pattern = f"^{viewport}-base: (.+)$"
+                full_pattern = f"^{viewport}-full: (.+)$"
+                canvas_pattern = f"^{viewport}-canvas: (.+)$"
                 
-            full_match = re.match(full_pattern, line)
-            if full_match:
-                full_path = full_match.group(1)
-                
-            canvas_match = re.match(canvas_pattern, line)
-            if canvas_match:
-                canvas_path = canvas_match.group(1)
+                for line in output.splitlines():
+                    base_match = re.match(base_pattern, line)
+                    if base_match:
+                        paths[f'{viewport}_base'] = base_match.group(1)
+                        
+                    full_match = re.match(full_pattern, line)
+                    if full_match:
+                        paths[f'{viewport}_full'] = full_match.group(1)
+                        
+                    canvas_match = re.match(canvas_pattern, line)
+                    if canvas_match:
+                        paths[f'{viewport}_canvas'] = canvas_match.group(1)
+        else:
+            # Original behavior - single viewport
+            base_pattern = f"^{self.viewport_for_analysis}-base: (.+)$"
+            full_pattern = f"^{self.viewport_for_analysis}-full: (.+)$"
+            canvas_pattern = f"^{self.viewport_for_analysis}-canvas: (.+)$"
+            
+            for line in output.splitlines():
+                base_match = re.match(base_pattern, line)
+                if base_match:
+                    paths['base'] = base_match.group(1)
+                    
+                full_match = re.match(full_pattern, line)
+                if full_match:
+                    paths['full'] = full_match.group(1)
+                    
+                canvas_match = re.match(canvas_pattern, line)
+                if canvas_match:
+                    paths['canvas'] = canvas_match.group(1)
         
-        return base_path, full_path, canvas_path
+        return paths
     
-    def run_ai_analysis(self, base_path: str, full_path: str, canvas_path: str, 
-                       args: argparse.Namespace) -> int:
+    def run_ai_analysis(self, paths: dict, args: argparse.Namespace) -> int:
         """Run AI analysis on the screenshots."""
+        # Convert all paths to absolute paths
+        abs_paths = {}
+        for key, path in paths.items():
+            if path and not os.path.isabs(path):
+                abs_paths[key] = os.path.abspath(path)
+            else:
+                abs_paths[key] = path
+        
+        # Handle OpenAI models
+        if args.model in ['openai', 'gpt-4.1-mini', 'gpt-4.1']:
+            if not OPENAI_AVAILABLE:
+                print("Error: OpenAI module not available", file=sys.stderr)
+                return 1
+            
+            # Use the actual model name, defaulting to gpt-4.1-mini for 'openai'
+            model_name = 'gpt-4.1-mini' if args.model == 'openai' else args.model
+            analyzer = OpenAIImageAnalyzer(model=model_name)
+            
+            try:
+                if args.describe:
+                    base_path = abs_paths.get('base', '')
+                    result = analyzer.describe_demo(base_path)
+                    
+                elif args.check_standards:
+                    canvas_path = abs_paths.get('canvas', '')
+                    # Read standards file if it exists
+                    standards_file = "/home/jason/mathnotes/DEMO-STANDARD.md"
+                    standards_content = None
+                    if os.path.exists(standards_file):
+                        with open(standards_file, 'r') as f:
+                            standards_content = f.read()
+                    result = analyzer.check_demo_standards(canvas_path, standards_content)
+                    
+                elif args.check_scaling:
+                    mobile_base = abs_paths.get('mobile_base', '')
+                    desktop_base = abs_paths.get('desktop_base', '')
+                    result = analyzer.check_demo_scaling(desktop_base, mobile_base)
+                    
+                elif args.ask:
+                    # Custom question - need to handle placeholders
+                    question = args.ask
+                    base_path = abs_paths.get('base', '')
+                    full_path = abs_paths.get('full', '')
+                    canvas_path = abs_paths.get('canvas', '')
+                    
+                    # For OpenAI, we need to handle image references differently
+                    # Extract all @path references and analyze them together
+                    image_paths = []
+                    if '$BASE_PATH' in question or '@' + base_path in question:
+                        image_paths.append(base_path)
+                        question = question.replace('$BASE_PATH', 'the first image')
+                        question = question.replace(f'@{base_path}', 'the first image')
+                    if '$FULL_PATH' in question or '@' + full_path in question:
+                        image_paths.append(full_path)
+                        img_ref = f'image {len(image_paths)}'
+                        question = question.replace('$FULL_PATH', img_ref)
+                        question = question.replace(f'@{full_path}', img_ref)
+                    if '$CANVAS_PATH' in question or '@' + canvas_path in question:
+                        image_paths.append(canvas_path)
+                        img_ref = f'image {len(image_paths)}'
+                        question = question.replace('$CANVAS_PATH', img_ref)
+                        question = question.replace(f'@{canvas_path}', img_ref)
+                    
+                    if len(image_paths) > 1:
+                        result = analyzer.analyze_multiple_images(image_paths, question)
+                    elif len(image_paths) == 1:
+                        result = analyzer.analyze_single_image(image_paths[0], question)
+                    else:
+                        # No images referenced, use base image
+                        result = analyzer.analyze_single_image(base_path, question)
+                else:
+                    return 0
+                
+                print(result)
+                return 0
+                
+            except Exception as e:
+                print(f"Error during OpenAI analysis: {e}", file=sys.stderr)
+                return 1
+        
+        # Build the base command for non-OpenAI models
+        if args.model == 'gemini':
+            base_cmd = [self.GEMINI_CMD, '-p']
+        elif args.model == 'opus':
+            base_cmd = ['claude', '--model', 'opus', '-p']
+        elif args.model == 'sonnet':
+            base_cmd = ['claude', '--model', 'sonnet', '-p']
+        
         if args.describe:
             # Simple description mode
-            cmd = [self.GEMINI_CMD, '-p', f'describe what you see in @{base_path}']
+            base_path = abs_paths.get('base', '')
+            cmd = base_cmd + [f'describe what you see in @{base_path}']
             
         elif args.check_standards:
             # Check standards mode
+            canvas_path = abs_paths.get('canvas', '')
             standards_file = "/home/jason/mathnotes/DEMO-STANDARD.md"
             prompt = (
                 "You're a multimodal model. You can process images and answer questions about them. "
@@ -159,15 +302,36 @@ Examples:
                 f"Does the demo in @{canvas_path} meet the standards? "
                 "Be very thorough and precise in your measurements."
             )
-            cmd = [self.GEMINI_CMD, '-p', prompt]
+            cmd = base_cmd + [prompt]
+            
+        elif args.check_scaling:
+            # Check scaling mode - analyze both mobile and desktop
+            mobile_base = abs_paths.get('mobile_base', '')
+            desktop_base = abs_paths.get('desktop_base', '')
+            
+            prompt = (
+                "You're a multimodal model analyzing responsive web design. "
+                f"Compare the mobile version (@{mobile_base}) and desktop version (@{desktop_base}) "
+                "of this interactive demo. Analyze:\n"
+                "1. How well does the demo scale between viewports?\n"
+                "2. Are all interactive elements properly visible and accessible in both versions?\n"
+                "3. Does the demo maintain its functionality and visual clarity at both sizes?\n"
+                "4. Are there any layout issues, overlapping elements, or cut-off content?\n"
+                "5. Does the demo make good use of the available space in each viewport?\n"
+                "Be specific about any scaling issues you observe."
+            )
+            cmd = base_cmd + [prompt]
             
         elif args.ask:
             # Custom question mode - replace placeholders
             question = args.ask
+            base_path = abs_paths.get('base', '')
+            full_path = abs_paths.get('full', '')
+            canvas_path = abs_paths.get('canvas', '')
             question = question.replace('$BASE_PATH', base_path)
             question = question.replace('$FULL_PATH', full_path)
             question = question.replace('$CANVAS_PATH', canvas_path)
-            cmd = [self.GEMINI_CMD, '-p', question]
+            cmd = base_cmd + [question]
             
         else:
             return 0
@@ -187,7 +351,7 @@ Examples:
         docker_cmd = self.build_docker_command(args)
         
         # Determine if we need to capture output for analysis
-        need_analysis = args.describe or args.ask or args.check_standards
+        need_analysis = args.describe or args.ask or args.check_standards or args.check_scaling
         
         if need_analysis:
             # Capture output to parse screenshot paths
@@ -198,19 +362,32 @@ Examples:
                 return returncode
             
             # Extract screenshot paths
-            base_path, full_path, canvas_path = self.extract_screenshot_paths(output)
+            paths = self.extract_screenshot_paths(output, args.check_scaling)
             
-            if base_path and os.path.exists(base_path):
-                # Run AI analysis
-                ai_returncode = self.run_ai_analysis(base_path, full_path, canvas_path, args)
+            # Validate we have the necessary paths
+            if args.check_scaling:
+                # For scaling check, we need both mobile and desktop base paths
+                required_paths = ['mobile_base', 'desktop_base']
+                missing_paths = [p for p in required_paths if p not in paths or not os.path.exists(paths.get(p, ''))]
                 
-                if ai_returncode != 0:
-                    print(f"Error: AI command failed with exit code {ai_returncode}", file=sys.stderr)
-                    return ai_returncode
+                if missing_paths:
+                    print(f"Error: Missing required screenshots for scaling check: {missing_paths}", file=sys.stderr)
+                    print("Make sure the demo was captured with both mobile and desktop viewports.", file=sys.stderr)
+                    print(output, file=sys.stderr)
+                    return 1
             else:
-                # If something went wrong, show the error
-                print(output, file=sys.stderr)
-                return 1
+                # For other modes, check if we have at least the base path
+                base_key = 'base' if not args.check_scaling else f'{self.viewport_for_analysis}_base'
+                if base_key not in paths or not os.path.exists(paths.get(base_key, '')):
+                    print(output, file=sys.stderr)
+                    return 1
+            
+            # Run AI analysis
+            ai_returncode = self.run_ai_analysis(paths, args)
+            
+            if ai_returncode != 0:
+                print(f"Error: AI command failed with exit code {ai_returncode}", file=sys.stderr)
+                return ai_returncode
                 
         else:
             # Just run the crawler normally
@@ -227,3 +404,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
