@@ -8,7 +8,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -21,7 +21,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "types": ["vite/client", "p5/global"],
+    "baseUrl": ".",
     "paths": {
+      "@framework": ["./demos-framework/src/index"],
       "@framework/*": ["./demos-framework/src/*"],
       "@demos/*": ["./demos/*"]
     }

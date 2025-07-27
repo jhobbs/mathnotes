@@ -41,10 +41,10 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   private fillRateSelect!: HTMLSelectElement;
   private startButton!: HTMLButtonElement;
   private resetButton!: HTMLButtonElement;
-  private toroidCheckbox!: p5.Element;
+  private toroidCheckbox!: any;
   private entDiv!: p5.Element;
   private colEntDiv!: p5.Element;
-  private ruleInput!: p5.Element;
+  private ruleInput!: any;
   private ruleNumber: number = 30;
   
   protected getStylePrefix(): string {
@@ -217,7 +217,11 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   private setupRuleInput(p: p5): void {
     // Create a div for the rule input that will be positioned over the canvas
     const ruleDiv = p.createDiv('Rule: ');
-    ruleDiv.parent(this.canvasParent || this.containerEl);
+    if (this.canvasParent) {
+      ruleDiv.parent(this.canvasParent);
+    } else if (this.containerEl) {
+      ruleDiv.parent(this.containerEl);
+    }
     ruleDiv.position(10, 5);
     ruleDiv.style('color', this.colors.text);
     ruleDiv.style('font-size', '14px');
@@ -392,7 +396,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       } else {
         p.fill(this.colors.background);
       }
-      p.stroke(this.colors.grid);
+      if (this.colors.grid) p.stroke(this.colors.grid);
       p.rect(x, y, this.cellSize, this.cellSize);
     }
   }
@@ -413,13 +417,13 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       for (let j = 0; j < 3; j++) {
         const posX = startX + j * (ruleBoxSize + 2);
         (pattern[j] === "1") ? p.fill(this.colors.foreground) : p.fill(this.colors.background);
-        p.stroke(this.colors.grid);
+        if (this.colors.grid) p.stroke(this.colors.grid);
         p.rect(posX, posY, ruleBoxSize, ruleBoxSize);
       }
       const centerX = startX + ((ruleBoxSize + 2) * 1);
       const posY2 = posY + ruleBoxSize + 2;
       (result === 1) ? p.fill(this.colors.foreground) : p.fill(this.colors.background);
-      p.stroke(this.colors.grid);
+      if (this.colors.grid) p.stroke(this.colors.grid);
       p.rect(centerX, posY2, ruleBoxSize, ruleBoxSize);
     }
   }
@@ -468,7 +472,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     }
   }
 
-  protected onColorSchemeChange(isDark: boolean): void {
+  protected onColorSchemeChange(_isDark: boolean): void {
     if (this.p5Instance) {
       this.p5Instance.background(this.colors.background);
       this.p5Instance.redraw();

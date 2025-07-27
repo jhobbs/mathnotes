@@ -127,7 +127,7 @@ export abstract class P5DemoBase {
    * Called when the window is resized
    * Override this to handle resize events in your demo
    */
-  protected onResize(p: p5, size: CanvasSize): void {
+  protected onResize(_p: p5, _size: CanvasSize): void {
     // Default implementation does nothing
     // Override in subclasses to handle resize
   }

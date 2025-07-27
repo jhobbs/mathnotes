@@ -1,4 +1,5 @@
 // Shared types for all demo modules
+import type p5 from 'p5';
 
 export interface DemoConfig {
   darkMode?: boolean;
@@ -26,3 +27,7 @@ export interface DemoEventHandlers {
   onThemeChange?: (darkMode: boolean) => void;
   onVisibilityChange?: (visible: boolean) => void;
 }
+
+// Re-export types from other modules for convenience
+export type { CanvasSize, DemoColors } from './demo-utils';
+export type { DemoMetadata } from './p5-base';

@@ -458,7 +458,7 @@ class DiagonalizationDemo extends P5DemoBase {
     // Color scheme changes are now handled by base class
   }
 
-  protected onResize(p: p5, size: CanvasSize): void {
+  protected onResize(p: p5, _size: CanvasSize): void {
     // Adjust cell size based on viewport width
     const isMobile = p.width < 768;
     this.CELL_SIZE = isMobile ? 30 : 40;
