@@ -36,10 +36,18 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
 // Store for loaded metadata
 const demoMetadata: Record<string, DemoMetadata> = {};
 
+// Extend Window interface for demo globals
+declare global {
+  interface Window {
+    demoRegistry: typeof demoRegistry;
+    demoMetadata: typeof demoMetadata;
+  }
+}
+
 // Expose registry and metadata globally for inline scripts
 console.log('[Demo Framework] Exposing registry to window');
-(window as any).demoRegistry = demoRegistry;
-(window as any).demoMetadata = demoMetadata;
+window.demoRegistry = demoRegistry;
+window.demoMetadata = demoMetadata;
 
 // Initialize demos on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -72,7 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const instance = module.default(container, config);
       
       // Store instance for cleanup
-      (container as any).__demoInstance = instance;
+      interface DemoContainer extends HTMLElement {
+        __demoInstance?: DemoInstance;
+      }
+      (container as DemoContainer).__demoInstance = instance;
       
       // Handle cleanup on page unload
       window.addEventListener('beforeunload', () => {

@@ -4,6 +4,14 @@ import * as math from 'mathjs';
 import type { DemoInstance, DemoConfig, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
+// Extend p5.Element to include slider DOM properties
+interface P5SliderElement extends p5.Element {
+  elt: HTMLInputElement & {
+    min: string;
+    max: string;
+  };
+}
+
 class ProjectionDemo extends P5DemoBase {
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
@@ -52,18 +60,18 @@ class ProjectionDemo extends P5DemoBase {
     // Update slider ranges if they exist
     if (this.translateXSlider) {
       const currentX = this.translateXSlider.value() as number;
-      (this.translateXSlider as any).elt.min = -this.translationRange;
-      (this.translateXSlider as any).elt.max = this.translationRange;
+      (this.translateXSlider as P5SliderElement).elt.min = String(-this.translationRange);
+      (this.translateXSlider as P5SliderElement).elt.max = String(this.translationRange);
       this.translateXSlider.value(currentX);
       
       const currentY = this.translateYSlider.value() as number;
-      (this.translateYSlider as any).elt.min = -this.translationRange;
-      (this.translateYSlider as any).elt.max = this.translationRange;
+      (this.translateYSlider as P5SliderElement).elt.min = String(-this.translationRange);
+      (this.translateYSlider as P5SliderElement).elt.max = String(this.translationRange);
       this.translateYSlider.value(currentY);
       
       const currentZ = this.translateZSlider.value() as number;
-      (this.translateZSlider as any).elt.min = -this.translationRange;
-      (this.translateZSlider as any).elt.max = this.translationRange;
+      (this.translateZSlider as P5SliderElement).elt.min = String(-this.translationRange);
+      (this.translateZSlider as P5SliderElement).elt.max = String(this.translationRange);
       this.translateZSlider.value(currentZ);
     }
     

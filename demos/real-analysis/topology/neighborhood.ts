@@ -105,10 +105,14 @@ class NeighborhoodDemo extends P5DemoBase {
   protected updateColors(p: p5): void {
     super.updateColors(p);
     // Use accent color with transparency for outer neighborhood
-    const accentColor = this.colors.accent as any;
-    this.outerColor = p.color(accentColor.levels[0], accentColor.levels[1], accentColor.levels[2], 80);
+    const accentColor = this.colors.accent;
+    // Extract RGB values using p5's color methods
+    const r = p.red(accentColor);
+    const g = p.green(accentColor);
+    const b = p.blue(accentColor);
+    this.outerColor = p.color(r, g, b, 80);
     // Create complementary color for inner neighborhoods
-    this.innerColor = p.color(255 - accentColor.levels[0], 150, 100 - accentColor.levels[2], 100);
+    this.innerColor = p.color(255 - r, 150, 100 - b, 100);
   }
   
   private drawGrid(p: p5): void {
@@ -343,7 +347,7 @@ class NeighborhoodDemo extends P5DemoBase {
       if (Math.abs(this.zoomLevel - 1) < 0.1) {
         // Only use button zoom if we're at default zoom
         const lastInnerPoint = this.neighborhoods[this.neighborhoods.length - 1].innerPoints[this.neighborhoods[this.neighborhoods.length - 1].innerPoints.length - 1];
-        this.zoomCenter = (this.p5Instance as any).createVector(lastInnerPoint.x, lastInnerPoint.y);
+        this.zoomCenter = this.p5Instance!.createVector(lastInnerPoint.x, lastInnerPoint.y);
         this.zoomLevel = 3;
         this.isZoomed = true;
       } else {
