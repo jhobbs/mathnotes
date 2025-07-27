@@ -6,10 +6,6 @@ declare global {
 }
 
 export async function initMathJax() {
-  // Check if we're in development mode (Vite dev server)
-  const isDev = window.location.port === '5173' || 
-                window.location.hostname === 'localhost' && window.location.port === '5000';
-  
   // Configure MathJax before loading
   window.MathJax = {
     tex: {
