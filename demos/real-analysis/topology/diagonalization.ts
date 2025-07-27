@@ -10,7 +10,7 @@ class DiagonalizationDemo extends P5DemoBase {
   // Configuration
   private readonly SEQUENCE_LENGTH = 8;
   private readonly NUM_SEQUENCES = 8;
-  private readonly CELL_SIZE = 40;
+  private CELL_SIZE = 40;
   private readonly HIGHLIGHT_DURATION = 1000; // milliseconds
   private readonly SHIFT_DURATION = 1500; // milliseconds for shifting animation
   private readonly POST_SHIFT_PAUSE = 500; // milliseconds to pause after shift
@@ -44,6 +44,10 @@ class DiagonalizationDemo extends P5DemoBase {
   }
 
   protected createSketch(p: p5): void {
+    // Initialize cell size based on initial width
+    const isMobile = p.width < 768;
+    this.CELL_SIZE = isMobile ? 30 : 40;
+    
     // Helper function for subscripts
     const getSubscript = (num: number): string => {
       const subscripts = ['₀', '₁', '₂', '₃', '₄', '₅', '₆', '₇', '₈', '₉'];
@@ -143,9 +147,11 @@ class DiagonalizationDemo extends P5DemoBase {
       // Title
       p.fill(this.colors.text);
       p.textAlign(p.CENTER, p.CENTER);
-      p.textSize(16);
+      const isMobile = p.width < 768;
+      p.textSize(isMobile ? 14 : 16);
       const endPosition = this.startingPositionNumber + this.SEQUENCE_LENGTH - 1;
-      p.text(`Binary Sequences (showing positions ${this.startingPositionNumber}-${endPosition} of infinite sequences)`, p.width/2, 30);
+      const titleY = isMobile ? 40 : 30; // More space at top on mobile
+      p.text(`(showing positions ${this.startingPositionNumber}-${endPosition} of infinite sequences)`, p.width/2, titleY);
       
       // Draw the table of sequences
       drawSequenceTable(p);
@@ -163,7 +169,8 @@ class DiagonalizationDemo extends P5DemoBase {
 
     const drawSequenceTable = (p: p5) => {
       const startX = (p.width - this.SEQUENCE_LENGTH * this.CELL_SIZE) / 2;
-      const startY = 80;
+      const isMobile = p.width < 768;
+      const startY = isMobile ? 90 : 80; // Adjust for mobile title position
       
       // Calculate shift offset for smooth animation
       let shiftOffsetX = 0;
@@ -181,7 +188,7 @@ class DiagonalizationDemo extends P5DemoBase {
         if (labelY >= startY - this.CELL_SIZE && labelY <= startY + this.NUM_SEQUENCES * this.CELL_SIZE + this.CELL_SIZE) {
           p.fill(this.colors.text);
           p.textAlign(p.RIGHT, p.CENTER);
-          p.textSize(14);
+          p.textSize(isMobile ? 12 : 14);
           p.text(`s${getSubscript(this.startingSequenceNumber + i)}:`, startX - 10, labelY);
           
           // Draw ellipsis to indicate infinite sequence
@@ -249,7 +256,7 @@ class DiagonalizationDemo extends P5DemoBase {
           }
           p.noStroke();
           p.textAlign(p.CENTER, p.CENTER);
-          p.textSize(20);
+          p.textSize(isMobile ? 16 : 20);
           const digitIndex = this.startingPositionNumber - 1 + j;
           const digit = getSequenceDigit(i, digitIndex);
           p.text(digit, x + this.CELL_SIZE/2, y + this.CELL_SIZE/2);
@@ -269,7 +276,9 @@ class DiagonalizationDemo extends P5DemoBase {
 
     const drawConstructedSequence = (p: p5) => {
       const startX = (p.width - this.SEQUENCE_LENGTH * this.CELL_SIZE) / 2;
-      const startY = 80 + this.NUM_SEQUENCES * this.CELL_SIZE + 80;
+      const isMobile = p.width < 768;
+      const sequenceTableY = isMobile ? 90 : 80;
+      const startY = sequenceTableY + this.NUM_SEQUENCES * this.CELL_SIZE + 80;
       
       // Calculate shift offset
       let shiftOffsetX = 0;
@@ -283,7 +292,7 @@ class DiagonalizationDemo extends P5DemoBase {
       p.fill(this.colors.text);
       p.noStroke();
       p.textAlign(p.RIGHT, p.CENTER);
-      p.textSize(14);
+      p.textSize(isMobile ? 12 : 14);
       p.text("p:", startX - 10, startY + this.CELL_SIZE/2);
       
       // Set clipping
@@ -347,7 +356,7 @@ class DiagonalizationDemo extends P5DemoBase {
           }
           p.noStroke();
           p.textAlign(p.CENTER, p.CENTER);
-          p.textSize(20);
+          p.textSize(isMobile ? 16 : 20);
           p.text(this.constructedSequence[j], x + this.CELL_SIZE/2, y + this.CELL_SIZE/2);
         }
       }
@@ -378,7 +387,9 @@ class DiagonalizationDemo extends P5DemoBase {
     };
 
     const drawLabels = (p: p5) => {
-      const startY = 80 + this.NUM_SEQUENCES * this.CELL_SIZE + 80 + this.CELL_SIZE + 30;
+      const isMobile = p.width < 768;
+      const sequenceTableY = isMobile ? 90 : 80;
+      const startY = sequenceTableY + this.NUM_SEQUENCES * this.CELL_SIZE + 80 + this.CELL_SIZE + 30;
       
       p.fill(this.colors.text);
       p.textAlign(p.CENTER, p.TOP);
@@ -448,7 +459,13 @@ class DiagonalizationDemo extends P5DemoBase {
   }
 
   protected onResize(p: p5, size: CanvasSize): void {
-    const contentHeight = 30 + 80 + this.NUM_SEQUENCES * this.CELL_SIZE + 20 + 80 + this.CELL_SIZE + 30 + 50;
+    // Adjust cell size based on viewport width
+    const isMobile = p.width < 768;
+    this.CELL_SIZE = isMobile ? 30 : 40;
+    
+    const titleY = isMobile ? 40 : 30;
+    const sequenceTableY = isMobile ? 90 : 80;
+    const contentHeight = titleY + sequenceTableY + this.NUM_SEQUENCES * this.CELL_SIZE + 20 + 80 + this.CELL_SIZE + 30 + 50;
     p.resizeCanvas(p.width, contentHeight);
   }
 }
