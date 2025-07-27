@@ -11,37 +11,17 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 - Dark mode support with automatic detection
 - Comprehensive security headers including CSP with nonces
 
+## Security and Best Practices
+
+**Demo Crawler Guidelines**:
+* do not every read the screenshots from the demo crawler directly, only use --ask
+
 ## Common Commands
 
 ### Running Tests
 ```bash
-# Run all tests with coverage
-make test
-
-# Run specific test file
-pytest test/test_math_utils.py -v
-
-# Run tests in Docker (recommended for consistency)
-docker-compose run --rm web pytest
-
-# Run with coverage report
-make coverage
-./run-tests.sh coverage
-```
-
-### Code Quality
-```bash
-# Format code (Black, 100-char line length)
-make format
-
-# Lint code (Flake8)
-make lint
-
-# Type checking (mypy in strict mode)
-make type
-
-# Run all checks
-make check
+# Run all tests
+./run_tests.sh
 ```
 
 ### Development Server
@@ -49,22 +29,12 @@ make check
 # Integrated development (Flask + Vite HMR) - RECOMMENDED
 docker-compose -f docker-compose.dev.yml up
 
-# Build and run with standard Docker
+# Build and run with production docker
 docker-compose up --build
-
-# Direct Python (requires manual frontend build)
-./setup-dev.sh  # One-time setup
-python run.py   # or: python -m mathnotes
 ```
 
 ### Frontend Development
 ```bash
-# Build frontend assets for production
-make build-frontend
-
-# Development with Vite HMR (integrated with Flask)
-make dev-frontend
-
 # Test a specific page for JavaScript errors
 ./scripts/crawl-dev.sh --single-page "http://web-dev:5000/mathnotes/page-slug"
 
@@ -112,32 +82,10 @@ When implementing or documenting demos, use these commands to:
 - Document what each demo demonstrates
 - Check for visual bugs or layout problems
 
-### Deployment
-```bash
-# Deploy via GitHub Actions (automatic on push to main)
-git push origin main
-
-# Monitor deployment
-./scripts/monitor_deployment.sh
-
-# Check deployment status
-flyctl status
-flyctl logs
-```
-
 ### Content Management
 ```bash
-# Check for broken internal links
-python3 scripts/link_checker.py
-
 # Move files with automatic redirect handling
 ./scripts/move_file.sh old/path.md new/path.md
-
-# Check/fix missing redirects
-python3 scripts/check_redirects.py --fix
-
-# Find unstructured mathematical definitions
-python3 scripts/find_unstructured_definitions.py
 ```
 
 ## Architecture Overview
@@ -255,11 +203,9 @@ Development mode auto-detected via:
 2. Multi-platform Docker images (amd64, arm64)
 3. Push to ghcr.io registry
 4. Automatic deployment to Fly.io
-5. Monitor with `./scripts/monitor_deployment.sh`
 
 ### Production URLs
 - Primary: https://www.lacunary.org
-- Fly.io: https://mathnotes.fly.dev
 
 ## Troubleshooting
 
@@ -272,9 +218,6 @@ Development mode auto-detected via:
 
 ### Debug Commands
 ```bash
-# Check URL mappings
-python3 -c "from mathnotes import create_app; app = create_app(); print(app.url_mapper.url_mappings)"
-
 # Verify demo registration
 grep -r "registerDemo" mathnotes/demos-framework/src/main.ts
 
