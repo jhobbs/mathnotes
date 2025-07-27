@@ -98,7 +98,7 @@ export const metadata = {
   description: 'Interactive calculator for dilution processes using differential equations'
 };
 
-export default function createDilutionCalculatorDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {
+export default function createDilutionCalculatorDemo(container: HTMLElement, _config?: DemoConfig): DemoInstance {
   // Create the HTML structure
   container.innerHTML = `
     <div class="demo-content" id="dilution-calculator">

@@ -2,9 +2,6 @@ import p5 from 'p5';
 import type { DemoConfig, DemoInstance, CanvasSize, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
-interface ConstructedSequence {
-  digits: number[];
-}
 
 class DiagonalizationDemo extends P5DemoBase {
   // Configuration
@@ -28,7 +25,6 @@ class DiagonalizationDemo extends P5DemoBase {
   private startingPositionNumber = 1;
 
   // UI elements
-  private bottomInfo: HTMLElement;
   private generateNewSequences!: () => void;
 
   protected getStylePrefix(): string {
@@ -340,7 +336,7 @@ class DiagonalizationDemo extends P5DemoBase {
           p.fill((h + 120) % 360, s, b); // Complementary color
           p.colorMode(p.RGB);
         } else {
-          p.fill(this.colors.grid);
+          p.fill(this.colors.grid || p.color(200, 200, 200));
         }
         
         p.stroke(this.colors.stroke);

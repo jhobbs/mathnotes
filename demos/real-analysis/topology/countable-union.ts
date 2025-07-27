@@ -261,7 +261,7 @@ class CountableUnionDemo extends P5DemoBase {
     }
   }
 
-  protected onResize(p: p5, size: CanvasSize): void {
+  protected onResize(p: p5, _size: CanvasSize): void {
     this.cellSize = (p.width - 2 * this.margin) / this.gridSize;
   }
 }

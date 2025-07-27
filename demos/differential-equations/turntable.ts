@@ -3,15 +3,19 @@ import p5 from 'p5';
 import type { DemoConfig, DemoInstance, CanvasSize, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
+// Type for p5 radio element with proper methods
+interface P5Radio extends p5.Element {
+  option(value: string, label?: string): void;
+  selected(value?: string): string;
+  // value() is inherited from p5.Element but returns any
+}
+
 class TurntableDemo extends P5DemoBase {
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
   }
   // Constants - now dynamically scaled
-  private TABLE_SIZE = 600;
   private RECORD_RADIUS = 280;
-  private readonly ANGULAR_VELOCITY = 0.03;
-  private readonly BUG_VELOCITY = 0.3;
   private BUG_SIZE = 8;
   private ARROW_SCALAR = 20;
 
@@ -23,7 +27,7 @@ class TurntableDemo extends P5DemoBase {
   private locomotiveSlider!: p5.Element;
   private angularVelocitySlider!: p5.Element;
   private rhoSlider!: p5.Element;
-  private modeRadio!: p5.Element;
+  private modeRadio!: P5Radio;
   
   // State variables
   private bug_x!: number;
@@ -56,7 +60,6 @@ class TurntableDemo extends P5DemoBase {
     const scaleFactor = minDimension / baseSize;
     
     // Scale all size-related constants
-    this.TABLE_SIZE = minDimension;
     // Leave some padding around the record (90% of available space)
     this.RECORD_RADIUS = (minDimension * 0.9) / 2;
     this.BUG_SIZE = Math.max(6, 8 * scaleFactor); // Min size of 6 for visibility
@@ -65,7 +68,7 @@ class TurntableDemo extends P5DemoBase {
     this.ARROW_SCALAR = Math.max(minArrowScalar, 20 * scaleFactor);
   }
 
-  protected onResize(p: p5, size: CanvasSize): void {
+  protected onResize(p: p5, _size: CanvasSize): void {
     this.updateScaling(p);
   }
 
@@ -130,7 +133,7 @@ class TurntableDemo extends P5DemoBase {
     this.updateArrowStyles();
   }
 
-  protected onColorSchemeChange(isDark: boolean): void {
+  protected onColorSchemeChange(_isDark: boolean): void {
     // Update UI text colors when color scheme changes
     const labels = this.container.querySelectorAll('.demo-label, .demo-info');
     labels.forEach(label => {
@@ -181,7 +184,7 @@ class TurntableDemo extends P5DemoBase {
       'Bug locomotive speed',
       0, 3, 2.7, 0
     );
-    sliderRow.appendChild(this.locomotiveSlider.parent());
+    sliderRow.appendChild(this.locomotiveSlider.parent() as unknown as Node);
     
     // Record angular velocity slider - default to 15% (1.5 out of 10)
     this.angularVelocitySlider = this.createSlider(
@@ -189,7 +192,7 @@ class TurntableDemo extends P5DemoBase {
       'Record angular velocity',
       0, 10, 1.5, 0
     );
-    sliderRow.appendChild(this.angularVelocitySlider.parent());
+    sliderRow.appendChild(this.angularVelocitySlider.parent() as unknown as Node);
     
     // Start position slider
     this.rhoSlider = this.createSlider(
@@ -197,7 +200,7 @@ class TurntableDemo extends P5DemoBase {
       'Start position',
       0, 2 * p.PI, 0, p.PI / 32
     );
-    sliderRow.appendChild(this.rhoSlider.parent());
+    sliderRow.appendChild(this.rhoSlider.parent() as unknown as Node);
     
     // Mode radio buttons in separate row
     const radioRow = document.createElement('div');
@@ -205,7 +208,7 @@ class TurntableDemo extends P5DemoBase {
     radioRow.style.textAlign = 'center';
     controlPanel.appendChild(radioRow);
     
-    this.modeRadio = p.createRadio();
+    this.modeRadio = p.createRadio() as unknown as P5Radio;
     this.modeRadio.option(this.MODE_TO_CENTER, 'To Center');
     this.modeRadio.option(this.MODE_PARALLEL, 'Parallel to Start');
     this.modeRadio.option(this.MODE_TO_LIGHT, 'To Light');
@@ -357,7 +360,7 @@ class TurntableDemo extends P5DemoBase {
   }
 
   private moveBug(p: p5): void {
-    const mode = this.modeRadio.value() as string;
+    const mode = this.modeRadio.value();
     
     if (this.i > 10000
         || (mode === this.MODE_PARALLEL && this.getBugR(p) > this.RECORD_RADIUS * 1.5)
@@ -386,7 +389,7 @@ class TurntableDemo extends P5DemoBase {
 
   private getLocomotiveMotionVector(p: p5): p5.Vector {
     let locomotionDirection: number;
-    const mode = this.modeRadio.value() as string;
+    const mode = this.modeRadio.value();
     
     if (mode === this.MODE_PARALLEL) {
       locomotionDirection = this.rhoSlider.value() as number;

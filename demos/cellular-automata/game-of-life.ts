@@ -1,6 +1,6 @@
 // Conway's Game of Life - TypeScript module version
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig, DemoMetadata } from '@framework/types';
+import type { DemoInstance, DemoConfig, DemoMetadata, CanvasSize } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 interface GameOfLifeState {
@@ -119,7 +119,7 @@ class GameOfLifeDemo extends P5DemoBase {
 
   }
   
-  protected onResize(p: p5, size: CanvasSize): void {
+  protected onResize(_p: p5, size: CanvasSize): void {
     // Update grid dimensions
     const newCols = Math.floor(size.width / this.resolution);
     const newRows = Math.floor(size.height / this.resolution);
@@ -183,7 +183,7 @@ class GameOfLifeDemo extends P5DemoBase {
       'Initial Population',
       0, 1, 0.15, 0.01
     );
-    slidersRow.appendChild(this.initialPopulationSlider.parent());
+    slidersRow.appendChild(this.initialPopulationSlider.parent() as unknown as Node);
     
     // Frame rate slider
     this.frameRateSlider = this.createSlider(
@@ -195,7 +195,7 @@ class GameOfLifeDemo extends P5DemoBase {
         p.frameRate(frameRate);
       }
     );
-    slidersRow.appendChild(this.frameRateSlider.parent());
+    slidersRow.appendChild(this.frameRateSlider.parent() as unknown as Node);
     
     // Remove temp div
     controlPanel.removeChild(tempDiv);
@@ -317,7 +317,7 @@ class GameOfLifeDemo extends P5DemoBase {
     this.generationInfo.textContent = `Generation: ${this.state.generations}`;
   }
 
-  protected onColorSchemeChange(isDark: boolean): void {
+  protected onColorSchemeChange(_isDark: boolean): void {
     if (this.p5Instance) {
       this.p5Instance.redraw();
     }

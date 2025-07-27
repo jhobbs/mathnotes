@@ -1,6 +1,6 @@
 // Neighborhood demo - Interactive visualization for metric spaces
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig, CanvasSize, DemoMetadata } from '@framework/types';
+import type { DemoInstance, DemoConfig, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
 
 interface Neighborhood {
