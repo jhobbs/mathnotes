@@ -24,7 +24,7 @@ class PendulumDemo extends P5DemoBase {
   private start_time!: number;
   
   // UI elements
-  private infoDiv: HTMLElement;
+  private infoDiv!: HTMLElement;
   
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
@@ -58,15 +58,15 @@ class PendulumDemo extends P5DemoBase {
       
       // Wire length control
       this.lengthSlider = this.createSlider(p, 'Wire Length', 0, 20, 5, 0, () => this.redo());
-      sliderRow.appendChild(this.lengthSlider.parent());
+      sliderRow.appendChild(this.lengthSlider.parent() as unknown as Node);
       
       // Angular velocity control
       this.angularVelocitySlider = this.createSlider(p, 'Starting Angular Velocity', 0, 10, 0, 0, () => this.redo());
-      sliderRow.appendChild(this.angularVelocitySlider.parent());
+      sliderRow.appendChild(this.angularVelocitySlider.parent() as unknown as Node);
       
       // Starting angle control  
       this.angleSlider = this.createSlider(p, 'Starting Angle', 0, p.PI, p.PI / 4, p.PI / 32, () => this.redo());
-      sliderRow.appendChild(this.angleSlider.parent());
+      sliderRow.appendChild(this.angleSlider.parent() as unknown as Node);
     };
 
     const getTime = (): number => {

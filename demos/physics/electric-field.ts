@@ -1,6 +1,6 @@
 // Electric field simulation - TypeScript module version
 import p5 from 'p5';
-import type { DemoInstance, DemoConfig } from '@framework/types';
+import type { DemoInstance, DemoConfig, CanvasSize } from '@framework/types';
 import { P5DemoBase, type DemoMetadata } from '@framework';
 
 interface Particle {
@@ -216,7 +216,7 @@ class ElectricFieldDemo extends P5DemoBase {
     
   }
   
-  protected onResize(p: p5, size: CanvasSize): void {
+  protected onResize(p: p5, _size: CanvasSize): void {
     // Reinitialize force field grid with new dimensions
     this.forces = [];
     for (let i = p.width / this.numForces; i < p.width; i += p.width / this.numForces) {

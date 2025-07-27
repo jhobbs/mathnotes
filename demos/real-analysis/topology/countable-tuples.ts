@@ -515,7 +515,7 @@ class CountableTuplesDemo extends P5DemoBase {
     return y > 100 && y < this.canvasHeight - 100;
   }
 
-  protected onResize(p: p5, size: CanvasSize): void {
+  protected onResize(p: p5, _size: CanvasSize): void {
     this.canvasWidth = p.width;
     this.canvasHeight = p.height;
     this.centerY = this.canvasHeight / 2;

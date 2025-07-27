@@ -54,14 +54,17 @@ class ProjectionDemo extends P5DemoBase {
       const currentX = this.translateXSlider.value() as number;
       (this.translateXSlider as any).elt.min = -this.translationRange;
       (this.translateXSlider as any).elt.max = this.translationRange;
+      this.translateXSlider.value(currentX);
       
       const currentY = this.translateYSlider.value() as number;
       (this.translateYSlider as any).elt.min = -this.translationRange;
       (this.translateYSlider as any).elt.max = this.translationRange;
+      this.translateYSlider.value(currentY);
       
       const currentZ = this.translateZSlider.value() as number;
       (this.translateZSlider as any).elt.min = -this.translationRange;
       (this.translateZSlider as any).elt.max = this.translationRange;
+      this.translateZSlider.value(currentZ);
     }
     
     p.redraw();
@@ -93,11 +96,11 @@ class ProjectionDemo extends P5DemoBase {
       
       // Camera angle sliders (horizontal)
       this.cameraAngleXSlider = this.createSlider(p, 'X', -p.PI, p.PI, 0, 0.01, () => p.redraw());
-      cameraSliders.appendChild(this.cameraAngleXSlider.parent());
+      cameraSliders.appendChild(this.cameraAngleXSlider.parent() as unknown as Node);
       this.cameraAngleYSlider = this.createSlider(p, 'Y', -p.PI, p.PI, 0, 0.01, () => p.redraw());
-      cameraSliders.appendChild(this.cameraAngleYSlider.parent());
+      cameraSliders.appendChild(this.cameraAngleYSlider.parent() as unknown as Node);
       this.cameraAngleZSlider = this.createSlider(p, 'Z', -p.PI, p.PI, 0, 0.01, () => p.redraw());
-      cameraSliders.appendChild(this.cameraAngleZSlider.parent());
+      cameraSliders.appendChild(this.cameraAngleZSlider.parent() as unknown as Node);
       
       // Translation group
       const translateGroup = document.createElement('div');
@@ -111,17 +114,17 @@ class ProjectionDemo extends P5DemoBase {
       
       // Translation sliders (horizontal) - ranges will be updated after scaling
       this.translateXSlider = this.createSlider(p, 'X', -this.translationRange, this.translationRange, 0, 1, () => p.redraw());
-      translateSliders.appendChild(this.translateXSlider.parent());
+      translateSliders.appendChild(this.translateXSlider.parent() as unknown as Node);
       this.translateYSlider = this.createSlider(p, 'Y', -this.translationRange, this.translationRange, 0, 1, () => p.redraw());
-      translateSliders.appendChild(this.translateYSlider.parent());
+      translateSliders.appendChild(this.translateYSlider.parent() as unknown as Node);
       this.translateZSlider = this.createSlider(p, 'Z', -this.translationRange, this.translationRange, 100, 1, () => p.redraw());
-      translateSliders.appendChild(this.translateZSlider.parent());
+      translateSliders.appendChild(this.translateZSlider.parent() as unknown as Node);
       
       // Focal length (separate)
       const focalGroup = document.createElement('div');
       controlRow.appendChild(focalGroup);
       this.focalSlider = this.createSlider(p, 'Focal Length', 1, 30, 15, 0.1, () => p.redraw());
-      focalGroup.appendChild(this.focalSlider.parent());
+      focalGroup.appendChild(this.focalSlider.parent() as unknown as Node);
       
       // Initialize scaling
       this.updateScaling(p);

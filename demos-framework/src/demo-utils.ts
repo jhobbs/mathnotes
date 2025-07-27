@@ -14,8 +14,8 @@ export interface DemoColors {
   fill: p5.Color;
   text: string;
   accent: p5.Color;
-  grid?: p5.Color;
-  axis?: p5.Color;
+  grid: p5.Color;
+  axis: p5.Color;
 }
 
 export interface CanvasSize {
