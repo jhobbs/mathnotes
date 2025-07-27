@@ -378,8 +378,9 @@ export abstract class P5DemoBase {
    * Handle window resize
    */
   protected resize(): void {
-    if (this.p5Instance && typeof (this.p5Instance as any).windowResized === 'function') {
-      (this.p5Instance as any).windowResized();
+    // p5 instances have windowResized method but it's not in the type definitions
+    if (this.p5Instance && 'windowResized' in this.p5Instance && typeof this.p5Instance.windowResized === 'function') {
+      (this.p5Instance.windowResized as () => void)();
     }
   }
   

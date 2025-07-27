@@ -1,5 +1,10 @@
 import p5 from 'p5';
 
+// Extend p5.Element to include input method for sliders
+interface P5SliderElement extends p5.Element {
+  input(callback: () => void): void;
+}
+
 /**
  * Adds dark mode CSS styles for demo controls
  */
@@ -230,13 +235,13 @@ export function createSlider(
   labelDiv.style.fontSize = '14px';
   rowDiv.appendChild(labelDiv);
   
-  const slider = p.createSlider(min, max, value, step);
+  const slider = p.createSlider(min, max, value, step) as P5SliderElement;
   slider.parent(rowDiv);
   slider.class(`${className}-slider`);
   slider.style('width: 120px');
   
   if (onChange) {
-    (slider as any).input(onChange);
+    slider.input(onChange);
   }
   
   return slider;
