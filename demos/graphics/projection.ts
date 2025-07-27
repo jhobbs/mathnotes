@@ -17,12 +17,54 @@ class ProjectionDemo extends P5DemoBase {
   private translateYSlider!: p5.Element;
   private translateZSlider!: p5.Element;
   
+  // Scaling factors
+  private dotScale: number = 1;
+  private featureDotSize: number = 100;
+  private gridDotSize: number = 5;
+  private translationRange: number = 200;
+  
   protected getStylePrefix(): string {
     return 'projection';
   }
   
   protected getAspectRatio(): number {
     return 0.5;
+  }
+  
+  private updateScaling(p: p5): void {
+    // Base scaling on the smaller dimension for consistent appearance
+    const baseSize = Math.min(p.width, p.height);
+    this.dotScale = baseSize / 400; // 400 is our reference size
+    
+    // Scale dot sizes - larger on mobile for better visibility
+    const isMobile = p.width < 768;
+    this.featureDotSize = isMobile ? 150 * this.dotScale : 100 * this.dotScale;
+    this.gridDotSize = isMobile ? 12 * this.dotScale : 5 * this.dotScale;
+    
+    // Scale translation range based on canvas size
+    this.translationRange = baseSize * 0.5;
+  }
+  
+  protected onResize(p: p5): void {
+    // Update scaling when canvas resizes
+    this.updateScaling(p);
+    
+    // Update slider ranges if they exist
+    if (this.translateXSlider) {
+      const currentX = this.translateXSlider.value() as number;
+      (this.translateXSlider as any).elt.min = -this.translationRange;
+      (this.translateXSlider as any).elt.max = this.translationRange;
+      
+      const currentY = this.translateYSlider.value() as number;
+      (this.translateYSlider as any).elt.min = -this.translationRange;
+      (this.translateYSlider as any).elt.max = this.translationRange;
+      
+      const currentZ = this.translateZSlider.value() as number;
+      (this.translateZSlider as any).elt.min = -this.translationRange;
+      (this.translateZSlider as any).elt.max = this.translationRange;
+    }
+    
+    p.redraw();
   }
 
   protected createSketch(p: p5): void {
@@ -67,12 +109,12 @@ class ProjectionDemo extends P5DemoBase {
       translateSliders.style.gap = '10px';
       translateGroup.appendChild(translateSliders);
       
-      // Translation sliders (horizontal)
-      this.translateXSlider = this.createSlider(p, 'X', -200, 200, 0, 1, () => p.redraw());
+      // Translation sliders (horizontal) - ranges will be updated after scaling
+      this.translateXSlider = this.createSlider(p, 'X', -this.translationRange, this.translationRange, 0, 1, () => p.redraw());
       translateSliders.appendChild(this.translateXSlider.parent());
-      this.translateYSlider = this.createSlider(p, 'Y', -200, 200, 0, 1, () => p.redraw());
+      this.translateYSlider = this.createSlider(p, 'Y', -this.translationRange, this.translationRange, 0, 1, () => p.redraw());
       translateSliders.appendChild(this.translateYSlider.parent());
-      this.translateZSlider = this.createSlider(p, 'Z', -200, 200, 100, 1, () => p.redraw());
+      this.translateZSlider = this.createSlider(p, 'Z', -this.translationRange, this.translationRange, 100, 1, () => p.redraw());
       translateSliders.appendChild(this.translateZSlider.parent());
       
       // Focal length (separate)
@@ -80,6 +122,9 @@ class ProjectionDemo extends P5DemoBase {
       controlRow.appendChild(focalGroup);
       this.focalSlider = this.createSlider(p, 'Focal Length', 1, 30, 15, 0.1, () => p.redraw());
       focalGroup.appendChild(this.focalSlider.parent());
+      
+      // Initialize scaling
+      this.updateScaling(p);
       
       p.noLoop();
     };
@@ -179,7 +224,7 @@ class ProjectionDemo extends P5DemoBase {
         const projectedX = transformedPoint.get([0]) / w;
         const projectedY = transformedPoint.get([1]) / w;
 
-        p.circle(projectedX + p.width / 2, projectedY + p.height / 2, 100 / w);
+        p.circle(projectedX + p.width / 2, projectedY + p.height / 2, this.featureDotSize / w);
       }
 
       // Draw a dense bounding box around the face
@@ -187,8 +232,10 @@ class ProjectionDemo extends P5DemoBase {
       p.noFill();
       const boundingBoxPoints: math.Matrix[] = [];
       const halfSize = 120;
-      for (let x = -halfSize; x <= halfSize; x += 10) {
-        for (let y = -halfSize; y <= halfSize; y += 10) {
+      const isMobile = p.width < 768;
+      const gridSpacing = isMobile ? 20 : 10; // Less dense grid on mobile
+      for (let x = -halfSize; x <= halfSize; x += gridSpacing) {
+        for (let y = -halfSize; y <= halfSize; y += gridSpacing) {
           const z = 100;
           boundingBoxPoints.push(math.matrix([x, y, z, 1]));
         }
@@ -201,7 +248,7 @@ class ProjectionDemo extends P5DemoBase {
         const projectedX = transformedPoint.get([0]) / w;
         const projectedY = transformedPoint.get([1]) / w;
 
-        p.circle(projectedX + p.width / 2, projectedY + p.height / 2, 5 / w);
+        p.circle(projectedX + p.width / 2, projectedY + p.height / 2, this.gridDotSize / w);
       }
     };
   }
