@@ -181,5 +181,8 @@ $$ t = \frac{\frac{x}{k}^{\frac{c}{b}}-v}{c} $$
 
 QED.
 
+## Dilution Visualization
+{% include_demo "dilution-visual" %}
+
 ## Dilution Calculator
 {% include_demo "dilution-calculator" %}
