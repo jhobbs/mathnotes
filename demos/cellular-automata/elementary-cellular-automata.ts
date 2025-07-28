@@ -1,7 +1,7 @@
 // Elementary Cellular Automata - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig, CanvasSize, DemoMetadata } from '@framework/types';
-import { P5DemoBase } from '@framework';
+import { P5DemoBase, createSelect, createCheckbox, createTextInput, createInfoDisplay, createControlRow } from '@framework';
 
 interface Rule {
   pattern: string;
@@ -14,7 +14,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   }
   // Constants
   private readonly cellSize: number = 5;
-  private readonly gridOffsetX: number = 120;
+  private gridOffsetX: number = 120; // Made non-readonly for responsive adjustment
   private readonly RULES: Rule[] = [
     { pattern: "111", result: 0 },
     { pattern: "110", result: 0 },
@@ -41,10 +41,9 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   private fillRateSelect!: HTMLSelectElement;
   private startButton!: HTMLButtonElement;
   private resetButton!: HTMLButtonElement;
-  private toroidCheckbox!: any;
-  private entDiv!: p5.Element;
-  private colEntDiv!: p5.Element;
-  private ruleInput!: any;
+  private entDisplay!: ReturnType<typeof createInfoDisplay>;
+  private colEntDisplay!: ReturnType<typeof createInfoDisplay>;
+  private ruleInput!: HTMLInputElement;
   private ruleNumber: number = 30;
   
   protected getStylePrefix(): string {
@@ -62,6 +61,10 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
   protected getMaxHeightPercent(): number {
     return 0.7; // 70% max height
   }
+  
+  protected getMinHeight(): number {
+    return 400; // Ensure minimum height for visibility
+  }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
@@ -69,15 +72,16 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       // Create controls container first
       this.setupControls();
       
+      // Adjust gridOffsetX for mobile
+      const isMobile = p.width < 768;
+      this.gridOffsetX = isMobile ? 80 : 120; // Smaller offset on mobile
+      
       // Calculate grid dimensions based on canvas size
       const availableWidth = Math.max(this.cellSize, p.width - this.gridOffsetX);
       const availableHeight = Math.max(this.cellSize, p.height);
       this.cols = Math.floor(availableWidth / this.cellSize);
       this.rows = Math.floor(availableHeight / this.cellSize);
       
-      
-      // Set up P5 controls
-      this.setupP5Controls(p);
       
       // Create rule input in the left margin
       this.setupRuleInput(p);
@@ -109,9 +113,9 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       
       // Update entropy displays
       const ent = this.computeEntropy();
-      this.entDiv.html("H<sub>r</sub>: " + p.nf(ent, 1, 2) + "b");
+      this.entDisplay.element.innerHTML = "H<sub>r</sub>: " + p.nf(ent, 1, 2) + "b";
       const colEnt = this.computeColEntropy();
-      this.colEntDiv.html("H<sub>c</sub>: " + p.nf(colEnt, 1, 2) + "b");
+      this.colEntDisplay.element.innerHTML = "H<sub>c</sub>: " + p.nf(colEnt, 1, 2) + "b";
     };
 
     p.mousePressed = () => {
@@ -141,114 +145,101 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     
     // Instructions are now handled by metadata.instructions
     
-    // Main controls row
-    const mainControls = document.createElement('div');
-    mainControls.style.display = 'flex';
-    mainControls.style.justifyContent = 'center';
-    mainControls.style.alignItems = 'center';
-    mainControls.style.gap = '10px';
-    mainControls.style.marginBottom = '10px';
-    controlPanel.appendChild(mainControls);
-    
-    // Fill rate label and select
-    const fillLabel = document.createElement('label');
-    fillLabel.htmlFor = 'fillRate';
-    fillLabel.textContent = 'Initial fill rate:';
-    mainControls.appendChild(fillLabel);
-    
-    this.fillRateSelect = document.createElement('select');
-    this.fillRateSelect.id = 'fillRate';
-    this.fillRateSelect.className = `${this.getStylePrefix()}-select`;
-    this.fillRateSelect.innerHTML = `
-      <option value="1">1 pixel</option>
-      <option value="0.25">25%</option>
-      <option value="0.5">50%</option>
-      <option value="0.75">75%</option>
-      <option value="1.0">100%</option>
-    `;
-    mainControls.appendChild(this.fillRateSelect);
+    // Create fill rate select
+    const fillRateElement = createSelect(
+      'Initial fill rate',
+      [
+        { value: '1', label: '1 pixel' },
+        { value: '0.25', label: '25%' },
+        { value: '0.5', label: '50%' },
+        { value: '0.75', label: '75%' },
+        { value: '1.0', label: '100%' }
+      ],
+      '1',
+      () => {}, // No immediate action needed
+      this.getStylePrefix()
+    );
+    this.fillRateSelect = fillRateElement.querySelector('select') as HTMLSelectElement;
     
     // Buttons
     this.startButton = this.createButton('Start', () => {});
-    mainControls.appendChild(this.startButton);
-    
     this.resetButton = this.createButton('Reset', () => {});
-    mainControls.appendChild(this.resetButton);
     
-    // Create containers for P5 elements
-    const toroidalContainer = document.createElement('div');
-    toroidalContainer.id = 'toroidal-container';
-    toroidalContainer.style.textAlign = 'center';
-    toroidalContainer.style.marginBottom = '10px';
-    controlPanel.appendChild(toroidalContainer);
+    // Create main controls row
+    const mainControlsRow = createControlRow(
+      [fillRateElement, this.startButton, this.resetButton],
+      { gap: '20px' }
+    );
+    controlPanel.appendChild(mainControlsRow);
     
-    const entropyContainer = document.createElement('div');
-    entropyContainer.id = 'entropy-container';
-    entropyContainer.style.textAlign = 'center';
-    entropyContainer.style.marginBottom = '10px';
-    controlPanel.appendChild(entropyContainer);
+    // Create toroidal checkbox
+    const toroidalElement = createCheckbox(
+      'Toroidal',
+      this.toroidal,
+      (checked) => { this.toroidal = checked; },
+      this.getStylePrefix()
+    );
+    
+    // Create entropy displays
+    this.entDisplay = createInfoDisplay('H<sub>r</sub>: 0.00b', this.getStylePrefix());
+    this.colEntDisplay = createInfoDisplay('H<sub>c</sub>: 0.00b', this.getStylePrefix());
+    
+    // Create second row with checkbox and entropy displays
+    const secondRow = createControlRow(
+      [toroidalElement, this.entDisplay.element, this.colEntDisplay.element],
+      { gap: '20px' }
+    );
+    secondRow.style.marginTop = '10px';
+    controlPanel.appendChild(secondRow);
 
     // Set up button event handlers
     this.setupButtonHandlers();
   }
 
-  private setupP5Controls(p: p5): void {
-    const toroidalContainer = this.container.querySelector('#toroidal-container') as HTMLElement;
-    const entropyContainer = this.container.querySelector('#entropy-container') as HTMLElement;
-    
-    this.toroidCheckbox = p.createCheckbox('Toroidal', this.toroidal);
-    this.toroidCheckbox.parent(toroidalContainer);
-    this.toroidCheckbox.changed(() => {
-      this.toroidal = this.toroidCheckbox.checked();
-    });
-    
-    this.entDiv = p.createDiv("");
-    this.entDiv.parent(entropyContainer);
-    this.entDiv.style('color', 'var(--text-color)');
-    this.entDiv.style('display', 'inline-block');
-    this.entDiv.style('margin-right', '20px');
-    
-    this.colEntDiv = p.createDiv("");
-    this.colEntDiv.parent(entropyContainer);
-    this.colEntDiv.style('color', 'var(--text-color)');
-    this.colEntDiv.style('display', 'inline-block');
-  }
 
-  private setupRuleInput(p: p5): void {
-    // Create a div for the rule input that will be positioned over the canvas
-    const ruleDiv = p.createDiv('Rule: ');
+  private setupRuleInput(_p: p5): void {
+    // Create a container for the rule input that will be positioned over the canvas
+    const ruleContainer = document.createElement('div');
     if (this.canvasParent) {
-      ruleDiv.parent(this.canvasParent);
-    } else if (this.containerEl) {
-      ruleDiv.parent(this.containerEl);
+      this.canvasParent.appendChild(ruleContainer);
+    } else if (this.container) {
+      this.container.appendChild(ruleContainer);
     }
-    ruleDiv.position(10, 5);
-    ruleDiv.style('color', this.colors.text);
-    ruleDiv.style('font-size', '14px');
-    ruleDiv.style('position', 'absolute');
-    ruleDiv.style('z-index', '10');
+    ruleContainer.style.position = 'absolute';
+    ruleContainer.style.top = '5px';
+    ruleContainer.style.left = '10px';
+    ruleContainer.style.zIndex = '10';
     
-    this.ruleInput = p.createInput(this.ruleNumber.toString());
-    this.ruleInput.parent(ruleDiv);
-    this.ruleInput.size(40);
-    this.ruleInput.style('margin-left', '5px');
-    this.ruleInput.style('font-size', '14px');
-    this.ruleInput.style('padding', '2px 5px');
-    this.ruleInput.style('border', `1px solid ${this.colors.grid}`);
-    this.ruleInput.style('background-color', this.colors.background.toString());
-    this.ruleInput.style('color', this.colors.text);
-    
-    // Handle input changes
-    this.ruleInput.input(() => {
-      const value = this.ruleInput.value() as string;
-      const num = parseInt(value);
-      if (!isNaN(num) && num >= 0 && num <= 255) {
-        this.updateRulesFromNumber(num);
-        if (this.p5Instance) {
-          this.drawRulesVisuals(this.p5Instance);
+    // Create text input using new component
+    const ruleElement = createTextInput(
+      'Rule',
+      this.ruleNumber.toString(),
+      (value) => {
+        const num = parseInt(value);
+        if (!isNaN(num) && num >= 0 && num <= 255) {
+          this.ruleNumber = num;
+          this.updateRulesFromNumber(num);
+          if (this.p5Instance) {
+            this.drawRulesVisuals(this.p5Instance);
+          }
         }
+      },
+      {
+        type: 'number',
+        pattern: '[0-9]*'
       }
-    });
+    );
+    
+    // Style the input to be compact
+    const input = ruleElement.querySelector('input') as HTMLInputElement;
+    if (input) {
+      input.style.width = '50px';
+      input.style.padding = '2px 5px';
+      input.style.fontSize = '14px';
+      this.ruleInput = input;
+    }
+    
+    ruleContainer.appendChild(ruleElement);
   }
 
   private setupButtonHandlers(): void {
@@ -406,10 +397,11 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     p.fill(this.colors.background);
     p.rect(0, 0, this.gridOffsetX, p.height);
     
-    const ruleBoxSize = 15;
-    const startX = 10;
+    const isMobile = p.width < 768;
+    const ruleBoxSize = isMobile ? 10 : 15;
+    const startX = isMobile ? 5 : 10;
     const startY = 50;
-    const spacingY = ruleBoxSize * 2 + 10;
+    const spacingY = ruleBoxSize * 2 + (isMobile ? 5 : 10);
     
     for (let i = 0; i < this.RULES.length; i++) {
       const { pattern, result } = this.RULES[i];
@@ -464,7 +456,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
         this.ruleNumber = parseInt(binaryString, 2);
         // Update the input field
         if (this.ruleInput) {
-          this.ruleInput.value(this.ruleNumber.toString());
+          this.ruleInput.value = this.ruleNumber.toString();
         }
         this.drawRulesVisuals(p);
         return;
@@ -479,13 +471,17 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     }
     // Update rule input styling
     if (this.ruleInput) {
-      this.ruleInput.style('border', `1px solid ${this.colors.grid}`);
-      this.ruleInput.style('background-color', this.colors.background.toString());
-      this.ruleInput.style('color', this.colors.text);
+      this.ruleInput.style.border = `1px solid ${this.colors.grid}`;
+      this.ruleInput.style.backgroundColor = this.colors.background.toString();
+      this.ruleInput.style.color = this.colors.text.toString();
     }
   }
 
   protected onResize(p: p5, size: CanvasSize): void {
+    // Adjust gridOffsetX for mobile
+    const isMobile = size.width < 768;
+    this.gridOffsetX = isMobile ? 80 : 120; // Smaller offset on mobile
+    
     // Recalculate grid dimensions
     const availableWidth = Math.max(this.cellSize, size.width - this.gridOffsetX);
     const availableHeight = Math.max(this.cellSize, size.height);

@@ -1,6 +1,6 @@
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig } from '@framework/types';
-import { P5DemoBase, type DemoMetadata } from '@framework';
+import { P5DemoBase, type DemoMetadata, createSlider, createButton, createControlGrid } from '@framework';
 import type { CanvasSize } from '@framework/demo-utils';
 
 export const metadata: DemoMetadata = {
@@ -57,6 +57,10 @@ class DilutionVisualDemo extends P5DemoBase {
     this.currentConcentration = this.currentMass / this.currentVolume;
   }
   
+  protected getStylePrefix(): string {
+    return 'dilution';
+  }
+  
   protected createSketch(p: p5): void {
     p.setup = () => {
       // Balanced aspect ratio - not too wide, not too tall
@@ -64,89 +68,73 @@ class DilutionVisualDemo extends P5DemoBase {
       this.createResponsiveCanvas(p, aspectRatio, 25);
       p.colorMode(p.RGB);
       
-      // Create controls with proper class name
-      this.createControlPanel({ className: 'demo-control-panel' });
+      // Create control panel using new system
+      const controlPanel = this.createControlPanel();
       
-      // Add CSS for horizontal slider layout on desktop
-      const style = document.createElement('style');
-      style.textContent = `
-        @media (min-width: 768px) {
-          .demo-control-panel {
-            display: grid !important;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px 15px;
-            max-width: 500px;
-            margin: 10px auto;
-            padding: 10px;
-          }
-          
-          .demo-control-panel .demo-slider-group {
-            margin: 0 !important;
-            display: flex;
-            flex-direction: column;
-          }
-          
-          .demo-control-panel .demo-slider-label {
-            font-size: 12px;
-            margin-bottom: 4px;
-          }
-          
-          .demo-control-panel .demo-button {
-            align-self: center;
-            padding: 6px 20px;
-            margin-top: 5px;
-          }
-        }
-        
-        /* Make sliders more compact */
-        .demo-control-panel input[type="range"] {
-          margin: 0;
-        }
-      `;
-      document.head.appendChild(style);
+      // Create a container for sliders
+      const sliderContainer = document.createElement('div');
+      sliderContainer.className = 'demo-slider-container';
+      controlPanel.appendChild(sliderContainer);
       
       // Sliders
-      this.startVolumeSlider = this.createSlider(
+      this.startVolumeSlider = createSlider(
         p, 'Starting Volume (gal)', 10, 200, this.solutionStartingVolume, 5,
-        () => this.updateStartingConditions()
+        sliderContainer, () => this.updateStartingConditions(), this.getStylePrefix()
       );
       
-      this.startMassSlider = this.createSlider(
+      this.startMassSlider = createSlider(
         p, 'Starting Mass (lbs)', 0, 100, this.solutionStartingMass, 1,
-        () => this.updateStartingConditions()
+        sliderContainer, () => this.updateStartingConditions(), this.getStylePrefix()
       );
       
-      this.inflowRateSlider = this.createSlider(
+      this.inflowRateSlider = createSlider(
         p, 'Inflow Rate (gal/min)', 0, 5, this.inflowVolumeRate, 0.1,
-        () => this.updateParameters()
+        sliderContainer, () => this.updateParameters(), this.getStylePrefix()
       );
       
-      this.outflowRateSlider = this.createSlider(
+      this.outflowRateSlider = createSlider(
         p, 'Outflow Rate (gal/min)', 0, 5, 1.5, 0.1,
-        () => this.updateParameters()
+        sliderContainer, () => this.updateParameters(), this.getStylePrefix()
       );
       
-      this.inflowConcSlider = this.createSlider(
+      this.inflowConcSlider = createSlider(
         p, 'Inflow Concentration', 0, 2, this.inflowConcentration, 0.05,
-        () => this.updateParameters()
+        sliderContainer, () => this.updateParameters(), this.getStylePrefix()
       );
       
-      this.targetMassSlider = this.createSlider(
+      this.targetMassSlider = createSlider(
         p, 'Target Mass (lbs)', 0, 100, 45, 1,
-        () => {} // Just for display
+        sliderContainer, () => {}, this.getStylePrefix() // Just for display
       );
       
-      // Buttons
-      this.pauseButton = this.createButton(
+      // Create control grid for sliders
+      const controlGrid = createControlGrid(
+        [...sliderContainer.children] as HTMLElement[],
+        { columns: 2, responsive: true }
+      );
+      sliderContainer.innerHTML = '';
+      sliderContainer.appendChild(controlGrid);
+      
+      // Buttons in a separate container
+      const buttonContainer = document.createElement('div');
+      buttonContainer.style.display = 'flex';
+      buttonContainer.style.justifyContent = 'center';
+      buttonContainer.style.gap = '10px';
+      buttonContainer.style.marginTop = '10px';
+      controlPanel.appendChild(buttonContainer);
+      
+      this.pauseButton = createButton(
         'Pause',
+        buttonContainer,
         () => this.togglePause(),
-        'demo-button'
+        this.getStylePrefix() + '-button'
       );
       
-      this.createButton(
+      createButton(
         'Reset',
+        buttonContainer,
         () => this.reset(),
-        'demo-button'
+        this.getStylePrefix() + '-button'
       );
       
       this.reset();

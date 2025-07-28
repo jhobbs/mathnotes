@@ -1,7 +1,7 @@
 // Conway's Game of Life - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig, DemoMetadata, CanvasSize } from '@framework/types';
-import { P5DemoBase } from '@framework';
+import { P5DemoBase, createSlider, createInfoDisplay, createControlRow } from '@framework';
 
 interface GameOfLifeState {
   grid: number[][];
@@ -27,10 +27,10 @@ class GameOfLifeDemo extends P5DemoBase {
   private resetBtn!: HTMLButtonElement;
   private initialPopulationSlider!: p5.Element;
   private frameRateSlider!: p5.Element;
-  private runningStatus!: HTMLElement;
-  private populationInfo!: HTMLElement;
-  private rateChangeInfo!: HTMLElement;
-  private generationInfo!: HTMLElement;
+  private runningStatus!: ReturnType<typeof createInfoDisplay>;
+  private populationInfo!: ReturnType<typeof createInfoDisplay>;
+  private rateChangeInfo!: ReturnType<typeof createInfoDisplay>;
+  private generationInfo!: ReturnType<typeof createInfoDisplay>;
 
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
@@ -99,10 +99,10 @@ class GameOfLifeDemo extends P5DemoBase {
       // Update info displays
       const totalCells = this.cols * this.rows;
       const populationPercent = (populatedCount / totalCells) * 100;
-      this.populationInfo.textContent = `Population: ${populationPercent.toFixed(2)}%`;
+      this.populationInfo.update(`Population: ${populationPercent.toFixed(2)}%`);
       
       const rateChange = this.calculatePopulationRateChange();
-      this.rateChangeInfo.textContent = `Rate Change: ${rateChange.toFixed(2)}`;
+      this.rateChangeInfo.update(`Rate Change: ${rateChange.toFixed(2)}`);
     };
 
     p.mousePressed = () => {
@@ -144,85 +144,76 @@ class GameOfLifeDemo extends P5DemoBase {
     
     // Instructions are now handled by metadata.instructions
     
-    // Main controls row
-    const mainControls = document.createElement('div');
-    mainControls.style.display = 'flex';
-    mainControls.style.justifyContent = 'center';
-    mainControls.style.gap = '20px';
-    mainControls.style.marginBottom = '20px';
-    controlPanel.appendChild(mainControls);
-    
     // Buttons
     this.toggleBtn = this.createButton('Start', () => {
       this.state.running = !this.state.running;
       this.toggleBtn.textContent = this.state.running ? 'Stop' : 'Start';
-      this.runningStatus.textContent = `Running: ${this.state.running ? "Yes" : "No"}`;
+      this.runningStatus.update(`Running: ${this.state.running ? "Yes" : "No"}`);
     });
-    mainControls.appendChild(this.toggleBtn);
     
     this.resetBtn = this.createButton('Reset', () => {
       this.resetGrid(p);
     });
-    mainControls.appendChild(this.resetBtn);
     
-    // Sliders row
-    const slidersRow = document.createElement('div');
-    slidersRow.style.display = 'flex';
-    slidersRow.style.justifyContent = 'center';
-    slidersRow.style.gap = '30px';
-    slidersRow.style.marginBottom = '20px';
-    controlPanel.appendChild(slidersRow);
+    // Create button row
+    const buttonRow = createControlRow(
+      [this.toggleBtn, this.resetBtn],
+      { gap: '20px' }
+    );
+    controlPanel.appendChild(buttonRow);
     
-    // Create sliders in temporary div, then move to slidersRow
-    const tempDiv = document.createElement('div');
-    controlPanel.appendChild(tempDiv);
+    // Create slider container
+    const sliderContainer = document.createElement('div');
     
     // Initial population slider
-    this.initialPopulationSlider = this.createSlider(
+    this.initialPopulationSlider = createSlider(
       p,
       'Initial Population',
-      0, 1, 0.15, 0.01
+      0, 1, 0.15, 0.01,
+      sliderContainer,
+      undefined,
+      this.getStylePrefix()
     );
-    slidersRow.appendChild(this.initialPopulationSlider.parent() as unknown as Node);
     
     // Frame rate slider
-    this.frameRateSlider = this.createSlider(
+    this.frameRateSlider = createSlider(
       p,
       'Frame Rate',
       1, 30, 10, 1,
+      sliderContainer,
       () => {
         const frameRate = this.frameRateSlider.value() as number;
         p.frameRate(frameRate);
-      }
+      },
+      this.getStylePrefix()
     );
-    slidersRow.appendChild(this.frameRateSlider.parent() as unknown as Node);
     
-    // Remove temp div
-    controlPanel.removeChild(tempDiv);
-    
-    // Info panel
-    const infoPanel = document.createElement('div');
-    infoPanel.className = 'info-panel';
-    infoPanel.style.display = 'flex';
-    infoPanel.style.justifyContent = 'center';
-    infoPanel.style.gap = '20px';
-    infoPanel.style.flexWrap = 'wrap';
-    controlPanel.appendChild(infoPanel);
+    // Create slider row
+    const sliderRow = createControlRow(
+      [...sliderContainer.children] as HTMLElement[],
+      { gap: '30px' }
+    );
+    sliderRow.style.marginTop = '20px';
+    controlPanel.appendChild(sliderRow);
     
     // Create info displays
-    this.runningStatus = this.createInfoDisplay('Running: No', infoPanel);
-    this.populationInfo = this.createInfoDisplay('Population: 0.00%', infoPanel);
-    this.rateChangeInfo = this.createInfoDisplay('Rate Change: 0.00', infoPanel);
-    this.generationInfo = this.createInfoDisplay('Generation: 0', infoPanel);
-  }
-
-  private createInfoDisplay(text: string, parent: HTMLElement): HTMLElement {
-    const display = document.createElement('div');
-    display.className = `${this.getStylePrefix()}-info`;
-    display.style.fontSize = '14px';
-    display.textContent = text;
-    parent.appendChild(display);
-    return display;
+    this.runningStatus = createInfoDisplay('Running: No', this.getStylePrefix());
+    this.populationInfo = createInfoDisplay('Population: 0.00%', this.getStylePrefix());
+    this.rateChangeInfo = createInfoDisplay('Rate Change: 0.00', this.getStylePrefix());
+    this.generationInfo = createInfoDisplay('Generation: 0', this.getStylePrefix());
+    
+    // Create info row
+    const infoRow = createControlRow(
+      [
+        this.runningStatus.element,
+        this.populationInfo.element,
+        this.rateChangeInfo.element,
+        this.generationInfo.element
+      ],
+      { gap: '20px' }
+    );
+    infoRow.style.marginTop = '20px';
+    controlPanel.appendChild(infoRow);
   }
 
   private make2DArray(cols: number, rows: number): number[][] {
@@ -245,7 +236,7 @@ class GameOfLifeDemo extends P5DemoBase {
     this.state.populationHistory = [];
     this.state.generations = 0;
     this.updatePopulationHistory();
-    this.generationInfo.textContent = `Generation: ${this.state.generations}`;
+    this.generationInfo.update(`Generation: ${this.state.generations}`);
   }
 
   private updatePopulationHistory(): void {
@@ -314,7 +305,7 @@ class GameOfLifeDemo extends P5DemoBase {
     this.state.grid = next;
     this.updatePopulationHistory();
     this.state.generations++;
-    this.generationInfo.textContent = `Generation: ${this.state.generations}`;
+    this.generationInfo.update(`Generation: ${this.state.generations}`);
   }
 
   protected onColorSchemeChange(_isDark: boolean): void {
