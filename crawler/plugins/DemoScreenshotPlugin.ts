@@ -19,6 +19,11 @@ interface ViewportConfig {
   name: string;
 }
 
+interface ColorScheme {
+  name: string;
+  value: 'light' | 'dark' | 'no-preference';
+}
+
 export class DemoScreenshotPlugin implements CrawlerPlugin {
   name = 'DemoScreenshotPlugin';
   private screenshotDir: string;
@@ -28,6 +33,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
   private baseUrl: string;
   private singleDemo: string | null;
   private viewports: ViewportConfig[];
+  private captureColorSchemes: boolean = true;
 
   private static readonly DESKTOP_VIEWPORT: ViewportConfig = {
     width: 1920,
@@ -47,7 +53,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     name: 'mobile'
   };
 
-  constructor(options: { screenshotDir?: string; baseUrl?: string; singleDemo?: string | null; viewports?: string[] } = {}) {
+  constructor(options: { screenshotDir?: string; baseUrl?: string; singleDemo?: string | null; viewports?: string[]; captureColorSchemes?: boolean } = {}) {
     this.screenshotDir = options.screenshotDir || './demo-screenshots';
     // Ensure base URL uses the correct protocol and no trailing slash
     this.baseUrl = (options.baseUrl || 'http://localhost:5000').replace(/\/$/, '');
@@ -70,6 +76,9 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
       // Default to both viewports
       this.viewports = [DemoScreenshotPlugin.DESKTOP_VIEWPORT, DemoScreenshotPlugin.MOBILE_VIEWPORT];
     }
+    
+    // Whether to capture both light and dark color schemes
+    this.captureColorSchemes = options.captureColorSchemes !== undefined ? options.captureColorSchemes : true;
   }
 
   async beforeCrawl(crawler: Crawler): Promise<void> {
@@ -84,44 +93,56 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
   async afterCrawl(crawler: Crawler, results: Map<string, CrawlResult>): Promise<void> {
     const browser = (crawler as any).browser;
     
-    // Capture screenshots for each viewport
+    // Define color schemes to capture
+    const colorSchemes: ColorScheme[] = this.captureColorSchemes ? [
+      { name: 'light', value: 'light' },
+      { name: 'dark', value: 'dark' }
+    ] : [
+      { name: 'light', value: 'light' }
+    ];
+    
+    // Capture screenshots for each viewport and color scheme
     for (const viewport of this.viewports) {
-      if (!this.singleDemo) {
-        console.log(`\n📱 Capturing ${viewport.name} screenshots (${viewport.width}x${viewport.height})`);
-      }
-      
-      // Create a new context with the specific viewport settings
-      const context = await browser.newContext({
-        viewport: {
-          width: viewport.width,
-          height: viewport.height
-        },
-        deviceScaleFactor: viewport.deviceScaleFactor,
-        isMobile: viewport.isMobile,
-        hasTouch: viewport.hasTouch,
-        ignoreHTTPSErrors: true,
-        bypassCSP: true,
-        extraHTTPHeaders: {
-          'Upgrade-Insecure-Requests': '0'
-        }
-      });
-      
-      const page = await context.newPage();
-      try {
-        // If we haven't discovered demos yet, do it now
-        if (this.demos.length === 0) {
-          await this.discoverDemos(page);
+      for (const colorScheme of colorSchemes) {
+        if (!this.singleDemo) {
+          const colorInfo = this.captureColorSchemes ? ` (${colorScheme.name} mode)` : '';
+          console.log(`\n📱 Capturing ${viewport.name} screenshots (${viewport.width}x${viewport.height})${colorInfo}`);
         }
         
-        // Capture all demos for this viewport
-        if (this.demos.length > 0) {
-          await this.captureAllDemosForViewport(page, viewport);
-        } else {
-          console.log('[DemoScreenshotPlugin] No demos found to capture');
+        // Create a new context with the specific viewport settings and color scheme
+        const context = await browser.newContext({
+          viewport: {
+            width: viewport.width,
+            height: viewport.height
+          },
+          deviceScaleFactor: viewport.deviceScaleFactor,
+          isMobile: viewport.isMobile,
+          hasTouch: viewport.hasTouch,
+          ignoreHTTPSErrors: true,
+          bypassCSP: true,
+          extraHTTPHeaders: {
+            'Upgrade-Insecure-Requests': '0'
+          },
+          colorScheme: colorScheme.value
+        });
+        
+        const page = await context.newPage();
+        try {
+          // If we haven't discovered demos yet, do it now
+          if (this.demos.length === 0) {
+            await this.discoverDemos(page);
+          }
+          
+          // Capture all demos for this viewport and color scheme
+          if (this.demos.length > 0) {
+            await this.captureAllDemosForViewport(page, viewport, colorScheme);
+          } else {
+            console.log('[DemoScreenshotPlugin] No demos found to capture');
+          }
+        } finally {
+          await page.close();
+          await context.close();
         }
-      } finally {
-        await page.close();
-        await context.close();
       }
     }
   }
@@ -159,7 +180,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
 
   }
 
-  private async captureAllDemosForViewport(page: Page, viewport: ViewportConfig): Promise<void> {
+  private async captureAllDemosForViewport(page: Page, viewport: ViewportConfig, colorScheme?: ColorScheme): Promise<void> {
     if (this.singleDemo) {
       // Navigate directly to the specific demo using URL anchor
       await page.goto(`${this.demoViewerUrl}#${this.singleDemo}`, { waitUntil: 'networkidle' });
@@ -185,7 +206,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
       
       // Get demo info and capture
       const demoInfo = await this.getDemoInfoFromDOM(page, 0);
-      await this.captureDemo(page, demoInfo, viewport);
+      await this.captureDemo(page, demoInfo, viewport, colorScheme);
       
     } else {
       // First, navigate to demo viewer to get the list of all demos
@@ -220,7 +241,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
           
           // Get demo info and capture
           const demoInfo = await this.getDemoInfoFromDOM(page, 0);
-          await this.captureDemo(page, demoInfo, viewport);
+          await this.captureDemo(page, demoInfo, viewport, colorScheme);
           
         } catch (error) {
           console.error(`[DemoScreenshotPlugin] Failed to capture demo ${demoName}:`, error);
@@ -259,7 +280,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     }, index);
   }
 
-  private async captureDemo(page: Page, demo: DemoInfo, viewport: ViewportConfig): Promise<void> {
+  private async captureDemo(page: Page, demo: DemoInfo, viewport: ViewportConfig, colorScheme?: ColorScheme): Promise<void> {
     // We're already on the correct demo, no need to navigate again
 
     // The demo.id already contains the full path structure (e.g., "cellular-automata/game-of-life")
@@ -275,10 +296,13 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     
     await fs.mkdir(screenshotDir, { recursive: true });
 
+    // Add color scheme suffix to filenames if capturing multiple schemes
+    const colorSuffix = colorScheme && this.captureColorSchemes ? `-${colorScheme.name}` : '';
+    
     // Capture screenshot of the demo container
     const demoContainer = await page.$('.demo-component');
     if (demoContainer) {
-      const screenshotPath = path.join(screenshotDir, `${filename}-${viewport.name}.png`);
+      const screenshotPath = path.join(screenshotDir, `${filename}-${viewport.name}${colorSuffix}.png`);
       await demoContainer.screenshot({ 
         path: screenshotPath,
         animations: 'disabled'
@@ -286,25 +310,25 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
       this.captureCount++;
       // Convert absolute path to relative path for output
       const relativePath = screenshotPath.replace(/^.*\/demo-screenshots\//, './demo-screenshots/');
-      console.log(`${viewport.name}-base: ${relativePath}`);
+      console.log(`${viewport.name}${colorSuffix}-base: ${relativePath}`);
       
       // Also capture canvas-only screenshot
       const canvas = await page.$('.demo-component canvas');
       if (canvas) {
-        const canvasPath = path.join(screenshotDir, `${filename}-${viewport.name}-canvas.png`);
+        const canvasPath = path.join(screenshotDir, `${filename}-${viewport.name}${colorSuffix}-canvas.png`);
         await canvas.screenshot({ 
           path: canvasPath,
           animations: 'disabled'
         });
         const relativeCanvasPath = canvasPath.replace(/^.*\/demo-screenshots\//, './demo-screenshots/');
-        console.log(`${viewport.name}-canvas: ${relativeCanvasPath}`);
+        console.log(`${viewport.name}${colorSuffix}-canvas: ${relativeCanvasPath}`);
       }
     } else {
       console.warn(`[DemoScreenshotPlugin] Demo container not found for ${demo.id}`);
     }
 
     // Also capture full page screenshot for context
-    const fullPagePath = path.join(screenshotDir, `${filename}-${viewport.name}-full.png`);
+    const fullPagePath = path.join(screenshotDir, `${filename}-${viewport.name}${colorSuffix}-full.png`);
     await page.screenshot({ 
       path: fullPagePath,
       fullPage: true,
@@ -312,7 +336,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     });
     // Convert absolute path to relative path for output
     const relativeFullPath = fullPagePath.replace(/^.*\/demo-screenshots\//, './demo-screenshots/');
-    console.log(`${viewport.name}-full: ${relativeFullPath}`);
+    console.log(`${viewport.name}${colorSuffix}-full: ${relativeFullPath}`);
   }
 }
 

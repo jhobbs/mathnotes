@@ -15,7 +15,8 @@ async function main() {
     demoOnly: true,
     concurrency: 1,
     singleDemo: null as string | null,
-    viewports: [] as string[]
+    viewports: [] as string[],
+    noColorSchemes: false
   };
   
   // Simple argument parsing
@@ -55,6 +56,9 @@ async function main() {
           }
         }
         break;
+      case '--no-color-schemes':
+        options.noColorSchemes = true;
+        break;
       case '--help':
       case '-h':
         console.log(`
@@ -68,6 +72,7 @@ Options:
   -c, --concurrency <n>   Number of concurrent pages (default: 1)
   -d, --demo <name>       Capture only a specific demo (e.g., physics/electric-field)
   -vp, --viewport <type>  Viewport to capture: desktop, mobile, or both (default: both)
+  --no-color-schemes      Disable capturing dark mode screenshots (only light mode)
   -h, --help              Show this help message
 
 Examples:
@@ -110,7 +115,8 @@ Examples:
     screenshotDir: path.resolve(options.output),
     baseUrl: options.url,
     singleDemo: options.singleDemo,
-    viewports: options.viewports.length > 0 ? options.viewports : undefined
+    viewports: options.viewports.length > 0 ? options.viewports : undefined,
+    captureColorSchemes: !options.noColorSchemes
   });
   crawler.registerPlugin(demoPlugin);
   

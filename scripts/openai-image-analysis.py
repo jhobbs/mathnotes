@@ -112,6 +112,24 @@ class OpenAIImageAnalyzer:
         )
         
         return self.analyze_single_image(canvas_path, prompt)
+    
+    def check_dark_mode_compatibility(self, light_path: str, dark_path: str) -> str:
+        """Check if a demo looks good in both light and dark modes."""
+        prompt = (
+            "Compare the light mode (first image) and dark mode (second image) versions "
+            "of this interactive demo page. These are full page screenshots showing the demo "
+            "in context with surrounding content. Analyze:\n"
+            "1. Are all visual elements clearly visible in both modes?\n"
+            "2. Is there sufficient contrast for text, UI elements, and interactive components?\n"
+            "3. Are colors appropriately adapted (not just inverted) for each mode?\n"
+            "4. Do any elements become hard to see or disappear in either mode?\n"
+            "5. Is the visual hierarchy maintained in both modes?\n"
+            "6. Are there any specific issues with canvas elements, borders, or overlays?\n"
+            "7. Does the demo maintain its visual appeal and usability in both modes?\n"
+            "Be specific about any visibility or contrast issues you observe."
+        )
+        
+        return self.analyze_multiple_images([light_path, dark_path], prompt)
 
 
 def main():
