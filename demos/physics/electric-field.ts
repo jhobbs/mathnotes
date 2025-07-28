@@ -1,7 +1,7 @@
 // Electric field simulation - TypeScript module version
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig, CanvasSize } from '@framework/types';
-import { P5DemoBase, type DemoMetadata } from '@framework';
+import { P5DemoBase, type DemoMetadata, createRadioGroup, createResetButton, createControlRow } from '@framework';
 
 interface Particle {
   pos: p5.Vector;
@@ -224,106 +224,42 @@ class ElectricFieldDemo extends P5DemoBase {
   init(): DemoInstance {
     const result = super.init();
     
-    // Create UI controls
-    const controls = document.createElement('div');
-    controls.className = 'demo-controls';
-    const isMobile = window.innerWidth < 768;
-    controls.style.cssText = `
-      display: flex;
-      gap: ${isMobile ? '12px' : '20px'};
-      align-items: center;
-      justify-content: center;
-      padding: ${isMobile ? '8px' : '10px'};
-      background: ${this.colors.surfaceAlt.toString()};
-      border-radius: 8px;
-      margin-top: ${isMobile ? '8px' : '10px'};
-      flex-wrap: wrap;
-    `;
+    // Create control panel using new system
+    const controlPanel = this.createControlPanel();
     
-    // Create charge selection radio buttons
-    const chargeGroup = document.createElement('div');
-    chargeGroup.style.cssText = `display: flex; gap: ${isMobile ? '10px' : '15px'}; align-items: center;`;
+    // Create charge selection radio group
+    const chargeRadioGroup = createRadioGroup(
+      'charge-selection',
+      [
+        { value: -1, label: 'Negative (-)' },
+        { value: 1, label: 'Positive (+)' }
+      ],
+      -1,
+      (value) => { this.selectedCharge = value; },
+      this.getStylePrefix()
+    );
     
-    const negativeLabel = document.createElement('label');
-    negativeLabel.style.cssText = 'display: flex; align-items: center; gap: 5px; cursor: pointer;';
-    const negativeRadio = document.createElement('input');
-    negativeRadio.type = 'radio';
-    negativeRadio.name = 'charge-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    negativeRadio.value = '-1';
-    negativeRadio.checked = true;
-    negativeRadio.addEventListener('change', () => {
-      if (negativeRadio.checked) this.selectedCharge = -1;
-    });
-    negativeLabel.appendChild(negativeRadio);
-    negativeLabel.appendChild(document.createTextNode('Negative (-)'));
-    
-    const positiveLabel = document.createElement('label');
-    positiveLabel.style.cssText = 'display: flex; align-items: center; gap: 5px; cursor: pointer;';
-    const positiveRadio = document.createElement('input');
-    positiveRadio.type = 'radio';
-    positiveRadio.name = negativeRadio.name;
-    positiveRadio.value = '1';
-    positiveRadio.addEventListener('change', () => {
-      if (positiveRadio.checked) this.selectedCharge = 1;
-    });
-    positiveLabel.appendChild(positiveRadio);
-    positiveLabel.appendChild(document.createTextNode('Positive (+)'));
-    
-    chargeGroup.appendChild(negativeLabel);
-    chargeGroup.appendChild(positiveLabel);
-    
-    // Create motion toggle button
-    const motionButton = document.createElement('button');
-    motionButton.textContent = 'Start Motion';
-    motionButton.style.cssText = `
-      padding: ${isMobile ? '10px 18px' : '8px 16px'};
-      background: ${this.colors.info.toString()};
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: ${isMobile ? '16px' : '14px'};
-      transition: background 0.3s;
-      -webkit-tap-highlight-color: transparent;
-    `;
-    motionButton.addEventListener('click', () => {
+    // Create motion toggle button (using standard button instead of play/pause for clarity)
+    let motionButton: HTMLButtonElement;
+    motionButton = this.createButton('Start Motion', () => {
       this.moveParticles = !this.moveParticles;
       motionButton.textContent = this.moveParticles ? 'Stop Motion' : 'Start Motion';
-      motionButton.style.background = this.moveParticles ? this.colors.error.toString() : this.colors.info.toString();
     });
     
     // Create reset button
-    const resetButton = document.createElement('button');
-    resetButton.textContent = 'Reset';
-    resetButton.style.cssText = `
-      padding: ${isMobile ? '10px 18px' : '8px 16px'};
-      background: ${this.colors.surface.toString()};
-      color: ${this.colors.text};
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: ${isMobile ? '16px' : '14px'};
-      transition: background 0.3s;
-      -webkit-tap-highlight-color: transparent;
-    `;
-    resetButton.addEventListener('click', () => {
+    const resetButton = createResetButton(() => {
       this.particles = [];
       this.moveParticles = false;
       motionButton.textContent = 'Start Motion';
-      motionButton.style.background = this.colors.info.toString();
-    });
+    }, this.getStylePrefix());
     
-    controls.appendChild(chargeGroup);
-    controls.appendChild(motionButton);
-    controls.appendChild(resetButton);
+    // Create control row with all controls
+    const controlRow = createControlRow(
+      [chargeRadioGroup, motionButton, resetButton],
+      { gap: '20px', mobileStack: true }
+    );
     
-    // Prevent clicks on controls from propagating to canvas
-    controls.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
-    
-    // Insert controls after the canvas
-    this.container.appendChild(controls);
+    controlPanel.appendChild(controlRow);
     
     return result;
   }
