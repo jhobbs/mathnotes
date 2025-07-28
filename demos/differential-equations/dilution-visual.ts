@@ -155,8 +155,8 @@ class DilutionVisualDemo extends P5DemoBase {
     p.draw = () => {
       p.background(255);
       
-      // Update simulation
-      if (this.isRunning) {
+      // Update simulation only if solvable
+      if (this.isRunning && !this.method.includes("unsolvable")) {
         this.updateSimulation();
       }
       
@@ -203,6 +203,7 @@ class DilutionVisualDemo extends P5DemoBase {
     const v = this.solutionStartingVolume;
     const x0 = this.solutionStartingMass;
     
+    
     // Case 1: netFlowRate = 0, outflowVolumeRate != 0
     if (Math.abs(c) < 0.0001 && Math.abs(b) > 0.0001) {
       this.method = "separable (c=0)";
@@ -218,10 +219,10 @@ class DilutionVisualDemo extends P5DemoBase {
     }
     
     // Case 3: inflowMassRate != 0, netFlowRate != 0
+    // LINEAR CASE - Cannot solve analytically for time
     if (Math.abs(a) > 0.0001 && Math.abs(c) > 0.0001) {
-      this.method = "linear";
-      this.k = Math.pow(v, b / c) * (x0 - (a * v) / (c - b));
-      return (a * (v + c * time)) / (c - b) + this.k * Math.pow(v + c * time, -b / c);
+      this.method = "unsolvable (linear)";
+      return x0; // Don't calculate, just return initial value
     }
     
     // Case 4: No flow (both rates are 0)
@@ -231,13 +232,19 @@ class DilutionVisualDemo extends P5DemoBase {
       return x0;
     }
     
-    // Unsolvable case
-    this.method = "unsolvable";
+    // This should never happen - all cases should be covered above
+    console.error('[ERROR] calculateMass: no case matched! a=', a, 'b=', b, 'c=', c);
+    this.method = "error";
     this.k = 0;
-    return x0; // Just return starting mass, simulation should be paused
+    return x0;
   }
   
   private calculateMaxGraphTime(): number {
+    // Don't calculate if unsolvable
+    if (this.method.includes("unsolvable")) {
+      return 60; // Return default
+    }
+    
     // Calculate various end conditions and return the maximum time needed
     let maxTime = 60; // Default minimum
     
@@ -307,12 +314,6 @@ class DilutionVisualDemo extends P5DemoBase {
   }
   
   private updateSimulation(): void {
-    // Check if we can solve this case
-    if (this.method === "unsolvable") {
-      this.isRunning = false;
-      return;
-    }
-    
     // Update time
     this.time += this.timeScale;
     
@@ -323,10 +324,14 @@ class DilutionVisualDemo extends P5DemoBase {
     // Update volume
     const netFlowRate = this.inflowVolumeRate - this.outflowVolumeRate;
     this.currentVolume = this.solutionStartingVolume + netFlowRate * this.time;
-    this.currentVolume = Math.max(1, this.currentVolume); // Prevent division by zero
+    this.currentVolume = Math.max(0, this.currentVolume); // Allow volume to reach 0
     
-    // Update concentration
-    this.currentConcentration = this.currentMass / this.currentVolume;
+    // Update concentration (avoid division by zero)
+    if (this.currentVolume > 0.001) {
+      this.currentConcentration = this.currentMass / this.currentVolume;
+    } else {
+      this.currentConcentration = 0; // No concentration if no volume
+    }
     
     // Auto-reset conditions
     let shouldReset = false;
@@ -519,13 +524,13 @@ class DilutionVisualDemo extends P5DemoBase {
     p.textSize(11 * this.scaleFactor);
     
     // Show error message for unsolvable cases
-    if (this.method === "unsolvable") {
+    if (this.method.includes("unsolvable")) {
       p.fill(255, 0, 0);
       p.textAlign(p.CENTER, p.CENTER);
       p.textSize(14 * this.scaleFactor);
       p.text("Cannot solve this case analytically", p.width / 2, p.height / 2 - 60 * this.scaleFactor);
       p.textSize(11 * this.scaleFactor);
-      p.text("Please adjust parameters", p.width / 2, p.height / 2 - 40 * this.scaleFactor);
+      p.text("Linear case: time calculation requires numerical methods", p.width / 2, p.height / 2 - 40 * this.scaleFactor);
       return;
     }
     
@@ -623,7 +628,7 @@ class DilutionVisualDemo extends P5DemoBase {
     
     // Calculate initial method to check if case is solvable
     this.calculateMass(0);
-    if (this.method === "unsolvable") {
+    if (this.method.includes("unsolvable")) {
       this.isRunning = false;
       if (this.pauseButton) {
         this.pauseButton.disabled = true;
@@ -644,6 +649,7 @@ class DilutionVisualDemo extends P5DemoBase {
   
   private drawMassGraph(p: p5, x: number, y: number): void {
     if (this.graphWidth === 0) return; // Skip on mobile
+    if (this.method.includes("unsolvable")) return; // Skip if unsolvable
     
     p.push();
     p.translate(x, y);
@@ -729,6 +735,7 @@ class DilutionVisualDemo extends P5DemoBase {
   
   private drawVolumeGraph(p: p5, x: number, y: number): void {
     if (this.graphWidth === 0) return; // Skip on mobile
+    if (this.method.includes("unsolvable")) return; // Skip if unsolvable
     
     p.push();
     p.translate(x, y);
