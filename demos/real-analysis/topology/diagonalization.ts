@@ -336,7 +336,7 @@ class DiagonalizationDemo extends P5DemoBase {
           p.fill((h + 120) % 360, s, b); // Complementary color
           p.colorMode(p.RGB);
         } else {
-          p.fill(this.colors.grid || p.color(200, 200, 200));
+          p.fill(this.colors.grid);
         }
         
         p.stroke(this.colors.stroke);

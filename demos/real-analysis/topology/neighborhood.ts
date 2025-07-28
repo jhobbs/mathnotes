@@ -111,8 +111,12 @@ class NeighborhoodDemo extends P5DemoBase {
     const g = p.green(accentColor);
     const b = p.blue(accentColor);
     this.outerColor = p.color(r, g, b, 80);
-    // Create complementary color for inner neighborhoods
-    this.innerColor = p.color(255 - r, 150, 100 - b, 100);
+    // Use warning color with transparency for inner neighborhoods
+    const warningColor = this.colors.warning;
+    const wr = p.red(warningColor);
+    const wg = p.green(warningColor);
+    const wb = p.blue(warningColor);
+    this.innerColor = p.color(wr, wg, wb, 100);
   }
   
   private drawGrid(p: p5): void {

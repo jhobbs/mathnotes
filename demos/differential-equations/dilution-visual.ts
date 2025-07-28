@@ -153,7 +153,7 @@ class DilutionVisualDemo extends P5DemoBase {
     };
     
     p.draw = () => {
-      p.background(255);
+      p.background(this.colors.background);
       
       // Update simulation only if solvable
       if (this.isRunning && !this.method.includes("unsolvable")) {
@@ -365,7 +365,7 @@ class DilutionVisualDemo extends P5DemoBase {
     p.translate(x, y);
     
     // Vessel container
-    p.stroke(0);
+    p.stroke(this.colors.foreground);
     p.strokeWeight(3 * this.scaleFactor);
     p.noFill();
     p.rect(-this.vesselWidth/2, -this.vesselHeight/2, this.vesselWidth, this.vesselHeight);
@@ -388,18 +388,18 @@ class DilutionVisualDemo extends P5DemoBase {
     );
     
     // Draw concentration and volume values
-    p.fill(0);
+    p.fill(this.colors.foreground);
     p.textAlign(p.CENTER, p.CENTER);
     p.textSize(14 * this.scaleFactor);
     p.text(`C = ${this.currentConcentration.toFixed(3)}`, 0, -15 * this.scaleFactor);
     
     // Show volume with warning color if approaching capacity
     if (this.currentVolume > this.maxVesselCapacity * 0.9) {
-      p.fill(255, 0, 0);
+      p.fill(this.colors.error);
     }
     p.text(`V = ${this.currentVolume.toFixed(1)} gal`, 0, 0);
     
-    p.fill(0);
+    p.fill(this.colors.foreground);
     p.text(`M = ${this.currentMass.toFixed(2)} lbs`, 0, 15 * this.scaleFactor);
     
     p.pop();
@@ -441,7 +441,7 @@ class DilutionVisualDemo extends P5DemoBase {
       }
       
       // Label
-      p.fill(0);
+      p.fill(this.colors.foreground);
       p.textAlign(p.LEFT, p.CENTER);
       p.textSize(14 * this.scaleFactor);
       p.text(`In: ${this.inflowVolumeRate.toFixed(1)} gal/min`, vesselX + pipeWidth/2 + 10 * this.scaleFactor, pipeStartY);
@@ -494,7 +494,7 @@ class DilutionVisualDemo extends P5DemoBase {
       );
       
       // Label - position below the pipe to avoid collision with volume graph
-      p.fill(0);
+      p.fill(this.colors.foreground);
       p.textAlign(p.CENTER, p.TOP);
       p.textSize(14 * this.scaleFactor);
       p.text(`Out: ${Math.abs(this.outflowVolumeRate).toFixed(1)} gal/min`, pipeEndX, vesselBottom + 15 * this.scaleFactor);
@@ -512,20 +512,20 @@ class DilutionVisualDemo extends P5DemoBase {
     // Map concentration to color (light blue to dark blue)
     const normalizedConc = Math.min(1, concentration / 2);
     return p.lerpColor(
-      p.color(173, 216, 230, 200), // Light blue
-      p.color(0, 0, 139, 220),      // Dark blue
+      this.colors.liquid,
+      this.colors.liquidDark,
       normalizedConc
     );
   }
   
   private drawInfo(p: p5): void {
-    p.fill(0);
+    p.fill(this.colors.foreground);
     const isMobile = p.width < 768;
     p.textSize(11 * this.scaleFactor);
     
     // Show error message for unsolvable cases
     if (this.method.includes("unsolvable")) {
-      p.fill(255, 0, 0);
+      p.fill(this.colors.error);
       p.textAlign(p.CENTER, p.CENTER);
       p.textSize(14 * this.scaleFactor);
       p.text("Cannot solve this case analytically", p.width / 2, p.height / 2 - 60 * this.scaleFactor);
@@ -657,13 +657,13 @@ class DilutionVisualDemo extends P5DemoBase {
     const maxTime = this.calculateMaxGraphTime();
     
     // Draw axes
-    p.stroke(0);
+    p.stroke(this.colors.axis);
     p.strokeWeight(2);
     p.line(0, this.graphHeight/2, this.graphWidth, this.graphHeight/2); // x-axis
     p.line(0, -this.graphHeight/2, 0, this.graphHeight/2); // y-axis
     
     // Draw title
-    p.fill(0);
+    p.fill(this.colors.foreground);
     p.noStroke();
     p.textAlign(p.CENTER, p.BOTTOM);
     p.textSize(12 * this.scaleFactor);
@@ -679,7 +679,7 @@ class DilutionVisualDemo extends P5DemoBase {
     
     // Draw curve
     p.noFill();
-    p.stroke(0, 0, 255);
+    p.stroke(this.colors.accent);
     p.strokeWeight(2);
     p.beginShape();
     const step = Math.max(1, maxTime / 100); // Adaptive step size
@@ -696,14 +696,15 @@ class DilutionVisualDemo extends P5DemoBase {
       const targetMass = this.targetMassSlider.value() as number;
       const targetY = -((targetMass / maxMass) - 0.5) * this.graphHeight;
       
-      p.stroke(255, 0, 0, 150);
+      const errorColor = this.colors.error;
+      p.stroke(p.red(errorColor), p.green(errorColor), p.blue(errorColor), 150);
       p.strokeWeight(2);
       p.drawingContext.setLineDash([5, 5]);
       p.line(0, targetY, this.graphWidth, targetY);
       p.drawingContext.setLineDash([]);
       
       // Label for target
-      p.fill(255, 0, 0);
+      p.fill(this.colors.error);
       p.noStroke();
       p.textAlign(p.LEFT, p.CENTER);
       p.textSize(10 * this.scaleFactor);
@@ -713,12 +714,12 @@ class DilutionVisualDemo extends P5DemoBase {
     // Draw current position
     const currentX = (this.time / maxTime) * this.graphWidth;
     const currentY = -((this.currentMass / maxMass) - 0.5) * this.graphHeight;
-    p.fill(255, 0, 0);
+    p.fill(this.colors.error);
     p.noStroke();
     p.circle(currentX, currentY, 8 * this.scaleFactor);
     
     // Draw labels
-    p.fill(0);
+    p.fill(this.colors.foreground);
     p.noStroke();
     p.textAlign(p.RIGHT, p.CENTER);
     p.textSize(10 * this.scaleFactor);
@@ -743,13 +744,13 @@ class DilutionVisualDemo extends P5DemoBase {
     const maxTime = this.calculateMaxGraphTime();
     
     // Draw axes
-    p.stroke(0);
+    p.stroke(this.colors.axis);
     p.strokeWeight(2);
     p.line(0, this.graphHeight/2, this.graphWidth, this.graphHeight/2); // x-axis
     p.line(0, -this.graphHeight/2, 0, this.graphHeight/2); // y-axis
     
     // Draw title
-    p.fill(0);
+    p.fill(this.colors.foreground);
     p.noStroke();
     p.textAlign(p.CENTER, p.BOTTOM);
     p.textSize(12 * this.scaleFactor);
@@ -765,7 +766,7 @@ class DilutionVisualDemo extends P5DemoBase {
     
     // Draw curve
     p.noFill();
-    p.stroke(0, 150, 0);
+    p.stroke(this.colors.success);
     p.strokeWeight(2);
     p.beginShape();
     const step = Math.max(1, maxTime / 100); // Adaptive step size
@@ -780,12 +781,12 @@ class DilutionVisualDemo extends P5DemoBase {
     // Draw current position
     const currentX = (this.time / maxTime) * this.graphWidth;
     const currentY = -((this.currentVolume - paddedMin) / (paddedMax - paddedMin) - 0.5) * this.graphHeight;
-    p.fill(255, 0, 0);
+    p.fill(this.colors.error);
     p.noStroke();
     p.circle(currentX, currentY, 8 * this.scaleFactor);
     
     // Draw labels
-    p.fill(0);
+    p.fill(this.colors.foreground);
     p.noStroke();
     p.textAlign(p.RIGHT, p.CENTER);
     p.textSize(10 * this.scaleFactor);
