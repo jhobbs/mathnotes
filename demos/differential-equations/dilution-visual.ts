@@ -488,13 +488,11 @@ class DilutionVisualDemo extends P5DemoBase {
         pipeEndX, arrowY + arrowSizeV
       );
       
-      // Label
+      // Label - position below the pipe to avoid collision with volume graph
       p.fill(0);
-      p.textAlign(p.LEFT, p.TOP);
+      p.textAlign(p.CENTER, p.TOP);
       p.textSize(14 * this.scaleFactor);
-      const isMobile = p.width < 768;
-      const labelX = isMobile ? vesselRight + 10 * this.scaleFactor : pipeEndX + 10 * this.scaleFactor;
-      p.text(`Out: ${Math.abs(this.outflowVolumeRate).toFixed(1)} gal/min`, labelX, pipeBendY);
+      p.text(`Out: ${Math.abs(this.outflowVolumeRate).toFixed(1)} gal/min`, pipeEndX, vesselBottom + 15 * this.scaleFactor);
       
       p.pop();
     }
