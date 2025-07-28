@@ -179,42 +179,51 @@ Examples:
                     if canvas_match:
                         paths[f'{mode}_canvas'] = canvas_match.group(1)
         elif check_scaling:
-            # Extract both mobile and desktop paths
+            # Extract both mobile and desktop paths (handling light/dark variations)
             for viewport in ['mobile', 'desktop']:
-                base_pattern = f"^{viewport}-base: (.+)$"
-                full_pattern = f"^{viewport}-full: (.+)$"
-                canvas_pattern = f"^{viewport}-canvas: (.+)$"
+                # Match patterns with optional color scheme (light/dark)
+                base_pattern = f"^{viewport}-(light|dark)-base: (.+)$"
+                full_pattern = f"^{viewport}-(light|dark)-full: (.+)$"
+                canvas_pattern = f"^{viewport}-(light|dark)-canvas: (.+)$"
                 
                 for line in output.splitlines():
                     base_match = re.match(base_pattern, line)
                     if base_match:
-                        paths[f'{viewport}_base'] = base_match.group(1)
+                        # Use light variant by default for consistency
+                        if base_match.group(1) == 'light':
+                            paths[f'{viewport}_base'] = base_match.group(2)
                         
                     full_match = re.match(full_pattern, line)
                     if full_match:
-                        paths[f'{viewport}_full'] = full_match.group(1)
+                        if full_match.group(1) == 'light':
+                            paths[f'{viewport}_full'] = full_match.group(2)
                         
                     canvas_match = re.match(canvas_pattern, line)
                     if canvas_match:
-                        paths[f'{viewport}_canvas'] = canvas_match.group(1)
+                        if canvas_match.group(1) == 'light':
+                            paths[f'{viewport}_canvas'] = canvas_match.group(2)
         else:
-            # Original behavior - single viewport
-            base_pattern = f"^{self.viewport_for_analysis}-base: (.+)$"
-            full_pattern = f"^{self.viewport_for_analysis}-full: (.+)$"
-            canvas_pattern = f"^{self.viewport_for_analysis}-canvas: (.+)$"
+            # Original behavior - single viewport (handling light/dark variations)
+            base_pattern = f"^{self.viewport_for_analysis}-(light|dark)-base: (.+)$"
+            full_pattern = f"^{self.viewport_for_analysis}-(light|dark)-full: (.+)$"
+            canvas_pattern = f"^{self.viewport_for_analysis}-(light|dark)-canvas: (.+)$"
             
             for line in output.splitlines():
                 base_match = re.match(base_pattern, line)
                 if base_match:
-                    paths['base'] = base_match.group(1)
+                    # Use light variant by default for consistency
+                    if base_match.group(1) == 'light':
+                        paths['base'] = base_match.group(2)
                     
                 full_match = re.match(full_pattern, line)
                 if full_match:
-                    paths['full'] = full_match.group(1)
+                    if full_match.group(1) == 'light':
+                        paths['full'] = full_match.group(2)
                     
                 canvas_match = re.match(canvas_pattern, line)
                 if canvas_match:
-                    paths['canvas'] = canvas_match.group(1)
+                    if canvas_match.group(1) == 'light':
+                        paths['canvas'] = canvas_match.group(2)
         
         return paths
     
