@@ -55,8 +55,9 @@ class DilutionVisualDemo extends P5DemoBase {
   
   protected createSketch(p: p5): void {
     p.setup = () => {
-      // Ultra compact - just enough for vessel and pipes
-      this.createResponsiveCanvas(p, 0.25, 25);
+      // Balanced aspect ratio - not too wide, not too tall
+      const aspectRatio = p.windowWidth >= 768 ? 0.4 : 0.5;
+      this.createResponsiveCanvas(p, aspectRatio, 25);
       p.colorMode(p.RGB);
       
       // Create controls with proper class name
@@ -69,8 +70,8 @@ class DilutionVisualDemo extends P5DemoBase {
           .demo-control-panel {
             display: grid !important;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px 20px;
-            max-width: 700px;
+            gap: 10px 15px;
+            max-width: 500px;
             margin: 10px auto;
             padding: 10px;
           }
@@ -158,9 +159,9 @@ class DilutionVisualDemo extends P5DemoBase {
       // Update scaling
       this.updateScaling(p);
       
-      // Draw components - position vessel to maximize use of tiny canvas
+      // Draw components - position vessel to use canvas space efficiently
       const centerX = p.width / 2;
-      const centerY = p.height * 0.6; // Slight offset down in ultra-compact canvas
+      const centerY = p.height * 0.55; // Slightly lower to account for top info
       
       this.drawVessel(p, centerX, centerY);
       this.drawPipes(p, centerX, centerY);
@@ -173,8 +174,8 @@ class DilutionVisualDemo extends P5DemoBase {
     if (isMobile) {
       this.scaleFactor = Math.min(p.width / 400, p.height / 400);
     } else {
-      // Smaller scaling for desktop to keep it compact
-      this.scaleFactor = Math.min(p.width / 500, p.height / 400, 1.2);
+      // Better scaling to fill the canvas
+      this.scaleFactor = Math.min(p.width / 280, p.height / 200, 1.5);
     }
     
     this.vesselWidth = 120 * this.scaleFactor;
