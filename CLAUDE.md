@@ -71,6 +71,9 @@ You have to use the venv to run ./scripts/crawl-demos.py
 # Check if a demo scales properly from desktop to mobile
 ./scripts/crawl-demos.py -d pendulum --check-scaling
 
+# Check if a demo has good dark mode handling
+./scripts/crawl-demos.py -d pendulum --check-dark-mode
+
 
 # Ask specific questions about demos
 ./scripts/crawl-demos.py -d diagonalization --ask "is the widget flombulating properly in @\$BASE_PATH?"

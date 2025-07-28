@@ -48,6 +48,7 @@ Examples:
   %(prog)s -d pendulum --ask 'what physics concepts are illustrated?'
   %(prog)s -d pendulum --check-standards
   %(prog)s -d electric-field --check-scaling  # Analyze mobile/desktop scaling
+  %(prog)s -d pendulum --check-dark-mode  # Compare light vs dark mode visibility
   %(prog)s -d pendulum --describe --model gpt-4.1  # Use GPT-4.1 instead of default
   %(prog)s -d game-of-life --check-scaling --model gpt-4.1-mini  # Explicitly use GPT-4.1-mini
             """
@@ -78,6 +79,8 @@ Examples:
                           help='Check if demo meets standards in DEMO-STANDARD.md')
         parser.add_argument('--check-scaling', action='store_true',
                           help='Analyze how well demo handles scaling between mobile and desktop')
+        parser.add_argument('--check-dark-mode', action='store_true',
+                          help='Compare light mode vs dark mode to ensure visibility in both')
         parser.add_argument('--model', choices=['gpt-4.1-mini', 'gpt-4.1'],
                           default='gpt-4.1-mini',
                           help='OpenAI model to use for analysis (default: gpt-4.1-mini)')
@@ -119,6 +122,16 @@ Examples:
         if args.check_scaling:
             viewport_to_use = 'both'
             
+        # For check-dark-mode, only pass --no-color-schemes if explicitly disabled
+        # By default, we want to capture both light and dark modes
+        if args.check_dark_mode:
+            # Don't add --no-color-schemes, we want both color schemes
+            pass
+        elif not args.check_dark_mode and args.viewport:
+            # Only if we're not checking dark mode and user specified viewport
+            # we might want to add --no-color-schemes in the future if needed
+            pass
+            
         if viewport_to_use:
             cmd.extend(['--viewport', viewport_to_use])
             # Set viewport for analysis
@@ -141,11 +154,31 @@ Examples:
         except subprocess.CalledProcessError as e:
             return e.returncode, str(e)
     
-    def extract_screenshot_paths(self, output: str, check_scaling: bool = False) -> dict:
+    def extract_screenshot_paths(self, output: str, check_scaling: bool = False, check_dark_mode: bool = False) -> dict:
         """Extract screenshot paths from crawler output."""
         paths = {}
         
-        if check_scaling:
+        if check_dark_mode:
+            # Extract both light and dark mode paths for the selected viewport
+            viewport = self.viewport_for_analysis
+            for mode in ['light', 'dark']:
+                base_pattern = f"^{viewport}-{mode}-base: (.+)$"
+                full_pattern = f"^{viewport}-{mode}-full: (.+)$"
+                canvas_pattern = f"^{viewport}-{mode}-canvas: (.+)$"
+                
+                for line in output.splitlines():
+                    base_match = re.match(base_pattern, line)
+                    if base_match:
+                        paths[f'{mode}_base'] = base_match.group(1)
+                        
+                    full_match = re.match(full_pattern, line)
+                    if full_match:
+                        paths[f'{mode}_full'] = full_match.group(1)
+                        
+                    canvas_match = re.match(canvas_pattern, line)
+                    if canvas_match:
+                        paths[f'{mode}_canvas'] = canvas_match.group(1)
+        elif check_scaling:
             # Extract both mobile and desktop paths
             for viewport in ['mobile', 'desktop']:
                 base_pattern = f"^{viewport}-base: (.+)$"
@@ -234,6 +267,17 @@ Examples:
                     return 1
                 result = analyzer.check_demo_scaling(desktop_full, mobile_full)
                 
+            elif args.check_dark_mode:
+                light_full = abs_paths.get('light_full', '')
+                dark_full = abs_paths.get('dark_full', '')
+                if not light_full or not os.path.exists(light_full):
+                    print(f"Error: Light mode full page screenshot not found at {light_full}", file=sys.stderr)
+                    return 1
+                if not dark_full or not os.path.exists(dark_full):
+                    print(f"Error: Dark mode full page screenshot not found at {dark_full}", file=sys.stderr)
+                    return 1
+                result = analyzer.check_dark_mode_compatibility(light_full, dark_full)
+                
             elif args.ask:
                 # Custom question - handle placeholders
                 question = args.ask
@@ -311,7 +355,7 @@ Examples:
         docker_cmd = self.build_docker_command(args)
         
         # Determine if we need to capture output for analysis
-        need_analysis = args.describe or args.ask or args.check_standards or args.check_scaling
+        need_analysis = args.describe or args.ask or args.check_standards or args.check_scaling or args.check_dark_mode
         
         if need_analysis:
             # Capture output to parse screenshot paths
@@ -322,10 +366,20 @@ Examples:
                 return returncode
             
             # Extract screenshot paths
-            paths = self.extract_screenshot_paths(output, args.check_scaling)
+            paths = self.extract_screenshot_paths(output, args.check_scaling, args.check_dark_mode)
             
             # Validate we have the necessary paths
-            if args.check_scaling:
+            if args.check_dark_mode:
+                # For dark mode check, we need both light and dark full paths
+                required_paths = ['light_full', 'dark_full']
+                missing_paths = [p for p in required_paths if p not in paths or not os.path.exists(paths.get(p, ''))]
+                
+                if missing_paths:
+                    print(f"Error: Missing required screenshots for dark mode check: {missing_paths}", file=sys.stderr)
+                    print("Make sure the demo was captured with both light and dark color schemes.", file=sys.stderr)
+                    print(output, file=sys.stderr)
+                    return 1
+            elif args.check_scaling:
                 # For scaling check, we need both mobile and desktop full paths
                 required_paths = ['mobile_full', 'desktop_full']
                 missing_paths = [p for p in required_paths if p not in paths or not os.path.exists(paths.get(p, ''))]
