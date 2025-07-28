@@ -1,7 +1,7 @@
 // Neighborhood demo - Interactive visualization for metric spaces
 import p5 from 'p5';
 import type { DemoInstance, DemoConfig, DemoMetadata } from '@framework/types';
-import { P5DemoBase } from '@framework';
+import { P5DemoBase, createControlRow } from '@framework';
 
 interface Neighborhood {
   center: p5.Vector;
@@ -44,9 +44,19 @@ class NeighborhoodDemo extends P5DemoBase {
     p.setup = () => {
       console.log('[probe] Neighborhood demo setup running');
       
-      // Create controls
-      this.createButton('Reset', () => this.resetDemo());
-      this.createButton('Toggle Zoom', () => this.toggleZoom());
+      // Create control panel using new system
+      const controlPanel = this.createControlPanel();
+      
+      // Create buttons using new components
+      const resetButton = this.createButton('Reset', () => this.resetDemo());
+      const toggleZoomButton = this.createButton('Toggle Zoom', () => this.toggleZoom());
+      
+      // Create control row with both buttons
+      const controlRow = createControlRow(
+        [resetButton, toggleZoomButton],
+        { gap: '10px' }
+      );
+      controlPanel.appendChild(controlRow);
       
       // Info section is now handled by base class
       

@@ -1,6 +1,6 @@
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance, CanvasSize, DemoMetadata } from '@framework/types';
-import { P5DemoBase } from '@framework';
+import { P5DemoBase, createResetButton } from '@framework';
 
 
 class DiagonalizationDemo extends P5DemoBase {
@@ -131,8 +131,12 @@ class DiagonalizationDemo extends P5DemoBase {
 
       // Canvas is now automatically created by base class
       
-      // Create controls
-      this.createButton('Reset', () => this.generateNewSequences());
+      // Create control panel using new system
+      const controlPanel = this.createControlPanel();
+      
+      // Create reset button using new component
+      const resetButton = createResetButton(() => this.generateNewSequences(), this.getStylePrefix());
+      controlPanel.appendChild(resetButton);
 
       this.generateNewSequences();
     };
