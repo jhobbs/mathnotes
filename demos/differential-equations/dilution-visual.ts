@@ -16,7 +16,7 @@ class DilutionVisualDemo extends P5DemoBase {
   private solutionStartingMass = 20;
   private inflowVolumeRate = 1.5;
   private inflowConcentration = 0.5;
-  private outflowVolumeRate = -1.5; // Negative for outflow
+  private outflowVolumeRate = 1.5; // Positive value
   
   // Simulation state
   private time = 0;
@@ -185,8 +185,8 @@ class DilutionVisualDemo extends P5DemoBase {
   
   private calculateMass(time: number): number {
     const a = this.inflowVolumeRate * this.inflowConcentration; // inflowMassRate
-    const b = this.outflowVolumeRate; // outflowVolumeRate (negative)
-    const c = this.inflowVolumeRate + this.outflowVolumeRate; // netFlowRate
+    const b = this.outflowVolumeRate; // outflowVolumeRate (positive)
+    const c = this.inflowVolumeRate - this.outflowVolumeRate; // netFlowRate
     const v = this.solutionStartingVolume;
     const x0 = this.solutionStartingMass;
     
@@ -207,20 +207,27 @@ class DilutionVisualDemo extends P5DemoBase {
     // Case 3: inflowMassRate != 0, netFlowRate != 0
     if (Math.abs(a) > 0.0001 && Math.abs(c) > 0.0001) {
       this.method = "linear";
-      this.k = Math.pow(v, b / c) * (x0 - (a * v) / (c + b));
-      return (a * (v + c * time)) / (c + b) + this.k * Math.pow(v + c * time, -b / c);
+      this.k = Math.pow(v, b / c) * (x0 - (a * v) / (c - b));
+      return (a * (v + c * time)) / (c - b) + this.k * Math.pow(v + c * time, -b / c);
     }
     
-    // Case 4: No change
-    this.method = "constant";
+    // Case 4: No flow (both rates are 0)
+    if (Math.abs(b) < 0.0001 && Math.abs(a) < 0.0001) {
+      this.method = "constant";
+      this.k = 0;
+      return x0;
+    }
+    
+    // Unsolvable case
+    this.method = "unsolvable";
     this.k = 0;
-    return x0;
+    return x0; // Just return starting mass, simulation should be paused
   }
   
   private calculateTimeToReachMass(targetMass: number): number | string {
     const a = this.inflowVolumeRate * this.inflowConcentration; // inflowMassRate
-    const b = this.outflowVolumeRate; // outflowVolumeRate (negative)
-    const c = this.inflowVolumeRate + this.outflowVolumeRate; // netFlowRate
+    const b = this.outflowVolumeRate; // outflowVolumeRate (positive)
+    const c = this.inflowVolumeRate - this.outflowVolumeRate; // netFlowRate
     const v = this.solutionStartingVolume;
     const x0 = this.solutionStartingMass;
     
@@ -252,6 +259,12 @@ class DilutionVisualDemo extends P5DemoBase {
   }
   
   private updateSimulation(): void {
+    // Check if we can solve this case
+    if (this.method === "unsolvable") {
+      this.isRunning = false;
+      return;
+    }
+    
     // Update time
     this.time += this.timeScale;
     
@@ -260,7 +273,7 @@ class DilutionVisualDemo extends P5DemoBase {
     this.currentMass = Math.max(0, this.currentMass);
     
     // Update volume
-    const netFlowRate = this.inflowVolumeRate + this.outflowVolumeRate;
+    const netFlowRate = this.inflowVolumeRate - this.outflowVolumeRate;
     this.currentVolume = this.solutionStartingVolume + netFlowRate * this.time;
     this.currentVolume = Math.max(1, this.currentVolume); // Prevent division by zero
     
@@ -362,7 +375,7 @@ class DilutionVisualDemo extends P5DemoBase {
     }
     
     // Outflow pipe (bottom)
-    if (this.outflowVolumeRate < 0) {
+    if (this.outflowVolumeRate > 0) {
       p.push();
       
       // Pipe width based on flow rate
@@ -436,6 +449,17 @@ class DilutionVisualDemo extends P5DemoBase {
     const isMobile = p.width < 768;
     p.textSize(11 * this.scaleFactor);
     
+    // Show error message for unsolvable cases
+    if (this.method === "unsolvable") {
+      p.fill(255, 0, 0);
+      p.textAlign(p.CENTER, p.CENTER);
+      p.textSize(14 * this.scaleFactor);
+      p.text("Cannot solve this case analytically", p.width / 2, p.height / 2 - 60 * this.scaleFactor);
+      p.textSize(11 * this.scaleFactor);
+      p.text("Please adjust parameters", p.width / 2, p.height / 2 - 40 * this.scaleFactor);
+      return;
+    }
+    
     if (isMobile) {
       // Mobile: vertical layout
       p.textAlign(p.LEFT, p.TOP);
@@ -444,7 +468,7 @@ class DilutionVisualDemo extends P5DemoBase {
       const lineHeight = 16 * this.scaleFactor;
       
       p.text(`Time: ${this.time.toFixed(1)} min`, infoX, infoY);
-      p.text(`Net Flow: ${(this.inflowVolumeRate + this.outflowVolumeRate).toFixed(2)} gal/min`, infoX, infoY + lineHeight);
+      p.text(`Net Flow: ${(this.inflowVolumeRate - this.outflowVolumeRate).toFixed(2)} gal/min`, infoX, infoY + lineHeight);
       p.text(`Method: ${this.method}`, infoX, infoY + lineHeight * 2);
       
       // Target mass info
@@ -471,7 +495,7 @@ class DilutionVisualDemo extends P5DemoBase {
       
       // Left column
       p.text(`Time: ${this.time.toFixed(1)} min`, leftX, topY);
-      p.text(`Net Flow: ${(this.inflowVolumeRate + this.outflowVolumeRate).toFixed(2)} gal/min`, leftX, topY + lineHeight);
+      p.text(`Net Flow: ${(this.inflowVolumeRate - this.outflowVolumeRate).toFixed(2)} gal/min`, leftX, topY + lineHeight);
       
       // Right column
       p.text(`Method: ${this.method}`, rightX, topY);
@@ -497,7 +521,7 @@ class DilutionVisualDemo extends P5DemoBase {
   private updateParameters(): void {
     if (this.inflowRateSlider && this.outflowRateSlider && this.inflowConcSlider) {
       this.inflowVolumeRate = this.inflowRateSlider.value() as number;
-      this.outflowVolumeRate = -(this.outflowRateSlider.value() as number);
+      this.outflowVolumeRate = this.outflowRateSlider.value() as number;
       this.inflowConcentration = this.inflowConcSlider.value() as number;
       // Reset when parameters change
       this.reset();
@@ -527,6 +551,22 @@ class DilutionVisualDemo extends P5DemoBase {
     this.currentConcentration = this.currentMass / this.currentVolume;
     this.method = '';
     this.k = 0;
+    
+    // Calculate initial method to check if case is solvable
+    this.calculateMass(0);
+    if (this.method === "unsolvable") {
+      this.isRunning = false;
+      if (this.pauseButton) {
+        this.pauseButton.disabled = true;
+        this.pauseButton.textContent = 'Unsolvable';
+      }
+    } else {
+      this.isRunning = true;
+      if (this.pauseButton) {
+        this.pauseButton.disabled = false;
+        this.pauseButton.textContent = 'Pause';
+      }
+    }
   }
   
   protected onResize(p: p5, _size: CanvasSize): void {
