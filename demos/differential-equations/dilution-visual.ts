@@ -30,6 +30,10 @@ class DilutionVisualDemo extends P5DemoBase {
   private method = '';
   private k = 0;
   
+  // Graph data
+  private graphWidth = 150;
+  private graphHeight = 120;
+  
   // UI elements
   private startVolumeSlider?: p5.Element;
   private startMassSlider?: p5.Element;
@@ -38,13 +42,13 @@ class DilutionVisualDemo extends P5DemoBase {
   private inflowConcSlider?: p5.Element;
   private targetMassSlider?: p5.Element;
   private pauseButton?: HTMLButtonElement;
-  private controlPanel?: HTMLElement;
   
   // Visual constants (will be scaled)
   private vesselWidth = 120;
   private vesselHeight = 150;
   private maxPipeWidth = 35;
   private scaleFactor = 1;
+  private maxVesselCapacity = 300; // Maximum vessel capacity in gallons
   
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
@@ -61,7 +65,7 @@ class DilutionVisualDemo extends P5DemoBase {
       p.colorMode(p.RGB);
       
       // Create controls with proper class name
-      this.controlPanel = this.createControlPanel({ className: 'demo-control-panel' });
+      this.createControlPanel({ className: 'demo-control-panel' });
       
       // Add CSS for horizontal slider layout on desktop
       const style = document.createElement('style');
@@ -163,6 +167,10 @@ class DilutionVisualDemo extends P5DemoBase {
       const centerX = p.width / 2;
       const centerY = p.height * 0.55; // Slightly lower to account for top info
       
+      // Draw graphs
+      this.drawMassGraph(p, centerX - this.vesselWidth/2 - this.graphWidth - 40 * this.scaleFactor, centerY);
+      this.drawVolumeGraph(p, centerX + this.vesselWidth/2 + 40 * this.scaleFactor, centerY);
+      
       this.drawVessel(p, centerX, centerY);
       this.drawPipes(p, centerX, centerY);
       this.drawInfo(p);
@@ -173,9 +181,14 @@ class DilutionVisualDemo extends P5DemoBase {
     const isMobile = p.width < 768;
     if (isMobile) {
       this.scaleFactor = Math.min(p.width / 400, p.height / 400);
+      // Hide graphs on mobile or make them very small
+      this.graphWidth = 0;
+      this.graphHeight = 0;
     } else {
       // Better scaling to fill the canvas
-      this.scaleFactor = Math.min(p.width / 280, p.height / 200, 1.5);
+      this.scaleFactor = Math.min(p.width / 600, p.height / 250, 1.2);
+      this.graphWidth = 150 * this.scaleFactor;
+      this.graphHeight = 120 * this.scaleFactor;
     }
     
     this.vesselWidth = 120 * this.scaleFactor;
@@ -222,6 +235,41 @@ class DilutionVisualDemo extends P5DemoBase {
     this.method = "unsolvable";
     this.k = 0;
     return x0; // Just return starting mass, simulation should be paused
+  }
+  
+  private calculateMaxGraphTime(): number {
+    // Calculate various end conditions and return the maximum time needed
+    let maxTime = 60; // Default minimum
+    
+    // Time to reach target mass
+    if (this.targetMassSlider) {
+      const targetMass = this.targetMassSlider.value() as number;
+      const timeToTarget = this.calculateTimeToReachMass(targetMass);
+      if (typeof timeToTarget === 'number' && timeToTarget > 0) {
+        maxTime = Math.max(maxTime, timeToTarget * 1.2); // Add 20% padding
+      }
+    }
+    
+    // Time to reach volume limits
+    const netFlow = this.inflowVolumeRate - this.outflowVolumeRate;
+    if (Math.abs(netFlow) > 0.001) {
+      if (netFlow > 0) {
+        // Time to fill vessel
+        const timeToFill = (this.maxVesselCapacity - this.solutionStartingVolume) / netFlow;
+        if (timeToFill > 0) {
+          maxTime = Math.max(maxTime, timeToFill * 1.2);
+        }
+      } else {
+        // Time to empty vessel
+        const timeToEmpty = (this.solutionStartingVolume - 0.1) / -netFlow;
+        if (timeToEmpty > 0) {
+          maxTime = Math.max(maxTime, timeToEmpty * 1.2);
+        }
+      }
+    }
+    
+    // Cap at a reasonable maximum
+    return Math.min(maxTime, 300); // Max 5 hours
   }
   
   private calculateTimeToReachMass(targetMass: number): number | string {
@@ -280,13 +328,30 @@ class DilutionVisualDemo extends P5DemoBase {
     // Update concentration
     this.currentConcentration = this.currentMass / this.currentVolume;
     
-    // Auto-reset when target mass is reached
+    // Auto-reset conditions
+    let shouldReset = false;
+    
+    // Reset when target mass is reached
     if (this.targetMassSlider) {
       const targetMass = this.targetMassSlider.value() as number;
       const tolerance = 0.5; // Within 0.5 lbs
       if (Math.abs(this.currentMass - targetMass) < tolerance) {
-        this.reset();
+        shouldReset = true;
       }
+    }
+    
+    // Reset when volume exceeds vessel capacity
+    if (this.currentVolume > this.maxVesselCapacity) {
+      shouldReset = true;
+    }
+    
+    // Reset when volume reaches zero (or very close to zero)
+    if (this.currentVolume <= 0.1) {
+      shouldReset = true;
+    }
+    
+    if (shouldReset) {
+      this.reset();
     }
   }
   
@@ -301,9 +366,8 @@ class DilutionVisualDemo extends P5DemoBase {
     p.rect(-this.vesselWidth/2, -this.vesselHeight/2, this.vesselWidth, this.vesselHeight);
     
     // Draw liquid level based on volume
-    // Use a fixed reference volume for consistent scaling
-    const referenceVolume = 200; // Fixed reference for visual scaling
-    const liquidLevel = Math.min(0.95, this.currentVolume / referenceVolume);
+    // Scale based on max capacity to show when vessel is getting full
+    const liquidLevel = Math.min(0.95, this.currentVolume / this.maxVesselCapacity);
     const liquidHeight = this.vesselHeight * liquidLevel;
     
     // Liquid color based on concentration (matching pipes)
@@ -323,7 +387,14 @@ class DilutionVisualDemo extends P5DemoBase {
     p.textAlign(p.CENTER, p.CENTER);
     p.textSize(14 * this.scaleFactor);
     p.text(`C = ${this.currentConcentration.toFixed(3)}`, 0, -15 * this.scaleFactor);
+    
+    // Show volume with warning color if approaching capacity
+    if (this.currentVolume > this.maxVesselCapacity * 0.9) {
+      p.fill(255, 0, 0);
+    }
     p.text(`V = ${this.currentVolume.toFixed(1)} gal`, 0, 0);
+    
+    p.fill(0);
     p.text(`M = ${this.currentMass.toFixed(2)} lbs`, 0, 15 * this.scaleFactor);
     
     p.pop();
@@ -571,6 +642,157 @@ class DilutionVisualDemo extends P5DemoBase {
   
   protected onResize(p: p5, _size: CanvasSize): void {
     this.updateScaling(p);
+  }
+  
+  private drawMassGraph(p: p5, x: number, y: number): void {
+    if (this.graphWidth === 0) return; // Skip on mobile
+    
+    p.push();
+    p.translate(x, y);
+    
+    const maxTime = this.calculateMaxGraphTime();
+    
+    // Draw axes
+    p.stroke(0);
+    p.strokeWeight(2);
+    p.line(0, this.graphHeight/2, this.graphWidth, this.graphHeight/2); // x-axis
+    p.line(0, -this.graphHeight/2, 0, this.graphHeight/2); // y-axis
+    
+    // Draw title
+    p.fill(0);
+    p.noStroke();
+    p.textAlign(p.CENTER, p.BOTTOM);
+    p.textSize(12 * this.scaleFactor);
+    p.text('Mass (lbs)', this.graphWidth/2, -this.graphHeight/2 - 10);
+    
+    // Calculate max mass for scaling
+    let maxMass = this.solutionStartingMass;
+    const inflowMassRate = this.inflowVolumeRate * this.inflowConcentration;
+    if (inflowMassRate > 0) {
+      // Estimate max based on equilibrium or growth
+      maxMass = Math.max(maxMass, this.calculateMass(maxTime) * 1.1);
+    }
+    
+    // Draw curve
+    p.noFill();
+    p.stroke(0, 0, 255);
+    p.strokeWeight(2);
+    p.beginShape();
+    const step = Math.max(1, maxTime / 100); // Adaptive step size
+    for (let t = 0; t <= maxTime; t += step) {
+      const mass = this.calculateMass(t);
+      const xPos = (t / maxTime) * this.graphWidth;
+      const yPos = -((mass / maxMass) - 0.5) * this.graphHeight;
+      p.vertex(xPos, yPos);
+    }
+    p.endShape();
+    
+    // Draw target line (dashed)
+    if (this.targetMassSlider) {
+      const targetMass = this.targetMassSlider.value() as number;
+      const targetY = -((targetMass / maxMass) - 0.5) * this.graphHeight;
+      
+      p.stroke(255, 0, 0, 150);
+      p.strokeWeight(2);
+      p.drawingContext.setLineDash([5, 5]);
+      p.line(0, targetY, this.graphWidth, targetY);
+      p.drawingContext.setLineDash([]);
+      
+      // Label for target
+      p.fill(255, 0, 0);
+      p.noStroke();
+      p.textAlign(p.LEFT, p.CENTER);
+      p.textSize(10 * this.scaleFactor);
+      p.text(`Target: ${targetMass.toFixed(0)}`, this.graphWidth + 5, targetY);
+    }
+    
+    // Draw current position
+    const currentX = (this.time / maxTime) * this.graphWidth;
+    const currentY = -((this.currentMass / maxMass) - 0.5) * this.graphHeight;
+    p.fill(255, 0, 0);
+    p.noStroke();
+    p.circle(currentX, currentY, 8 * this.scaleFactor);
+    
+    // Draw labels
+    p.fill(0);
+    p.noStroke();
+    p.textAlign(p.RIGHT, p.CENTER);
+    p.textSize(10 * this.scaleFactor);
+    p.text(maxMass.toFixed(0), -5, -this.graphHeight/2);
+    p.text('0', -5, this.graphHeight/2);
+    
+    p.textAlign(p.CENTER, p.TOP);
+    p.text('0', 0, this.graphHeight/2 + 5);
+    p.text(maxTime.toFixed(0), this.graphWidth, this.graphHeight/2 + 5);
+    p.text('Time (min)', this.graphWidth/2, this.graphHeight/2 + 20);
+    
+    p.pop();
+  }
+  
+  private drawVolumeGraph(p: p5, x: number, y: number): void {
+    if (this.graphWidth === 0) return; // Skip on mobile
+    
+    p.push();
+    p.translate(x, y);
+    
+    const maxTime = this.calculateMaxGraphTime();
+    
+    // Draw axes
+    p.stroke(0);
+    p.strokeWeight(2);
+    p.line(0, this.graphHeight/2, this.graphWidth, this.graphHeight/2); // x-axis
+    p.line(0, -this.graphHeight/2, 0, this.graphHeight/2); // y-axis
+    
+    // Draw title
+    p.fill(0);
+    p.noStroke();
+    p.textAlign(p.CENTER, p.BOTTOM);
+    p.textSize(12 * this.scaleFactor);
+    p.text('Volume (gal)', this.graphWidth/2, -this.graphHeight/2 - 10);
+    
+    // Calculate volume range for scaling
+    const netFlow = this.inflowVolumeRate - this.outflowVolumeRate;
+    const minVolume = Math.max(1, Math.min(this.solutionStartingVolume, this.solutionStartingVolume + netFlow * maxTime));
+    const maxVolume = Math.max(this.solutionStartingVolume, this.solutionStartingVolume + netFlow * maxTime);
+    const volumeRange = maxVolume - minVolume || 100;
+    const paddedMin = minVolume - volumeRange * 0.1;
+    const paddedMax = maxVolume + volumeRange * 0.1;
+    
+    // Draw curve
+    p.noFill();
+    p.stroke(0, 150, 0);
+    p.strokeWeight(2);
+    p.beginShape();
+    const step = Math.max(1, maxTime / 100); // Adaptive step size
+    for (let t = 0; t <= maxTime; t += step) {
+      const volume = this.solutionStartingVolume + netFlow * t;
+      const xPos = (t / maxTime) * this.graphWidth;
+      const yPos = -((volume - paddedMin) / (paddedMax - paddedMin) - 0.5) * this.graphHeight;
+      p.vertex(xPos, yPos);
+    }
+    p.endShape();
+    
+    // Draw current position
+    const currentX = (this.time / maxTime) * this.graphWidth;
+    const currentY = -((this.currentVolume - paddedMin) / (paddedMax - paddedMin) - 0.5) * this.graphHeight;
+    p.fill(255, 0, 0);
+    p.noStroke();
+    p.circle(currentX, currentY, 8 * this.scaleFactor);
+    
+    // Draw labels
+    p.fill(0);
+    p.noStroke();
+    p.textAlign(p.RIGHT, p.CENTER);
+    p.textSize(10 * this.scaleFactor);
+    p.text(paddedMax.toFixed(0), -5, -this.graphHeight/2);
+    p.text(paddedMin.toFixed(0), -5, this.graphHeight/2);
+    
+    p.textAlign(p.CENTER, p.TOP);
+    p.text('0', 0, this.graphHeight/2 + 5);
+    p.text(maxTime.toFixed(0), this.graphWidth, this.graphHeight/2 + 5);
+    p.text('Time (min)', this.graphWidth/2, this.graphHeight/2 + 20);
+    
+    p.pop();
   }
 }
 
