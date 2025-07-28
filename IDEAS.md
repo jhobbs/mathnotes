@@ -93,13 +93,6 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Enable rich snippets for mathematical content
   - Consider using CreativeWork for cited/attributed content
 
-- **Mobile-Friendly Controls for Electric Field Demo**: Add touch-friendly UI controls
-  - Add on-screen play/pause button (alternative to spacebar)
-  - Add charge polarity toggle button (alternative to Ctrl+click)
-  - Add charge strength slider/input control
-  - Improve mobile usability and accessibility
-  - Consider adding visual feedback for current settings
-
 - **Visual Dilution Process Demo**: Create a p5.js-based animated visualization of the dilution calculator
   - Convert the existing form-based dilution calculator to include visual representation
   - Show animated tank/container with inflow and outflow

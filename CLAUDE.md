@@ -21,6 +21,7 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 ### Coding Best Practices
 
 * Don't check types after every single change
+* Do not hardcode colors - always use colors from the central colors theme.
 
 ## Common Commands
 

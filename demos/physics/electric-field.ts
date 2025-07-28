@@ -130,13 +130,16 @@ class ElectricFieldDemo extends P5DemoBase {
   private moveParticles = false;
   private positiveColor!: p5.Color;
   private negativeColor!: p5.Color;
+  private selectedCharge: number = -1; // Default to negative
   
   protected getStylePrefix(): string {
     return 'electric-field';
   }
   
   protected getAspectRatio(): number {
-    return 0.65;
+    // Use taller aspect ratio on mobile for better vertical space
+    const isMobile = window.innerWidth < 768;
+    return isMobile ? 0.85 : 0.65;
   }
   
   constructor(container: HTMLElement, config?: DemoConfig) {
@@ -196,22 +199,14 @@ class ElectricFieldDemo extends P5DemoBase {
     };
     
     p.mouseClicked = () => {
-      let sgn = -1; // Default to negative charge
-      if (p.keyIsDown(p.CONTROL)) {
-        sgn = 1; // Positive charge when Ctrl is held
+      // Only place particles if clicking within canvas bounds
+      if (p.mouseX >= 0 && p.mouseX <= p.width && 
+          p.mouseY >= 0 && p.mouseY <= p.height) {
+        const particle = new ParticleImpl(p, p.mouseX, p.mouseY, this.selectedCharge * 15);
+        // Set the color based on charge
+        particle.color = this.selectedCharge > 0 ? this.positiveColor : this.negativeColor;
+        this.particles.push(particle);
       }
-      const particle = new ParticleImpl(p, p.mouseX, p.mouseY, sgn * 15);
-      // Set the color based on charge
-      particle.color = sgn > 0 ? this.positiveColor : this.negativeColor;
-      this.particles.push(particle);
-    };
-    
-    p.keyPressed = () => {
-      if (p.keyCode === 32) { // Spacebar
-        this.moveParticles = !this.moveParticles;
-        return false; // Prevent default behavior
-      }
-      return true; // Allow default behavior for other keys
     };
     
   }
@@ -227,16 +222,110 @@ class ElectricFieldDemo extends P5DemoBase {
   }
 
   init(): DemoInstance {
-    // Prevent spacebar from scrolling the page
-    const preventSpaceScroll = (event: KeyboardEvent) => {
-      if (event.code === 'Space' || event.keyCode === 32) {
-        event.preventDefault();
-      }
-    };
+    const result = super.init();
     
-    this.addEventListener(document, 'keydown', preventSpaceScroll as EventListener, { capture: true });
+    // Create UI controls
+    const controls = document.createElement('div');
+    controls.className = 'demo-controls';
+    const isMobile = window.innerWidth < 768;
+    controls.style.cssText = `
+      display: flex;
+      gap: ${isMobile ? '12px' : '20px'};
+      align-items: center;
+      justify-content: center;
+      padding: ${isMobile ? '8px' : '10px'};
+      background: ${this.colors.surfaceAlt.toString()};
+      border-radius: 8px;
+      margin-top: ${isMobile ? '8px' : '10px'};
+      flex-wrap: wrap;
+    `;
     
-    return super.init();
+    // Create charge selection radio buttons
+    const chargeGroup = document.createElement('div');
+    chargeGroup.style.cssText = `display: flex; gap: ${isMobile ? '10px' : '15px'}; align-items: center;`;
+    
+    const negativeLabel = document.createElement('label');
+    negativeLabel.style.cssText = 'display: flex; align-items: center; gap: 5px; cursor: pointer;';
+    const negativeRadio = document.createElement('input');
+    negativeRadio.type = 'radio';
+    negativeRadio.name = 'charge-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    negativeRadio.value = '-1';
+    negativeRadio.checked = true;
+    negativeRadio.addEventListener('change', () => {
+      if (negativeRadio.checked) this.selectedCharge = -1;
+    });
+    negativeLabel.appendChild(negativeRadio);
+    negativeLabel.appendChild(document.createTextNode('Negative (-)'));
+    
+    const positiveLabel = document.createElement('label');
+    positiveLabel.style.cssText = 'display: flex; align-items: center; gap: 5px; cursor: pointer;';
+    const positiveRadio = document.createElement('input');
+    positiveRadio.type = 'radio';
+    positiveRadio.name = negativeRadio.name;
+    positiveRadio.value = '1';
+    positiveRadio.addEventListener('change', () => {
+      if (positiveRadio.checked) this.selectedCharge = 1;
+    });
+    positiveLabel.appendChild(positiveRadio);
+    positiveLabel.appendChild(document.createTextNode('Positive (+)'));
+    
+    chargeGroup.appendChild(negativeLabel);
+    chargeGroup.appendChild(positiveLabel);
+    
+    // Create motion toggle button
+    const motionButton = document.createElement('button');
+    motionButton.textContent = 'Start Motion';
+    motionButton.style.cssText = `
+      padding: ${isMobile ? '10px 18px' : '8px 16px'};
+      background: ${this.colors.info.toString()};
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: ${isMobile ? '16px' : '14px'};
+      transition: background 0.3s;
+      -webkit-tap-highlight-color: transparent;
+    `;
+    motionButton.addEventListener('click', () => {
+      this.moveParticles = !this.moveParticles;
+      motionButton.textContent = this.moveParticles ? 'Stop Motion' : 'Start Motion';
+      motionButton.style.background = this.moveParticles ? this.colors.error.toString() : this.colors.info.toString();
+    });
+    
+    // Create reset button
+    const resetButton = document.createElement('button');
+    resetButton.textContent = 'Reset';
+    resetButton.style.cssText = `
+      padding: ${isMobile ? '10px 18px' : '8px 16px'};
+      background: ${this.colors.surface.toString()};
+      color: ${this.colors.text};
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: ${isMobile ? '16px' : '14px'};
+      transition: background 0.3s;
+      -webkit-tap-highlight-color: transparent;
+    `;
+    resetButton.addEventListener('click', () => {
+      this.particles = [];
+      this.moveParticles = false;
+      motionButton.textContent = 'Start Motion';
+      motionButton.style.background = this.colors.info.toString();
+    });
+    
+    controls.appendChild(chargeGroup);
+    controls.appendChild(motionButton);
+    controls.appendChild(resetButton);
+    
+    // Prevent clicks on controls from propagating to canvas
+    controls.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+    
+    // Insert controls after the canvas
+    this.container.appendChild(controls);
+    
+    return result;
   }
 }
 
@@ -245,9 +334,9 @@ export const metadata: DemoMetadata = {
   category: 'Physics',
   description: 'Interactive simulation of electric field lines and charged particles',
   instructions: `
-    <p><strong>Instructions:</strong> Click to place negative charges. 
-    Ctrl+Click to place positive charges. 
-    Press spacebar to toggle particle movement.</p>
+    <p><strong>Instructions:</strong> Select charge type using the radio buttons, 
+    then click on the canvas to place charges. 
+    Use the button to start/stop particle movement.</p>
   `
 };
 
