@@ -16,6 +16,14 @@ export interface DemoColors {
   accent: p5.Color;
   grid: p5.Color;
   axis: p5.Color;
+  error: p5.Color;
+  success: p5.Color;
+  warning: p5.Color;
+  info: p5.Color;
+  surface: p5.Color;
+  surfaceAlt: p5.Color;
+  liquid: p5.Color;
+  liquidDark: p5.Color;
 }
 
 export interface CanvasSize {
@@ -73,7 +81,15 @@ export function getDemoColors(p: p5, config?: DemoConfig): DemoColors {
       text: '#e0e0e0',
       accent: p.color(100, 150, 255),
       grid: p.color(60, 60, 60),
-      axis: p.color(150, 150, 150)
+      axis: p.color(150, 150, 150),
+      error: p.color(255, 87, 87),
+      success: p.color(87, 255, 87),
+      warning: p.color(255, 193, 7),
+      info: p.color(33, 150, 243),
+      surface: p.color(45, 45, 45),
+      surfaceAlt: p.color(60, 60, 60),
+      liquid: p.color(173, 216, 230),
+      liquidDark: p.color(25, 118, 210)
     };
   } else {
     return {
@@ -84,7 +100,15 @@ export function getDemoColors(p: p5, config?: DemoConfig): DemoColors {
       text: '#333333',
       accent: p.color(50, 100, 200),
       grid: p.color(200, 200, 200),
-      axis: p.color(100, 100, 100)
+      axis: p.color(100, 100, 100),
+      error: p.color(211, 47, 47),
+      success: p.color(46, 125, 50),
+      warning: p.color(245, 124, 0),
+      info: p.color(25, 118, 210),
+      surface: p.color(245, 245, 245),
+      surfaceAlt: p.color(235, 235, 235),
+      liquid: p.color(173, 216, 230),
+      liquidDark: p.color(0, 0, 139)
     };
   }
 }

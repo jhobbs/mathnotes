@@ -237,27 +237,28 @@ class TurntableDemo extends P5DemoBase {
     const isDark = this.isDarkMode;
     if (isDark) {
       // Light grey background in dark mode
-      p.fill(200, 200, 200);
+      p.fill(this.colors.surface);
       p.noStroke();
       p.rect(-p.width/2, -p.height/2, p.width, p.height);
     }
     
     // Draw the vinyl record - black in both modes
-    p.fill(0); // Black vinyl
-    p.stroke(isDark ? 255 : 0); // White border in dark mode, black in light mode
+    p.fill(this.isDarkMode ? this.colors.foreground : p.color(0)); // Black vinyl in light mode, foreground in dark
+    p.stroke(this.colors.stroke);
     p.strokeWeight(2);
     p.circle(0, 0, this.RECORD_RADIUS * 2);
     
     // Add concentric grooves for visual interest
     p.strokeWeight(1);
-    p.stroke(isDark ? 255 : 128, isDark ? 255 : 128, isDark ? 255 : 128, 80); // Semi-transparent grooves
+    const gridColor = this.colors.grid;
+    p.stroke(p.red(gridColor), p.green(gridColor), p.blue(gridColor), 80); // Semi-transparent grooves
     p.noFill();
     for (let r = 0.3; r < 1; r += 0.15) {
       p.circle(0, 0, this.RECORD_RADIUS * 2 * r);
     }
     
     // Center label (hole)
-    p.fill(isDark ? 200 : 255); // Light grey in dark mode, white in light mode
+    p.fill(this.colors.surfaceAlt);
     p.noStroke();
     p.circle(0, 0, this.RECORD_RADIUS * 0.2);
     

@@ -193,7 +193,7 @@ export default function createDilutionCalculatorDemo(container: HTMLElement, _co
     .demo-button {
       padding: 0.75rem 1.5rem;
       background-color: var(--link-color);
-      color: white;
+      color: var(--bg-color);
       border: none;
       border-radius: 4px;
       cursor: pointer;
