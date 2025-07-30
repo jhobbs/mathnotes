@@ -2,6 +2,8 @@
 layout: page
 title: Perfect Sets
 description: Introduces perfect sets.
+redirect_from:
+  - real-analysis/topology/perfect-sets
 ---
 
 # Perfect Sets

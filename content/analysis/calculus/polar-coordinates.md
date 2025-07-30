@@ -2,6 +2,8 @@
 layout: page
 title: Polar Coordinates
 description: Polar coordinate system fundamentals including conversion formulas, derivatives in polar form, radial and transverse components of motion, and applications to physics and differential equations.
+redirect_from:
+  - calculus/polar-coordinates
 ---
 
 # Polar Coordinates

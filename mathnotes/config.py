@@ -12,18 +12,17 @@ SITE_DESCRIPTION = "A collection of mathematics notes and interactive demonstrat
 # Content directories
 CONTENT_DIRS = [
     "content/algebra",
-    "content/calculus",
+    "content/analysis",
     "content/differential-equations",
     "content/geometry",
+    "content/topology",
     "content/logic-and-proofs",
     "content/physics",
-    "content/complex-analysis",
     "content/probability-and-statistics",
     "content/misc",
     "content/numerical-analysis",
     "content/discrete-math",
     "content/cellular-automata",
-    "content/real-analysis",
 ]
 
 
