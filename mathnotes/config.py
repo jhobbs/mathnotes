@@ -13,13 +13,9 @@ SITE_DESCRIPTION = "A collection of mathematics notes and interactive demonstrat
 CONTENT_DIRS = [
     "content/algebra",
     "content/analysis",
-    "content/differential-equations",
+    "content/applied-math",
     "content/geometry",
     "content/topology",
-    "content/physics",
-    "content/probability-and-statistics",
-    "content/misc",
-    "content/numerical-analysis",
     "content/discrete-math",
 ]
 
