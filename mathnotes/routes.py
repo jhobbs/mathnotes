@@ -87,11 +87,9 @@ def register_routes(app, url_mapper, markdown_processor):
             "differential-equations": "Differential Equations",
             "geometry": "Geometry",
             "topology": "Topology",
-            "logic-and-proofs": "Logic and Proofs",
             "probability-and-statistics": "Probability and Statistics",
             "numerical-analysis": "Numerical Analysis",
             "discrete-math": "Discrete Math",
-            "cellular-automata": "Cellular Automata",
         }
 
         sections = []
