@@ -32,7 +32,8 @@ class DiagonalizationDemo extends P5DemoBase {
   }
   
   protected getAspectRatio(): number {
-    return 0.775; // Calculated for the content height
+    // Need a much taller aspect ratio to fit all content including the p: row and text
+    return 1.5;
   }
 
   constructor(container: HTMLElement, config?: DemoConfig) {
@@ -465,7 +466,16 @@ class DiagonalizationDemo extends P5DemoBase {
     
     const titleY = isMobile ? 40 : 30;
     const sequenceTableY = isMobile ? 90 : 80;
-    const contentHeight = titleY + sequenceTableY + this.NUM_SEQUENCES * this.CELL_SIZE + 20 + 80 + this.CELL_SIZE + 30 + 50;
+    
+    // Calculate exact positions based on drawConstructedSequence and drawLabels
+    const constructedSeqY = sequenceTableY + this.NUM_SEQUENCES * this.CELL_SIZE + 80;
+    const labelsY = constructedSeqY + this.CELL_SIZE + 30;
+    
+    // Total height needs to include:
+    // - Labels position + text height (need more space for step text and total positions)
+    // - Bottom padding
+    const contentHeight = labelsY + 80 + 20;
+    
     p.resizeCanvas(p.width, contentHeight);
   }
 }
