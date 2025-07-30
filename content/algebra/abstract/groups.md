@@ -2,6 +2,8 @@
 layout: page
 title: Groups
 description: Mathematical groups and their fundamental properties including closure, associativity, identity, and inverse elements.
+redirect_from:
+  - algebra/groups
 ---
 
 # Groups

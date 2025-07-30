@@ -29,21 +29,30 @@ class URLMapper:
                     with open(md_file, "r", encoding="utf-8") as f:
                         post = frontmatter.load(f)
 
-                    # Get slug from frontmatter or generate from title
-                    slug = post.metadata.get("slug")
-                    if not slug:
-                        title = post.metadata.get("title", md_file.stem.replace("-", " "))
-                        slug = slugify(title)
-
                     # Build canonical URL
                     relative_path = md_file.relative_to(Path("."))
-                    # Remove "content/" prefix from section name for URLs
-                    section_name = (
-                        relative_path.parts[1]
-                        if relative_path.parts[0] == "content"
-                        else relative_path.parts[0]
-                    )
-                    canonical_url = f"{section_name}/{slug}"
+                    
+                    # Check if there's a custom slug that should override the path
+                    custom_slug = post.metadata.get("slug")
+                    if custom_slug:
+                        # Custom slug provided - use it with section prefix
+                        section_name = (
+                            relative_path.parts[1]
+                            if relative_path.parts[0] == "content"
+                            else relative_path.parts[0]
+                        )
+                        canonical_url = f"{section_name}/{custom_slug}"
+                    else:
+                        # No custom slug - use full directory structure
+                        # Remove content/ prefix and .md extension
+                        if relative_path.parts[0] == "content":
+                            url_path = "/".join(relative_path.parts[1:])
+                        else:
+                            url_path = str(relative_path)
+                        # Remove .md extension
+                        if url_path.endswith(".md"):
+                            url_path = url_path[:-3]
+                        canonical_url = url_path
 
                     # Store mappings
                     file_path = str(relative_path).replace("\\", "/")
