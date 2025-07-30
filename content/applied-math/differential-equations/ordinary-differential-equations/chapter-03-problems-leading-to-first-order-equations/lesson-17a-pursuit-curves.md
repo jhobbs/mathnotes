@@ -4,7 +4,6 @@ redirect_from:
 - ode/chapter 03 - problems leading to first order equations/lesson 17a - pursuit
   curves
 - ode/chapter 03 - problems leading to first order equations/lesson 17 - pursuit curves
-- /differential-equations/ordinary differential-equations/chapter 03 - problems leading
   to first order equations/lesson 17a - pursuit curves
 title: Pursuit Curves
 ---

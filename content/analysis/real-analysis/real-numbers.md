@@ -10,7 +10,7 @@ description: Axiomatically defines the real numbers as an ordered complete field
 
 The real numbers $\mathbb{R}$ are a set of objects along with two binary operations $+ : \mathbb{R} \times \mathbb{R} \to \mathbb{R}$ and $\cdot : \mathbb{R} \times \mathbb{R} \to \mathbb{R}$ that satisfy the 9 field axioms along with the Order axiom and the Completeness axiom. That is, the reals are an ordered, complete field.
 
-We know that a [[field is a commutative division ring|algebra/rings-and-fields]].
+We know that a [[field is a commutative division ring|algebra/abstract/rings]].
 
 The **Order axiom** states that there exists a subset of $\mathbb{R}^+$ of $\mathbb{R}$ such that for all $a, b \in \mathbb{R}^+,a + b \in \mathbb{R}^+, a \cdot b \in \mathbb{R}^+.$ and for all $a \in \mathbb{R}$ exactly one of the following is true: (i) $a \in \mathbb{R}^+$, (ii) $-a \in \mathbb{R}^+$, or (iii) $a = 0$.
 

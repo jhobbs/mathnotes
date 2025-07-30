@@ -9,9 +9,7 @@ redirect_from:
 - ode/lesson 07 - first order differential equation with homogenous coefficients
 - ode/lesson 7 - first order differential equation with homogenous coefficients
 - diffeq/lesson 7 - first order differential equation with homogenous coefficients
-- /differential-equations/ordinary differential-equations/chapter 02 - special types
   of first order equations/lesson 07 - first order differential equation with homogenous
-  coefficients
 title: First Order Differential Equation with Homogenous Coefficients
 ---
 

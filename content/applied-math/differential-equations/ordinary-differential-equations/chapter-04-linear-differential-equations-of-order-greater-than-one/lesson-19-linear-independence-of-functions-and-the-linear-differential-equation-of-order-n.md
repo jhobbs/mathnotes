@@ -4,12 +4,7 @@ description: Fundamental theory of linear differential equations of higher order
   of general solutions for homogeneous and nonhomogeneous equations.
 layout: page
 redirect_from:
-- ode/chapter 04 - linear differential equations of order greater than one/lesson
-  19 - linear independence of functions and the linear differential equation of order
-  n
-- /differential-equations/ordinary differential-equations/chapter 04 - linear differential
-  equations of order greater than one/lesson 19 - linear independence of functions
-  and the linear differential equation of order n
+- ode/chapter 04 - linear differential equations of order greater than one/lesson 19 - linear independence of functions and the linear differential equation of order n
 title: Linear Independence of Functions. The Linear Differential Equation of Order
   n.
 ---
@@ -171,7 +166,7 @@ Using the fact that $f'(x) + g'(x) = \frac{d}{dx}[f(x) + g(x)]$, and also distri
 
 $$ \tag{19.5m} f_n(x){u(x)}^{(n)} + f_n(x){iv(x)}^{(n)} + \cdots + f_1(x){u(x)}' + f_1(x){iv(x)}' + f_0(x){u(x)} + f_0(x){iv(x)} = R(x) + iS(x) $$
 
-Rearranging terms in $(19.5m)$ and factoring out $i$ lets us rewrite the left-hand side in real and imaginary parts (see notes on [Complex Numbers](/mathnotes/complex-analysis/algebraic-properties):
+Rearranging terms in $(19.5m)$ and factoring out $i$ lets us rewrite the left-hand side in real and imaginary parts (see notes on [Complex Numbers](/mathnotes/analysis/complex-analysis/module-01-algebriac-properties)):
 
 $$ \tag{19.5n} [f_n(x){u(x)}^{(n)} + \cdots + f_1(x){u(x)}' + f_0(x){u(x)}] + i[f_n(x){v(x)}^{(n)} + \cdots + f_1(x){v(x)} + f_0(x){v(x)}] = R(x) + iS(x) $$
 

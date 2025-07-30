@@ -2,6 +2,7 @@
 layout: page
 redirect_from:
 - partial differential-equations/heat
+- differential-equations/heat-equation
 title: Heat Equation
 description: Introduction to the heat equation as a fundamental partial differential equation modeling temperature distribution over time. Covers the mathematical formulation, boundary conditions, and initial-boundary value problems for heat flow in one dimension.
 ---
@@ -26,7 +27,7 @@ Using alternative notation, this can be written
 
 $$ \frac{\partial u}{\partial t}(x,t) = \alpha \frac{\partial^2 u}{\partial x^2}(x,t). $$
 
-Notice that $\frac{\partial^2 u}{\partial x^2}$ is the [[Laplacian|calculus/multivariable-differential-operators]] in one dimension. In higher dimensions, the heat equation can be adjusted to account for the additional heat flow contribution along the other axes by the simple modification
+Notice that $\frac{\partial^2 u}{\partial x^2}$ is the [[Laplacian|analysis/calculus/multivariable-differential-operators]] in one dimension. In higher dimensions, the heat equation can be adjusted to account for the additional heat flow contribution along the other axes by the simple modification
 
 $$ \frac{\partial u}{\partial t} = \alpha \nabla^2 u, $$
 
@@ -66,4 +67,4 @@ One more thing to note. When the temperature reaches a steady state and $u$ does
 
 $$ \nabla^2 u = 0. $$
 
-To see how to solve the heat equation, see [[Separation of Variables|differential-equations/separation-of-variables]].
+To see how to solve the heat equation, see [[Separation of Variables|applied-math/differential-equations/partial-differential-equations/separation-of-variables]].

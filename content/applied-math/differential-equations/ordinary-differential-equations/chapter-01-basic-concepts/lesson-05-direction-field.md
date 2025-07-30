@@ -7,8 +7,6 @@ redirect_from:
 - ode/lesson 05 - Direction Field
 - ode/lesson 5 - Direction Field
 - diffeq/lesson 5 - Direction Field
-- /differential-equations/ordinary differential-equations/chapter 01 - basic concepts/lesson
-  05 - Direction Field
 title: Direction Field
 ---
 

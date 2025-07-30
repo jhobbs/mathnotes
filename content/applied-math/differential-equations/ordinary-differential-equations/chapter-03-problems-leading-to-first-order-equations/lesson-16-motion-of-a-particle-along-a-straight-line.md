@@ -7,7 +7,6 @@ layout: page
 redirect_from:
 - ode/chapter 03 - problems leading to first order equations/lesson 16 - motion of
   a particle along a straight line
-- /differential-equations/ordinary differential-equations/chapter 03 - problems leading
   to first order equations/lesson 16 - motion of a particle along a straight line
 title: Motion of a Particle Along a Straight Line
 ---

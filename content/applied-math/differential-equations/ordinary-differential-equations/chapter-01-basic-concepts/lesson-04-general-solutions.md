@@ -7,8 +7,6 @@ redirect_from:
 - ode/lesson 04 - general solutions
 - ode/lesson 4 - general solutions
 - diffeq/lesson 4 - general solutions
-- /differential-equations/ordinary differential-equations/chapter 01 - basic concepts/lesson
-  04 - general solutions
 title: The General Solution of a Differential Equation
 ---
 

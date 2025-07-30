@@ -5,14 +5,12 @@ redirect_from:
   differential equations
 - ode/chapter 90 - series solutions/lesson 901 - power series solutions to linear
   differential equatons
-- /differential-equations/ordinary differential-equations/chapter 90 - series solutions/lesson
-  901 - power series solutions to linear differential equations
 title: Power Series Solutions to Linear Differential Equations
 ---
 
 # Power Series Solutions to Linear Differential Equations
 
-It may be helpful to review [[shifting the summation index|real-analysis/summation]] before proceeding. 
+It may be helpful to review [[shifting the summation index|analysis/real-analysis/summation]] before proceeding. 
 
 We'll also use the following theorem about power series vanishing on an interval: If $\sum_{n=0}^{\infty}{a_0(x-x_0)^n} = 0$ for all $x$ in some open interval, then each coefficient $a_n$ equals zero.
 

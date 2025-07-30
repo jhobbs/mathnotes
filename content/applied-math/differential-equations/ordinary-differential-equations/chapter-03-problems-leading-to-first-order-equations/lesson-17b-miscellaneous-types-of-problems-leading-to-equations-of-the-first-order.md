@@ -1,13 +1,8 @@
 ---
 layout: page
 redirect_from:
-- ode/chapter 03 - problems leading to first order equations/lesson 17b - miscellaneous
-  types of problems leading to equations of the first order
-- ode/chapter 03 - problems leading to first order equations/lesson 18 - miscellaneous
-  types of problems leading to equations of the first order
-- /differential-equations/ordinary differential-equations/chapter 03 - problems leading
-  to first order equations/lesson 17b - miscellaneous types of problems leading to
-  equations of the first order
+- ode/chapter 03 - problems leading to first order equations/lesson 17b - miscellaneous types of problems leading to equations of the first order
+- ode/chapter 03 - problems leading to first order equations/lesson 18 - miscellaneous types of problems leading to equations of the first order
 title: Miscellaneous Types of Problems Leading to Equations of the First Order
 ---
 
@@ -17,7 +12,7 @@ title: Miscellaneous Types of Problems Leading to Equations of the First Order
 
 Take a circuit where an applied electromotive force $E$, an inductor $L$ and a resistor are connected in series:
 
-![ELR Circuit](/mathnotes/differential-equations/ordinary-differential-equations/chapter-03-problems-leading-to-first-order-equations/elr-circuit.jpg)
+![ELR Circuit](/mathnotes/applied-math/differential-equations/ordinary-differential-equations/chapter-03-problems-leading-to-first-order-equations/elr-circuit.jpg)
 
 The differential equation describing change in current over time is:
 
@@ -71,7 +66,7 @@ Assume that the chain is adjusted so the portion on the right side of the suppor
 
 $$ F = 2y\delta \tag{c} $$
 
-![Chain force](/mathnotes/differential-equations/ordinary-differential-equations/chapter-03-problems-leading-to-first-order-equations/chain-force.jpg)
+![Chain force](/mathnotes/applied-math/differential-equations/ordinary-differential-equations/chapter-03-problems-leading-to-first-order-equations/chain-force.jpg)
 
 From Newton's law of motion we have $F = mv \frac{dv}{dy}$ and so we have:
 

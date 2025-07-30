@@ -8,8 +8,6 @@ redirect_from:
 - ode/lesson 3 - the differential equation
 - diffeq/lesson 3 - the differential equation
 - diffeq/firstorderode
-- /differential-equations/ordinary differential-equations/chapter 01 - basic concepts/lesson
-  03 - the differential equation
 title: The Differential Equation
 ---
 
