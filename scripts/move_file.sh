@@ -43,7 +43,10 @@ if [ -n "$CURRENT_SLUG" ]; then
 else
 
     # No custom slug - use file path without .md
-    OLD_URL="${OLD_FILE%.md}"
+    # Convert file path to URL by removing "content/" prefix
+    FILE_PATH="${OLD_FILE%.md}"
+    # Remove content/ prefix if present
+    OLD_URL="${FILE_PATH#content/}"
     echo "No custom slug found"
     echo "Old file-based URL: $OLD_URL"
 fi
