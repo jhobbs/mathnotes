@@ -2,6 +2,8 @@
 layout: page
 title: Projection
 description: Vector projection formulas and geometric interpretation, including component calculation and orthogonal projection methods.
+redirect_from:
+  - linear-algebra/projection
 ---
 
 # Projection
