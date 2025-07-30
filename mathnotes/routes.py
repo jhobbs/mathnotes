@@ -84,12 +84,10 @@ def register_routes(app, url_mapper, markdown_processor):
         # Map directory names to display names
         display_names = {
             "analysis": "Analysis",
-            "differential-equations": "Differential Equations",
+            "applied-math": "Applied",
             "geometry": "Geometry",
             "topology": "Topology",
-            "probability-and-statistics": "Probability and Statistics",
-            "numerical-analysis": "Numerical Analysis",
-            "discrete-math": "Discrete Math",
+            "discrete-math": "Discrete",
         }
 
         sections = []
