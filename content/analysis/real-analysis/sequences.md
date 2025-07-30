@@ -37,7 +37,7 @@ Now, let $N = \max{(N_1, N_2)}.$ We have that whenever $n > N$,
 
 $$  |a_n - L| < \frac{L - M}{2}, \quad |a_n - M| < \frac{L - M}{2}, $$
 
-which can be [[rewritten|real-analysis/real-numbers]] as
+which can be [[rewritten|analysis/real-analysis/real-numbers]] as
 
 $$ - \frac{L - M}{2} < a_n - L < \frac{L - M}{2}, \text{ and }  - \frac{L - M}{2} < a_n - M < \frac{L - M}{2}.$$
 

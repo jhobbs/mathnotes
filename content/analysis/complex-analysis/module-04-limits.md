@@ -12,7 +12,7 @@ title: Limits and Continuity of Complex Functions
 
 # Limits of Complex Functions
 
-See first the [[Limits notes for two dimensional functions|real-analysis/limits-of-a-function]].
+See first the [[Limits notes for two dimensional functions|analysis/real-analysis/limits-of-a-function]].
 
 ## Delta Epsilon Definition
 

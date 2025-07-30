@@ -1,15 +1,8 @@
 ---
 layout: page
 redirect_from:
-- ode/chapter 04 - linear differential equations of order greater than one/lesson
-  23 - solution of the linear differential equation with nonconstant coefficients
-  - reduction of order method
-- chapter 04 - linear differential equations of order greater than one/lesson 23 -
-  solution of the linear differential equation with nonconstant coefficients - reduction
-  of order method.html
-- /differential-equations/ordinary differential-equations/chapter 04 - linear differential
-  equations of order greater than one/lesson 23 - solution of the linear differential
-  equation with nonconstant coefficients - reduction of order method
+- ode/chapter 04 - linear differential equations of order greater than one/lesson 23 - solution of the linear differential equation with nonconstant coefficients - reduction of order method
+- chapter 04 - linear differential equations of order greater than one/lesson 23 - solution of the linear differential equation with nonconstant coefficients - reduction of order method.html
 title: Solution of the Linear Differential Equation with Nonconstant Coefficients.
   Reduction of Order Method.
 ---

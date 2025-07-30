@@ -73,7 +73,7 @@ Thus, when $m = n = 0$, (c) evaluates to 2L.
 
 The following table (from "Differential Equations and Boundary Value Problems", Nagle, et al, 2017, p574) summarizes these integrals nicely:
 
-![Summary of important integrals](/mathnotes/differential-equations/partial-differential-equations/fsints.png)
+![Summary of important integrals](/mathnotes/applied-math/differential-equations/partial-differential-equations/fsints.png)
 
 # Fourier Series
 

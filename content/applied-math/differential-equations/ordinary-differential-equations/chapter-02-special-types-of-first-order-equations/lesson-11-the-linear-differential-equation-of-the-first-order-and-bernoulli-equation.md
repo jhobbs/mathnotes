@@ -8,7 +8,6 @@ redirect_from:
   equation of the first order and bernoulli equation
 - ode/lesson 11 - the linear differential equation of the first order and bernoulli
   equation
-- /differential-equations/ordinary differential-equations/chapter 02 - special types
   of first order equations/lesson 11 - the linear differential equation of the first
   order and bernoulli equation
 title: The Linear Differential Equation

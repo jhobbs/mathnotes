@@ -4,12 +4,8 @@ description: Theory and application of Laplace transforms for solving linear dif
   the gamma function for extending factorial operations to non-integers.
 layout: page
 redirect_from:
-- ode/chapter 05 - operators and laplace transforms/lesson 27 - the laplace transform
-  and gamma function
-- chapter 05 - operators and laplace transforms/lesson 27 - the laplace transform
-  and gamma function.html
-- /differential-equations/ordinary differential-equations/chapter 05 - operators and
-  laplace transforms/lesson 27 - the laplace transform and gamma function
+- ode/chapter 05 - operators and laplace transforms/lesson 27 - the laplace transform and gamma function
+- chapter 05 - operators and laplace transforms/lesson 27 - the laplace transform and gamma function.html
 title: The Laplace Transform. Gamma Function.
 ---
 
@@ -158,4 +154,4 @@ Gamma is related to factorial this way, for positive $n$:
 
 $$ \Gamma(n + 1) = n! $$
 
-i.e. $\Gamma(\frac{7}{2}) = (\frac{5}{2})! $
+i.e. $\Gamma(\frac{7}{2}) = (\frac{5}{2})! $- differential-equations/the-laplace-transform-gamma-function

@@ -5,7 +5,6 @@ redirect_from:
   equations with linear coefficients
 - ode/lesson 08 - differential equations with linear coefficients
 - ode/lesson 8 - differential equations with linear coefficients
-- /differential-equations/ordinary differential-equations/chapter 02 - special types
   of first order equations/lesson 08 - differential equations with linear coefficients
 title: Differential Equations with Linear Coefficients
 ---

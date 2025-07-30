@@ -1,7 +1,8 @@
 ---
 layout: page
 redirect_from:
-- partial differential-equations/separation-of-variables
+  - differential-equations/separation-of-variables
+  - partial differential-equations/separation-of-variables
 title: Separation of Variables
 description: The method of separation of variables for solving partial differential equations including the heat equation, wave equation, and Laplace's equation. Covers eigenvalue problems, boundary conditions, and Fourier series solutions.
 ---
@@ -19,7 +20,7 @@ Substituting this form for a solution into the partial differential equation and
 
 ## Solving the Heat Equation
 
-First, see the notes on the [[heat equation|differential-equations/heat-equation]]. We have the following mathematical model for the heat flow in a uniform wire without internal sources $(P = 0)$ whose ends are kept at the constant temperature $0^\circ c$:
+First, see the notes on the [[heat equation|applied-math/differential-equations/partial-differential-equations/heat]]. We have the following mathematical model for the heat flow in a uniform wire without internal sources $(P = 0)$ whose ends are kept at the constant temperature $0^\circ c$:
 
 $$ \frac{\partial u}{\partial t}(x,t) = \beta \frac{\partial^2 u}{\partial x^2}(x,t), \quad 0 < x < L, \quad t > 0, \tag{1} $$
 
@@ -71,7 +72,7 @@ where $\lambda$ can be any constant.
 
 Notice that the function $X(x) \equiv 0$ is a soluton of (7) for every $\lambda$. Depending on the choice of $\lambda$, this may be the only solution to the boundary value problem. Thus, to find a non-trival solution $u(x,t) = X(x)T(t)$, we must first determine those values of $\lambda$ for which the boundary value problem has nontrivial solutions. These solutions are called the **eigenfunctions** of the problem; the **eigenvalues** are the special values of $\lambda$.
 
-To solve the equation in (7), we note that it has constant coefficients and follow [[the method outlined for linear differential equations with constant coefficients|differential-equations/solution-of-the-homogeneous-linear-differential-equation-of-order-n-with-constant-coefficients]], and then solve for the constants using the boundary conditions.
+To solve the equation in (7), we note that it has constant coefficients and follow [[the method outlined for linear differential equations with constant coefficients|applied-math/differential-equations/ordinary-differential-equations/chapter-04-linear-differential-equations-of-order-greater-than-one/lesson-20-solution-of-the-homogeneous-linear-differential-equation-of-order-n-with-constant-coefficients]], and then solve for the constants using the boundary conditions.
 
 There are three cases:
 

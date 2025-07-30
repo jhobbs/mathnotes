@@ -6,7 +6,6 @@ layout: page
 redirect_from:
 - ode/chapter 03 - problems leading to first order equations/lesson 15 - dilution
   and accretion, interest, temperature, decomposition and growth, second order processes
-- /differential-equations/ordinary differential-equations/chapter 03 - problems leading
   to first order equations/lesson 15 - dilution and accretion, interest, temperature,
   decomposition and growth, second order processes
 title: Dilution and Accretion

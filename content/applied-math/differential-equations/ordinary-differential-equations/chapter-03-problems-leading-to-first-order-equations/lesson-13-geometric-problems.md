@@ -4,10 +4,7 @@ description: Applications of differential equations to geometric problems involv
   of curves with specified geometric properties.
 layout: page
 redirect_from:
-- ode/chapter 03 - problems leading to first order equations/lesson 13 - geometric
-  problems
-- /differential-equations/ordinary differential-equations/chapter 03 - problems leading
-  to first order equations/lesson 13 - geometric problems
+- ode/chapter 03 - problems leading to first order equations/lesson 13 - geometric problems
 title: Geometric Problems
 ---
 
@@ -33,14 +30,14 @@ $$ (\frac{x_1+x_2}{2},\frac{y_1 + y_2}{2}) $$
 
 A projection of $\vec{a}$ onto $\vec{b}$ is a new vector $\vec{c}$ in the direction of $\vec{b}$ representing the portion of $\vec{a}$ that's in the direction of $\vec{b}$. Geometrically, we can find $\vec{b}$ by drawing a line perpindicular to $\vec{b}$ passing through the end of $\vec{a}$. Where this line intersects $\vec{b}$ will be the end of $\vec{c}$
 
-![Projection](/mathnotes/differential-equations/ordinary-differential-equations/chapter-03-problems-leading-to-first-order-equations/projection.jpg)
+![Projection](/mathnotes/applied-math/differential-equations/ordinary-differential-equations/chapter-03-problems-leading-to-first-order-equations/projection.jpg)
 
 **Tangent Line and Normal Line**
 The tangent line (or simply tangent) to a plane curve at a given point is the straight line that "just touches" the curve at that point. Its slope is $y'$.
 
 The normal line is the line perpindicular to the tangent line at the point of tangency. Its slope is $-\frac{1}{y'}$.
 
-![Normal and Tangent](/mathnotes/differential-equations/ordinary-differential-equations/chapter-03-problems-leading-to-first-order-equations/normal-and-tangent.jpg)
+![Normal and Tangent](/mathnotes/applied-math/differential-equations/ordinary-differential-equations/chapter-03-problems-leading-to-first-order-equations/normal-and-tangent.jpg)
 
 **Subtangent**
 The subtangent is the length of the projection of the tangent line on the $x$-axis, i.e., the distance from the $x$-intercept of the tangent line and $x$. Its value is $|\frac{y}{y'}|$.
