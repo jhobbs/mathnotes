@@ -83,15 +83,15 @@ def register_routes(app, url_mapper, markdown_processor):
         """Home page listing all sections."""
         # Map directory names to display names
         display_names = {
+            "analysis": "Analysis",
             "differential-equations": "Differential Equations",
-            "complex-analysis": "Complex Analysis",
             "geometry": "Geometry",
+            "topology": "Topology",
             "logic-and-proofs": "Logic and Proofs",
             "probability-and-statistics": "Probability and Statistics",
             "numerical-analysis": "Numerical Analysis",
             "discrete-math": "Discrete Math",
             "cellular-automata": "Cellular Automata",
-            "real-analysis": "Real Analysis",
         }
 
         sections = []
