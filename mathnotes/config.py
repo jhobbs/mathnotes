@@ -16,13 +16,11 @@ CONTENT_DIRS = [
     "content/differential-equations",
     "content/geometry",
     "content/topology",
-    "content/logic-and-proofs",
     "content/physics",
     "content/probability-and-statistics",
     "content/misc",
     "content/numerical-analysis",
     "content/discrete-math",
-    "content/cellular-automata",
 ]
 
 

@@ -1,6 +1,8 @@
 ---
 layout: page
 title: Boolean Algebra
+redirect_from:
+  - logic-and-proofs/boolean-algebra
 ---
 
 # Boolean Algebra
