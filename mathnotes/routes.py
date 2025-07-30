@@ -85,7 +85,7 @@ def register_routes(app, url_mapper, markdown_processor):
         display_names = {
             "differential-equations": "Differential Equations",
             "complex-analysis": "Complex Analysis",
-            "linear-algebra": "Linear Algebra",
+            "geometry": "Geometry",
             "logic-and-proofs": "Logic and Proofs",
             "probability-and-statistics": "Probability and Statistics",
             "numerical-analysis": "Numerical Analysis",

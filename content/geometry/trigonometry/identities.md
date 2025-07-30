@@ -1,6 +1,8 @@
 ---
 layout: page
 title: Trigonometric Identities
+redirect_from:
+  - trigonometry/identities
 ---
 # Trigonometric Identities
 

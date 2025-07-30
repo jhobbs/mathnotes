@@ -1,6 +1,8 @@
 ---
 layout: page
 title: Projective Transformations
+redirect_from:
+  - graphics/projection-and-homogenous-coordinates
 ---
 
 # Projective Transformations
