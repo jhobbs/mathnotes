@@ -75,3 +75,28 @@ def inject_env():
 def inject_base_url():
     """Add dynamic base URL to all templates."""
     return {"base_url": get_base_url(request)}
+
+
+def inject_tooltip_data():
+    """Add tooltip data for block references to all templates."""
+    from flask import g
+    import json
+    
+    # Check if we have tooltip data in the request context
+    tooltip_data = getattr(g, 'tooltip_data', None)
+    
+    if tooltip_data:
+        # Convert to JSON-serializable format
+        tooltip_list = []
+        for label, data in tooltip_data.items():
+            tooltip_list.append({
+                'label': label,
+                'type': data['type'],
+                'title': data['title'],
+                'content': data['content'],
+                'url': data.get('url', '')
+            })
+        
+        return {"tooltip_data": json.dumps(tooltip_list)}
+    
+    return {"tooltip_data": None}

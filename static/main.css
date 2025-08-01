@@ -887,3 +887,180 @@ footer p {
         vertical-align: middle !important;
     }
 }
+
+/* Math Tooltip System */
+.math-tooltip {
+  position: absolute;
+  z-index: 10000;
+  max-width: 500px;
+  min-width: 200px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  pointer-events: auto;
+  font-size: 0.9em;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .math-tooltip {
+    background: #1a1a1a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.math-tooltip-content {
+  padding: 12px 16px;
+}
+
+.math-tooltip-header {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.math-tooltip-type {
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.math-tooltip-body {
+  color: var(--color-text-secondary);
+}
+
+.math-tooltip-body p {
+  margin: 0 0 8px 0;
+}
+
+.math-tooltip-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Math block type-specific colors in tooltips */
+.math-tooltip-content.math-definition .math-tooltip-type {
+  color: #007acc;
+}
+
+.math-tooltip-content.math-theorem .math-tooltip-type {
+  color: #d73a49;
+}
+
+.math-tooltip-content.math-proposition .math-tooltip-type {
+  color: #6f42c1;
+}
+
+.math-tooltip-content.math-lemma .math-tooltip-type {
+  color: #e36209;
+}
+
+.math-tooltip-content.math-corollary .math-tooltip-type {
+  color: #22863a;
+}
+
+.math-tooltip-content.math-example .math-tooltip-type {
+  color: #735c0f;
+}
+
+.math-tooltip-content.math-remark .math-tooltip-type {
+  color: #5a637d;
+}
+
+.math-tooltip-content.math-note .math-tooltip-type {
+  color: #5a637d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .math-tooltip-content.math-definition .math-tooltip-type {
+    color: #58a6ff;
+  }
+  
+  .math-tooltip-content.math-theorem .math-tooltip-type {
+    color: #f85149;
+  }
+  
+  .math-tooltip-content.math-proposition .math-tooltip-type {
+    color: #bc8cff;
+  }
+  
+  .math-tooltip-content.math-lemma .math-tooltip-type {
+    color: #fb8500;
+  }
+  
+  .math-tooltip-content.math-corollary .math-tooltip-type {
+    color: #3fb950;
+  }
+  
+  .math-tooltip-content.math-example .math-tooltip-type {
+    color: #d29922;
+  }
+  
+  .math-tooltip-content.math-remark .math-tooltip-type,
+  .math-tooltip-content.math-note .math-tooltip-type {
+    color: #8b949e;
+  }
+}
+
+.math-tooltip-footer {
+  border-top: 1px solid var(--color-border);
+  padding: 8px 16px;
+  background: #f8f8f8;
+}
+
+@media (prefers-color-scheme: dark) {
+  .math-tooltip-footer {
+    background: #0d0d0d;
+  }
+}
+
+.math-tooltip-link {
+  font-size: 0.85em;
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+.math-tooltip-link:hover {
+  text-decoration: underline;
+}
+
+/* Loading state */
+.math-tooltip-loading {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-text-secondary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .math-tooltip {
+    max-width: calc(100vw - 20px);
+    font-size: 0.85em;
+  }
+  
+  .math-tooltip-content {
+    padding: 10px 12px;
+  }
+  
+  .math-tooltip-footer {
+    padding: 6px 12px;
+  }
+}

@@ -13,6 +13,7 @@ from flask import (
     Response,
     request,
     current_app,
+    g,
 )
 from .config import CONTENT_DIRS, BASE_URL, STATIC_FILE_CACHE_CONFIG, get_base_url
 from .file_utils import get_directory_contents, get_all_content_for_section
@@ -94,14 +95,20 @@ def register_routes(app, url_mapper, markdown_processor):
         for section in CONTENT_DIRS:
             path = Path(section)
             if path.exists():
+                # Skip test directory in production
+                section_name = (
+                    section.replace("content/", "")
+                    if section.startswith("content/")
+                    else section
+                )
+                
+                # Check if we should skip this section
+                is_development = current_app.debug or os.environ.get("FLASK_ENV") == "development"
+                if section_name == "test" and not is_development:
+                    continue
+                
                 content = get_all_content_for_section(section, url_mapper.file_to_canonical)
                 if content:
-                    # Extract section name without content/ prefix
-                    section_name = (
-                        section.replace("content/", "")
-                        if section.startswith("content/")
-                        else section
-                    )
                     # Use display name if available, otherwise use title case
                     display_name = display_names.get(section_name, section_name.title())
                     sections.append({"name": display_name, "path": section, "content": content})
@@ -134,6 +141,11 @@ def register_routes(app, url_mapper, markdown_processor):
         if md_path:
             content = markdown_processor.render_markdown_file(md_path)
             if content:
+                # Store tooltip data in g for context processor
+                if 'tooltip_data' in content:
+                    g.tooltip_data = content['tooltip_data']
+                    # Remove from content dict to avoid passing it twice
+                    del content['tooltip_data']
                 return render_template("page.html", **content)
 
         # Check if it's a directory
@@ -158,6 +170,11 @@ def register_routes(app, url_mapper, markdown_processor):
             # Otherwise serve directly
             content = markdown_processor.render_markdown_file(md_path)
             if content:
+                # Store tooltip data in g for context processor
+                if 'tooltip_data' in content:
+                    g.tooltip_data = content['tooltip_data']
+                    # Remove from content dict to avoid passing it twice
+                    del content['tooltip_data']
                 return render_template("page.html", **content)
 
         # Static files are handled at the top of the function now
