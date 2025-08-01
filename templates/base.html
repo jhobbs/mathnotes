@@ -140,6 +140,12 @@
         });
     </script>
     
+    {% if tooltip_data %}
+    <script nonce="{{ csp_nonce }}">
+    window.mathTooltipData = {{ tooltip_data|safe }};
+    </script>
+    {% endif %}
+    
     {% if is_development %}
     <!-- Vite development server -->
     <script type="module" src="{{ vite_url }}/static/dist/demos-framework/src/main.ts"></script>

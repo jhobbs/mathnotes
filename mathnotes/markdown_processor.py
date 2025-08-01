@@ -9,6 +9,7 @@ import frontmatter
 from .config import create_markdown_instance
 from .structured_math import StructuredMathParser, process_structured_math_content
 from .math_utils import MathProtector, BlockReferenceProcessor
+from .tooltip_collector import TooltipCollectingBlockReferenceProcessor, collect_tooltip_data_from_html
 
 
 class MarkdownProcessor:
@@ -68,10 +69,14 @@ class MarkdownProcessor:
 
                 # Process cross-references to structured blocks (@label or @type:label)
                 # Store the processor to use it later for embedded blocks
-                self.block_ref_processor = BlockReferenceProcessor(
+                # Use tooltip-collecting version
+                self.block_ref_processor = TooltipCollectingBlockReferenceProcessor(
                     block_markers=block_markers, current_file=filepath, block_index=self.block_index
                 )
                 content = self.block_ref_processor.process_references(content)
+                
+                # Start collecting tooltip data
+                tooltip_data = self.block_ref_processor.get_tooltip_data()
 
                 # Protect math delimiters from markdown processing
                 math_protector = MathProtector()
@@ -105,6 +110,17 @@ class MarkdownProcessor:
                         current_file=filepath,
                         block_index=self.block_index,
                     )
+                    
+                    # Collect any additional references from structured math content
+                    additional_labels = collect_tooltip_data_from_html(html_content, tooltip_data)
+                    if additional_labels:
+                        # Create a temporary processor to get data for these labels
+                        temp_processor = TooltipCollectingBlockReferenceProcessor(
+                            block_markers={}, current_file=filepath, block_index=self.block_index
+                        )
+                        temp_processor.referenced_labels = additional_labels
+                        additional_data = temp_processor.get_tooltip_data()
+                        tooltip_data.update(additional_data)
 
                 # Fix escaped asterisks and tildes that should be rendered normally
                 # Note: This must happen AFTER structured math processing to preserve LaTeX escapes
@@ -134,6 +150,7 @@ class MarkdownProcessor:
                     "source_path": filepath,
                     "canonical_url": canonical_path,
                     "has_integrated_demos": len(integrated_demos) > 0,
+                    "tooltip_data": tooltip_data,
                 }
         except Exception as e:
             import traceback

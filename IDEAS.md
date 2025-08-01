@@ -30,7 +30,6 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - ✅ Error handling for broken references
   - ✅ Cross-file references (builds global index on startup)
   - ✅ Automatic URL resolution for cross-file links
-  - TODO: Tooltips on hover, integration with numbering system
 
 ### TODO Features
 
@@ -52,10 +51,6 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Generate "References" or "See Also" sections automatically
   - Note: We're basically reimplementing LaTeX's reference system for the web!
 
-- **Deep Linking to Structured Content**: ✅ FULLY IMPLEMENTED - Cross-references work across files!
-  - TODO: Integrate with the automatic numbering system for consistent IDs (when numbering is implemented)
-  - TODO: Enable tooltip previews when hovering over internal reference links
-
 - **Structured Definitions Index**: Build an indexable system for mathematical definitions
   - Separate from theorems but similar structured approach
   - Searchable definition index across all content
@@ -69,23 +64,6 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Improve SEO and discoverability in search results
   - Enable rich snippets for mathematical content
   - Consider using CreativeWork for cited/attributed content
-
-- **Reorganize Top-Level Sections**: Consolidate sections to align with classical mathematical organization
-  - Current structure has too many top-level sections
-  - Reorganize into classical mathematical branches: Algebra, Analysis, Topology, Geometry, Logic, etc.
-  - Move current sections to appropriate subsections:
-    - "Real Analysis" → Analysis/Real Analysis
-    - "Complex Analysis" → Analysis/Complex Analysis  
-    - "Numerical Analysis" → Analysis/Numerical Analysis
-    - "Linear Algebra" → Algebra/Linear Algebra
-    - "Discrete Math" → Logic/Discrete Mathematics or Algebra/Discrete Mathematics
-    - "Differential Equations" → Analysis/Differential Equations
-    - "Probability and Statistics" → Analysis/Probability Theory (or its own section)
-    - "Calculus" → Analysis/Calculus
-    - "Trigonometry" → Geometry/Trigonometry (or Analysis/Trigonometry)
-    - "Physics" → Applied Mathematics/Physics (or remove if focusing on pure math)
-  - Create cleaner, more academic hierarchy that matches how mathematics is traditionally organized
-  - Would need extensive URL redirects to preserve existing links
 
 - **Definition Disambiguation System**: Handle cases where multiple files define the same concept
   - Detect when two or more files contain definitions with the same label or term

@@ -17,6 +17,7 @@ CONTENT_DIRS = [
     "content/geometry",
     "content/topology",
     "content/discrete-math",
+    "content/test",
 ]
 
 
