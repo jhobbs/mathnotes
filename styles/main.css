@@ -2,6 +2,11 @@
 @import './theme.css';
 @import './utilities.css';
 
+/* Page-specific styles */
+@import './pages/demos-showcase.module.css';
+@import './pages/demo-viewer.module.css';
+@import './pages/index.module.css';
+
 /* Custom media queries for consistent responsive design */
 @custom-media --phone (max-width: 640px);
 @custom-media --tablet (min-width: 641px) and (max-width: 1024px);
@@ -607,103 +612,9 @@ footer {
   }
 }
 
-/* Collapsible sections for content organization */
+/* Collapsible sections container */
 .sections-container {
   margin-block: var(--space-lg);
-}
-
-.collapsible-section {
-  margin-block-end: var(--space-md);
-}
-
-.section-header {
-  background-color: var(--color-code-bg);
-  padding: var(--space-sm) var(--space-md);
-  cursor: pointer;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: background-color var(--transition-base);
-  
-  &:hover {
-    background-color: var(--color-border);
-  }
-  
-  &.active {
-    background-color: var(--color-link);
-    color: white;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-}
-
-.section-title {
-  font-size: var(--font-size-xl);
-  font-weight: 600;
-  margin: 0;
-}
-
-.toggle-icon {
-  font-size: var(--font-size-xl);
-  transition: transform var(--transition-slow);
-}
-
-.section-header.active .toggle-icon {
-  transform: rotate(90deg);
-}
-
-.section-content {
-  display: none;
-  border: 1px solid var(--color-border);
-  border-top: none;
-  border-bottom-left-radius: var(--radius-md);
-  border-bottom-right-radius: var(--radius-md);
-  padding: var(--space-md);
-  background-color: var(--color-bg);
-  
-  &.show {
-    display: block;
-  }
-}
-
-.content-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.content-item {
-  padding: var(--space-sm) 0;
-  border-bottom: 1px solid var(--color-border);
-  
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.content-link {
-  color: var(--color-link);
-  text-decoration: none;
-  display: block;
-  padding: var(--space-xs) 0;
-  
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.subdirectory {
-  margin-inline-start: var(--space-lg);
-  margin-block-start: var(--space-sm);
-}
-
-.subdir-header {
-  font-weight: 600;
-  color: var(--color-text-secondary);
-  margin: var(--space-sm) 0;
-  font-size: var(--font-size-sm);
 }
 
 /* Math content toggle button styles */
