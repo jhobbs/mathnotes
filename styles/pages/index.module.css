@@ -1,15 +1,15 @@
 /* Index page specific styles */
 
 .collapsible-section {
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-md);
 }
 
 .section-header {
   background-color: var(--code-bg);
-  padding: 0.75rem 1rem;
+  padding: calc(var(--space-sm) + var(--space-xs)) var(--space-md);
   cursor: pointer;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border: var(--border-width-thin) solid var(--border-color);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -44,11 +44,11 @@
 
 .section-content {
   display: none;
-  border: 1px solid var(--border-color);
+  border: var(--border-width-thin) solid var(--border-color);
   border-top: none;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-  padding: 1rem;
+  padding: var(--space-md);
   background-color: var(--bg-color);
 }
 
@@ -63,8 +63,8 @@
 }
 
 .content-item {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--border-color);
+  padding: var(--space-sm) 0;
+  border-bottom: var(--border-width-thin) solid var(--border-color);
 }
 
 .content-item:last-child {
@@ -75,7 +75,7 @@
   color: var(--link-color);
   text-decoration: none;
   display: block;
-  padding: 0.25rem 0;
+  padding: var(--space-xs) 0;
 }
 
 .content-link:hover {
@@ -83,19 +83,19 @@
 }
 
 .subdirectory {
-  margin-left: 1.5rem;
-  margin-top: 0.5rem;
+  margin-left: var(--space-lg);
+  margin-top: var(--space-sm);
 }
 
 .subdir-header {
   font-weight: 600;
   color: var(--blockquote-color);
-  margin: 0.5rem 0;
+  margin: var(--space-sm) 0;
   font-size: 1.1rem;
 }
 
 .subdir-files {
   list-style: none;
   padding: 0;
-  margin-left: 1rem;
+  margin-left: var(--space-md);
 }

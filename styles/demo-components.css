@@ -68,7 +68,7 @@
 .demo-control-grid {
   display: grid;
   gap: var(--space-md);
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--width-grid-min-sm), 1fr));
   
   &.demo-control-grid--2-cols {
     grid-template-columns: repeat(2, 1fr);
