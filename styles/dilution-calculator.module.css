@@ -42,7 +42,7 @@
 .input:focus {
   outline: none;
   border-color: var(--color-link);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-link) 20%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-link), transparent 80%);
 }
 
 .button {
@@ -59,8 +59,7 @@
 }
 
 .button:hover {
-  filter: brightness(0.9);
-  opacity: 0.95;
+  background-color: var(--color-link-hover);
 }
 
 .resultItem {

@@ -81,7 +81,7 @@
 .button {
   padding: var(--space-sm) var(--space-md);
   background-color: var(--color-primary);
-  color: white;
+  color: var(--color-white);
   border: none;
   border-radius: var(--radius-md);
   font-size: var(--font-size-base);

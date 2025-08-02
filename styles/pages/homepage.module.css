@@ -1,18 +1,18 @@
 /* Homepage specific styles */
 
 :root {
-  --bg-color: #fafafa;
-  --text-color: #333;
-  --link-color: #0366d6;
-  --footer-color: #6a737d;
+  --bg-color: var(--color-bg);
+  --text-color: var(--color-text);
+  --link-color: var(--color-link);
+  --footer-color: var(--color-text-secondary);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-color: #0d1117;
-    --text-color: #c9d1d9;
-    --link-color: #58a6ff;
-    --footer-color: #484f58;
+    --bg-color: var(--color-bg);
+    --text-color: var(--color-text);
+    --link-color: var(--color-link);
+    --footer-color: var(--color-text-secondary);
   }
 }
 
