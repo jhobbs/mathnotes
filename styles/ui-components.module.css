@@ -1,0 +1,223 @@
+/* UI Components CSS Module - migrated from ui-components.ts */
+
+/* Button styles */
+.button {
+  padding: var(--space-xs) var(--space-sm);
+  margin: 0 var(--space-xs);
+  cursor: pointer;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+  font-size: var(--font-size-sm);
+}
+
+.button:hover {
+  filter: brightness(0.95);
+  opacity: 0.9;
+}
+
+/* Info display styles */
+.info {
+  color: var(--color-text);
+}
+
+.infoDisplay {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.infoLabel {
+  font-weight: 500;
+  margin-right: var(--space-xs);
+}
+
+/* Label styles */
+.label {
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+  font-size: var(--font-size-sm);
+  display: block;
+}
+
+/* Slider styles */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 120px;
+  height: 5px;
+  background: var(--color-border);
+  outline: none;
+  opacity: 0.8;
+  transition: opacity var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  background: var(--color-link);
+  cursor: pointer;
+  border-radius: var(--radius-full);
+}
+
+.slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  background: var(--color-link);
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  border: none;
+}
+
+/* Radio button styles */
+.radioGroup {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.radio {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.radio input[type="radio"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.radio label {
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+/* Checkbox styles */
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.checkbox {
+  cursor: pointer;
+}
+
+.checkboxLabel {
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+/* Select dropdown styles */
+.select {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.select:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Text input styles */
+.textInput {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+}
+
+.textInput:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Textarea styles */
+.textarea {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+}
+
+.textarea:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Fieldset styles */
+.fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin: var(--space-md) 0;
+}
+
+.fieldset legend {
+  padding: 0 var(--space-sm);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+/* Container styles */
+.sliderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .label {
+    font-size: var(--font-size-xs);
+    margin-bottom: 0.25rem;
+  }
+  
+  .radio {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+  
+  .radio label {
+    padding: var(--space-xs) 0;
+  }
+  
+  .radioGroup {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .slider {
+    width: 100px;
+  }
+}

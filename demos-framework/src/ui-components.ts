@@ -1,4 +1,5 @@
 import p5 from 'p5';
+import uiStyles from '@/styles/ui-components.module.css';
 
 // Extend p5.Element to include input method for sliders
 interface P5SliderElement extends p5.Element {
@@ -38,327 +39,14 @@ export interface NumberDisplay {
 }
 
 /**
- * Adds dark mode CSS styles for demo controls
+ * Deprecated: Styles are now in CSS modules
+ * @deprecated Use CSS modules instead
  */
 export function addDemoStyles(container: HTMLElement, prefix: string = 'demo'): HTMLStyleElement {
+  // This function is deprecated - styles are now in CSS modules
+  // Returning empty style element for backward compatibility
   const style = document.createElement('style');
-  style.textContent = `
-    .${prefix}-button {
-      padding: 5px 10px;
-      margin: 0 5px;
-      cursor: pointer;
-      background-color: #f0f0f0;
-      color: #333;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      transition: background-color 0.2s;
-    }
-    
-    .${prefix}-button:hover {
-      background-color: #e0e0e0;
-    }
-    
-    .${prefix}-info {
-      color: #333;
-    }
-    
-    .${prefix}-label {
-      color: #333;
-      margin-bottom: 5px;
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      .${prefix}-button {
-        background-color: #444;
-        color: #e0e0e0;
-        border-color: #666;
-      }
-      
-      .${prefix}-button:hover {
-        background-color: #555;
-      }
-      
-      .${prefix}-info {
-        color: #e0e0e0;
-      }
-      
-      .${prefix}-label {
-        color: #e0e0e0;
-      }
-    }
-    
-    /* Slider styles */
-    input[type="range"].${prefix}-slider {
-      -webkit-appearance: none !important;
-      -moz-appearance: none !important;
-      appearance: none !important;
-      height: 8px !important;
-      background: #d0d0d0 !important;
-      border-radius: 4px !important;
-      outline: none !important;
-      cursor: pointer !important;
-    }
-    
-    /* Webkit browsers (Chrome, Safari, Edge) */
-    input[type="range"].${prefix}-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      background: #4a7ba7;
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-    
-    /* Firefox */
-    input[type="range"].${prefix}-slider::-moz-range-thumb {
-      width: 16px;
-      height: 16px;
-      background: #4a7ba7;
-      border-radius: 50%;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-    
-    input[type="range"].${prefix}-slider::-moz-range-track {
-      background: #d0d0d0;
-      height: 6px;
-      border-radius: 3px;
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      input[type="range"].${prefix}-slider {
-        background: #5a5a5a !important;
-      }
-      
-      input[type="range"].${prefix}-slider::-webkit-slider-thumb {
-        background: #6496ff;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-      }
-      
-      input[type="range"].${prefix}-slider::-moz-range-thumb {
-        background: #6496ff;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-      }
-      
-      input[type="range"].${prefix}-slider::-moz-range-track {
-        background: #5a5a5a;
-      }
-    }
-    
-    /* Radio button styles */
-    .${prefix}-radio {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .${prefix}-radio label {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      cursor: pointer;
-      color: #333;
-      font-size: 14px;
-    }
-    
-    .${prefix}-radio input[type="radio"] {
-      cursor: pointer;
-      margin: 0;
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      .${prefix}-radio label {
-        color: #e0e0e0;
-      }
-    }
-    
-    /* Select dropdown styles */
-    .${prefix}-select {
-      padding: 5px 10px;
-      margin: 0 5px;
-      cursor: pointer;
-      background-color: #f0f0f0;
-      color: #333;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      font-size: 14px;
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      .${prefix}-select {
-        background-color: #444;
-        color: #e0e0e0;
-        border-color: #666;
-      }
-      
-      .${prefix}-select option {
-        background-color: #444;
-        color: #e0e0e0;
-      }
-    }
-    
-    /* Checkbox styles */
-    .${prefix}-checkbox-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
-    
-    .${prefix}-checkbox-container input[type="checkbox"] {
-      cursor: pointer;
-      margin: 0;
-    }
-    
-    .${prefix}-checkbox-label {
-      color: #333;
-      font-size: 14px;
-      user-select: none;
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      .${prefix}-checkbox-label {
-        color: #e0e0e0;
-      }
-    }
-    
-    /* Text input styles */
-    .${prefix}-text-input {
-      padding: 5px 10px;
-      margin: 0 5px;
-      background-color: #f0f0f0;
-      color: #333;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      font-size: 14px;
-      outline: none;
-    }
-    
-    .${prefix}-text-input:focus {
-      border-color: #4a7ba7;
-      box-shadow: 0 0 0 2px rgba(74, 123, 167, 0.2);
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      .${prefix}-text-input {
-        background-color: #444;
-        color: #e0e0e0;
-        border-color: #666;
-      }
-      
-      .${prefix}-text-input:focus {
-        border-color: #6496ff;
-        box-shadow: 0 0 0 2px rgba(100, 150, 255, 0.2);
-      }
-    }
-    
-    /* Info display styles */
-    .${prefix}-info-display {
-      color: #333;
-      font-size: 14px;
-      padding: 5px 10px;
-      background-color: rgba(0, 0, 0, 0.05);
-      border-radius: 3px;
-      display: inline-block;
-    }
-    
-    .${prefix}-info-label {
-      font-weight: 600;
-      margin-right: 5px;
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      .${prefix}-info-display {
-        color: #e0e0e0;
-        background-color: rgba(255, 255, 255, 0.05);
-      }
-    }
-    
-    /* Radio group container */
-    .${prefix}-radio-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    
-    .${prefix}-radio-group-label {
-      color: #333;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      .${prefix}-radio-group-label {
-        color: #e0e0e0;
-      }
-    }
-    
-    /* Layout helper styles - not prefixed since they're framework-level */
-    .demo-control-group {
-      background-color: rgba(0, 0, 0, 0.02);
-    }
-    
-    .demo-control-group-header {
-      color: #333;
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      .demo-control-group {
-        background-color: rgba(255, 255, 255, 0.02);
-        border-color: #555 !important;
-      }
-      
-      .demo-control-group-header {
-        color: #e0e0e0;
-      }
-    }
-    
-    /* Mobile responsive styles - not prefixed since they're framework-level */
-    @media (max-width: 768px) {
-      .demo-control-row[data-mobile-stack="true"] {
-        flex-direction: column !important;
-        gap: 10px !important;
-      }
-      
-      .demo-control-grid[data-responsive="true"] {
-        grid-template-columns: 1fr !important;
-      }
-      
-      .${prefix}-button {
-        min-width: 44px;
-        min-height: 44px;
-        padding: 10px 15px;
-      }
-      
-      .${prefix}-select,
-      .${prefix}-text-input {
-        min-height: 44px;
-        font-size: 16px; /* Prevents zoom on iOS */
-      }
-      
-      input[type="checkbox"],
-      input[type="radio"] {
-        min-width: 20px;
-        min-height: 20px;
-      }
-      
-      /* Stack radio buttons vertically on mobile */
-      .${prefix}-radio {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 10px !important;
-      }
-      
-      .${prefix}-radio label {
-        padding: 5px 0;
-      }
-    }
-  `;
+  style.setAttribute('data-demo-styles', prefix);
   container.appendChild(style);
   return style;
 }
@@ -389,7 +77,7 @@ export function createButton(
 ): HTMLButtonElement {
   const button = document.createElement('button');
   button.textContent = text;
-  button.className = className;
+  button.className = uiStyles.button;
   button.addEventListener('click', onClick);
   parent.appendChild(button);
   return button;
@@ -415,12 +103,12 @@ export function createSlider(
   
   const labelDiv = document.createElement('div');
   labelDiv.textContent = label;
-  labelDiv.className = `${className}-label`;
+  labelDiv.className = uiStyles.label;
   rowDiv.appendChild(labelDiv);
   
   const slider = p.createSlider(min, max, value, step) as P5SliderElement;
   slider.parent(rowDiv);
-  slider.class(`${className}-slider`);
+  slider.class(uiStyles.slider);
   slider.style('width: 120px');
   
   if (onChange) {
@@ -441,10 +129,10 @@ export function createRadioGroup<T>(
   className: string = 'demo'
 ): HTMLElement {
   const container = document.createElement('div');
-  container.className = `${className}-radio-group`;
+  container.className = uiStyles.radioGroup;
   
   const radioContainer = document.createElement('div');
-  radioContainer.className = `${className}-radio`;
+  radioContainer.className = uiStyles.radio;
   
   options.forEach((option) => {
     const label = document.createElement('label');
@@ -480,7 +168,7 @@ export function createCheckbox(
   className: string = 'demo'
 ): HTMLElement {
   const container = document.createElement('label');
-  container.className = `${className}-checkbox-container`;
+  container.className = uiStyles.checkboxContainer;
   
   const input = document.createElement('input');
   input.type = 'checkbox';
@@ -491,7 +179,7 @@ export function createCheckbox(
   });
   
   const labelSpan = document.createElement('span');
-  labelSpan.className = `${className}-checkbox-label`;
+  labelSpan.className = uiStyles.checkboxLabel;
   labelSpan.textContent = label;
   
   container.appendChild(input);
@@ -515,13 +203,13 @@ export function createSelect<T>(
   
   if (label) {
     const labelDiv = document.createElement('div');
-    labelDiv.className = `${className}-label`;
+    labelDiv.className = uiStyles.label;
     labelDiv.textContent = label;
     container.appendChild(labelDiv);
   }
   
   const select = document.createElement('select');
-  select.className = `${className}-select`;
+  select.className = uiStyles.select;
   
   options.forEach(option => {
     const optionEl = document.createElement('option');
@@ -558,13 +246,13 @@ export function createTextInput(
   
   if (label) {
     const labelDiv = document.createElement('div');
-    labelDiv.className = 'demo-label';
+    labelDiv.className = uiStyles.label;
     labelDiv.textContent = label;
     container.appendChild(labelDiv);
   }
   
   const input = document.createElement('input');
-  input.className = 'demo-text-input';
+  input.className = uiStyles.textInput;
   input.type = options.type || 'text';
   input.value = value;
   
@@ -593,10 +281,10 @@ export function createInfoDisplay(
   className: string = 'demo'
 ): InfoDisplay {
   const element = document.createElement('div');
-  element.className = `${className}-info-display`;
+  element.className = uiStyles.infoDisplay;
   
   const labelSpan = document.createElement('span');
-  labelSpan.className = `${className}-info-label`;
+  labelSpan.className = uiStyles.infoLabel;
   labelSpan.textContent = label + ':';
   
   const valueSpan = document.createElement('span');
@@ -794,7 +482,7 @@ export function createPlayPauseButton(
   className: string = 'demo'
 ): HTMLButtonElement {
   const button = document.createElement('button');
-  button.className = `${className}-button`;
+  button.className = uiStyles.button;
   button.textContent = isPlaying ? 'Pause' : 'Play';
   
   let playing = isPlaying;
@@ -816,7 +504,7 @@ export function createResetButton(
   className: string = 'demo'
 ): HTMLButtonElement {
   const button = document.createElement('button');
-  button.className = `${className}-button`;
+  button.className = uiStyles.button;
   button.textContent = 'Reset';
   
   button.addEventListener('click', onReset);
