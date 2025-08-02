@@ -93,9 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (demo.description) {
           const desc = document.createElement('p');
-          desc.style.fontSize = '0.9em';
-          desc.style.color = 'var(--text-secondary)';
-          desc.style.marginBottom = '10px';
+          desc.className = 'demo-description';
           desc.textContent = demo.description;
           card.appendChild(desc);
         }
@@ -106,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const demoDiv = document.createElement('div');
         demoDiv.className = 'demo-component';
         demoDiv.setAttribute('data-demo', demo.name);
-        demoDiv.style.minHeight = '300px';
         container.appendChild(demoDiv);
         
         card.appendChild(container);
