@@ -10,6 +10,33 @@
     <link rel="canonical" href="{{ base_url }}{{ canonical_url }}">
     {% endif %}
     
+    <!-- Preload main CSS to prevent FOUC -->
+    {% if not is_development %}
+    <link rel="preload" href="{{ url_for('static', filename='dist/main.css') }}" as="style">
+    {% endif %}
+    
+    <!-- Critical inline styles to prevent FOUC -->
+    <style>
+        /* Prevent flash of unstyled content */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #fafafa;
+            color: #333;
+            margin: 0;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+        body.loaded {
+            opacity: 1;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #0d1117;
+                color: #c9d1d9;
+            }
+        }
+    </style>
+    
     <!-- MathJax initialization -->
     {% if is_development %}
     <script type="module" src="{{ vite_url }}/static/dist/demos-framework/src/mathjax-entry.ts"></script>
@@ -20,8 +47,27 @@
     <!-- Main stylesheet -->
     {% if is_development %}
     <script type="module" src="{{ vite_url }}/static/dist/styles/main.css"></script>
+    <script nonce="{{ csp_nonce }}">
+        // In dev mode, add loaded class immediately
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('loaded');
+        });
+    </script>
     {% else %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='dist/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/main.css') }}" onload="document.body.classList.add('loaded')">
+    <!-- Fallback for CSS load -->
+    <script nonce="{{ csp_nonce }}">
+        // Add loaded class when DOM is ready (fallback)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(function() {
+                    document.body.classList.add('loaded');
+                }, 100);
+            });
+        } else {
+            document.body.classList.add('loaded');
+        }
+    </script>
     {% endif %}
     
     {% block extra_head %}{% endblock %}
