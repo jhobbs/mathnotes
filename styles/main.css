@@ -9,6 +9,7 @@
 @import './pages/index.module.css';
 
 /* Custom media queries for consistent responsive design */
+@custom-media --phone-xs (max-width: 400px);
 @custom-media --phone (max-width: 640px);
 @custom-media --tablet (min-width: 641px) and (max-width: 1024px);
 @custom-media --desktop (min-width: 1025px);
@@ -246,7 +247,7 @@ pre {
   
   /* Custom scrollbar for code blocks */
   &::-webkit-scrollbar {
-    height: 8px;
+    height: var(--size-scrollbar);
   }
   
   &::-webkit-scrollbar-track {
@@ -621,7 +622,7 @@ footer {
 /* Math content toggle button styles */
 .math-content-toggle-container {
   position: sticky;
-  top: 10px;
+  top: var(--space-micro-5);
   z-index: var(--z-sticky);
   display: flex;
   justify-content: flex-end;
@@ -659,10 +660,10 @@ footer {
 /* Dark mode toggle button adjustments */
 @media (prefers-color-scheme: dark) {
   .math-content-toggle {
-    box-shadow: 0 2px 4px oklch(0% 0 0 / 0.3);
+    box-shadow: var(--shadow-button);
     
     &:hover {
-      box-shadow: 0 4px 8px oklch(0% 0 0 / 0.4);
+      box-shadow: var(--shadow-button-hover);
     }
   }
 }
@@ -893,8 +894,8 @@ footer {
 .math-tooltip {
   position: absolute;
   z-index: 10000;
-  max-width: 500px;
-  min-width: 200px;
+  max-width: var(--size-tooltip-max);
+  min-width: var(--size-tooltip-min);
   background: var(--color-tooltip-bg);
   border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -937,7 +938,7 @@ footer {
 }
 
 .math-tooltip-body p {
-  margin: 0 0 8px 0;
+  margin: 0 0 var(--space-micro-4) 0;
 }
 
 .math-tooltip-body p:last-child {
@@ -1009,8 +1010,8 @@ footer {
   border-top: var(--border-width-thin) solid var(--color-border);
   padding: var(--space-sm) var(--space-md);
   background: var(--color-tooltip-footer-bg);
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1040,8 +1041,8 @@ footer {
 
 .loading-spinner {
   display: inline-block;
-  width: 14px;
-  height: 14px;
+  width: var(--size-spinner);
+  height: var(--size-spinner);
   border: var(--border-width-base) solid var(--color-spinner-border);
   border-top-color: var(--color-primary);
   border-radius: 50%;
@@ -1055,7 +1056,7 @@ footer {
 /* Mobile adjustments */
 @media (max-width: var(--breakpoint-tablet)) {
   .math-tooltip {
-    max-width: calc(100vw - 20px);
+    max-width: calc(100vw - var(--space-md));
     font-size: 0.85em;
   }
   

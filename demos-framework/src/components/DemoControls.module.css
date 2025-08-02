@@ -145,7 +145,7 @@
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
   .slider {
-    background: oklch(30% 0 0);
+    background: var(--color-slider-track-dark);
     
     &::-webkit-slider-thumb {
       background: var(--color-link);

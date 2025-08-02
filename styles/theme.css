@@ -129,6 +129,13 @@
   --shadow-lg: 0 10px 15px -3px oklch(0% 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px oklch(0% 0 0 / 0.1);
   
+  /* Component-specific shadows */
+  --shadow-button: 0 2px 4px oklch(0% 0 0 / 0.3);
+  --shadow-button-hover: 0 4px 8px oklch(0% 0 0 / 0.4);
+  
+  /* Component backgrounds */
+  --color-slider-track-dark: oklch(30% 0 0);
+  
   /* Transitions */
   --transition-fast: 150ms ease;
   --transition-base: 200ms ease;
@@ -166,6 +173,12 @@
   --size-button-icon: 16px;
   --size-thumb: 15px;
   --size-slider-track: 4px;
+  --size-scrollbar: 8px;
+  --size-tooltip-min: 200px;
+  --size-tooltip-max: 500px;
+  --size-spinner: 14px;
+  --size-nav-button: 24px;
+  --line-height-nav-button: 20px;
   
   /* Content widths */
   --width-content-base: 1200px;
@@ -195,6 +208,12 @@
   --breakpoint-tablet: 768px;
   --breakpoint-desktop: 1024px;
   --breakpoint-wide: 1440px;
+  
+  /* Container query breakpoints */
+  /* Note: Container queries also can't use CSS custom properties */
+  --container-sm: 600px;
+  --container-md: 900px;
+  --container-lg: 1200px;
   
   /* Transform values */
   --translate-subtle: -1px;

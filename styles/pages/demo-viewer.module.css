@@ -65,8 +65,8 @@
   font-size: 0.75em;
   transition: background 0.2s;
   white-space: nowrap;
-  height: 24px;
-  line-height: 20px;
+  height: var(--size-nav-button);
+  line-height: var(--line-height-nav-button);
   margin: 0;
   font-family: inherit;
 }
@@ -86,7 +86,7 @@
   text-align: center;
   white-space: nowrap;
   margin: 0;
-  line-height: 24px;
+  line-height: var(--size-nav-button);
 }
 
 /* Match the embedded demo component styles */
@@ -157,7 +157,7 @@
 }
 
 /* Ensure navigation stays on one line */
-@media (max-width: 400px) {
+@media (--phone-xs) {
   .nav-button {
     font-size: 0.8em;
     padding: var(--space-micro-2) var(--space-sm);
@@ -168,7 +168,7 @@
 }
 
 /* Mobile footer improvements for demo viewer */
-@media (max-width: 768px) {
+@media (--phone) {
   footer {
     flex-direction: column;
     gap: var(--space-xs);
