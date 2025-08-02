@@ -24,6 +24,11 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 * Don't check types after every single change
 * Do not hardcode colors - always use CSS custom properties from the theme (e.g., `var(--color-primary)`, `var(--space-md)`)
 * CSS changes in development have hot module replacement - no need to restart the server
+* **NEVER use inline styles** - Always use CSS classes instead. The codebase uses a modern CSS system with:
+  - CSS Modules for component-scoped styles (e.g., `import styles from './Component.module.css'`)
+  - Global styles in `/styles/` directory
+  - Theme variables defined in `/styles/theme.css`
+  - All inline styles have been removed - maintain this standard
 
 ## Common Commands
 
