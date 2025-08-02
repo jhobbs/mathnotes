@@ -119,40 +119,40 @@
 .demo-error {
   text-align: center;
   padding: 20px;
-  color: var(--error-color, #d32f2f);
-  background: var(--error-background, #ffebee);
+  color: var(--color-error);
+  background: var(--color-error-bg);
   border-radius: 4px;
 }
 
 /* Dark mode variables */
 @media (prefers-color-scheme: dark) {
   :root {
-    --button-background: #3a3a3a;
-    --button-hover: #4a4a4a;
-    --button-text: #fff;
-    --card-background: #2a2a2a;
-    --border-color: #444;
-    --border-light: #333;
-    --background-secondary: #1a1a1a;
-    --text-secondary: #b0b0b0;
-    --error-background: #2d1515;
-    --info-background: #1a2a3a;
+    --button-background: var(--color-button-bg);
+    --button-hover: var(--color-button-hover);
+    --button-text: var(--color-button-text);
+    --card-background: var(--color-card-bg);
+    --border-color: var(--color-border);
+    --border-light: var(--color-border-light);
+    --background-secondary: var(--color-bg-secondary);
+    --text-secondary: var(--color-text-secondary);
+    --error-background: var(--color-error-bg);
+    --info-background: var(--color-info-bg);
   }
 }
 
 /* Light mode variables */
 @media (prefers-color-scheme: light) {
   :root {
-    --button-background: #f5f5f5;
-    --button-hover: #e0e0e0;
-    --button-text: #333;
-    --card-background: #ffffff;
-    --border-color: #e0e0e0;
-    --border-light: #f0f0f0;
-    --background-secondary: #fafafa;
-    --text-secondary: #666;
-    --error-background: #ffebee;
-    --info-background: #e3f2fd;
+    --button-background: var(--color-button-bg);
+    --button-hover: var(--color-button-hover);
+    --button-text: var(--color-button-text);
+    --card-background: var(--color-card-bg);
+    --border-color: var(--color-border);
+    --border-light: var(--color-border-light);
+    --background-secondary: var(--color-bg-secondary);
+    --text-secondary: var(--color-text-secondary);
+    --error-background: var(--color-error-bg);
+    --info-background: var(--color-info-bg);
   }
 }
 

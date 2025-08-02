@@ -22,7 +22,7 @@
 
 .section-header.active {
   background-color: var(--link-color);
-  color: white;
+  color: var(--color-white);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }

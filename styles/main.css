@@ -199,40 +199,40 @@ article {
   transition: background-color 0.2s ease;
   
   &:hover {
-    background-color: rgba(3, 102, 214, 0.1);
+    background-color: var(--color-primary-hover);
     text-decoration: underline;
   }
   
   &:active {
-    background-color: rgba(3, 102, 214, 0.2);
+    background-color: var(--color-primary-active);
   }
 }
 
 /* Error styling for broken references */
 .block-reference-error {
-  color: #dc3545;
-  background-color: rgba(220, 53, 69, 0.1);
+  color: var(--color-error);
+  background-color: color-mix(in oklch, var(--color-error), transparent 90%);
   padding: 0.1em 0.2em;
   border-radius: 3px;
   font-family: monospace;
   font-size: 0.9em;
-  border: 1px dashed #dc3545;
+  border: 1px dashed var(--color-error-border);
 }
 
 /* Dark mode reference styling */
 @media (prefers-color-scheme: dark) {
   .block-reference:hover {
-    background-color: rgba(88, 166, 255, 0.1);
+    background-color: var(--color-primary-hover);
   }
   
   .block-reference:active {
-    background-color: rgba(88, 166, 255, 0.2);
+    background-color: var(--color-primary-active);
   }
   
   .block-reference-error {
-    color: #f85149;
-    background-color: rgba(248, 81, 73, 0.1);
-    border-color: #f85149;
+    color: var(--color-error);
+    background-color: color-mix(in oklch, var(--color-error), transparent 90%);
+    border-color: var(--color-error-border);
   }
 }
 
@@ -357,11 +357,11 @@ input, textarea, select {
     height: auto;
     display: block;
     margin-inline: auto;
-    border: 2px dashed #000000; /* High contrast black dashed border in light mode */
+    border: 2px dashed var(--color-text); /* High contrast border using theme color */
     border-radius: var(--radius-md);
     
     @media (--dark) {
-      border-color: #ffffff; /* White border for high contrast in dark mode */
+      border-color: var(--color-text); /* High contrast border for dark mode */
     }
   }
   
@@ -474,7 +474,7 @@ input, textarea, select {
   padding: 0.75rem;
   padding-inline-start: var(--space-md);
   border-inline-start-width: 3px;
-  background-color: rgba(0, 0, 0, 0.02);
+  background-color: var(--color-overlay-light);
   position: relative;
   
   /* Tighter spacing for nested content */
@@ -500,67 +500,67 @@ input, textarea, select {
   }
   
   @media (--dark) {
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: var(--color-overlay-light);
   }
 }
 
 /* Type-specific nested blocks */
 .math-block-nested {
   &.math-definition {
-    background-color: rgba(44, 82, 130, 0.03);
+    background-color: var(--color-nested-definition);
   }
   
   &.math-theorem {
-    background-color: rgba(56, 161, 105, 0.03);
+    background-color: var(--color-nested-theorem);
   }
   
   &.math-lemma {
-    background-color: rgba(43, 108, 176, 0.03);
+    background-color: var(--color-nested-lemma);
   }
   
   &.math-proposition {
-    background-color: rgba(49, 130, 206, 0.03);
+    background-color: var(--color-nested-proposition);
   }
   
   &.math-corollary {
-    background-color: rgba(113, 128, 150, 0.025);
+    background-color: var(--color-nested-corollary);
   }
   
   &.math-proof {
-    background-color: rgba(45, 55, 72, 0.03);
+    background-color: var(--color-nested-proof);
   }
   
   &.math-example {
-    background-color: rgba(47, 133, 90, 0.03);
+    background-color: var(--color-nested-example);
   }
   
   @media (--dark) {
     &.math-definition {
-      background-color: rgba(44, 82, 130, 0.06);
+      background-color: var(--color-nested-definition);
     }
     
     &.math-theorem {
-      background-color: rgba(56, 161, 105, 0.06);
+      background-color: var(--color-nested-theorem);
     }
     
     &.math-lemma {
-      background-color: rgba(43, 108, 176, 0.06);
+      background-color: var(--color-nested-lemma);
     }
     
     &.math-proposition {
-      background-color: rgba(49, 130, 206, 0.06);
+      background-color: var(--color-nested-proposition);
     }
     
     &.math-corollary {
-      background-color: rgba(113, 128, 150, 0.05);
+      background-color: var(--color-nested-corollary);
     }
     
     &.math-proof {
-      background-color: rgba(45, 55, 72, 0.06);
+      background-color: var(--color-nested-proof);
     }
     
     &.math-example {
-      background-color: rgba(47, 133, 90, 0.06);
+      background-color: var(--color-nested-example);
     }
   }
 }
@@ -569,11 +569,11 @@ input, textarea, select {
 .math-block-error {
   margin: var(--space-lg) 0;
   padding: var(--space-md);
-  border: 2px solid #dc3545;
-  border-inline-start: 5px solid #dc3545;
-  background-color: rgba(220, 53, 69, 0.1);
+  border: 2px solid var(--color-error-border);
+  border-inline-start: 5px solid var(--color-error-border);
+  background-color: var(--color-error-bg);
   border-radius: var(--radius-md);
-  color: #721c24;
+  color: var(--color-error-text-dark);
 }
 
 .math-block-error-header {
@@ -589,9 +589,9 @@ input, textarea, select {
 
 @media (--dark) {
   .math-block-error {
-    background-color: rgba(220, 53, 69, 0.15);
-    color: #f8d7da;
-    border-color: #dc3545;
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text-dark);
+    border-color: var(--color-error-border);
   }
 }
 
@@ -659,10 +659,10 @@ footer {
 /* Dark mode toggle button adjustments */
 @media (prefers-color-scheme: dark) {
   .math-content-toggle {
-    box-shadow: 0 2px 4px rgb(0 0 0 / 0.3);
+    box-shadow: 0 2px 4px oklch(0% 0 0 / 0.3);
     
     &:hover {
-      box-shadow: 0 4px 8px rgb(0 0 0 / 0.4);
+      box-shadow: 0 4px 8px oklch(0% 0 0 / 0.4);
     }
   }
 }
@@ -745,7 +745,7 @@ footer {
   }
   
   @media (--dark) {
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: var(--color-embedded-bg);
     
     &.embedded-definition {
       background-color: color-mix(in oklch, var(--color-definition), transparent 88%);
@@ -779,15 +779,15 @@ footer {
 
 /* Embed error styling */
 .embed-error {
-  color: #dc3545;
+  color: var(--color-error);
   font-weight: bold;
-  background-color: rgba(220, 53, 69, 0.1);
+  background-color: var(--color-error-bg);
   padding: 2px 6px;
   border-radius: var(--radius-sm);
   
   @media (--dark) {
-    background-color: rgba(220, 53, 69, 0.2);
-    color: #f8d7da;
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text-dark);
   }
 }
 
@@ -895,10 +895,10 @@ footer {
   z-index: 10000;
   max-width: 500px;
   min-width: 200px;
-  background: #ffffff;
+  background: var(--color-tooltip-bg);
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
   padding: 0;
   pointer-events: auto;
   opacity: 0;
@@ -911,8 +911,8 @@ footer {
 
 @media (prefers-color-scheme: dark) {
   .math-tooltip {
-    background: #1a1a1a;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    background: var(--color-tooltip-bg);
+    box-shadow: var(--shadow-lg);
   }
 }
 
@@ -946,76 +946,76 @@ footer {
 
 /* Math block type-specific colors in tooltips */
 .math-tooltip-content.math-definition .math-tooltip-type {
-  color: #007acc;
+  color: var(--color-type-definition);
 }
 
 .math-tooltip-content.math-theorem .math-tooltip-type {
-  color: #d73a49;
+  color: var(--color-type-theorem);
 }
 
 .math-tooltip-content.math-proposition .math-tooltip-type {
-  color: #6f42c1;
+  color: var(--color-type-proposition);
 }
 
 .math-tooltip-content.math-lemma .math-tooltip-type {
-  color: #e36209;
+  color: var(--color-type-lemma);
 }
 
 .math-tooltip-content.math-corollary .math-tooltip-type {
-  color: #22863a;
+  color: var(--color-type-corollary);
 }
 
 .math-tooltip-content.math-example .math-tooltip-type {
-  color: #735c0f;
+  color: var(--color-type-example);
 }
 
 .math-tooltip-content.math-remark .math-tooltip-type,
 .math-tooltip-content.math-note .math-tooltip-type {
-  color: #5a637d;
+  color: var(--color-type-note);
 }
 
 @media (prefers-color-scheme: dark) {
   .math-tooltip-content.math-definition .math-tooltip-type {
-    color: #58a6ff;
+    color: var(--color-type-definition);
   }
   
   .math-tooltip-content.math-theorem .math-tooltip-type {
-    color: #f85149;
+    color: var(--color-type-theorem);
   }
   
   .math-tooltip-content.math-proposition .math-tooltip-type {
-    color: #bc8cff;
+    color: var(--color-type-proposition);
   }
   
   .math-tooltip-content.math-lemma .math-tooltip-type {
-    color: #fb8500;
+    color: var(--color-type-lemma);
   }
   
   .math-tooltip-content.math-corollary .math-tooltip-type {
-    color: #3fb950;
+    color: var(--color-type-corollary);
   }
   
   .math-tooltip-content.math-example .math-tooltip-type {
-    color: #d29922;
+    color: var(--color-type-example);
   }
   
   .math-tooltip-content.math-remark .math-tooltip-type,
   .math-tooltip-content.math-note .math-tooltip-type {
-    color: #8b949e;
+    color: var(--color-type-note);
   }
 }
 
 .math-tooltip-footer {
   border-top: 1px solid var(--color-border);
   padding: 8px 16px;
-  background: #f8f8f8;
+  background: var(--color-tooltip-footer-bg);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
 
 @media (prefers-color-scheme: dark) {
   .math-tooltip-footer {
-    background: #0d0d0d;
+    background: var(--color-tooltip-footer-bg);
   }
 }
 
@@ -1042,7 +1042,7 @@ footer {
   display: inline-block;
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--color-spinner-border);
   border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -1101,8 +1101,8 @@ footer {
 /* Print styles */
 @media print {
   body {
-    background: white;
-    color: black;
+    background: var(--color-white);
+    color: var(--color-black);
   }
   
   .demo-component,

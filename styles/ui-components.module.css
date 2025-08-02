@@ -14,8 +14,7 @@
 }
 
 .button:hover {
-  filter: brightness(0.95);
-  opacity: 0.9;
+  background-color: var(--color-button-hover);
 }
 
 /* Info display styles */
