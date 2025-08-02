@@ -29,7 +29,7 @@
 
 .slider {
   width: 100%;
-  height: 4px;
+  height: var(--size-slider-track);
   border-radius: var(--radius-sm);
   background: var(--color-border);
   outline: none;
@@ -39,8 +39,8 @@
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 16px;
-    height: 16px;
+    width: var(--size-button-icon);
+    height: var(--size-button-icon);
     border-radius: var(--radius-full);
     background: var(--color-primary);
     cursor: pointer;
@@ -52,8 +52,8 @@
   }
   
   &::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
+    width: var(--size-button-icon);
+    height: var(--size-button-icon);
     border-radius: var(--radius-full);
     background: var(--color-primary);
     cursor: pointer;
@@ -91,7 +91,7 @@
   
   &:hover {
     background-color: var(--color-primary-dark);
-    transform: translateY(-1px);
+    transform: translateY(var(--translate-subtle));
     box-shadow: var(--shadow-md);
   }
   
@@ -116,7 +116,7 @@
   composes: button;
   background-color: transparent;
   color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  border: var(--border-width-base) solid var(--color-primary);
   
   &:hover {
     background-color: var(--color-primary-light);
@@ -124,7 +124,7 @@
 }
 
 /* Responsive design */
-@media (max-width: 640px) {
+@media (max-width: var(--breakpoint-phone)) {
   .container {
     padding: var(--space-sm);
   }

@@ -4,12 +4,25 @@ This document outlines the styling and CSS guidelines for the Mathnotes project.
 
 ## CSS Guidelines
 
-### Use Theme Variables
-* **NEVER hardcode colors** - Always use CSS custom properties from the theme
-* All colors should reference theme variables: `var(--color-primary)`, `var(--color-secondary)`, etc.
-* Use OKLCH color space for defining colors - provides better perceptual uniformity and more predictable color manipulation
-* Use spacing variables: `var(--space-xs)`, `var(--space-sm)`, `var(--space-md)`, `var(--space-lg)`, etc.
-* Use typography variables for consistent font sizes and line heights
+### Use Theme Variables and Design Tokens
+* **NEVER hardcode values** - Always use CSS custom properties (design tokens) from the theme
+* **Colors**: Use theme variables like `var(--color-primary)`, `var(--color-secondary)`, etc.
+  - Use OKLCH color space for defining colors - provides better perceptual uniformity
+* **Spacing**: Use spacing tokens: `var(--space-xs)` through `var(--space-3xl)`
+  - Also use gap tokens: `var(--gap-xs)` through `var(--gap-2xl)`
+* **Typography**: Use font size tokens: `var(--font-size-xs)` through `var(--font-size-3xl)`
+  - Use line height tokens: `var(--line-height-tight)`, `var(--line-height-base)`, `var(--line-height-relaxed)`
+* **Borders**: Use border tokens:
+  - Widths: `var(--border-width-thin)` through `var(--border-width-heavy)`
+  - Radius: `var(--radius-sm)`, `var(--radius-md)`, `var(--radius-lg)`, `var(--radius-full)`
+* **Component Sizes**: Use size tokens like `var(--size-input-base)`, `var(--size-button-icon)`, etc.
+* **Layout**: Use content width tokens: `var(--width-content-base)`, `var(--width-content-wide)`
+* **Heights**: Use height tokens: `var(--height-input-min)`, `var(--height-card-base)`, etc.
+* **Shadows**: Use shadow tokens: `var(--shadow-sm)` through `var(--shadow-xl)`
+* **Transitions**: Use transition tokens: `var(--transition-fast)`, `var(--transition-base)`, `var(--transition-slow)`
+* **Z-index**: Use z-index scale: `var(--z-base)` through `var(--z-tooltip)`
+* **Breakpoints**: Reference breakpoint tokens in PostCSS: `var(--breakpoint-phone)`, `var(--breakpoint-tablet)`, etc.
+* **Transforms**: Use transform tokens: `var(--translate-subtle)`, `var(--translate-sm)`, etc.
 
 ### No Inline Styles
 * **NEVER use inline styles** - Always use CSS classes instead

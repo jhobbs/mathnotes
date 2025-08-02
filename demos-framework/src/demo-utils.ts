@@ -66,10 +66,22 @@ export function isDarkMode(config?: DemoConfig): boolean {
 }
 
 /**
+ * Get CSS custom property value
+ * @param propertyName - CSS custom property name (e.g., '--color-primary')
+ * @returns The computed value of the CSS property
+ */
+function getCSSProperty(propertyName: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue(propertyName).trim();
+}
+
+/**
  * Gets standard demo colors based on dark mode
  */
 export function getDemoColors(p: p5, config?: DemoConfig): DemoColors {
   const isDark = isDarkMode(config);
+  
+  // Use CSS custom properties for text colors
+  const textColor = getCSSProperty('--color-text');
   
   if (isDark) {
     return {
@@ -77,7 +89,7 @@ export function getDemoColors(p: p5, config?: DemoConfig): DemoColors {
       foreground: p.color(220, 220, 220),
       stroke: p.color(200, 200, 200),
       fill: p.color(180, 180, 180),
-      text: '#e0e0e0',
+      text: textColor || '#e0e0e0',
       accent: p.color(100, 150, 255),
       grid: p.color(60, 60, 60),
       axis: p.color(150, 150, 150),
@@ -96,7 +108,7 @@ export function getDemoColors(p: p5, config?: DemoConfig): DemoColors {
       foreground: p.color(30, 30, 30),
       stroke: p.color(0, 0, 0),
       fill: p.color(50, 50, 50),
-      text: '#333333',
+      text: textColor || '#333333',
       accent: p.color(50, 100, 200),
       grid: p.color(200, 200, 200),
       axis: p.color(100, 100, 100),

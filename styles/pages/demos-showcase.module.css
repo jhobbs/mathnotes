@@ -1,19 +1,19 @@
 /* Demos showcase page specific styles */
 
 .demos-container {
-  max-width: 1200px;
+  max-width: var(--width-content-base);
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--gap-base);
 }
 
 .demos-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: var(--gap-xl);
 }
 
 .demos-header h1 {
   font-size: 2.5em;
-  margin-bottom: 10px;
+  margin-bottom: var(--gap-xs);
 }
 
 .demos-header p {
@@ -22,77 +22,77 @@
 }
 
 .category-section {
-  margin-bottom: 40px;
+  margin-bottom: var(--gap-xl);
 }
 
 .category-title {
   font-size: 1.8em;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--border-color);
+  margin-bottom: var(--gap-base);
+  padding-bottom: var(--gap-xs);
+  border-bottom: var(--border-width-base) solid var(--border-color);
 }
 
 .demos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(var(--width-card-min), 1fr));
+  gap: var(--gap-base);
 }
 
 .demo-card {
   background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 20px;
+  border: var(--border-width-thin) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--gap-base);
   transition: transform 0.2s, box-shadow 0.2s;
-  min-height: 200px;
+  min-height: var(--height-card-sm);
 }
 
 .demo-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(var(--translate-sm));
   box-shadow: var(--shadow-md);
 }
 
 .demo-card h3 {
   margin-top: 0;
-  margin-bottom: 15px;
+  margin-bottom: var(--gap-sm);
   font-size: 1.3em;
 }
 
 .demo-description {
   font-size: 0.9em;
   color: var(--text-secondary);
-  margin-bottom: 10px;
+  margin-bottom: var(--gap-xs);
 }
 
 .demo-container {
-  margin: 20px 0;
-  min-height: 300px;
-  min-width: 300px;
-  border: 1px solid var(--border-light);
-  border-radius: 4px;
-  padding: 10px;
+  margin: var(--gap-base) 0;
+  min-height: var(--height-demo-min);
+  min-width: var(--height-demo-min);
+  border: var(--border-width-thin) solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: var(--gap-xs);
   background: var(--background-secondary);
   position: relative;
   overflow: hidden;
 }
 
 .demo-component {
-  min-height: 300px;
+  min-height: var(--height-demo-min);
 }
 
 .demo-loading {
   text-align: center;
-  padding: 50px;
+  padding: var(--gap-2xl);
   color: var(--text-secondary);
 }
 
 .demo-error {
   text-align: center;
-  padding: 20px;
+  padding: var(--gap-base);
   color: var(--color-error);
   background: var(--color-error-bg);
-  border-radius: 4px;
-  margin: 10px 0;
+  border-radius: var(--radius-md);
+  margin: var(--gap-xs) 0;
 }
 
 /* Dark mode variables */

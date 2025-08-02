@@ -34,7 +34,7 @@
 
 html {
   /* Keep default browser font size */
-  font-size: 16px;
+  font-size: var(--font-size-base);
   -webkit-text-size-adjust: 100%;
   
   /* Smooth scrolling with accessibility consideration */
@@ -52,9 +52,9 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  max-width: 1200px;
+  max-width: var(--width-content-base);
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--gap-base);
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
@@ -63,20 +63,20 @@ body {
 /* Modern container using container queries */
 .container {
   container-type: inline-size;
-  width: min(100% - 2rem, 1200px);
+  width: min(100% - calc(var(--space-md) * 2), var(--width-content-base));
   margin-inline: auto;
   padding-block: var(--space-lg);
 }
 
 /* Layout components */
 header {
-  border-bottom: 1px solid var(--color-border);
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-md);
   
   & h1 {
     margin: 0;
-    font-size: 2rem;
+    font-size: var(--font-size-3xl);
     font-weight: normal;
     
     & a {
@@ -97,15 +97,15 @@ main {
   
   /* Ensure first element has minimal top spacing */
   & > *:first-child {
-    margin-top: 0.5rem;
+    margin-top: var(--space-sm);
   }
 }
 
 /* Typography - matching old styles */
 h1, h2, h3, h4, h5, h6 {
   color: var(--color-heading);
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 h1 {
@@ -143,24 +143,24 @@ p {
 /* Links with modern states */
 a {
   color: var(--color-link);
-  text-decoration-thickness: 2px;
+  text-decoration-thickness: var(--border-width-base);
   text-underline-offset: 0.1em;
   transition: color var(--transition-fast);
   
   &:hover {
-    text-decoration-thickness: 3px;
+    text-decoration-thickness: var(--border-width-thick);
   }
   
   &:focus-visible {
-    outline: 2px solid var(--color-link);
-    outline-offset: 3px;
+    outline: var(--border-width-base) solid var(--color-link);
+    outline-offset: var(--outline-offset-base);
     border-radius: var(--radius-sm);
   }
 }
 
 /* Blockquotes */
 blockquote {
-  border-inline-start: 4px solid var(--color-border);
+  border-inline-start: var(--border-width-heavy) solid var(--color-border);
   margin: 0;
   padding-inline-start: var(--space-md);
   color: var(--color-text-secondary);
@@ -195,7 +195,7 @@ article {
   text-decoration: none;
   font-weight: 500;
   padding: 0.1em 0.2em;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   transition: background-color 0.2s ease;
   
   &:hover {
@@ -213,10 +213,10 @@ article {
   color: var(--color-error);
   background-color: color-mix(in oklch, var(--color-error), transparent 90%);
   padding: 0.1em 0.2em;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   font-family: monospace;
   font-size: 0.9em;
-  border: 1px dashed var(--color-error-border);
+  border: var(--border-width-thin) dashed var(--color-error-border);
 }
 
 /* Dark mode reference styling */
@@ -285,7 +285,7 @@ table {
   & td {
     padding: var(--space-sm);
     text-align: start;
-    border-block-end: 1px solid var(--color-border);
+    border-block-end: var(--border-width-thin) solid var(--color-border);
   }
   
   & th {
@@ -307,12 +307,12 @@ input, textarea, select {
   font: inherit;
   color: inherit;
   background-color: var(--color-bg);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--space-sm);
   
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: var(--border-width-base) solid var(--color-primary);
     outline-offset: 0;
     border-color: transparent;
   }
@@ -357,7 +357,7 @@ input, textarea, select {
     height: auto;
     display: block;
     margin-inline: auto;
-    border: 2px dashed var(--color-text); /* High contrast border using theme color */
+    border: var(--border-width-base) dashed var(--color-text); /* High contrast border using theme color */
     border-radius: var(--radius-md);
     
     @media (--dark) {
@@ -376,7 +376,7 @@ input, textarea, select {
 .math-block {
   margin-block: var(--space-lg);
   padding: var(--space-md);
-  border-inline-start: 3px solid;
+  border-inline-start: var(--border-width-thick) solid;
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   background-color: var(--color-code-bg);
   position: relative;
@@ -447,7 +447,7 @@ input, textarea, select {
 
 /* Math block header and content */
 .math-block-header {
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-sm);
   font-weight: bold;
   color: var(--color-heading);
 }
@@ -671,7 +671,7 @@ footer {
 .embedded-block {
   margin: var(--space-lg) 0;
   padding: var(--space-md);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   border-inline-start: 3px solid var(--color-border);
   background-color: var(--color-code-bg);
   border-radius: var(--radius-md);
@@ -679,7 +679,7 @@ footer {
 }
 
 .embedded-header {
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-sm);
   font-weight: bold;
   color: var(--color-heading);
   font-size: 0.95em;
@@ -792,7 +792,7 @@ footer {
 }
 
 /* Mobile optimizations */
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-tablet)) {
   body {
     max-width: 100%;
     padding: 15px;
@@ -896,7 +896,7 @@ footer {
   max-width: 500px;
   min-width: 200px;
   background: var(--color-tooltip-bg);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   border-radius: 8px;
   box-shadow: var(--shadow-md);
   padding: 0;
@@ -1053,7 +1053,7 @@ footer {
 }
 
 /* Mobile adjustments */
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-tablet)) {
   .math-tooltip {
     max-width: calc(100vw - 20px);
     font-size: 0.85em;

@@ -131,6 +131,58 @@
   --z-overlay: 300;
   --z-modal: 400;
   --z-tooltip: 500;
+  
+  /* Border widths */
+  --border-width-thin: 1px;
+  --border-width-base: 2px;
+  --border-width-thick: 3px;
+  --border-width-heavy: 4px;
+  
+  /* Component sizes */
+  --size-input-sm: 100px;
+  --size-input-base: 120px;
+  --size-input-md: 160px;
+  --size-input-lg: 200px;
+  --size-button-icon: 16px;
+  --size-thumb: 15px;
+  --size-slider-track: 4px;
+  
+  /* Content widths */
+  --width-content-base: 1200px;
+  --width-content-wide: 1440px;
+  --width-grid-min: 250px;
+  --width-card-min: 350px;
+  
+  /* Heights */
+  --height-input-min: 60px;
+  --height-card-sm: 200px;
+  --height-card-base: 300px;
+  --height-demo-min: 300px;
+  
+  /* Gaps and gutters */
+  --gap-xs: 10px;
+  --gap-sm: 15px;
+  --gap-base: 20px;
+  --gap-lg: 30px;
+  --gap-xl: 40px;
+  --gap-2xl: 50px;
+  
+  /* Breakpoints */
+  /* Note: These values are also hardcoded in main.css @custom-media rules
+     because CSS custom properties don't work in @custom-media at-rules */
+  --breakpoint-phone: 640px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-wide: 1440px;
+  
+  /* Transform values */
+  --translate-subtle: -1px;
+  --translate-sm: -2px;
+  --translate-base: 1rem;
+  
+  /* Outline offsets */
+  --outline-offset-sm: 2px;
+  --outline-offset-base: 3px;
 }
 
 /* Dark theme */

@@ -8,7 +8,7 @@
 }
 
 .grid-cols-auto {
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--width-grid-min), 1fr));
 }
 
 .flex {
@@ -55,7 +55,7 @@
 }
 
 .border-block-end {
-  border-block-end: 1px solid var(--color-border);
+  border-block-end: var(--border-width-thin) solid var(--color-border);
 }
 
 /* Modern spacing utilities using custom properties */
