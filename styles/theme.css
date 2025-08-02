@@ -11,6 +11,7 @@
   
   /* Semantic colors */
   --color-bg: #fafafa;
+  --color-bg-secondary: #ffffff;
   --color-text: #333333;
   --color-text-secondary: #6a737d;
   --color-heading: #333333;
@@ -78,9 +79,10 @@
 }
 
 /* Dark theme */
-@media (--dark) {
+@media (prefers-color-scheme: dark) {
   :root {
     --color-bg: #0d1117;
+    --color-bg-secondary: #0d1117;
     --color-text: #c9d1d9;
     --color-text-secondary: #8b949e;
     --color-heading: #f0f6fc;

@@ -27,8 +27,8 @@
 }
 
 html {
-  /* Fluid base font size */
-  font-size: clamp(16px, 1vw + 0.5rem, 18px);
+  /* Keep default browser font size */
+  font-size: 16px;
   -webkit-text-size-adjust: 100%;
   
   /* Smooth scrolling with accessibility consideration */
@@ -38,14 +38,19 @@ html {
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  line-height: var(--line-height-base);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
   color: var(--color-text);
   background-color: var(--color-bg);
   min-height: 100vh;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Modern container using container queries */
@@ -56,26 +61,69 @@ body {
   padding-block: var(--space-lg);
 }
 
-/* Typography with fluid sizing and optical adjustments */
-h1, h2, h3, h4, h5, h6 {
-  color: var(--color-heading);
-  font-weight: 600;
-  line-height: var(--line-height-tight);
-  text-wrap: balance;
+/* Layout components */
+header {
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
   
-  & + * {
-    margin-block-start: var(--space-sm);
+  & h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: normal;
+    
+    & a {
+      color: var(--color-text);
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 
+main {
+  flex: 1;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  
+  /* Ensure first element has minimal top spacing */
+  & > *:first-child {
+    margin-top: 0.5rem;
+  }
+}
+
+/* Typography - matching old styles */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-heading);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 h1 {
-  font-size: var(--text-fluid-xl);
-  letter-spacing: -0.02em;
+  font-size: 2em;
 }
 
 h2 {
-  font-size: var(--text-fluid-lg);
-  letter-spacing: -0.01em;
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.17em;
+}
+
+h4 {
+  font-size: 1em;
+}
+
+h5 {
+  font-size: 0.83em;
+}
+
+h6 {
+  font-size: 0.67em;
 }
 
 p {
@@ -101,6 +149,62 @@ a {
     outline: 2px solid var(--color-link);
     outline-offset: 3px;
     border-radius: var(--radius-sm);
+  }
+}
+
+/* Blockquotes */
+blockquote {
+  border-inline-start: 4px solid var(--color-border);
+  margin: 0;
+  padding-inline-start: var(--space-md);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+/* Block reference links (for tooltips) */
+.block-reference {
+  color: var(--color-link);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.1em 0.2em;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(3, 102, 214, 0.1);
+    text-decoration: underline;
+  }
+  
+  &:active {
+    background-color: rgba(3, 102, 214, 0.2);
+  }
+}
+
+/* Error styling for broken references */
+.block-reference-error {
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+  padding: 0.1em 0.2em;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9em;
+  border: 1px dashed #dc3545;
+}
+
+/* Dark mode reference styling */
+@media (prefers-color-scheme: dark) {
+  .block-reference:hover {
+    background-color: rgba(88, 166, 255, 0.1);
+  }
+  
+  .block-reference:active {
+    background-color: rgba(88, 166, 255, 0.2);
+  }
+  
+  .block-reference-error {
+    color: #f85149;
+    background-color: rgba(248, 81, 73, 0.1);
+    border-color: #f85149;
   }
 }
 
@@ -258,6 +362,397 @@ footer {
     &:hover {
       color: var(--color-link);
     }
+  }
+}
+
+/* Collapsible sections for content organization */
+.sections-container {
+  margin-block: var(--space-lg);
+}
+
+.collapsible-section {
+  margin-block-end: var(--space-md);
+}
+
+.section-header {
+  background-color: var(--color-code-bg);
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color var(--transition-base);
+  
+  &:hover {
+    background-color: var(--color-border);
+  }
+  
+  &.active {
+    background-color: var(--color-link);
+    color: white;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.section-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin: 0;
+}
+
+.toggle-icon {
+  font-size: var(--font-size-xl);
+  transition: transform var(--transition-slow);
+}
+
+.section-header.active .toggle-icon {
+  transform: rotate(90deg);
+}
+
+.section-content {
+  display: none;
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-bottom-left-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+  padding: var(--space-md);
+  background-color: var(--color-bg);
+  
+  &.show {
+    display: block;
+  }
+}
+
+.content-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.content-item {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.content-link {
+  color: var(--color-link);
+  text-decoration: none;
+  display: block;
+  padding: var(--space-xs) 0;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.subdirectory {
+  margin-inline-start: var(--space-lg);
+  margin-block-start: var(--space-sm);
+}
+
+.subdir-header {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin: var(--space-sm) 0;
+  font-size: var(--font-size-sm);
+}
+
+/* Math content toggle button styles */
+.math-content-toggle-container {
+  position: sticky;
+  top: 10px;
+  z-index: var(--z-sticky);
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0 var(--space-md);
+  float: right;
+  width: auto;
+}
+
+.math-content-toggle {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+  
+  &:hover {
+    background-color: var(--color-link);
+    color: var(--color-bg);
+    border-color: var(--color-link);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* Dark mode toggle button adjustments */
+@media (prefers-color-scheme: dark) {
+  .math-content-toggle {
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.3);
+    
+    &:hover {
+      box-shadow: 0 4px 8px rgb(0 0 0 / 0.4);
+    }
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  body {
+    max-width: 100%;
+    padding: 15px;
+  }
+  
+  /* Mobile footer improvements */
+  footer {
+    padding: var(--space-md) var(--space-sm);
+    
+    & p {
+      font-size: var(--font-size-sm);
+      line-height: 1.8;
+      white-space: normal;
+      text-align: center;
+    }
+    
+    & .separator {
+      display: none;
+    }
+    
+    & .copyright,
+    & .version {
+      display: block;
+      width: 100%;
+      margin: var(--space-xs) 0;
+    }
+  }
+  
+  /* Demo components mobile optimization */
+  .demo-component {
+    margin: var(--space-sm) 0;
+    width: 100%;
+    
+    & .demo-content {
+      padding: 0;
+      width: 100%;
+    }
+    
+    & canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+  }
+  
+  /* Fix MathJax font sizing on mobile */
+  mjx-container {
+    font-size: 120% !important;
+  }
+  
+  mjx-container[display="false"] {
+    font-size: inherit !important;
+    vertical-align: baseline;
+  }
+  
+  mjx-container[display="true"] {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Tooltip styles */
+.math-tooltip {
+  position: absolute;
+  z-index: 10000;
+  max-width: 500px;
+  min-width: 200px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.math-tooltip.visible {
+  opacity: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  .math-tooltip {
+    background: #1a1a1a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.math-tooltip-content {
+  padding: 12px 16px;
+}
+
+.math-tooltip-header {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.math-tooltip-type {
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.math-tooltip-body {
+  color: var(--color-text-secondary);
+}
+
+.math-tooltip-body p {
+  margin: 0 0 8px 0;
+}
+
+.math-tooltip-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Math block type-specific colors in tooltips */
+.math-tooltip-content.math-definition .math-tooltip-type {
+  color: #007acc;
+}
+
+.math-tooltip-content.math-theorem .math-tooltip-type {
+  color: #d73a49;
+}
+
+.math-tooltip-content.math-proposition .math-tooltip-type {
+  color: #6f42c1;
+}
+
+.math-tooltip-content.math-lemma .math-tooltip-type {
+  color: #e36209;
+}
+
+.math-tooltip-content.math-corollary .math-tooltip-type {
+  color: #22863a;
+}
+
+.math-tooltip-content.math-example .math-tooltip-type {
+  color: #735c0f;
+}
+
+.math-tooltip-content.math-remark .math-tooltip-type,
+.math-tooltip-content.math-note .math-tooltip-type {
+  color: #5a637d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .math-tooltip-content.math-definition .math-tooltip-type {
+    color: #58a6ff;
+  }
+  
+  .math-tooltip-content.math-theorem .math-tooltip-type {
+    color: #f85149;
+  }
+  
+  .math-tooltip-content.math-proposition .math-tooltip-type {
+    color: #bc8cff;
+  }
+  
+  .math-tooltip-content.math-lemma .math-tooltip-type {
+    color: #fb8500;
+  }
+  
+  .math-tooltip-content.math-corollary .math-tooltip-type {
+    color: #3fb950;
+  }
+  
+  .math-tooltip-content.math-example .math-tooltip-type {
+    color: #d29922;
+  }
+  
+  .math-tooltip-content.math-remark .math-tooltip-type,
+  .math-tooltip-content.math-note .math-tooltip-type {
+    color: #8b949e;
+  }
+}
+
+.math-tooltip-footer {
+  border-top: 1px solid var(--color-border);
+  padding: 8px 16px;
+  background: #f8f8f8;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .math-tooltip-footer {
+    background: #0d0d0d;
+  }
+}
+
+.math-tooltip-link {
+  font-size: 0.85em;
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+.math-tooltip-link:hover {
+  text-decoration: underline;
+}
+
+/* Loading state */
+.math-tooltip-loading {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .math-tooltip {
+    max-width: calc(100vw - 20px);
+    font-size: 0.85em;
+  }
+  
+  .math-tooltip-content {
+    padding: 10px 12px;
+  }
+  
+  .math-tooltip-footer {
+    padding: 6px 12px;
   }
 }
 

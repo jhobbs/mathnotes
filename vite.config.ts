@@ -92,6 +92,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@': resolve(__dirname),
       '@demos': resolve(__dirname, 'demos'),
       '@framework': resolve(__dirname, 'demos-framework/src')
     }

@@ -264,6 +264,7 @@ class TooltipSystem {
     
     this.tooltipElement.innerHTML = content;
     this.tooltipElement.style.display = 'block';
+    this.tooltipElement.classList.add('visible');
     
     if (window.MathJax && window.MathJax.typesetPromise) {
       window.MathJax.typesetPromise([this.tooltipElement]).catch((e: any) => {
@@ -305,6 +306,7 @@ class TooltipSystem {
   private hideTooltip(): void {
     if (!this.tooltipElement) return;
     
+    this.tooltipElement.classList.remove('visible');
     this.tooltipElement.style.display = 'none';
     this.currentTarget = null;
     this.mouseOverTooltip = false;
