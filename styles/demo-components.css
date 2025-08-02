@@ -12,15 +12,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: var(--space-lg);
-  flex-wrap: wrap;
+  gap: var(--gap, var(--space-lg)); /* Use custom property with fallback */
   
-  &.demo-control-row--small-gap {
-    gap: var(--space-sm);
-  }
-  
-  &.demo-control-row--medium-gap {
-    gap: var(--space-md);
+  /* Handle wrap with data attribute */
+  &[data-wrap="true"] {
+    flex-wrap: wrap;
   }
 }
 
@@ -179,7 +175,12 @@
 /* Mobile responsive adjustments */
 @media (max-width: var(--breakpoint-tablet)) {
   .demo-control-row {
-    gap: var(--space-sm);
+    gap: var(--gap, var(--space-sm)); /* Respect custom gap on mobile too */
+    
+    /* Stack controls vertically on mobile when data-mobile-stack is set */
+    &[data-mobile-stack="true"] {
+      flex-direction: column;
+    }
   }
   
   .demo-control-group {

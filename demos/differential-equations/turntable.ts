@@ -169,10 +169,8 @@ class TurntableDemo extends P5DemoBase {
     // Create a row for sliders
     const sliderRow = document.createElement('div');
     sliderRow.className = 'demo-control-row';
-    // Add responsive class for mobile
-    if (window.innerWidth < 768) {
-      sliderRow.classList.add('demo-control-row--small-gap');
-    }
+    // Use CSS custom property for responsive gap
+    sliderRow.style.setProperty('--gap', 'var(--space-sm)');
     controlPanel.appendChild(sliderRow);
     
     // Bug locomotive speed slider - default to 90% (2.7 out of 3)

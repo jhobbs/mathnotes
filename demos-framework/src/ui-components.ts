@@ -362,19 +362,16 @@ export function createControlRow(
   const row = document.createElement('div');
   row.className = 'demo-control-row';
   
-  // Add modifier classes based on options
-  if (options.gap === '10px') {
-    row.classList.add('demo-control-row--small-gap');
-  } else if (options.gap === '15px') {
-    row.classList.add('demo-control-row--medium-gap');
+  // Set gap using CSS custom property
+  if (options.gap) {
+    row.style.setProperty('--gap', options.gap);
   }
   
   if (options.wrap) {
-    row.style.flexWrap = 'wrap'; // Keep this as inline style since it's conditional
+    row.setAttribute('data-wrap', 'true');
   }
   
   if (options.mobileStack) {
-    // Add a data attribute for CSS media query handling
     row.setAttribute('data-mobile-stack', 'true');
   }
   
