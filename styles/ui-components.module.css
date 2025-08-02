@@ -7,7 +7,7 @@
   cursor: pointer;
   background-color: var(--color-bg-secondary);
   color: var(--color-text);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-sm);
   transition: background-color var(--transition-fast);
   font-size: var(--font-size-sm);
@@ -47,8 +47,8 @@
 .slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 120px;
-  height: 5px;
+  width: var(--size-input-base);
+  height: var(--size-slider-track);
   background: var(--color-border);
   outline: none;
   opacity: 0.8;
@@ -63,16 +63,16 @@
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 15px;
-  height: 15px;
+  width: var(--size-thumb);
+  height: var(--size-thumb);
   background: var(--color-link);
   cursor: pointer;
   border-radius: var(--radius-full);
 }
 
 .slider::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
+  width: var(--size-thumb);
+  height: var(--size-thumb);
   background: var(--color-link);
   cursor: pointer;
   border-radius: var(--radius-full);
@@ -125,7 +125,7 @@
 .select {
   padding: var(--space-xs) var(--space-sm);
   font-size: var(--font-size-sm);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   background-color: var(--color-bg);
   color: var(--color-text);
   border-radius: var(--radius-sm);
@@ -133,46 +133,46 @@
 }
 
 .select:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: var(--border-width-base) solid var(--color-primary);
+  outline-offset: var(--outline-offset-sm);
 }
 
 /* Text input styles */
 .textInput {
   padding: var(--space-xs) var(--space-sm);
   font-size: var(--font-size-sm);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   background-color: var(--color-bg);
   color: var(--color-text);
   border-radius: var(--radius-sm);
 }
 
 .textInput:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: var(--border-width-base) solid var(--color-primary);
+  outline-offset: var(--outline-offset-sm);
 }
 
 /* Textarea styles */
 .textarea {
   padding: var(--space-xs) var(--space-sm);
   font-size: var(--font-size-sm);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   background-color: var(--color-bg);
   color: var(--color-text);
   border-radius: var(--radius-sm);
   resize: vertical;
-  min-height: 60px;
+  min-height: var(--height-input-min);
   font-family: inherit;
 }
 
 .textarea:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: var(--border-width-base) solid var(--color-primary);
+  outline-offset: var(--outline-offset-sm);
 }
 
 /* Fieldset styles */
 .fieldset {
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--space-md);
   margin: var(--space-md) 0;
@@ -195,10 +195,10 @@
 }
 
 /* Mobile responsive styles */
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-tablet)) {
   .label {
     font-size: var(--font-size-xs);
-    margin-bottom: 0.25rem;
+    margin-bottom: var(--space-xs);
   }
   
   .radio {
@@ -217,6 +217,6 @@
   }
   
   .slider {
-    width: 100px;
+    width: var(--size-input-sm);
   }
 }

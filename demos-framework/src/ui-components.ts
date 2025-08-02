@@ -109,7 +109,7 @@ export function createSlider(
   const slider = p.createSlider(min, max, value, step) as P5SliderElement;
   slider.parent(rowDiv);
   slider.class(uiStyles.slider);
-  slider.style('width: 120px');
+  // Width is set via CSS class
   
   if (onChange) {
     slider.input(onChange);

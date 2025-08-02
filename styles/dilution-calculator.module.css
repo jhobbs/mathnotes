@@ -14,19 +14,19 @@
 }
 
 .inputGroup label {
-  min-width: 160px;
+  min-width: var(--size-input-md);
   font-weight: 500;
   color: var(--color-text);
 }
 
 .input {
   padding: var(--space-sm);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-sm);
   background-color: var(--color-bg);
   color: var(--color-text);
   font-size: var(--font-size-sm);
-  width: 120px;
+  width: var(--size-input-base);
 }
 
 /* Hide number input spinners for cleaner look */
@@ -42,7 +42,7 @@
 .input:focus {
   outline: none;
   border-color: var(--color-link);
-  box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-link), transparent 80%);
+  box-shadow: 0 0 0 var(--border-width-base) color-mix(in oklch, var(--color-link), transparent 80%);
 }
 
 .button {
@@ -73,7 +73,7 @@
 }
 
 .resultLabel {
-  min-width: 160px;
+  min-width: var(--size-input-md);
   font-weight: 500;
   color: var(--color-text);
 }
@@ -85,7 +85,7 @@
 }
 
 /* Mobile responsive */
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-tablet)) {
   .inputGroup,
   .resultItem {
     flex-direction: column;
@@ -104,9 +104,9 @@
 }
 
 /* Additional styles for wider inputs on mobile */
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-tablet)) {
   .input {
     width: 100%;
-    max-width: 200px;
+    max-width: var(--size-input-lg);
   }
 }

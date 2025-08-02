@@ -91,7 +91,7 @@ class ProjectionDemo extends P5DemoBase {
       
       // Camera rotation group
       const cameraGroup = document.createElement('div');
-      cameraGroup.innerHTML = `<div class="${this.getStylePrefix()}-label" style="text-align: center; font-weight: bold; margin-bottom: 5px;">Camera Rotation</div>`;
+      cameraGroup.innerHTML = `<div class="${this.getStylePrefix()}-label">Camera Rotation</div>`;
       controlRow.appendChild(cameraGroup);
       
       const cameraSliders = document.createElement('div');
@@ -108,7 +108,7 @@ class ProjectionDemo extends P5DemoBase {
       
       // Translation group
       const translateGroup = document.createElement('div');
-      translateGroup.innerHTML = `<div class="${this.getStylePrefix()}-label" style="text-align: center; font-weight: bold; margin-bottom: 5px;">Translation</div>`;
+      translateGroup.innerHTML = `<div class="${this.getStylePrefix()}-label">Translation</div>`;
       controlRow.appendChild(translateGroup);
       
       const translateSliders = document.createElement('div');
