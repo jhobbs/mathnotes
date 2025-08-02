@@ -20,17 +20,6 @@ This file tracks ideas for future features, enhancements, and demonstrations for
 
 ## Technical Improvements
 
-### ✅ Implemented Features
-
-- **Cross-Reference System for Structured Blocks** (Implemented 2024-12-26)
-  - ✅ Basic syntax: `@label` for auto-generated link text
-  - ✅ Type-specific: `@type:label` validates block type  
-  - ✅ Custom text: `@[custom text](label)` for full control
-  - ✅ Works in nested blocks (e.g., references within proofs)
-  - ✅ Error handling for broken references
-  - ✅ Cross-file references (builds global index on startup)
-  - ✅ Automatic URL resolution for cross-file links
-
 ### TODO Features
 
 - **Attribution/Citation Blocks**: Create structured blocks for referencing content from other authors

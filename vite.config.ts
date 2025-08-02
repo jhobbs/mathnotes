@@ -49,6 +49,13 @@ export default defineConfig({
   root: '.',
   base: '/static/dist/',
   publicDir: false, // We don't use a public directory
+  css: {
+    modules: {
+      localsConvention: 'camelCase',
+      generateScopedName: '[name]__[local]___[hash:base64:5]',
+    },
+    postcss: './postcss.config.js',
+  },
   plugins: [
     requestLogger(),
     viteStaticCopy({
@@ -67,11 +74,18 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'demos-framework/src/main.ts'),
         mathjax: resolve(__dirname, 'demos-framework/src/mathjax-entry.ts'),
+        styles: resolve(__dirname, 'styles/main.css'),
       },
       output: {
         entryFileNames: '[name].js',
         chunkFileNames: '[name]-[hash].js',
-        assetFileNames: '[name]-[hash].[ext]'
+        assetFileNames: (assetInfo) => {
+          // Keep CSS files with a simple name for easier reference
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'main.css';
+          }
+          return '[name]-[hash].[ext]';
+        }
       }
     },
     sourcemap: true

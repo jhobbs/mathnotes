@@ -1,0 +1,275 @@
+/* Modern CSS entry point using PostCSS features */
+@import './theme.css';
+@import './utilities.css';
+
+/* Custom media queries for consistent responsive design */
+@custom-media --phone (max-width: 640px);
+@custom-media --tablet (min-width: 641px) and (max-width: 1024px);
+@custom-media --desktop (min-width: 1025px);
+@custom-media --wide (min-width: 1440px);
+@custom-media --portrait (orientation: portrait);
+@custom-media --landscape (orientation: landscape);
+@custom-media --hover (hover: hover);
+@custom-media --touch (hover: none);
+@custom-media --motion-ok (prefers-reduced-motion: no-preference);
+@custom-media --motion-reduce (prefers-reduced-motion: reduce);
+@custom-media --dark (prefers-color-scheme: dark);
+@custom-media --light (prefers-color-scheme: light);
+@custom-media --high-contrast (prefers-contrast: high);
+
+/* Base reset and modern defaults */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  /* Fluid base font size */
+  font-size: clamp(16px, 1vw + 0.5rem, 18px);
+  -webkit-text-size-adjust: 100%;
+  
+  /* Smooth scrolling with accessibility consideration */
+  @media (--motion-ok) {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Modern container using container queries */
+.container {
+  container-type: inline-size;
+  width: min(100% - 2rem, 1200px);
+  margin-inline: auto;
+  padding-block: var(--space-lg);
+}
+
+/* Typography with fluid sizing and optical adjustments */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-heading);
+  font-weight: 600;
+  line-height: var(--line-height-tight);
+  text-wrap: balance;
+  
+  & + * {
+    margin-block-start: var(--space-sm);
+  }
+}
+
+h1 {
+  font-size: var(--text-fluid-xl);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: var(--text-fluid-lg);
+  letter-spacing: -0.01em;
+}
+
+p {
+  text-wrap: pretty;
+  
+  & + & {
+    margin-block-start: var(--space-md);
+  }
+}
+
+/* Links with modern states */
+a {
+  color: var(--color-link);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.1em;
+  transition: color var(--transition-fast);
+  
+  &:hover {
+    text-decoration-thickness: 3px;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* Modern code blocks with syntax highlighting support */
+pre {
+  background-color: var(--color-code-bg);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  tab-size: 2;
+  
+  /* Custom scrollbar for code blocks */
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: var(--radius-full);
+    
+    &:hover {
+      background-color: var(--color-text-secondary);
+    }
+  }
+}
+
+code {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
+  font-size: 0.9em;
+  background-color: var(--color-code-bg);
+  padding: 0.125em 0.25em;
+  border-radius: var(--radius-sm);
+  
+  pre & {
+    background: none;
+    padding: 0;
+  }
+}
+
+/* Modern table design */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  
+  & th,
+  & td {
+    padding: var(--space-sm);
+    text-align: start;
+    border-block-end: 1px solid var(--color-border);
+  }
+  
+  & th {
+    font-weight: 600;
+    background-color: var(--color-code-bg);
+  }
+  
+  & tbody tr {
+    transition: background-color var(--transition-fast);
+    
+    &:hover {
+      background-color: var(--color-code-bg);
+    }
+  }
+}
+
+/* Modern form elements */
+input, textarea, select {
+  font: inherit;
+  color: inherit;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 0;
+    border-color: transparent;
+  }
+}
+
+/* Demo components with modern features */
+.demo-component {
+  container-type: inline-size;
+  margin-block: var(--space-lg);
+  
+  & canvas {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-inline: auto;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    
+    @media (--dark) {
+      border-color: oklch(50% 0 0);
+    }
+  }
+  
+  @container (max-width: 600px) {
+    & .demo-controls {
+      font-size: var(--font-size-sm);
+    }
+  }
+}
+
+/* Math blocks with improved visual hierarchy */
+.math-block {
+  margin-block: var(--space-lg);
+  padding: var(--space-md);
+  border-inline-start: 3px solid;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background-color: var(--color-code-bg);
+  position: relative;
+  
+  /* Use CSS custom properties for each type */
+  &.math-definition {
+    border-color: var(--color-definition);
+    background-color: color-mix(in oklch, var(--color-definition), transparent 95%);
+  }
+  
+  &.math-theorem {
+    border-color: var(--color-theorem);
+    background-color: color-mix(in oklch, var(--color-theorem), transparent 95%);
+  }
+  
+  &.math-proof {
+    border-color: var(--color-proof);
+    background-color: color-mix(in oklch, var(--color-proof), transparent 95%);
+  }
+  
+  /* Nested math blocks */
+  & .math-block {
+    margin-inline-start: var(--space-sm);
+    background-color: color-mix(in oklch, currentColor, transparent 98%);
+  }
+}
+
+/* Modern footer */
+footer {
+  margin-block-start: auto;
+  padding-block: var(--space-xl);
+  border-block-start: 1px solid var(--color-border);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  
+  & a {
+    color: inherit;
+    
+    &:hover {
+      color: var(--color-link);
+    }
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .demo-component,
+  footer {
+    display: none;
+  }
+}
