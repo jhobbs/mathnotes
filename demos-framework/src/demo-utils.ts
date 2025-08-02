@@ -44,12 +44,11 @@ export function createDemoContainer(
   const containerEl = document.createElement('div');
   if (id) containerEl.id = id;
   if (className) containerEl.className = className;
-  if (center) containerEl.style.textAlign = 'center';
+  if (center) containerEl.classList.add('text-center');
   
   // Create canvas parent div
   const canvasParent = document.createElement('div');
-  canvasParent.style.display = 'inline-block';
-  canvasParent.style.position = 'relative';
+  canvasParent.className = 'demo-canvas-container';
   if (!id) canvasParent.id = `demo-${Date.now()}`;
   
   containerEl.appendChild(canvasParent);

@@ -117,10 +117,7 @@ class DilutionVisualDemo extends P5DemoBase {
       
       // Buttons in a separate container
       const buttonContainer = document.createElement('div');
-      buttonContainer.style.display = 'flex';
-      buttonContainer.style.justifyContent = 'center';
-      buttonContainer.style.gap = '10px';
-      buttonContainer.style.marginTop = '10px';
+      buttonContainer.className = 'demo-control-row demo-control-row--small-gap mt-sm';
       controlPanel.appendChild(buttonContainer);
       
       this.pauseButton = createButton(

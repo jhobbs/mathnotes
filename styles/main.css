@@ -1,6 +1,7 @@
 /* Modern CSS entry point using PostCSS features */
 @import './theme.css';
 @import './utilities.css';
+@import './demo-components.css';
 
 /* Page-specific styles */
 @import './pages/demos-showcase.module.css';

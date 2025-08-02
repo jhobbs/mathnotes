@@ -67,6 +67,15 @@
   margin-inline-start: var(--space-md);
 }
 
+/* Margin utilities */
+.mt-sm {
+  margin-top: var(--space-sm);
+}
+
+.mt-lg {
+  margin-top: var(--space-lg);
+}
+
 /* Responsive spacing with custom media queries */
 @media (--phone) {
   .phone\:space-y-sm > * + * {
@@ -88,6 +97,10 @@
 }
 
 /* Modern text utilities */
+.text-center {
+  text-align: center;
+}
+
 .text-balance {
   text-wrap: balance;
 }

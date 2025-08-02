@@ -1,0 +1,194 @@
+/* Demo component styles using CSS custom properties */
+
+/* Control panels and containers */
+.demo-controls {
+  margin-top: var(--space-lg);
+  text-align: center;
+  padding: var(--space-md);
+}
+
+/* Control rows and layouts */
+.demo-control-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  
+  &.demo-control-row--small-gap {
+    gap: var(--space-sm);
+  }
+  
+  &.demo-control-row--medium-gap {
+    gap: var(--space-md);
+  }
+}
+
+.demo-control-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Control groups */
+.demo-control-group {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.demo-control-group-header {
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-align: center;
+  
+  &.demo-control-group-header--clickable {
+    cursor: pointer;
+    user-select: none;
+  }
+}
+
+.demo-control-group-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  
+  &.demo-control-group-content--row {
+    flex-direction: row;
+    gap: var(--space-md);
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Grid layouts */
+.demo-control-grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  
+  &.demo-control-grid--2-cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  &.demo-control-grid--3-cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Slider components */
+.demo-slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+
+.demo-label {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* Input containers */
+.demo-input-container {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Text inputs */
+.demo-text-input {
+  width: 50px;
+  padding: var(--space-xs);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+/* Select dropdowns */
+.demo-select {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+/* Info displays */
+.demo-info {
+  margin-top: var(--space-lg);
+  text-align: center;
+  color: var(--color-text);
+}
+
+.demo-info-display {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.demo-info-label {
+  font-weight: 500;
+}
+
+/* Instructions */
+.demo-instructions {
+  margin-top: var(--space-lg);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* Canvas containers */
+.demo-canvas-container {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+}
+
+/* Absolute positioned overlays */
+.demo-overlay {
+  position: absolute;
+  top: var(--space-xs);
+  left: var(--space-sm);
+  z-index: var(--z-dropdown);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .demo-control-row {
+    gap: var(--space-sm);
+  }
+  
+  .demo-control-group {
+    padding: var(--space-sm);
+  }
+  
+  .demo-label {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Dark mode adjustments handled automatically via CSS custom properties */
