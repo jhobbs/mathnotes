@@ -1,90 +1,129 @@
 /* Modern theme system using CSS custom properties and modern color spaces */
 :root {
-  /* Color palette using modern color functions */
-  --color-primary: oklch(64% 0.20 252);
-  --color-primary-light: oklch(64% 0.20 252 / 0.1);
-  --color-primary-dark: oklch(52% 0.22 252);
+  /* ===== CORE COLOR PALETTE ===== */
+  /* Base colors - everything else derives from these */
   
-  /* Test HMR - temporary accent color */
-  --color-accent: oklch(70% 0.2 30);
+  /* Brand colors */
+  --base-primary: oklch(64% 0.20 252);      /* Blue */
+  --base-accent: oklch(70% 0.2 30);         /* Orange accent */
   
   /* Semantic colors */
-  --color-bg: oklch(98% 0.01 100);
-  --color-bg-secondary: oklch(100% 0 0);
-  --color-text: oklch(26% 0.02 100);
-  --color-text-secondary: oklch(52% 0.03 210);
-  --color-heading: oklch(26% 0.02 100);
-  --color-link: var(--color-primary);
-  --color-border: oklch(91% 0.01 210);
+  --base-error: oklch(53% 0.24 29);         /* Red */
+  --base-success: oklch(55% 0.13 150);      /* Green */
+  --base-warning: oklch(63% 0.20 40);       /* Yellow/Orange */
+  --base-info: oklch(64% 0.04 220);         /* Light blue */
+  
+  /* Math content type colors */
+  --base-math-definition: oklch(56% 0.13 252);    /* Blue */
+  --base-math-theorem: oklch(60% 0.15 142);       /* Green */
+  --base-math-proof: oklch(40% 0.05 250);         /* Dark blue */
+  --base-math-example: oklch(55% 0.13 150);       /* Green */
+  --base-math-note: oklch(50% 0.06 250);          /* Muted blue */
+  
+  /* Neutrals for light mode */
+  --base-neutral-0: oklch(100% 0 0);        /* Pure white */
+  --base-neutral-100: oklch(98% 0.01 100);  /* Off-white */
+  --base-neutral-200: oklch(96% 0.01 100);  /* Light gray */
+  --base-neutral-300: oklch(91% 0.01 210);  /* Gray */
+  --base-neutral-700: oklch(52% 0.03 210);  /* Dark gray */
+  --base-neutral-800: oklch(26% 0.02 100);  /* Near black */
+  --base-neutral-900: oklch(0% 0 0);        /* Pure black */
+  
+  /* ===== DERIVED COLORS ===== */
+  /* All other colors are calculated from the base palette */
+  
+  /* Primary variations */
+  --color-primary: var(--base-primary);
+  --color-primary-light: color-mix(in oklch, var(--base-primary) 10%, transparent);
+  --color-primary-dark: oklch(52% 0.22 252);
+  --color-primary-hover: color-mix(in oklch, var(--base-primary) 10%, transparent);
+  --color-primary-active: color-mix(in oklch, var(--base-primary) 20%, transparent);
+  
+  /* Accent */
+  --color-accent: var(--base-accent);
+  
+  /* Background colors */
+  --color-bg: var(--base-neutral-100);
+  --color-bg-secondary: var(--base-neutral-0);
+  --color-card-bg: var(--base-neutral-0);
   --color-code-bg: oklch(97% 0.01 210);
   
-  /* Error and state colors */
-  --color-error: oklch(53% 0.24 29);
-  --color-error-bg: oklch(95% 0.09 25);
-  --color-error-border: oklch(53% 0.24 29);
-  --color-error-text-dark: oklch(35% 0.15 29);
+  /* Text colors */
+  --color-text: var(--base-neutral-800);
+  --color-text-secondary: var(--base-neutral-700);
+  --color-heading: var(--base-neutral-800);
   
-  /* UI component colors */
-  --color-card-bg: oklch(100% 0 0);
-  --color-button-bg: oklch(96% 0.01 100);
-  --color-button-hover: oklch(91% 0.01 100);
-  --color-button-text: oklch(26% 0.02 100);
-  --color-border-light: oklch(94% 0.01 100);
-  --color-info-bg: oklch(94% 0.04 220);
+  /* Interactive elements */
+  --color-link: var(--color-primary);
   --color-link-hover: oklch(58% 0.22 252);
+  --color-button-bg: var(--base-neutral-200);
+  --color-button-hover: var(--base-neutral-300);
+  --color-button-text: var(--base-neutral-800);
+  
+  /* Borders */
+  --color-border: var(--base-neutral-300);
+  --color-border-light: oklch(94% 0.01 100);
+  
+  /* State colors */
+  --color-error: var(--base-error);
+  --color-error-bg: oklch(95% 0.09 25);
+  --color-error-border: var(--base-error);
+  --color-error-text-dark: oklch(35% 0.15 29);
+  --color-info-bg: color-mix(in oklch, var(--base-info) 15%, var(--color-bg));
+  
+  /* Overlays - all derived from black/white with alpha */
+  --color-overlay-light: color-mix(in oklch, var(--base-neutral-900) 2%, transparent);
+  --color-overlay-medium: color-mix(in oklch, var(--base-neutral-900) 5%, transparent);
+  --color-overlay-dark: color-mix(in oklch, var(--base-neutral-900) 10%, transparent);
+  --color-spinner-border: color-mix(in oklch, var(--base-neutral-900) 10%, transparent);
   
   /* Tooltip colors */
-  --color-tooltip-bg: oklch(100% 0 0);
-  --color-tooltip-footer-bg: oklch(97% 0.01 100);
+  --color-tooltip-bg: var(--base-neutral-0);
+  --color-tooltip-footer-bg: var(--base-neutral-100);
   
-  /* Math tooltip type colors */
+  /* Math block colors - using base colors directly */
+  --color-definition: var(--base-math-definition);
+  --color-theorem: var(--base-math-theorem);
+  --color-lemma: oklch(58% 0.14 241);
+  --color-proposition: oklch(62% 0.12 230);
+  --color-corollary: oklch(54% 0.08 250);
+  --color-proof: var(--base-math-proof);
+  --color-example: var(--base-math-example);
+  --color-remark: var(--base-math-note);
+  --color-note: var(--base-math-note);
+  --color-intuition: oklch(65% 0.12 180);
+  --color-exercise: var(--base-math-definition);
+  --color-solution: var(--base-math-note);
+  
+  /* Math tooltip type colors - reuse base colors where appropriate */
   --color-type-definition: oklch(60% 0.17 252);
-  --color-type-theorem: oklch(53% 0.24 25);
+  --color-type-theorem: var(--base-error);
   --color-type-proposition: oklch(55% 0.18 300);
-  --color-type-lemma: oklch(63% 0.20 40);
+  --color-type-lemma: var(--base-warning);
   --color-type-corollary: oklch(50% 0.15 142);
   --color-type-example: oklch(52% 0.12 85);
   --color-type-note: oklch(48% 0.06 250);
   
-  /* Transparent overlays and effects */
-  --color-overlay-light: oklch(0% 0 0 / 0.02);
-  --color-overlay-medium: oklch(0% 0 0 / 0.05);
-  --color-overlay-dark: oklch(0% 0 0 / 0.1);
-  --color-primary-hover: oklch(64% 0.20 252 / 0.1);
-  --color-primary-active: oklch(64% 0.20 252 / 0.2);
-  --color-spinner-border: oklch(0% 0 0 / 0.1);
-  
-  /* Named color replacements */
-  --color-white: oklch(100% 0 0);
-  --color-black: oklch(0% 0 0);
-  
-  /* Math block colors using oklch for better perceptual uniformity */
-  --color-definition: oklch(56% 0.13 252);
-  --color-theorem: oklch(60% 0.15 142);
-  --color-lemma: oklch(58% 0.14 241);
-  --color-proposition: oklch(62% 0.12 230);
-  --color-corollary: oklch(54% 0.08 250);
-  --color-proof: oklch(40% 0.05 250);
-  --color-example: oklch(55% 0.13 150);
-  --color-remark: oklch(50% 0.06 250);
-  --color-note: oklch(50% 0.06 250);
-  --color-intuition: oklch(65% 0.12 180);
-  --color-exercise: oklch(56% 0.13 252);
-  --color-solution: oklch(50% 0.06 250);
-  
-  /* Nested math block overlays */
-  --color-nested-definition: oklch(56% 0.13 252 / 0.03);
-  --color-nested-theorem: oklch(60% 0.15 142 / 0.03);
-  --color-nested-lemma: oklch(58% 0.14 241 / 0.03);
-  --color-nested-proposition: oklch(62% 0.12 230 / 0.03);
-  --color-nested-corollary: oklch(54% 0.08 250 / 0.025);
-  --color-nested-proof: oklch(40% 0.05 250 / 0.03);
-  --color-nested-example: oklch(55% 0.13 150 / 0.03);
+  /* Nested math block overlays - all using color-mix for consistency */
+  --color-nested-definition: color-mix(in oklch, var(--color-definition) 3%, transparent);
+  --color-nested-theorem: color-mix(in oklch, var(--color-theorem) 3%, transparent);
+  --color-nested-lemma: color-mix(in oklch, var(--color-lemma) 3%, transparent);
+  --color-nested-proposition: color-mix(in oklch, var(--color-proposition) 3%, transparent);
+  --color-nested-corollary: color-mix(in oklch, var(--color-corollary) 2.5%, transparent);
+  --color-nested-proof: color-mix(in oklch, var(--color-proof) 3%, transparent);
+  --color-nested-example: color-mix(in oklch, var(--color-example) 3%, transparent);
   
   /* Embedded block overlays */
-  --color-embedded-bg: oklch(0% 0 0 / 0.03);
+  --color-embedded-bg: color-mix(in oklch, var(--base-neutral-900) 3%, transparent);
   
-  /* Spacing scale */
+  /* Component-specific */
+  --color-slider-track-dark: oklch(30% 0 0);
+  
+  /* Named color aliases for compatibility */
+  --color-white: var(--base-neutral-0);
+  --color-black: var(--base-neutral-900);
+  
+  /* ===== SPACING SCALE ===== */
   --space-3xs: 0.125rem;  /* 2px */
   --space-2xs: 0.375rem;  /* 6px */
   --space-xs: 0.25rem;    /* 4px */
@@ -103,7 +142,7 @@
   --space-micro-5: 10px;
   --space-micro-6: 12px;
   
-  /* Typography scale */
+  /* ===== TYPOGRAPHY ===== */
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -112,51 +151,17 @@
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 2rem;
   
-  /* Line heights */
   --line-height-tight: 1.25;
   --line-height-base: 1.6;
   --line-height-relaxed: 1.8;
   
-  /* Border radius */
-  --radius-sm: 3px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-full: 9999px;
-  
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 oklch(0% 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px oklch(0% 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px oklch(0% 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px oklch(0% 0 0 / 0.1);
-  
-  /* Component-specific shadows */
-  --shadow-button: 0 2px 4px oklch(0% 0 0 / 0.3);
-  --shadow-button-hover: 0 4px 8px oklch(0% 0 0 / 0.4);
-  
-  /* Component backgrounds */
-  --color-slider-track-dark: oklch(30% 0 0);
-  
-  /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-base: 200ms ease;
-  --transition-slow: 300ms ease;
-  
-  /* Z-index scale */
-  --z-base: 0;
-  --z-dropdown: 100;
-  --z-sticky: 200;
-  --z-overlay: 300;
-  --z-modal: 400;
-  --z-tooltip: 500;
-  
-  /* Border widths */
+  /* ===== BORDERS & RADIUS ===== */
   --border-width-thin: 1px;
   --border-width-base: 2px;
   --border-width-thick: 3px;
   --border-width-heavy: 4px;
   --border-width-extra: 5px;
   
-  /* Border radius */
   --radius-xs: 3px;
   --radius-sm: 4px;
   --radius-md: 6px;
@@ -165,7 +170,30 @@
   --radius-2xl: 16px;
   --radius-full: 9999px;
   
-  /* Component sizes */
+  /* ===== SHADOWS ===== */
+  --shadow-sm: 0 1px 2px 0 color-mix(in oklch, var(--base-neutral-900) 5%, transparent);
+  --shadow-md: 0 4px 6px -1px color-mix(in oklch, var(--base-neutral-900) 10%, transparent);
+  --shadow-lg: 0 10px 15px -3px color-mix(in oklch, var(--base-neutral-900) 10%, transparent);
+  --shadow-xl: 0 20px 25px -5px color-mix(in oklch, var(--base-neutral-900) 10%, transparent);
+  
+  /* Component-specific shadows */
+  --shadow-button: 0 2px 4px color-mix(in oklch, var(--base-neutral-900) 30%, transparent);
+  --shadow-button-hover: 0 4px 8px color-mix(in oklch, var(--base-neutral-900) 40%, transparent);
+  
+  /* ===== TRANSITIONS ===== */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+  
+  /* ===== Z-INDEX SCALE ===== */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-tooltip: 500;
+  
+  /* ===== COMPONENT SIZES ===== */
   --size-input-sm: 100px;
   --size-input-base: 120px;
   --size-input-md: 160px;
@@ -180,20 +208,18 @@
   --size-nav-button: 24px;
   --line-height-nav-button: 20px;
   
-  /* Content widths */
+  /* ===== LAYOUT ===== */
   --width-content-base: 1200px;
   --width-content-wide: 1440px;
   --width-grid-min: 250px;
   --width-grid-min-sm: 150px;
   --width-card-min: 350px;
   
-  /* Heights */
   --height-input-min: 60px;
   --height-card-sm: 200px;
   --height-card-base: 300px;
   --height-demo-min: 300px;
   
-  /* Gaps and gutters */
   --gap-xs: 10px;
   --gap-sm: 15px;
   --gap-base: 20px;
@@ -201,7 +227,7 @@
   --gap-xl: 40px;
   --gap-2xl: 50px;
   
-  /* Breakpoints */
+  /* ===== BREAKPOINTS ===== */
   /* Note: These values are also hardcoded in main.css @custom-media rules
      because CSS custom properties don't work in @custom-media at-rules */
   --breakpoint-phone: 640px;
@@ -210,70 +236,71 @@
   --breakpoint-wide: 1440px;
   
   /* Container query breakpoints */
-  /* Note: Container queries also can't use CSS custom properties */
   --container-sm: 600px;
   --container-md: 900px;
   --container-lg: 1200px;
   
-  /* Transform values */
+  /* ===== TRANSFORMS ===== */
   --translate-subtle: -1px;
   --translate-sm: -2px;
   --translate-base: 1rem;
   
-  /* Outline offsets */
   --outline-offset-sm: 2px;
   --outline-offset-base: 3px;
 }
 
-/* Dark theme */
+/* ===== DARK THEME ===== */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: oklch(15% 0.02 240);
-    --color-bg-secondary: oklch(15% 0.02 240);
-    --color-text: oklch(85% 0.01 210);
-    --color-text-secondary: oklch(65% 0.02 210);
+    /* Redefine base neutrals for dark mode */
+    --base-neutral-0: oklch(15% 0.02 240);
+    --base-neutral-100: oklch(18% 0.02 240);
+    --base-neutral-200: oklch(22% 0.02 240);
+    --base-neutral-300: oklch(30% 0.01 210);
+    --base-neutral-700: oklch(65% 0.02 210);
+    --base-neutral-800: oklch(85% 0.01 210);
+    --base-neutral-900: oklch(100% 0 0);
+    
+    /* Adjust brand colors for dark mode */
+    --base-primary: oklch(73% 0.15 220);
+    --base-error: oklch(67% 0.24 25);
+    
+    /* Background colors automatically update via base neutrals */
+    --color-bg: var(--base-neutral-0);
+    --color-bg-secondary: var(--base-neutral-0);
+    --color-card-bg: var(--base-neutral-200);
+    --color-code-bg: var(--base-neutral-100);
+    
+    /* Text colors automatically update */
+    --color-text: var(--base-neutral-800);
+    --color-text-secondary: var(--base-neutral-700);
     --color-heading: oklch(96% 0.01 210);
-    --color-link: oklch(73% 0.15 220);
-    --color-border: oklch(30% 0.01 210);
-    --color-code-bg: oklch(18% 0.02 240);
     
-    /* Error and state colors for dark mode */
-    --color-error: oklch(67% 0.24 25);
-    --color-error-bg: oklch(25% 0.10 25);
-    --color-error-border: oklch(67% 0.24 25);
-    --color-error-text-dark: oklch(90% 0.09 25);
-    
-    /* UI component colors for dark mode */
-    --color-card-bg: oklch(22% 0.02 240);
+    /* Interactive elements */
+    --color-link-hover: oklch(68% 0.17 220);
     --color-button-bg: oklch(28% 0.02 240);
     --color-button-hover: oklch(34% 0.02 240);
-    --color-button-text: oklch(100% 0 0);
+    --color-button-text: var(--base-neutral-900);
+    
+    /* Borders */
     --color-border-light: oklch(26% 0.01 240);
+    
+    /* State colors */
+    --color-error-bg: oklch(25% 0.10 25);
+    --color-error-text-dark: oklch(90% 0.09 25);
     --color-info-bg: oklch(20% 0.05 220);
-    --color-link-hover: oklch(68% 0.17 220);
     
-    /* Tooltip colors for dark mode */
-    --color-tooltip-bg: oklch(18% 0.02 240);
-    --color-tooltip-footer-bg: oklch(15% 0.02 240);
+    /* Overlays - now using white instead of black */
+    --color-overlay-light: color-mix(in oklch, var(--base-neutral-900) 2%, transparent);
+    --color-overlay-medium: color-mix(in oklch, var(--base-neutral-900) 5%, transparent);
+    --color-overlay-dark: color-mix(in oklch, var(--base-neutral-900) 10%, transparent);
+    --color-spinner-border: color-mix(in oklch, var(--base-neutral-900) 10%, transparent);
     
-    /* Math tooltip type colors for dark mode */
-    --color-type-definition: oklch(73% 0.15 220);
-    --color-type-theorem: oklch(67% 0.24 25);
-    --color-type-proposition: oklch(75% 0.15 300);
-    --color-type-lemma: oklch(72% 0.17 40);
-    --color-type-corollary: oklch(65% 0.12 142);
-    --color-type-example: oklch(70% 0.10 85);
-    --color-type-note: oklch(65% 0.04 250);
+    /* Tooltip colors */
+    --color-tooltip-bg: var(--base-neutral-100);
+    --color-tooltip-footer-bg: var(--base-neutral-0);
     
-    /* Transparent overlays for dark mode */
-    --color-overlay-light: oklch(100% 0 0 / 0.02);
-    --color-overlay-medium: oklch(100% 0 0 / 0.05);
-    --color-overlay-dark: oklch(100% 0 0 / 0.1);
-    --color-primary-hover: oklch(73% 0.15 220 / 0.1);
-    --color-primary-active: oklch(73% 0.15 220 / 0.2);
-    --color-spinner-border: oklch(100% 0 0 / 0.1);
-    
-    /* Adjusted math colors for dark mode */
+    /* Math colors - slightly brighter for dark mode */
     --color-definition: oklch(65% 0.13 252);
     --color-theorem: oklch(68% 0.15 142);
     --color-lemma: oklch(66% 0.14 241);
@@ -287,27 +314,36 @@
     --color-exercise: oklch(65% 0.13 252);
     --color-solution: oklch(60% 0.06 250);
     
-    /* Nested math block overlays for dark mode */
-    --color-nested-definition: oklch(65% 0.13 252 / 0.06);
-    --color-nested-theorem: oklch(68% 0.15 142 / 0.06);
-    --color-nested-lemma: oklch(66% 0.14 241 / 0.06);
-    --color-nested-proposition: oklch(70% 0.12 230 / 0.06);
-    --color-nested-corollary: oklch(62% 0.08 250 / 0.05);
-    --color-nested-proof: oklch(55% 0.05 250 / 0.06);
-    --color-nested-example: oklch(63% 0.13 150 / 0.06);
+    /* Math tooltip type colors for dark mode */
+    --color-type-definition: var(--base-primary);
+    --color-type-theorem: var(--base-error);
+    --color-type-proposition: oklch(75% 0.15 300);
+    --color-type-lemma: oklch(72% 0.17 40);
+    --color-type-corollary: oklch(65% 0.12 142);
+    --color-type-example: oklch(70% 0.10 85);
+    --color-type-note: oklch(65% 0.04 250);
     
-    /* Embedded block overlays for dark mode */
-    --color-embedded-bg: oklch(100% 0 0 / 0.03);
+    /* Nested overlays - increased opacity for dark mode */
+    --color-nested-definition: color-mix(in oklch, var(--color-definition) 6%, transparent);
+    --color-nested-theorem: color-mix(in oklch, var(--color-theorem) 6%, transparent);
+    --color-nested-lemma: color-mix(in oklch, var(--color-lemma) 6%, transparent);
+    --color-nested-proposition: color-mix(in oklch, var(--color-proposition) 6%, transparent);
+    --color-nested-corollary: color-mix(in oklch, var(--color-corollary) 5%, transparent);
+    --color-nested-proof: color-mix(in oklch, var(--color-proof) 6%, transparent);
+    --color-nested-example: color-mix(in oklch, var(--color-example) 6%, transparent);
+    
+    /* Embedded block overlays */
+    --color-embedded-bg: color-mix(in oklch, var(--base-neutral-900) 3%, transparent);
     
     /* Darker shadows for dark mode */
-    --shadow-sm: 0 1px 2px 0 oklch(0% 0 0 / 0.2);
-    --shadow-md: 0 4px 6px -1px oklch(0% 0 0 / 0.3);
-    --shadow-lg: 0 10px 15px -3px oklch(0% 0 0 / 0.4);
-    --shadow-xl: 0 20px 25px -5px oklch(0% 0 0 / 0.5);
+    --shadow-sm: 0 1px 2px 0 color-mix(in oklch, var(--base-neutral-900) 20%, transparent);
+    --shadow-md: 0 4px 6px -1px color-mix(in oklch, var(--base-neutral-900) 30%, transparent);
+    --shadow-lg: 0 10px 15px -3px color-mix(in oklch, var(--base-neutral-900) 40%, transparent);
+    --shadow-xl: 0 20px 25px -5px color-mix(in oklch, var(--base-neutral-900) 50%, transparent);
   }
 }
 
-/* Utility classes for theme values */
+/* ===== UTILITY CLASSES ===== */
 .theme-primary { color: var(--color-primary); }
 .theme-bg-primary { background-color: var(--color-primary); }
 .theme-border-primary { border-color: var(--color-primary); }
