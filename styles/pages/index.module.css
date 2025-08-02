@@ -1,0 +1,101 @@
+/* Index page specific styles */
+
+.collapsible-section {
+  margin-bottom: 1rem;
+}
+
+.section-header {
+  background-color: var(--code-bg);
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.2s;
+}
+
+.section-header:hover {
+  background-color: var(--border-color);
+}
+
+.section-header.active {
+  background-color: var(--link-color);
+  color: white;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.toggle-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+}
+
+.section-header.active .toggle-icon {
+  transform: rotate(90deg);
+}
+
+.section-content {
+  display: none;
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  padding: 1rem;
+  background-color: var(--bg-color);
+}
+
+.section-content.show {
+  display: block;
+}
+
+.content-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.content-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.content-item:last-child {
+  border-bottom: none;
+}
+
+.content-link {
+  color: var(--link-color);
+  text-decoration: none;
+  display: block;
+  padding: 0.25rem 0;
+}
+
+.content-link:hover {
+  text-decoration: underline;
+}
+
+.subdirectory {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.subdir-header {
+  font-weight: 600;
+  color: var(--blockquote-color);
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.subdir-files {
+  list-style: none;
+  padding: 0;
+  margin-left: 1rem;
+}

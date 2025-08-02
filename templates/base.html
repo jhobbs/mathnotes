@@ -26,7 +26,7 @@
     
     {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
     <header>
         <div class="header-content">
             <h1><a href="{{ url_for('index') }}">{{ config.SITE_TITLE }}</a></h1>

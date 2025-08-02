@@ -1,0 +1,217 @@
+/* Demo viewer page specific styles */
+
+/* Only apply these styles when on demo viewer page */
+.demo-viewer-page header {
+  display: none !important;
+}
+
+.demo-viewer-page main {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.demo-viewer-page footer {
+  margin-top: 0.25rem !important;
+  margin-bottom: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 20px 0 20px;
+}
+
+.footer-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  white-space: nowrap;
+}
+
+.footer-demo-info {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  font-size: 0.9em;
+}
+
+#footer-demo-title {
+  font-weight: 600;
+  color: var(--footer-color);
+}
+
+.footer-copyright {
+  font-size: 0.5em;
+  color: var(--footer-color);
+  opacity: 0.6;
+}
+
+.footer-copyright p {
+  margin: 0;
+  line-height: 1;
+}
+
+.viewer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5px 20px 10px 20px;
+}
+
+.nav-button {
+  background: var(--button-background);
+  color: var(--button-text);
+  border: 1px solid var(--border-color);
+  padding: 2px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.75em;
+  transition: background 0.2s;
+  white-space: nowrap;
+  height: 24px;
+  line-height: 20px;
+  margin: 0;
+  font-family: inherit;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: var(--button-hover);
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.demo-counter {
+  font-size: 0.75em;
+  color: var(--text-secondary);
+  text-align: center;
+  white-space: nowrap;
+  margin: 0;
+  line-height: 24px;
+}
+
+/* Match the embedded demo component styles */
+.demo-component {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.demo-component canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Ensure the demo content area matches regular pages */
+#demo-content {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.demo-loading {
+  text-align: center;
+  padding: 50px;
+  color: var(--text-secondary);
+}
+
+.demo-error {
+  text-align: center;
+  padding: 20px;
+  color: var(--error-color, #d32f2f);
+  background: var(--error-background, #ffebee);
+  border-radius: 4px;
+}
+
+/* Dark mode variables */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --button-background: #3a3a3a;
+    --button-hover: #4a4a4a;
+    --button-text: #fff;
+    --card-background: #2a2a2a;
+    --border-color: #444;
+    --border-light: #333;
+    --background-secondary: #1a1a1a;
+    --text-secondary: #b0b0b0;
+    --error-background: #2d1515;
+    --info-background: #1a2a3a;
+  }
+}
+
+/* Light mode variables */
+@media (prefers-color-scheme: light) {
+  :root {
+    --button-background: #f5f5f5;
+    --button-hover: #e0e0e0;
+    --button-text: #333;
+    --card-background: #ffffff;
+    --border-color: #e0e0e0;
+    --border-light: #f0f0f0;
+    --background-secondary: #fafafa;
+    --text-secondary: #666;
+    --error-background: #ffebee;
+    --info-background: #e3f2fd;
+  }
+}
+
+/* Ensure navigation stays on one line */
+@media (max-width: 400px) {
+  .nav-button {
+    font-size: 0.8em;
+    padding: 4px 8px;
+  }
+  .demo-counter {
+    font-size: 0.8em;
+  }
+}
+
+/* Mobile footer improvements for demo viewer */
+@media (max-width: 768px) {
+  footer {
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+    padding: 0.25rem 10px 0 10px;
+    margin-bottom: 0 !important;
+  }
+  
+  .footer-copyright {
+    width: 100%;
+    font-size: 0.45em;
+  }
+  
+  .footer-copyright p {
+    margin: 0;
+    text-align: center;
+    line-height: 1.1;
+  }
+  
+  /* Hide the separator on mobile */
+  .footer-copyright .separator {
+    display: none !important;
+  }
+  
+  /* Make copyright and version stack */
+  .footer-copyright .copyright,
+  .footer-copyright .version {
+    display: block !important;
+    width: 100%;
+    white-space: nowrap;
+  }
+  
+  /* Reduce space between the stacked elements */
+  .footer-copyright .copyright {
+    margin-bottom: 0.1rem;
+  }
+  
+  /* Make nav controls more compact on mobile */
+  .footer-nav-controls {
+    gap: 10px;
+  }
+  
+  .footer-demo-info {
+    font-size: 0.85em;
+  }
+}
