@@ -11,6 +11,11 @@
   },
   "devDependencies": {
     "@types/p5": "^1.7.6",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "postcss-custom-media": "^10.0.2",
+    "postcss-lab-function": "^6.0.9",
+    "postcss-nesting": "^12.0.2",
     "typescript": "^5.3.3",
     "vite": "^5.4.19",
     "vite-plugin-static-copy": "^1.0.0"

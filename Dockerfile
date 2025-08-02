@@ -12,9 +12,10 @@ WORKDIR /app
 COPY package.json ./
 # Don't copy package-lock.json to avoid platform-specific issues
 RUN npm install
-COPY tsconfig.json vite.config.ts ./
+COPY tsconfig.json vite.config.ts postcss.config.js ./
 COPY demos-framework ./demos-framework
 COPY demos ./demos
+COPY styles ./styles
 RUN npm run build
 
 # Stage 3: Build the actual application

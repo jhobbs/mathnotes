@@ -18,9 +18,11 @@
     {% endif %}
     
     <!-- Main stylesheet -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}?v=2">
-    
-    <!-- Main stylesheet loaded above contains all demo styles -->
+    {% if is_development %}
+    <script type="module" src="{{ vite_url }}/static/dist/styles/main.css"></script>
+    {% else %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/main.css') }}">
+    {% endif %}
     
     {% block extra_head %}{% endblock %}
 </head>
