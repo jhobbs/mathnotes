@@ -251,16 +251,8 @@ class TooltipSystem {
         </div>
         <div class="math-tooltip-body">
           ${data.content}
-        </div>`;
-    
-    if (data.url) {
-      content += `
-        <div class="math-tooltip-footer">
-          <a href="${data.url}" class="math-tooltip-link">Go to full ${data.type} →</a>
-        </div>`;
-    }
-    
-    content += `</div>`;
+        </div>
+      </div>`;
     
     this.tooltipElement.innerHTML = content;
     this.tooltipElement.style.display = 'block';
