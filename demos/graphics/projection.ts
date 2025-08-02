@@ -85,11 +85,8 @@ class ProjectionDemo extends P5DemoBase {
       
       // Create a single row for all controls
       const controlRow = document.createElement('div');
-      controlRow.style.display = 'flex';
-      controlRow.style.flexWrap = 'wrap';
-      controlRow.style.justifyContent = 'center';
-      controlRow.style.gap = '20px';
-      controlRow.style.alignItems = 'flex-start';
+      controlRow.className = 'demo-control-row';
+      controlRow.style.alignItems = 'flex-start'; // Keep this for specific alignment
       controlPanel.appendChild(controlRow);
       
       // Camera rotation group
@@ -98,8 +95,7 @@ class ProjectionDemo extends P5DemoBase {
       controlRow.appendChild(cameraGroup);
       
       const cameraSliders = document.createElement('div');
-      cameraSliders.style.display = 'flex';
-      cameraSliders.style.gap = '10px';
+      cameraSliders.className = 'demo-control-row demo-control-row--small-gap';
       cameraGroup.appendChild(cameraSliders);
       
       // Camera angle sliders (horizontal)
@@ -116,8 +112,7 @@ class ProjectionDemo extends P5DemoBase {
       controlRow.appendChild(translateGroup);
       
       const translateSliders = document.createElement('div');
-      translateSliders.style.display = 'flex';
-      translateSliders.style.gap = '10px';
+      translateSliders.className = 'demo-control-row demo-control-row--small-gap';
       translateGroup.appendChild(translateSliders);
       
       // Translation sliders (horizontal) - ranges will be updated after scaling

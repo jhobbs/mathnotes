@@ -373,8 +373,7 @@ export function createControlPanel(
   const panel = document.createElement('div');
   if (options.id) panel.id = options.id;
   panel.className = options.className || 'demo-controls';
-  panel.style.marginTop = '20px';
-  panel.style.textAlign = 'center';
+  // CSS classes handle styling
   parent.appendChild(panel);
   return panel;
 }
@@ -411,18 +410,12 @@ export function createSlider(
   className: string = 'demo'
 ): p5.Element {
   const rowDiv = document.createElement('div');
-  rowDiv.style.marginBottom = '10px';
-  rowDiv.style.display = 'flex';
-  rowDiv.style.flexDirection = 'column';
-  rowDiv.style.alignItems = 'center';
-  rowDiv.style.gap = '5px';
+  rowDiv.className = 'demo-slider-container';
   parent.appendChild(rowDiv);
   
   const labelDiv = document.createElement('div');
   labelDiv.textContent = label;
   labelDiv.className = `${className}-label`;
-  labelDiv.style.textAlign = 'center';
-  labelDiv.style.fontSize = '14px';
   rowDiv.appendChild(labelDiv);
   
   const slider = p.createSlider(min, max, value, step) as P5SliderElement;
@@ -518,9 +511,7 @@ export function createSelect<T>(
   className: string = 'demo'
 ): HTMLElement {
   const container = document.createElement('div');
-  container.style.display = 'inline-flex';
-  container.style.alignItems = 'center';
-  container.style.gap = '10px';
+  container.className = 'demo-input-container';
   
   if (label) {
     const labelDiv = document.createElement('div');
@@ -563,9 +554,7 @@ export function createTextInput(
   options: TextInputOptions = {}
 ): HTMLElement {
   const container = document.createElement('div');
-  container.style.display = 'inline-flex';
-  container.style.alignItems = 'center';
-  container.style.gap = '10px';
+  container.className = 'demo-input-container';
   
   if (label) {
     const labelDiv = document.createElement('div');
@@ -684,14 +673,16 @@ export function createControlRow(
 ): HTMLElement {
   const row = document.createElement('div');
   row.className = 'demo-control-row';
-  row.style.display = 'flex';
-  row.style.flexDirection = 'row';
-  row.style.gap = options.gap || '20px';
-  row.style.justifyContent = options.justify || 'center';
-  row.style.alignItems = 'center';
+  
+  // Add modifier classes based on options
+  if (options.gap === '10px') {
+    row.classList.add('demo-control-row--small-gap');
+  } else if (options.gap === '15px') {
+    row.classList.add('demo-control-row--medium-gap');
+  }
   
   if (options.wrap) {
-    row.style.flexWrap = 'wrap';
+    row.style.flexWrap = 'wrap'; // Keep this as inline style since it's conditional
   }
   
   if (options.mobileStack) {
@@ -713,10 +704,6 @@ export function createControlColumn(
 ): HTMLElement {
   const column = document.createElement('div');
   column.className = 'demo-control-column';
-  column.style.display = 'flex';
-  column.style.flexDirection = 'column';
-  column.style.gap = options.gap || '10px';
-  column.style.alignItems = options.align || 'center';
   
   controls.forEach(control => column.appendChild(control));
   
@@ -733,31 +720,18 @@ export function createControlGroup(
 ): HTMLElement {
   const group = document.createElement('div');
   group.className = 'demo-control-group';
-  group.style.border = '1px solid #ccc';
-  group.style.borderRadius = '5px';
-  group.style.padding = '15px';
-  group.style.marginBottom = '15px';
+  // CSS class handles styling
   
   const header = document.createElement('div');
   header.className = 'demo-control-group-header';
-  header.style.marginBottom = '10px';
-  header.style.fontWeight = '600';
-  header.style.fontSize = '14px';
+  // CSS class handles styling
   header.textContent = label;
   
   const content = document.createElement('div');
   content.className = 'demo-control-group-content';
   
   if (options.layout === 'row') {
-    content.style.display = 'flex';
-    content.style.flexDirection = 'row';
-    content.style.gap = '15px';
-    content.style.alignItems = 'center';
-    content.style.justifyContent = 'center';
-  } else {
-    content.style.display = 'flex';
-    content.style.flexDirection = 'column';
-    content.style.gap = '10px';
+    content.classList.add('demo-control-group-content--row');
   }
   
   controls.forEach(control => content.appendChild(control));
@@ -766,8 +740,7 @@ export function createControlGroup(
   group.appendChild(content);
   
   if (options.collapsible) {
-    header.style.cursor = 'pointer';
-    header.style.userSelect = 'none';
+    header.classList.add('demo-control-group-header--clickable');
     
     const toggleIndicator = document.createElement('span');
     toggleIndicator.textContent = options.defaultCollapsed ? ' ▶' : ' ▼';
@@ -796,13 +769,11 @@ export function createControlGrid(
 ): HTMLElement {
   const grid = document.createElement('div');
   grid.className = 'demo-control-grid';
-  grid.style.display = 'grid';
-  grid.style.gap = options.gap || '15px';
-  
-  if (options.columns) {
-    grid.style.gridTemplateColumns = `repeat(${options.columns}, 1fr)`;
-  } else {
-    grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(150px, 1fr))';
+  // Add modifier classes based on columns
+  if (options.columns === 2) {
+    grid.classList.add('demo-control-grid--2-cols');
+  } else if (options.columns === 3) {
+    grid.classList.add('demo-control-grid--3-cols');
   }
   
   if (options.responsive) {

@@ -193,7 +193,7 @@ class GameOfLifeDemo extends P5DemoBase {
       [...sliderContainer.children] as HTMLElement[],
       { gap: '30px' }
     );
-    sliderRow.style.marginTop = '20px';
+    sliderRow.classList.add('mt-lg');
     controlPanel.appendChild(sliderRow);
     
     // Create info displays
@@ -212,7 +212,7 @@ class GameOfLifeDemo extends P5DemoBase {
       ],
       { gap: '20px' }
     );
-    infoRow.style.marginTop = '20px';
+    infoRow.classList.add('mt-lg');
     controlPanel.appendChild(infoRow);
   }
 

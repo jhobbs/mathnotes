@@ -209,7 +209,7 @@ export abstract class P5DemoBase {
     
     this.instructionsEl = document.createElement('div');
     this.instructionsEl.className = `${this.getStylePrefix()}-instructions demo-info`;
-    this.instructionsEl.style.marginTop = '20px';
+    this.instructionsEl.style.marginTop = 'var(--space-lg)';
     this.instructionsEl.style.textAlign = 'center';
     this.instructionsEl.innerHTML = instructions;
     this.container.appendChild(this.instructionsEl);

@@ -67,8 +67,7 @@ export class DemoControls {
     
     const legend = document.createElement('div');
     legend.textContent = config.label;
-    legend.style.fontWeight = '500';
-    legend.style.marginBottom = 'var(--space-xs)';
+    legend.className = 'demo-control-group-header';
     this.container.appendChild(legend);
     
     config.options.forEach(option => {

@@ -137,7 +137,7 @@ class TurntableDemo extends P5DemoBase {
     // Update UI text colors when color scheme changes
     const labels = this.container.querySelectorAll('.demo-label, .demo-info');
     labels.forEach(label => {
-      (label as HTMLElement).style.color = this.colors.text;
+      // Color is handled by CSS classes
     });
     
     // Update arrow styles with new colors
@@ -168,13 +168,10 @@ class TurntableDemo extends P5DemoBase {
     
     // Create a row for sliders
     const sliderRow = document.createElement('div');
-    sliderRow.style.display = 'flex';
-    sliderRow.style.justifyContent = 'center';
-    sliderRow.style.gap = '20px';
-    sliderRow.style.flexWrap = 'wrap';
-    // Reduce gap on mobile
+    sliderRow.className = 'demo-control-row';
+    // Add responsive class for mobile
     if (window.innerWidth < 768) {
-      sliderRow.style.gap = '10px';
+      sliderRow.classList.add('demo-control-row--small-gap');
     }
     controlPanel.appendChild(sliderRow);
     
@@ -204,8 +201,7 @@ class TurntableDemo extends P5DemoBase {
     
     // Mode radio buttons in separate row
     const radioRow = document.createElement('div');
-    radioRow.style.marginTop = window.innerWidth < 768 ? '10px' : '20px';
-    radioRow.style.textAlign = 'center';
+    radioRow.className = window.innerWidth < 768 ? 'text-center mt-sm' : 'text-center mt-lg';
     controlPanel.appendChild(radioRow);
     
     this.modeRadio = p.createRadio() as unknown as P5Radio;

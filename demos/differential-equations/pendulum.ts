@@ -51,9 +51,7 @@ class PendulumDemo extends P5DemoBase {
       // Create control panel with horizontal layout
       const panel = this.createControlPanel();
       const sliderRow = document.createElement('div');
-      sliderRow.style.display = 'flex';
-      sliderRow.style.justifyContent = 'center';
-      sliderRow.style.gap = '20px';
+      sliderRow.className = 'demo-control-row';
       panel.appendChild(sliderRow);
       
       // Wire length control
@@ -142,8 +140,7 @@ class PendulumDemo extends P5DemoBase {
       
       // Create info display
       this.infoDiv = document.createElement('div');
-      this.infoDiv.style.marginTop = '20px';
-      this.infoDiv.style.textAlign = 'center';
+      this.infoDiv.className = 'demo-info';
       this.infoDiv.innerHTML = `
         <div id="wire-length-display" class="pendulum-info"></div>
         <div id="period-display" class="pendulum-info"></div>

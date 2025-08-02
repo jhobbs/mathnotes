@@ -189,7 +189,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
       [toroidalElement, this.entDisplay.element, this.colEntDisplay.element],
       { gap: '20px' }
     );
-    secondRow.style.marginTop = '10px';
+    secondRow.classList.add('mt-sm');
     controlPanel.appendChild(secondRow);
 
     // Set up button event handlers
@@ -205,10 +205,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     } else if (this.container) {
       this.container.appendChild(ruleContainer);
     }
-    ruleContainer.style.position = 'absolute';
-    ruleContainer.style.top = '5px';
-    ruleContainer.style.left = '10px';
-    ruleContainer.style.zIndex = '10';
+    ruleContainer.className = 'demo-overlay';
     
     // Create text input using new component
     const ruleElement = createTextInput(
@@ -233,9 +230,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     // Style the input to be compact
     const input = ruleElement.querySelector('input') as HTMLInputElement;
     if (input) {
-      input.style.width = '50px';
-      input.style.padding = '2px 5px';
-      input.style.fontSize = '14px';
+      input.classList.add('demo-text-input');
       this.ruleInput = input;
     }
     
@@ -471,9 +466,7 @@ class ElementaryCellularAutomataDemo extends P5DemoBase {
     }
     // Update rule input styling
     if (this.ruleInput) {
-      this.ruleInput.style.border = `1px solid ${this.colors.grid}`;
-      this.ruleInput.style.backgroundColor = this.colors.background.toString();
-      this.ruleInput.style.color = this.colors.text.toString();
+      // Theme colors are handled by CSS classes
     }
   }
 
