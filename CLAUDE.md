@@ -22,13 +22,7 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 ### Coding Best Practices
 
 * Don't check types after every single change
-* Do not hardcode colors - always use CSS custom properties from the theme (e.g., `var(--color-primary)`, `var(--space-md)`)
-* CSS changes in development have hot module replacement - no need to restart the server
-* **NEVER use inline styles** - Always use CSS classes instead. The codebase uses a modern CSS system with:
-  - CSS Modules for component-scoped styles (e.g., `import styles from './Component.module.css'`)
-  - Global styles in `/styles/` directory
-  - Theme variables defined in `/styles/theme.css`
-  - All inline styles have been removed - maintain this standard
+* For styling guidelines, see [STYLE.md](./STYLE.md)
 
 ## Common Commands
 
@@ -114,12 +108,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
 
 5. **Development/Production Detection**: Automatic via localhost detection, affects caching headers and asset loading.
 
-6. **Modern CSS System**: 
-   - PostCSS for modern CSS features (nesting, custom media queries)
-   - CSS custom properties for theming (colors, spacing, typography)
-   - CSS entry point at `styles/main.css` processed by Vite
-   - Hot module replacement in development for instant style updates
-   - Theme variables defined in `styles/theme.css`, utilities in `styles/utilities.css`
+6. **Modern CSS System**: See [STYLE.md](./STYLE.md) for detailed CSS and styling guidelines
 
 ## Important Implementation Details
 
@@ -171,6 +160,7 @@ When moving/renaming content files:
 - No inline event handlers (onclick, onload)
 - Use `addEventListener` and data attributes
 - Demos must be CSP-compliant
+- For CSS-specific guidelines, see [STYLE.md](./STYLE.md)
 
 ### URL Best Practices
 - Choose stable, descriptive slugs
@@ -192,7 +182,7 @@ Development mode auto-detected via:
 - Dev: TypeScript served directly from `http://localhost:5173`
 - Prod: Bundled assets served by Flask
 - Proxy config handles routing between Vite and Flask
-- CSS is loaded as a Vite entry point, enabling HMR in development
+- For CSS configuration and guidelines, see [STYLE.md](./STYLE.md)
 
 ### Python Dependencies
 - Python 3.11+ required
