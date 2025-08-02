@@ -11,18 +11,18 @@
 }
 
 .demo-viewer-page footer {
-  margin-top: 0.25rem !important;
+  margin-top: var(--space-xs) !important;
   margin-bottom: 0 !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.25rem 20px 0 20px;
+  padding: var(--space-xs) var(--gap-base) 0 var(--gap-base);
 }
 
 .footer-nav-controls {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: var(--gap-sm);
   white-space: nowrap;
 }
 
@@ -50,17 +50,17 @@
 }
 
 .viewer-container {
-  max-width: 1200px;
+  max-width: var(--width-content-base);
   margin: 0 auto;
-  padding: 5px 20px 10px 20px;
+  padding: var(--space-micro-2) var(--gap-base) var(--gap-xs) var(--gap-base);
 }
 
 .nav-button {
   background: var(--button-background);
   color: var(--button-text);
-  border: 1px solid var(--border-color);
-  padding: 2px 8px;
-  border-radius: 3px;
+  border: var(--border-width-thin) solid var(--border-color);
+  padding: var(--space-micro-1) var(--space-sm);
+  border-radius: var(--radius-xs);
   cursor: pointer;
   font-size: 0.75em;
   transition: background 0.2s;
@@ -112,16 +112,16 @@
 
 .demo-loading {
   text-align: center;
-  padding: 50px;
+  padding: var(--gap-2xl);
   color: var(--text-secondary);
 }
 
 .demo-error {
   text-align: center;
-  padding: 20px;
+  padding: var(--gap-base);
   color: var(--color-error);
   background: var(--color-error-bg);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 /* Dark mode variables */
@@ -160,7 +160,7 @@
 @media (max-width: 400px) {
   .nav-button {
     font-size: 0.8em;
-    padding: 4px 8px;
+    padding: var(--space-micro-2) var(--space-sm);
   }
   .demo-counter {
     font-size: 0.8em;
@@ -171,9 +171,9 @@
 @media (max-width: 768px) {
   footer {
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--space-xs);
     text-align: center;
-    padding: 0.25rem 10px 0 10px;
+    padding: var(--space-xs) var(--gap-xs) 0 var(--gap-xs);
     margin-bottom: 0 !important;
   }
   
@@ -203,12 +203,12 @@
   
   /* Reduce space between the stacked elements */
   .footer-copyright .copyright {
-    margin-bottom: 0.1rem;
+    margin-bottom: var(--space-3xs);
   }
   
   /* Make nav controls more compact on mobile */
   .footer-nav-controls {
-    gap: 10px;
+    gap: var(--gap-xs);
   }
   
   .footer-demo-info {

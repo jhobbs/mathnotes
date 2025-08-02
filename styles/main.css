@@ -194,7 +194,7 @@ article {
   color: var(--color-link);
   text-decoration: none;
   font-weight: 500;
-  padding: 0.1em 0.2em;
+  padding: var(--space-3xs) var(--space-xs);
   border-radius: var(--radius-sm);
   transition: background-color 0.2s ease;
   
@@ -212,7 +212,7 @@ article {
 .block-reference-error {
   color: var(--color-error);
   background-color: color-mix(in oklch, var(--color-error), transparent 90%);
-  padding: 0.1em 0.2em;
+  padding: var(--space-3xs) var(--space-xs);
   border-radius: var(--radius-sm);
   font-family: monospace;
   font-size: 0.9em;
@@ -267,7 +267,7 @@ code {
   font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
   font-size: 0.9em;
   background-color: var(--color-code-bg);
-  padding: 0.125em 0.25em;
+  padding: var(--space-3xs) var(--space-xs);
   border-radius: var(--radius-sm);
   
   pre & {
@@ -471,9 +471,9 @@ input, textarea, select {
 .math-block-nested {
   margin: var(--space-md) 0;
   margin-inline-start: 0.25rem;
-  padding: 0.75rem;
+  padding: calc(var(--space-sm) + var(--space-xs));
   padding-inline-start: var(--space-md);
-  border-inline-start-width: 3px;
+  border-inline-start-width: var(--border-width-thick);
   background-color: var(--color-overlay-light);
   position: relative;
   
@@ -569,8 +569,8 @@ input, textarea, select {
 .math-block-error {
   margin: var(--space-lg) 0;
   padding: var(--space-md);
-  border: 2px solid var(--color-error-border);
-  border-inline-start: 5px solid var(--color-error-border);
+  border: var(--border-width-base) solid var(--color-error-border);
+  border-inline-start: var(--border-width-extra) solid var(--color-error-border);
   background-color: var(--color-error-bg);
   border-radius: var(--radius-md);
   color: var(--color-error-text-dark);
@@ -599,7 +599,7 @@ input, textarea, select {
 footer {
   margin-block-start: auto;
   padding-block: var(--space-xl);
-  border-block-start: 1px solid var(--color-border);
+  border-block-start: var(--border-width-thin) solid var(--color-border);
   text-align: center;
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
@@ -634,7 +634,7 @@ footer {
 .math-content-toggle {
   background-color: var(--color-bg);
   color: var(--color-text);
-  border: 2px solid var(--color-border);
+  border: var(--border-width-base) solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-sm) var(--space-md);
   font-size: var(--font-size-sm);
@@ -672,7 +672,7 @@ footer {
   margin: var(--space-lg) 0;
   padding: var(--space-md);
   border: var(--border-width-thin) solid var(--color-border);
-  border-inline-start: 3px solid var(--color-border);
+  border-inline-start: var(--border-width-thick) solid var(--color-border);
   background-color: var(--color-code-bg);
   border-radius: var(--radius-md);
   position: relative;
@@ -782,7 +782,7 @@ footer {
   color: var(--color-error);
   font-weight: bold;
   background-color: var(--color-error-bg);
-  padding: 2px 6px;
+  padding: var(--space-micro-1) var(--space-micro-3);
   border-radius: var(--radius-sm);
   
   @media (--dark) {
@@ -795,7 +795,7 @@ footer {
 @media (max-width: var(--breakpoint-tablet)) {
   body {
     max-width: 100%;
-    padding: 15px;
+    padding: var(--gap-sm);
   }
   
   /* Mobile footer improvements */
@@ -856,7 +856,7 @@ footer {
   
   /* Add padding to scrollable equations */
   mjx-container[display="true"] mjx-math {
-    padding: 0.5em 0;
+    padding: var(--space-sm) 0;
   }
   
   /* Ensure MathJax doesn't get too small */
@@ -875,12 +875,12 @@ footer {
   }
   
   .demo-slider-container {
-    margin-bottom: 0.75rem !important;
+    margin-bottom: calc(var(--space-sm) + var(--space-xs)) !important;
   }
   
   .demo-label {
     font-size: var(--font-size-sm);
-    margin-bottom: 0.25rem !important;
+    margin-bottom: var(--space-xs) !important;
   }
   
   .demo-radio label {
@@ -897,7 +897,7 @@ footer {
   min-width: 200px;
   background: var(--color-tooltip-bg);
   border: var(--border-width-thin) solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: 0;
   pointer-events: auto;
@@ -917,12 +917,12 @@ footer {
 }
 
 .math-tooltip-content {
-  padding: 12px 16px;
+  padding: var(--space-micro-6) var(--space-md);
 }
 
 .math-tooltip-header {
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-sm);
   color: var(--color-text);
 }
 
@@ -1006,8 +1006,8 @@ footer {
 }
 
 .math-tooltip-footer {
-  border-top: 1px solid var(--color-border);
-  padding: 8px 16px;
+  border-top: var(--border-width-thin) solid var(--color-border);
+  padding: var(--space-sm) var(--space-md);
   background: var(--color-tooltip-footer-bg);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
@@ -1031,10 +1031,10 @@ footer {
 
 /* Loading state */
 .math-tooltip-loading {
-  padding: 16px;
+  padding: var(--space-md);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   color: var(--color-text-secondary);
 }
 
@@ -1042,7 +1042,7 @@ footer {
   display: inline-block;
   width: 14px;
   height: 14px;
-  border: 2px solid var(--color-spinner-border);
+  border: var(--border-width-base) solid var(--color-spinner-border);
   border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -1060,11 +1060,11 @@ footer {
   }
   
   .math-tooltip-content {
-    padding: 10px 12px;
+    padding: var(--gap-xs) var(--space-micro-6);
   }
   
   .math-tooltip-footer {
-    padding: 6px 12px;
+    padding: var(--space-micro-3) var(--space-micro-6);
   }
 }
 
