@@ -58,6 +58,12 @@
   font-size: 1.3em;
 }
 
+.demo-description {
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
 .demo-container {
   margin: 20px 0;
   min-height: 300px;
@@ -68,6 +74,10 @@
   background: var(--background-secondary);
   position: relative;
   overflow: hidden;
+}
+
+.demo-component {
+  min-height: 300px;
 }
 
 .demo-loading {
