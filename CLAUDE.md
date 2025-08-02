@@ -73,34 +73,9 @@ You have to use the venv to run ./scripts/crawl-demos.py
 # Capture with specific viewport
 ./scripts/crawl-demos.py --viewport desktop    # Desktop only
 ./scripts/crawl-demos.py --viewport mobile     # Mobile only
-./scripts/crawl-demos.py -d pendulum --viewport mobile
-
-# Get AI description of a demo (useful for documentation)
-./scripts/crawl-demos.py -d pendulum --describe
-./scripts/crawl-demos.py -d pendulum --describe --viewport mobile  # Analyze mobile version
-
-# Check if a demo meets the standards in DEMO-STANDARD.md
-./scripts/crawl-demos.py -d pendulum --check-standards
-
-# Check if a demo scales properly from desktop to mobile
-./scripts/crawl-demos.py -d pendulum --check-scaling
-
-# Check if a demo has good dark mode handling
-./scripts/crawl-demos.py -d pendulum --check-dark-mode
-
-
-# Ask specific questions about demos
-./scripts/crawl-demos.py -d diagonalization --ask "is the widget flombulating properly in @\$BASE_PATH?"
-
-# Compare demo container to full page (check for layout issues)
-./scripts/crawl-demos.py -d neighborhood --ask "compare @\$BASE_PATH to @\$FULL_PATH. is the demo area visible in the full page?"
 ```
 
-When implementing or documenting demos, use these commands to:
-- Get textual descriptions of visual demos for accessibility
-- Verify demos render correctly without scrolling issues
-- Document what each demo demonstrates
-- Check for visual bugs or layout problems
+For advanced demo testing commands (AI analysis, standards checking, scaling verification, etc.), see [DEBUGGING.md](./DEBUGGING.md#demo-testing-workflow).
 
 ### Content Management
 ```bash
@@ -235,90 +210,13 @@ Development mode auto-detected via:
 ### Production URLs
 - Primary: https://www.lacunary.org
 
-## Troubleshooting
+## Debugging and Troubleshooting
 
-### Common Issues
-- **CSP Errors**: Check for missing nonces on inline scripts
-- **404 Errors**: Use `/sitemap.xml` to find correct URLs
-- **Dark Mode**: Uses CSS `@media (prefers-color-scheme)`, not classes
-- **Test Failures**: Run in Docker for consistency
-- **Permission Errors**: Clean with `rm -rf htmlcov .pytest_cache`
+For comprehensive debugging techniques, troubleshooting tips, and testing workflows, see [DEBUGGING.md](./DEBUGGING.md).
 
-### Debug Commands
-```bash
-# Verify demo registration
-grep -r "registerDemo" mathnotes/demos-framework/src/main.ts
-
-# Check for CSP violations
-# Open browser console and look for CSP errors
-```
-
-## Debug Techniques
-
-### Console Probe Debugging
-- You can use console.log("[probe] ...") to debug JavaScript/CSS/DOM issues in conjunction with the page crawler
-- Example: `console.log('[probe] Copyright display:', getComputedStyle(element).display)`
-- Run with: `./scripts/crawl-dev.sh --single-page "http://web-dev:5000/demo-viewer#demo-name" 2>&1 | grep "\[probe\]"`
-
-### Demo Screenshot Analysis
-The demo crawler (`./scripts/crawl-demos.py`) supports AI-powered visual analysis:
-
-```bash
-# Check demo scaling between desktop and mobile
-./scripts/crawl-demos.py -d demo-name --check-scaling
-
-# Ask specific questions about screenshots using placeholders
-./scripts/crawl-demos.py -d demo-name --viewport mobile --ask "Look at $FULL_PATH. Is the footer readable?"
-
-# Available placeholders:
-# - $BASE_PATH: The base demo screenshot
-# - $FULL_PATH: Full page screenshot including surrounding content
-# - $CANVAS_PATH: Just the canvas area
-
-# Enable verbose mode to see OpenAI prompts
-./scripts/crawl-demos.py -v -d demo-name --ask "question"
-```
-
-### Mobile-Specific Testing
-```bash
-# Test mobile viewport only
-./scripts/crawl-demos.py -d demo-name --viewport mobile
-
-# Common mobile issues to check:
-# - Text breaking awkwardly (use $FULL_PATH to see footer/header)
-# - Canvas elements being cropped
-# - Interactive controls stacking properly
-# - Arrow/visual element visibility at smaller sizes
-```
-
-### CSS Development
-With the modern CSS system:
-1. **Main CSS entry**: `styles/main.css` imports theme and utilities
-2. **Theme variables**: Edit `styles/theme.css` for colors, spacing, typography
-3. **PostCSS features**: Use CSS nesting, custom media queries, modern color functions
-4. **Hot module replacement**: CSS changes appear instantly in development
-5. **CSS Modules**: Available for component-scoped styles (e.g., `DemoControls.module.css`)
-
-### Responsive Scaling Best Practices
-When implementing responsive demos:
-1. Scale constants based on canvas size:
-   ```typescript
-   private updateScaling(p: p5): void {
-     const scaleFactor = Math.min(p.width, p.height) / baseSize;
-     this.RADIUS = baseRadius * scaleFactor;
-     this.ARROW_SIZE = Math.max(minSize, baseArrowSize * scaleFactor);
-   }
-   ```
-
-2. Use different values for mobile:
-   ```typescript
-   const strokeWeight = p.width < 768 ? 4 : 3; // Thicker on mobile
-   const minArrowScalar = p.width < 768 ? 25 : 15; // Larger minimum on mobile
-   ```
-
-3. Handle resize events:
-   ```typescript
-   protected onResize(p: p5, size: CanvasSize): void {
-     this.updateScaling(p);
-   }
-   ```
+Key debugging tools available:
+- Console probe debugging for JavaScript/CSS/DOM issues
+- Demo screenshot analysis with AI-powered visual testing
+- Mobile-specific testing and responsive scaling
+- CSP violation detection and fixes
+- Docker container debugging
