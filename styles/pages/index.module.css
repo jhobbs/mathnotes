@@ -5,10 +5,10 @@
 }
 
 .section-header {
-  background-color: var(--code-bg);
+  background-color: var(--color-code-bg);
   padding: calc(var(--space-sm) + var(--space-xs)) var(--space-md);
   cursor: pointer;
-  border: var(--border-width-thin) solid var(--border-color);
+  border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -17,11 +17,11 @@
 }
 
 .section-header:hover {
-  background-color: var(--border-color);
+  background-color: var(--color-border);
 }
 
 .section-header.active {
-  background-color: var(--link-color);
+  background-color: var(--color-link);
   color: var(--color-white);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
@@ -44,12 +44,12 @@
 
 .section-content {
   display: none;
-  border: var(--border-width-thin) solid var(--border-color);
+  border: var(--border-width-thin) solid var(--color-border);
   border-top: none;
   border-bottom-left-radius: var(--radius-md);
   border-bottom-right-radius: var(--radius-md);
   padding: var(--space-md);
-  background-color: var(--bg-color);
+  background-color: var(--color-bg);
 }
 
 .section-content.show {
@@ -64,7 +64,7 @@
 
 .content-item {
   padding: var(--space-sm) 0;
-  border-bottom: var(--border-width-thin) solid var(--border-color);
+  border-bottom: var(--border-width-thin) solid var(--color-border);
 }
 
 .content-item:last-child {
@@ -72,14 +72,39 @@
 }
 
 .content-link {
-  color: var(--link-color);
+  color: var(--color-link);
   text-decoration: none;
   display: block;
-  padding: var(--space-xs) 0;
+  padding: var(--space-xs) var(--space-sm);
+  margin: 0 calc(-1 * var(--space-sm));
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  font-weight: 500;
+  position: relative;
+}
+
+.content-link::before {
+  content: "→";
+  opacity: 0;
+  margin-right: var(--space-xs);
+  transition: opacity var(--transition-fast);
+  color: var(--color-link);
 }
 
 .content-link:hover {
+  color: var(--color-link-hover);
   text-decoration: underline;
+  background-color: var(--color-primary-hover);
+  transform: translateX(var(--space-xs));
+}
+
+.content-link:hover::before {
+  opacity: 1;
+}
+
+.content-link:focus-visible {
+  outline: var(--border-width-base) solid var(--color-link);
+  outline-offset: var(--outline-offset-sm);
 }
 
 .subdirectory {
@@ -89,7 +114,7 @@
 
 .subdir-header {
   font-weight: 600;
-  color: var(--blockquote-color);
+  color: var(--color-text-secondary);
   margin: var(--space-sm) 0;
   font-size: 1.1rem;
 }
