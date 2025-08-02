@@ -88,7 +88,7 @@ class TestMarkdownProcessor:
         """Test that other image attributes are preserved."""
         html_content = """
         <img class="diagram" src="test.png" width="300" height="200" alt="Test">
-        <img id="fig1" src="figure.jpg" style="border: 1px solid black;">
+        <img id="fig1" class="border" src="figure.jpg">
         """
 
         result = self.processor._fix_relative_image_paths(html_content, "content/test.md")
@@ -98,7 +98,7 @@ class TestMarkdownProcessor:
             in result
         )
         assert (
-            '<img id="fig1" src="/mathnotes/figure.jpg" style="border: 1px solid black;">' in result
+            '<img id="fig1" class="border" src="/mathnotes/figure.jpg">' in result
         )
 
     def test_fix_relative_image_paths_root_directory(self):
