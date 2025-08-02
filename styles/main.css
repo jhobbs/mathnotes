@@ -1156,6 +1156,36 @@ footer {
   }
 }
 
+/* Demo loading state */
+.demo-loading {
+  text-align: center;
+  padding: var(--space-3xl);
+  color: var(--color-text-secondary);
+}
+
+/* Index page subdirectory indentation */
+.subdirectory[data-level="1"] {
+  margin-left: calc(1 * 1.5rem);
+}
+
+.subdirectory[data-level="2"] {
+  margin-left: calc(2 * 1.5rem);
+}
+
+.subdirectory[data-level="3"] {
+  margin-left: calc(3 * 1.5rem);
+}
+
+.subdirectory[data-level="4"] {
+  margin-left: calc(4 * 1.5rem);
+}
+
+/* Index page help text */
+.index-help-text {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-lg);
+}
+
 /* Print styles */
 @media print {
   body {
