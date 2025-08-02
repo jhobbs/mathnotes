@@ -10,6 +10,7 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 - Wiki-style cross-references using `[[slug]]` syntax
 - Dark mode support with automatic detection
 - Comprehensive security headers including CSP with nonces
+- Modern CSS system with PostCSS, CSS custom properties, and hot module replacement
 
 ## Security and Best Practices
 
@@ -21,7 +22,8 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 ### Coding Best Practices
 
 * Don't check types after every single change
-* Do not hardcode colors - always use colors from the central colors theme.
+* Do not hardcode colors - always use CSS custom properties from the theme (e.g., `var(--color-primary)`, `var(--space-md)`)
+* CSS changes in development have hot module replacement - no need to restart the server
 
 ## Common Commands
 
@@ -132,6 +134,13 @@ When implementing or documenting demos, use these commands to:
 
 5. **Development/Production Detection**: Automatic via localhost detection, affects caching headers and asset loading.
 
+6. **Modern CSS System**: 
+   - PostCSS for modern CSS features (nesting, custom media queries)
+   - CSS custom properties for theming (colors, spacing, typography)
+   - CSS entry point at `styles/main.css` processed by Vite
+   - Hot module replacement in development for instant style updates
+   - Theme variables defined in `styles/theme.css`, utilities in `styles/utilities.css`
+
 ## Important Implementation Details
 
 ### Math Content Protection
@@ -203,6 +212,7 @@ Development mode auto-detected via:
 - Dev: TypeScript served directly from `http://localhost:5173`
 - Prod: Bundled assets served by Flask
 - Proxy config handles routing between Vite and Flask
+- CSS is loaded as a Vite entry point, enabling HMR in development
 
 ### Python Dependencies
 - Python 3.11+ required
@@ -276,11 +286,13 @@ The demo crawler (`./scripts/crawl-demos.py`) supports AI-powered visual analysi
 # - Arrow/visual element visibility at smaller sizes
 ```
 
-### CSS Cache Busting
-When CSS changes aren't appearing:
-1. Add version query parameter to stylesheet: `main.css?v=2`
-2. Restart the dev server: `docker-compose -f docker-compose.dev.yml restart web-dev`
-3. Wait a few seconds for the server to fully restart
+### CSS Development
+With the modern CSS system:
+1. **Main CSS entry**: `styles/main.css` imports theme and utilities
+2. **Theme variables**: Edit `styles/theme.css` for colors, spacing, typography
+3. **PostCSS features**: Use CSS nesting, custom media queries, modern color functions
+4. **Hot module replacement**: CSS changes appear instantly in development
+5. **CSS Modules**: Available for component-scoped styles (e.g., `DemoControls.module.css`)
 
 ### Responsive Scaling Best Practices
 When implementing responsive demos:

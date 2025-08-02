@@ -161,6 +161,28 @@ blockquote {
   font-style: italic;
 }
 
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  
+  /* Make images slightly dimmer in dark mode */
+  @media (--dark) {
+    opacity: 0.9;
+  }
+}
+
+/* Article styles */
+article {
+  margin: 0;
+  padding: 0;
+  
+  /* Ensure first heading in article has minimal top spacing */
+  & > h1:first-child {
+    margin-top: 0;
+  }
+}
+
 /* Block reference links (for tooltips) */
 .block-reference {
   color: var(--color-link);
@@ -290,6 +312,35 @@ input, textarea, select {
   }
 }
 
+/* Navigation lists */
+.section-list {
+  list-style: none;
+  padding: 0;
+  
+  & li {
+    margin-bottom: var(--space-sm);
+  }
+  
+  & a {
+    color: var(--color-link);
+    text-decoration: none;
+    font-size: var(--font-size-lg);
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+  
+  & li {
+    margin-bottom: var(--space-sm);
+  }
+}
+
 /* Demo components with modern features */
 .demo-component {
   container-type: inline-size;
@@ -300,11 +351,11 @@ input, textarea, select {
     height: auto;
     display: block;
     margin-inline: auto;
-    border: 2px solid var(--color-border);
+    border: 2px dashed #000000; /* High contrast black dashed border in light mode */
     border-radius: var(--radius-md);
     
     @media (--dark) {
-      border-color: oklch(50% 0 0);
+      border-color: #ffffff; /* White border for high contrast in dark mode */
     }
   }
   
@@ -335,15 +386,206 @@ input, textarea, select {
     background-color: color-mix(in oklch, var(--color-theorem), transparent 95%);
   }
   
+  &.math-lemma {
+    border-color: var(--color-lemma);
+    background-color: color-mix(in oklch, var(--color-lemma), transparent 95%);
+  }
+  
+  &.math-proposition {
+    border-color: var(--color-proposition);
+    background-color: color-mix(in oklch, var(--color-proposition), transparent 95%);
+  }
+  
+  &.math-corollary {
+    border-color: var(--color-corollary);
+    background-color: color-mix(in oklch, var(--color-corollary), transparent 96%);
+  }
+  
   &.math-proof {
     border-color: var(--color-proof);
     background-color: color-mix(in oklch, var(--color-proof), transparent 95%);
+  }
+  
+  &.math-example {
+    border-color: var(--color-example);
+    background-color: color-mix(in oklch, var(--color-example), transparent 95%);
+  }
+  
+  &.math-remark, &.math-note {
+    border-color: var(--color-remark);
+    background-color: color-mix(in oklch, var(--color-remark), transparent 96%);
+  }
+  
+  &.math-intuition {
+    border-color: var(--color-intuition);
+    background-color: color-mix(in oklch, var(--color-intuition), transparent 95%);
+  }
+  
+  &.math-exercise {
+    border-color: var(--color-exercise);
+    background-color: color-mix(in oklch, var(--color-exercise), transparent 94%);
+  }
+  
+  &.math-solution {
+    border-color: var(--color-solution);
+    background-color: color-mix(in oklch, var(--color-solution), transparent 96%);
+    margin-inline-start: var(--space-xl);
   }
   
   /* Nested math blocks */
   & .math-block {
     margin-inline-start: var(--space-sm);
     background-color: color-mix(in oklch, currentColor, transparent 98%);
+  }
+}
+
+/* Math block header and content */
+.math-block-header {
+  margin-bottom: 0.75rem;
+  font-weight: bold;
+  color: var(--color-heading);
+}
+
+.math-block-type {
+  font-style: normal;
+}
+
+.math-block-title {
+  margin-left: var(--space-sm);
+  font-weight: normal;
+  font-style: normal;
+}
+
+.math-block-content {
+  color: var(--color-text);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Nested math blocks */
+.math-block-nested {
+  margin: var(--space-md) 0;
+  margin-inline-start: 0.25rem;
+  padding: 0.75rem;
+  padding-inline-start: var(--space-md);
+  border-inline-start-width: 3px;
+  background-color: rgba(0, 0, 0, 0.02);
+  position: relative;
+  
+  /* Tighter spacing for nested content */
+  & .math-block-content {
+    line-height: 1.7;
+  }
+  
+  /* Remove extra spacing at the bottom */
+  &:last-child {
+    margin-bottom: var(--space-sm);
+  }
+  
+  /* Add a subtle visual connector */
+  &::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: -1rem;
+    bottom: -1rem;
+    width: 3px;
+    background-color: inherit;
+    opacity: 0.3;
+  }
+  
+  @media (--dark) {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+}
+
+/* Type-specific nested blocks */
+.math-block-nested {
+  &.math-definition {
+    background-color: rgba(44, 82, 130, 0.03);
+  }
+  
+  &.math-theorem {
+    background-color: rgba(56, 161, 105, 0.03);
+  }
+  
+  &.math-lemma {
+    background-color: rgba(43, 108, 176, 0.03);
+  }
+  
+  &.math-proposition {
+    background-color: rgba(49, 130, 206, 0.03);
+  }
+  
+  &.math-corollary {
+    background-color: rgba(113, 128, 150, 0.025);
+  }
+  
+  &.math-proof {
+    background-color: rgba(45, 55, 72, 0.03);
+  }
+  
+  &.math-example {
+    background-color: rgba(47, 133, 90, 0.03);
+  }
+  
+  @media (--dark) {
+    &.math-definition {
+      background-color: rgba(44, 82, 130, 0.06);
+    }
+    
+    &.math-theorem {
+      background-color: rgba(56, 161, 105, 0.06);
+    }
+    
+    &.math-lemma {
+      background-color: rgba(43, 108, 176, 0.06);
+    }
+    
+    &.math-proposition {
+      background-color: rgba(49, 130, 206, 0.06);
+    }
+    
+    &.math-corollary {
+      background-color: rgba(113, 128, 150, 0.05);
+    }
+    
+    &.math-proof {
+      background-color: rgba(45, 55, 72, 0.06);
+    }
+    
+    &.math-example {
+      background-color: rgba(47, 133, 90, 0.06);
+    }
+  }
+}
+
+/* Math block error styles */
+.math-block-error {
+  margin: var(--space-lg) 0;
+  padding: var(--space-md);
+  border: 2px solid #dc3545;
+  border-inline-start: 5px solid #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: var(--radius-md);
+  color: #721c24;
+}
+
+.math-block-error-header {
+  margin-bottom: var(--space-sm);
+  font-size: var(--font-size-lg);
+}
+
+.math-block-error-content {
+  font-family: monospace;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+@media (--dark) {
+  .math-block-error {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #f8d7da;
+    border-color: #dc3545;
   }
 }
 
@@ -513,6 +755,130 @@ footer {
   }
 }
 
+/* Embedded blocks (transclusion) */
+.embedded-block {
+  margin: var(--space-lg) 0;
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-inline-start: 3px solid var(--color-border);
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-md);
+  position: relative;
+}
+
+.embedded-header {
+  margin-bottom: 0.75rem;
+  font-weight: bold;
+  color: var(--color-heading);
+  font-size: 0.95em;
+  opacity: 0.9;
+}
+
+.embedded-content {
+  color: var(--color-text);
+  line-height: var(--line-height-relaxed);
+}
+
+.embedded-source {
+  margin-top: 0.75rem;
+  font-size: 0.85em;
+  color: var(--color-text-secondary);
+  text-align: right;
+  
+  & a {
+    color: var(--color-link);
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Type-specific embedded block colors */
+.embedded-block {
+  &.embedded-definition {
+    border-inline-start-color: var(--color-definition);
+    background-color: color-mix(in oklch, var(--color-definition), transparent 95%);
+  }
+  
+  &.embedded-theorem {
+    border-inline-start-color: var(--color-theorem);
+    background-color: color-mix(in oklch, var(--color-theorem), transparent 95%);
+  }
+  
+  &.embedded-lemma {
+    border-inline-start-color: var(--color-lemma);
+    background-color: color-mix(in oklch, var(--color-lemma), transparent 95%);
+  }
+  
+  &.embedded-proposition {
+    border-inline-start-color: var(--color-proposition);
+    background-color: color-mix(in oklch, var(--color-proposition), transparent 95%);
+  }
+  
+  &.embedded-corollary {
+    border-inline-start-color: var(--color-corollary);
+    background-color: color-mix(in oklch, var(--color-corollary), transparent 96%);
+  }
+  
+  &.embedded-proof {
+    border-inline-start-color: var(--color-proof);
+    background-color: color-mix(in oklch, var(--color-proof), transparent 95%);
+  }
+  
+  &.embedded-example {
+    border-inline-start-color: var(--color-example);
+    background-color: color-mix(in oklch, var(--color-example), transparent 95%);
+  }
+  
+  @media (--dark) {
+    background-color: rgba(255, 255, 255, 0.03);
+    
+    &.embedded-definition {
+      background-color: color-mix(in oklch, var(--color-definition), transparent 88%);
+    }
+    
+    &.embedded-theorem {
+      background-color: color-mix(in oklch, var(--color-theorem), transparent 88%);
+    }
+    
+    &.embedded-lemma {
+      background-color: color-mix(in oklch, var(--color-lemma), transparent 88%);
+    }
+    
+    &.embedded-proposition {
+      background-color: color-mix(in oklch, var(--color-proposition), transparent 88%);
+    }
+    
+    &.embedded-corollary {
+      background-color: color-mix(in oklch, var(--color-corollary), transparent 90%);
+    }
+    
+    &.embedded-proof {
+      background-color: color-mix(in oklch, var(--color-proof), transparent 88%);
+    }
+    
+    &.embedded-example {
+      background-color: color-mix(in oklch, var(--color-example), transparent 88%);
+    }
+  }
+}
+
+/* Embed error styling */
+.embed-error {
+  color: #dc3545;
+  font-weight: bold;
+  background-color: rgba(220, 53, 69, 0.1);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  
+  @media (--dark) {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #f8d7da;
+  }
+}
+
 /* Mobile optimizations */
 @media (max-width: 768px) {
   body {
@@ -574,6 +940,40 @@ footer {
     overflow-y: hidden;
     max-width: 100%;
     -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Add padding to scrollable equations */
+  mjx-container[display="true"] mjx-math {
+    padding: 0.5em 0;
+  }
+  
+  /* Ensure MathJax doesn't get too small */
+  .mjx-chtml {
+    min-font-size: 16px !important;
+  }
+  
+  /* Fix alignment issues */
+  mjx-container {
+    vertical-align: middle !important;
+  }
+  
+  /* Demo control panel mobile optimizations */
+  .demo-controls {
+    padding: var(--space-sm);
+  }
+  
+  .demo-slider-container {
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .demo-label {
+    font-size: var(--font-size-sm);
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .demo-radio label {
+    font-size: var(--font-size-sm);
+    margin: 0 0.25rem;
   }
 }
 

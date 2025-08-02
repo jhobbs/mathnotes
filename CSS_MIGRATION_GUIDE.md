@@ -163,3 +163,80 @@ element.classList.add(styles.container);
   }
 }
 ```
+
+## Legacy CSS Inventory
+
+### 1. Legacy CSS Files
+
+#### `/static/main.css` - **REMOVED ✅**
+- **Status**: Successfully migrated and removed
+- **Migration Date**: 2025-08-02
+- **Content Migrated**: 
+  - All CSS custom properties merged into theme system
+  - Typography, layout, navigation styles modernized
+  - Interactive demo component styles with container queries
+  - Structured mathematical content styling with modern color functions
+  - Mobile optimizations with custom media queries
+  - MathJax integration styles preserved
+  - Tooltip system updated
+  - Math content toggle buttons modernized
+- **Result**: All styles successfully migrated to `/styles/main.css` and `/styles/theme.css`
+
+### 2. Inline Styles in HTML Templates
+
+#### `/templates/demos_showcase.html`
+- Line 126: `style="text-align: center; padding: 50px;"`
+
+#### `/templates/index.html`
+- Line 114: `style="margin-left: {{ level * 1.5 }}rem;"`
+- Line 137: `style="color: var(--blockquote-color); margin-bottom: 1.5rem;"`
+
+### 3. Style Tags in HTML Templates - **MEDIUM PRIORITY**
+
+#### `/templates/demos_showcase.html` (Lines 6-100+)
+- Grid layouts, cards, responsive design for demos showcase
+
+#### `/templates/homepage.html` (Lines 8-80+)
+- Homepage-specific styling with CSS custom properties
+
+#### `/templates/demo_viewer.html` (Lines 6-80+)
+- Demo viewer layout customizations (header hiding, footer mods)
+
+#### `/templates/index.html` (Lines 8-80+)
+- Collapsible sections and directory navigation styles
+
+### 4. CSS-in-TypeScript (Direct Style Assignments)
+
+Demo files with element.style manipulation:
+- `/demos/cellular-automata/elementary-cellular-automata.ts`
+- `/demos/cellular-automata/game-of-life.ts`
+- `/demos/differential-equations/pendulum.ts`
+- `/demos/differential-equations/dilution-visual.ts`
+- `/demos/differential-equations/turntable.ts`
+- `/demos/graphics/projection.ts`
+
+Framework files:
+- `/demos-framework/src/p5-base.ts`
+- `/demos-framework/src/demo-utils.ts`
+- `/demos-framework/src/tooltip-system.ts`
+- `/demos-framework/src/components/DemoControls.ts`
+
+### 5. CSS-in-JavaScript (Template Literals) - **MEDIUM PRIORITY**
+
+#### `/demos/differential-equations/dilution-calculator.ts` (Lines 150-256)
+- Large CSS template literal with form styling, responsive design, dark mode
+
+#### `/demos-framework/src/ui-components.ts` (Lines 47-277)
+- Extensive CSS for UI components (buttons, sliders, inputs)
+
+## Migration Checklist
+
+- [x] Audit legacy `/static/main.css` against modern CSS system
+- [x] Document which styles are duplicated vs missing
+- [x] Migrate missing styles to modern system
+- [ ] Extract template `<style>` tags to separate files
+- [ ] Convert CSS-in-JS template literals to CSS modules
+- [ ] Replace inline styles with CSS classes
+- [x] Remove legacy main.css
+- [ ] Update build process if needed
+- [x] Test all pages for visual regressions
