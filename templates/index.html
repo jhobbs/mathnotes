@@ -111,7 +111,7 @@
 {% macro render_item(item, level) %}
     {% if item.is_subdir %}
         <li class="content-item">
-            <div class="subdirectory" style="margin-left: {{ level * 1.5 }}rem;">
+            <div class="subdirectory" data-level="{{ level }}">
                 <h5 class="subdir-header">{{ item.name }}</h5>
                 <ul class="subdir-files">
                     {% for subitem in item.files %}
@@ -134,7 +134,7 @@
 <p>{{ config.SITE_DESCRIPTION }}</p>
 
 <h3>Topics</h3>
-<p style="color: var(--blockquote-color); margin-bottom: 1.5rem;">Click on any section to expand and view its contents</p>
+<p class="index-help-text">Click on any section to expand and view its contents</p>
 
 <div class="sections-container">
     {% for section in sections %}
