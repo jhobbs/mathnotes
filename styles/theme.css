@@ -28,6 +28,10 @@
   --color-proof: oklch(40% 0.05 250);
   --color-example: oklch(55% 0.13 150);
   --color-remark: oklch(50% 0.06 250);
+  --color-note: oklch(50% 0.06 250);
+  --color-intuition: oklch(65% 0.12 180);
+  --color-exercise: oklch(56% 0.13 252);
+  --color-solution: oklch(50% 0.06 250);
   
   /* Spacing scale */
   --space-xs: 0.25rem;
@@ -99,6 +103,10 @@
     --color-proof: oklch(55% 0.05 250);
     --color-example: oklch(63% 0.13 150);
     --color-remark: oklch(60% 0.06 250);
+    --color-note: oklch(60% 0.06 250);
+    --color-intuition: oklch(72% 0.12 180);
+    --color-exercise: oklch(65% 0.13 252);
+    --color-solution: oklch(60% 0.06 250);
     
     /* Darker shadows for dark mode */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
