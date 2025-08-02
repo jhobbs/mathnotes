@@ -1,0 +1,113 @@
+/* Dilution Calculator CSS Module */
+
+.content h3 {
+  margin-top: 0;
+  margin-bottom: var(--space-md);
+  color: var(--color-heading);
+}
+
+.inputGroup {
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.inputGroup label {
+  min-width: 160px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.input {
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  width: 120px;
+}
+
+/* Hide number input spinners for cleaner look */
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-link);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-link) 20%, transparent);
+}
+
+.button {
+  padding: var(--space-sm) var(--space-lg);
+  background-color: var(--color-link);
+  color: var(--color-bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  margin: var(--space-md) 0;
+  transition: background-color var(--transition-fast);
+}
+
+.button:hover {
+  filter: brightness(0.9);
+  opacity: 0.95;
+}
+
+.resultItem {
+  margin-bottom: var(--space-sm);
+  padding: var(--space-sm);
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.resultLabel {
+  min-width: 160px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.resultValue {
+  color: var(--color-link);
+  font-weight: 600;
+  font-family: monospace;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .inputGroup,
+  .resultItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+  
+  .inputGroup label,
+  .resultLabel {
+    min-width: auto;
+  }
+  
+  .input {
+    width: 100%;
+  }
+}
+
+/* Additional styles for wider inputs on mobile */
+@media (max-width: 768px) {
+  .input {
+    width: 100%;
+    max-width: 200px;
+  }
+}

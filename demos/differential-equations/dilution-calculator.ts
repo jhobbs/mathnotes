@@ -1,4 +1,5 @@
 import type { DemoConfig, DemoInstance } from '@framework/types';
+import styles from '@/styles/dilution-calculator.module.css';
 
 // Dilution calculator demo
 interface DilutionParameters {
@@ -101,163 +102,47 @@ export const metadata = {
 export default function createDilutionCalculatorDemo(container: HTMLElement, _config?: DemoConfig): DemoInstance {
   // Create the HTML structure
   container.innerHTML = `
-    <div class="demo-content" id="dilution-calculator">
+    <div class="${styles.content}" id="dilution-calculator">
       <h3>Setup</h3>
       <form>
         <div id="parameters">
-          <div class="input-group">
+          <div class="${styles.inputGroup}">
             <label for="solutionStartingVolume">Solution Starting Volume:</label>
-            <input type="number" id="solutionStartingVolume" class="demo-input" step="any">
+            <input type="number" id="solutionStartingVolume" class="${styles.input}" step="any">
           </div>
-          <div class="input-group">
+          <div class="${styles.inputGroup}">
             <label for="solutionStartingMass">Solution Starting Mass:</label>
-            <input type="number" id="solutionStartingMass" class="demo-input" step="any">
+            <input type="number" id="solutionStartingMass" class="${styles.input}" step="any">
           </div>
-          <div class="input-group">
+          <div class="${styles.inputGroup}">
             <label for="inflowVolumeRate">Inflow Volume Rate:</label>
-            <input type="number" id="inflowVolumeRate" class="demo-input" step="any">
+            <input type="number" id="inflowVolumeRate" class="${styles.input}" step="any">
           </div>
-          <div class="input-group">
+          <div class="${styles.inputGroup}">
             <label for="inflowConcentration">Inflow Concentration:</label>
-            <input type="number" id="inflowConcentration" class="demo-input" step="any">
+            <input type="number" id="inflowConcentration" class="${styles.input}" step="any">
           </div>
-          <div class="input-group">
+          <div class="${styles.inputGroup}">
             <label for="outflowVolumeRate">Outflow Volume Rate:</label>
-            <input type="number" id="outflowVolumeRate" class="demo-input" step="any">
+            <input type="number" id="outflowVolumeRate" class="${styles.input}" step="any">
           </div>
-          <div class="input-group">
+          <div class="${styles.inputGroup}">
             <label for="desiredMass">Desired Mass:</label>
-            <input type="number" id="desiredMass" class="demo-input" step="any">
+            <input type="number" id="desiredMass" class="${styles.input}" step="any">
           </div>
-          <div class="input-group">
+          <div class="${styles.inputGroup}">
             <label for="desiredTime">Desired Time:</label>
-            <input type="number" id="desiredTime" class="demo-input" step="any">
+            <input type="number" id="desiredTime" class="${styles.input}" step="any">
           </div>
         </div>
-        <button type="button" id="Calculate" class="demo-button">Calculate</button>
+        <button type="button" id="Calculate" class="${styles.button}">Calculate</button>
       </form>
       <h3>Results</h3>
       <div id="results"></div>
     </div>
   `;
 
-  // Add styles
-  const style = document.createElement('style');
-  style.textContent = `
-    .demo-content h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      color: var(--header-color);
-    }
-
-    .input-group {
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .input-group label {
-      min-width: 160px;
-      font-weight: 500;
-      color: var(--text-color);
-    }
-
-    .demo-input {
-      padding: 0.5rem;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-size: 0.9rem;
-      width: 120px;
-    }
-
-    /* Hide number input spinners for cleaner look */
-    .demo-input::-webkit-outer-spin-button,
-    .demo-input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    .demo-input[type=number] {
-      -moz-appearance: textfield;
-    }
-
-    .demo-input:focus {
-      outline: none;
-      border-color: var(--link-color);
-      box-shadow: 0 0 0 2px var(--link-color);
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--link-color) 20%, transparent);
-    }
-
-    .demo-button {
-      padding: 0.75rem 1.5rem;
-      background-color: var(--link-color);
-      color: var(--bg-color);
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 500;
-      margin: 1rem 0;
-      transition: background-color 0.2s;
-    }
-
-    .demo-button:hover {
-      filter: brightness(0.9);
-      opacity: 0.95;
-    }
-
-    .result-item {
-      margin-bottom: 0.5rem;
-      padding: 0.5rem;
-      background-color: var(--code-bg);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .result-label {
-      min-width: 160px;
-      font-weight: 500;
-      color: var(--text-color);
-    }
-
-    .result-value {
-      color: var(--link-color);
-      font-weight: 600;
-      font-family: monospace;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .demo-input {
-        background-color: var(--code-bg);
-        border-color: var(--border-color);
-      }
-      
-    }
-
-    @media (max-width: 768px) {
-      .input-group,
-      .result-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
-      }
-      
-      .input-group label,
-      .result-label {
-        min-width: auto;
-      }
-      
-      .demo-input {
-        width: 100%;
-        max-width: 200px;
-      }
-    }
-  `;
-  document.head.appendChild(style);
+  // CSS module styles are imported at the top
 
   // Event handler
   const calculateButton = container.querySelector('#Calculate') as HTMLButtonElement;
@@ -285,14 +170,14 @@ export default function createDilutionCalculatorDemo(container: HTMLElement, _co
 
     for (const [fieldName, value] of Object.entries(results)) {
       const resultDiv = document.createElement('div');
-      resultDiv.className = 'result-item';
+      resultDiv.className = styles.resultItem;
       
       const label = document.createElement('span');
-      label.className = 'result-label';
+      label.className = styles.resultLabel;
       label.textContent = formatFieldName(fieldName) + ':';
       
       const valueSpan = document.createElement('span');
-      valueSpan.className = 'result-value';
+      valueSpan.className = styles.resultValue;
       valueSpan.textContent = typeof value === 'string' ? value : value.toFixed(6);
       
       resultDiv.appendChild(label);
