@@ -923,7 +923,7 @@ footer {
 }
 
 /* Mobile adjustments */
-@media (max-width: var(--breakpoint-tablet)) {
+@media (max-width: 768px) {
   .math-tooltip {
     max-width: calc(100vw - var(--space-md));
     font-size: 0.85em;
@@ -939,7 +939,7 @@ footer {
 }
 
 /* Mobile optimizations */
-@media (max-width: var(--breakpoint-tablet)) {
+@media (max-width: 768px) {
   body {
     max-width: 100%;
     padding: var(--gap-sm);

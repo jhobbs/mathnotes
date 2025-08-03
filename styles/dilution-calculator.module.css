@@ -85,7 +85,7 @@
 }
 
 /* Mobile responsive */
-@media (max-width: var(--breakpoint-tablet)) {
+@media (max-width: 768px) {
   .inputGroup,
   .resultItem {
     flex-direction: column;
@@ -104,7 +104,7 @@
 }
 
 /* Additional styles for wider inputs on mobile */
-@media (max-width: var(--breakpoint-tablet)) {
+@media (max-width: 768px) {
   .input {
     width: 100%;
     max-width: var(--size-input-lg);
