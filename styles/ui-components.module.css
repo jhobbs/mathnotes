@@ -195,7 +195,7 @@
 }
 
 /* Mobile responsive styles */
-@media (max-width: var(--breakpoint-tablet)) {
+@media (max-width: 768px) {
   .label {
     font-size: var(--font-size-xs);
     margin-bottom: var(--space-xs);

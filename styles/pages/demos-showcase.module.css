@@ -67,7 +67,6 @@
 .demo-container {
   margin: var(--gap-base) 0;
   min-height: var(--height-demo-min);
-  min-width: var(--height-demo-min);
   border: var(--border-width-thin) solid var(--border-light);
   border-radius: var(--radius-md);
   padding: var(--gap-xs);

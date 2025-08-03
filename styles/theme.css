@@ -228,8 +228,10 @@
   --gap-2xl: 50px;
   
   /* ===== BREAKPOINTS ===== */
-  /* Note: These values are also hardcoded in main.css @custom-media rules
-     because CSS custom properties don't work in @custom-media at-rules */
+  /* IMPORTANT: CSS custom properties do NOT work in @media queries!
+     These values must be hardcoded in all @media rules throughout the codebase.
+     They are defined here for documentation purposes only.
+     If you change these values, you must manually update all @media queries. */
   --breakpoint-phone: 640px;
   --breakpoint-tablet: 768px;
   --breakpoint-desktop: 1024px;
