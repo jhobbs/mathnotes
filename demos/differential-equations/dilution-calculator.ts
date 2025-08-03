@@ -189,9 +189,7 @@ export default function createDilutionCalculatorDemo(container: HTMLElement, _co
   // Return DemoInstance
   return {
     cleanup: () => {
-      if (style.parentNode) {
-        style.parentNode.removeChild(style);
-      }
+      // No cleanup needed - using CSS modules now
     },
     pause: () => {}, // No animation to pause
     resume: () => {}, // No animation to resume

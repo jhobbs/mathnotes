@@ -7,6 +7,7 @@
 @import './pages/demos-showcase.module.css';
 @import './pages/demo-viewer.module.css';
 @import './pages/index.module.css';
+@import './pages/directory.module.css';
 
 /* Custom media queries for consistent responsive design */
 @custom-media --phone-xs (max-width: 400px);
@@ -319,35 +320,6 @@ input, textarea, select {
   }
 }
 
-/* Navigation lists */
-.section-list {
-  list-style: none;
-  padding: 0;
-  
-  & li {
-    margin-bottom: var(--space-sm);
-  }
-  
-  & a {
-    color: var(--color-link);
-    text-decoration: none;
-    font-size: var(--font-size-lg);
-    
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
-.file-list {
-  list-style: none;
-  padding: 0;
-  
-  & li {
-    margin-bottom: var(--space-sm);
-  }
-}
-
 /* Demo components with modern features */
 .demo-component {
   container-type: inline-size;
@@ -614,11 +586,6 @@ footer {
   }
 }
 
-/* Collapsible sections container */
-.sections-container {
-  margin-block: var(--space-lg);
-}
-
 /* Math content toggle button styles */
 .math-content-toggle-container {
   position: sticky;
@@ -789,104 +756,6 @@ footer {
   @media (--dark) {
     background-color: var(--color-error-bg);
     color: var(--color-error-text-dark);
-  }
-}
-
-/* Mobile optimizations */
-@media (max-width: var(--breakpoint-tablet)) {
-  body {
-    max-width: 100%;
-    padding: var(--gap-sm);
-  }
-  
-  /* Mobile footer improvements */
-  footer {
-    padding: var(--space-md) var(--space-sm);
-    
-    & p {
-      font-size: var(--font-size-sm);
-      line-height: 1.8;
-      white-space: normal;
-      text-align: center;
-    }
-    
-    & .separator {
-      display: none;
-    }
-    
-    & .copyright,
-    & .version {
-      display: block;
-      width: 100%;
-      margin: var(--space-xs) 0;
-    }
-  }
-  
-  /* Demo components mobile optimization */
-  .demo-component {
-    margin: var(--space-sm) 0;
-    width: 100%;
-    
-    & .demo-content {
-      padding: 0;
-      width: 100%;
-    }
-    
-    & canvas {
-      width: 100% !important;
-      height: auto !important;
-    }
-  }
-  
-  /* Fix MathJax font sizing on mobile */
-  mjx-container {
-    font-size: 120% !important;
-  }
-  
-  mjx-container[display="false"] {
-    font-size: inherit !important;
-    vertical-align: baseline;
-  }
-  
-  mjx-container[display="true"] {
-    overflow-x: auto;
-    overflow-y: hidden;
-    max-width: 100%;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Add padding to scrollable equations */
-  mjx-container[display="true"] mjx-math {
-    padding: var(--space-sm) 0;
-  }
-  
-  /* Ensure MathJax doesn't get too small */
-  .mjx-chtml {
-    min-font-size: 16px !important;
-  }
-  
-  /* Fix alignment issues */
-  mjx-container {
-    vertical-align: middle !important;
-  }
-  
-  /* Demo control panel mobile optimizations */
-  .demo-controls {
-    padding: var(--space-sm);
-  }
-  
-  .demo-slider-container {
-    margin-bottom: calc(var(--space-sm) + var(--space-xs)) !important;
-  }
-  
-  .demo-label {
-    font-size: var(--font-size-sm);
-    margin-bottom: var(--space-xs) !important;
-  }
-  
-  .demo-radio label {
-    font-size: var(--font-size-sm);
-    margin: 0 0.25rem;
   }
 }
 
@@ -1069,34 +938,110 @@ footer {
   }
 }
 
+/* Mobile optimizations */
+@media (max-width: var(--breakpoint-tablet)) {
+  body {
+    max-width: 100%;
+    padding: var(--gap-sm);
+  }
+  
+  /* Mobile footer improvements */
+  footer {
+    padding: var(--space-md) var(--space-sm);
+    
+    & p {
+      font-size: var(--font-size-sm);
+      line-height: 1.8;
+      white-space: normal;
+      text-align: center;
+    }
+    
+    & .separator {
+      display: none;
+    }
+    
+    & .copyright,
+    & .version {
+      display: block;
+      width: 100%;
+      margin: var(--space-xs) 0;
+    }
+  }
+  
+  /* Demo components mobile optimization */
+  .demo-component {
+    margin: var(--space-sm) 0;
+    width: 100%;
+    
+    & .demo-content {
+      padding: 0;
+      width: 100%;
+    }
+    
+    & canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+  }
+  
+  /* Fix MathJax font sizing on mobile */
+  mjx-container {
+    font-size: 120% !important;
+  }
+  
+  mjx-container[display="false"] {
+    font-size: inherit !important;
+    vertical-align: baseline;
+  }
+  
+  mjx-container[display="true"] {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Add padding to scrollable equations */
+  mjx-container[display="true"] mjx-math {
+    padding: var(--space-sm) 0;
+  }
+  
+  /* Ensure MathJax doesn't get too small */
+  .mjx-chtml {
+    min-font-size: 16px !important;
+  }
+  
+  /* Fix alignment issues */
+  mjx-container {
+    vertical-align: middle !important;
+  }
+  
+  /* Demo control panel mobile optimizations */
+  .demo-controls {
+    padding: var(--space-sm);
+  }
+  
+  .demo-slider-container {
+    margin-bottom: calc(var(--space-sm) + var(--space-xs)) !important;
+  }
+  
+  .demo-label {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-xs) !important;
+  }
+  
+  .demo-radio label {
+    font-size: var(--font-size-sm);
+    margin: 0 0.25rem;
+  }
+}
+
+
 /* Demo loading state */
 .demo-loading {
   text-align: center;
   padding: var(--space-3xl);
   color: var(--color-text-secondary);
-}
-
-/* Index page subdirectory indentation */
-.subdirectory[data-level="1"] {
-  margin-left: calc(1 * 1.5rem);
-}
-
-.subdirectory[data-level="2"] {
-  margin-left: calc(2 * 1.5rem);
-}
-
-.subdirectory[data-level="3"] {
-  margin-left: calc(3 * 1.5rem);
-}
-
-.subdirectory[data-level="4"] {
-  margin-left: calc(4 * 1.5rem);
-}
-
-/* Index page help text */
-.index-help-text {
-  color: var(--color-text-secondary);
-  margin-bottom: var(--space-lg);
 }
 
 /* Print styles */
