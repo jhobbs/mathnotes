@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>lacunary.org</title>
     <meta name="description" content="Personal website featuring mathematics notes, interactive demonstrations, and educational resources covering algebra, calculus, complex analysis, and more.">
-    <link rel="stylesheet" href="/static/dist/main.css">
+    {% if css_url %}
+    <link rel="stylesheet" href="{{ css_url }}">
+    {% else %}
+    <!-- CSS loaded via Vite in development -->
+    {% endif %}
 </head>
 <body>
     <div class="container">

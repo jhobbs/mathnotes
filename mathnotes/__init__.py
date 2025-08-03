@@ -27,6 +27,7 @@ from .context_processors import (
     inject_env,
     inject_base_url,
     inject_tooltip_data,
+    inject_assets,
 )
 from .url_mapper import URLMapper
 from .markdown_processor import MarkdownProcessor
@@ -86,6 +87,7 @@ def create_app(config=None):
     app.context_processor(inject_env)
     app.context_processor(inject_base_url)
     app.context_processor(inject_tooltip_data)
+    app.context_processor(inject_assets)
 
     # Register routes
     register_routes(app, url_mapper, markdown_processor)

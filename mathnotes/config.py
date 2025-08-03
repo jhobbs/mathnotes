@@ -59,9 +59,9 @@ SEND_FILE_MAX_AGE_DEFAULT = 3600  # 1 hour default for static files
 
 # Cache headers for different file types (production values)
 STATIC_FILE_CACHE_CONFIG = {
-    # CSS and JS files - shorter cache for development
-    ".css": {"max_age": 60, "public": True},  # 1 minute
-    ".js": {"max_age": 60, "public": True},  # 1 minute
+    # CSS and JS files - moderate cache (hashed assets get longer cache in security.py)
+    ".css": {"max_age": 3600, "public": True},  # 1 hour
+    ".js": {"max_age": 3600, "public": True},  # 1 hour
     # Images - cache for 1 day maximum
     ".png": {"max_age": 86400, "public": True},  # 1 day
     ".jpg": {"max_age": 86400, "public": True},  # 1 day

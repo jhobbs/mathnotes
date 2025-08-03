@@ -7,6 +7,7 @@ import subprocess
 from datetime import datetime
 from flask import g, request
 from .config import get_base_url
+from .assets import get_css_url, get_main_js_url, get_mathjax_js_url
 
 
 def inject_year():
@@ -100,3 +101,12 @@ def inject_tooltip_data():
         return {"tooltip_data": json.dumps(tooltip_list)}
     
     return {"tooltip_data": None}
+
+
+def inject_assets():
+    """Add asset URLs to all templates."""
+    return {
+        "css_url": get_css_url(),
+        "main_js_url": get_main_js_url(),
+        "mathjax_js_url": get_mathjax_js_url()
+    }
