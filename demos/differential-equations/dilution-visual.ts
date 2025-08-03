@@ -152,9 +152,18 @@ class DilutionVisualDemo extends P5DemoBase {
       const centerX = p.width / 2;
       const centerY = p.height * 0.55; // Slightly lower to account for top info
       
-      // Draw graphs
-      this.drawMassGraph(p, centerX - this.vesselWidth/2 - this.graphWidth - 40 * this.scaleFactor, centerY);
-      this.drawVolumeGraph(p, centerX + this.vesselWidth/2 + 40 * this.scaleFactor, centerY);
+      // Draw graphs - position differently on mobile
+      const isMobile = p.width < 768;
+      if (isMobile && this.graphWidth > 0) {
+        // Stack graphs vertically below vessel on mobile
+        const vesselBottom = centerY + this.vesselHeight/2 + 30 * this.scaleFactor;
+        this.drawMassGraph(p, centerX - this.graphWidth/2 - 10 * this.scaleFactor, vesselBottom + this.graphHeight/2 + 20 * this.scaleFactor);
+        this.drawVolumeGraph(p, centerX + this.graphWidth/2 + 10 * this.scaleFactor, vesselBottom + this.graphHeight/2 + 20 * this.scaleFactor);
+      } else {
+        // Side-by-side on desktop
+        this.drawMassGraph(p, centerX - this.vesselWidth/2 - this.graphWidth - 40 * this.scaleFactor, centerY);
+        this.drawVolumeGraph(p, centerX + this.vesselWidth/2 + 40 * this.scaleFactor, centerY);
+      }
       
       this.drawVessel(p, centerX, centerY);
       this.drawPipes(p, centerX, centerY);
@@ -166,9 +175,9 @@ class DilutionVisualDemo extends P5DemoBase {
     const isMobile = p.width < 768;
     if (isMobile) {
       this.scaleFactor = Math.min(p.width / 400, p.height / 400);
-      // Hide graphs on mobile or make them very small
-      this.graphWidth = 0;
-      this.graphHeight = 0;
+      // Scale graphs down on mobile but keep them visible
+      this.graphWidth = 100 * this.scaleFactor;
+      this.graphHeight = 80 * this.scaleFactor;
     } else {
       // Better scaling to fill the canvas
       this.scaleFactor = Math.min(p.width / 600, p.height / 250, 1.2);

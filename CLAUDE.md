@@ -16,6 +16,7 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 
 **Demo Crawler Guidelines**:
 * do not every read the screenshots from the demo crawler directly, only use --ask
+* Hey - you're not supposed to look at screenshots yourself. Only use --ask to do that.
 
 ## Development Guidelines
 
@@ -210,3 +211,4 @@ Key debugging tools available:
 - Mobile-specific testing and responsive scaling
 - CSP violation detection and fixes
 - Docker container debugging
+```

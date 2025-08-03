@@ -99,10 +99,10 @@ class GameOfLifeDemo extends P5DemoBase {
       // Update info displays
       const totalCells = this.cols * this.rows;
       const populationPercent = (populatedCount / totalCells) * 100;
-      this.populationInfo.update(`Population: ${populationPercent.toFixed(2)}%`);
+      this.populationInfo.update(`${populationPercent.toFixed(2)}%`);
       
       const rateChange = this.calculatePopulationRateChange();
-      this.rateChangeInfo.update(`Rate Change: ${rateChange.toFixed(2)}`);
+      this.rateChangeInfo.update(`${rateChange.toFixed(2)}`);
     };
 
     p.mousePressed = () => {
@@ -148,7 +148,7 @@ class GameOfLifeDemo extends P5DemoBase {
     this.toggleBtn = this.createButton('Start', () => {
       this.state.running = !this.state.running;
       this.toggleBtn.textContent = this.state.running ? 'Stop' : 'Start';
-      this.runningStatus.update(`Running: ${this.state.running ? "Yes" : "No"}`);
+      this.runningStatus.update(`${this.state.running ? "Yes" : "No"}`);
     });
     
     this.resetBtn = this.createButton('Reset', () => {
@@ -197,12 +197,12 @@ class GameOfLifeDemo extends P5DemoBase {
     controlPanel.appendChild(sliderRow);
     
     // Create info displays
-    this.runningStatus = createInfoDisplay('Running: No', this.getStylePrefix());
-    this.populationInfo = createInfoDisplay('Population: 0.00%', this.getStylePrefix());
-    this.rateChangeInfo = createInfoDisplay('Rate Change: 0.00', this.getStylePrefix());
-    this.generationInfo = createInfoDisplay('Generation: 0', this.getStylePrefix());
+    this.runningStatus = createInfoDisplay('Running', 'No', this.getStylePrefix());
+    this.populationInfo = createInfoDisplay('Population', '0.00%', this.getStylePrefix());
+    this.rateChangeInfo = createInfoDisplay('Rate Change', '0.00', this.getStylePrefix());
+    this.generationInfo = createInfoDisplay('Generation', '0', this.getStylePrefix());
     
-    // Create info row
+    // Create info row with wrapping enabled
     const infoRow = createControlRow(
       [
         this.runningStatus.element,
@@ -213,6 +213,7 @@ class GameOfLifeDemo extends P5DemoBase {
       { gap: '20px' }
     );
     infoRow.classList.add('mt-lg');
+    infoRow.setAttribute('data-wrap', 'true');
     controlPanel.appendChild(infoRow);
   }
 
@@ -236,7 +237,7 @@ class GameOfLifeDemo extends P5DemoBase {
     this.state.populationHistory = [];
     this.state.generations = 0;
     this.updatePopulationHistory();
-    this.generationInfo.update(`Generation: ${this.state.generations}`);
+    this.generationInfo.update(`${this.state.generations}`);
   }
 
   private updatePopulationHistory(): void {
@@ -305,7 +306,7 @@ class GameOfLifeDemo extends P5DemoBase {
     this.state.grid = next;
     this.updatePopulationHistory();
     this.state.generations++;
-    this.generationInfo.update(`Generation: ${this.state.generations}`);
+    this.generationInfo.update(`${this.state.generations}`);
   }
 
   protected onColorSchemeChange(_isDark: boolean): void {

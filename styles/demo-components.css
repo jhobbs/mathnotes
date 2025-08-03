@@ -185,10 +185,40 @@
   
   .demo-control-group {
     padding: var(--space-sm);
+    margin-bottom: var(--space-sm);
   }
   
   .demo-label {
     font-size: var(--font-size-xs);
+  }
+  
+  /* Reduce vertical spacing on mobile */
+  .demo-instructions {
+    margin-top: var(--space-md);
+    padding: var(--space-sm);
+  }
+  
+  .demo-controls {
+    margin-top: var(--space-md);
+    padding: var(--space-sm);
+  }
+  
+  .demo-info {
+    margin-top: var(--space-md);
+  }
+  
+  /* Override utility classes on mobile */
+  .mt-lg {
+    margin-top: var(--space-md);
+  }
+  
+  .mt-sm {
+    margin-top: var(--space-xs);
+  }
+  
+  /* Reduce slider container spacing */
+  .demo-slider-container {
+    margin-bottom: var(--space-xs);
   }
 }
 
