@@ -51,6 +51,8 @@ Examples:
   %(prog)s -d pendulum --check-dark-mode  # Compare light vs dark mode visibility
   %(prog)s -d pendulum --describe --model gpt-4.1  # Use GPT-4.1 instead of default
   %(prog)s -d game-of-life --check-scaling --model gpt-4.1-mini  # Explicitly use GPT-4.1-mini
+  %(prog)s -d electric-field --show-probe  # Show [probe] console messages from demo
+  %(prog)s -d game-of-life --show-probe --ask 'check $CANVAS_PATH'  # Combine probe output with AI analysis
             """
         )
         
@@ -84,6 +86,8 @@ Examples:
         parser.add_argument('--model', choices=['gpt-4.1-mini', 'gpt-4.1'],
                           default='gpt-4.1-mini',
                           help='OpenAI model to use for analysis (default: gpt-4.1-mini)')
+        parser.add_argument('--show-probe', action='store_true',
+                          help='Show [probe] console messages from demos')
         
         return parser.parse_args()
     
@@ -138,6 +142,10 @@ Examples:
             if viewport_to_use in ['desktop', 'mobile']:
                 self.viewport_for_analysis = viewport_to_use
         
+        # Add show-probe flag if requested
+        if args.show_probe:
+            cmd.extend(['--show-probe', 'true'])
+        
         return cmd
     
     def run_crawler(self, cmd: List[str]) -> Tuple[int, str]:
@@ -148,9 +156,15 @@ Examples:
             print()
         
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True)
-            output = result.stdout + result.stderr
-            return result.returncode, output
+            # If show_probe is enabled, we need to stream output in real-time
+            if '--show-probe' in cmd and 'true' in cmd:
+                # Run without capturing output to allow real-time display
+                result = subprocess.run(cmd, text=True)
+                return result.returncode, ''
+            else:
+                result = subprocess.run(cmd, capture_output=True, text=True)
+                output = result.stdout + result.stderr
+                return result.returncode, output
         except subprocess.CalledProcessError as e:
             return e.returncode, str(e)
     
@@ -366,7 +380,34 @@ Examples:
         # Determine if we need to capture output for analysis
         need_analysis = args.describe or args.ask or args.check_standards or args.check_scaling or args.check_dark_mode
         
-        if need_analysis:
+        # If show_probe is enabled and we need analysis, we need a different approach
+        if args.show_probe and need_analysis:
+            # First run to capture paths (without show_probe)
+            docker_cmd_no_probe = [cmd for cmd in docker_cmd if cmd != '--show-probe' and cmd != 'true']
+            returncode, output = self.run_crawler(docker_cmd_no_probe)
+            
+            if returncode != 0:
+                print(output, file=sys.stderr)
+                return returncode
+            
+            # Extract screenshot paths from the first run
+            paths = self.extract_screenshot_paths(output, args.check_scaling, args.check_dark_mode)
+            
+            # Now run again with show_probe enabled for real-time output
+            print("Running demo crawler with probe output...")
+            returncode, _ = self.run_crawler(docker_cmd)
+            
+            if returncode != 0:
+                return returncode
+            
+            # Run AI analysis
+            ai_returncode = self.run_ai_analysis(paths, args)
+            
+            if ai_returncode != 0:
+                print(f"Error: AI command failed with exit code {ai_returncode}", file=sys.stderr)
+                return ai_returncode
+                
+        elif need_analysis:
             # Capture output to parse screenshot paths
             returncode, output = self.run_crawler(docker_cmd)
             
@@ -414,7 +455,11 @@ Examples:
                 
         else:
             # Just run the crawler normally
-            returncode = subprocess.call(docker_cmd)
+            if args.show_probe:
+                # Run without capturing output to allow real-time display
+                returncode = subprocess.call(docker_cmd)
+            else:
+                returncode = subprocess.call(docker_cmd)
             return returncode
         
         return 0
