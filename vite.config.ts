@@ -77,18 +77,13 @@ export default defineConfig({
         styles: resolve(__dirname, 'styles/main.css'),
       },
       output: {
-        entryFileNames: '[name].js',
+        entryFileNames: '[name]-[hash].js',
         chunkFileNames: '[name]-[hash].js',
-        assetFileNames: (assetInfo) => {
-          // Keep CSS files with a simple name for easier reference
-          if (assetInfo.name?.endsWith('.css')) {
-            return 'main.css';
-          }
-          return '[name]-[hash].[ext]';
-        }
+        assetFileNames: '[name]-[hash].[ext]'
       }
     },
-    sourcemap: true
+    sourcemap: true,
+    manifest: true
   },
   resolve: {
     alias: {

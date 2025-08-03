@@ -121,10 +121,6 @@ def apply_static_file_caching(response):
                     # Hashed assets and fonts can be cached forever
                     max_age = 31536000  # 1 year
                     response.headers["Cache-Control"] = f"public, max-age={max_age}, immutable"
-                elif path.endswith(("main.js", "mathjax.js")):
-                    # Entry points should have shorter cache
-                    max_age = 3600  # 1 hour
-                    response.headers["Cache-Control"] = f"public, max-age={max_age}"
                 else:
                     # Other dist files get moderate caching
                     max_age = 86400  # 1 day

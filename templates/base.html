@@ -12,7 +12,7 @@
     
     <!-- Preload main CSS to prevent FOUC -->
     {% if not is_development %}
-    <link rel="preload" href="{{ url_for('static', filename='dist/main.css') }}" as="style">
+    <link rel="preload" href="{{ css_url }}" as="style">
     {% endif %}
     
     <!-- Critical inline styles to prevent FOUC -->
@@ -41,7 +41,7 @@
     {% if is_development %}
     <script type="module" src="{{ vite_url }}/static/dist/demos-framework/src/mathjax-entry.ts"></script>
     {% else %}
-    <script type="module" src="{{ url_for('static', filename='dist/mathjax.js') }}"></script>
+    <script type="module" src="{{ mathjax_js_url }}"></script>
     {% endif %}
     
     <!-- Main stylesheet -->
@@ -54,7 +54,7 @@
         });
     </script>
     {% else %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='dist/main.css') }}" onload="document.body.classList.add('loaded')">
+    <link rel="stylesheet" href="{{ css_url }}" onload="document.body.classList.add('loaded')">
     <!-- Fallback for CSS load -->
     <script nonce="{{ csp_nonce }}">
         // Add loaded class when DOM is ready (fallback)
@@ -199,7 +199,7 @@
     <script type="module" src="{{ vite_url }}/static/dist/demos-framework/src/main.ts"></script>
     {% else %}
     <!-- Production build -->
-    <script type="module" src="{{ url_for('static', filename='dist/main.js') }}"></script>
+    <script type="module" src="{{ main_js_url }}"></script>
     {% endif %}
 </body>
 </html>
