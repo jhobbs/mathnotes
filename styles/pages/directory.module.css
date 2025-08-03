@@ -1,0 +1,30 @@
+/* Directory page specific styles */
+
+/* Navigation lists */
+.section-list {
+  list-style: none;
+  padding: 0;
+  
+  & li {
+    margin-bottom: var(--space-sm);
+  }
+  
+  & a {
+    color: var(--color-link);
+    text-decoration: none;
+    font-size: var(--font-size-lg);
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+  
+  & li {
+    margin-bottom: var(--space-sm);
+  }
+}
