@@ -104,7 +104,6 @@ def create_app(config=None):
         app.logger.setLevel(gunicorn_logger.level)
     else:
         # Development: suppress werkzeug logs for /dev-status
-        import logging
         from werkzeug.serving import WSGIRequestHandler
         
         # Store the original log_request method
