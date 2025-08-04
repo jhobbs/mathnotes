@@ -272,22 +272,26 @@ class BlockReferenceProcessor:
         Returns:
             Tuple of (block, url) or (None, None) if not found
         """
+        # Normalize label for case-insensitive lookup
+        from .structured_math import MathBlock
+        normalized_ref_label = MathBlock.normalize_label_from_title(ref_label)
+        
         # Check local blocks first
         for marker_id, block in self.block_markers.items():
-            if block.label == ref_label:
+            if block.label and MathBlock.normalize_label_from_title(block.label) == normalized_ref_label:
                 # If type is specified, verify it matches
                 if ref_type is None or block.block_type.value == ref_type:
-                    return block, f"#{ref_label}"  # Local reference
+                    return block, f"#{block.label}"  # Local reference with actual label
 
         # If not found locally and we have a global index, check there
         if self.block_index:
-            block_ref = self.block_index.get_reference(ref_label)
+            block_ref = self.block_index.get_reference(normalized_ref_label)
             if block_ref:
                 # Verify type if specified
                 if ref_type is None or block_ref.block.block_type.value == ref_type:
                     # Check if it's in the same file
                     if block_ref.file_path == self.current_file:
-                        target_url = f"#{ref_label}"
+                        target_url = f"#{block_ref.block.label}"
                     else:
                         target_url = block_ref.full_url
                     return block_ref.block, target_url

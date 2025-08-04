@@ -111,12 +111,16 @@ class BlockIndex:
                             canonical_url=f"/mathnotes/{canonical_url}",
                             page_title=page_title
                         )
-                        if block.label in self.index:
-                            existing = self.index[block.label]
+                        # Normalize label for storage (case-insensitive lookup)
+                        from .structured_math import MathBlock
+                        normalized_label = MathBlock.normalize_label_from_title(block.label)
+                        
+                        if normalized_label in self.index:
+                            existing = self.index[normalized_label]
                             print(
                                 f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
                             )
-                        self.index[block.label] = ref
+                        self.index[normalized_label] = ref
 
         except Exception as e:
             print(f"Error indexing {file_path}: {e}")
@@ -186,7 +190,10 @@ class BlockIndex:
 
     def get_reference(self, label: str) -> Optional[BlockReference]:
         """Get a block reference by its label."""
-        return self.index.get(label)
+        # Normalize label for lookup
+        from .structured_math import MathBlock
+        normalized_label = MathBlock.normalize_label_from_title(label)
+        return self.index.get(normalized_label)
     
     def get_rendered_html(self, file_path: str, marker_id: str) -> Optional[str]:
         """Get pre-rendered HTML for a block by file path and marker ID."""
