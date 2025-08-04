@@ -1,0 +1,112 @@
+/* Definition index page specific styles */
+
+.definition-index-page .definition-index-container {
+  max-width: var(--width-content-base);
+  margin: 0 auto;
+  padding: var(--gap-base);
+}
+
+.definition-index-page h2 {
+  margin-bottom: var(--gap-base);
+}
+
+.definition-index-page .index-description {
+  color: var(--text-secondary);
+  margin-bottom: var(--gap-xl);
+  font-size: var(--font-size-base);
+}
+
+.definition-index-page .definition-count {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--gap-base);
+  font-style: italic;
+}
+
+.definition-index-page .definitions-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-base);
+}
+
+.definition-index-page .definition-entry {
+  background: var(--card-background);
+  border: var(--border-width-thin) solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--gap-base);
+  transition: all 0.2s ease;
+}
+
+.definition-index-page .definition-entry:hover {
+  border-color: var(--color-link);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.definition-index-page .definition-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  text-decoration: none;
+  color: inherit;
+  gap: var(--gap-base);
+  flex-wrap: wrap;
+}
+
+.definition-index-page .definition-title {
+  font-weight: 600;
+  color: var(--color-link);
+  font-size: var(--font-size-base);
+}
+
+.definition-index-page .definition-location {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+.definition-index-page .definition-preview {
+  margin-top: var(--gap-sm);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.definition-index-page .no-definitions {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: var(--gap-2xl);
+  font-style: italic;
+}
+
+/* Dark mode variables */
+@media (prefers-color-scheme: dark) {
+  .definition-index-page {
+    --card-background: var(--color-card-bg);
+    --border-color: var(--color-border);
+    --text-secondary: var(--color-text-secondary);
+  }
+  
+  .definition-index-page .definition-entry:hover {
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Mobile responsive */
+@media (--phone) {
+  .definition-index-page .definition-link {
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+  
+  .definition-index-page .definition-location {
+    font-size: var(--font-size-xs);
+  }
+  
+  .definition-index-page .definition-entry {
+    padding: var(--gap-sm);
+  }
+}

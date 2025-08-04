@@ -10,7 +10,7 @@ redirect_from:
 
 A **ring** is a set together with two binary operations $+$ and $\cdot$, which we will call addition and multiplication, such that the following axioms are satisfied:
 
-1. $\langle R, + \rangle$ is an abelian group.
+1. $\langle R, + \rangle$ is an @Abelian @group.
 
 2. Multiplication is associtative.
 

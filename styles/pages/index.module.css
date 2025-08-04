@@ -136,6 +136,43 @@
   margin-bottom: var(--space-lg);
 }
 
+/* Meta pages section */
+.meta-pages {
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+.meta-pages-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.meta-pages-list li {
+  margin-bottom: var(--space-sm);
+  padding-left: var(--space-md);
+  position: relative;
+}
+
+.meta-pages-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--color-text-secondary);
+}
+
+.meta-link {
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--color-link);
+  transition: color 0.2s ease;
+}
+
+.meta-link:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
+
 /* Index page subdirectory indentation */
 .subdirectory[data-level="1"] {
   margin-left: calc(1 * 1.5rem);

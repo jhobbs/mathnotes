@@ -90,7 +90,7 @@ def create_app(config=None):
     app.context_processor(inject_assets)
 
     # Register routes
-    register_routes(app, url_mapper, markdown_processor)
+    register_routes(app, url_mapper, markdown_processor, block_index)
 
     # Configure logging if in production (gunicorn will handle this)
     # In development, Flask's default logger will work

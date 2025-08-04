@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Definition Index - {{ config.SITE_TITLE }}{% endblock %}
+
+{% block header_title %}lacunary - Definition Index{% endblock %}
+
+{% block body_class %}definition-index-page{% endblock %}
+
+{% block description %}Index of all mathematical definitions across the site{% endblock %}
+
+{% block content %}
+<div class="definition-index-container">
+    <h2>Definition Index</h2>
+    <p class="index-description">
+        This page lists all mathematical definitions found across the site. 
+        Click on any definition to jump to its location in the notes.
+    </p>
+    
+    {% if definitions %}
+        <div class="definition-count">
+            Found {{ definitions|length }} definition{{ 's' if definitions|length != 1 else '' }}
+        </div>
+        
+        <div class="definitions-list">
+            {% for ref in definitions %}
+                <div class="definition-entry">
+                    <a href="{{ ref.full_url }}" class="definition-link">
+                        <span class="definition-title">
+                            {% if ref.block.title %}
+                                {{ ref.block.title }}
+                            {% elif ref.block.label %}
+                                {{ ref.block.label|replace('-', ' ')|title }}
+                            {% else %}
+                                Untitled Definition
+                            {% endif %}
+                        </span>
+                        <span class="definition-location">
+                            in {{ ref.canonical_url.split('/')[-1]|replace('-', ' ')|title }}
+                        </span>
+                    </a>
+                    {% if ref.block.processed_content %}
+                        <div class="definition-preview">
+                            {{ ref.block.processed_content|safe }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-definitions">No definitions found in the index.</p>
+    {% endif %}
+</div>
+{% endblock %}
