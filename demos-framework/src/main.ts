@@ -5,6 +5,9 @@ console.log('[Demo Framework] main.ts loaded');
 
 import type { DemoConfig, DemoInstance } from './types';
 
+// Import dev auto-reload for development mode
+import './dev-auto-reload';
+
 // Demo metadata type
 interface DemoMetadata {
   title: string;
