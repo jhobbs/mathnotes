@@ -328,13 +328,13 @@ class BlockReferenceProcessor:
 
             embed_marker = f"EMBED_MARKER_{uuid.uuid4().hex[:8]}_{ref_label}"
 
-            # Store the block content for later processing
+            # Store the block with pre-processed content
             self.embedded_blocks[embed_marker] = {
-                "content": target_block.content,
                 "block_type": target_block.block_type.value,
                 "title": f"{block_type_display}{title_part}",
                 "source_info": source_info,
                 "ref_label": ref_label,
+                "processed_content": target_block.processed_content
             }
 
             # Return the marker - it will be replaced after markdown processing
@@ -354,19 +354,8 @@ class BlockReferenceProcessor:
             HTML with embedded blocks properly rendered
         """
         for marker, embed_info in self.embedded_blocks.items():
-            # Process the embedded content through markdown
-            content = embed_info["content"]
-
-            # Protect math before markdown processing
-            math_protector = MathProtector(prefix=f"EMBEDMATH{marker[-8:]}")
-            content = math_protector.protect_math(content)
-
-            # Convert markdown to HTML
-            content_html = md_processor.convert(content)
-            md_processor.reset()
-
-            # Restore math
-            content_html = math_protector.restore_math(content_html)
+            # Use pre-processed content
+            content_html = embed_info["processed_content"]
 
             # Build the embedded block HTML
             embedded_html = f"""<div class="embedded-block embedded-{embed_info['block_type']}" data-embed-label="{embed_info['ref_label']}">
