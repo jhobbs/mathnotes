@@ -448,10 +448,13 @@ class StructuredMathParser:
         # Process the block's content through markdown
         block_content = block.content
 
-        # Process cross-references in child blocks if available
-        # md_processor here is the markdown instance, but we need access to the MarkdownProcessor
-        # For now, let's add a simple reference processor directly
-        block_content = self._process_child_block_references(block_content, block_markers)
+        # Process cross-references using the unified processor (first pass)
+        block_ref_processor = BlockReferenceProcessor(
+            block_markers=block_markers,
+            current_file=self.current_file,
+            block_index=self.block_index,
+        )
+        block_content = block_ref_processor.process_references(block_content)
 
         # Protect math before markdown processing
         child_math_protector = MathProtector(prefix="CHILDMATH")
@@ -463,6 +466,10 @@ class StructuredMathParser:
 
         # Restore math
         block_html = child_math_protector.restore_math(block_html)
+        
+        # Process embedded blocks after markdown conversion (second pass)
+        if block_ref_processor.embedded_blocks:
+            block_html = block_ref_processor.process_embedded_blocks(block_html, md_processor)
 
         # Render the block with nested support
         # For child blocks on the same page, use #label as URL
@@ -480,26 +487,6 @@ class StructuredMathParser:
                 return block
         return None
 
-    def _process_child_block_references(
-        self, content: str, block_markers: Dict[str, MathBlock]
-    ) -> str:
-        """Process cross-references to structured blocks within child blocks using the unified processor.
-
-        Supports both local and cross-file references using the global block index.
-
-        Supported formats:
-        - @label - Auto-generated link text
-        - @type:label - Auto-generated link text with type prefix
-        - @{custom text|label} - Custom link text
-        - @{custom text|type:label} - Custom link text with type validation
-        """
-        # Use the unified BlockReferenceProcessor
-        processor = BlockReferenceProcessor(
-            block_markers=block_markers,
-            current_file=self.current_file,
-            block_index=self.block_index,
-        )
-        return processor.process_references(content)
 
 
 def process_structured_math_content(
@@ -525,30 +512,8 @@ def process_structured_math_content(
     # Child blocks will be processed recursively by their parents
     for marker_id, block in block_markers.items():
         if block.parent is None:  # Only process top-level blocks
-            # Protect math in block content before markdown processing
-            block_content = block.content
-
-            # Process cross-references in block content
-            block_content = parser._process_child_block_references(block_content, block_markers)
-
-            # Protect math before markdown processing
-            block_math_protector = MathProtector(prefix="BLOCKMATH")
-            block_content = block_math_protector.protect_math(block_content)
-
-            # Process the block's content through markdown
-            block_html = md_processor.convert(block_content)
-            # Reset the markdown processor for the next conversion
-            md_processor.reset()
-
-            # Restore protected math
-            block_html = block_math_protector.restore_math(block_html)
-
-            # Render the complete block with nested blocks support
-            # For blocks on the same page, use #label as URL
-            url = f"#{block.label}" if block.label else None
-            rendered_block = parser.render_block_html(
-                block, block_html, block_markers, md_processor, url
-            )
+            # Use pre-rendered HTML from the block index
+            rendered_block = block.rendered_html
 
             # Replace the marker with the rendered block
             # Look for the marker in a paragraph tag or standalone
