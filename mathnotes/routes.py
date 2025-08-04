@@ -17,6 +17,7 @@ from flask import (
 )
 from .config import CONTENT_DIRS, BASE_URL, STATIC_FILE_CACHE_CONFIG, get_base_url
 from .file_utils import get_directory_contents, get_all_content_for_section
+from .tooltip_collector import TooltipCollectingBlockReferenceProcessor, collect_tooltip_data_from_html
 
 
 def apply_content_file_caching(response, filepath):
@@ -244,6 +245,28 @@ def register_routes(app, url_mapper, markdown_processor, block_index=None):
         
         # Sort definitions by title (or label if no title)
         definitions.sort(key=lambda ref: (ref.block.title or ref.block.label or "").lower())
+        
+        # Collect tooltip data from all embedded definitions
+        tooltip_data = {}
+        referenced_labels = set()
+        
+        # Scan all definition HTML for references
+        for definition_ref in definitions:
+            if definition_ref.block.rendered_html:
+                labels = collect_tooltip_data_from_html(definition_ref.block.rendered_html, tooltip_data)
+                referenced_labels.update(labels)
+        
+        # Get tooltip data for all referenced labels
+        if referenced_labels:
+            # Create a processor to get tooltip data
+            processor = TooltipCollectingBlockReferenceProcessor(
+                block_markers={}, current_file="", block_index=block_index
+            )
+            processor.referenced_labels = referenced_labels
+            tooltip_data = processor.get_tooltip_data()
+            
+            # Store in g for context processor
+            g.tooltip_data = tooltip_data
         
         # Content is already processed in the block index
         return render_template("definition_index.html", definitions=definitions)

@@ -738,6 +738,11 @@ footer {
   border-radius: 0;
 }
 
+/* Hide the math block header in tooltips to avoid duplication */
+.math-tooltip-content .math-block-header {
+  display: none;
+}
+
 .math-tooltip-header {
   font-weight: 600;
   margin-bottom: var(--space-sm);
