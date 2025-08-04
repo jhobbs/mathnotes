@@ -1,23 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lacunary.org</title>
-    <meta name="description" content="Personal website featuring mathematics notes, interactive demonstrations, and educational resources covering algebra, calculus, complex analysis, and more.">
-    {% if css_url %}
-    <link rel="stylesheet" href="{{ css_url }}">
-    {% else %}
-    <!-- CSS loaded via Vite in development -->
-    {% endif %}
-</head>
-<body>
-    <div class="container">
-        <h1>lacunary.org</h1>
-        <a href="/mathnotes/">Mathnotes</a>
-    </div>
-    <footer>
-        &copy; {{ current_year }} Jason Hobbs. All rights reserved. | Version: <a href="https://github.com/jhobbs/mathnotes/commit/{{ app_version }}" target="_blank" rel="noopener">{{ app_version }}</a>
-    </footer>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}lacunary.org{% endblock %}
+{% block description %}Personal website featuring mathematics notes, interactive demonstrations, and educational resources covering algebra, calculus, complex analysis, and more.{% endblock %}
+
+{% block header_link %}/{% endblock %}
+{% block header_title %}lacunary{% endblock %}
+
+{% block content %}
+<div class="container homepage-content">
+    <a href="/mathnotes/">Mathnotes</a>
+</div>
+{% endblock %}

@@ -75,7 +75,7 @@
 <body class="{% block body_class %}{% endblock %}">
     <header>
         <div class="header-content">
-            <h1><a href="{{ url_for('index') }}">{{ config.SITE_TITLE }}</a></h1>
+            <h1><a href="{% block header_link %}{{ url_for('index') }}{% endblock %}">{% block header_title %}lacunary - {{ config.SITE_TITLE }}{% endblock %}</a></h1>
             {% block header_extra %}{% endblock %}
         </div>
     </header>
