@@ -275,3 +275,10 @@ def register_routes(app, url_mapper, markdown_processor, block_index=None):
     def page_not_found(e):
         """Handle 404 errors."""
         return render_template("404.html"), 404
+    
+    # Development auto-reload endpoint
+    if app.debug:
+        @app.route("/dev-status")
+        def dev_status():
+            """Return server startup time for auto-reload detection."""
+            return {"startTime": app.config.get('SERVER_START_TIME', 0)}

@@ -46,6 +46,7 @@ def create_app(config=None):
         Configured Flask application instance
     """
     import os
+    import time
 
     # Get the parent directory of the package for template/static file paths
     package_dir = os.path.dirname(os.path.abspath(__file__))
@@ -56,6 +57,9 @@ def create_app(config=None):
         template_folder=os.path.join(parent_dir, "templates"),
         static_folder=os.path.join(parent_dir, "static"),
     )
+    
+    # Store server startup time for development auto-reload
+    app.config['SERVER_START_TIME'] = time.time()
 
     # Apply any custom configuration
     if config:
@@ -92,12 +96,28 @@ def create_app(config=None):
     # Register routes
     register_routes(app, url_mapper, markdown_processor, block_index)
 
-    # Configure logging if in production (gunicorn will handle this)
-    # In development, Flask's default logger will work
+    # Configure logging
     if not app.debug:
-        # Configure app logger to use the same format as gunicorn
+        # Production: use gunicorn logger
         gunicorn_logger = logging.getLogger('gunicorn.error')
         app.logger.handlers = gunicorn_logger.handlers
         app.logger.setLevel(gunicorn_logger.level)
+    else:
+        # Development: suppress werkzeug logs for /dev-status
+        import logging
+        from werkzeug.serving import WSGIRequestHandler
+        
+        # Store the original log_request method
+        original_log_request = WSGIRequestHandler.log_request
+        
+        def log_request(self, code='-', size='-'):
+            # Skip logging for /dev-status endpoint
+            if self.path == '/dev-status':
+                return
+            # Call the original method for all other requests
+            original_log_request(self, code, size)
+        
+        # Replace the method
+        WSGIRequestHandler.log_request = log_request
 
     return app
