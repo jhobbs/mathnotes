@@ -51,6 +51,14 @@
     {% endfor %}
 </div>
 
+<h3>Tools & Resources</h3>
+<div class="meta-pages">
+    <ul class="meta-pages-list">
+        <li><a href="{{ url_for('definition_index') }}" class="meta-link">Definition Index</a> - Browse all mathematical definitions</li>
+        <li><a href="{{ url_for('demo_viewer') }}" class="meta-link">Demo Viewer</a> - Interactive mathematical demonstrations</li>
+    </ul>
+</div>
+
 <script nonce="{{ csp_nonce }}">
 function toggleSection(header) {
     const content = header.nextElementSibling;
