@@ -23,26 +23,9 @@
         
         <div class="definitions-list">
             {% for ref in definitions %}
-                <div class="definition-entry">
-                    <a href="{{ ref.full_url }}" class="definition-link">
-                        <span class="definition-title">
-                            {% if ref.block.title %}
-                                {{ ref.block.title }}
-                            {% elif ref.block.label %}
-                                {{ ref.block.label|replace('-', ' ')|title }}
-                            {% else %}
-                                Untitled Definition
-                            {% endif %}
-                        </span>
-                        <span class="definition-location">
-                            in {{ ref.canonical_url.split('/')[-1]|replace('-', ' ')|title }}
-                        </span>
-                    </a>
-                    {% if ref.block.processed_content %}
-                        <div class="definition-preview">
-                            {{ ref.block.processed_content|safe }}
-                        </div>
-                    {% endif %}
+                <div class="embedded-block" data-embed-label="{{ ref.block.label }}">
+                    {{ ref.block.rendered_html|safe }}
+                    <div class="embedded-source">from <a href="{{ ref.full_url }}">{{ ref.page_title }}</a></div>
                 </div>
             {% endfor %}
         </div>

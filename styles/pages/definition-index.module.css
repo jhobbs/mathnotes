@@ -29,50 +29,14 @@
   gap: var(--gap-base);
 }
 
-.definition-index-page .definition-entry {
-  background: var(--card-background);
-  border: var(--border-width-thin) solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: var(--gap-base);
-  transition: all 0.2s ease;
+/* Hide the "Definition:" type prefix on the index page */
+.definition-index-page .math-definition .math-block-type {
+  display: none;
 }
 
-.definition-index-page .definition-entry:hover {
-  border-color: var(--color-link);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.definition-index-page .definition-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  text-decoration: none;
-  color: inherit;
-  gap: var(--gap-base);
-  flex-wrap: wrap;
-}
-
-.definition-index-page .definition-title {
-  font-weight: 600;
-  color: var(--color-link);
-  font-size: var(--font-size-base);
-}
-
-.definition-index-page .definition-location {
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-  white-space: nowrap;
-}
-
-.definition-index-page .definition-preview {
-  margin-top: var(--gap-sm);
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+/* Remove the left margin from title since we're hiding the type prefix */
+.definition-index-page .math-definition .math-block-title {
+  margin-left: 0;
 }
 
 .definition-index-page .no-definitions {
