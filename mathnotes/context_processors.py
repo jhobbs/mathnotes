@@ -63,9 +63,12 @@ def inject_env():
         # If accessed via localhost or 127.0.0.1, keep using localhost
         if request_host in ["localhost", "127.0.0.1"]:
             vite_url = "http://localhost:5173"
-        else:
-            # For Docker service names (web-dev, etc), use vite service
+        elif request_host in ["web-dev", "vite"]:
+            # For Docker service names, use vite service
             vite_url = "http://vite:5173"
+        else:
+            # For external IPs (like accessing from phone), use the same host
+            vite_url = f"http://{request_host}:5173"
     
     return {
         "is_development": is_development,
