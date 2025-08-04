@@ -196,45 +196,28 @@ article {
   color: var(--color-link);
   text-decoration: none;
   font-weight: 500;
-  padding: var(--space-3xs) var(--space-xs);
-  border-radius: var(--radius-sm);
   transition: background-color 0.2s ease;
   
   &:hover {
-    background-color: var(--color-primary-hover);
     text-decoration: underline;
   }
   
   &:active {
-    background-color: var(--color-primary-active);
+    text-decoration: underline;
   }
 }
 
 /* Error styling for broken references */
 .block-reference-error {
   color: var(--color-error);
-  background-color: color-mix(in oklch, var(--color-error), transparent 90%);
-  padding: var(--space-3xs) var(--space-xs);
-  border-radius: var(--radius-sm);
   font-family: monospace;
   font-size: 0.9em;
-  border: var(--border-width-thin) dashed var(--color-error-border);
 }
 
 /* Dark mode reference styling */
 @media (prefers-color-scheme: dark) {
-  .block-reference:hover {
-    background-color: var(--color-primary-hover);
-  }
-  
-  .block-reference:active {
-    background-color: var(--color-primary-active);
-  }
-  
   .block-reference-error {
     color: var(--color-error);
-    background-color: color-mix(in oklch, var(--color-error), transparent 90%);
-    border-color: var(--color-error-border);
   }
 }
 
