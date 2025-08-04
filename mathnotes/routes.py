@@ -245,32 +245,7 @@ def register_routes(app, url_mapper, markdown_processor, block_index=None):
         # Sort definitions by title (or label if no title)
         definitions.sort(key=lambda ref: (ref.block.title or ref.block.label or "").lower())
         
-        # Process markdown content for each definition (similar to tooltip processing)
-        from markdown import Markdown
-        from .math_utils import MathProtector
-        
-        md = Markdown(extensions=['extra'])
-        
-        for ref in definitions:
-            if ref.block.content:
-                # Protect math expressions
-                math_protector = MathProtector()
-                protected_content = math_protector.protect_math(ref.block.content)
-                
-                # Convert to HTML
-                html_content = md.convert(protected_content)
-                md.reset()
-                
-                # Restore math expressions
-                html_content = math_protector.restore_math(html_content)
-                
-                # Fix escaped asterisks and tildes (same as in markdown_processor.py line 127-128)
-                html_content = html_content.replace(r"\*", "*")
-                html_content = html_content.replace(r"\~", "~")
-                
-                # Store processed content
-                ref.block.processed_content = html_content
-        
+        # Content is already processed in the block index
         return render_template("definition_index.html", definitions=definitions)
 
     @app.errorhandler(404)

@@ -9,7 +9,9 @@ import os
 import frontmatter
 from typing import Dict, Optional, List, Tuple
 from dataclasses import dataclass
+from markdown import Markdown
 from .structured_math import StructuredMathParser, MathBlock
+from .math_utils import MathProtector
 
 
 @dataclass
@@ -33,6 +35,8 @@ class BlockIndex:
         self.url_mapper = url_mapper
         self.index: Dict[str, BlockReference] = {}
         self._is_built = False
+        # Create markdown processor for content rendering
+        self.md = Markdown(extensions=['extra'])
 
     def build_index(self):
         """Build the global index by scanning all markdown files."""
@@ -88,10 +92,60 @@ class BlockIndex:
         except Exception as e:
             print(f"Error indexing {file_path}: {e}")
 
+    def _process_block_content(self, block: MathBlock):
+        """Process markdown content for a block and store it as rendered HTML."""
+        if block.content:
+            # First, create version without nested blocks (for tooltips)
+            content_without_nested = self._extract_content_without_nested(block.content)
+            
+            # Process both versions
+            for content, attr_name in [
+                (block.content, 'processed_content'),
+                (content_without_nested, 'processed_content_no_nested')
+            ]:
+                # Protect math expressions
+                math_protector = MathProtector()
+                protected_content = math_protector.protect_math(content)
+                
+                # Convert to HTML
+                html_content = self.md.convert(protected_content)
+                self.md.reset()
+                
+                # Restore math expressions
+                html_content = math_protector.restore_math(html_content)
+                
+                # Fix escaped asterisks and tildes (same as in markdown_processor.py)
+                html_content = html_content.replace(r"\*", "*")
+                html_content = html_content.replace(r"\~", "~")
+                
+                # Store processed content on the block
+                setattr(block, attr_name, html_content)
+    
+    def _extract_content_without_nested(self, content: str) -> str:
+        """Extract block content without nested blocks like proofs."""
+        import re
+        
+        # Remove any nested block markers
+        # Pattern: :::type ... :::
+        nested_pattern = r':::(?:proof|example|solution|exercise|remark|note|intuition).*?:::'
+        content = re.sub(nested_pattern, '', content, flags=re.DOTALL)
+        
+        # Remove any block markers that might be present
+        content = re.sub(r'[A-Z]+BLOCK\d+MARKER', '', content)
+        
+        # Clean up extra whitespace
+        content = re.sub(r'\n\s*\n\s*\n', '\n\n', content)
+        content = content.strip()
+        
+        return content
+
     def _add_to_index(
         self, block: MathBlock, file_path: str, canonical_url: str, parent_info: str = "top-level"
     ):
         """Add a block to the index, including nested blocks."""
+        # Process the block's markdown content once
+        self._process_block_content(block)
+        
         if block.label:
             ref = BlockReference(
                 block=block, file_path=file_path, canonical_url=f"/mathnotes/{canonical_url}"

@@ -61,11 +61,8 @@ class TooltipCollectingBlockReferenceProcessor(BlockReferenceProcessor):
             target_block, target_url = self._find_target_block(label, None)
             
             if target_block:
-                # Extract main content without nested blocks
-                content = self._extract_content_without_nested(target_block)
-                
-                # Process markdown to HTML
-                html_content = self._process_markdown_content(content)
+                # Use pre-processed content without nested blocks
+                html_content = target_block.processed_content_no_nested
                 
                 tooltip_data[label] = {
                     'type': target_block.block_type.value,
@@ -76,43 +73,6 @@ class TooltipCollectingBlockReferenceProcessor(BlockReferenceProcessor):
         
         return tooltip_data
     
-    def _extract_content_without_nested(self, block: MathBlock) -> str:
-        """Extract block content without nested blocks like proofs."""
-        content = block.content
-        
-        # Remove any nested block markers
-        # Pattern: :::type ... :::
-        nested_pattern = r':::(?:proof|example|solution|exercise|remark|note|intuition).*?:::'
-        content = re.sub(nested_pattern, '', content, flags=re.DOTALL)
-        
-        # Remove any block markers that might be present
-        content = re.sub(r'[A-Z]+BLOCK\d+MARKER', '', content)
-        
-        # Clean up extra whitespace
-        content = re.sub(r'\n\s*\n\s*\n', '\n\n', content)
-        content = content.strip()
-        
-        return content
-    
-    def _process_markdown_content(self, content: str) -> str:
-        """Process markdown content to HTML, preserving math expressions."""
-        from markdown import Markdown
-        from .math_utils import MathProtector
-        
-        # Create a simple markdown instance
-        md = Markdown(extensions=['extra'])
-        
-        # Protect math expressions
-        math_protector = MathProtector()
-        protected_content = math_protector.protect_math(content)
-        
-        # Convert to HTML
-        html = md.convert(protected_content)
-        
-        # Restore math expressions
-        html = math_protector.restore_math(html)
-        
-        return html
 
 
 def collect_tooltip_data_from_html(html_content: str, tooltip_data: Dict[str, Dict[str, Any]]) -> Set[str]:
