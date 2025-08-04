@@ -38,6 +38,8 @@ class BlockIndex:
         self._is_built = False
         # Create markdown processor for content rendering
         self.md = Markdown(extensions=['extra'])
+        # Store rendered HTML for all blocks by file path and marker ID
+        self.rendered_blocks: Dict[str, Dict[str, str]] = {}
 
     def build_index(self):
         """Build the global index by scanning all markdown files."""
@@ -45,11 +47,17 @@ class BlockIndex:
             return
 
         content_dir = "content"
+        
+        # Phase 1: Scan and index all blocks
         self._scan_directory(content_dir)
+        
+        # Phase 2: Render all blocks now that the index is complete
+        self._render_all_blocks()
+        
         self._is_built = True
 
         # Log index statistics
-        print(f"Block index built: {len(self.index)} labeled blocks found")
+        print(f"Block index built: {len(self.index)} labeled blocks found, {sum(len(blocks) for blocks in self.rendered_blocks.values())} total blocks rendered")
 
     def _scan_directory(self, directory: str):
         """Recursively scan a directory for markdown files and index their blocks."""
@@ -73,6 +81,7 @@ class BlockIndex:
                 page_title = post.metadata.get('title', None)
 
                 # Parse structured math content
+                # Don't pass block_index yet - it's not complete in phase 1
                 parser = StructuredMathParser()
                 _, block_markers = parser.parse(content)
 
@@ -83,25 +92,77 @@ class BlockIndex:
                     # Fallback to file path without extension
                     canonical_url = file_path_normalized.replace(".md", "")
 
-                # Index only top-level blocks (not nested ones)
-                # The _add_to_index method will recursively handle children
-                top_level_blocks = [
-                    block for block in block_markers.values() if block.parent is None
-                ]
-
-                for block in top_level_blocks:
-                    # This will recursively add the block and all its children
-                    self._add_to_index(block, file_path, canonical_url, block_markers, parser, page_title)
+                # Store the blocks and metadata for phase 2 rendering
+                if not hasattr(self, '_pending_files'):
+                    self._pending_files = []
+                self._pending_files.append({
+                    'file_path': file_path,
+                    'canonical_url': canonical_url,
+                    'page_title': page_title,
+                    'block_markers': block_markers
+                })
+                
+                # Index only labeled blocks for cross-references
+                for block in block_markers.values():
+                    if block.label:
+                        ref = BlockReference(
+                            block=block, 
+                            file_path=file_path, 
+                            canonical_url=f"/mathnotes/{canonical_url}",
+                            page_title=page_title
+                        )
+                        if block.label in self.index:
+                            existing = self.index[block.label]
+                            print(
+                                f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
+                            )
+                        self.index[block.label] = ref
 
         except Exception as e:
             print(f"Error indexing {file_path}: {e}")
 
+    def _render_all_blocks(self):
+        """Phase 2: Render all blocks now that the index is complete."""
+        if not hasattr(self, '_pending_files'):
+            return
+            
+        for file_info in self._pending_files:
+            file_path = file_info['file_path']
+            canonical_url = file_info['canonical_url']
+            block_markers = file_info['block_markers']
+            
+            # Create a new parser with the complete block index for proper cross-references
+            parser = StructuredMathParser(current_file=file_path, block_index=self)
+            
+            # Initialize rendered blocks storage for this file
+            self.rendered_blocks[file_path] = {}
+            
+            # Render all blocks in this file
+            for marker_id, block in block_markers.items():
+                full_url = f"/mathnotes/{canonical_url}#{block.label}" if block.label else f"/mathnotes/{canonical_url}"
+                self._process_block_content(block, block_markers, parser, full_url)
+                # Store the rendered HTML by marker ID
+                self.rendered_blocks[file_path][marker_id] = block.rendered_html
+        
+        # Clean up temporary storage
+        del self._pending_files
+
     def _process_block_content(self, block: MathBlock, block_markers: Dict[str, MathBlock], parser: StructuredMathParser, full_url: str):
         """Process and render a block using the same pipeline as page view."""
         if block.content:
+            # Process cross-references in the block content (first pass)
+            # Use BlockReferenceProcessor to handle @references and @embed directives
+            from .math_utils import BlockReferenceProcessor
+            block_ref_processor = BlockReferenceProcessor(
+                block_markers=block_markers,
+                current_file=parser.current_file,
+                block_index=parser.block_index
+            )
+            content_with_refs = block_ref_processor.process_references(block.content)
+            
             # Protect math expressions
             math_protector = MathProtector()
-            protected_content = math_protector.protect_math(block.content)
+            protected_content = math_protector.protect_math(content_with_refs)
             
             # Convert to HTML
             html_content = self.md.convert(protected_content)
@@ -109,6 +170,10 @@ class BlockIndex:
             
             # Restore math expressions
             html_content = math_protector.restore_math(html_content)
+            
+            # Process embedded blocks after markdown conversion (second pass)
+            if block_ref_processor.embedded_blocks:
+                html_content = block_ref_processor.process_embedded_blocks(html_content, self.md)
             
             # Fix escaped asterisks and tildes (same as in markdown_processor.py)
             html_content = html_content.replace(r"\*", "*")
@@ -118,45 +183,16 @@ class BlockIndex:
             block.rendered_html = parser.render_block_html(block, html_content, block_markers, self.md, full_url)
     
 
-    def _add_to_index(
-        self, block: MathBlock, file_path: str, canonical_url: str, block_markers: Dict[str, MathBlock], 
-        parser: StructuredMathParser, page_title: Optional[str], parent_info: str = "top-level"
-    ):
-        """Add a block to the index, including nested blocks."""
-        # Build the full URL for this block
-        full_canonical_url = f"/mathnotes/{canonical_url}"
-        full_url = f"{full_canonical_url}#{block.label}" if block.label else full_canonical_url
-        
-        # Process the block's content and render full HTML with URL
-        self._process_block_content(block, block_markers, parser, full_url)
-        
-        if block.label:
-            ref = BlockReference(
-                block=block, 
-                file_path=file_path, 
-                canonical_url=full_canonical_url,
-                page_title=page_title
-            )
-
-            # Check for duplicate labels
-            if block.label in self.index:
-                existing = self.index[block.label]
-                print(
-                    f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
-                )
-
-            self.index[block.label] = ref
-
-        # Recursively index child blocks
-        for child in block.children:
-            child_parent_info = (
-                f"{block.block_type.value}: {block.title or block.label or 'untitled'}"
-            )
-            self._add_to_index(child, file_path, canonical_url, block_markers, parser, page_title, child_parent_info)
 
     def get_reference(self, label: str) -> Optional[BlockReference]:
         """Get a block reference by its label."""
         return self.index.get(label)
+    
+    def get_rendered_html(self, file_path: str, marker_id: str) -> Optional[str]:
+        """Get pre-rendered HTML for a block by file path and marker ID."""
+        if file_path in self.rendered_blocks:
+            return self.rendered_blocks[file_path].get(marker_id)
+        return None
 
     def find_blocks_by_type(self, block_type: str) -> List[BlockReference]:
         """Find all blocks of a specific type."""

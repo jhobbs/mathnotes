@@ -66,6 +66,12 @@ class MarkdownProcessor:
                 # Process structured mathematical content - first pass
                 math_parser = StructuredMathParser()
                 content, block_markers = math_parser.parse(content)
+                
+                # Get pre-rendered HTML from block index for all blocks
+                for marker_id, block in block_markers.items():
+                    rendered_html = self.block_index.get_rendered_html(filepath, marker_id)
+                    if rendered_html:
+                        block.rendered_html = rendered_html
 
                 # Process cross-references to structured blocks (@label or @type:label)
                 # Store the processor to use it later for embedded blocks
