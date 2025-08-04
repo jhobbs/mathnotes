@@ -4,7 +4,6 @@
 @import './demo-components.css';
 
 /* Page-specific styles */
-@import './pages/demos-showcase.module.css';
 @import './pages/demo-viewer.module.css';
 @import './pages/index.module.css';
 @import './pages/directory.module.css';

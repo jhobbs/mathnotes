@@ -227,11 +227,6 @@ def register_routes(app, url_mapper, markdown_processor):
         response.headers["Content-Type"] = "application/xml"
         return response
 
-    @app.route("/demos")
-    def demos_showcase():
-        """Display all available interactive demos."""
-        # The template will dynamically load demos from the JS registry
-        return render_template("demos_showcase.html")
 
     @app.route("/demo-viewer")
     def demo_viewer():
