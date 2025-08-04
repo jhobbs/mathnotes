@@ -21,6 +21,7 @@ class BlockReference:
     block: MathBlock
     file_path: str
     canonical_url: str
+    page_title: Optional[str] = None
 
     @property
     def full_url(self) -> str:
@@ -67,6 +68,9 @@ class BlockIndex:
             with open(file_path, "r", encoding="utf-8") as f:
                 post = frontmatter.load(f)
                 content = post.content
+                
+                # Get page title from frontmatter
+                page_title = post.metadata.get('title', None)
 
                 # Parse structured math content
                 parser = StructuredMathParser()
@@ -87,68 +91,51 @@ class BlockIndex:
 
                 for block in top_level_blocks:
                     # This will recursively add the block and all its children
-                    self._add_to_index(block, file_path, canonical_url)
+                    self._add_to_index(block, file_path, canonical_url, block_markers, parser, page_title)
 
         except Exception as e:
             print(f"Error indexing {file_path}: {e}")
 
-    def _process_block_content(self, block: MathBlock):
-        """Process markdown content for a block and store it as rendered HTML."""
+    def _process_block_content(self, block: MathBlock, block_markers: Dict[str, MathBlock], parser: StructuredMathParser, full_url: str):
+        """Process and render a block using the same pipeline as page view."""
         if block.content:
-            # First, create version without nested blocks (for tooltips)
-            content_without_nested = self._extract_content_without_nested(block.content)
+            # Protect math expressions
+            math_protector = MathProtector()
+            protected_content = math_protector.protect_math(block.content)
             
-            # Process both versions
-            for content, attr_name in [
-                (block.content, 'processed_content'),
-                (content_without_nested, 'processed_content_no_nested')
-            ]:
-                # Protect math expressions
-                math_protector = MathProtector()
-                protected_content = math_protector.protect_math(content)
-                
-                # Convert to HTML
-                html_content = self.md.convert(protected_content)
-                self.md.reset()
-                
-                # Restore math expressions
-                html_content = math_protector.restore_math(html_content)
-                
-                # Fix escaped asterisks and tildes (same as in markdown_processor.py)
-                html_content = html_content.replace(r"\*", "*")
-                html_content = html_content.replace(r"\~", "~")
-                
-                # Store processed content on the block
-                setattr(block, attr_name, html_content)
+            # Convert to HTML
+            html_content = self.md.convert(protected_content)
+            self.md.reset()
+            
+            # Restore math expressions
+            html_content = math_protector.restore_math(html_content)
+            
+            # Fix escaped asterisks and tildes (same as in markdown_processor.py)
+            html_content = html_content.replace(r"\*", "*")
+            html_content = html_content.replace(r"\~", "~")
+            
+            # Render the complete block HTML using the same method as page view
+            block.rendered_html = parser.render_block_html(block, html_content, block_markers, self.md, full_url)
     
-    def _extract_content_without_nested(self, content: str) -> str:
-        """Extract block content without nested blocks like proofs."""
-        import re
-        
-        # Remove any nested block markers
-        # Pattern: :::type ... :::
-        nested_pattern = r':::(?:proof|example|solution|exercise|remark|note|intuition).*?:::'
-        content = re.sub(nested_pattern, '', content, flags=re.DOTALL)
-        
-        # Remove any block markers that might be present
-        content = re.sub(r'[A-Z]+BLOCK\d+MARKER', '', content)
-        
-        # Clean up extra whitespace
-        content = re.sub(r'\n\s*\n\s*\n', '\n\n', content)
-        content = content.strip()
-        
-        return content
 
     def _add_to_index(
-        self, block: MathBlock, file_path: str, canonical_url: str, parent_info: str = "top-level"
+        self, block: MathBlock, file_path: str, canonical_url: str, block_markers: Dict[str, MathBlock], 
+        parser: StructuredMathParser, page_title: Optional[str], parent_info: str = "top-level"
     ):
         """Add a block to the index, including nested blocks."""
-        # Process the block's markdown content once
-        self._process_block_content(block)
+        # Build the full URL for this block
+        full_canonical_url = f"/mathnotes/{canonical_url}"
+        full_url = f"{full_canonical_url}#{block.label}" if block.label else full_canonical_url
+        
+        # Process the block's content and render full HTML with URL
+        self._process_block_content(block, block_markers, parser, full_url)
         
         if block.label:
             ref = BlockReference(
-                block=block, file_path=file_path, canonical_url=f"/mathnotes/{canonical_url}"
+                block=block, 
+                file_path=file_path, 
+                canonical_url=full_canonical_url,
+                page_title=page_title
             )
 
             # Check for duplicate labels
@@ -165,7 +152,7 @@ class BlockIndex:
             child_parent_info = (
                 f"{block.block_type.value}: {block.title or block.label or 'untitled'}"
             )
-            self._add_to_index(child, file_path, canonical_url, child_parent_info)
+            self._add_to_index(child, file_path, canonical_url, block_markers, parser, page_title, child_parent_info)
 
     def get_reference(self, label: str) -> Optional[BlockReference]:
         """Get a block reference by its label."""

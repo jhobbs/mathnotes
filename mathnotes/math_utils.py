@@ -314,10 +314,12 @@ class BlockReferenceProcessor:
             # Get the source link if this is from another file
             source_info = ""
             if target_url and not target_url.startswith("#"):
-                # This is from another file, add source link
-                source_info = (
-                    f'<div class="embedded-source"><a href="{target_url}">source</a></div>'
-                )
+                # This is from another file, get the page title
+                if self.block_index:
+                    block_ref = self.block_index.get_reference(ref_label)
+                    source_info = (
+                        f'<div class="embedded-source">from <a href="{target_url}">{block_ref.page_title}</a></div>'
+                    )
 
             # Construct the embedded content
             block_type_display = target_block.block_type.value.replace("_", " ").title()
@@ -328,13 +330,11 @@ class BlockReferenceProcessor:
 
             embed_marker = f"EMBED_MARKER_{uuid.uuid4().hex[:8]}_{ref_label}"
 
-            # Store the block with pre-processed content
+            # Store the block with rendered HTML
             self.embedded_blocks[embed_marker] = {
-                "block_type": target_block.block_type.value,
-                "title": f"{block_type_display}{title_part}",
+                "rendered_html": target_block.rendered_html,
                 "source_info": source_info,
-                "ref_label": ref_label,
-                "processed_content": target_block.processed_content
+                "ref_label": ref_label
             }
 
             # Return the marker - it will be replaced after markdown processing
@@ -354,13 +354,9 @@ class BlockReferenceProcessor:
             HTML with embedded blocks properly rendered
         """
         for marker, embed_info in self.embedded_blocks.items():
-            # Use pre-processed content
-            content_html = embed_info["processed_content"]
-
-            # Build the embedded block HTML
-            embedded_html = f"""<div class="embedded-block embedded-{embed_info['block_type']}" data-embed-label="{embed_info['ref_label']}">
-<div class="embedded-header">{embed_info['title']}</div>
-<div class="embedded-content">{content_html}</div>
+            # Build the embedded wrapper around the rendered block
+            embedded_html = f"""<div class="embedded-block" data-embed-label="{embed_info['ref_label']}">
+{embed_info['rendered_html']}
 {embed_info['source_info']}
 </div>"""
 

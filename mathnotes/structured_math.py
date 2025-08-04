@@ -360,7 +360,7 @@ class StructuredMathParser:
 </div>"""
 
     def render_block_html(
-        self, block: MathBlock, content_html: str, block_markers: Dict[str, MathBlock], md_processor
+        self, block: MathBlock, content_html: str, block_markers: Dict[str, MathBlock], md_processor, url: str = None
     ) -> str:
         """
         Render a math block to HTML with pre-processed content.
@@ -370,6 +370,7 @@ class StructuredMathParser:
             content_html: The markdown-processed HTML content for the block
             block_markers: Dictionary of all block markers for rendering children
             md_processor: Markdown processor for rendering child content
+            url: Optional URL to link the title to
         """
         # Build the opening div with appropriate classes and attributes
         css_classes = [block.css_class]
@@ -396,7 +397,10 @@ class StructuredMathParser:
             if block.title:
                 # Type: Title format
                 header_parts.append(f'<span class="math-block-type">{block.display_name}:</span>')
-                header_parts.append(f'<span class="math-block-title">{block.title}</span>')
+                if url:
+                    header_parts.append(f'<span class="math-block-title"><a href="{url}">{block.title}</a></span>')
+                else:
+                    header_parts.append(f'<span class="math-block-title">{block.title}</span>')
             else:
                 # Just type without colon
                 header_parts.append(f'<span class="math-block-type">{block.display_name}</span>')
@@ -461,7 +465,9 @@ class StructuredMathParser:
         block_html = child_math_protector.restore_math(block_html)
 
         # Render the block with nested support
-        return self.render_block_html(block, block_html, block_markers, md_processor)
+        # For child blocks on the same page, use #label as URL
+        url = f"#{block.label}" if block.label else None
+        return self.render_block_html(block, block_html, block_markers, md_processor, url)
 
     def get_blocks_by_type(self, block_type: MathBlockType) -> List[MathBlock]:
         """Get all blocks of a specific type."""
@@ -538,8 +544,10 @@ def process_structured_math_content(
             block_html = block_math_protector.restore_math(block_html)
 
             # Render the complete block with nested blocks support
+            # For blocks on the same page, use #label as URL
+            url = f"#{block.label}" if block.label else None
             rendered_block = parser.render_block_html(
-                block, block_html, block_markers, md_processor
+                block, block_html, block_markers, md_processor, url
             )
 
             # Replace the marker with the rendered block

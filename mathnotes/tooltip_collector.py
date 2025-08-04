@@ -61,8 +61,8 @@ class TooltipCollectingBlockReferenceProcessor(BlockReferenceProcessor):
             target_block, target_url = self._find_target_block(label, None)
             
             if target_block:
-                # Use pre-processed content without nested blocks
-                html_content = target_block.processed_content_no_nested
+                # Use the fully rendered HTML
+                html_content = target_block.rendered_html
                 
                 tooltip_data[label] = {
                     'type': target_block.block_type.value,
