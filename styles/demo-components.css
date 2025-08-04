@@ -183,9 +183,21 @@
     }
   }
   
+  .demo-control-grid {
+    /* Force single column on mobile for better visibility */
+    grid-template-columns: 1fr !important;
+    gap: var(--space-sm);
+  }
+  
   .demo-control-group {
     padding: var(--space-sm);
     margin-bottom: var(--space-sm);
+  }
+  
+  .demo-control-group-content--row {
+    /* Stack sliders vertically on mobile for better visibility */
+    flex-direction: column;
+    gap: var(--space-sm);
   }
   
   .demo-label {

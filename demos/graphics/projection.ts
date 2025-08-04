@@ -83,22 +83,29 @@ class ProjectionDemo extends P5DemoBase {
       // Create control panel
       const controlPanel = this.createControlPanel();
       
-      // Create a single row for all controls
-      const controlRow = document.createElement('div');
-      controlRow.className = 'demo-control-row';
-      controlRow.style.alignItems = 'flex-start'; // Keep this for specific alignment
-      controlPanel.appendChild(controlRow);
+      // Create a responsive grid for controls
+      const controlGrid = document.createElement('div');
+      controlGrid.className = 'demo-control-grid';
+      controlGrid.style.gap = 'var(--space-lg)';
+      controlGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
+      controlPanel.appendChild(controlGrid);
       
       // Camera rotation group
       const cameraGroup = document.createElement('div');
-      cameraGroup.innerHTML = `<div class="${this.getStylePrefix()}-label">Camera Rotation</div>`;
-      controlRow.appendChild(cameraGroup);
+      cameraGroup.className = 'demo-control-group';
+      controlGrid.appendChild(cameraGroup);
+      
+      const cameraHeader = document.createElement('div');
+      cameraHeader.className = 'demo-control-group-header';
+      cameraHeader.textContent = 'Camera Rotation';
+      cameraGroup.appendChild(cameraHeader);
       
       const cameraSliders = document.createElement('div');
-      cameraSliders.className = 'demo-control-row demo-control-row--small-gap';
+      cameraSliders.className = 'demo-control-group-content demo-control-group-content--row';
+      cameraSliders.style.gap = 'var(--space-sm)';
       cameraGroup.appendChild(cameraSliders);
       
-      // Camera angle sliders (horizontal)
+      // Camera angle sliders
       this.cameraAngleXSlider = this.createSlider(p, 'X', -p.PI, p.PI, 0, 0.01, () => p.redraw());
       cameraSliders.appendChild(this.cameraAngleXSlider.parent() as unknown as Node);
       this.cameraAngleYSlider = this.createSlider(p, 'Y', -p.PI, p.PI, 0, 0.01, () => p.redraw());
@@ -108,14 +115,20 @@ class ProjectionDemo extends P5DemoBase {
       
       // Translation group
       const translateGroup = document.createElement('div');
-      translateGroup.innerHTML = `<div class="${this.getStylePrefix()}-label">Translation</div>`;
-      controlRow.appendChild(translateGroup);
+      translateGroup.className = 'demo-control-group';
+      controlGrid.appendChild(translateGroup);
+      
+      const translateHeader = document.createElement('div');
+      translateHeader.className = 'demo-control-group-header';
+      translateHeader.textContent = 'Translation';
+      translateGroup.appendChild(translateHeader);
       
       const translateSliders = document.createElement('div');
-      translateSliders.className = 'demo-control-row demo-control-row--small-gap';
+      translateSliders.className = 'demo-control-group-content demo-control-group-content--row';
+      translateSliders.style.gap = 'var(--space-sm)';
       translateGroup.appendChild(translateSliders);
       
-      // Translation sliders (horizontal) - ranges will be updated after scaling
+      // Translation sliders - ranges will be updated after scaling
       this.translateXSlider = this.createSlider(p, 'X', -this.translationRange, this.translationRange, 0, 1, () => p.redraw());
       translateSliders.appendChild(this.translateXSlider.parent() as unknown as Node);
       this.translateYSlider = this.createSlider(p, 'Y', -this.translationRange, this.translationRange, 0, 1, () => p.redraw());
@@ -123,11 +136,22 @@ class ProjectionDemo extends P5DemoBase {
       this.translateZSlider = this.createSlider(p, 'Z', -this.translationRange, this.translationRange, 100, 1, () => p.redraw());
       translateSliders.appendChild(this.translateZSlider.parent() as unknown as Node);
       
-      // Focal length (separate)
+      // Focal length group
       const focalGroup = document.createElement('div');
-      controlRow.appendChild(focalGroup);
-      this.focalSlider = this.createSlider(p, 'Focal Length', 1, 30, 15, 0.1, () => p.redraw());
-      focalGroup.appendChild(this.focalSlider.parent() as unknown as Node);
+      focalGroup.className = 'demo-control-group';
+      controlGrid.appendChild(focalGroup);
+      
+      const focalHeader = document.createElement('div');
+      focalHeader.className = 'demo-control-group-header';
+      focalHeader.textContent = 'Focal Length';
+      focalGroup.appendChild(focalHeader);
+      
+      const focalContent = document.createElement('div');
+      focalContent.className = 'demo-control-group-content';
+      focalGroup.appendChild(focalContent);
+      
+      this.focalSlider = this.createSlider(p, '', 1, 30, 15, 0.1, () => p.redraw());
+      focalContent.appendChild(this.focalSlider.parent() as unknown as Node);
       
       // Initialize scaling
       this.updateScaling(p);
