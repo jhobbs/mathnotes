@@ -36,11 +36,11 @@ def add_security_headers(response):
     script_src = f"script-src 'self' 'nonce-{nonce}' 'unsafe-eval'"
     connect_src = "connect-src 'self'"
 
-    # In development, also allow Vite dev server
+    # In development, also allow Vite dev server and any host
     if is_development:
         # Allow various hostnames that might be used (no HTTPS in dev)
-        script_src += " http://localhost:5173 http://vite:5173 http://127.0.0.1:5173"
-        connect_src += " http://localhost:5173 ws://localhost:5173 http://vite:5173 ws://vite:5173 http://127.0.0.1:5173 ws://127.0.0.1:5173"
+        script_src += " http://localhost:5173 http://vite:5173 http://127.0.0.1:5173 http://*:5173"
+        connect_src += " http://localhost:5173 ws://localhost:5173 http://vite:5173 ws://vite:5173 http://127.0.0.1:5173 ws://127.0.0.1:5173 http://*:5173 ws://*:5173 http://*:5000 ws://*:5000"
 
     csp_directives = [
         "default-src 'self'",
@@ -54,8 +54,11 @@ def add_security_headers(response):
         "base-uri 'self'",
         "form-action 'self'",
         "object-src 'none'",
-        "upgrade-insecure-requests",
     ]
+    
+    # Only add upgrade-insecure-requests in production
+    if not is_development:
+        csp_directives.append("upgrade-insecure-requests")
 
     response.headers["Content-Security-Policy"] = "; ".join(csp_directives)
 
@@ -65,15 +68,22 @@ def add_security_headers(response):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
 
-    # HTTP Strict Transport Security (HSTS)
-    # max-age=31536000 (1 year), includeSubDomains, preload
-    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
+    # HTTP Strict Transport Security (HSTS) - only in production
+    if not is_development:
+        # max-age=31536000 (1 year), includeSubDomains, preload
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
 
     # Cross-Origin-Opener-Policy for origin isolation
     response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
 
     # Cross-Origin-Embedder-Policy (using credentialless for better compatibility)
     response.headers["Cross-Origin-Embedder-Policy"] = "credentialless"
+
+    # In development, add permissive CORS headers
+    if is_development:
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
 
     # Apply static file caching headers
     response = apply_static_file_caching(response)
