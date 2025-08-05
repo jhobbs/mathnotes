@@ -5,7 +5,7 @@ This guide contains debugging techniques and troubleshooting tips for working wi
 ## Troubleshooting
 
 ### Common Issues
-- **CSP Errors**: Check for missing nonces on inline scripts
+- **CSP Errors**: Ensure no inline JavaScript is used (all JS must be in external files)
 - **404 Errors**: Use `/sitemap.xml` to find correct URLs
 - **Dark Mode**: Uses CSS `@media (prefers-color-scheme)`, not classes
 - **Test Failures**: Run in Docker for consistency
@@ -180,10 +180,10 @@ Use browser developer tools:
 ### CSP Violations
 1. Open browser console
 2. Look for Content Security Policy errors
-3. Check for missing nonces on inline scripts
+3. Check for inline scripts (not allowed - all JS must be external)
 4. Verify all demos use event listeners instead of inline handlers
 
 ### Common CSP Fixes
-- Add `nonce="{{ csp_nonce }}"` to inline scripts
+- Move all inline scripts to external JavaScript files
 - Replace `onclick` with `addEventListener`
 - Use data attributes instead of inline event handlers

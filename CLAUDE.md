@@ -9,7 +9,7 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 - TypeScript/p5.js interactive demos built with Vite
 - Wiki-style cross-references using `[[slug]]` syntax
 - Dark mode support with automatic detection
-- Comprehensive security headers including CSP with nonces
+- Comprehensive security headers with Content Security Policy
 - Modern CSS system with PostCSS, CSS custom properties, and hot module replacement
 
 ## Security and Best Practices
@@ -90,7 +90,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
    - Parses `:::type` blocks (definition, theorem, proof, etc.)
    - Builds global index for cross-references
    - Handles `@label` references and `@@label` embeds
-4. **Security** (`security.py`): Applies CSP nonces and security headers
+4. **Security** (`security.py`): Applies CSP and security headers
 5. **Rendering**: Flask/Jinja2 templates with MathJax for LaTeX
 
 ### Key Architectural Decisions
@@ -105,7 +105,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
 
 3. **Demo System**: TypeScript demos are registered in `demos-framework/src/main.ts` and loaded dynamically. Vite handles bundling with code splitting.
 
-4. **CSP Implementation**: Per-request nonces ensure inline scripts are secure. All demos must use event listeners instead of inline handlers.
+4. **CSP Implementation**: No inline JavaScript or inline event handlers are permitted. All JavaScript must be in external files to keep content static and cacheable.
 
 5. **Development/Production Detection**: Automatic via localhost detection, affects caching headers and asset loading.
 
@@ -132,7 +132,7 @@ This prevents markdown from interfering with LaTeX syntax.
 - Demo must be registered in `demos-framework/src/main.ts`
 - TypeScript source in `mathnotes/demos/`
 - Automatic dark mode support
-- CSP-compliant (no inline scripts)
+- CSP-compliant (no inline scripts or event handlers)
 
 ### File Movement Protocol
 When moving/renaming content files:
@@ -156,11 +156,13 @@ When moving/renaming content files:
 - Check browser console for CSP violations
 - Test demos on mobile devices
 
-### CSP Compliance
-- All inline scripts need `nonce="{{ csp_nonce }}"`
-- No inline event handlers (onclick, onload)
-- Use `addEventListener` and data attributes
-- Demos must be CSP-compliant
+### CSP Compliance and JavaScript Policy
+- **NEVER use inline JavaScript** - all JavaScript must be in external files
+- **NEVER generate nonces** - we don't need them since we don't use inline scripts
+- **No inline event handlers** (onclick, onload, etc.)
+- Use `addEventListener` and data attributes instead
+- All demos must be CSP-compliant
+- This policy keeps our content static and cacheable without per-request processing
 - For CSS-specific guidelines, see [STYLE.md](./STYLE.md)
 
 ### URL Best Practices
@@ -209,6 +211,6 @@ Key debugging tools available:
 - Console probe debugging for JavaScript/CSS/DOM issues
 - Demo screenshot analysis with AI-powered visual testing
 - Mobile-specific testing and responsive scaling
-- CSP violation detection and fixes
+- JavaScript policy compliance and CSP debugging
 - Docker container debugging
 ```

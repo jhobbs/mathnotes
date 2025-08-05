@@ -5,7 +5,7 @@ Flask context processors for the Mathnotes application.
 import os
 import subprocess
 from datetime import datetime
-from flask import g, request
+from flask import request
 from .config import get_base_url
 from .assets import get_css_url, get_main_js_url, get_mathjax_js_url
 
@@ -13,11 +13,6 @@ from .assets import get_css_url, get_main_js_url, get_mathjax_js_url
 def inject_year():
     """Add current year to all templates."""
     return {"current_year": datetime.now().year}
-
-
-def inject_nonce():
-    """Add CSP nonce to all templates."""
-    return {"csp_nonce": getattr(g, "csp_nonce", "")}
 
 
 def inject_version():

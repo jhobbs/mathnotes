@@ -221,7 +221,7 @@ Development automatically detected via:
 
 Comprehensive security headers applied:
 
-- **Content Security Policy** with nonces
+- **Content Security Policy** enforcing external scripts only
 - **HSTS** with preload and subdomain inclusion
 - **Cross-Origin policies** for isolation
 - **X-Content-Type-Options**: nosniff

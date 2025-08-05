@@ -45,7 +45,7 @@ This document outlines the styling and CSS guidelines for the Mathnotes project.
 * Test responsive layouts on mobile devices
 
 ### CSP Compliance
-* All inline scripts need `nonce="{{ csp_nonce }}"`
+* No inline JavaScript - all scripts must be in external files
 * No inline event handlers (onclick, onload)
 * Use `addEventListener` and data attributes
 * Demos must be CSP-compliant
