@@ -94,23 +94,6 @@
         {% endblock %}
     </footer>
     
-    <script nonce="{{ csp_nonce }}">
-    // Debug footer CSS on mobile
-    if (window.innerWidth <= 768) {
-        const footer = document.querySelector('footer');
-        const copyright = document.querySelector('.copyright');
-        const separator = document.querySelector('.separator');
-        const version = document.querySelector('.version');
-        
-        console.log('[probe] Footer width:', window.innerWidth);
-        console.log('[probe] Copyright display:', copyright ? getComputedStyle(copyright).display : 'not found');
-        console.log('[probe] Separator display:', separator ? getComputedStyle(separator).display : 'not found');
-        console.log('[probe] Version display:', version ? getComputedStyle(version).display : 'not found');
-        console.log('[probe] Copyright text:', copyright ? copyright.textContent : 'not found');
-        console.log('[probe] Version text:', version ? version.textContent : 'not found');
-    }
-    </script>
-    
     <!-- Math content toggle functionality -->
     <script nonce="{{ csp_nonce }}">
         // State to track whether we're showing only statements or all content
