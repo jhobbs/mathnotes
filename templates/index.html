@@ -59,37 +59,4 @@
     </ul>
 </div>
 
-<script nonce="{{ csp_nonce }}">
-function toggleSection(header) {
-    const content = header.nextElementSibling;
-    const isOpen = content.classList.contains('show');
-    
-    // Close all sections
-    document.querySelectorAll('.section-content').forEach(el => {
-        el.classList.remove('show');
-    });
-    document.querySelectorAll('.section-header').forEach(el => {
-        el.classList.remove('active');
-    });
-    
-    // Open clicked section if it was closed
-    if (!isOpen) {
-        content.classList.add('show');
-        header.classList.add('active');
-    }
-}
-
-// Initialize event listeners when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Add click handlers for all section headers
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('[data-section="toggle"]')) {
-            const header = e.target.closest('[data-section="toggle"]');
-            toggleSection(header);
-        }
-    });
-});
-
-// All sections start closed
-</script>
 {% endblock %}

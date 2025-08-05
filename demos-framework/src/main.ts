@@ -11,6 +11,9 @@ import './dev-auto-reload';
 // Import mathblock toggle functionality
 import { initMathBlockToggle } from './mathblock-toggle';
 
+// Import section toggle functionality for index page
+import { initSectionToggle } from './section-toggle';
+
 // Demo metadata type
 interface DemoMetadata {
   title: string;
@@ -62,6 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Initialize mathblock toggle functionality
   initMathBlockToggle();
+  
+  // Initialize section toggle for index page
+  const isIndexPage = document.querySelector('.sections-container');
+  if (isIndexPage) {
+    initSectionToggle();
+  }
   const demoContainers = document.querySelectorAll<HTMLElement>('.demo-component[data-demo]');
   console.log('[Demo Framework] Found demo containers:', demoContainers.length);
   
