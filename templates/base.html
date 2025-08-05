@@ -90,9 +90,7 @@
     
     
     {% if tooltip_data %}
-    <script nonce="{{ csp_nonce }}">
-    window.mathTooltipData = {{ tooltip_data|safe }};
-    </script>
+    <script type="application/json" id="tooltip-data">{{ tooltip_data|safe }}</script>
     {% endif %}
     
     {% if is_development %}

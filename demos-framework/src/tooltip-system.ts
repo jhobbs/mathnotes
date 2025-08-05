@@ -1,7 +1,6 @@
 declare global {
   interface Window {
     MathJax: any;
-    mathTooltipData?: TooltipData[];
   }
 }
 
@@ -40,10 +39,18 @@ class TooltipSystem {
   }
 
   private loadPreloadedData(): void {
-    if (window.mathTooltipData && Array.isArray(window.mathTooltipData)) {
-      window.mathTooltipData.forEach(item => {
-        this.cache[item.label] = item;
-      });
+    const tooltipDataElement = document.getElementById('tooltip-data');
+    if (tooltipDataElement && tooltipDataElement.textContent) {
+      try {
+        const data = JSON.parse(tooltipDataElement.textContent);
+        if (Array.isArray(data)) {
+          data.forEach(item => {
+            this.cache[item.label] = item;
+          });
+        }
+      } catch (e) {
+        console.error('Failed to parse tooltip data:', e);
+      }
     }
   }
 
