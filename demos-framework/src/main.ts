@@ -8,6 +8,9 @@ import type { DemoConfig, DemoInstance } from './types';
 // Import dev auto-reload for development mode
 import './dev-auto-reload';
 
+// Import mathblock toggle functionality
+import { initMathBlockToggle } from './mathblock-toggle';
+
 // Demo metadata type
 interface DemoMetadata {
   title: string;
@@ -56,6 +59,9 @@ window.demoMetadata = demoMetadata;
 // Initialize demos on page load
 document.addEventListener('DOMContentLoaded', () => {
   console.log('[Demo Framework] DOMContentLoaded fired');
+  
+  // Initialize mathblock toggle functionality
+  initMathBlockToggle();
   const demoContainers = document.querySelectorAll<HTMLElement>('.demo-component[data-demo]');
   console.log('[Demo Framework] Found demo containers:', demoContainers.length);
   
