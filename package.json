@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "build:static": "python scripts/build_static.py",
+    "serve:static": "docker-compose -f docker-compose.static.yml up --build"
   },
   "devDependencies": {
     "@types/p5": "^1.7.6",
