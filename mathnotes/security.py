@@ -2,15 +2,9 @@
 Security middleware and utilities for the Mathnotes application.
 """
 
-import secrets
 import os
-from flask import g, request
+from flask import request
 from .config import STATIC_FILE_CACHE_CONFIG
-
-
-def generate_nonce():
-    """Generate a unique nonce for CSP."""
-    g.csp_nonce = secrets.token_urlsafe(16)
 
 
 def add_security_headers(response):
@@ -23,17 +17,14 @@ def add_security_headers(response):
     Returns:
         Modified response with security headers
     """
-    # Get the nonce for this request
-    nonce = getattr(g, "csp_nonce", "")
-
     # Check if we're in development mode
     is_development = (
         os.environ.get("FLASK_ENV") == "development" or os.environ.get("FLASK_DEBUG") == "1"
     )
 
-    # Content Security Policy with nonce
+    # Content Security Policy
     # Note: p5.js requires 'unsafe-eval' to work properly
-    script_src = f"script-src 'self' 'nonce-{nonce}' 'unsafe-eval'"
+    script_src = "script-src 'self' 'unsafe-eval'"
     connect_src = "connect-src 'self'"
 
     # In development, also allow Vite dev server and any host

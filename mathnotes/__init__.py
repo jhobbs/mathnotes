@@ -19,10 +19,9 @@ from .config import (
     SEND_FILE_MAX_AGE_DEFAULT,
     STATIC_FILE_CACHE_CONFIG,
 )
-from .security import generate_nonce, add_security_headers
+from .security import add_security_headers
 from .context_processors import (
     inject_year,
-    inject_nonce,
     inject_version,
     inject_env,
     inject_base_url,
@@ -81,12 +80,10 @@ def create_app(config=None):
     markdown_processor = MarkdownProcessor(url_mapper, block_index)
 
     # Register middleware
-    app.before_request(generate_nonce)
     app.after_request(add_security_headers)
 
     # Register context processors
     app.context_processor(inject_year)
-    app.context_processor(inject_nonce)
     app.context_processor(inject_version)
     app.context_processor(inject_env)
     app.context_processor(inject_base_url)
