@@ -23,16 +23,29 @@
             background-color: #fafafa;
             color: #333;
             margin: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
             opacity: 0;
-            transition: opacity 0.2s ease-in-out;
+            animation: fadeIn 0.2s ease-in-out forwards;
         }
-        body.loaded {
-            opacity: 1;
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        header {
+            border-bottom: 1px solid #e1e4e8;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
         }
         @media (prefers-color-scheme: dark) {
             body {
                 background-color: #0d1117;
                 color: #c9d1d9;
+            }
+            header {
+                border-bottom-color: #30363d;
             }
         }
     </style>
@@ -47,27 +60,8 @@
     <!-- Main stylesheet -->
     {% if is_development %}
     <script type="module" src="{{ vite_url }}/static/dist/styles/main.css"></script>
-    <script nonce="{{ csp_nonce }}">
-        // In dev mode, add loaded class immediately
-        document.addEventListener('DOMContentLoaded', function() {
-            document.body.classList.add('loaded');
-        });
-    </script>
     {% else %}
-    <link rel="stylesheet" href="{{ css_url }}" onload="document.body.classList.add('loaded')">
-    <!-- Fallback for CSS load -->
-    <script nonce="{{ csp_nonce }}">
-        // Add loaded class when DOM is ready (fallback)
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() {
-                setTimeout(function() {
-                    document.body.classList.add('loaded');
-                }, 100);
-            });
-        } else {
-            document.body.classList.add('loaded');
-        }
-    </script>
+    <link rel="stylesheet" href="{{ css_url }}">
     {% endif %}
     
     {% block extra_head %}{% endblock %}
