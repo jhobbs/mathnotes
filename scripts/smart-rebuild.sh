@@ -68,6 +68,8 @@ npm run build
 touch "$VITE_LAST_BUILD"
 python scripts/build_static.py -o /app/static-build/website --no-vite
 touch "$STATIC_LAST_BUILD"
+# Write initial timestamp for browser auto-refresh
+date +%s > /app/static-build/website/rebuild-timestamp.txt
 echo "[$(date)] Initial build complete"
 
 # Main loop
@@ -83,6 +85,8 @@ while true; do
         touch "$VITE_LAST_BUILD"
         # Force static rebuild since vite output changed
         rm -f "$STATIC_LAST_BUILD"
+        # Write timestamp for browser auto-refresh (vite changes)
+        date +%s > /app/static-build/website/rebuild-timestamp.txt
     fi
     
     # Check if static site needs rebuilding
@@ -92,5 +96,7 @@ while true; do
         echo "Rebuilding static site..."
         python scripts/build_static.py -o /app/static-build/website --no-vite
         touch "$STATIC_LAST_BUILD"
+        # Write timestamp for browser auto-refresh
+        date +%s > /app/static-build/website/rebuild-timestamp.txt
     fi
 done

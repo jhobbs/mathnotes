@@ -5,10 +5,8 @@ console.log('[Demo Framework] main.ts loaded');
 
 import type { DemoConfig, DemoInstance } from './types';
 
-// Only import dev auto-reload in development mode
-if (import.meta.env.DEV) {
-  import('./dev-auto-reload');
-}
+// Import dev auto-reload (it will check if it should activate)
+import('./dev-auto-reload');
 
 // Import mathblock toggle functionality
 import { initMathBlockToggle } from './mathblock-toggle';
