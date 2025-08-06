@@ -60,7 +60,18 @@ class Page(ABC):
         
         if path == 'index':
             return f"{self.base_url}/"
+        
+        # Ensure trailing slash for directory-style URLs
+        if not path.endswith('/') and not path.endswith('.xml'):
+            path += '/'
+        
         return f"{self.base_url}/{path}"
+    
+    def get_canonical_path(self, spec: PageSpec) -> str:
+        """Get the canonical path for a page spec (for canonical link tag)."""
+        # Get the full URL and strip the base URL to get just the path
+        full_url = self.get_url(spec)
+        return full_url.replace(self.base_url, '')
 
 
 class HomePage(Page):
@@ -164,6 +175,7 @@ class ContentPages(Page):
                     'content': result.get('content', ''),
                     'path': md_path,
                     'frontmatter': result.get('frontmatter', {}),
+                    'canonical_url': result.get('canonical_url', ''),
                 }
                 
                 # Add tooltip data if we have references
@@ -278,20 +290,8 @@ class SitemapPage(Page):
             
             for spec in page.get_specs():
                 if spec.priority > 0:  # Only include if priority > 0
-                    # Get the path part of the URL
-                    path = spec.output_path
-                    if path.endswith('/index.html'):
-                        path = path[:-11]  # Remove /index.html
-                    elif path.endswith('.html'):
-                        path = path[:-5]  # Remove .html
-                    
-                    # Build the absolute URL with trailing slash for directories
-                    if path == 'index':
-                        url = f"{base_url}/"
-                    elif not path.endswith('.xml'):  # Don't add trailing slash to sitemap.xml
-                        url = f"{base_url}/{path}/"
-                    else:
-                        url = f"{base_url}/{path}"
+                    # Use the centralized URL generation
+                    url = page.get_url(spec)
                     
                     urls.append({
                         'loc': url,
@@ -353,5 +353,11 @@ class PageRegistry:
         all_specs = []
         for page in self.pages:
             for spec in page.get_specs():
+                # Ensure canonical_url is in context if not already set
+                # (ContentPages already have it from markdown processor)
+                if spec.context is None:
+                    spec.context = {}
+                if 'canonical_url' not in spec.context:
+                    spec.context['canonical_url'] = page.get_canonical_path(spec)
                 all_specs.append((page, spec))
         return all_specs
