@@ -137,10 +137,15 @@ class MarkdownProcessor:
                 file_path_normalized = filepath.replace("\\", "/")
                 canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
                 if canonical_url:
+                    # Ensure trailing slash for canonical URL
+                    if not canonical_url.endswith('/'):
+                        canonical_url += '/'
                     canonical_path = f"/mathnotes/{canonical_url}"
                 else:
                     # Fallback to current URL structure
                     file_path_no_ext = file_path_normalized.replace(".md", "")
+                    if not file_path_no_ext.endswith('/'):
+                        file_path_no_ext += '/'
                     canonical_path = f"/mathnotes/{file_path_no_ext}"
 
                 # Generate description from frontmatter or content
@@ -187,6 +192,9 @@ class MarkdownProcessor:
             canonical_url = self._find_slug_in_mappings(slug)
 
         if canonical_url:
+            # Ensure trailing slash for proper URL format
+            if not canonical_url.endswith('/'):
+                canonical_url += '/'
             return f"[{link_text}](/mathnotes/{canonical_url})"
         else:
             # If slug not found, return the original text with a broken link indicator

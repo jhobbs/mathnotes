@@ -27,3 +27,5 @@ yarn-error.log*
 
 # Vite
 static/dist/
+
+static-build

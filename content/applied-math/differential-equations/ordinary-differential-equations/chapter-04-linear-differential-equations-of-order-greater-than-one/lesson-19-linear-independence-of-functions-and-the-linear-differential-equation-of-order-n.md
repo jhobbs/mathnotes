@@ -166,7 +166,7 @@ Using the fact that $f'(x) + g'(x) = \frac{d}{dx}[f(x) + g(x)]$, and also distri
 
 $$ \tag{19.5m} f_n(x){u(x)}^{(n)} + f_n(x){iv(x)}^{(n)} + \cdots + f_1(x){u(x)}' + f_1(x){iv(x)}' + f_0(x){u(x)} + f_0(x){iv(x)} = R(x) + iS(x) $$
 
-Rearranging terms in $(19.5m)$ and factoring out $i$ lets us rewrite the left-hand side in real and imaginary parts (see notes on [Complex Numbers](/mathnotes/analysis/complex-analysis/module-01-algebriac-properties)):
+Rearranging terms in $(19.5m)$ and factoring out $i$ lets us rewrite the left-hand side in real and imaginary parts (see notes on [Complex Numbers](/mathnotes/analysis/complex-analysis/module-01-algebriac-properties/)):
 
 $$ \tag{19.5n} [f_n(x){u(x)}^{(n)} + \cdots + f_1(x){u(x)}' + f_0(x){u(x)}] + i[f_n(x){v(x)}^{(n)} + \cdots + f_1(x){v(x)} + f_0(x){v(x)}] = R(x) + iS(x) $$
 

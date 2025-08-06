@@ -21,12 +21,15 @@ from mathnotes.url_mapper import URLMapper
 from mathnotes.markdown_processor import MarkdownProcessor
 from mathnotes.block_index import BlockIndex
 from mathnotes.file_utils import get_directory_contents, get_all_content_for_section
-from flask import g
+from mathnotes.relative_urls import relative_url_for, relative_asset_url, make_relative_url
+from flask import g, url_for
+import re
 
 
 class StaticSiteGenerator:
-    def __init__(self, output_dir="static-build"):
+    def __init__(self, output_dir="static-build", use_relative_urls=True):
         self.output_dir = Path(output_dir)
+        self.use_relative_urls = use_relative_urls
         # Force production mode for static build
         config = {
             'DEBUG': False,
@@ -52,6 +55,92 @@ class StaticSiteGenerator:
             print(f"Cleaning existing output directory: {self.output_dir}")
             shutil.rmtree(self.output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
+    
+    def make_urls_relative(self, html_content, current_path):
+        """
+        Convert absolute URLs in HTML to relative URLs.
+        
+        Args:
+            html_content: The HTML content to process
+            current_path: The current page's path (e.g., '/mathnotes/algebra/groups')
+        
+        Returns:
+            HTML with relative URLs
+        """
+        # Normalize current path
+        current_path = current_path.strip('/')
+        
+        # Pattern to match various URL attributes
+        # This handles href, src, action attributes
+        url_pattern = re.compile(
+            r'((?:href|src|action)\s*=\s*["\'])((?:https?://[^/]+)?/[^"\']*?)(["\'])',
+            re.IGNORECASE
+        )
+        
+        def replace_url(match):
+            prefix = match.group(1)  # e.g., 'href="'
+            url = match.group(2)      # the URL (may include scheme://host)
+            suffix = match.group(3)   # closing quote
+            
+            # Check if this is a canonical link - if so, skip it
+            start_pos = max(0, match.start() - 50)
+            end_pos = min(len(html_content), match.end() + 50)
+            context = html_content[start_pos:end_pos]
+            if 'rel="canonical"' in context:
+                return match.group(0)  # Return unchanged
+            
+            # Handle URLs with scheme://host
+            if url.startswith(('http://', 'https://')):
+                # Skip external URLs
+                if 'lacunary.org' not in url and 'localhost' not in url:
+                    return match.group(0)
+                # Extract the path part for internal URLs
+                from urllib.parse import urlparse
+                parsed = urlparse(url)
+                if parsed.path:
+                    # Convert the path part to relative
+                    relative = make_relative_url(current_path, parsed.path)
+                    return prefix + relative + suffix
+                return match.group(0)
+            
+            # Skip protocol-relative and anchors
+            if url.startswith(('//', '#')):
+                return match.group(0)
+            
+            # Convert to relative URL
+            relative = make_relative_url(current_path, url)
+            
+            # Handle special case of same directory
+            if relative == '.':
+                # For href to current directory, use './'
+                if 'href' in prefix.lower():
+                    relative = './'
+            
+            return prefix + relative + suffix
+        
+        # Replace all URLs
+        html_content = url_pattern.sub(replace_url, html_content)
+        
+        # Also handle URLs in inline styles (background-image, etc.)
+        style_pattern = re.compile(
+            r'(url\s*\(\s*["\']?)(/[^"\'\)]*?)(["\']?\s*\))',
+            re.IGNORECASE
+        )
+        
+        def replace_style_url(match):
+            prefix = match.group(1)
+            url = match.group(2)
+            suffix = match.group(3)
+            
+            if url.startswith(('http://', 'https://', '//')):
+                return match.group(0)
+            
+            relative = make_relative_url(current_path, url)
+            return prefix + relative + suffix
+        
+        html_content = style_pattern.sub(replace_style_url, html_content)
+        
+        return html_content
         
     def copy_static_assets(self):
         """Copy static assets to output directory."""
@@ -61,20 +150,52 @@ class StaticSiteGenerator:
         if static_src.exists():
             print("Copying static assets...")
             shutil.copytree(static_src, static_dst, dirs_exist_ok=True)
+    
+    def copy_content_assets(self):
+        """Copy image and other asset files from content directory."""
+        content_src = Path("content")
+        
+        if not content_src.exists():
+            return
             
-    def save_page(self, url_path, html_content):
+        print("Copying content assets...")
+        asset_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.svg', '.pdf', '.webp'}
+        
+        for file_path in content_src.rglob("*"):
+            if file_path.is_file() and file_path.suffix.lower() in asset_extensions:
+                # Calculate relative path from content directory
+                relative_path = file_path.relative_to(content_src)
+                
+                # Create destination path under mathnotes/
+                dest_path = self.output_dir / "mathnotes" / relative_path
+                
+                # Create parent directories
+                dest_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                # Copy the file
+                shutil.copy2(file_path, dest_path)
+                print(f"  Copied: {relative_path}")
+            
+    def save_page(self, url_path, html_content, make_relative=True):
         """Save HTML content to appropriate file path."""
         # Remove leading slash if present
         url_path = url_path.lstrip("/")
         
         # Determine output path
-        if url_path == "" or url_path == "mathnotes":
+        if url_path == "":
             output_path = self.output_dir / "index.html"
-        elif url_path == "mathnotes/":
+            page_url_path = ""
+        elif url_path == "mathnotes":
             output_path = self.output_dir / "mathnotes" / "index.html"
+            page_url_path = "mathnotes"
         else:
             # For paths like "mathnotes/algebra/groups", create "mathnotes/algebra/groups/index.html"
             output_path = self.output_dir / url_path / "index.html"
+            page_url_path = url_path
+            
+        # Convert URLs to relative if requested
+        if make_relative and self.use_relative_urls:
+            html_content = self.make_urls_relative(html_content, page_url_path)
             
         # Create directory structure
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -162,6 +283,7 @@ class StaticSiteGenerator:
         xml = self.render_page("sitemap")
         if xml:
             output_path = self.output_dir / "sitemap.xml"
+            # Sitemap should keep absolute URLs, don't process
             output_path.write_text(xml, encoding="utf-8")
             print(f"  Generated: {output_path}")
             
@@ -231,6 +353,9 @@ class StaticSiteGenerator:
         # Copy static assets
         self.copy_static_assets()
         
+        # Copy content assets (images, etc.)
+        self.copy_content_assets()
+        
         # Generate all pages
         self.generate_homepage()
         self.generate_mathnotes_index()
@@ -262,10 +387,18 @@ def main():
         action="store_true",
         help="Skip Vite build step"
     )
+    parser.add_argument(
+        "--absolute-urls",
+        action="store_true",
+        help="Use absolute URLs instead of relative (default: use relative URLs)"
+    )
     
     args = parser.parse_args()
     
-    generator = StaticSiteGenerator(output_dir=args.output)
+    # Use relative URLs by default, absolute only if flag is set
+    use_relative = not args.absolute_urls
+    
+    generator = StaticSiteGenerator(output_dir=args.output, use_relative_urls=use_relative)
     
     if args.no_vite:
         # Monkey patch to skip Vite build

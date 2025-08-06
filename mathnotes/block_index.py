@@ -26,7 +26,11 @@ class BlockReference:
     @property
     def full_url(self) -> str:
         """Get the full URL including the fragment for this block."""
-        return f"{self.canonical_url}#{self.block.label}"
+        # Ensure canonical URL has trailing slash before adding fragment
+        url = self.canonical_url
+        if not url.endswith('/'):
+            url += '/'
+        return f"{url}#{self.block.label}"
 
 
 class BlockIndex:
@@ -143,7 +147,11 @@ class BlockIndex:
             
             # Render all blocks in this file
             for marker_id, block in block_markers.items():
-                full_url = f"/mathnotes/{canonical_url}#{block.label}" if block.label else f"/mathnotes/{canonical_url}"
+                # Ensure trailing slash before fragment
+                base_url = f"/mathnotes/{canonical_url}"
+                if not base_url.endswith('/'):
+                    base_url += '/'
+                full_url = f"{base_url}#{block.label}" if block.label else base_url
                 self._process_block_content(block, block_markers, parser, full_url)
                 # Store the rendered HTML by marker ID
                 self.rendered_blocks[file_path][marker_id] = block.rendered_html

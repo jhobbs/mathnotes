@@ -122,6 +122,9 @@ def register_routes(app, url_mapper, markdown_processor, block_index=None):
     @app.route("/mathnotes/<path:filepath>")
     def serve_content(filepath):
         """Serve markdown content or static files."""
+        # Strip trailing slash for consistent handling
+        filepath = filepath.rstrip('/')
+        
         # Handle static files using proper send_from_directory with absolute paths
         content_filepath = Path(f"content/{filepath}")
         if content_filepath.exists() and content_filepath.is_file():
@@ -229,12 +232,12 @@ def register_routes(app, url_mapper, markdown_processor, block_index=None):
         return response
 
 
-    @app.route("/demo-viewer")
+    @app.route("/demo-viewer/")
     def demo_viewer():
         """Display one demo at a time with navigation."""
         return render_template("demo_viewer.html")
 
-    @app.route("/definition-index")
+    @app.route("/definition-index/")
     def definition_index():
         """Display an index of all definitions across the codebase."""
         if block_index is None:
