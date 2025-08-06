@@ -4,9 +4,8 @@
   "description": "Mathnotes interactive mathematics demonstrations",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
+    "dev": "node esbuild.config.js --watch",
+    "build": "node esbuild.config.js",
     "type-check": "tsc --noEmit",
     "build:static": "python scripts/build_static.py",
     "serve:static": "docker-compose up --build"
@@ -14,13 +13,13 @@
   "devDependencies": {
     "@types/p5": "^1.7.6",
     "autoprefixer": "^10.4.16",
+    "esbuild": "^0.19.11",
+    "glob": "^10.3.10",
     "postcss": "^8.4.32",
     "postcss-custom-media": "^10.0.2",
     "postcss-lab-function": "^6.0.9",
     "postcss-nesting": "^12.0.2",
-    "typescript": "^5.3.3",
-    "vite": "^5.4.19",
-    "vite-plugin-static-copy": "^1.0.0"
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "mathjax": "^3.2.2",
