@@ -26,6 +26,7 @@ COPY mathnotes/ ./mathnotes/
 COPY content/ ./content/
 COPY templates/ ./templates/
 COPY scripts/build_static.py ./scripts/
+COPY scripts/smart-rebuild.sh ./scripts/
 COPY demos-framework/ ./demos-framework/
 COPY styles/ ./styles/
 COPY demos/ ./demos/
@@ -36,23 +37,4 @@ COPY .git/ ./.git/
 ENV FLASK_ENV=production
 ENV FLASK_DEBUG=0
 
-# Create a wrapper script that rebuilds everything in a loop
-RUN echo '#!/bin/sh\n\
-mkdir -p /version\n\
-git describe --always --tags > /version/version.txt || echo "unknown" > /version/version.txt\n\
-# Rebuild loop - rebuild everything every 15 seconds\n\
-while true; do\n\
-    echo "[$(date)] Starting full rebuild..."\n\
-    # Build Vite assets\n\
-    echo "[$(date)] Building Vite assets..."\n\
-    npm run build\n\
-    # Build static site to a subdirectory within the volume\n\
-    echo "[$(date)] Building static content..."\n\
-    mkdir -p /app/static-build\n\
-    python scripts/build_static.py -o /app/static-build/website --no-vite\n\
-    echo "[$(date)] Full rebuild complete, sleeping for 15 seconds..."\n\
-    ls -la /app/static-build/website/ | head -20\n\
-    sleep 15\n\
-done' > /app/build-and-run.sh && chmod +x /app/build-and-run.sh
-
-CMD ["/app/build-and-run.sh"]
+CMD ["/app/scripts/smart-rebuild.sh"]
