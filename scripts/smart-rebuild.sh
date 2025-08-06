@@ -1,0 +1,96 @@
+#!/bin/sh
+
+# State files to track last build times
+VITE_LAST_BUILD="/tmp/vite_last_build"
+STATIC_LAST_BUILD="/tmp/static_last_build"
+
+# Directories that trigger vite rebuild
+VITE_DIRS="demos demos-framework styles"
+
+# Directories that trigger static rebuild (includes vite dirs)
+STATIC_DIRS="content mathnotes templates $VITE_DIRS"
+
+# Check if any files in given directories are newer than timestamp file
+# Sets CHANGED_FILES variable with list of changed files
+needs_rebuild() {
+    timestamp_file=$1
+    shift
+    dirs="$@"
+    
+    # Clear the changed files list
+    CHANGED_FILES=""
+    
+    # If timestamp file doesn't exist, we need to build
+    if [ ! -f "$timestamp_file" ]; then
+        CHANGED_FILES="(initial build)"
+        return 0
+    fi
+    
+    # Check if any file in the directories is newer than our timestamp
+    for dir in $dirs; do
+        if [ -d "$dir" ]; then
+            # Find files newer than our timestamp, excluding swap files and temp files
+            new_files=$(find "$dir" -type f -newer "$timestamp_file" \
+                ! -name "*.swp" \
+                ! -name "*.swo" \
+                ! -name "*.swn" \
+                ! -name ".*.swp" \
+                ! -name ".*.swo" \
+                ! -name ".*.swn" \
+                ! -name "*~" \
+                ! -name ".*~" \
+                ! -name "#*#" \
+                ! -name ".#*" \
+                2>/dev/null | head -10)
+            if [ -n "$new_files" ]; then
+                CHANGED_FILES="$CHANGED_FILES$new_files
+"
+            fi
+        fi
+    done
+    
+    # If we found any changed files, return 0 (needs rebuild)
+    if [ -n "$CHANGED_FILES" ]; then
+        return 0
+    fi
+    
+    return 1
+}
+
+# Initial setup
+mkdir -p /version
+git describe --always --tags > /version/version.txt || echo "unknown" > /version/version.txt
+mkdir -p /app/static-build
+
+# Initial build
+echo "[$(date)] Initial build starting..."
+npm run build
+touch "$VITE_LAST_BUILD"
+python scripts/build_static.py -o /app/static-build/website --no-vite
+touch "$STATIC_LAST_BUILD"
+echo "[$(date)] Initial build complete"
+
+# Main loop
+while true; do
+    sleep 0.1  # Check every 100ms for near-instant rebuilds
+    
+    # Check if vite needs rebuilding
+    if needs_rebuild "$VITE_LAST_BUILD" $VITE_DIRS; then
+        echo "[$(date)] Vite source changes detected:"
+        echo "$CHANGED_FILES" | sed 's/^/  /'
+        echo "Rebuilding Vite..."
+        npm run build
+        touch "$VITE_LAST_BUILD"
+        # Force static rebuild since vite output changed
+        rm -f "$STATIC_LAST_BUILD"
+    fi
+    
+    # Check if static site needs rebuilding
+    if needs_rebuild "$STATIC_LAST_BUILD" $STATIC_DIRS; then
+        echo "[$(date)] Content changes detected:"
+        echo "$CHANGED_FILES" | sed 's/^/  /'
+        echo "Rebuilding static site..."
+        python scripts/build_static.py -o /app/static-build/website --no-vite
+        touch "$STATIC_LAST_BUILD"
+    fi
+done
