@@ -266,44 +266,47 @@ class SitemapPage(Page):
         self.all_pages = all_pages
     
     def get_specs(self) -> List[PageSpec]:
-        # The sitemap doesn't use a template, we generate XML directly
-        return [PageSpec(
-            output_path='sitemap.xml',
-            template='',  # No template, we'll handle this specially
-            title='Sitemap',
-            description='XML sitemap for search engines'
-        )]
-    
-    def generate_xml(self) -> str:
-        """Generate the XML content for the sitemap."""
+        # Collect URLs from all pages
         urls = []
         
-        # Collect URLs from all pages
+        # Use the configured base_url for absolute URLs
+        base_url = self.base_url
+        
         for page in self.all_pages:
             if isinstance(page, SitemapPage):
                 continue  # Don't include sitemap in sitemap
             
             for spec in page.get_specs():
                 if spec.priority > 0:  # Only include if priority > 0
+                    # Get the path part of the URL
+                    path = spec.output_path
+                    if path.endswith('/index.html'):
+                        path = path[:-11]  # Remove /index.html
+                    elif path.endswith('.html'):
+                        path = path[:-5]  # Remove .html
+                    
+                    # Build the absolute URL with trailing slash for directories
+                    if path == 'index':
+                        url = f"{base_url}/"
+                    elif not path.endswith('.xml'):  # Don't add trailing slash to sitemap.xml
+                        url = f"{base_url}/{path}/"
+                    else:
+                        url = f"{base_url}/{path}"
+                    
                     urls.append({
-                        'loc': page.get_url(spec),
+                        'loc': url,
                         'priority': str(spec.priority)
                     })
         
-        # Build XML
-        xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-        xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        
-        for url in urls:
-            xml += '  <url>\n'
-            xml += f'    <loc>{url["loc"]}</loc>\n'
-            xml += f'    <priority>{url["priority"]}</priority>\n'
-            xml += '  </url>\n'
-        
-        xml += '</urlset>'
-        
         logger.info(f"Generated sitemap with {len(urls)} URLs")
-        return xml
+        
+        return [PageSpec(
+            output_path='sitemap.xml',
+            template='sitemap.xml',  # Use the sitemap.xml template
+            title='Sitemap',
+            description='XML sitemap for search engines',
+            context={'urls': urls}
+        )]
 
 
 class PageRegistry:
