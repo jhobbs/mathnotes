@@ -2,7 +2,7 @@
 # These are the direct dependencies for the application
 # Use pip-compile to generate requirements.txt with pinned versions
 
-Flask
+Jinja2
 Markdown
 python-markdown-math
 PyYAML
