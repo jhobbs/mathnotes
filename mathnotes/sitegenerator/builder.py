@@ -1,4 +1,4 @@
-"""Main builder class that orchestrates the static site generation."""
+"""Refactored builder using page-centric architecture."""
 
 import logging
 import shutil
@@ -7,9 +7,9 @@ from typing import Optional
 
 from .core import StaticSiteGenerator
 from .router import Router
-from .renderer import PageRenderer
 from .urls import URLGenerator
 from .context import build_global_context
+from .pages import PageRegistry, SitemapPage
 
 from mathnotes.url_mapper import URLMapper
 from mathnotes.markdown_processor import MarkdownProcessor
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class SiteBuilder:
-    """Orchestrates the complete static site build process."""
+    """Simplified site builder using page registry pattern."""
     
     def __init__(self, output_dir: str = "static-build", base_url: str = ''):
         """Initialize the site builder.
@@ -31,22 +31,22 @@ class SiteBuilder:
         self.output_dir = Path(output_dir)
         self.base_url = base_url
         
-        # Initialize generator
+        # Initialize core generator
         self.generator = StaticSiteGenerator(
             template_dir='templates',
             output_dir=str(self.output_dir),
             base_url=base_url
         )
         
-        # Initialize router
+        # Initialize router for url_for function
         self.router = Router()
         self._setup_routes()
         
-        # Initialize URL generator
+        # Initialize URL generator and add to template globals
         self.url_gen = URLGenerator(self.router, base_url)
         self.generator.add_global('url_for', self.url_gen.url_for)
         
-        # Initialize components
+        # Initialize data components
         self.url_mapper = URLMapper()
         self.url_mapper.build_url_mappings()
         
@@ -55,20 +55,22 @@ class SiteBuilder:
         
         self.markdown_processor = MarkdownProcessor(self.url_mapper, self.block_index)
         
-        # Initialize renderer
-        self.renderer = PageRenderer(
-            self.generator,
-            self.url_mapper,
-            self.markdown_processor,
-            self.block_index
-        )
+        # Build site context for pages
+        site_context = {
+            'url_mapper': self.url_mapper,
+            'block_index': self.block_index,
+            'markdown_processor': self.markdown_processor,
+            'base_url': base_url,
+            'generator': self.generator
+        }
+        
+        # Initialize page registry
+        self.page_registry = PageRegistry(site_context)
         
         logger.info(f"Initialized site builder: output={output_dir}")
     
     def _setup_routes(self):
-        """Set up URL routes."""
-        # These aren't actually used for routing in static generation,
-        # but needed for url_for() to work
+        """Set up URL routes for url_for() function."""
         self.router.add_route('/', lambda: None, 'index')
         self.router.add_route('/mathnotes/<path:filepath>', lambda: None, 'page')
         self.router.add_route('/sitemap.xml', lambda: None, 'sitemap')
@@ -82,8 +84,8 @@ class SiteBuilder:
             shutil.rmtree(self.output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
     
-    def build_global_context(self):
-        """Build and set global context for templates."""
+    def setup_global_context(self):
+        """Set up global context for all templates."""
         # Convert block index to tooltip data format
         tooltip_data = None
         if self.block_index and hasattr(self.block_index, 'index'):
@@ -107,100 +109,35 @@ class SiteBuilder:
             self.generator.add_global(key, value)
     
     def render_all_pages(self):
-        """Render all pages for the site."""
-        # Render homepage
-        logger.info("Rendering homepage...")
-        self.renderer.render_homepage()
+        """Render all pages using the page registry."""
+        # Get all page specifications
+        all_specs = self.page_registry.get_all_specs()
         
-        # Render mathnotes index
-        logger.info("Rendering mathnotes index...")
-        self.renderer.render_mathnotes_index()
+        logger.info(f"Rendering {len(all_specs)} pages...")
         
-        # Render all content pages
-        logger.info("Rendering content pages...")
-        for canonical_url in self.url_mapper.url_mappings.keys():
-            url = f'/mathnotes/{canonical_url}'
+        for page, spec in all_specs:
             try:
-                md_path = self.url_mapper.get_file_path(canonical_url)
-                if md_path and not Path(md_path).is_dir():
-                    output_path = f'mathnotes/{canonical_url}'
-                    if not output_path.endswith('.html'):
-                        output_path = f'{output_path}/index.html'
-                    self.renderer.render_markdown_page(md_path, output_path)
+                # Special handling for sitemap (raw XML)
+                if isinstance(page, SitemapPage):
+                    xml_content = page.generate_xml()
+                    output_path = self.output_dir / spec.output_path
+                    output_path.parent.mkdir(parents=True, exist_ok=True)
+                    output_path.write_text(xml_content)
+                    logger.info(f"Generated {spec.output_path}")
+                else:
+                    # Normal template rendering
+                    context = {
+                        'title': spec.title,
+                        'description': spec.description,
+                        **spec.context
+                    }
+                    
+                    html = self.generator.render_template(spec.template, **context)
+                    self.generator.write_page(spec.output_path, html)
+                    logger.debug(f"Rendered {spec.template} -> {spec.output_path}")
+                    
             except Exception as e:
-                logger.error(f"Failed to render {url}: {e}")
-        
-        # Render special pages
-        logger.info("Rendering special pages...")
-        self.render_sitemap()
-        self.render_demos()
-        self.render_definitions()
-        self.renderer.render_404()
-    
-    def render_sitemap(self):
-        """Generate XML sitemap."""
-        urls = []
-        
-        # Add homepage
-        urls.append({
-            'loc': f'{self.base_url}/',
-            'priority': '1.0'
-        })
-        
-        # Add all content pages
-        for canonical_url in self.url_mapper.url_mappings.keys():
-            url = f'/mathnotes/{canonical_url}'
-            urls.append({
-                'loc': f'{self.base_url}{url}',
-                'priority': '0.8'
-            })
-        
-        xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-        xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        
-        for url in urls:
-            xml += '  <url>\n'
-            xml += f'    <loc>{url["loc"]}</loc>\n'
-            xml += f'    <priority>{url["priority"]}</priority>\n'
-            xml += '  </url>\n'
-        
-        xml += '</urlset>'
-        
-        # Write sitemap
-        sitemap_path = self.output_dir / 'sitemap.xml'
-        sitemap_path.write_text(xml)
-        logger.info(f"Generated sitemap with {len(urls)} URLs")
-    
-    def render_demos(self):
-        """Render the demos viewer page."""
-        self.renderer.render_page(
-            'demo_viewer.html',
-            'demos/index.html',
-            title='Interactive Demos - Mathnotes',
-            description='Interactive mathematical demonstrations'
-        )
-    
-    def render_definitions(self):
-        """Render the definitions index page."""
-        # Get all definitions from block index
-        definitions = []
-        if self.block_index and hasattr(self.block_index, 'find_blocks_by_type'):
-            definitions = self.block_index.find_blocks_by_type("definition")
-        elif self.block_index and hasattr(self.block_index, 'index'):
-            for label, ref in self.block_index.index.items():
-                if ref.block.block_type.value == 'definition':
-                    definitions.append(ref)
-        
-        # Sort definitions by title (or label if no title)
-        definitions.sort(key=lambda ref: (ref.block.title or ref.block.label or "").lower())
-        
-        self.renderer.render_page(
-            'definition_index.html',
-            'mathnotes/definitions/index.html',
-            title='Definition Index - Mathnotes',
-            description='Index of all mathematical definitions',
-            definitions=definitions
-        )
+                logger.error(f"Failed to render {spec.output_path}: {e}")
     
     def copy_static_assets(self):
         """Copy all static assets to output directory."""
@@ -226,6 +163,10 @@ class SiteBuilder:
             shutil.copy(robots, self.output_dir / 'robots.txt')
         
         # Copy images from content directories
+        self._copy_content_images()
+    
+    def _copy_content_images(self):
+        """Copy images from content directories."""
         logger.info("Copying content images...")
         content_dir = Path('content')
         image_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'}
@@ -250,21 +191,21 @@ class SiteBuilder:
         """Execute the complete build process."""
         logger.info("Starting static site build...")
         
-        # Clean output directory
+        # 1. Clean output directory
         self.clean_output_dir()
         
-        # Build global context
-        self.build_global_context()
+        # 2. Set up global template context
+        self.setup_global_context()
         
-        # Render all pages
+        # 3. Render all pages
         self.render_all_pages()
         
-        # Copy static assets
+        # 4. Copy static assets
         self.copy_static_assets()
-        
-        logger.info(f"Build complete! Output in {self.output_dir}")
         
         # Report statistics
         total_files = sum(1 for _ in self.output_dir.rglob('*') if _.is_file())
         total_size = sum(f.stat().st_size for f in self.output_dir.rglob('*') if f.is_file())
+        
+        logger.info(f"Build complete! Output in {self.output_dir}")
         logger.info(f"Generated {total_files} files, total size: {total_size / 1024 / 1024:.2f} MB")
