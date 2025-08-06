@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Mathnotes is a Flask application serving mathematics notes with interactive demonstrations. The application features:
 - Structured mathematical content with semantic markup (theorems, proofs, definitions)
-- TypeScript/p5.js interactive demos built with Vite
+- TypeScript/p5.js interactive demos with bundled JavaScript
 - Wiki-style cross-references using `[[slug]]` syntax
 - Dark mode support with automatic detection
 - Comprehensive security headers with Content Security Policy
@@ -35,11 +35,21 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 
 ### Development Server
 ```bash
-# Static development mode - RECOMMENDED
+# Development mode with Flask
 docker-compose -f docker-compose.dev.yml up
+```
 
-# Build and run with production docker
+### Static Site Generation (Production)
+```bash
+# Generate static site (primary deployment method)
 docker-compose up --build
+
+# Production Docker build generates:
+# 1. Crawls all markdown content
+# 2. Renders each page to static HTML
+# 3. Copies all assets (images, CSS, JS)
+# 4. Generates sitemap.xml
+# 5. Serves via nginx (no Python runtime)
 ```
 
 ### Frontend Development
@@ -103,7 +113,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
    - Cross-references resolved using the global index
    - MathJax handles final LaTeX rendering client-side
 
-3. **Demo System**: TypeScript demos are registered in `demos-framework/src/main.ts` and loaded dynamically. Vite handles bundling with code splitting.
+3. **Demo System**: TypeScript demos are registered in `demos-framework/src/main.ts` and loaded dynamically with code splitting.
 
 4. **CSP Implementation**: No inline JavaScript or inline event handlers are permitted. All JavaScript must be in external files to keep content static and cacheable.
 
@@ -180,11 +190,10 @@ Development mode auto-detected via:
 - `FLASK_DEBUG=1`
 - `app.debug=True`
 
-### Vite Configuration
-- Base path: Always `/static/dist/` in dev and prod
-- Dev: TypeScript served directly from `http://localhost:5173`
-- Prod: Bundled assets served by Flask
-- Proxy config handles routing between Vite and Flask
+### Build Configuration
+- Assets served from `/static/dist/` in production
+- TypeScript/JavaScript bundled with code splitting
+- CSS processed with PostCSS
 - For CSS configuration and guidelines, see [STYLE.md](./STYLE.md)
 
 ### Python Dependencies
@@ -194,11 +203,44 @@ Development mode auto-detected via:
 
 ## Deployment
 
+### Static Site Deployment (Primary Method)
+The production site is deployed as a static site generated from the Flask application:
+
+1. **Build Phase**: Docker multi-stage build
+   - Stage 1: Python environment renders all content to static HTML
+   - Stage 2: Copy generated files to nginx image
+   - Preserves URL structure (e.g., `/mathnotes/algebra/groups` → `mathnotes/algebra/groups/index.html`)
+   - Includes all assets with proper cache headers
+   - Generates sitemap.xml for SEO
+
+2. **Serving**: Static files served by nginx
+   - No Python runtime required in production
+   - Faster page loads (pre-rendered HTML)
+   - Better caching and CDN compatibility
+   - Reduced server resources and improved security
+
+3. **Generated File Structure**:
+   ```
+   /usr/share/nginx/html/      # Inside nginx container
+   ├── index.html             # Homepage
+   ├── mathnotes/             # Content pages
+   │   ├── algebra/
+   │   │   └── groups/
+   │   │       └── index.html
+   │   └── ...
+   ├── static/                # Static assets
+   │   ├── dist/             # Bundled JS/CSS
+   │   ├── css/
+   │   └── images/
+   └── sitemap.xml           # Generated sitemap
+   ```
+
 ### GitHub Actions Pipeline
 1. Push to main triggers build
-2. Multi-platform Docker images (amd64, arm64)
-3. Push to ghcr.io registry
-4. Automatic deployment to Fly.io
+2. Docker build runs static site generation
+3. Multi-platform Docker images (amd64, arm64) with nginx
+4. Push to ghcr.io registry
+5. Automatic deployment to Fly.io
 
 ### Production URLs
 - Primary: https://lacunary.org

@@ -56,12 +56,9 @@ node scripts/crawler.js http://host.docker.internal:5000
 
 In development:
 - `web-dev:5000` - Flask backend
-- `vite:5173` - Vite dev server
 - The crawler runs in the same Docker network
 
-URLs are automatically served correctly:
-- `/static/dist/*` → Vite (port 5173)
-- Everything else → Flask (port 5000)
+URLs are served by Flask on port 5000
 
 ## Troubleshooting
 

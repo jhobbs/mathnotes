@@ -35,7 +35,7 @@ This document outlines the styling and CSS guidelines for the Mathnotes project.
 ### Modern CSS System
 * PostCSS for modern CSS features (nesting, custom media queries)
 * CSS custom properties for theming (colors, spacing, typography)
-* CSS entry point at `styles/main.css` processed by Vite
+* CSS entry point at `styles/main.css` processed by the build system
 * Hot module replacement in development for instant style updates
 * Theme variables defined in `styles/theme.css`, utilities in `styles/utilities.css`
 

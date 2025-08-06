@@ -1,6 +1,3 @@
-// Main entry point for Vite
-// This file will handle dynamic imports of demo modules
-
 console.log('[Demo Framework] main.ts loaded');
 
 import type { DemoConfig, DemoInstance } from './types';

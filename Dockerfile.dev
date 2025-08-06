@@ -3,7 +3,7 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install git for version info and node for vite builds
+# Install git for version info and node for js builds
 RUN apt-get update && \
     apt-get install -y git curl && \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \

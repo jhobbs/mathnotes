@@ -25,7 +25,6 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 
-# Vite
 static/dist/
 
 static-build
