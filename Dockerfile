@@ -1,3 +1,4 @@
+# Multi-stage build for static site generation
 # Stage 1: Get git version
 FROM alpine/git:latest AS version
 WORKDIR /app
@@ -6,39 +7,72 @@ COPY .git .git
 # since Docker builds should be from committed code
 RUN git describe --always --tags > /version.txt || echo "unknown" > /version.txt
 
-# Stage 2: Build frontend assets
-FROM node:24-alpine AS frontend
+# Stage 2: Node environment for building Vite assets
+FROM node:24-alpine AS vite-builder
+
 WORKDIR /app
-COPY package.json ./
-# Don't copy package-lock.json to avoid platform-specific issues
-RUN npm install
-COPY tsconfig.json vite.config.ts postcss.config.js ./
-COPY demos-framework ./demos-framework
-COPY demos ./demos
-COPY styles ./styles
+
+# Copy package files and config from root
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY vite.config.ts ./
+COPY postcss.config.js ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source files
+COPY demos-framework/ ./demos-framework/
+COPY styles/ ./styles/
+COPY demos/ ./demos/
+
+# Build Vite assets
 RUN npm run build
 
-# Stage 3: Build the actual application
-FROM python:3.12-slim
+# Stage 3: Python environment for generating HTML
+FROM python:3.12-slim AS builder
 
-# Set working directory
 WORKDIR /app
-
-# Copy requirements first for better caching
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy version from first stage
 COPY --from=version /version.txt /version/version.txt
 
-# Copy the rest of the application first (excluding static/dist)
-COPY . .
+# Copy Python requirements and install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy built frontend assets from frontend stage (this overwrites any local static/dist)
-COPY --from=frontend /app/static/dist ./static/dist
+# Copy application code
+COPY mathnotes/ ./mathnotes/
+COPY content/ ./content/
+COPY templates/ ./templates/
+COPY static/ ./static/
+COPY scripts/build_static.py ./scripts/
+COPY favicon.ico robots.txt ./
 
-# Expose port
-EXPOSE 5000
+# Copy Vite build output from the vite-builder stage
+COPY --from=vite-builder /app/static/dist ./static/dist
 
-# Run the application with gunicorn using the WSGI entry point
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "info", "wsgi:application"]
+# Set production environment for static build
+ENV FLASK_ENV=production
+ENV FLASK_DEBUG=0
+
+# Run static site generator (with Vite assets already in place)
+RUN python scripts/build_static.py --no-vite
+
+# Stage 4: Final nginx image with static files only
+FROM nginx:alpine
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy generated static site from builder
+COPY --from=builder /app/static-build /usr/share/nginx/html
+
+# Copy Vite build output to static/dist
+COPY --from=vite-builder /app/static/dist /usr/share/nginx/html/static/dist
+
+# Expose port 80
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

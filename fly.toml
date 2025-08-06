@@ -11,13 +11,8 @@ primary_region = "ord"
 [build]
   dockerfile = "Dockerfile"
 
-[env]
-  PORT = "5000"
-  ENABLE_DIRECT_DEMOS = "true"
-  DIRECT_DEMO_WHITELIST = "electric-field.html"
-
 [http_service]
-  internal_port = 5000
+  internal_port = 80
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
