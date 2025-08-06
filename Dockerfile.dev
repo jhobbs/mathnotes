@@ -21,20 +21,17 @@ COPY esbuild.config.js ./
 COPY postcss.config.js ./
 RUN npm ci
 
-# Copy all application code
+# Copy all application code including new generator
+COPY generator/ ./generator/
 COPY mathnotes/ ./mathnotes/
 COPY content/ ./content/
 COPY templates/ ./templates/
-COPY scripts/build_static.py ./scripts/
+COPY scripts/build_static_simple.py ./scripts/
 COPY scripts/smart-rebuild.sh ./scripts/
 COPY demos-framework/ ./demos-framework/
 COPY styles/ ./styles/
 COPY demos/ ./demos/
 COPY favicon.ico robots.txt ./
 COPY .git/ ./.git/
-
-# Set production environment for static build
-ENV FLASK_ENV=production
-ENV FLASK_DEBUG=0
 
 CMD ["/app/scripts/smart-rebuild.sh"]
