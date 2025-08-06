@@ -3,6 +3,7 @@
 import logging
 from pathlib import Path
 from typing import Dict, Any, Optional
+from mathnotes.config import CONTENT_DIRS
 
 logger = logging.getLogger(__name__)
 
@@ -139,7 +140,6 @@ class PageRenderer:
     
     def render_mathnotes_index(self):
         """Render the mathnotes index with all sections."""
-        from mathnotes.config import CONTENT_DIRS
         from mathnotes.file_utils import get_all_content_for_section
         
         # Map directory names to display names

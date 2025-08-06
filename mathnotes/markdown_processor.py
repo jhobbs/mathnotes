@@ -6,10 +6,16 @@ import re
 from pathlib import Path
 from typing import Dict, Optional
 import frontmatter
-from .config import create_markdown_instance
+import markdown
 from .structured_math import StructuredMathParser, process_structured_math_content
 from .math_utils import MathProtector, BlockReferenceProcessor
 from .tooltip_collector import TooltipCollectingBlockReferenceProcessor, collect_tooltip_data_from_html
+
+# Markdown configuration
+def create_markdown_instance():
+    """Create and configure a Markdown instance with required extensions."""
+    return markdown.Markdown(extensions=["extra", "codehilite", "toc", "tables", "fenced_code"])
+
 
 
 class MarkdownProcessor:
