@@ -6,6 +6,4 @@ Flask
 Markdown
 python-markdown-math
 PyYAML
-gunicorn
 python-frontmatter
-watchdog
