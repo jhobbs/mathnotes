@@ -56,23 +56,14 @@ def get_asset_url(asset_name):
 
 def get_css_url():
     """Get the URL for the main CSS file."""
-    # In development, return None so template uses Vite directly
-    if current_app.debug:
-        return None
-    return get_asset_url('styles/main.css')
+    return get_asset_url('main.css')
 
 
 def get_main_js_url():
     """Get the URL for the main JavaScript file."""
-    # In development, return None so template uses Vite directly
-    if current_app.debug:
-        return None
-    return get_asset_url('demos-framework/src/main.ts')
+    return get_asset_url('main.js')
 
 
 def get_mathjax_js_url():
     """Get the URL for the MathJax JavaScript file."""
-    # In development, return None so template uses Vite directly
-    if current_app.debug:
-        return None
-    return get_asset_url('demos-framework/src/mathjax-entry.ts')
+    return get_asset_url('mathjax.js')

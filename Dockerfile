@@ -7,15 +7,15 @@ COPY .git .git
 # since Docker builds should be from committed code
 RUN git describe --always --tags > /version.txt || echo "unknown" > /version.txt
 
-# Stage 2: Node environment for building Vite assets
-FROM node:24-alpine AS vite-builder
+# Stage 2: Node environment for building assets with esbuild
+FROM node:24-alpine AS esbuild-builder
 
 WORKDIR /app
 
 # Copy package files and config from root
 COPY package*.json ./
 COPY tsconfig.json ./
-COPY vite.config.ts ./
+COPY esbuild.config.js ./
 COPY postcss.config.js ./
 
 # Install dependencies
@@ -26,7 +26,7 @@ COPY demos-framework/ ./demos-framework/
 COPY styles/ ./styles/
 COPY demos/ ./demos/
 
-# Build Vite assets
+# Build assets with esbuild
 RUN npm run build
 
 # Stage 3: Python environment for generating HTML
@@ -48,14 +48,14 @@ COPY templates/ ./templates/
 COPY scripts/build_static.py ./scripts/
 COPY favicon.ico robots.txt ./
 
-# Copy Vite build output from the vite-builder stage
-COPY --from=vite-builder /app/static/dist ./static/dist
+# Copy esbuild output from the esbuild-builder stage
+COPY --from=esbuild-builder /app/static/dist ./static/dist
 
 # Set production environment for static build
 ENV FLASK_ENV=production
 ENV FLASK_DEBUG=0
 
-# Run static site generator (with Vite assets already in place)
+# Run static site generator (with esbuild assets already in place)
 RUN python scripts/build_static.py --no-vite
 
 # Stage 4: Final nginx image with static files only
@@ -64,7 +64,7 @@ FROM nginx:alpine
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy generated static site from builder (includes Vite assets)
+# Copy generated static site from builder (includes esbuild assets)
 COPY --from=builder /app/static-build /usr/share/nginx/html
 
 # Expose port 80

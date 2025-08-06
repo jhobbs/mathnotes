@@ -51,18 +51,10 @@
     </style>
     
     <!-- MathJax initialization -->
-    {% if is_development %}
-    <script type="module" src="{{ vite_url }}/static/dist/demos-framework/src/mathjax-entry.ts"></script>
-    {% else %}
     <script type="module" src="{{ mathjax_js_url }}"></script>
-    {% endif %}
     
     <!-- Main stylesheet -->
-    {% if is_development %}
-    <script type="module" src="{{ vite_url }}/static/dist/styles/main.css"></script>
-    {% else %}
     <link rel="stylesheet" href="{{ css_url }}">
-    {% endif %}
     
     {% block extra_head %}{% endblock %}
 </head>
@@ -93,12 +85,7 @@
     <script type="application/json" id="tooltip-data">{{ tooltip_data|safe }}</script>
     {% endif %}
     
-    {% if is_development %}
-    <!-- Vite development server -->
-    <script type="module" src="{{ vite_url }}/static/dist/demos-framework/src/main.ts"></script>
-    {% else %}
-    <!-- Production build -->
+    <!-- Main JavaScript -->
     <script type="module" src="{{ main_js_url }}"></script>
-    {% endif %}
 </body>
 </html>
