@@ -33,7 +33,7 @@ Convert the Flask-based mathnotes application into a fully static site that can 
 - Copy built assets to static output
 - Update asset paths in HTML if needed
 
-### 3. Docker Build Process (`Dockerfile.static`)
+### 3. Docker Build Process (`Dockerfile`)
 - Multi-stage build:
   - Stage 1: Python environment to run Flask and generate HTML
   - Stage 2: Node environment to build Vite assets
@@ -46,7 +46,7 @@ Convert the Flask-based mathnotes application into a fully static site that can 
 - Fallback 404 page
 - Security headers (CSP already in HTML)
 
-### 5. Docker Compose (`docker-compose.static.yml`)
+### 5. Docker Compose (`docker-compose.yml`)
 - Simple nginx container
 - Volume mapping for testing
 - Production-ready configuration
