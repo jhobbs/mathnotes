@@ -17,7 +17,8 @@ def get_manifest():
     if _manifest_cache is not None:
         return _manifest_cache
     
-    manifest_path = os.path.join(current_app.root_path, '..', 'static', 'dist', '.vite', 'manifest.json')
+    # The manifest is directly in static/dist/, not in a .vite subdirectory
+    manifest_path = os.path.join(current_app.root_path, '..', 'static', 'dist', 'manifest.json')
     
     # In development, we don't use the manifest
     if current_app.debug:
@@ -37,7 +38,7 @@ def get_asset_url(asset_name):
     Get the URL for a Vite-generated asset, accounting for hash in production.
     
     Args:
-        asset_name: The original asset name (e.g., 'styles/main.css')
+        asset_name: The original asset name (e.g., 'main.css')
     
     Returns:
         The URL for the asset, with hash in production
@@ -46,8 +47,8 @@ def get_asset_url(asset_name):
     
     # Look up the asset in the manifest
     if asset_name in manifest:
-        # Get the hashed filename
-        hashed_filename = manifest[asset_name]['file']
+        # The manifest directly maps original names to hashed names
+        hashed_filename = manifest[asset_name]
         return f'/static/dist/{hashed_filename}'
     else:
         # Fallback to non-hashed name (for development or missing manifest)
