@@ -41,22 +41,19 @@ COPY --from=version /version.txt /version/version.txt
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy application code including new generator
+COPY generator/ ./generator/
 COPY mathnotes/ ./mathnotes/
 COPY content/ ./content/
 COPY templates/ ./templates/
-COPY scripts/build_static.py ./scripts/
+COPY scripts/build_static_simple.py ./scripts/
 COPY favicon.ico robots.txt ./
 
 # Copy esbuild output from the esbuild-builder stage
 COPY --from=esbuild-builder /app/static/dist ./static/dist
 
-# Set production environment for static build
-ENV FLASK_ENV=production
-ENV FLASK_DEBUG=0
-
 # Run static site generator (with esbuild assets already in place)
-RUN python scripts/build_static.py
+RUN python scripts/build_static_simple.py
 
 # Stage 4: Final nginx image with static files only
 FROM nginx:alpine
