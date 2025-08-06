@@ -55,10 +55,10 @@ node scripts/crawler.js http://host.docker.internal:5000
 ## Network Architecture
 
 In development:
-- `web-dev:5000` - Flask backend
+- `web-dev:5000` - Development server
 - The crawler runs in the same Docker network
 
-URLs are served by Flask on port 5000
+URLs are served on port 5000
 
 ## Troubleshooting
 

@@ -1,4 +1,4 @@
-"""Static site generator without Flask."""
+"""Static site generator."""
 
 from .core import StaticSiteGenerator
 from .router import Router

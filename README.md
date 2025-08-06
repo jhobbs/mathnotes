@@ -1,6 +1,6 @@
 # Mathnotes
 
-A static site generator that uses Flask to build mathematical notes and interactive demonstrations into pre-rendered HTML served by nginx. Features structured mathematical content, dark mode support, LaTeX rendering, and interactive HTML/JavaScript demonstrations.
+A static site generator that builds mathematical notes and interactive demonstrations into pre-rendered HTML served by nginx. Features structured mathematical content, dark mode support, LaTeX rendering, and interactive HTML/JavaScript demonstrations.
 
 ## Features
 
@@ -18,7 +18,7 @@ A static site generator that uses Flask to build mathematical notes and interact
 ### Docker (Recommended)
 
 ```bash
-# Development (Flask dev server for local testing only)
+# Development (local testing only)
 docker-compose -f docker-compose.dev.yml up
 
 # Production (generates static site, serves with nginx)
@@ -65,14 +65,14 @@ make check   # Run all checks (lint, type, test)
 
 ## Architecture
 
-Mathnotes uses Flask as a build tool to generate a completely static website. Flask never runs in production - only nginx serves the pre-generated HTML files.
+Mathnotes generates a completely static website. The build process creates static HTML files that are served by nginx in production.
 
 ### Package Structure
 
 ```
 mathnotes/
 ├── mathnotes/                    # Main Python package
-│   ├── __init__.py              # Flask app factory
+│   ├── __init__.py              # Package initialization
 │   ├── config.py                # Configuration settings
 │   ├── security.py              # Security middleware & CSP
 │   ├── url_mapper.py            # URL mapping & redirects
@@ -195,8 +195,8 @@ $$\int_0^1 x^2 dx = \frac{1}{3}$$
 
 ### Environment Variables
 
-- `FLASK_ENV` - Set to `development` for dev mode
-- `FLASK_DEBUG` - Set to `1` to enable debug mode
+- `ENV` - Set to `development` for dev mode
+- `DEBUG` - Set to `1` to enable debug mode
 
 ### Static File Caching
 
@@ -213,9 +213,8 @@ Smart caching with automatic development detection:
 - Content pages: No cache headers
 
 Development automatically detected via:
-- `app.debug = True`
-- `FLASK_ENV=development`
-- `FLASK_DEBUG=1`
+- Debug mode enabled
+- Development environment variables
 - `localhost` or `127.0.0.1` in hostname
 
 ### Security
@@ -233,7 +232,7 @@ Comprehensive security headers applied:
 
 ### Static Site Generation
 
-Flask is used exclusively as a build-time tool to generate static HTML. Production never runs Flask:
+The build process generates static HTML files. Production serves only static files:
 
 ```bash
 # Build and run production container (nginx serving static files)
@@ -241,15 +240,15 @@ docker-compose up --build
 ```
 
 The Docker build process:
-- Multi-stage build: Flask generates static site in stage 1, nginx serves it in stage 2
-- Flask crawls all markdown content and renders to HTML files
+- Multi-stage build: Python generator creates static site in stage 1, nginx serves it in stage 2
+- Generator crawls all markdown content and renders to HTML files
 - URL structure preserved (e.g., `/mathnotes/algebra/groups` → `mathnotes/algebra/groups/index.html`)
 - All static assets copied to output directory
 - sitemap.xml generated for SEO
 - Final container is nginx-only with zero Python dependencies
 
 Benefits of static generation:
-- Flask never runs in production (build tool only)
+- No application server in production (static files only)
 - Instant page loads (pre-rendered HTML)
 - Perfect CDN compatibility
 - Minimal server resources (nginx only)
@@ -348,7 +347,7 @@ When moving or renaming files:
 ### Testing
 
 ```bash
-# Development server with Flask (local testing only)
+# Development server (local testing only)
 docker-compose -f docker-compose.dev.yml up
 
 # Generate static site and serve with nginx
@@ -372,7 +371,7 @@ python -c "from mathnotes import create_app; app = create_app()"
 
 ## Technology Stack
 
-- **Build Tool**: Flask 3.0 with Python 3.11 (generates static HTML)
+- **Build Tool**: Python 3.11 static site generator
 - **Templating**: Jinja2
 - **Markdown**: Python-Markdown with extensions
 - **Math**: MathJax 3 for LaTeX rendering
