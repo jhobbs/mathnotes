@@ -45,7 +45,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY mathnotes/ ./mathnotes/
 COPY content/ ./content/
 COPY templates/ ./templates/
-COPY static/ ./static/
 COPY scripts/build_static.py ./scripts/
 COPY favicon.ico robots.txt ./
 
@@ -65,11 +64,8 @@ FROM nginx:alpine
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy generated static site from builder
+# Copy generated static site from builder (includes Vite assets)
 COPY --from=builder /app/static-build /usr/share/nginx/html
-
-# Copy Vite build output to static/dist
-COPY --from=vite-builder /app/static/dist /usr/share/nginx/html/static/dist
 
 # Expose port 80
 EXPOSE 80
