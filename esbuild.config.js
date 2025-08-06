@@ -155,43 +155,6 @@ async function build() {
       JSON.stringify(manifest, null, 2)
     );
     
-    // Also create non-hashed copies for backward compatibility
-    const mainCssHash = manifest['main.css'];
-    if (mainCssHash) {
-      // Create styles directory if it doesn't exist
-      await fs.mkdir('./static/dist/styles', { recursive: true });
-      
-      // Copy to both locations for compatibility
-      await fs.copyFile(
-        `./static/dist/${mainCssHash}`,
-        './static/dist/main.css'
-      );
-      await fs.copyFile(
-        `./static/dist/${mainCssHash}`,
-        './static/dist/styles/main.css'
-      );
-      console.log('✓ Created main.css and styles/main.css (non-hashed copies)');
-    }
-    
-    // Create non-hashed copies of JS files
-    const mainJsHash = manifest['main.js'];
-    if (mainJsHash) {
-      await fs.copyFile(
-        `./static/dist/${mainJsHash}`,
-        './static/dist/main.js'
-      );
-      console.log('✓ Created main.js (non-hashed copy)');
-    }
-    
-    const mathjaxJsHash = manifest['mathjax.js'];
-    if (mathjaxJsHash) {
-      await fs.copyFile(
-        `./static/dist/${mathjaxJsHash}`,
-        './static/dist/mathjax.js'
-      );
-      console.log('✓ Created mathjax.js (non-hashed copy)');
-    }
-    
     console.log('✓ Build complete');
     console.log('✓ Manifest generated');
     
