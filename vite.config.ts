@@ -83,7 +83,9 @@ export default defineConfig({
       }
     },
     sourcemap: true,
-    manifest: true
+    manifest: true,
+    target: 'esnext',
+    minify: 'esbuild'
   },
   resolve: {
     alias: {
