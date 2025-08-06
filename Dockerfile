@@ -41,8 +41,7 @@ COPY --from=version /version.txt /version/version.txt
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code including new generator
-COPY generator/ ./generator/
+# Copy application code
 COPY mathnotes/ ./mathnotes/
 COPY content/ ./content/
 COPY templates/ ./templates/
