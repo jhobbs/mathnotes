@@ -1,4 +1,0 @@
-FROM node:24-alpine
-# Upgrade npm to latest version at build time
-#RUN npm install -g npm@latest
-WORKDIR /app

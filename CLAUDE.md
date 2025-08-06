@@ -35,7 +35,7 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 
 ### Development Server
 ```bash
-# Integrated development (Flask + Vite HMR) - RECOMMENDED
+# Static development mode - RECOMMENDED
 docker-compose -f docker-compose.dev.yml up
 
 # Build and run with production docker
@@ -50,8 +50,8 @@ docker-compose up --build
 # Test framework changes by crawling entire site
 ./scripts/crawl-dev.sh "http://web-dev:5000"
 
-# Check TypeScript type errors in the Vite container
-docker-compose -f docker-compose.dev.yml exec vite npm run type-check
+# Check TypeScript type errors
+npm run type-check
 ```
 
 ### Demo Screenshots and AI Descriptions
