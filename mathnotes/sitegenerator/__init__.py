@@ -3,13 +3,17 @@
 from .core import StaticSiteGenerator
 from .router import Router
 from .context import build_global_context
-from .renderer import PageRenderer
+from .builder import SiteBuilder
+from .pages import PageRegistry, Page, PageSpec
 from .urls import URLGenerator
 
 __all__ = [
     'StaticSiteGenerator',
     'Router', 
     'build_global_context',
-    'PageRenderer',
+    'SiteBuilder',
+    'PageRegistry',
+    'Page',
+    'PageSpec',
     'URLGenerator'
 ]
