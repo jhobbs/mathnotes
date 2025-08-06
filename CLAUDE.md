@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-Mathnotes is a static site generator that uses Flask to render mathematics notes with interactive demonstrations into static HTML files served by nginx. The application features:
+Mathnotes is a static site generator that renders mathematics notes with interactive demonstrations into static HTML files served by nginx. The application features:
 - Structured mathematical content with semantic markup (theorems, proofs, definitions)
 - TypeScript/p5.js interactive demos with bundled JavaScript
 - Wiki-style cross-references using `[[slug]]` syntax
@@ -35,7 +35,7 @@ Mathnotes is a static site generator that uses Flask to render mathematics notes
 
 ### Development Server
 ```bash
-# Development mode with Flask (for local testing only)
+# Development mode (for local testing only)
 docker-compose -f docker-compose.dev.yml up
 ```
 
@@ -45,11 +45,11 @@ docker-compose -f docker-compose.dev.yml up
 docker-compose up --build
 
 # Production Docker build process:
-# 1. Flask crawls all markdown content
-# 2. Flask renders each page to static HTML
+# 1. Generator crawls all markdown content
+# 2. Jinja2 templates render each page to static HTML
 # 3. All assets copied to static output directory
 # 4. Sitemap.xml generated for SEO
-# 5. nginx serves the static files (Flask never runs in production)
+# 5. nginx serves the static files
 ```
 
 ### Frontend Development
@@ -91,6 +91,14 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
 ## Architecture Overview
 
 ### Static Generation Pipeline
+
+1. **Core Generator** (`generator/core.py`): Manages Jinja2 environment and template rendering
+2. **URL Router** (`generator/router.py`): Simple pattern matching for URL generation
+3. **Page Renderer** (`generator/renderer.py`): Orchestrates page rendering from markdown to HTML
+4. **Site Builder** (`generator/builder.py`): Main orchestration for the entire build process
+5. **Build Script** (`scripts/build_static_simple.py`): Minimal entry point (~45 lines)
+
+#### Processing Components
 1. **URL Resolution** (`url_mapper.py`): Maps slugs to file paths, handles redirects
 2. **Markdown Processing** (`markdown_processor.py`): 
    - Protects math expressions from markdown parsing
@@ -101,7 +109,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
    - Builds global index for cross-references
    - Handles `@label` references and `@@label` embeds
 4. **Security** (`security.py`): Embeds CSP and security headers in HTML
-5. **Rendering**: Flask/Jinja2 templates generate static HTML with MathJax for LaTeX
+5. **Rendering**: Jinja2 templates generate static HTML with MathJax for LaTeX
 6. **Output**: Complete static site ready for nginx serving
 
 ### Key Architectural Decisions
@@ -118,7 +126,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
 
 4. **CSP Implementation**: No inline JavaScript or inline event handlers are permitted. All JavaScript must be in external files to keep content static and cacheable.
 
-5. **Development Mode Detection**: Flask dev server runs only locally for testing. Production always uses pre-generated static files served by nginx.
+5. **Development Mode Detection**: Development server runs only locally for testing. Production always uses pre-generated static files served by nginx.
 
 6. **Modern CSS System**: See [STYLE.md](./STYLE.md) for detailed CSS and styling guidelines
 
@@ -187,9 +195,7 @@ When moving/renaming content files:
 ### Environment Detection
 Development mode auto-detected via:
 - `localhost` or `127.0.0.1` in URL
-- `FLASK_ENV=development`
-- `FLASK_DEBUG=1`
-- `app.debug=True`
+- Development environment variables
 
 ### Build Configuration
 - Assets served from `/static/dist/` in production
@@ -199,22 +205,21 @@ Development mode auto-detected via:
 
 ### Python Dependencies
 - Python 3.11+ required
-- Key packages: Flask 3.0.0, Markdown 3.5.1, python-frontmatter 1.0.1
+- Key packages: Jinja2, Markdown 3.5.1, python-frontmatter 1.0.1
 - Dev tools: pytest, black, flake8, mypy, tox
 
 ## Deployment
 
 ### Static Site Generation and Deployment
-Flask is used exclusively as a build tool to generate static HTML. The production site never runs Flask:
 
 1. **Build Phase**: Docker multi-stage build
-   - Stage 1: Flask application crawls and renders all content to static HTML
-   - Stage 2: Static HTML and assets copied to nginx image (no Python)
+   - Stage 1: Python generator crawls and renders all content to static HTML using Jinja2 directly
+   - Stage 2: Static HTML and assets copied to nginx image (no Python runtime)
    - URL structure preserved (e.g., `/mathnotes/algebra/groups` → `mathnotes/algebra/groups/index.html`)
    - All assets included with proper cache headers
    - sitemap.xml generated for SEO
 
-2. **Production Serving**: nginx only (Flask never runs)
+2. **Production Serving**: nginx only
    - Pure static file serving
    - No Python runtime in production container
    - Pre-rendered HTML for instant page loads

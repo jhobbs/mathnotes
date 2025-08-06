@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class StaticSiteGenerator:
-    """Static site generator using Jinja2 without Flask."""
+    """Static site generator using Jinja2 directly."""
     
     def __init__(self, template_dir='templates', output_dir='output', base_url=''):
         """Initialize the generator with Jinja2 environment.

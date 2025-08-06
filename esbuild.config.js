@@ -120,7 +120,7 @@ async function build() {
     console.log('Building with esbuild...');
     const result = await esbuild.build(buildOptions);
     
-    // Generate manifest.json for Flask integration
+    // Generate manifest.json for asset versioning
     const manifest = {};
     if (result.metafile) {
       for (const [key, value] of Object.entries(result.metafile.outputs)) {

@@ -1,4 +1,4 @@
-"""URL generation utilities to replace Flask's url_for."""
+"""URL generation utilities for static site generation."""
 
 import logging
 from typing import Optional
@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class URLGenerator:
-    """Generate URLs for various endpoints without Flask."""
+    """Generate URLs for various endpoints."""
     
     def __init__(self, router=None, base_url=''):
         """Initialize URL generator.

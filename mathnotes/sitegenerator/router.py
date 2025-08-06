@@ -1,4 +1,4 @@
-"""Simple URL router without Flask."""
+"""Simple URL router for static site generation."""
 
 import re
 from typing import Dict, Tuple, Optional, Callable, Any
@@ -23,7 +23,7 @@ class Router:
             handler: Function to handle this route
             endpoint: Optional name for this route (for url_for)
         """
-        # Convert Flask-style pattern to regex
+        # Convert URL pattern to regex
         regex_pattern, converters = self._pattern_to_regex(pattern)
         compiled = re.compile(regex_pattern)
         
@@ -37,7 +37,7 @@ class Router:
         logger.debug(f"Added route: {pattern} -> {handler}")
     
     def _pattern_to_regex(self, pattern: str) -> Tuple[str, Dict[str, Callable]]:
-        """Convert Flask-style URL pattern to regex.
+        """Convert URL pattern to regex.
         
         Args:
             pattern: URL pattern like '/page/<path:slug>'

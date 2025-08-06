@@ -1,4 +1,4 @@
-"""Page rendering without Flask."""
+"""Page rendering for static site generation."""
 
 import logging
 from pathlib import Path
