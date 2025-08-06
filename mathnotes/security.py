@@ -27,11 +27,6 @@ def add_security_headers(response):
     script_src = "script-src 'self' 'unsafe-eval'"
     connect_src = "connect-src 'self'"
 
-    # In development, also allow Vite dev server and any host
-    if is_development:
-        # Allow various hostnames that might be used (no HTTPS in dev)
-        script_src += " http://localhost:5173 http://vite:5173 http://127.0.0.1:5173 http://*:5173"
-        connect_src += " http://localhost:5173 ws://localhost:5173 http://vite:5173 ws://vite:5173 http://127.0.0.1:5173 ws://127.0.0.1:5173 http://*:5173 ws://*:5173 http://*:5000 ws://*:5000"
 
     csp_directives = [
         "default-src 'self'",
@@ -111,7 +106,7 @@ def apply_static_file_caching(response):
             ext = ext.lower()
 
             # Check if this is a hashed asset (contains hash in filename)
-            # Vite generates files like: chunk-ABC123.js, index-DEF456.css
+            # Bundlers generate files like: chunk-ABC123.js, index-DEF456.css
             import re
 
             is_hashed_asset = bool(re.search(r"-[a-f0-9]{6,}\.", path))

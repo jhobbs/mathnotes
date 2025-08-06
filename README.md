@@ -18,12 +18,11 @@ A modern Flask application for serving mathematical notes and interactive demons
 ### Docker (Recommended)
 
 ```bash
-# Development
-docker-compose up --build
+# Development (Flask dev server)
+docker-compose -f docker-compose.dev.yml up
 
-# Production
-docker build -t mathnotes .
-docker run -p 5000:5000 mathnotes
+# Production (static site with nginx)
+docker-compose up --build
 ```
 
 ### Local Development
@@ -230,22 +229,36 @@ Comprehensive security headers applied:
 
 ## Deployment
 
-### Production Deployment
+### Static Site Generation (Primary Method)
+
+The production site is deployed as a static site, pre-rendered from the Flask application using Docker:
 
 ```bash
-# Using Gunicorn (recommended)
-gunicorn --bind 0.0.0.0:5000 --workers 4 wsgi:application
-
-# Using Docker
-docker build -t mathnotes .
-docker run -p 5000:5000 mathnotes
+# Build and run production container (nginx serving static files)
+docker-compose up --build
 ```
+
+The Docker build process:
+- Multi-stage build: Python generates static site, then nginx serves it
+- Crawls all markdown content and renders to HTML
+- Preserves URL structure (e.g., `/mathnotes/algebra/groups` → `mathnotes/algebra/groups/index.html`)
+- Copies all static assets (images, CSS, JavaScript)
+- Generates sitemap.xml for SEO
+- Results in a lightweight nginx container with no Python runtime
+
+Benefits of static deployment:
+- No Python runtime required in production
+- Faster page loads (pre-rendered HTML)
+- Better caching and CDN compatibility
+- Reduced server resources
+- Improved security (no dynamic code execution)
 
 ### Fly.io Deployment
 
-The application is configured for deployment to fly.io:
+The static site is automatically deployed to fly.io via GitHub Actions:
 
 ```bash
+# Manual deployment (if needed)
 flyctl deploy
 ```
 
@@ -333,7 +346,10 @@ When moving or renaming files:
 ### Testing
 
 ```bash
-# Docker Compose (recommended for consistency)
+# Development server with Flask
+docker-compose -f docker-compose.dev.yml up
+
+# Production build with static site
 docker-compose up --build
 
 # Direct Python (requires local dependencies)

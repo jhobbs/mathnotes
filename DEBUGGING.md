@@ -134,8 +134,8 @@ When implementing responsive demos:
 
 ### Type Checking
 ```bash
-# Check TypeScript type errors in the Vite container
-docker-compose -f docker-compose.dev.yml exec vite npm run type-check
+# Check TypeScript type errors
+npm run type-check
 ```
 
 ## Docker Debugging
@@ -148,17 +148,12 @@ docker-compose -f docker-compose.dev.yml logs
 # Follow logs for specific container
 docker-compose -f docker-compose.dev.yml logs -f web-dev
 
-# Check Vite dev server logs
-docker-compose -f docker-compose.dev.yml logs -f vite
 ```
 
 ### Container Shell Access
 ```bash
 # Access web container shell
 docker-compose -f docker-compose.dev.yml exec web-dev bash
-
-# Access Vite container shell
-docker-compose -f docker-compose.dev.yml exec vite sh
 ```
 
 ## Performance Debugging

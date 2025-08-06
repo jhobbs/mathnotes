@@ -1,14 +1,14 @@
 #!/bin/sh
 
 # State files to track last build times
-VITE_LAST_BUILD="/tmp/vite_last_build"
+JS_LAST_BUILD="/tmp/js_last_build"
 STATIC_LAST_BUILD="/tmp/static_last_build"
 
-# Directories that trigger vite rebuild
-VITE_DIRS="demos demos-framework styles"
+# Directories that trigger JavaScript/CSS rebuild
+JS_DIRS="demos demos-framework styles"
 
-# Directories that trigger static rebuild (includes vite dirs)
-STATIC_DIRS="content mathnotes templates $VITE_DIRS"
+# Directories that trigger static rebuild (includes JS dirs)
+STATIC_DIRS="content mathnotes templates $JS_DIRS"
 
 # Check if any files in given directories are newer than timestamp file
 # Sets CHANGED_FILES variable with list of changed files
@@ -65,7 +65,7 @@ mkdir -p /app/static-build
 # Initial build
 echo "[$(date)] Initial build starting..."
 npm run build
-touch "$VITE_LAST_BUILD"
+touch "$JS_LAST_BUILD"
 python scripts/build_static.py -o /app/static-build/website
 touch "$STATIC_LAST_BUILD"
 # Write initial timestamp for browser auto-refresh
@@ -76,16 +76,16 @@ echo "[$(date)] Initial build complete"
 while true; do
     sleep 0.1  # Check every 100ms for near-instant rebuilds
     
-    # Check if vite needs rebuilding
-    if needs_rebuild "$VITE_LAST_BUILD" $VITE_DIRS; then
-        echo "[$(date)] Vite source changes detected:"
+    # Check if JavaScript/CSS needs rebuilding
+    if needs_rebuild "$JS_LAST_BUILD" $JS_DIRS; then
+        echo "[$(date)] JavaScript/CSS source changes detected:"
         echo "$CHANGED_FILES" | sed 's/^/  /'
-        echo "Rebuilding Vite..."
+        echo "Rebuilding JavaScript/CSS bundles..."
         npm run build
-        touch "$VITE_LAST_BUILD"
-        # Force static rebuild since vite output changed
+        touch "$JS_LAST_BUILD"
+        # Force static rebuild since bundled output changed
         rm -f "$STATIC_LAST_BUILD"
-        # Write timestamp for browser auto-refresh (vite changes)
+        # Write timestamp for browser auto-refresh (JS/CSS changes)
         date +%s > /app/static-build/website/rebuild-timestamp.txt
     fi
     

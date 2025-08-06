@@ -20,7 +20,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["vite/client", "p5/global"],
+    "types": ["p5/global"],
     "baseUrl": ".",
     "paths": {
       "@framework": ["./demos-framework/src/index"],

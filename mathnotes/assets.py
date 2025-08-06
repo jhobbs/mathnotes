@@ -1,5 +1,5 @@
 """
-Asset management utilities for handling Vite-generated assets with hashes.
+Asset management utilities for handling bundled assets with hashes.
 """
 
 import json
@@ -11,13 +11,13 @@ _manifest_cache = None
 
 
 def get_manifest():
-    """Load and cache the Vite manifest file."""
+    """Load and cache the manifest file."""
     global _manifest_cache
     
     if _manifest_cache is not None:
         return _manifest_cache
     
-    # The manifest is directly in static/dist/, not in a .vite subdirectory
+    # The manifest is directly in static/dist/
     manifest_path = os.path.join(current_app.root_path, '..', 'static', 'dist', 'manifest.json')
     
     # In development, we don't use the manifest
@@ -35,7 +35,7 @@ def get_manifest():
 
 def get_asset_url(asset_name):
     """
-    Get the URL for a Vite-generated asset, accounting for hash in production.
+    Get the URL for a bundled asset, accounting for hash in production.
     
     Args:
         asset_name: The original asset name (e.g., 'main.css')
