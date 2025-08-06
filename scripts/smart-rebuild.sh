@@ -66,7 +66,7 @@ mkdir -p /app/static-build
 echo "[$(date)] Initial build starting..."
 npm run build
 touch "$VITE_LAST_BUILD"
-python scripts/build_static.py -o /app/static-build/website --no-vite
+python scripts/build_static.py -o /app/static-build/website
 touch "$STATIC_LAST_BUILD"
 # Write initial timestamp for browser auto-refresh
 date +%s > /app/static-build/website/rebuild-timestamp.txt
@@ -94,7 +94,7 @@ while true; do
         echo "[$(date)] Content changes detected:"
         echo "$CHANGED_FILES" | sed 's/^/  /'
         echo "Rebuilding static site..."
-        python scripts/build_static.py -o /app/static-build/website --no-vite
+        python scripts/build_static.py -o /app/static-build/website
         touch "$STATIC_LAST_BUILD"
         # Write timestamp for browser auto-refresh
         date +%s > /app/static-build/website/rebuild-timestamp.txt
