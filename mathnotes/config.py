@@ -36,6 +36,10 @@ def get_base_url(request=None):
     # Use the provided request or get from Flask context
     req = request or flask_request
 
+    # For static builds or when explicitly in production mode, always use production URL
+    if os.environ.get("STATIC_BUILD") == "1":
+        return "https://lacunary.org"
+
     # Check if we're in development mode
     is_development = (
         os.environ.get("FLASK_ENV") == "development"
@@ -48,11 +52,11 @@ def get_base_url(request=None):
         return f"{req.scheme}://{req.host}"
     else:
         # Use production URL
-        return "https://www.lacunary.org"
+        return "https://lacunary.org"
 
 
 # Legacy constant for backward compatibility (production URL)
-BASE_URL = "https://www.lacunary.org"
+BASE_URL = "https://lacunary.org"
 
 # Static file caching configuration
 SEND_FILE_MAX_AGE_DEFAULT = 3600  # 1 hour default for static files

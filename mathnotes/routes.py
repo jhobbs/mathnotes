@@ -199,7 +199,7 @@ def register_routes(app, url_mapper, markdown_processor, block_index=None):
         base_url = get_base_url(request)
 
         # Add main home page
-        pages.append({"loc": base_url, "changefreq": "weekly", "priority": "1.0"})
+        pages.append({"loc": f"{base_url}/", "changefreq": "weekly", "priority": "1.0"})
 
         # Add mathnotes section
         pages.append({"loc": f"{base_url}/mathnotes/", "changefreq": "weekly", "priority": "0.9"})
@@ -208,7 +208,7 @@ def register_routes(app, url_mapper, markdown_processor, block_index=None):
         for canonical_url in url_mapper.url_mappings:
             pages.append(
                 {
-                    "loc": f"{base_url}/mathnotes/{canonical_url}",
+                    "loc": f"{base_url}/mathnotes/{canonical_url}/",
                     "changefreq": "monthly",
                     "priority": "0.8",
                 }

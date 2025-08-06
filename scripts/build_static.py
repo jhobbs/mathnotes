@@ -30,6 +30,8 @@ class StaticSiteGenerator:
     def __init__(self, output_dir="static-build", use_relative_urls=True):
         self.output_dir = Path(output_dir)
         self.use_relative_urls = use_relative_urls
+        # Set environment variable for static build
+        os.environ['STATIC_BUILD'] = '1'
         # Force production mode for static build
         config = {
             'DEBUG': False,
