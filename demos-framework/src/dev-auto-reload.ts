@@ -1,39 +1,30 @@
 /**
  * Development auto-reload functionality
- * Polls the server to detect restarts and automatically reloads the page
+ * Polls for content changes and automatically reloads the page
  */
 
 class DevAutoReload {
-  private serverStartTime: number | null = null;
-  private pollInterval: number = 500; // Poll every 500ms
+  private lastTimestamp: string | null = null;
+  private pollInterval: number = 1000; // Poll every second
   private intervalId: number | null = null;
 
   constructor() {
-    // Only run in development mode
-    if (this.isDevelopment()) {
-      this.init();
-    }
-  }
-
-  private isDevelopment(): boolean {
-    // Check if we're in development mode by looking at the hostname
-    const hostname = window.location.hostname;
-    return hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('dev');
+    this.init();
   }
 
   private async init(): Promise<void> {
-    // Get initial server start time
+    // Check if timestamp file exists - if it does, we're in dev mode
     try {
-      const response = await fetch('/dev-status');
+      const response = await fetch('/rebuild-timestamp.txt');
       if (response.ok) {
-        const data = await response.json();
-        this.serverStartTime = data.startTime;
+        this.lastTimestamp = (await response.text()).trim();
+        console.log('Dev auto-reload enabled');
         
         // Start polling
         this.startPolling();
       }
     } catch (error) {
-      // Dev endpoint not available, don't start polling
+      // Timestamp file not available, not in dev mode
       console.debug('Dev auto-reload not available');
     }
   }
@@ -41,20 +32,20 @@ class DevAutoReload {
   private startPolling(): void {
     this.intervalId = window.setInterval(async () => {
       try {
-        const response = await fetch('/dev-status');
+        const response = await fetch('/rebuild-timestamp.txt');
         if (response.ok) {
-          const data = await response.json();
+          const timestamp = (await response.text()).trim();
           
-          // If server start time changed, reload the page
-          if (this.serverStartTime !== null && data.startTime !== this.serverStartTime) {
-            console.log('Server restarted, reloading page...');
+          // If timestamp changed, reload the page
+          if (this.lastTimestamp !== null && timestamp !== this.lastTimestamp) {
+            console.log('Content changed, reloading...');
             this.stopPolling();
             window.location.reload();
           }
         }
       } catch (error) {
-        // Server might be restarting, keep polling
-        console.debug('Server unavailable, might be restarting...');
+        // Might be rebuilding, keep polling
+        console.debug('Timestamp check failed, might be rebuilding...');
       }
     }, this.pollInterval);
   }
