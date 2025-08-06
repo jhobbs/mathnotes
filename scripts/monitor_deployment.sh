@@ -24,7 +24,7 @@ DEPLOYMENT_COMPLETE=false
 
 while true; do
     # Check the live site version from mathnotes page (version is now inside a link)
-    LIVE_VERSION=$(curl -s https://www.lacunary.org/mathnotes/ 2>/dev/null | grep -oP 'Version:.*?>(\K[^<]+)' | head -1)
+    LIVE_VERSION=$(curl -s https://lacunary.org/mathnotes/ 2>/dev/null | grep -oP 'Version:.*?>(\K[^<]+)' | head -1)
     
     CURRENT_TIME=$(date +%s)
     ELAPSED=$((CURRENT_TIME - START_TIME))
@@ -60,15 +60,15 @@ if [ "$DEPLOYMENT_COMPLETE" = true ]; then
     echo "Testing site endpoints..."
     
     # Test main page
-    HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://www.lacunary.org/)
+    HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://lacunary.org/)
     echo "  Homepage (/):" $([[ $HTTP_STATUS == 200 ]] && echo "✓ OK ($HTTP_STATUS)" || echo "✗ Failed ($HTTP_STATUS)")
     
     # Test mathnotes section
-    HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://www.lacunary.org/mathnotes/)
+    HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://lacunary.org/mathnotes/)
     echo "  Mathnotes (/mathnotes/):" $([[ $HTTP_STATUS == 200 ]] && echo "✓ OK ($HTTP_STATUS)" || echo "✗ Failed ($HTTP_STATUS)")
     
     # Test sitemap
-    HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://www.lacunary.org/sitemap.xml)
+    HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://lacunary.org/sitemap.xml)
     echo "  Sitemap (/sitemap.xml):" $([[ $HTTP_STATUS == 200 ]] && echo "✓ OK ($HTTP_STATUS)" || echo "✗ Failed ($HTTP_STATUS)")
 fi
 

@@ -30,7 +30,7 @@ For production or standalone crawling:
 npm install
 
 # Crawl production
-node scripts/crawler.js https://www.lacunary.org
+node scripts/crawler.js https://lacunary.org
 
 # Crawl local Docker container
 node scripts/crawler.js http://host.docker.internal:5000

@@ -47,7 +47,7 @@ test = [
 ]
 
 [project.urls]
-Homepage = "https://www.lacunary.org"
+Homepage = "https://lacunary.org"
 Repository = "https://github.com/yourusername/mathnotes"
 
 [tool.setuptools.packages.find]

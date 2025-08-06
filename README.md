@@ -369,7 +369,7 @@ All content and code are the property of Jason Hobbs. All rights reserved.
 
 ## Links
 
-- **Live Site**: https://www.lacunary.org
+- **Live Site**: https://lacunary.org
 - **Source**: This repository contains the complete application
 
 ---

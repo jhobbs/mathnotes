@@ -201,7 +201,7 @@ Development mode auto-detected via:
 4. Automatic deployment to Fly.io
 
 ### Production URLs
-- Primary: https://www.lacunary.org
+- Primary: https://lacunary.org
 
 ## Debugging and Troubleshooting
 
