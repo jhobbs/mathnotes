@@ -9,13 +9,15 @@ logger = logging.getLogger(__name__)
 class URLGenerator:
     """Generate URLs for various endpoints."""
     
-    def __init__(self, router=None, base_url=''):
+    def __init__(self, page_registry=None, router=None, base_url=''):
         """Initialize URL generator.
         
         Args:
+            page_registry: PageRegistry instance for endpoint lookup
             router: Router instance for dynamic URL generation
             base_url: Base URL for absolute URLs (empty for relative)
         """
+        self.page_registry = page_registry
         self.router = router
         self.base_url = base_url.rstrip('/')
     
@@ -31,35 +33,27 @@ class URLGenerator:
         Returns:
             Generated URL string
         """
-        # Handle special endpoints
-        if endpoint == 'static':
+        # Check page registry for the endpoint
+        url = self.page_registry.get_url_for_endpoint(endpoint)
+        
+        if url:
+            # Found in registry
+            pass
+        elif endpoint == 'static':
+            # Special case for static files
             filename = kwargs.get('filename', '')
             url = f"/static/{filename}"
-        elif endpoint == 'index':
-            url = '/'
         elif endpoint == 'page' or endpoint == 'serve_content':
-            # Handle mathnotes pages
+            # Special case for content pages with dynamic paths
             path = kwargs.get('path', kwargs.get('filepath', ''))
             if path:
                 # Keep the path as-is - it should already have proper trailing slashes
                 url = f"/mathnotes/{path}"
             else:
                 url = '/mathnotes/'
-        elif endpoint == 'sitemap':
-            url = '/sitemap.xml'
-        elif endpoint == 'demos':
-            url = '/demos/'
-        elif endpoint == 'definition_index':
-            url = '/mathnotes/definitions/'
-        elif endpoint == 'demo_viewer':
-            url = '/demos/'  # The demo viewer is at /demos/, not /demos/viewer
-        elif self.router:
-            # Try to use router for dynamic generation
-            url = self.router.url_for(endpoint, **kwargs)
         else:
-            # Fallback for unknown endpoints
-            logger.warning(f"Unknown endpoint: {endpoint}")
-            url = '/'
+            # Unknown endpoint
+            raise ValueError(f"Unknown endpoint: {endpoint}")
         
         # Add base URL if external
         if _external and self.base_url:

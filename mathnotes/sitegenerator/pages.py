@@ -77,6 +77,8 @@ class Page(ABC):
 class HomePage(Page):
     """The main lacunary.org homepage."""
     
+    endpoint_name = 'index'  # For url_for('index')
+    
     def get_specs(self) -> List[PageSpec]:
         return [PageSpec(
             output_path='index.html',
@@ -89,6 +91,8 @@ class HomePage(Page):
 
 class MathnotesIndexPage(Page):
     """The /mathnotes index page showing all sections."""
+    
+    endpoint_name = 'mathnotes_index'  # For url_for('mathnotes_index')
     
     def get_specs(self) -> List[PageSpec]:
         from mathnotes.file_utils import get_all_content_for_section
@@ -211,6 +215,8 @@ class ContentPages(Page):
 class DemoViewerPage(Page):
     """The interactive demos viewer page."""
     
+    endpoint_name = 'demos'  # For url_for('demos')
+    
     def get_specs(self) -> List[PageSpec]:
         return [PageSpec(
             output_path='demos/index.html',
@@ -223,6 +229,8 @@ class DemoViewerPage(Page):
 
 class DefinitionIndexPage(Page):
     """The definitions index page."""
+    
+    endpoint_name = 'definition_index'  # For url_for('definition_index')
     
     def get_specs(self) -> List[PageSpec]:
         definitions = []
@@ -343,6 +351,54 @@ class PageRegistry:
         """
         page = page_class(self.site_context)
         self.pages.append(page)
+    
+    def setup_routes(self, router):
+        """Set up URL routes based on registered pages.
+        
+        Args:
+            router: Router instance to add routes to
+        """
+        # Build endpoint to URL mapping
+        self.endpoint_urls = {}
+        
+        # Add routes for pages that have endpoint names
+        for page in self.pages:
+            if hasattr(page, 'endpoint_name') and page.endpoint_name:
+                # Get the first spec to determine the route pattern
+                specs = page.get_specs()
+                if specs:
+                    # Derive route from output path
+                    output_path = specs[0].output_path
+                    if output_path == 'index.html':
+                        route = '/'
+                    elif output_path.endswith('/index.html'):
+                        route = '/' + output_path[:-11]  # Remove /index.html  
+                        if not route.endswith('/'):
+                            route += '/'
+                    elif output_path.endswith('.html'):
+                        route = '/' + output_path[:-5]  # Remove .html
+                    else:
+                        route = '/' + output_path
+                    
+                    # Store the mapping
+                    self.endpoint_urls[page.endpoint_name] = route
+                    router.add_route(route, lambda: None, page.endpoint_name)
+        
+        # Add special routes that don't correspond to single pages
+        router.add_route('/mathnotes/<path:filepath>', lambda: None, 'page')
+        router.add_route('/sitemap.xml', lambda: None, 'sitemap')
+        self.endpoint_urls['sitemap'] = '/sitemap.xml'
+    
+    def get_url_for_endpoint(self, endpoint: str) -> str:
+        """Get the URL for a given endpoint name.
+        
+        Args:
+            endpoint: The endpoint name
+            
+        Returns:
+            The URL path for the endpoint, or None if not found
+        """
+        return self.endpoint_urls.get(endpoint)
     
     def get_all_specs(self) -> List[tuple[Page, PageSpec]]:
         """Get all page specs from all registered pages.

@@ -38,15 +38,7 @@ class SiteBuilder:
             base_url=self.base_url
         )
         
-        # Initialize router for url_for function
-        self.router = Router()
-        self._setup_routes()
-        
-        # Initialize URL generator and add to template globals
-        self.url_gen = URLGenerator(self.router, self.base_url)
-        self.generator.add_global('url_for', self.url_gen.url_for)
-        
-        # Initialize data components
+        # Initialize data components first
         self.url_mapper = URLMapper()
         self.url_mapper.build_url_mappings()
         
@@ -67,15 +59,15 @@ class SiteBuilder:
         # Initialize page registry
         self.page_registry = PageRegistry(site_context)
         
+        # Initialize router and set up routes from page registry
+        self.router = Router()
+        self.page_registry.setup_routes(self.router)
+        
+        # Initialize URL generator and add to template globals
+        self.url_gen = URLGenerator(self.page_registry, self.router, self.base_url)
+        self.generator.add_global('url_for', self.url_gen.url_for)
+        
         logger.info(f"Initialized site builder: output={output_dir}")
-    
-    def _setup_routes(self):
-        """Set up URL routes for url_for() function."""
-        self.router.add_route('/', lambda: None, 'index')
-        self.router.add_route('/mathnotes/<path:filepath>', lambda: None, 'page')
-        self.router.add_route('/sitemap.xml', lambda: None, 'sitemap')
-        self.router.add_route('/demos', lambda: None, 'demos')
-        self.router.add_route('/mathnotes/definitions', lambda: None, 'definition_index')
     
     def clean_output_dir(self):
         """Clean the output directory."""
