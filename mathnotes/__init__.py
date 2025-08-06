@@ -57,6 +57,9 @@ def create_app(config=None):
         static_folder=os.path.join(parent_dir, "static"),
     )
     
+    # Set trailing slash behavior - allows both with and without trailing slash
+    app.url_map.strict_slashes = False
+    
     # Store server startup time for development auto-reload
     app.config['SERVER_START_TIME'] = time.time()
 

@@ -33,8 +33,13 @@ def get_directory_contents(
             canonical_url = file_to_canonical.get(file_path)
             if canonical_url:
                 url = canonical_url
+                # Ensure trailing slash for canonical URLs
+                if not url.endswith('/'):
+                    url += '/'
             else:
                 url = file_path.replace(".md", "")
+                if not url.endswith('/'):
+                    url += '/'
 
             files.append({"name": item.stem.replace("-", " ").title(), "path": url})
         elif item.is_dir() and not item.name.startswith("."):
@@ -76,8 +81,13 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
                 canonical_url = file_to_canonical.get(file_path)
                 if canonical_url:
                     url = canonical_url
+                    # Ensure trailing slash for canonical URLs
+                    if not url.endswith('/'):
+                        url += '/'
                 else:
                     url = file_path.replace(".md", "")
+                    if not url.endswith('/'):
+                        url += '/'
 
                 items.append(
                     {"name": item.stem.replace("-", " ").title(), "path": url, "is_subdir": False}

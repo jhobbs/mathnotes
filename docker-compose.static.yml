@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile.static
     ports:
-      - "80:80"
+      - "8080:80"
     container_name: mathnotes-static
     restart: unless-stopped
     environment:

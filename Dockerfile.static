@@ -1,5 +1,13 @@
 # Multi-stage build for static site generation
-# Stage 1: Node environment for building Vite assets (do this first)
+# Stage 1: Get git version
+FROM alpine/git:latest AS version
+WORKDIR /app
+COPY .git .git
+# For production builds, we use the commit version without --dirty
+# since Docker builds should be from committed code
+RUN git describe --always --tags > /version.txt || echo "unknown" > /version.txt
+
+# Stage 2: Node environment for building Vite assets
 FROM node:18-alpine as vite-builder
 
 WORKDIR /app
@@ -21,7 +29,7 @@ COPY demos/ ./demos/
 # Build Vite assets
 RUN npm run build
 
-# Stage 2: Python environment for generating HTML
+# Stage 3: Python environment for generating HTML
 FROM python:3.11-slim as builder
 
 WORKDIR /app
@@ -30,6 +38,9 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
+
+# Copy version from first stage
+COPY --from=version /version.txt /version/version.txt
 
 # Copy Python requirements and install
 COPY requirements.txt .
@@ -53,7 +64,7 @@ ENV FLASK_DEBUG=0
 # Run static site generator (with Vite assets already in place)
 RUN python scripts/build_static.py --no-vite
 
-# Stage 3: Final nginx image with static files only
+# Stage 4: Final nginx image with static files only
 FROM nginx:alpine
 
 # Copy nginx configuration
