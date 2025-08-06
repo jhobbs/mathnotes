@@ -21,8 +21,7 @@ COPY esbuild.config.js ./
 COPY postcss.config.js ./
 RUN npm ci
 
-# Copy all application code including new generator
-COPY generator/ ./generator/
+# Copy all application code
 COPY mathnotes/ ./mathnotes/
 COPY content/ ./content/
 COPY templates/ ./templates/
