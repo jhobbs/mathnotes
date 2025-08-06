@@ -299,37 +299,6 @@ class StaticSiteGenerator:
                 shutil.copy2(src, dst)
                 print(f"  Copied: {filename}")
                 
-    def build_vite_assets(self):
-        """Build Vite assets for production."""
-        print("Building Vite assets...")
-        import subprocess
-        
-        # Check if we're in Docker or have npm available
-        try:
-            # Try to build Vite assets
-            result = subprocess.run(
-                ["npm", "run", "build"],
-                cwd="demos-framework",
-                capture_output=True,
-                text=True
-            )
-            if result.returncode == 0:
-                print("  Vite build successful")
-                # Copy built assets to static/dist
-                vite_dist = Path("demos-framework/dist")
-                static_dist = Path("static/dist")
-                if vite_dist.exists():
-                    if static_dist.exists():
-                        shutil.rmtree(static_dist)
-                    shutil.copytree(vite_dist, static_dist)
-                    print("  Copied Vite dist to static/dist")
-            else:
-                print(f"  Vite build failed: {result.stderr}")
-                print("  Continuing without Vite assets (will use existing static/dist if available)")
-        except FileNotFoundError:
-            print("  npm not found, skipping Vite build")
-            print("  Using existing static/dist if available")
-            
     def generate_404_page(self):
         """Generate 404 error page."""
         print("Generating 404 page...")
@@ -348,9 +317,6 @@ class StaticSiteGenerator:
         
         # Prepare output directory
         self.ensure_output_dir()
-        
-        # Build Vite assets first (if possible)
-        self.build_vite_assets()
         
         # Copy static assets
         self.copy_static_assets()
@@ -385,11 +351,6 @@ def main():
         help="Output directory for static site (default: static-build)"
     )
     parser.add_argument(
-        "--no-vite",
-        action="store_true",
-        help="Skip Vite build step"
-    )
-    parser.add_argument(
         "--absolute-urls",
         action="store_true",
         help="Use absolute URLs instead of relative (default: use relative URLs)"
@@ -401,11 +362,6 @@ def main():
     use_relative = not args.absolute_urls
     
     generator = StaticSiteGenerator(output_dir=args.output, use_relative_urls=use_relative)
-    
-    if args.no_vite:
-        # Monkey patch to skip Vite build
-        generator.build_vite_assets = lambda: print("Skipping Vite build (--no-vite flag)")
-    
     generator.build()
 
 

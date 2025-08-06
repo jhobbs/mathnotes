@@ -56,7 +56,7 @@ ENV FLASK_ENV=production
 ENV FLASK_DEBUG=0
 
 # Run static site generator (with esbuild assets already in place)
-RUN python scripts/build_static.py --no-vite
+RUN python scripts/build_static.py
 
 # Stage 4: Final nginx image with static files only
 FROM nginx:alpine
