@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-Mathnotes is a Flask application serving mathematics notes with interactive demonstrations. The application features:
+Mathnotes is a static site generator that uses Flask to render mathematics notes with interactive demonstrations into static HTML files served by nginx. The application features:
 - Structured mathematical content with semantic markup (theorems, proofs, definitions)
 - TypeScript/p5.js interactive demos with bundled JavaScript
 - Wiki-style cross-references using `[[slug]]` syntax
@@ -35,21 +35,21 @@ Mathnotes is a Flask application serving mathematics notes with interactive demo
 
 ### Development Server
 ```bash
-# Development mode with Flask
+# Development mode with Flask (for local testing only)
 docker-compose -f docker-compose.dev.yml up
 ```
 
 ### Static Site Generation (Production)
 ```bash
-# Generate static site (primary deployment method)
+# Generate static site (the ONLY deployment method)
 docker-compose up --build
 
-# Production Docker build generates:
-# 1. Crawls all markdown content
-# 2. Renders each page to static HTML
-# 3. Copies all assets (images, CSS, JS)
-# 4. Generates sitemap.xml
-# 5. Serves via nginx (no Python runtime)
+# Production Docker build process:
+# 1. Flask crawls all markdown content
+# 2. Flask renders each page to static HTML
+# 3. All assets copied to static output directory
+# 4. Sitemap.xml generated for SEO
+# 5. nginx serves the static files (Flask never runs in production)
 ```
 
 ### Frontend Development
@@ -90,7 +90,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
 
 ## Architecture Overview
 
-### Request Flow
+### Static Generation Pipeline
 1. **URL Resolution** (`url_mapper.py`): Maps slugs to file paths, handles redirects
 2. **Markdown Processing** (`markdown_processor.py`): 
    - Protects math expressions from markdown parsing
@@ -100,8 +100,9 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
    - Parses `:::type` blocks (definition, theorem, proof, etc.)
    - Builds global index for cross-references
    - Handles `@label` references and `@@label` embeds
-4. **Security** (`security.py`): Applies CSP and security headers
-5. **Rendering**: Flask/Jinja2 templates with MathJax for LaTeX
+4. **Security** (`security.py`): Embeds CSP and security headers in HTML
+5. **Rendering**: Flask/Jinja2 templates generate static HTML with MathJax for LaTeX
+6. **Output**: Complete static site ready for nginx serving
 
 ### Key Architectural Decisions
 
@@ -117,7 +118,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
 
 4. **CSP Implementation**: No inline JavaScript or inline event handlers are permitted. All JavaScript must be in external files to keep content static and cacheable.
 
-5. **Development/Production Detection**: Automatic via localhost detection, affects caching headers and asset loading.
+5. **Development Mode Detection**: Flask dev server runs only locally for testing. Production always uses pre-generated static files served by nginx.
 
 6. **Modern CSS System**: See [STYLE.md](./STYLE.md) for detailed CSS and styling guidelines
 
@@ -203,21 +204,22 @@ Development mode auto-detected via:
 
 ## Deployment
 
-### Static Site Deployment (Primary Method)
-The production site is deployed as a static site generated from the Flask application:
+### Static Site Generation and Deployment
+Flask is used exclusively as a build tool to generate static HTML. The production site never runs Flask:
 
 1. **Build Phase**: Docker multi-stage build
-   - Stage 1: Python environment renders all content to static HTML
-   - Stage 2: Copy generated files to nginx image
-   - Preserves URL structure (e.g., `/mathnotes/algebra/groups` → `mathnotes/algebra/groups/index.html`)
-   - Includes all assets with proper cache headers
-   - Generates sitemap.xml for SEO
+   - Stage 1: Flask application crawls and renders all content to static HTML
+   - Stage 2: Static HTML and assets copied to nginx image (no Python)
+   - URL structure preserved (e.g., `/mathnotes/algebra/groups` → `mathnotes/algebra/groups/index.html`)
+   - All assets included with proper cache headers
+   - sitemap.xml generated for SEO
 
-2. **Serving**: Static files served by nginx
-   - No Python runtime required in production
-   - Faster page loads (pre-rendered HTML)
-   - Better caching and CDN compatibility
-   - Reduced server resources and improved security
+2. **Production Serving**: nginx only (Flask never runs)
+   - Pure static file serving
+   - No Python runtime in production container
+   - Pre-rendered HTML for instant page loads
+   - Full CDN compatibility
+   - Maximum security (no dynamic code execution)
 
 3. **Generated File Structure**:
    ```

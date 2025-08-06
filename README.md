@@ -1,6 +1,6 @@
 # Mathnotes
 
-A modern Flask application for serving mathematical notes and interactive demonstrations. Features structured mathematical content, dark mode support, LaTeX rendering, and interactive HTML/JavaScript demonstrations.
+A static site generator that uses Flask to build mathematical notes and interactive demonstrations into pre-rendered HTML served by nginx. Features structured mathematical content, dark mode support, LaTeX rendering, and interactive HTML/JavaScript demonstrations.
 
 ## Features
 
@@ -18,10 +18,10 @@ A modern Flask application for serving mathematical notes and interactive demons
 ### Docker (Recommended)
 
 ```bash
-# Development (Flask dev server)
+# Development (Flask dev server for local testing only)
 docker-compose -f docker-compose.dev.yml up
 
-# Production (static site with nginx)
+# Production (generates static site, serves with nginx)
 docker-compose up --build
 ```
 
@@ -65,6 +65,8 @@ make check   # Run all checks (lint, type, test)
 
 ## Architecture
 
+Mathnotes uses Flask as a build tool to generate a completely static website. Flask never runs in production - only nginx serves the pre-generated HTML files.
+
 ### Package Structure
 
 ```
@@ -80,7 +82,7 @@ mathnotes/
 │   ├── file_utils.py            # File system utilities
 │   ├── context_processors.py    # Template context injection
 │   └── utils.py                 # General utilities
-├── wsgi.py                      # Production WSGI entry point
+├── wsgi.py                      # WSGI entry point (used during build only)
 ├── run.py                       # Development server entry point
 ├── templates/                   # Jinja2 templates
 ├── static/                      # Static assets (CSS, JS)
@@ -229,9 +231,9 @@ Comprehensive security headers applied:
 
 ## Deployment
 
-### Static Site Generation (Primary Method)
+### Static Site Generation
 
-The production site is deployed as a static site, pre-rendered from the Flask application using Docker:
+Flask is used exclusively as a build-time tool to generate static HTML. Production never runs Flask:
 
 ```bash
 # Build and run production container (nginx serving static files)
@@ -239,19 +241,19 @@ docker-compose up --build
 ```
 
 The Docker build process:
-- Multi-stage build: Python generates static site, then nginx serves it
-- Crawls all markdown content and renders to HTML
-- Preserves URL structure (e.g., `/mathnotes/algebra/groups` → `mathnotes/algebra/groups/index.html`)
-- Copies all static assets (images, CSS, JavaScript)
-- Generates sitemap.xml for SEO
-- Results in a lightweight nginx container with no Python runtime
+- Multi-stage build: Flask generates static site in stage 1, nginx serves it in stage 2
+- Flask crawls all markdown content and renders to HTML files
+- URL structure preserved (e.g., `/mathnotes/algebra/groups` → `mathnotes/algebra/groups/index.html`)
+- All static assets copied to output directory
+- sitemap.xml generated for SEO
+- Final container is nginx-only with zero Python dependencies
 
-Benefits of static deployment:
-- No Python runtime required in production
-- Faster page loads (pre-rendered HTML)
-- Better caching and CDN compatibility
-- Reduced server resources
-- Improved security (no dynamic code execution)
+Benefits of static generation:
+- Flask never runs in production (build tool only)
+- Instant page loads (pre-rendered HTML)
+- Perfect CDN compatibility
+- Minimal server resources (nginx only)
+- Maximum security (pure static files, no code execution)
 
 ### Fly.io Deployment
 
@@ -315,8 +317,8 @@ All listed URLs will redirect (301) to the canonical URL.
 
 ### Entry Points
 
-- **`wsgi.py`** - Production WSGI entry point for Gunicorn/uWSGI
-- **`run.py`** - Development server with debug mode
+- **`wsgi.py`** - WSGI entry point used during static site generation
+- **`run.py`** - Development server for local testing only
 
 ### Adding Content
 
@@ -346,10 +348,10 @@ When moving or renaming files:
 ### Testing
 
 ```bash
-# Development server with Flask
+# Development server with Flask (local testing only)
 docker-compose -f docker-compose.dev.yml up
 
-# Production build with static site
+# Generate static site and serve with nginx
 docker-compose up --build
 
 # Direct Python (requires local dependencies)
@@ -370,14 +372,14 @@ python -c "from mathnotes import create_app; app = create_app()"
 
 ## Technology Stack
 
-- **Backend**: Flask 3.0 with Python 3.11
+- **Build Tool**: Flask 3.0 with Python 3.11 (generates static HTML)
 - **Templating**: Jinja2
 - **Markdown**: Python-Markdown with extensions
 - **Math**: MathJax 3 for LaTeX rendering
 - **Interactive**: P5.js for visualizations
 - **Styling**: CSS with custom properties (dark mode)
 - **Security**: CSP, HSTS, and comprehensive headers
-- **Deployment**: Docker, Gunicorn, Fly.io
+- **Deployment**: Docker, nginx (static files only), Fly.io
 
 ## License
 
