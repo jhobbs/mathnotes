@@ -24,7 +24,6 @@ def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description='Build static site')
     parser.add_argument('--output', default='static-build', help='Output directory')
-    parser.add_argument('--base-url', default='', help='Base URL for the site')
     parser.add_argument('--verbose', action='store_true', help='Enable verbose logging')
     
     args = parser.parse_args()
@@ -33,7 +32,7 @@ def main():
         logging.getLogger().setLevel(logging.DEBUG)
     
     # Build the site
-    builder = SiteBuilder(output_dir=args.output, base_url=args.base_url)
+    builder = SiteBuilder(output_dir=args.output)
     
     try:
         builder.build()

@@ -1,4 +1,9 @@
 
+"""Configuration for the mathnotes site."""
+
+# Production base URL
+BASE_URL = "https://lacunary.org"
+
 # Content directories
 CONTENT_DIRS = [
     "content/algebra",
@@ -9,4 +14,3 @@ CONTENT_DIRS = [
     "content/discrete-math",
     "content/test",
 ]
-

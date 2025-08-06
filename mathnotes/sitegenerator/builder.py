@@ -9,11 +9,12 @@ from .core import StaticSiteGenerator
 from .router import Router
 from .urls import URLGenerator
 from .context import build_global_context
-from .pages import PageRegistry, SitemapPage
+from .pages import PageRegistry
 
 from mathnotes.url_mapper import URLMapper
 from mathnotes.markdown_processor import MarkdownProcessor
 from mathnotes.block_index import BlockIndex
+from mathnotes.config import BASE_URL
 
 logger = logging.getLogger(__name__)
 
@@ -21,21 +22,20 @@ logger = logging.getLogger(__name__)
 class SiteBuilder:
     """Simplified site builder using page registry pattern."""
     
-    def __init__(self, output_dir: str = "static-build", base_url: str = ''):
+    def __init__(self, output_dir: str = "static-build"):
         """Initialize the site builder.
         
         Args:
             output_dir: Directory for output files
-            base_url: Base URL for the site (empty for relative URLs)
         """
         self.output_dir = Path(output_dir)
-        self.base_url = base_url
+        self.base_url = BASE_URL
         
         # Initialize core generator
         self.generator = StaticSiteGenerator(
             template_dir='templates',
             output_dir=str(self.output_dir),
-            base_url=base_url
+            base_url=self.base_url
         )
         
         # Initialize router for url_for function
@@ -43,7 +43,7 @@ class SiteBuilder:
         self._setup_routes()
         
         # Initialize URL generator and add to template globals
-        self.url_gen = URLGenerator(self.router, base_url)
+        self.url_gen = URLGenerator(self.router, self.base_url)
         self.generator.add_global('url_for', self.url_gen.url_for)
         
         # Initialize data components
@@ -60,7 +60,7 @@ class SiteBuilder:
             'url_mapper': self.url_mapper,
             'block_index': self.block_index,
             'markdown_processor': self.markdown_processor,
-            'base_url': base_url,
+            'base_url': self.base_url,
             'generator': self.generator
         }
         
@@ -117,24 +117,17 @@ class SiteBuilder:
         
         for page, spec in all_specs:
             try:
-                # Special handling for sitemap (raw XML)
-                if isinstance(page, SitemapPage):
-                    xml_content = page.generate_xml()
-                    output_path = self.output_dir / spec.output_path
-                    output_path.parent.mkdir(parents=True, exist_ok=True)
-                    output_path.write_text(xml_content)
-                    logger.info(f"Generated {spec.output_path}")
-                else:
-                    # Normal template rendering
-                    context = {
-                        'title': spec.title,
-                        'description': spec.description,
-                        **spec.context
-                    }
-                    
-                    html = self.generator.render_template(spec.template, **context)
-                    self.generator.write_page(spec.output_path, html)
-                    logger.debug(f"Rendered {spec.template} -> {spec.output_path}")
+                # Build context for rendering
+                context = {
+                    'title': spec.title,
+                    'description': spec.description,
+                    **spec.context
+                }
+                
+                # Render template and write to file
+                html = self.generator.render_template(spec.template, **context)
+                self.generator.write_page(spec.output_path, html)
+                logger.debug(f"Rendered {spec.template} -> {spec.output_path}")
                     
             except Exception as e:
                 logger.error(f"Failed to render {spec.output_path}: {e}")
