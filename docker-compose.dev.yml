@@ -17,11 +17,11 @@ services:
   nginx-dev:
     image: nginx:alpine
     ports:
-      - "8080:80"
+      - "5000:5000"
     volumes:
       - static-build:/usr/share/nginx/html:ro
       - ./nginx-dev-static.conf:/etc/nginx/conf.d/default.conf:ro
-    container_name: mathnotes-static-dev
+    container_name: web-dev
     restart: unless-stopped
     environment:
       - NGINX_HOST=localhost
@@ -34,6 +34,18 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-
+  crawler:
+    build:
+      context: .
+      dockerfile: Dockerfile.crawler
+    volumes:
+      - ./crawler:/usr/src/app/crawler
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+    # Don't run automatically, use docker-compose run
+    command: echo "Crawler ready. Use 'docker-compose -f docker-compose.dev.yml run --rm crawler npx tsx crawler.ts <url>' to run"
+    profiles:
+      - tools
 volumes:
   static-build:

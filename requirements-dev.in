@@ -25,3 +25,5 @@ pydocstyle
 
 # Dependency management
 pip-tools
+
+openai
