@@ -83,10 +83,11 @@ class SiteBuilder:
         if self.block_index and hasattr(self.block_index, 'index'):
             tooltip_data = {}
             for label, ref in self.block_index.index.items():
+                # Use the processed HTML content (with references converted to links)
                 tooltip_data[label] = {
                     'type': ref.block.block_type.value,
                     'title': ref.block.title or '',
-                    'content': ref.block.content,
+                    'content': ref.block.content_html,
                     'url': ref.full_url
                 }
         

@@ -145,9 +145,21 @@ class BlockIndex:
             # Initialize rendered blocks storage for this file
             self.rendered_blocks[file_path] = {}
             
-            # Render all blocks in this file
-            for marker_id, block in block_markers.items():
-                # Ensure trailing slash before fragment
+            # Process blocks in dependency order: children before parents
+            # First, identify root blocks (blocks without parents) and process recursively
+            processed_blocks = set()
+            
+            def process_block_tree(block, marker_id):
+                """Recursively process a block and its children."""
+                if marker_id in processed_blocks:
+                    return
+                    
+                # First process all child blocks
+                for child_marker_id, child_block in block_markers.items():
+                    if child_block.parent == block:
+                        process_block_tree(child_block, child_marker_id)
+                
+                # Now process this block
                 base_url = f"/mathnotes/{canonical_url}"
                 if not base_url.endswith('/'):
                     base_url += '/'
@@ -155,6 +167,12 @@ class BlockIndex:
                 self._process_block_content(block, block_markers, parser, full_url)
                 # Store the rendered HTML by marker ID
                 self.rendered_blocks[file_path][marker_id] = block.rendered_html
+                processed_blocks.add(marker_id)
+            
+            # Process all root blocks (blocks without parents)
+            for marker_id, block in block_markers.items():
+                if block.parent is None:
+                    process_block_tree(block, marker_id)
         
         # Clean up temporary storage
         del self._pending_files
@@ -191,7 +209,20 @@ class BlockIndex:
             html_content = html_content.replace(r"\*", "*")
             html_content = html_content.replace(r"\~", "~")
             
+            # Remove child block markers for tooltip use
+            # Tooltips should only show the block's own content, not nested blocks
+            clean_html = html_content
+            for marker_id, child_block in block_markers.items():
+                if child_block.parent == block and marker_id in clean_html:
+                    # Remove the marker entirely - don't include child content in tooltips
+                    clean_html = clean_html.replace(f"<p>{marker_id}</p>", "")
+                    clean_html = clean_html.replace(marker_id, "")
+            
+            # Store the clean inner HTML content (for tooltips and other uses)
+            block.content_html = clean_html
+            
             # Render the complete block HTML using the same method as page view
+            # This will wrap the content and replace child markers with full child HTML
             block.rendered_html = parser.render_block_html(block, html_content, block_markers, self.md, full_url)
     
 

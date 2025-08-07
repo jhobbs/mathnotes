@@ -41,6 +41,7 @@ class MathBlock:
     metadata: Dict[str, Any] = field(default_factory=dict)
     children: List["MathBlock"] = field(default_factory=list)
     parent: Optional["MathBlock"] = None
+    content_html: Optional[str] = None  # Stores the inner HTML content (without wrapper)
 
     @property
     def css_class(self) -> str:
@@ -422,8 +423,8 @@ class StructuredMathParser:
         # Render child blocks that are referenced in the content
         for marker_id, child_block in block_markers.items():
             if child_block.parent == block and marker_id in processed_content:
-                # Render the child block
-                child_html = self._render_child_block(child_block, block_markers, md_processor)
+                # Child blocks are always processed first, so rendered_html is available
+                child_html = child_block.rendered_html
                 # Replace marker with rendered child
                 processed_content = processed_content.replace(f"<p>{marker_id}</p>", child_html)
                 processed_content = processed_content.replace(marker_id, child_html)
@@ -440,41 +441,6 @@ class StructuredMathParser:
         html_parts.append("</div>")
 
         return "\n".join(html_parts)
-
-    def _render_child_block(
-        self, block: MathBlock, block_markers: Dict[str, MathBlock], md_processor
-    ) -> str:
-        """Render a child block with its content."""
-        # Process the block's content through markdown
-        block_content = block.content
-
-        # Process cross-references using the unified processor (first pass)
-        block_ref_processor = BlockReferenceProcessor(
-            block_markers=block_markers,
-            current_file=self.current_file,
-            block_index=self.block_index,
-        )
-        block_content = block_ref_processor.process_references(block_content)
-
-        # Protect math before markdown processing
-        child_math_protector = MathProtector(prefix="CHILDMATH")
-        block_content = child_math_protector.protect_math(block_content)
-
-        # Process through markdown
-        block_html = md_processor.convert(block_content)
-        md_processor.reset()
-
-        # Restore math
-        block_html = child_math_protector.restore_math(block_html)
-        
-        # Process embedded blocks after markdown conversion (second pass)
-        if block_ref_processor.embedded_blocks:
-            block_html = block_ref_processor.process_embedded_blocks(block_html, md_processor)
-
-        # Render the block with nested support
-        # For child blocks on the same page, use #label as URL
-        url = f"#{block.label}" if block.label else None
-        return self.render_block_html(block, block_html, block_markers, md_processor, url)
 
     def get_blocks_by_type(self, block_type: MathBlockType) -> List[MathBlock]:
         """Get all blocks of a specific type."""
