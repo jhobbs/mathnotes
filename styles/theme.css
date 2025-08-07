@@ -196,6 +196,7 @@
   /* ===== COMPONENT SIZES ===== */
   --size-input-sm: 100px;
   --size-input-base: 120px;
+  --size-input-compact: 60px;
   --size-input-md: 160px;
   --size-input-lg: 200px;
   --size-button-icon: 16px;
