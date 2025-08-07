@@ -2,9 +2,6 @@
 description: Fundamental theorem stating that integrals of analytic functions around
   closed curves vanish, with extensions for multiply connected domains.
 layout: page
-redirect_from:
-- complex/module 12 - cauchy-goursat
-- /complex analysis/module 12 - cauchy-goursat
 title: Cauchy-Goursat Theorem
 ---
 

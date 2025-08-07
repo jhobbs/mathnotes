@@ -2,10 +2,6 @@
 description: Complex antiderivatives and indefinite integration, with considerations
   for multivalued functions and domains of validity.
 layout: page
-redirect_from:
-- complex/module 09 - indefinite integrals
-- complex/module 9 - indefinite integrals
-- /complex analysis/module 09 - indefinite integrals
 title: Complex Indefinite Integrals
 ---
 

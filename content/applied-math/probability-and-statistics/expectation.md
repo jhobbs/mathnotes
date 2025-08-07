@@ -1,9 +1,8 @@
 ---
+description: Mathematical definitions and computational methods for expected value
+  and variance of discrete and continuous random variables.
 layout: page
 title: Expectation
-description: Mathematical definitions and computational methods for expected value and variance of discrete and continuous random variables.
-redirect_from:
-  - probability-and-statistics/expectation
 ---
 
 # Expectation
@@ -41,4 +40,3 @@ The positive square root of the variance, $\sigma,$ is called the **standard dev
 Variance and stanard deviation tell us about how spread out the values of $X$ are around its mean.
 
 An alternative and equivalent formula for variance is
-

@@ -1,9 +1,9 @@
 ---
+description: Defines the derivative using limits and proves fundamental differentiation
+  rules including linearity, product rule, quotient rule, and chain rule, plus major
+  theorems like Rolle's Theorem and the Mean Value Theorem.
 layout: page
-redirect_from:
-- calculus/differentiation
 title: Differentiation
-description: Defines the derivative using limits and proves fundamental differentiation rules including linearity, product rule, quotient rule, and chain rule, plus major theorems like Rolle's Theorem and the Mean Value Theorem.
 ---
 
 # Differentiation

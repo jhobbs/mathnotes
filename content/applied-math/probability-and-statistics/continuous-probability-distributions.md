@@ -1,9 +1,8 @@
 ---
+description: Study of uniform and normal distributions including their density functions,
+  parameters, and the normal approximation to binomial distributions.
 layout: page
 title: Some Continuous Probability Distributions
-description: Study of uniform and normal distributions including their density functions, parameters, and the normal approximation to binomial distributions.
-redirect_from:
-  - probability-and-statistics/continuous-probability-distributions
 ---
 
 # Some Continuous Probability Distributions
@@ -80,4 +79,3 @@ and the approximation is good if $np$ and $n(1-p)$ are greater than or equal to 
 The $0.5$ is called a **continuity correction** and comes from the fact that
 
 $$ P(X = k) \approx P(k - 0.5 \leq X \leq k + 0.5). $$
-

@@ -1,9 +1,8 @@
 ---
+description: Analysis of binomial, hypergeometric, Poisson, geometric, and negative
+  binomial distributions with their probability mass functions and parameters.
 layout: page
 title: Some Discrete Probability Distbutions
-description: Analysis of binomial, hypergeometric, Poisson, geometric, and negative binomial distributions with their probability mass functions and parameters.
-redirect_from:
-  - probability-and-statistics/discrete-probability-distributions
 ---
 
 # Some Discrete Probability Distributions
@@ -104,4 +103,3 @@ The mean is $\frac{1}{p}$ and the variance is $\frac{1 - p}{p^2}.$
 The **negative binomial random variable** generalizes the geometric random variable by giving the probability that it takes $n$ independent trials to get $r$ successes. Its pmf is
 
 $$ P(x = n) = \binom{n - 1}{r - 1} p^r (1 - )^{n - r}. $$
-

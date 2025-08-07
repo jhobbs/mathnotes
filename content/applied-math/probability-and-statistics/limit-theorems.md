@@ -1,9 +1,9 @@
 ---
+description: Fundamental probability limit theorems including Markov and Chebyshev
+  inequalities, Law of Large Numbers, and Central Limit Theorem with moment generating
+  functions.
 layout: page
 title: Limit Theorems
-description: Fundamental probability limit theorems including Markov and Chebyshev inequalities, Law of Large Numbers, and Central Limit Theorem with moment generating functions.
-redirect_from:
-  - probability-and-statistics/limit-theorems
 ---
 
 # Limit Theorems
@@ -216,4 +216,3 @@ $$ \frac{\bar{X} - \mu}{\frac{\sigma}{\sqrt{n}}} \sim Z, \quad n \geq 30. $$
 A more precise version of the theorem follows.
 
 *Central Limit Theorem:* If $c$ is a real constant and $X_1, X_2, \dots$ are independent random variables with mean $\mu$ and standard deviation $\sigma,$ then
-

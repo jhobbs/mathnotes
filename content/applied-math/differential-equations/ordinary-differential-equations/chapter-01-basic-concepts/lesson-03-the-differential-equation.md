@@ -2,12 +2,6 @@
 description: Fundamental definitions of ordinary differential equations, their order,
   and the distinction between explicit and implicit solutions.
 layout: page
-redirect_from:
-- ode/chapter 01 - basic concepts/lesson 03 - the differential equation
-- ode/lesson 03 - the differential equation
-- ode/lesson 3 - the differential equation
-- diffeq/lesson 3 - the differential equation
-- diffeq/firstorderode
 title: The Differential Equation
 ---
 

@@ -1,9 +1,8 @@
 ---
+description: Bivariate random variables, marginalization, multinomial distributions,
+  convolutions, and covariance-correlation analysis.
 layout: page
 title: Joint Probability
-description: Bivariate random variables, marginalization, multinomial distributions, convolutions, and covariance-correlation analysis.
-redirect_from:
-  - probability-and-statistics/joint-probability
 ---
 
 # Joint Probability
@@ -66,4 +65,3 @@ $$ \text{Cov}(X,Y) = E[XY] - E[X]E[Y]. $$
 The correlation coefficient of $X$ and $Y$, $\rho_{x,y},$ is given by
 
 $$ \rho_{x,y} = \frac{\text{Cov}{(X, Y)}}{\sigma_X \sigma_Y}. $$
-

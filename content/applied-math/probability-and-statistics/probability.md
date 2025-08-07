@@ -1,9 +1,8 @@
 ---
+description: Foundational concepts including sample spaces, events, probability rules,
+  conditional probability, and independence using set theory operations.
 layout: page
 title: Probability Basics
-description: Foundational concepts including sample spaces, events, probability rules, conditional probability, and independence using set theory operations.
-redirect_from:
-  - probability-and-statistics/probability
 ---
 
 # Probability Basics

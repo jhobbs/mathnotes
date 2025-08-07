@@ -1,8 +1,5 @@
 ---
 layout: page
-redirect_from:
-- ode/chapter 05 - operators and laplace transforms/lesson 26 - solution of a linear differential equation by means of the partial fraction expansion of inverse operators
-- chapter 05 - operators and laplace transforms/lesson 26 - solution of a linear differential equation by means of the partial fraction expansion of inverse operators.html
 title: Solution of a Linear Differential Equation by Means of the Partial Fraction
   Expansion of Inverse Operators
 ---

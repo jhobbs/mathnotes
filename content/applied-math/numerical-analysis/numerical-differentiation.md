@@ -1,9 +1,8 @@
 ---
+description: Forward, backward, and central difference formulas for approximating
+  derivatives, including multi-point methods based on Lagrange polynomial differentiation.
 layout: page
 title: Numerical Differentiation
-description: Forward, backward, and central difference formulas for approximating derivatives, including multi-point methods based on Lagrange polynomial differentiation.
-redirect_from:
-  - numerical-analysis/numerical-differentiation
 ---
 
 # Numerical Differentiation
@@ -45,4 +44,3 @@ $$ f'(x_0) = \frac{1}{2h} \left( f(x_0 + h) - f(x_0 -h) \right ) - \frac{h^2}{6}
 where $\xi_1$ is in $(x_0 - h, x_0 + h).$
 
 Note that in addition to being more accurate, the midpoint formula uses one less evaluation of $f$ than the endpoint formula!
-

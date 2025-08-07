@@ -1,8 +1,6 @@
 ---
 layout: page
 title: Standardized Test Math
-redirect_from:
-  - misc/standardized-test
 ---
 
 # Standardized Test Math

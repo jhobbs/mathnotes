@@ -3,13 +3,6 @@ description: Solution methods for first-order differential equations with homoge
   coefficients. Covers the definition of homogeneous functions and substitution techniques
   that transform these equations into separable forms.
 layout: page
-redirect_from:
-- ode/chapter 02 - special types of first order equations/lesson 07 - first order
-  differential equation with homogenous coefficients
-- ode/lesson 07 - first order differential equation with homogenous coefficients
-- ode/lesson 7 - first order differential equation with homogenous coefficients
-- diffeq/lesson 7 - first order differential equation with homogenous coefficients
-  of first order equations/lesson 07 - first order differential equation with homogenous
 title: First Order Differential Equation with Homogenous Coefficients
 ---
 

@@ -2,13 +2,6 @@
 description: Introduction to complex numbers, their algebraic properties, polar and
   exponential forms, and operations including roots and quadratics.
 layout: page
-redirect_from:
-- complex/module 01 - algebriac properties
-- complex/module 1 - algebriac properties
-- complex/lesson 18 - complex numbers
-- ode/chapter 04 - linear differential equations of order greater than one/lesson
-  18 - complex numbers
-- /complex analysis/module 01 - algebriac properties
 title: Algebraic Properties
 ---
 

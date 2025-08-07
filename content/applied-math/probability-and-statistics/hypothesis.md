@@ -1,9 +1,8 @@
 ---
+description: Statistical inference methods using z-tests and t-tests to evaluate null
+  and alternative hypotheses with p-value calculations.
 layout: page
 title: Hypothesis Testing
-description: Statistical inference methods using z-tests and t-tests to evaluate null and alternative hypotheses with p-value calculations.
-redirect_from:
-  - probability-and-statistics/hypothesis
 ---
 
 # Hypothesis Testing

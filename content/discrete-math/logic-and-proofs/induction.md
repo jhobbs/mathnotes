@@ -1,9 +1,8 @@
 ---
 layout: page
-redirect_from:
-- proof techniques/induction
 title: Induction
 ---
+
 # Induction
 
 For proof by induction that a statement is true for all $n \geq 1$  we show two things:

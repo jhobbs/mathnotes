@@ -1,7 +1,5 @@
 ---
 layout: page
-redirect_from:
-- ode/chapter 91 - initial and boundary values problems/lesson 910 - initial and boundary values problems
 title: Initial and Boundary Value Problems
 ---
 

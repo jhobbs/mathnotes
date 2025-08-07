@@ -1,11 +1,5 @@
 ---
 layout: page
-redirect_from:
-- ode/chapter 02 - special types of first order equations/lesson 10 - recognizable
-  exact differential equations and integrating factors
-- ode/lesson 10 - recognizable exact differential equations and integrating factors
-  of first order equations/lesson 10 - recognizable exact differential equations and
-  integrating factors
 title: Recognizable Exact Differential Equations
 ---
 

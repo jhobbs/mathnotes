@@ -1,9 +1,8 @@
 ---
+description: Polynomial approximation techniques for both discrete data sets and continuous
+  functions using least squares error minimization.
 layout: page
 title: Least Squares
-description: Polynomial approximation techniques for both discrete data sets and continuous functions using least squares error minimization.
-redirect_from:
-  - numerical-analysis/least-squares
 ---
 
 # Discrete Least Squares Approximation
@@ -29,4 +28,3 @@ The system of equations is produced to minimize $E$ by setting $0 = \frac{\parti
 # Continuous Least Squares Approximation
 
 If we have a function $f \in C[a,b],$ we can use a similar method to approximate it with a polynomial of degree $n.$ This time, our $(n+1)$ normal equations are, for each $j = 0, 1, \dots, n,$
-

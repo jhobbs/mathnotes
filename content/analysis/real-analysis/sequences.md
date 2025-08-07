@@ -1,9 +1,9 @@
 ---
+description: Covers convergent and divergent sequences with epsilon-N definitions,
+  limit laws, monotone convergence theorem, subsequences, Bolzano-Weierstrass theorem,
+  and Cauchy sequences.
 layout: page
-redirect_from:
-- calculus/sequences
 title: Sequences
-description: Covers convergent and divergent sequences with epsilon-N definitions, limit laws, monotone convergence theorem, subsequences, Bolzano-Weierstrass theorem, and Cauchy sequences.
 ---
 
 # Sequences

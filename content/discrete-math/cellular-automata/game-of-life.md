@@ -1,9 +1,9 @@
 ---
+description: Conway's famous cellular automaton demonstrating emergence and complexity
+  from simple rules, featuring still lifes, oscillators, spaceships, and computational
+  universality with interactive simulation.
 layout: page
-redirect_from:
-- cellular/game-of-life
 title: Conway's Game of Life
-description: Conway's famous cellular automaton demonstrating emergence and complexity from simple rules, featuring still lifes, oscillators, spaceships, and computational universality with interactive simulation.
 ---
 
 # Conway's Game of Life

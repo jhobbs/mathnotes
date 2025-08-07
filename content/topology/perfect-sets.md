@@ -1,9 +1,7 @@
 ---
+description: Introduces perfect sets.
 layout: page
 title: Perfect Sets
-description: Introduces perfect sets.
-redirect_from:
-  - real-analysis/topology/perfect-sets
 ---
 
 # Perfect Sets
@@ -35,4 +33,3 @@ For each $n$, let $K_n = \overline{V_n} \cap P.$ Since $\overline{V_n}$ is close
 Every interval $[a, b] (a < b)$ is uncountable, and thus the set of all real numbers is uncountable as it contains uncountable subsets.
 ::::
 :::
-

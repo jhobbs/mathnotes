@@ -1,9 +1,9 @@
 ---
+description: Maxwell's fundamental equation relating electric flux through closed
+  surfaces to enclosed charge, with applications using symmetry arguments and surface
+  integrals.
 layout: page
 title: Gauss's Law
-description: Maxwell's fundamental equation relating electric flux through closed surfaces to enclosed charge, with applications using symmetry arguments and surface integrals.
-redirect_from:
-  - physics/gauss-law
 ---
 
 # Gauss's Law

@@ -75,7 +75,7 @@ mathnotes/
 │   ├── __init__.py              # Package initialization
 │   ├── config.py                # Configuration settings
 │   ├── security.py              # Security middleware & CSP
-│   ├── url_mapper.py            # URL mapping & redirects
+│   ├── url_mapper.py            # URL mapping
 │   ├── markdown_processor.py    # Markdown rendering
 │   ├── structured_math.py       # Mathematical content system
 │   ├── routes.py                # Route definitions
@@ -280,23 +280,6 @@ description: "Brief description for SEO"
 **URL Generation:**
 - Default: `/mathnotes/section/title-as-slug`
 - Custom: `/mathnotes/section/custom-slug`
-- Automatic redirect from file-based URLs
-
-### Redirects
-
-Preserve old URLs when moving or renaming content:
-
-```yaml
----
-title: "Integration Strategies"
-slug: integration-techniques
-redirect_from:
-  - calculus/integration
-  - calculus/old-integration-page
----
-```
-
-All listed URLs will redirect (301) to the canonical URL.
 
 ### SEO Features
 
@@ -308,9 +291,9 @@ All listed URLs will redirect (301) to the canonical URL.
 ### Best Practices
 
 1. **Choose descriptive slugs**: lowercase, hyphens, meaningful
-2. **Always add redirects**: when moving or renaming files
-3. **Keep slugs stable**: avoid changing once published
-4. **Use descriptions**: for better search engine results
+2. **Keep slugs stable**: avoid changing once published  
+3. **Use descriptions**: for better search engine results
+4. **Update internal links**: when moving or renaming files
 
 ## Development
 
@@ -338,11 +321,8 @@ All listed URLs will redirect (301) to the canonical URL.
 When moving or renaming files:
 
 1. Note the current canonical URL
-2. Add `redirect_from` to frontmatter:
-   ```yaml
-   redirect_from: [old/path, another/old/path]
-   ```
-3. Test that redirects work
+2. Update any internal links that reference the old URL
+3. Test that all links work correctly
 
 ### Testing
 

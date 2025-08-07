@@ -1,7 +1,5 @@
 ---
 layout: page
-redirect_from:
-- ode/chapter 03 - problems leading to first order equations/lesson 14 - trajectories
 title: Trajectories
 ---
 

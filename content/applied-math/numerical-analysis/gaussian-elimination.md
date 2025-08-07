@@ -1,9 +1,8 @@
 ---
+description: Matrix row operations for solving linear systems, including pivoting
+  strategies and LU factorization for efficient multiple-solve scenarios.
 layout: page
 title: Gaussian Elimination
-description: Matrix row operations for solving linear systems, including pivoting strategies and LU factorization for efficient multiple-solve scenarios.
-redirect_from:
-  - numerical-analysis/gaussian-elimination
 ---
 
 # Gaussian Elimination

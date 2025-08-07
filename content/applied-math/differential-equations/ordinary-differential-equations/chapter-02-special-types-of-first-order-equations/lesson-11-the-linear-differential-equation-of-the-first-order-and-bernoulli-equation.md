@@ -3,13 +3,6 @@ description: Solution methods for first-order linear differential equations usin
   integrating factors, and techniques for solving Bernoulli and Ricatti equations.
   Covers the standard form and systematic solution approaches.
 layout: page
-redirect_from:
-- ode/chapter 02 - special types of first order equations/lesson 11 - the linear differential
-  equation of the first order and bernoulli equation
-- ode/lesson 11 - the linear differential equation of the first order and bernoulli
-  equation
-  of first order equations/lesson 11 - the linear differential equation of the first
-  order and bernoulli equation
 title: The Linear Differential Equation
 ---
 

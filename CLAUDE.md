@@ -84,7 +84,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
 
 ### Content Management
 ```bash
-# Move files with automatic redirect handling
+# Move files
 ./scripts/move_file.sh old/path.md new/path.md
 ```
 
@@ -99,7 +99,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
 5. **Build Script** (`scripts/build_static_simple.py`): Minimal entry point (~45 lines)
 
 #### Processing Components
-1. **URL Resolution** (`url_mapper.py`): Maps slugs to file paths, handles redirects
+1. **URL Resolution** (`url_mapper.py`): Maps slugs to file paths
 2. **Markdown Processing** (`markdown_processor.py`): 
    - Protects math expressions from markdown parsing
    - Processes wiki-style links `[[slug]]`
@@ -114,7 +114,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
 
 ### Key Architectural Decisions
 
-1. **URL System**: Content uses slug-based canonical URLs (`/mathnotes/section/slug`) with automatic redirects from file-based paths. This allows content reorganization without breaking links.
+1. **URL System**: Content uses slug-based canonical URLs (`/mathnotes/section/slug`). This allows content reorganization without breaking links.
 
 2. **Math Processing Pipeline**: 
    - Math expressions are protected before markdown parsing
@@ -156,9 +156,8 @@ This prevents markdown from interfering with LaTeX syntax.
 ### File Movement Protocol
 When moving/renaming content files:
 1. Note the current canonical URL
-2. Add `redirect_from: [old-url]` to frontmatter
-3. Test redirect works
-4. Or use: `./scripts/move_file.sh old/path.md new/path.md`
+2. Update any internal links that reference the old URL
+3. Or use: `./scripts/move_file.sh old/path.md new/path.md`
 
 ## Development Guidelines
 
@@ -186,7 +185,7 @@ When moving/renaming content files:
 
 ### URL Best Practices
 - Choose stable, descriptive slugs
-- Always add redirects when moving files
+- Update internal links when moving files
 - Use wiki-style links for resilience: `[[slug]]`
 - Canonical URLs adapt automatically for dev/prod
 

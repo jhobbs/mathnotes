@@ -1,10 +1,5 @@
 ---
 layout: page
-redirect_from:
-- ode/chapter 90 - series solutions/lesson 901 - power series solutions to linear
-  differential equations
-- ode/chapter 90 - series solutions/lesson 901 - power series solutions to linear
-  differential equatons
 title: Power Series Solutions to Linear Differential Equations
 ---
 

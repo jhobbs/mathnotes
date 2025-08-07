@@ -1,9 +1,8 @@
 ---
+description: Scalar potential theory in electrostatics, exploring the relationship
+  between electric fields and potential through gradient operations and line integrals.
 layout: page
 title: Electric Potential
-description: Scalar potential theory in electrostatics, exploring the relationship between electric fields and potential through gradient operations and line integrals.
-redirect_from:
-  - physics/electric-potential
 ---
 
 # Electric Potential

@@ -1,10 +1,9 @@
 ---
+description: Introduction to the heat equation as a fundamental partial differential
+  equation modeling temperature distribution over time. Covers the mathematical formulation,
+  boundary conditions, and initial-boundary value problems for heat flow in one dimension.
 layout: page
-redirect_from:
-- partial differential-equations/heat
-- differential-equations/heat-equation
 title: Heat Equation
-description: Introduction to the heat equation as a fundamental partial differential equation modeling temperature distribution over time. Covers the mathematical formulation, boundary conditions, and initial-boundary value problems for heat flow in one dimension.
 ---
 
 # Heat Equation

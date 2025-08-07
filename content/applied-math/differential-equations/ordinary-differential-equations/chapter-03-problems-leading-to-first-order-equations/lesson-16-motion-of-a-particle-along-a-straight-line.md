@@ -4,10 +4,6 @@ description: Applications of first-order differential equations to particle moti
   and horizontal motion with friction. Covers Newton's laws and various resistance
   models.
 layout: page
-redirect_from:
-- ode/chapter 03 - problems leading to first order equations/lesson 16 - motion of
-  a particle along a straight line
-  to first order equations/lesson 16 - motion of a particle along a straight line
 title: Motion of a Particle Along a Straight Line
 ---
 

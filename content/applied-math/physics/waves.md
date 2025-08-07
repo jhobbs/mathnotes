@@ -1,9 +1,8 @@
 ---
+description: Wave mechanics covering sinusoidal waves, interference, standing waves,
+  and sound propagation using partial differential equations and trigonometric analysis.
 layout: page
 title: Waves
-description: Wave mechanics covering sinusoidal waves, interference, standing waves, and sound propagation using partial differential equations and trigonometric analysis.
-redirect_from:
-  - physics/waves
 ---
 
 # Waves

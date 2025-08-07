@@ -1,10 +1,9 @@
 ---
+description: The method of separation of variables for solving partial differential
+  equations including the heat equation, wave equation, and Laplace's equation. Covers
+  eigenvalue problems, boundary conditions, and Fourier series solutions.
 layout: page
-redirect_from:
-  - differential-equations/separation-of-variables
-  - partial differential-equations/separation-of-variables
 title: Separation of Variables
-description: The method of separation of variables for solving partial differential equations including the heat equation, wave equation, and Laplace's equation. Covers eigenvalue problems, boundary conditions, and Fourier series solutions.
 ---
 
 # Separation of Variables

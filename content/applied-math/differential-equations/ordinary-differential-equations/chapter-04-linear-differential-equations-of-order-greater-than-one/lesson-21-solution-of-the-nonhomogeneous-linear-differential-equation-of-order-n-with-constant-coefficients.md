@@ -3,9 +3,6 @@ description: Comprehensive treatment of the method of undetermined coefficients 
   solving nonhomogeneous linear differential equations with constant coefficients.
   Covers multiple cases and the use of complex variables for particular solutions.
 layout: page
-redirect_from:
-- ode/chapter 04 - linear differential equations of order greater than one/lesson 21 - solution of the nonhomogeneous linear differential equation of order n with constant coefficients
-- chapter 04 - linear differential equations of order greater than one/lesson 21 - solution of the nonhomogeneous linear differential equation of order n with constant coefficients.html
 title: Solution of the Nonhomogeneous Linear Differential Equation of Order n with
   Constant Coefficients (Method of Undetermined Coefficients)
 ---

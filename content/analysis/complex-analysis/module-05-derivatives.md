@@ -2,10 +2,6 @@
 description: Complex derivatives, analyticity, Cauchy-Riemann equations, and their
   relationship to harmonic functions and Jacobian transformations.
 layout: page
-redirect_from:
-- complex/module 05 - derivatives
-- complex/module 5 - derivatives
-- /complex analysis/module 05 - derivatives
 title: Derivatives of Complex Functions
 ---
 
