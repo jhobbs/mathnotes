@@ -1,9 +1,8 @@
 ---
+description: Newton's law of universal gravitation and its applications, including
+  inverse square force relationships and gravitational field calculations.
 layout: page
 title: Gravitation
-description: Newton's law of universal gravitation and its applications, including inverse square force relationships and gravitational field calculations.
-redirect_from:
-  - physics/gravitation
 ---
 
 # Gravitation

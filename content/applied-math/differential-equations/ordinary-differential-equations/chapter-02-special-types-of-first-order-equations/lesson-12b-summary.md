@@ -1,9 +1,5 @@
 ---
 layout: page
-redirect_from:
-- ode/chapter 02 - special types of first order equations/lesson 12b - summary
-- ode/chapter 02 - special types of first order equations/summary
-  of first order equations/lesson 12b - summary
 title: Summary of First Order Differential Equations
 ---
 

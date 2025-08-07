@@ -1,9 +1,8 @@
 ---
+description: Iterative algorithms including bisection method and Newton's method for
+  finding approximate solutions to equations of the form f(x) = 0.
 layout: page
 title: Root Approximation
-description: Iterative algorithms including bisection method and Newton's method for finding approximate solutions to equations of the form f(x) = 0.
-redirect_from:
-  - numerical-analysis/root-approximation
 ---
 
 # Root Approximation

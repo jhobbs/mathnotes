@@ -1,9 +1,8 @@
 ---
+description: Lagrange and Newton polynomial interpolation methods, divided differences,
+  and cubic spline techniques for approximating functions through discrete data points.
 layout: page
 title: Interpolation and Polynomial Approximation
-description: Lagrange and Newton polynomial interpolation methods, divided differences, and cubic spline techniques for approximating functions through discrete data points.
-redirect_from:
-  - numerical-analysis/interpolation-and-polynomial-approximation
 ---
 
 # Interpolation and Polynomial Approximation
@@ -210,4 +209,3 @@ A **natural spline** approximates the shape a long flexible rod would take when 
 The procedure for finding a cubic spline interpolation over $n$ subintervals is to setup a system of equations using the contraints given above and to solve for the unknown constants. There will be $n$ cubic polynomials, each with 4 constants, so $4n$ equations will be needed to find the $4n$ constants.
 
 Each cubic polynomial is of the form
-

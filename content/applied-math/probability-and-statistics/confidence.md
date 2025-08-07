@@ -1,9 +1,8 @@
 ---
+description: Statistical methods for estimating population parameters with specified
+  confidence levels using normal and t-distributions.
 layout: page
 title: Confidence Intervals
-description: Statistical methods for estimating population parameters with specified confidence levels using normal and t-distributions.
-redirect_from:
-  - probability-and-statistics/confidence
 ---
 
 # Confidence Intervals
@@ -45,4 +44,3 @@ When $n$ is small and the unknown proportion $p$ is believed to be close to $0$ 
 $$ n = \frac{z_{\alpha/2}^2 \hat{p} \hat{q}}{e^2}. $$
 
 *Theorem:* If $\hat{p}$ is used as an estimate of $p,$ we can be **at least** $100(1-\alpha)\%$ confident that the error will not exceed a specified amount $e$ when the sample size is
-

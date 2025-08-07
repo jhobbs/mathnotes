@@ -3,17 +3,6 @@ description: Introduction to the concept of differentials and separable variable
   equations. Covers the differential as a function of two variables and the method
   for solving equations where variables can be separated.
 layout: page
-redirect_from:
-- ode/chapter 02 - special types of first order equations/lesson 06 - meaning of the
-  differential of a function and separable differential equations
-- ode/lesson 06 - meaning of the differential of a function and separable differential
-  equations
-- ode/lesson 6 - meaning of the differential of a function and separable differential
-  equations
-- diffeq/lesson 6 - meaning of the differential of a function and separable differential
-  equations
-  of first order equations/lesson 06 - meaning of the differential of a function and
-  separable differential equations
 title: Meaning of the Differential
 ---
 

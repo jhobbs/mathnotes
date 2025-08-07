@@ -1,9 +1,7 @@
 ---
+description: A definition of the Cantor set, along with some theorems about it.
 layout: page
 title: Cantor Set
-description: A definition of the Cantor set, along with some theorems about it.
-redirect_from:
-  - real-analysis/topology/cantor-set
 ---
 
 :::note

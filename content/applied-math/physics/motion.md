@@ -1,9 +1,8 @@
 ---
+description: Classical mechanics covering forces, energy, momentum, and rotational
+  dynamics using calculus-based analysis and vector methods.
 layout: page
 title: Newtonian Motion
-description: Classical mechanics covering forces, energy, momentum, and rotational dynamics using calculus-based analysis and vector methods.
-redirect_from:
-  - physics/motion
 ---
 
 # Newtonian Motion

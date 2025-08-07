@@ -2,11 +2,6 @@
 description: Definitions and properties of neighborhoods, interior and boundary points,
   open and closed sets, domains, and connectivity in the complex plane.
 layout: page
-redirect_from:
-- complex/module 02 - regions of the complex plane
-- complex/module 2 - regions of the complex plane
-- complex/regions-of-the-complex-plane
-- /complex analysis/module 02 - regions of the complex plane
 title: Regions of the Complex Plane
 ---
 

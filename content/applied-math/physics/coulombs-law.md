@@ -1,9 +1,8 @@
 ---
+description: Fundamental law describing electrostatic forces between charged particles
+  using inverse square relationships and vector analysis.
 layout: page
 title: Coulomb's Law
-description: Fundamental law describing electrostatic forces between charged particles using inverse square relationships and vector analysis.
-redirect_from:
-  - physics/coulombs-law
 ---
 
 # Coulomb's Law

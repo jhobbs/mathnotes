@@ -1,9 +1,7 @@
 ---
+description: Introduces compact sets.
 layout: page
 title: Compact Sets
-description: Introduces compact sets.
-redirect_from:
-  - real-analysis/topology/compact-sets
 ---
 
 # Compact Sets

@@ -1,9 +1,8 @@
 ---
+description: Stochastic processes with transition matrices, ergodic properties, and
+  steady-state probability calculations using linear algebra methods.
 layout: page
 title: Markov Chains
-description: Stochastic processes with transition matrices, ergodic properties, and steady-state probability calculations using linear algebra methods.
-redirect_from:
-  - probability-and-statistics/markov-chains
 ---
 
 # Markov Chains
@@ -55,4 +54,3 @@ $$ \sum_{k=1}^N \pi_k = 1. $$
 Here, $\vec{\pi} = \langle \pi_1, \pi_2, \dots, \pi_N \rangle$ and the entries in it represent the long term probabilities of being in any given state, or equivalently, the portion of time spent in any given state.
 
 Note that $\vec{\pi} \cdot P = \vec{\pi},$ which when combined with the fact that the entries of $\vec{\pi}$ sum to 1 lets us solve a linear system of equations to find the entries of $\vec{\pi}.$
-

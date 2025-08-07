@@ -1,9 +1,8 @@
 ---
+description: Analysis of floating-point arithmetic precision, error measurement techniques,
+  and computational strategies like nesting to minimize numerical errors.
 layout: page
 title: Rounding Errors
-description: Analysis of floating-point arithmetic precision, error measurement techniques, and computational strategies like nesting to minimize numerical errors.
-redirect_from:
-  - numerical-analysis/rounding-errors
 ---
 
 # Rounding Errors
@@ -26,5 +25,4 @@ $$ f(x) = x^3 - 6.1x^2 + 3.2x + 1.5 $$
 
 as
 
-$$ f(x) = (x - 6.1)x + 3.2)x + 1.5. $$ 
-
+$$ f(x) = (x - 6.1)x + 3.2)x + 1.5. $$

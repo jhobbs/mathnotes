@@ -3,8 +3,6 @@ description: Fundamental theory of linear differential equations of higher order
   linear independence of solutions, existence and uniqueness theorems, and the structure
   of general solutions for homogeneous and nonhomogeneous equations.
 layout: page
-redirect_from:
-- ode/chapter 04 - linear differential equations of order greater than one/lesson 19 - linear independence of functions and the linear differential equation of order n
 title: Linear Independence of Functions. The Linear Differential Equation of Order
   n.
 ---

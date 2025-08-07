@@ -2,9 +2,6 @@
 description: Types of isolated singularities including removable singularities, poles
   of various orders, and essential singularities based on Laurent series.
 layout: page
-redirect_from:
-- complex/module 22 - classification of singularities
-- /complex analysis/module 22 - classification of singularities
 title: Classification of Singularities
 ---
 

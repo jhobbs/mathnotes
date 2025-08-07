@@ -3,9 +3,6 @@ description: Theory and application of Laplace transforms for solving linear dif
   equations with initial conditions. Includes properties, inverse transforms, and
   the gamma function for extending factorial operations to non-integers.
 layout: page
-redirect_from:
-- ode/chapter 05 - operators and laplace transforms/lesson 27 - the laplace transform and gamma function
-- chapter 05 - operators and laplace transforms/lesson 27 - the laplace transform and gamma function.html
 title: The Laplace Transform. Gamma Function.
 ---
 

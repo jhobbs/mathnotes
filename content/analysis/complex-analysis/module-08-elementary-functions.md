@@ -2,10 +2,6 @@
 description: Complex exponential, trigonometric, hyperbolic, and logarithmic functions
   with their properties, periodicity, and branch structures.
 layout: page
-redirect_from:
-- complex/module 08 - elementary functions
-- complex/module 8 - elementary functions
-- /complex analysis/module 08 - elementary functions
 title: Elementary Functions
 ---
 

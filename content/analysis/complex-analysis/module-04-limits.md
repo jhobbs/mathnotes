@@ -2,11 +2,6 @@
 description: Delta-epsilon definition of limits for complex functions, continuity,
   removable discontinuities, and multi-valued functions with branches and branch cuts.
 layout: page
-redirect_from:
-- complex/module 04 - limits
-- complex/module 4 - limits
-- complex/limits
-- /complex analysis/module 04 - limits
 title: Limits and Continuity of Complex Functions
 ---
 

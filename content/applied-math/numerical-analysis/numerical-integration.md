@@ -1,9 +1,8 @@
 ---
+description: Quadrature methods including trapezoidal and Simpson's rules, composite
+  integration techniques, and Gaussian quadrature using optimal node selection.
 layout: page
 title: Numerical Integration
-description: Quadrature methods including trapezoidal and Simpson's rules, composite integration techniques, and Gaussian quadrature using optimal node selection.
-redirect_from:
-  - numerical-analysis/numerical-integration
 ---
 
 # Numerical Integration
@@ -155,4 +154,3 @@ We can take advantage of the fact that $\int_{a}^{b}f(x) dx$ over an arbitrary i
 $$ t = \frac{2x - a - b}{b - a} \iff x = \frac{1}{2}[(b - a)t + a + b]. $$
 
 Thus,
-

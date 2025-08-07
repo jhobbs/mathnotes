@@ -54,3 +54,4 @@ This file tracks ideas for future features, enhancements, and demonstrations for
   - Allow explicit selection of which definition to link to
   - Could use file path or section hierarchy for automatic namespacing
   - Warn during build process about duplicate definition labels
+

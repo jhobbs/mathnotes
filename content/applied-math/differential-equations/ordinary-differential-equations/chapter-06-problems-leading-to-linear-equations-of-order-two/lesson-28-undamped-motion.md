@@ -3,9 +3,6 @@ description: Analysis of simple harmonic motion and forced oscillations using se
   linear differential equations. Covers spring-mass systems, pendulum motion, resonance
   phenomena, and both free and forced undamped vibrations.
 layout: page
-redirect_from:
-- ode/chapter 06 - problems leading to linear equations of order two/lesson 28 - undamped motion
-- ode/chapter 06 - problems leading to linear equations of order two/lesson 28 - undamped motion.html
 title: Undamped Motion
 ---
 

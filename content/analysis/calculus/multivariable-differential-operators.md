@@ -1,9 +1,9 @@
 ---
+description: Vector calculus operators including gradient, curl, divergence, and Laplacian
+  with geometric interpretations, mathematical definitions, and applications to physics
+  and engineering.
 layout: page
 title: Multivariable Differential Operators
-description: Vector calculus operators including gradient, curl, divergence, and Laplacian with geometric interpretations, mathematical definitions, and applications to physics and engineering.
-redirect_from:
-  - calculus/multivariable-differential-operators
 ---
 
 # Multivariable Differential Operators

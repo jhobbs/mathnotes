@@ -1,9 +1,9 @@
 ---
+description: One-dimensional cellular automata with binary states and local rules,
+  exploring Wolfram's 256 elementary rules including chaotic patterns, fractals, and
+  Turing completeness with interactive demonstrations.
 layout: page
-redirect_from:
-- cellular/elementary-cellular-automata
 title: Elementary Cellular Automata
-description: One-dimensional cellular automata with binary states and local rules, exploring Wolfram's 256 elementary rules including chaotic patterns, fractals, and Turing completeness with interactive demonstrations.
 ---
 
 # Elementary Cellular Automata

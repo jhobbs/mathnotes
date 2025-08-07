@@ -1,9 +1,8 @@
 ---
+description: Mathematical framework for discrete and continuous random variables with
+  their probability mass functions and cumulative distribution functions.
 layout: page
 title: Random Variables and Probability Distributions
-description: Mathematical framework for discrete and continuous random variables with their probability mass functions and cumulative distribution functions.
-redirect_from:
-  - probability-and-statistics/random-variables-and-probability-distributions
 ---
 
 # Random Variables and Probability Distributions
@@ -51,4 +50,3 @@ In other words, if we integrate $f(x)$ from $a$ to $b$ we will get the probabili
 From here, the **cumulative distribution function** F(X) of a continuous random variable $X$ with density function $f(x)$ is attained by simply integrating $f(x)$ from $-\infty$ to $x$:
 
 $$ F(X) = P(X \leq x) = \int_{-\infty}^{x} f(t)dt, \quad -\infty < x < \infty. $$
-

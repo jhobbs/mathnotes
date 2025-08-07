@@ -1,9 +1,8 @@
 ---
+description: Applied probability analysis of slot machine mechanics using combinatorics
+  and independent events to calculate matching probabilities across multiple spins.
 layout: page
 title: Slot Machines
-description: Applied probability analysis of slot machine mechanics using combinatorics and independent events to calculate matching probabilities across multiple spins.
-redirect_from:
-  - probability-and-statistics/slots
 ---
 
 My dad told a story at dinner once about playing slots in Las Vegas. He doesn't gamble much, but he was there and had some time to kill, so he thought, "Why not, I'll give this a spin!" He put a \\$20 bill into a machine with three reels, and at \\\$1 per spin for a total of $20$ spins, he never even had two reels match, much less three! He said surely not having two reels match at least once in 20 spins is much less likely than having three reels match at least once, and wanted to know the odds. Someone pointed out that the machines don't have fair reels so it's impossible for an outsider to calculate the odds, but for the sake of getting to do some math, we can make some simplifying assumptions.
@@ -88,4 +87,3 @@ Note that the probability of no two reels matching on any spins starts at $0$ fo
 Most slot machines in Las Vegas have something like $10$ symbols; the probability of not having any two reels match on $20$ spins with $3$ reels and $10$ symbols are less than one percent, roughly $0.14\%,$ while the probability of having three reels match at least once is much higher at about $18.2\%.$
 
 My dad's intuition was right, and it's not even close! For 10 symbols, the "three reels matching at least once" outcome is over 100 times more likely to occur than the "not a single case of two reels matching" outcome. After doing the calculations, I was very surprised by how unlikely my dad's experience would be on a slot machine with this simplified behavior. I know that the machines are tilted in the house's favor, but I would have expected them to behave in a way that more closely matches our intuitive sense of fairness, since it seems like that would be more likely to entice people to continue to play.
-

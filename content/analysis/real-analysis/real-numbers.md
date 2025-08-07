@@ -1,9 +1,9 @@
 ---
+description: Axiomatically defines the real numbers as an ordered complete field,
+  covering field axioms, order properties, completeness, supremum and infimum, and
+  the absolute value function.
 layout: page
-redirect_from:
-- calculus/real-numbers
 title: Real Numbers
-description: Axiomatically defines the real numbers as an ordered complete field, covering field axioms, order properties, completeness, supremum and infimum, and the absolute value function.
 ---
 
 # Real Numbers

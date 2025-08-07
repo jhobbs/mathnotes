@@ -1,9 +1,8 @@
 ---
+description: Algebraic structures with two operations - rings and fields including
+  their axioms and fundamental properties.
 layout: page
 title: Rings and Fields
-description: Algebraic structures with two operations - rings and fields including their axioms and fundamental properties.
-redirect_from:
-  - algebra/rings
 ---
 
 # Rings

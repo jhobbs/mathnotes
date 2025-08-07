@@ -1,9 +1,9 @@
 ---
+description: Studies infinite series convergence through partial sums, covering convergence
+  tests including geometric series, p-series, ratio test, root test, and comparison
+  tests.
 layout: page
-redirect_from:
-- calculus/series
 title: Series
-description: Studies infinite series convergence through partial sums, covering convergence tests including geometric series, p-series, ratio test, root test, and comparison tests.
 ---
 
 # Series

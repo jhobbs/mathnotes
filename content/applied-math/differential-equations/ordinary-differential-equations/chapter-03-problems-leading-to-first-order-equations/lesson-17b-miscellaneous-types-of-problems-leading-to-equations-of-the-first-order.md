@@ -1,8 +1,5 @@
 ---
 layout: page
-redirect_from:
-- ode/chapter 03 - problems leading to first order equations/lesson 17b - miscellaneous types of problems leading to equations of the first order
-- ode/chapter 03 - problems leading to first order equations/lesson 18 - miscellaneous types of problems leading to equations of the first order
 title: Miscellaneous Types of Problems Leading to Equations of the First Order
 ---
 

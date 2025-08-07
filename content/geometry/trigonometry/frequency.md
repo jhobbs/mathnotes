@@ -1,9 +1,8 @@
 ---
 layout: page
 title: Frequency and Period
-redirect_from:
-  - trigonometry/frequency
 ---
+
 # Frequency and Period
 
 ## Definitions

@@ -1,9 +1,8 @@
 ---
+description: Sinusoidal oscillatory motion analyzed through differential equations,
+  covering springs, pendulums, and damped systems with trigonometric solutions.
 layout: page
 title: Simple Harmonic Motion
-description: Sinusoidal oscillatory motion analyzed through differential equations, covering springs, pendulums, and damped systems with trigonometric solutions.
-redirect_from:
-  - physics/simple-harmonic-motion
 ---
 
 # Simple Harmonic Motion

@@ -1,9 +1,7 @@
 ---
+description: An introduction to conneceted sets
 layout: page
 title: Connected Sets
-description: An introduction to conneceted sets
-redirect_from:
-  - real-analysis/topology/connected-sets
 ---
 
 :::note

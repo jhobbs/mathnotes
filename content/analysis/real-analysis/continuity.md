@@ -1,10 +1,10 @@
 ---
+description: Explores the epsilon-delta definition of continuity and fundamental continuity
+  theorems including the Intermediate Value Theorem, Boundedness Theorem, and Extreme
+  Value Theorem.
 layout: page
-redirect_from:
-- calculus/continuity
 test: change
 title: Continuity
-description: Explores the epsilon-delta definition of continuity and fundamental continuity theorems including the Intermediate Value Theorem, Boundedness Theorem, and Extreme Value Theorem.
 ---
 
 # Continuity

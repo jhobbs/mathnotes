@@ -2,11 +2,6 @@
 description: Complex-valued functions, geometric transformations, bilinear mappings,
   and methods for finding images of curves in the complex plane.
 layout: page
-redirect_from:
-- complex/module 03 - complex functions
-- complex/module 3 - complex functions
-- complex/complex-functions
-- /complex analysis/module 03 - complex functions
 title: Complex Functions
 ---
 

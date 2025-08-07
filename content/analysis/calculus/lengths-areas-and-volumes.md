@@ -3,8 +3,6 @@ description: Geometric applications of integration including volumes of solids o
   revolution, areas enclosed by polar curves, and arc length calculations for parametric
   and polar coordinate systems.
 layout: page
-redirect_from:
-- /calculus/lengths areas and volumes
 title: Lengths, Areas and Volumes
 ---
 

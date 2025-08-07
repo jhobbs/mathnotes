@@ -2,10 +2,6 @@
 description: Harmonic functions satisfying Laplace's equation, harmonic conjugates,
   and their relationship to analytic complex functions.
 layout: page
-redirect_from:
-- complex/module 06 - harmonic
-- complex/module 6 - harmonic
-- /complex analysis/module 06 - harmonic
 title: Harmonic Functions
 ---
 

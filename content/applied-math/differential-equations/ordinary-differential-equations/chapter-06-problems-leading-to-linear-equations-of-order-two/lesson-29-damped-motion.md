@@ -1,9 +1,5 @@
 ---
 layout: page
-redirect_from:
-- ode/chapter 06 - problems leading to linear equations of order two/lesson 29 - damped
-  motion
-  to linear equations of order two/lesson 29 - damped motion
 title: Damped Motion
 ---
 

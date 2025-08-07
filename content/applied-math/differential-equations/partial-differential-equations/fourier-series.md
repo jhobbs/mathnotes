@@ -1,9 +1,9 @@
 ---
+description: Comprehensive treatment of Fourier series including trigonometric series,
+  Euler-Fourier formulas, and half-range expansions. Covers both sine and cosine series
+  with applications to solving partial differential equations.
 layout: page
-redirect_from:
-- partial differential-equations/fourier-series
 title: Fourier Series
-description: Comprehensive treatment of Fourier series including trigonometric series, Euler-Fourier formulas, and half-range expansions. Covers both sine and cosine series with applications to solving partial differential equations.
 ---
 
 # Review
