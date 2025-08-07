@@ -107,10 +107,13 @@ class ProjectionDemo extends P5DemoBase {
       
       // Camera angle sliders
       this.cameraAngleXSlider = this.createSlider(p, 'X', -p.PI, p.PI, 0, 0.01, () => p.redraw());
+      (this.cameraAngleXSlider.elt as HTMLElement).classList.add('projection-compact-slider');
       cameraSliders.appendChild(this.cameraAngleXSlider.parent() as unknown as Node);
       this.cameraAngleYSlider = this.createSlider(p, 'Y', -p.PI, p.PI, 0, 0.01, () => p.redraw());
+      (this.cameraAngleYSlider.elt as HTMLElement).classList.add('projection-compact-slider');
       cameraSliders.appendChild(this.cameraAngleYSlider.parent() as unknown as Node);
       this.cameraAngleZSlider = this.createSlider(p, 'Z', -p.PI, p.PI, 0, 0.01, () => p.redraw());
+      (this.cameraAngleZSlider.elt as HTMLElement).classList.add('projection-compact-slider');
       cameraSliders.appendChild(this.cameraAngleZSlider.parent() as unknown as Node);
       
       // Translation group
@@ -130,10 +133,13 @@ class ProjectionDemo extends P5DemoBase {
       
       // Translation sliders - ranges will be updated after scaling
       this.translateXSlider = this.createSlider(p, 'X', -this.translationRange, this.translationRange, 0, 1, () => p.redraw());
+      (this.translateXSlider.elt as HTMLElement).classList.add('projection-compact-slider');
       translateSliders.appendChild(this.translateXSlider.parent() as unknown as Node);
       this.translateYSlider = this.createSlider(p, 'Y', -this.translationRange, this.translationRange, 0, 1, () => p.redraw());
+      (this.translateYSlider.elt as HTMLElement).classList.add('projection-compact-slider');
       translateSliders.appendChild(this.translateYSlider.parent() as unknown as Node);
       this.translateZSlider = this.createSlider(p, 'Z', -this.translationRange, this.translationRange, 100, 1, () => p.redraw());
+      (this.translateZSlider.elt as HTMLElement).classList.add('projection-compact-slider');
       translateSliders.appendChild(this.translateZSlider.parent() as unknown as Node);
       
       // Focal length group
@@ -151,6 +157,7 @@ class ProjectionDemo extends P5DemoBase {
       focalGroup.appendChild(focalContent);
       
       this.focalSlider = this.createSlider(p, '', 1, 30, 15, 0.1, () => p.redraw());
+      (this.focalSlider.elt as HTMLElement).classList.add('projection-compact-slider');
       focalContent.appendChild(this.focalSlider.parent() as unknown as Node);
       
       // Initialize scaling

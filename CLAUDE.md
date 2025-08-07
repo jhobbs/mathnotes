@@ -24,6 +24,7 @@ Mathnotes is a static site generator that renders mathematics notes with interac
 
 * Don't check types after every single change
 * For styling guidelines, see [STYLE.md](./STYLE.md)
+* we never put styles directly in typescript
 
 ## Common Commands
 
@@ -261,4 +262,5 @@ Key debugging tools available:
 - Mobile-specific testing and responsive scaling
 - JavaScript policy compliance and CSP debugging
 - Docker container debugging
+```
 ```

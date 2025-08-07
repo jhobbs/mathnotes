@@ -25,7 +25,7 @@ grep -r "registerDemo" mathnotes/demos-framework/src/main.ts
 ### Console Probe Debugging
 - You can use console.log("[probe] ...") to debug JavaScript/CSS/DOM issues in conjunction with the page crawler
 - Example: `console.log('[probe] Copyright display:', getComputedStyle(element).display)`
-- Run with: `./scripts/crawl-dev.sh --single-page "http://web-dev:5000/demo-viewer#demo-name" 2>&1 | grep "\[probe\]"`
+- Run with: `./scripts/crawl-dev.sh --single-page "http://web-dev:5000/demos/#demo-name" 2>&1 | grep "\[probe\]"`
 
 ### Demo Screenshot Analysis
 The demo crawler (`./scripts/crawl-demos.py`) supports AI-powered visual analysis:

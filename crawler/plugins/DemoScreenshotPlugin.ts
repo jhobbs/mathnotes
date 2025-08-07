@@ -61,7 +61,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
     if (this.baseUrl.includes('localhost') || this.baseUrl.includes('web-dev')) {
       this.baseUrl = this.baseUrl.replace(/^https:/, 'http:');
     }
-    this.demoViewerUrl = `${this.baseUrl}/demo-viewer`;
+    this.demoViewerUrl = `${this.baseUrl}/demos/`;
     this.singleDemo = options.singleDemo || null;
     
     // Parse viewport options
@@ -149,7 +149,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
 
   async afterVisit(page: Page, url: string, depth: number, result: CrawlResult): Promise<void> {
     // If this is the demo-viewer page, discover available demos
-    if (url.includes('/demo-viewer')) {
+    if (url.includes('/demos/')) {
       await this.discoverDemos(page);
     }
   }
@@ -157,7 +157,7 @@ export class DemoScreenshotPlugin implements CrawlerPlugin {
   private async discoverDemos(page: Page): Promise<void> {
     
     // Navigate to demo viewer if not already there
-    if (!page.url().includes('/demo-viewer')) {
+    if (!page.url().includes('/demos/')) {
       await page.goto(this.demoViewerUrl, { waitUntil: 'networkidle' });
     }
 

@@ -121,7 +121,7 @@ Examples:
   crawler.registerPlugin(demoPlugin);
   
   try {
-    const startUrl = options.demoOnly ? `${options.url}/demo-viewer` : options.url;
+    const startUrl = options.demoOnly ? `${options.url}/demos/` : options.url;
     const results = await crawler.crawl(startUrl);
     
     if (!options.singleDemo) {
