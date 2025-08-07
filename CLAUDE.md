@@ -25,8 +25,9 @@ Mathnotes is a static site generator that renders mathematics notes with interac
 * Don't check types after every single change
 * For styling guidelines, see [STYLE.md](./STYLE.md)
 * we never put styles directly in typescript
+* You don't need to manually rebuild everytime we change code in dev mode, unless you're changing the docker stuff itself.
 
-## Common Commands
+### Common Commands
 
 ### Running Tests
 ```bash
@@ -262,5 +263,6 @@ Key debugging tools available:
 - Mobile-specific testing and responsive scaling
 - JavaScript policy compliance and CSP debugging
 - Docker container debugging
+```
 ```
 ```

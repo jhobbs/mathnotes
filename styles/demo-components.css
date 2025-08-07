@@ -234,4 +234,11 @@
   }
 }
 
+/* Demo-specific styles */
+
+/* Projection demo: compact sliders for better layout */
+.projection-compact-slider {
+  width: var(--size-input-compact) !important;
+}
+
 /* Dark mode adjustments handled automatically via CSS custom properties */
