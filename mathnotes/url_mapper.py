@@ -42,13 +42,11 @@ class URLMapper:
                     # Remove content/ prefix and .md extension
                     url_path = "/".join(relative_path.parts[1:])
                     # Remove .md extension
-                    if url_path.endswith(".md"):
-                        url_path = url_path[:-3]
+                    url_path = url_path[:-3]
                     canonical_url = url_path
 
                 # Ensure canonical URL has trailing slash
-                if not canonical_url.endswith('/'):
-                    canonical_url += '/'
+                canonical_url += '/'
                 
                 # Store mappings
                 file_path = str(relative_path).replace("\\", "/")
@@ -67,7 +65,4 @@ class URLMapper:
 
     def get_file_path(self, canonical_url: str) -> str:
         """Get the file path for a canonical URL."""
-        # Ensure URL has trailing slash for lookup since they're stored that way
-        if canonical_url and not canonical_url.endswith('/'):
-            canonical_url += '/'
         return self.url_mappings.get(canonical_url)
