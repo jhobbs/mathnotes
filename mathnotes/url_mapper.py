@@ -19,46 +19,37 @@ class URLMapper:
         """Build URL mappings from all content files."""
         for section in CONTENT_DIRS:
             section_path = Path(section)
-            if not section_path.exists():
-                continue
 
             for md_file in section_path.rglob("*.md"):
-                try:
-                    with open(md_file, "r", encoding="utf-8") as f:
-                        post = frontmatter.load(f)
+                with open(md_file, "r", encoding="utf-8") as f:
+                    post = frontmatter.load(f)
 
-                    # Build canonical URL
-                    relative_path = md_file.relative_to(Path("."))
-                    
-                    # Check if there's a custom slug that should override the path
-                    custom_slug = post.metadata.get("slug")
-                    if custom_slug:
-                        # Custom slug provided - use it with section prefix
-                        section_name = (
-                            relative_path.parts[1]
-                            if relative_path.parts[0] == "content"
-                            else relative_path.parts[0]
-                        )
-                        canonical_url = f"{section_name}/{custom_slug}"
-                    else:
-                        # No custom slug - use full directory structure
-                        # Remove content/ prefix and .md extension
-                        if relative_path.parts[0] == "content":
-                            url_path = "/".join(relative_path.parts[1:])
-                        else:
-                            url_path = str(relative_path)
-                        # Remove .md extension
-                        if url_path.endswith(".md"):
-                            url_path = url_path[:-3]
-                        canonical_url = url_path
+                # Build canonical URL
+                relative_path = md_file.relative_to(Path("."))
+                
+                # Check if there's a custom slug that should override the path
+                custom_slug = post.metadata.get("slug")
+                if custom_slug:
+                    # Custom slug provided - use it with section prefix
+                    section_name = (
+                        relative_path.parts[1]
+                        if relative_path.parts[0] == "content"
+                        else relative_path.parts[0]
+                    )
+                    canonical_url = f"{section_name}/{custom_slug}"
+                else:
+                    # No custom slug - use full directory structure
+                    # Remove content/ prefix and .md extension
+                    url_path = "/".join(relative_path.parts[1:])
+                    # Remove .md extension
+                    if url_path.endswith(".md"):
+                        url_path = url_path[:-3]
+                    canonical_url = url_path
 
-                    # Store mappings
-                    file_path = str(relative_path).replace("\\", "/")
-                    self.url_mappings[canonical_url] = file_path
-                    self.file_to_canonical[file_path] = canonical_url
-
-                except Exception as e:
-                    print(f"Error processing {md_file}: {e}")
+                # Store mappings
+                file_path = str(relative_path).replace("\\", "/")
+                self.url_mappings[canonical_url] = file_path
+                self.file_to_canonical[file_path] = canonical_url
 
         print(
             f"Built {len(self.url_mappings)} URL mappings"
