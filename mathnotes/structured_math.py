@@ -345,24 +345,8 @@ class StructuredMathParser:
                 metadata[key.strip()] = value.strip()
         return metadata
 
-    def _render_block_error(
-        self, error_title: str, error_message: str, line_number: int = None
-    ) -> str:
-        """Render a visible error block for parsing errors."""
-        line_info = f" (around line {line_number})" if line_number else ""
-        return f"""<div class="math-block-error">
-    <div class="math-block-error-header">
-        <strong>⚠️ Math Block Error{line_info}</strong>
-    </div>
-    <div class="math-block-error-content">
-        <strong>{error_title}</strong><br>
-        {error_message}
-    </div>
-</div>"""
-
     def render_block_html(
-        self, block: MathBlock, content_html: str, block_markers: Dict[str, MathBlock], md_processor, url: str = None
-    ) -> str:
+        self, block: MathBlock, content_html: str, block_markers: Dict[str, MathBlock], md_processor, url: str) -> str:
         """
         Render a math block to HTML with pre-processed content.
 
@@ -371,7 +355,7 @@ class StructuredMathParser:
             content_html: The markdown-processed HTML content for the block
             block_markers: Dictionary of all block markers for rendering children
             md_processor: Markdown processor for rendering child content
-            url: Optional URL to link the title to
+            url: URL to link the title to
         """
         # Build the opening div with appropriate classes and attributes
         css_classes = [block.css_class]
@@ -398,10 +382,7 @@ class StructuredMathParser:
             if block.title:
                 # Type: Title format
                 header_parts.append(f'<span class="math-block-type">{block.display_name}:</span>')
-                if url:
-                    header_parts.append(f'<span class="math-block-title"><a href="{url}">{block.title}</a></span>')
-                else:
-                    header_parts.append(f'<span class="math-block-title">{block.title}</span>')
+                header_parts.append(f'<span class="math-block-title"><a href="{url}">{block.title}</a></span>')
             else:
                 # Just type without colon
                 header_parts.append(f'<span class="math-block-type">{block.display_name}</span>')
@@ -441,18 +422,6 @@ class StructuredMathParser:
         html_parts.append("</div>")
 
         return "\n".join(html_parts)
-
-    def get_blocks_by_type(self, block_type: MathBlockType) -> List[MathBlock]:
-        """Get all blocks of a specific type."""
-        return [block for block in self.blocks if block.block_type == block_type]
-
-    def get_block_by_label(self, label: str) -> Optional[MathBlock]:
-        """Get a block by its label."""
-        for block in self.blocks:
-            if block.label == label:
-                return block
-        return None
-
 
 
 def process_structured_math_content(
