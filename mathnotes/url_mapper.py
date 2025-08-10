@@ -1,7 +1,3 @@
-"""
-URL mapping and routing utilities for the Mathnotes application.
-"""
-
 from pathlib import Path
 import frontmatter
 from typing import Dict
