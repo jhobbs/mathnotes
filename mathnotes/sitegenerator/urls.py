@@ -38,14 +38,13 @@ class URLGenerator:
         
         if url:
             # Found in registry
-            pass
-        elif endpoint == 'page' or endpoint == 'serve_content':
+            return url
+
+        if endpoint == 'page' or endpoint == 'serve_content':
             # Special case for content pages with dynamic paths
             path = kwargs.get('path', kwargs.get('filepath', ''))
             # Keep the path as-is - it should already have proper trailing slashes
-            url = f"/mathnotes/{path}"
-        else:
-            # Unknown endpoint
-            raise ValueError(f"Unknown endpoint: {endpoint}")
+            return f"/mathnotes/{path}"
         
-        return url
+        # Unknown endpoint
+        raise ValueError(f"Unknown endpoint: {endpoint}")
