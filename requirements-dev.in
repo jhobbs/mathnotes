@@ -6,6 +6,7 @@
 -r requirements.in
 
 # Testing
+coverage
 pytest
 pytest-cov
 pytest-mock
