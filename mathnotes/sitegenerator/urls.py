@@ -39,55 +39,13 @@ class URLGenerator:
         if url:
             # Found in registry
             pass
-        elif endpoint == 'static':
-            # Special case for static files
-            filename = kwargs.get('filename', '')
-            url = f"/static/{filename}"
         elif endpoint == 'page' or endpoint == 'serve_content':
             # Special case for content pages with dynamic paths
             path = kwargs.get('path', kwargs.get('filepath', ''))
-            if path:
-                # Keep the path as-is - it should already have proper trailing slashes
-                url = f"/mathnotes/{path}"
-            else:
-                url = '/mathnotes/'
+            # Keep the path as-is - it should already have proper trailing slashes
+            url = f"/mathnotes/{path}"
         else:
             # Unknown endpoint
             raise ValueError(f"Unknown endpoint: {endpoint}")
         
-        # Add base URL if external
-        if _external and self.base_url:
-            url = self.base_url + url
-        
-        # Add anchor if provided
-        if _anchor:
-            url = f"{url}#{_anchor}"
-        
         return url
-    
-    def static_url(self, filename: str, **kwargs) -> str:
-        """Shortcut for static file URLs.
-        
-        Args:
-            filename: Path to static file
-            **kwargs: Additional parameters
-            
-        Returns:
-            URL to static file
-        """
-        return self.url_for('static', filename=filename, **kwargs)
-    
-    def asset_url(self, filename: str, manifest: Optional[dict] = None) -> str:
-        """Generate URL for asset with cache busting.
-        
-        Args:
-            filename: Original asset filename
-            manifest: Asset manifest with hashed filenames
-            
-        Returns:
-            URL to asset (possibly with hash)
-        """
-        if manifest and filename in manifest:
-            filename = manifest[filename]
-        
-        return self.static_url(f"dist/{filename}")
