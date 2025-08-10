@@ -111,30 +111,27 @@ class MathnotesIndexPage(Page):
         sections = []
         for section in CONTENT_DIRS:
             path = Path(section)
-            if path.exists():
-                section_name = (
-                    section.replace("content/", "")
-                    if section.startswith("content/")
-                    else section
-                )
-                
-                # Skip test directory in production
-                if section_name == "test":
-                    continue
-                
-                # Get all content for this section
-                if self.url_mapper:
-                    content = get_all_content_for_section(
-                        section, 
-                        self.url_mapper.file_to_canonical
-                    )
-                    if content:
-                        display_name = display_names.get(section_name, section_name.title())
-                        sections.append({
-                            "name": display_name,
-                            "path": section,
-                            "content": content
-                        })
+            section_name = (
+                section.replace("content/", "")
+                if section.startswith("content/")
+                else section
+            )
+            
+            # Skip test directory in production
+            if section_name == "test":
+                continue
+            
+            # Get all content for this section
+            content = get_all_content_for_section(
+                section, 
+                self.url_mapper.file_to_canonical
+            )
+            display_name = display_names.get(section_name, section_name.title())
+            sections.append({
+                "name": display_name,
+                "path": section,
+                "content": content
+            })
         
         # Sort sections alphabetically
         sections.sort(key=lambda x: x["name"])
@@ -163,9 +160,7 @@ class ContentPages(Page):
             result = self.markdown_processor.render_markdown_file(md_path)
             
             # Build output path
-            output_path = f'mathnotes/{canonical_url}'
-            if not output_path.endswith('.html'):
-                output_path = f'{output_path}/index.html'
+            output_path = f'mathnotes/{canonical_url}/index.html'
             
             # Build context
             context = {
@@ -207,14 +202,11 @@ class DefinitionIndexPage(Page):
     endpoint_name = 'definition_index'  # For url_for('definition_index')
     
     def get_specs(self) -> List[PageSpec]:
-        definitions = []
-        
-        if self.block_index:
-            definitions = self.block_index.find_blocks_by_type("definition")
+        definitions = self.block_index.find_blocks_by_type("definition")
 
-            definitions.sort(
-                key=lambda ref: (ref.block.title or ref.block.label or "").lower()
-            )
+        definitions.sort(
+            key=lambda ref: (ref.block.title or ref.block.label or "").lower()
+        )
         
         return [PageSpec(
             output_path='mathnotes/definitions/index.html',
@@ -333,21 +325,16 @@ class PageRegistry:
             if hasattr(page, 'endpoint_name') and page.endpoint_name:
                 # Get the first spec to determine the route pattern
                 specs = page.get_specs()
-                if specs:
-                    # Derive route from output path
-                    output_path = specs[0].output_path
-                    if output_path == 'index.html':
-                        route = '/'
-                    elif output_path.endswith('/index.html'):
-                        route = '/' + output_path[:-11]  # Remove /index.html  
-                        if not route.endswith('/'):
-                            route += '/'
-                    else:
-                        raise ValueError(f"Malformed output path: {output_path}")
-                    
-                    # Store the mapping
-                    self.endpoint_urls[page.endpoint_name] = route
-                    router.add_route(route, lambda: None, page.endpoint_name)
+                # Derive route from output path
+                output_path = specs[0].output_path
+                if output_path == 'index.html':
+                    route = '/'
+                else:
+                    route = '/' + output_path[:-11] + '/'  # Remove /index.html  
+                 
+                # Store the mapping
+                self.endpoint_urls[page.endpoint_name] = route
+                router.add_route(route, lambda: None, page.endpoint_name)
         
         # Add special routes that don't correspond to single pages
         router.add_route('/mathnotes/<path:filepath>', lambda: None, 'page')
