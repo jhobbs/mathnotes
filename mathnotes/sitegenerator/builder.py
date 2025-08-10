@@ -79,17 +79,15 @@ class SiteBuilder:
     def setup_global_context(self):
         """Set up global context for all templates."""
         # Convert block index to tooltip data format
-        tooltip_data = None
-        if self.block_index and hasattr(self.block_index, 'index'):
-            tooltip_data = {}
-            for label, ref in self.block_index.index.items():
-                # Use the processed HTML content (with references converted to links)
-                tooltip_data[label] = {
-                    'type': ref.block.block_type.value,
-                    'title': ref.block.title or '',
-                    'content': ref.block.content_html,
-                    'url': ref.full_url
-                }
+        tooltip_data = {}
+        for label, ref in self.block_index.index.items():
+            # Use the processed HTML content (with references converted to links)
+            tooltip_data[label] = {
+                'type': ref.block.block_type.value,
+                'title': ref.block.title or '',
+                'content': ref.block.content_html,
+                'url': ref.full_url
+            }
         
         global_context = build_global_context(
             base_url=self.base_url,
