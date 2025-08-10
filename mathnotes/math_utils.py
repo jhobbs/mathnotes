@@ -104,42 +104,6 @@ class MathProtector:
         # Don't modify math content - the issue is elsewhere
         return content
 
-    def reset(self):
-        """Reset counters and clear stored math content."""
-        self.display_counter = 0
-        self.inline_counter = 0
-        self.display_math.clear()
-        self.inline_math.clear()
-
-
-# Convenience functions for backward compatibility
-def protect_math(content: str, prefix: str = "MATH") -> Tuple[str, MathProtector]:
-    """Protect math content and return both the protected content and the protector instance.
-
-    Args:
-        content: The markdown content containing math
-        prefix: The placeholder prefix to use
-
-    Returns:
-        Tuple of (protected_content, protector_instance)
-    """
-    protector = MathProtector(prefix)
-    protected = protector.protect_math(content)
-    return protected, protector
-
-
-def restore_math(content: str, protector: MathProtector) -> str:
-    """Restore math content using a protector instance.
-
-    Args:
-        content: The content with placeholders
-        protector: The MathProtector instance that did the protection
-
-    Returns:
-        Content with math restored
-    """
-    return protector.restore_math(content)
-
 
 class BlockReferenceProcessor:
     """Handles processing of cross-references to structured blocks.
