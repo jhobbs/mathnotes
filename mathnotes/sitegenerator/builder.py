@@ -6,7 +6,6 @@ from pathlib import Path
 
 from .core import StaticSiteGenerator
 from .router import Router
-from .urls import URLGenerator
 from .context import build_global_context
 from .pages import PageRegistry
 
@@ -60,11 +59,36 @@ class SiteBuilder:
         self.router = Router()
         self.page_registry.setup_routes(self.router)
 
-        # Initialize URL generator and add to template globals
-        self.url_gen = URLGenerator(self.page_registry, self.base_url)
-        self.generator.add_global("url_for", self.url_gen.url_for)
+        # Add url_for to template globals
+        self.generator.add_global("url_for", self._url_for)
 
         logger.info(f"Initialized site builder: output={output_dir}")
+
+    def _url_for(self, endpoint: str, **kwargs) -> str:
+        """Generate URL for an endpoint.
+
+        Args:
+            endpoint: Name of the endpoint or special values like 'static'
+            **kwargs: Parameters for the URL
+
+        Returns:
+            Generated URL string
+        """
+        # Check page registry for the endpoint
+        url = self.page_registry.get_url_for_endpoint(endpoint)
+
+        if url:
+            # Found in registry
+            return url
+
+        if endpoint == "page" or endpoint == "serve_content":
+            # Special case for content pages with dynamic paths
+            path = kwargs.get("path", kwargs.get("filepath", ""))
+            # Keep the path as-is - it should already have proper trailing slashes
+            return f"/mathnotes/{path}"
+
+        # Unknown endpoint
+        raise ValueError(f"Unknown endpoint: {endpoint}")
 
     def clean_output_dir(self):
         """Clean the output directory."""
