@@ -21,7 +21,7 @@ def create_markdown_instance():
 class MarkdownProcessor:
     """Handles markdown processing with Jekyll includes, wiki links, and structured math."""
 
-    def __init__(self, url_mapper, block_index=None):
+    def __init__(self, url_mapper, block_index):
         self.md = create_markdown_instance()
         self.url_mapper = url_mapper
         self.block_index = block_index
@@ -103,9 +103,7 @@ class MarkdownProcessor:
                 hasattr(self, "block_ref_processor")
                 and self.block_ref_processor.embedded_blocks
             ):
-                html_content = self.block_ref_processor.process_embedded_blocks(
-                    html_content, self.md
-                )
+                html_content = self.block_ref_processor.process_embedded_blocks(html_content)
 
             # Fix relative image paths to include content/ prefix
             html_content = self._fix_relative_image_paths(html_content, filepath)

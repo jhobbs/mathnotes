@@ -310,12 +310,11 @@ class BlockReferenceProcessor:
             # Reference not found - return with error styling
             return f'<span class="embed-error" data-ref="{ref_text}">@embed{{{ref_text}}} (not found)</span>'
 
-    def process_embedded_blocks(self, html_content: str, md_processor) -> str:
+    def process_embedded_blocks(self, html_content: str) -> str:
         """Process embedded block markers after markdown conversion.
 
         Args:
             html_content: HTML content containing embed markers
-            md_processor: Markdown processor instance
 
         Returns:
             HTML with embedded blocks properly rendered
