@@ -17,26 +17,55 @@ echo -e "${BLUE}========================================${NC}"
 echo -e "${YELLOW}Cleaning previous coverage data...${NC}"
 rm -rf .coverage* htmlcov coverage.xml unused_lines_*.txt coverage_detailed.txt
 
-# Create a modified Dockerfile for coverage analysis
-echo -e "${YELLOW}Creating coverage-enabled Dockerfile...${NC}"
+# Create a modified Dockerfile for coverage analysis (includes full build)
+echo -e "${YELLOW}Creating coverage-enabled Dockerfile with full build...${NC}"
 cat > Dockerfile.coverage << 'EOF'
-FROM python:3.11-slim as generator
+# Stage 1: Get git version (same as production)
+FROM alpine/git:latest AS version
+WORKDIR /app
+COPY .git .git
+RUN git describe --always --tags > /version.txt || echo "unknown" > /version.txt
 
+# Stage 2: Node environment for building assets with esbuild (same as production)
+FROM node:24-alpine AS esbuild-builder
+WORKDIR /app
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY esbuild.config.js ./
+COPY postcss.config.js ./
+RUN npm ci
+COPY demos-framework/ ./demos-framework/
+COPY styles/ ./styles/
+COPY demos/ ./demos/
+RUN npm run build
+
+# Stage 3: Python environment with coverage
+FROM python:3.12-slim AS generator
 WORKDIR /app
 
 # Install coverage tool
 RUN pip install coverage
 
-# Copy requirements first for better caching
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+# Copy version from first stage
+COPY --from=version /version.txt /version/version.txt
 
-# Copy all source code
-COPY . .
+# Copy Python requirements and install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY mathnotes/ ./mathnotes/
+COPY content/ ./content/
+COPY templates/ ./templates/
+COPY scripts/build_static_simple.py ./scripts/
+COPY favicon.ico robots.txt ./
+
+# Copy esbuild output from the esbuild-builder stage
+COPY --from=esbuild-builder /app/static/dist ./static/dist
 
 # Create coverage configuration
 RUN echo '[run]' > .coveragerc && \
-    echo 'source = mathnotes,scripts,generator' >> .coveragerc && \
+    echo 'source = mathnotes,scripts' >> .coveragerc && \
     echo 'omit = */tests/*,*/test_*.py,*/__pycache__/*,*/venv/*,*/.venv/*' >> .coveragerc && \
     echo '' >> .coveragerc && \
     echo '[report]' >> .coveragerc && \
@@ -79,26 +108,55 @@ docker cp coverage-prod-container:/.coverage .coverage.prod
 docker cp coverage-prod-container:/htmlcov htmlcov_prod
 docker rm coverage-prod-container
 
-# Create dev-mode Dockerfile
+# Create dev-mode Dockerfile (also with full build)
 echo -e "${YELLOW}Creating dev-mode coverage Dockerfile...${NC}"
 cat > Dockerfile.coverage.dev << 'EOF'
-FROM python:3.11-slim as generator
+# Dev mode also includes full build process
+FROM alpine/git:latest AS version
+WORKDIR /app
+COPY .git .git
+RUN git describe --always --tags --dirty > /version.txt || echo "unknown" > /version.txt
 
+FROM node:24-alpine AS esbuild-builder
+WORKDIR /app
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY esbuild.config.js ./
+COPY postcss.config.js ./
+RUN npm ci
+COPY demos-framework/ ./demos-framework/
+COPY styles/ ./styles/
+COPY demos/ ./demos/
+# Dev mode build (might have different settings)
+ENV NODE_ENV=development
+RUN npm run build
+
+FROM python:3.12-slim as generator
 WORKDIR /app
 
 # Install coverage tool
 RUN pip install coverage
+
+# Copy version
+COPY --from=version /version.txt /version/version.txt
 
 # Copy requirements
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Copy all source code
-COPY . .
+COPY mathnotes/ ./mathnotes/
+COPY content/ ./content/
+COPY templates/ ./templates/
+COPY scripts/build_static_simple.py ./scripts/
+COPY favicon.ico robots.txt ./
+
+# Copy esbuild output
+COPY --from=esbuild-builder /app/static/dist ./static/dist
 
 # Create coverage configuration
 RUN echo '[run]' > .coveragerc && \
-    echo 'source = mathnotes,scripts,generator' >> .coveragerc && \
+    echo 'source = mathnotes,scripts' >> .coveragerc && \
     echo 'omit = */tests/*,*/test_*.py,*/__pycache__/*,*/venv/*,*/.venv/*' >> .coveragerc
 
 # Run the build with coverage in DEV mode
