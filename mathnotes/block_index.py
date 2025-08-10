@@ -47,9 +47,6 @@ class BlockIndex:
 
     def build_index(self):
         """Build the global index by scanning all markdown files."""
-        if self._is_built:
-            return
-
         content_dir = "content"
         
         # Phase 1: Scan and index all blocks
@@ -76,64 +73,54 @@ class BlockIndex:
 
     def _index_file(self, file_path: str):
         """Index all labeled blocks in a single markdown file."""
-        try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                post = frontmatter.load(f)
-                content = post.content
-                
-                # Get page title from frontmatter
-                page_title = post.metadata.get('title', None)
+        with open(file_path, "r", encoding="utf-8") as f:
+            post = frontmatter.load(f)
+            content = post.content
+            
+            # Get page title from frontmatter
+            page_title = post.metadata.get('title', None)
 
-                # Parse structured math content
-                # Don't pass block_index yet - it's not complete in phase 1
-                parser = StructuredMathParser()
-                _, block_markers = parser.parse(content)
+            # Parse structured math content
+            # Don't pass block_index yet - it's not complete in phase 1
+            parser = StructuredMathParser()
+            _, block_markers = parser.parse(content)
 
-                # Get canonical URL for this file
-                file_path_normalized = file_path.replace("\\", "/")
-                canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
-                if not canonical_url:
-                    # Fallback to file path without extension
-                    canonical_url = file_path_normalized.replace(".md", "")
+            # Get canonical URL for this file
+            file_path_normalized = file_path.replace("\\", "/")
+            canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
 
-                # Store the blocks and metadata for phase 2 rendering
-                if not hasattr(self, '_pending_files'):
-                    self._pending_files = []
-                self._pending_files.append({
-                    'file_path': file_path,
-                    'canonical_url': canonical_url,
-                    'page_title': page_title,
-                    'block_markers': block_markers
-                })
-                
-                # Index only labeled blocks for cross-references
-                for block in block_markers.values():
-                    if block.label:
-                        ref = BlockReference(
-                            block=block, 
-                            file_path=file_path, 
-                            canonical_url=f"/mathnotes/{canonical_url}",
-                            page_title=page_title
+            # Store the blocks and metadata for phase 2 rendering
+            if not hasattr(self, '_pending_files'):
+                self._pending_files = []
+            self._pending_files.append({
+                'file_path': file_path,
+                'canonical_url': canonical_url,
+                'page_title': page_title,
+                'block_markers': block_markers
+            })
+            
+            # Index only labeled blocks for cross-references
+            for block in block_markers.values():
+                if block.label:
+                    ref = BlockReference(
+                        block=block, 
+                        file_path=file_path, 
+                        canonical_url=f"/mathnotes/{canonical_url}",
+                        page_title=page_title
+                    )
+                    # Normalize label for storage (case-insensitive lookup)
+                    from .structured_math import MathBlock
+                    normalized_label = MathBlock.normalize_label_from_title(block.label)
+                    
+                    if normalized_label in self.index:
+                        existing = self.index[normalized_label]
+                        print(
+                            f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
                         )
-                        # Normalize label for storage (case-insensitive lookup)
-                        from .structured_math import MathBlock
-                        normalized_label = MathBlock.normalize_label_from_title(block.label)
-                        
-                        if normalized_label in self.index:
-                            existing = self.index[normalized_label]
-                            print(
-                                f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
-                            )
-                        self.index[normalized_label] = ref
-
-        except Exception as e:
-            print(f"Error indexing {file_path}: {e}")
+                    self.index[normalized_label] = ref
 
     def _render_all_blocks(self):
         """Phase 2: Render all blocks now that the index is complete."""
-        if not hasattr(self, '_pending_files'):
-            return
-            
         for file_info in self._pending_files:
             file_path = file_info['file_path']
             canonical_url = file_info['canonical_url']
@@ -151,9 +138,6 @@ class BlockIndex:
             
             def process_block_tree(block, marker_id):
                 """Recursively process a block and its children."""
-                if marker_id in processed_blocks:
-                    return
-                    
                 # First process all child blocks
                 for child_marker_id, child_block in block_markers.items():
                     if child_block.parent == block:
@@ -201,10 +185,6 @@ class BlockIndex:
             # Restore math expressions
             html_content = math_protector.restore_math(html_content)
             
-            # Process embedded blocks after markdown conversion (second pass)
-            if block_ref_processor.embedded_blocks:
-                html_content = block_ref_processor.process_embedded_blocks(html_content, self.md)
-            
             # Fix escaped asterisks and tildes (same as in markdown_processor.py)
             html_content = html_content.replace(r"\*", "*")
             html_content = html_content.replace(r"\~", "~")
@@ -236,19 +216,8 @@ class BlockIndex:
     
     def get_rendered_html(self, file_path: str, marker_id: str) -> Optional[str]:
         """Get pre-rendered HTML for a block by file path and marker ID."""
-        if file_path in self.rendered_blocks:
-            return self.rendered_blocks[file_path].get(marker_id)
-        return None
+        return self.rendered_blocks[file_path].get(marker_id)
 
     def find_blocks_by_type(self, block_type: str) -> List[BlockReference]:
         """Find all blocks of a specific type."""
         return [ref for ref in self.index.values() if ref.block.block_type.value == block_type]
-
-    def get_blocks_in_file(self, file_path: str) -> List[BlockReference]:
-        """Get all labeled blocks in a specific file."""
-        normalized_path = file_path.replace("\\", "/")
-        return [
-            ref
-            for ref in self.index.values()
-            if ref.file_path.replace("\\", "/") == normalized_path
-        ]
