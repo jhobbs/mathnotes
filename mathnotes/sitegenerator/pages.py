@@ -155,60 +155,34 @@ class ContentPages(Page):
     def get_specs(self) -> List[PageSpec]:
         specs = []
         
-        if not self.url_mapper or not self.markdown_processor:
-            logger.warning("Missing url_mapper or markdown_processor for content pages")
-            return specs
-        
         # Generate a spec for each content page
         for canonical_url in self.url_mapper.url_mappings.keys():
-            try:
-                md_path = self.url_mapper.get_file_path(canonical_url)
-                if not md_path or Path(md_path).is_dir():
-                    continue
-                
-                # Process the markdown to get metadata
-                result = self.markdown_processor.render_markdown_file(md_path)
-                
-                # Build output path
-                output_path = f'mathnotes/{canonical_url}'
-                if not output_path.endswith('.html'):
-                    output_path = f'{output_path}/index.html'
-                
-                # Build context
-                context = {
-                    'content': result.get('content', ''),
-                    'path': md_path,
-                    'frontmatter': result.get('frontmatter', {}),
-                    'canonical_url': result.get('canonical_url', ''),
-                }
-                
-                # Add tooltip data if we have references
-                if self.block_index and 'references' in result:
-                    tooltip_data = {}
-                    for ref_label in result['references']:
-                        if ref_label in self.block_index.index:
-                            ref = self.block_index.index[ref_label]
-                            tooltip_data[ref_label] = {
-                                'type': ref.block.block_type.value,
-                                'title': ref.block.title or '',
-                                'content': ref.block.content,
-                                'url': ref.full_url
-                            }
-                    if tooltip_data:
-                        context['tooltip_data'] = tooltip_data
-                
-                specs.append(PageSpec(
-                    output_path=output_path,
-                    template='page.html',
-                    title=result.get('title', ''),
-                    description=result.get('description', ''),
-                    priority=0.8,
-                    context=context
-                ))
-                
-            except Exception as e:
-                logger.error(f"Failed to create spec for {canonical_url}: {e}")
-        
+            md_path = self.url_mapper.get_file_path(canonical_url)
+            
+            # Process the markdown to get metadata
+            result = self.markdown_processor.render_markdown_file(md_path)
+            
+            # Build output path
+            output_path = f'mathnotes/{canonical_url}'
+            if not output_path.endswith('.html'):
+                output_path = f'{output_path}/index.html'
+            
+            # Build context
+            context = {
+                'content': result.get('content', ''),
+                'path': md_path,
+                'frontmatter': result.get('frontmatter', {}),
+                'canonical_url': result.get('canonical_url', ''),
+            }
+            
+            specs.append(PageSpec(
+                output_path=output_path,
+                template='page.html',
+                title=result.get('title', ''),
+                description=result.get('description', ''),
+                priority=0.8,
+                context=context
+            ))
         return specs
 
 
@@ -236,15 +210,8 @@ class DefinitionIndexPage(Page):
         definitions = []
         
         if self.block_index:
-            # Try to get definitions using the appropriate method
-            if hasattr(self.block_index, 'find_blocks_by_type'):
-                definitions = self.block_index.find_blocks_by_type("definition")
-            elif hasattr(self.block_index, 'index'):
-                for label, ref in self.block_index.index.items():
-                    if ref.block.block_type.value == 'definition':
-                        definitions.append(ref)
-            
-            # Sort definitions by title (or label if no title)
+            definitions = self.block_index.find_blocks_by_type("definition")
+
             definitions.sort(
                 key=lambda ref: (ref.block.title or ref.block.label or "").lower()
             )
@@ -375,10 +342,8 @@ class PageRegistry:
                         route = '/' + output_path[:-11]  # Remove /index.html  
                         if not route.endswith('/'):
                             route += '/'
-                    elif output_path.endswith('.html'):
-                        route = '/' + output_path[:-5]  # Remove .html
                     else:
-                        route = '/' + output_path
+                        raise ValueError(f"Malformed output path: {output_path}")
                     
                     # Store the mapping
                     self.endpoint_urls[page.endpoint_name] = route
@@ -411,8 +376,6 @@ class PageRegistry:
             for spec in page.get_specs():
                 # Ensure canonical_url is in context if not already set
                 # (ContentPages already have it from markdown processor)
-                if spec.context is None:
-                    spec.context = {}
                 if 'canonical_url' not in spec.context:
                     spec.context['canonical_url'] = page.get_canonical_path(spec)
                 all_specs.append((page, spec))
