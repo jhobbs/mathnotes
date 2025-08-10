@@ -123,6 +123,7 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
    - Structured blocks are parsed and indexed globally
    - Cross-references resolved using the global index
    - MathJax handles final LaTeX rendering client-side
+   - For detailed explanation of the parsing pipeline, see [PARSING.md](./PARSING.md)
 
 3. **Demo System**: TypeScript demos are registered in `demos-framework/src/main.ts` and loaded dynamically with code splitting.
 
