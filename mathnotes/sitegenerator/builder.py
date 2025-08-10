@@ -9,7 +9,7 @@ from .router import Router
 from .context import build_global_context
 from .pages import PageRegistry
 
-from mathnotes.url_mapper import URLMapper
+from mathnotes.content_discovery import ContentDiscovery
 from mathnotes.markdown_processor import MarkdownProcessor
 from mathnotes.block_index import BlockIndex
 from mathnotes.config import BASE_URL
@@ -35,7 +35,7 @@ class SiteBuilder:
         )
 
         # Initialize data components first
-        self.url_mapper = URLMapper()
+        self.url_mapper = ContentDiscovery()
         self.url_mapper.build_url_mappings()
 
         self.block_index = BlockIndex(self.url_mapper)

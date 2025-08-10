@@ -4,8 +4,8 @@ from typing import Dict
 from .config import CONTENT_DIRS
 
 
-class URLMapper:
-    """Handles URL mappings for the application."""
+class ContentDiscovery:
+    """Discovers content files and manages URL mappings for the application."""
 
     def __init__(self):
         self.url_mappings: Dict[str, str] = {}  # Maps canonical URLs to file paths

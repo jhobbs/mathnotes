@@ -26,7 +26,7 @@ class BlockReference:
     @property
     def full_url(self) -> str:
         """Get the full URL including the fragment for this block."""
-        # Canonical URL now always has trailing slash from url_mapper
+        # Canonical URL now always has trailing slash from content_discovery
         return f"{self.canonical_url}#{self.block.label}"
 
 
@@ -147,7 +147,7 @@ class BlockIndex:
 
                 # Now process this block
                 base_url = f"/mathnotes/{canonical_url}"
-                # canonical_url now always has trailing slash from url_mapper
+                # canonical_url now always has trailing slash from content_discovery
                 full_url = f"{base_url}#{block.label}" if block.label else base_url
                 self._process_block_content(block, block_markers, parser, full_url)
                 # Store the rendered HTML by marker ID
