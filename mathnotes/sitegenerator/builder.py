@@ -109,21 +109,17 @@ class SiteBuilder:
         logger.info(f"Rendering {len(all_specs)} pages...")
         
         for page, spec in all_specs:
-            try:
-                # Build context for rendering
-                context = {
-                    'title': spec.title,
-                    'description': spec.description,
-                    **spec.context
-                }
-                
-                # Render template and write to file
-                html = self.generator.render_template(spec.template, **context)
-                self.generator.write_page(spec.output_path, html)
-                logger.debug(f"Rendered {spec.template} -> {spec.output_path}")
-                    
-            except Exception as e:
-                logger.error(f"Failed to render {spec.output_path}: {e}")
+            # Build context for rendering
+            context = {
+                'title': spec.title,
+                'description': spec.description,
+                **spec.context
+            }
+            
+            # Render template and write to file
+            html = self.generator.render_template(spec.template, **context)
+            self.generator.write_page(spec.output_path, html)
+            logger.debug(f"Rendered {spec.template} -> {spec.output_path}")
     
     def copy_static_assets(self):
         """Copy all static assets to output directory."""
