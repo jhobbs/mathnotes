@@ -5,7 +5,6 @@ from .router import Router
 from .context import build_global_context
 from .builder import SiteBuilder
 from .pages import PageRegistry, Page, PageSpec
-from .urls import URLGenerator
 
 __all__ = [
     "StaticSiteGenerator",
@@ -15,5 +14,4 @@ __all__ = [
     "PageRegistry",
     "Page",
     "PageSpec",
-    "URLGenerator",
 ]
