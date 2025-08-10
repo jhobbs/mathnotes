@@ -74,9 +74,7 @@ class MarkdownProcessor:
             
             # Get pre-rendered HTML from block index for all blocks
             for marker_id, block in block_markers.items():
-                rendered_html = self.block_index.get_rendered_html(filepath, marker_id)
-                if rendered_html:
-                    block.rendered_html = rendered_html
+                block.rendered_html = self.block_index.get_rendered_html(filepath, marker_id)
 
             # Process cross-references to structured blocks (@label or @type:label)
             # Store the processor to use it later for embedded blocks
@@ -213,14 +211,12 @@ class MarkdownProcessor:
             clean_content = re.sub(r"\s+", " ", clean_content).strip()  # Normalize whitespace
 
             # Take first sentence or up to 160 characters
-            if clean_content:
-                sentences = clean_content.split(". ")
-                if sentences:
-                    description = sentences[0]
-                    if len(description) > 160:
-                        description = description[:157] + "..."
-                    elif not description.endswith("."):
-                        description += "."
+            sentences = clean_content.split(". ")
+            description = sentences[0]
+            if len(description) > 160:
+                description = description[:157] + "..."
+            elif not description.endswith("."):
+                description += "."
 
         return description
 
