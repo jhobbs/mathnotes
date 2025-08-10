@@ -20,9 +20,6 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
     content_files = []
     path = Path(section_path)
 
-    if not path.exists():
-        return content_files
-
     def process_directory(dir_path: Path, depth: int = 0) -> List[Dict]:
         items = []
         for item in sorted(dir_path.iterdir()):
@@ -30,15 +27,10 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
                 file_path_raw = str(item.relative_to(Path(".")))
                 file_path = file_path_raw.replace("\\", "/")
                 canonical_url = file_to_canonical.get(file_path)
-                if canonical_url:
-                    url = canonical_url
-                    # Ensure trailing slash for canonical URLs
-                    if not url.endswith('/'):
-                        url += '/'
-                else:
-                    url = file_path.replace(".md", "")
-                    if not url.endswith('/'):
-                        url += '/'
+                url = canonical_url
+                # Ensure trailing slash for canonical URLs
+                if not url.endswith('/'):
+                    url += '/'
 
                 items.append(
                     {"name": item.stem.replace("-", " ").title(), "path": url, "is_subdir": False}
