@@ -46,6 +46,10 @@ class URLMapper:
                         url_path = url_path[:-3]
                     canonical_url = url_path
 
+                # Ensure canonical URL has trailing slash
+                if not canonical_url.endswith('/'):
+                    canonical_url += '/'
+                
                 # Store mappings
                 file_path = str(relative_path).replace("\\", "/")
                 self.url_mappings[canonical_url] = file_path
@@ -58,8 +62,12 @@ class URLMapper:
     def get_canonical_url(self, file_path: str) -> str:
         """Get the canonical URL for a file path."""
         file_path_normalized = file_path.replace("\\", "/")
+        # URLs are now stored with trailing slashes
         return self.file_to_canonical.get(file_path_normalized)
 
     def get_file_path(self, canonical_url: str) -> str:
         """Get the file path for a canonical URL."""
+        # Ensure URL has trailing slash for lookup since they're stored that way
+        if canonical_url and not canonical_url.endswith('/'):
+            canonical_url += '/'
         return self.url_mappings.get(canonical_url)

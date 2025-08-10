@@ -26,11 +26,8 @@ class BlockReference:
     @property
     def full_url(self) -> str:
         """Get the full URL including the fragment for this block."""
-        # Ensure canonical URL has trailing slash before adding fragment
-        url = self.canonical_url
-        if not url.endswith('/'):
-            url += '/'
-        return f"{url}#{self.block.label}"
+        # Canonical URL now always has trailing slash from url_mapper
+        return f"{self.canonical_url}#{self.block.label}"
 
 
 class BlockIndex:
@@ -145,8 +142,7 @@ class BlockIndex:
                 
                 # Now process this block
                 base_url = f"/mathnotes/{canonical_url}"
-                if not base_url.endswith('/'):
-                    base_url += '/'
+                # canonical_url now always has trailing slash from url_mapper
                 full_url = f"{base_url}#{block.label}" if block.label else base_url
                 self._process_block_content(block, block_markers, parser, full_url)
                 # Store the rendered HTML by marker ID
@@ -163,47 +159,46 @@ class BlockIndex:
 
     def _process_block_content(self, block: MathBlock, block_markers: Dict[str, MathBlock], parser: StructuredMathParser, full_url: str):
         """Process and render a block using the same pipeline as page view."""
-        if block.content:
-            # Process cross-references in the block content (first pass)
-            # Use BlockReferenceProcessor to handle @references and @embed directives
-            from .math_utils import BlockReferenceProcessor
-            block_ref_processor = BlockReferenceProcessor(
-                block_markers=block_markers,
-                current_file=parser.current_file,
-                block_index=parser.block_index
-            )
-            content_with_refs = block_ref_processor.process_references(block.content)
-            
-            # Protect math expressions
-            math_protector = MathProtector()
-            protected_content = math_protector.protect_math(content_with_refs)
-            
-            # Convert to HTML
-            html_content = self.md.convert(protected_content)
-            self.md.reset()
-            
-            # Restore math expressions
-            html_content = math_protector.restore_math(html_content)
-            
-            # Fix escaped asterisks and tildes (same as in markdown_processor.py)
-            html_content = html_content.replace(r"\*", "*")
-            html_content = html_content.replace(r"\~", "~")
-            
-            # Remove child block markers for tooltip use
-            # Tooltips should only show the block's own content, not nested blocks
-            clean_html = html_content
-            for marker_id, child_block in block_markers.items():
-                if child_block.parent == block and marker_id in clean_html:
-                    # Remove the marker entirely - don't include child content in tooltips
-                    clean_html = clean_html.replace(f"<p>{marker_id}</p>", "")
-                    clean_html = clean_html.replace(marker_id, "")
-            
-            # Store the clean inner HTML content (for tooltips and other uses)
-            block.content_html = clean_html
-            
-            # Render the complete block HTML using the same method as page view
-            # This will wrap the content and replace child markers with full child HTML
-            block.rendered_html = parser.render_block_html(block, html_content, block_markers, self.md, full_url)
+        # Process cross-references in the block content (first pass)
+        # Use BlockReferenceProcessor to handle @references and @embed directives
+        from .math_utils import BlockReferenceProcessor
+        block_ref_processor = BlockReferenceProcessor(
+            block_markers=block_markers,
+            current_file=parser.current_file,
+            block_index=parser.block_index
+        )
+        content_with_refs = block_ref_processor.process_references(block.content)
+        
+        # Protect math expressions
+        math_protector = MathProtector()
+        protected_content = math_protector.protect_math(content_with_refs)
+        
+        # Convert to HTML
+        html_content = self.md.convert(protected_content)
+        self.md.reset()
+        
+        # Restore math expressions
+        html_content = math_protector.restore_math(html_content)
+        
+        # Fix escaped asterisks and tildes (same as in markdown_processor.py)
+        html_content = html_content.replace(r"\*", "*")
+        html_content = html_content.replace(r"\~", "~")
+        
+        # Remove child block markers for tooltip use
+        # Tooltips should only show the block's own content, not nested blocks
+        clean_html = html_content
+        for marker_id, child_block in block_markers.items():
+            if child_block.parent == block and marker_id in clean_html:
+                # Remove the marker entirely - don't include child content in tooltips
+                clean_html = clean_html.replace(f"<p>{marker_id}</p>", "")
+                clean_html = clean_html.replace(marker_id, "")
+        
+        # Store the clean inner HTML content (for tooltips and other uses)
+        block.content_html = clean_html
+        
+        # Render the complete block HTML using the same method as page view
+        # This will wrap the content and replace child markers with full child HTML
+        block.rendered_html = parser.render_block_html(block, html_content, block_markers, self.md, full_url)
     
 
 
