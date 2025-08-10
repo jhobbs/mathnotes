@@ -64,7 +64,7 @@ class SiteBuilder:
         self.page_registry.setup_routes(self.router)
         
         # Initialize URL generator and add to template globals
-        self.url_gen = URLGenerator(self.page_registry, self.router, self.base_url)
+        self.url_gen = URLGenerator(self.page_registry, self.base_url)
         self.generator.add_global('url_for', self.url_gen.url_for)
         
         logger.info(f"Initialized site builder: output={output_dir}")
