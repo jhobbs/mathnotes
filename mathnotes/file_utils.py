@@ -3,7 +3,7 @@ File system utilities for the Mathnotes application.
 """
 
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import List, Dict
 
 
 def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, str]) -> List[Dict]:
@@ -17,7 +17,6 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
     Returns:
         List of content items with nested structure
     """
-    content_files = []
     path = Path(section_path)
 
     def process_directory(dir_path: Path, depth: int = 0) -> List[Dict]:

@@ -3,7 +3,6 @@
 import logging
 import shutil
 from pathlib import Path
-from typing import Optional
 
 from .core import StaticSiteGenerator
 from .router import Router

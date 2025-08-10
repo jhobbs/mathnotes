@@ -4,9 +4,9 @@ This module extends BlockReferenceProcessor to track which blocks are referenced
 so we can preload their data for tooltips.
 """
 
-from typing import Dict, Set, Optional, Any
-from .math_utils import BlockReferenceProcessor, MathProtector
-from .structured_math import MathBlock, process_structured_math_content
+from typing import Dict, Set, Any
+from .math_utils import BlockReferenceProcessor
+from .structured_math import MathBlock
 import re
 
 

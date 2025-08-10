@@ -6,11 +6,9 @@ content (theorems, definitions, proofs, etc.) with explicit boundaries and metad
 """
 
 import re
-import markdown
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any, Tuple
 from enum import Enum
-from .math_utils import MathProtector, BlockReferenceProcessor
 
 
 class MathBlockType(Enum):
@@ -374,7 +372,7 @@ class StructuredMathParser:
 
         # Add header if applicable
         if block.block_type != MathBlockType.PROOF:
-            header_parts = [f'<div class="math-block-header">']
+            header_parts = ['<div class="math-block-header">']
 
             if block.title:
                 # Type: Title format
@@ -434,8 +432,6 @@ def process_structured_math_content(
         current_file: Path to the current file being processed
         block_index: Global block index for cross-file references
     """
-    parser = StructuredMathParser(current_file=current_file, block_index=block_index)
-
     # Process only top-level blocks (blocks without parents)
     # Child blocks will be processed recursively by their parents
     for marker_id, block in block_markers.items():

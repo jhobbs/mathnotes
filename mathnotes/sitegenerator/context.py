@@ -1,8 +1,6 @@
 """Context building functions for templates."""
 
-import os
 import json
-import subprocess
 import logging
 from datetime import datetime
 from pathlib import Path

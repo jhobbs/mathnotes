@@ -5,8 +5,7 @@ similar to views in Flask or Django.
 """
 
 import logging
-from pathlib import Path
-from typing import Dict, Any, List, Optional, Callable
+from typing import Dict, Any, List
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 
@@ -112,7 +111,6 @@ class MathnotesIndexPage(Page):
 
         sections = []
         for section in CONTENT_DIRS:
-            path = Path(section)
             section_name = section.replace("content/", "") if section.startswith("content/") else section
 
             # Skip test directory in production
@@ -246,9 +244,6 @@ class SitemapPage(Page):
     def get_specs(self) -> List[PageSpec]:
         # Collect URLs from all pages
         urls = []
-
-        # Use the configured base_url for absolute URLs
-        base_url = self.base_url
 
         for page in self.all_pages:
             if isinstance(page, SitemapPage):

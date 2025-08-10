@@ -7,7 +7,7 @@ files, enabling cross-file references using the @label syntax.
 
 import os
 import frontmatter
-from typing import Dict, Optional, List, Tuple
+from typing import Dict, Optional, List
 from dataclasses import dataclass
 from markdown import Markdown
 from .structured_math import StructuredMathParser, MathBlock

@@ -8,7 +8,7 @@ from typing import Dict, Optional
 import frontmatter
 import markdown
 from .structured_math import StructuredMathParser, process_structured_math_content
-from .math_utils import MathProtector, BlockReferenceProcessor
+from .math_utils import MathProtector
 from .tooltip_collector import TooltipCollectingBlockReferenceProcessor, collect_tooltip_data_from_html
 
 
