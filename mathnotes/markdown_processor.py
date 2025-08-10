@@ -141,9 +141,7 @@ class MarkdownProcessor:
             # Get canonical URL for this file
             file_path_normalized = filepath.replace("\\", "/")
             canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
-            # Ensure trailing slash for canonical URL
-            if not canonical_url.endswith('/'):
-                canonical_url += '/'
+            # canonical_url now always has trailing slash from url_mapper
             canonical_path = f"/mathnotes/{canonical_url}"
 
             # Generate description from frontmatter or content
@@ -184,8 +182,9 @@ class MarkdownProcessor:
             canonical_url = self._find_slug_in_mappings(slug)
 
         if canonical_url:
-            # Ensure trailing slash for proper URL format
-            if not canonical_url.endswith('/'):
+            # canonical_url already has trailing slash from mappings or direct reference
+            if "/" in slug and not canonical_url.endswith('/'):
+                # For direct references, ensure trailing slash
                 canonical_url += '/'
             return f"[{link_text}](/mathnotes/{canonical_url})"
         else:
@@ -197,7 +196,8 @@ class MarkdownProcessor:
         # First try exact match in current section (this would require context)
         # For now, search all sections
         for url in self.url_mapper.url_mappings:
-            if url.endswith(f"/{slug}") or url == slug:
+            # URLs in mappings now have trailing slashes
+            if url == f"{slug}/" or url.endswith(f"/{slug}/"):
                 return url
         return None
 
