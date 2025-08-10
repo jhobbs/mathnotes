@@ -1,7 +1,7 @@
 """Simple URL router for static site generation."""
 
 import re
-from typing import Dict, Tuple, Optional, Callable, Any
+from typing import Dict, Tuple, Callable
 import logging
 
 logger = logging.getLogger(__name__)
@@ -48,9 +48,7 @@ class Router:
         param_pattern = re.compile(r"<(?:([^:>]+):)?([^>]+)>")
 
         def replace_param(match):
-            converter = match.group(1) or "string"
             name = match.group(2)
-
             converters[name] = str
             return f"(?P<{name}>.+)"  # Match everything including slashes
 

@@ -287,10 +287,6 @@ class BlockReferenceProcessor:
                         f'<div class="embedded-source">from <a href="{target_url}">{block_ref.page_title}</a></div>'
                     )
 
-            # Construct the embedded content
-            block_type_display = target_block.block_type.value.replace("_", " ").title()
-            title_part = f": {target_block.title}" if target_block.title else ""
-
             # Generate a unique marker for this embedded block
             import uuid
 
