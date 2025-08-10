@@ -34,12 +34,8 @@ def main():
     # Build the site
     builder = SiteBuilder(output_dir=args.output)
     
-    try:
-        builder.build()
-        return 0
-    except Exception as e:
-        logging.error(f"Build failed: {e}", exc_info=True)
-        return 1
+    builder.build()
+    return 0
 
 
 if __name__ == '__main__':
