@@ -43,10 +43,6 @@ class StaticSiteGenerator:
         self.global_context[key] = value
         self.env.globals[key] = value
     
-    def add_filter(self, name, func):
-        """Add a custom filter to Jinja2."""
-        self.env.filters[name] = func
-    
     def render_template(self, template_name, **context):
         """Render a template with context.
         
@@ -71,29 +67,5 @@ class StaticSiteGenerator:
         full_path = self.output_dir / output_path
         full_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Ensure we write index.html for directory paths
-        if not full_path.suffix:
-            full_path = full_path / 'index.html'
-        
         full_path.write_text(html_content, encoding='utf-8')
         logger.debug(f"Wrote {len(html_content)} bytes to {full_path}")
-    
-    def copy_static_assets(self, static_dir='static'):
-        """Copy static assets to output directory.
-        
-        Args:
-            static_dir: Directory containing static assets
-        """
-        import shutil
-        
-        static_path = Path(static_dir)
-        if not static_path.exists():
-            logger.warning(f"Static directory {static_dir} does not exist")
-            return
-        
-        output_static = self.output_dir / 'static'
-        if output_static.exists():
-            shutil.rmtree(output_static)
-        
-        shutil.copytree(static_path, output_static)
-        logger.info(f"Copied static assets from {static_dir} to {output_static}")
