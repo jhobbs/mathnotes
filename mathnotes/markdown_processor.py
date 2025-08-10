@@ -132,7 +132,7 @@ class MarkdownProcessor:
             # Get canonical URL for this file
             file_path_normalized = filepath.replace("\\", "/")
             canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
-            # canonical_url now always has trailing slash from url_mapper
+            # canonical_url now always has trailing slash from content_discovery
             canonical_path = f"/mathnotes/{canonical_url}"
 
             # Generate description from frontmatter or content

@@ -26,7 +26,7 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
                 file_path_raw = str(item.relative_to(Path(".")))
                 file_path = file_path_raw.replace("\\", "/")
                 canonical_url = file_to_canonical.get(file_path)
-                # canonical_url already has trailing slash from url_mapper
+                # canonical_url already has trailing slash from content_discovery
                 url = canonical_url
 
                 items.append({"name": item.stem.replace("-", " ").title(), "path": url, "is_subdir": False})
