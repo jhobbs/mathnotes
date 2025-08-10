@@ -11,11 +11,11 @@ from .structured_math import StructuredMathParser, process_structured_math_conte
 from .math_utils import MathProtector, BlockReferenceProcessor
 from .tooltip_collector import TooltipCollectingBlockReferenceProcessor, collect_tooltip_data_from_html
 
+
 # Markdown configuration
 def create_markdown_instance():
     """Create and configure a Markdown instance with required extensions."""
     return markdown.Markdown(extensions=["extra", "codehilite", "toc", "tables", "fenced_code"])
-
 
 
 class MarkdownProcessor:
@@ -59,9 +59,7 @@ class MarkdownProcessor:
                 # Track that we need to initialize this demo
                 integrated_demos.append(f"{demo_name}:{demo_id}")
 
-                return (
-                    f'<div class="demo-component" data-demo="{demo_name}" id="{demo_id}"></div>'
-                )
+                return f'<div class="demo-component" data-demo="{demo_name}" id="{demo_id}"></div>'
 
             content = re.sub(demo_pattern, replace_demo_include, content)
 
@@ -71,7 +69,7 @@ class MarkdownProcessor:
             # Process structured mathematical content - first pass
             math_parser = StructuredMathParser()
             content, block_markers = math_parser.parse(content)
-            
+
             # Get pre-rendered HTML from block index for all blocks
             for marker_id, block in block_markers.items():
                 block.rendered_html = self.block_index.get_rendered_html(filepath, marker_id)
@@ -83,7 +81,7 @@ class MarkdownProcessor:
                 block_markers=block_markers, current_file=filepath, block_index=self.block_index
             )
             content = self.block_ref_processor.process_references(content)
-            
+
             # Start collecting tooltip data
             tooltip_data = self.block_ref_processor.get_tooltip_data()
 
@@ -99,10 +97,7 @@ class MarkdownProcessor:
             html_content = math_protector.fix_math_backslashes(html_content)
 
             # Process embedded blocks after markdown conversion
-            if (
-                hasattr(self, "block_ref_processor")
-                and self.block_ref_processor.embedded_blocks
-            ):
+            if hasattr(self, "block_ref_processor") and self.block_ref_processor.embedded_blocks:
                 html_content = self.block_ref_processor.process_embedded_blocks(html_content)
 
             # Fix relative image paths to include content/ prefix
@@ -117,7 +112,7 @@ class MarkdownProcessor:
                     current_file=filepath,
                     block_index=self.block_index,
                 )
-                
+
                 # Collect any additional references from structured math content
                 additional_labels = collect_tooltip_data_from_html(html_content, tooltip_data)
                 if additional_labels:
@@ -146,9 +141,7 @@ class MarkdownProcessor:
             return {
                 "content": html_content,
                 "metadata": post.metadata,
-                "title": post.metadata.get(
-                    "title", Path(filepath).stem.replace("-", " ").title()
-                ),
+                "title": post.metadata.get("title", Path(filepath).stem.replace("-", " ").title()),
                 "page_description": description,
                 "source_path": filepath,
                 "canonical_url": canonical_path,
@@ -179,9 +172,9 @@ class MarkdownProcessor:
 
         if canonical_url:
             # canonical_url already has trailing slash from mappings or direct reference
-            if "/" in slug and not canonical_url.endswith('/'):
+            if "/" in slug and not canonical_url.endswith("/"):
                 # For direct references, ensure trailing slash
-                canonical_url += '/'
+                canonical_url += "/"
             return f"[{link_text}](/mathnotes/{canonical_url})"
         else:
             # If slug not found, return the original text with a broken link indicator
@@ -221,14 +214,14 @@ class MarkdownProcessor:
     def _fix_relative_image_paths(self, html_content: str, filepath: str) -> str:
         """Fix image paths in HTML to ensure they're absolute paths under /mathnotes/."""
         import os
-        
+
         # Get directory path
-        directory = os.path.dirname(filepath).replace('content/', '', 1).replace('content', '')
-        
+        directory = os.path.dirname(filepath).replace("content/", "", 1).replace("content", "")
+
         # Prepend to anything that's not http/https/data/absolute
         # Using replace to clean up any double slashes
         return re.sub(
             r'<img([^>]*\s)src="(?!(?:https?:|data:|/))([^"]+)"',
             lambda m: f'<img{m.group(1)}src="{f"/mathnotes/{directory}/{m.group(2)}".replace("//", "/")}"',
-            html_content
+            html_content,
         )

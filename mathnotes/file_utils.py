@@ -30,9 +30,7 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
                 # canonical_url already has trailing slash from url_mapper
                 url = canonical_url
 
-                items.append(
-                    {"name": item.stem.replace("-", " ").title(), "path": url, "is_subdir": False}
-                )
+                items.append({"name": item.stem.replace("-", " ").title(), "path": url, "is_subdir": False})
             elif item.is_dir() and not item.name.startswith(".") and not item.name.startswith("__"):
                 # Recursively get files from subdirectories
                 subdir_content = process_directory(item, depth + 1)

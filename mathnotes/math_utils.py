@@ -120,9 +120,7 @@ class BlockReferenceProcessor:
     - @embed{type:label} - Embed with type validation
     """
 
-    def __init__(
-        self, block_markers: Dict[str, "MathBlock"], current_file: str = None, block_index=None
-    ):
+    def __init__(self, block_markers: Dict[str, "MathBlock"], current_file: str = None, block_index=None):
         """Initialize the reference processor.
 
         Args:
@@ -238,8 +236,9 @@ class BlockReferenceProcessor:
         """
         # Normalize label for case-insensitive lookup
         from .structured_math import MathBlock
+
         normalized_ref_label = MathBlock.normalize_label_from_title(ref_label)
-        
+
         # Check local blocks first
         for marker_id, block in self.block_markers.items():
             if block.label and MathBlock.normalize_label_from_title(block.label) == normalized_ref_label:
@@ -301,7 +300,7 @@ class BlockReferenceProcessor:
             self.embedded_blocks[embed_marker] = {
                 "rendered_html": target_block.rendered_html,
                 "source_info": source_info,
-                "ref_label": ref_label
+                "ref_label": ref_label,
             }
 
             # Return the marker - it will be replaced after markdown processing

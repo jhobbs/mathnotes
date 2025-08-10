@@ -26,15 +26,13 @@ class URLMapper:
 
                 # Build canonical URL
                 relative_path = md_file.relative_to(Path("."))
-                
+
                 # Check if there's a custom slug that should override the path
                 custom_slug = post.metadata.get("slug")
                 if custom_slug:
                     # Custom slug provided - use it with section prefix
                     section_name = (
-                        relative_path.parts[1]
-                        if relative_path.parts[0] == "content"
-                        else relative_path.parts[0]
+                        relative_path.parts[1] if relative_path.parts[0] == "content" else relative_path.parts[0]
                     )
                     canonical_url = f"{section_name}/{custom_slug}"
                 else:
@@ -46,16 +44,14 @@ class URLMapper:
                     canonical_url = url_path
 
                 # Ensure canonical URL has trailing slash
-                canonical_url += '/'
-                
+                canonical_url += "/"
+
                 # Store mappings
                 file_path = str(relative_path).replace("\\", "/")
                 self.url_mappings[canonical_url] = file_path
                 self.file_to_canonical[file_path] = canonical_url
 
-        print(
-            f"Built {len(self.url_mappings)} URL mappings"
-        )
+        print(f"Built {len(self.url_mappings)} URL mappings")
 
     def get_canonical_url(self, file_path: str) -> str:
         """Get the canonical URL for a file path."""

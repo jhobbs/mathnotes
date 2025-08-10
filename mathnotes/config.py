@@ -1,4 +1,3 @@
-
 """Configuration for the mathnotes site."""
 
 # Production base URL
