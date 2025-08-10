@@ -23,10 +23,9 @@ def load_asset_manifest() -> Dict[str, str]:
         return json.load(f)
 
 
-def get_asset_urls(manifest: Optional[Dict[str, str]] = None) -> Dict[str, str]:
+def get_asset_urls() -> Dict[str, str]:
     """Get URLs for CSS and JS assets."""
-    if manifest is None:
-        manifest = load_asset_manifest()
+    manifest = load_asset_manifest()
     
     # Default filenames (what the manifest keys are)
     css_key = "main.css"
