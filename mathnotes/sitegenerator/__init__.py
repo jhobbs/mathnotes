@@ -8,12 +8,12 @@ from .pages import PageRegistry, Page, PageSpec
 from .urls import URLGenerator
 
 __all__ = [
-    'StaticSiteGenerator',
-    'Router', 
-    'build_global_context',
-    'SiteBuilder',
-    'PageRegistry',
-    'Page',
-    'PageSpec',
-    'URLGenerator'
+    "StaticSiteGenerator",
+    "Router",
+    "build_global_context",
+    "SiteBuilder",
+    "PageRegistry",
+    "Page",
+    "PageSpec",
+    "URLGenerator",
 ]

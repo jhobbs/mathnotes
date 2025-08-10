@@ -140,9 +140,7 @@ class StructuredMathParser:
 
     # Pattern for block start: :::+type "optional title" {optional: metadata}
     # Now captures the number of colons for nesting level
-    BLOCK_START_PATTERN = re.compile(
-        r'^(:::+)(\w+)(?:\s+"([^"]+)")?(?:\s+\{([^}]+)\})?\s*$', re.MULTILINE
-    )
+    BLOCK_START_PATTERN = re.compile(r'^(:::+)(\w+)(?:\s+"([^"]+)")?(?:\s+\{([^}]+)\})?\s*$', re.MULTILINE)
 
     # Pattern for block end: :::+ or :::+end (must match opening colons)
     BLOCK_END_PATTERN = re.compile(r"^(:::+)(?:end)?\s*$", re.MULTILINE)
@@ -286,9 +284,7 @@ class StructuredMathParser:
                             nested_level = len(nested_start_match.group(1)) - 3
                             if nested_level == level + 1:
                                 # This is a direct child block
-                                child_lines, next_i = self._parse_blocks(
-                                    lines, i, block, nested_level
-                                )
+                                child_lines, next_i = self._parse_blocks(lines, i, block, nested_level)
                                 block_content_lines.extend(child_lines)
                                 i = next_i
                             else:
@@ -346,7 +342,8 @@ class StructuredMathParser:
         return metadata
 
     def render_block_html(
-        self, block: MathBlock, content_html: str, block_markers: Dict[str, MathBlock], md_processor, url: str) -> str:
+        self, block: MathBlock, content_html: str, block_markers: Dict[str, MathBlock], md_processor, url: str
+    ) -> str:
         """
         Render a math block to HTML with pre-processed content.
 
@@ -391,9 +388,7 @@ class StructuredMathParser:
             html_parts.extend(header_parts)
         else:
             # For proofs, use bold "Proof" header (without colon)
-            html_parts.append(
-                '<div class="math-block-header"><span class="math-block-type">Proof</span></div>'
-            )
+            html_parts.append('<div class="math-block-header"><span class="math-block-type">Proof</span></div>')
 
         # Add content - already processed as markdown
         html_parts.append('<div class="math-block-content">')
@@ -413,9 +408,7 @@ class StructuredMathParser:
         html_parts.append(processed_content)
 
         # Add QED symbol for proofs if not already present
-        if block.block_type == MathBlockType.PROOF and not processed_content.rstrip().endswith(
-            "$\\square$"
-        ):
+        if block.block_type == MathBlockType.PROOF and not processed_content.rstrip().endswith("$\\square$"):
             html_parts.append(" $\\square$")
 
         html_parts.append("</div>")
