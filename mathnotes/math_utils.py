@@ -247,18 +247,17 @@ class BlockReferenceProcessor:
                 if ref_type is None or block.block_type.value == ref_type:
                     return block, f"#{block.label}"  # Local reference with actual label
 
-        # If not found locally and we have a global index, check there
-        if self.block_index:
-            block_ref = self.block_index.get_reference(normalized_ref_label)
-            if block_ref:
-                # Verify type if specified
-                if ref_type is None or block_ref.block.block_type.value == ref_type:
-                    # Check if it's in the same file
-                    if block_ref.file_path == self.current_file:
-                        target_url = f"#{block_ref.block.label}"
-                    else:
-                        target_url = block_ref.full_url
-                    return block_ref.block, target_url
+        # If not found locally check in the global index
+        block_ref = self.block_index.get_reference(normalized_ref_label)
+        if block_ref:
+            # Verify type if specified
+            if ref_type is None or block_ref.block.block_type.value == ref_type:
+                # Check if it's in the same file
+                if block_ref.file_path == self.current_file:
+                    target_url = f"#{block_ref.block.label}"
+                else:
+                    target_url = block_ref.full_url
+                return block_ref.block, target_url
 
         return None, None
 
