@@ -1,10 +1,10 @@
 ---
-description: Introduces perfect sets.
+description: Introduces perfect sets, separable spaces, and bases.
 layout: page
-title: Perfect Sets
+title: Perfect Sets and More
 ---
 
-# Perfect Sets
+## Perfect Sets
 
 :::note
 This section was developed by following Rudin, *Principles of Mathematical Analysis*, Chapter 2.
@@ -31,5 +31,25 @@ For each $n$, let $K_n = \overline{V_n} \cap P.$ Since $\overline{V_n}$ is close
 
 ::::corollary
 Every interval $[a, b] (a < b)$ is uncountable, and thus the set of all real numbers is uncountable as it contains uncountable subsets.
+::::
+:::
+
+## Separable Spaces
+
+:::definition "Separable"
+A metric space is called **separable** if it contains a countable dense subset.
+:::
+
+:::theorem
+$R^k$ is separable.
+
+::::proof
+The points of $R^k$ that have only rational coordinates are a subset of $R^k,$ we'll call it $Q^k,$ countable and dense.
+
+We know that @{the rationals are countable|rationals-are-countable}, and because @{$n$-tuples of countable elements are countable|n-tuples-of-countable-elements-are-countable}, $Q^k$ is countable.
+
+To show $Q^k$ is dense, consider an arbitrary point $p$ in $R^k.$ If $p \in Q^k,$ we are done, so assume $p \notin Q^k.$ Now, let $\epsilon > 0.$ To find a point $q \in Q^k$ with $d(p, q) < \epsilon,$ simply truncate the decimal representations of the coordinates of $p$ with enough digits remaining to result in a rational that is within $\epsilon$ of $p,$ i.e.
+
+$$ |p_i - q_i| < \frac{\epsilon}{\sqrt{k}} \implies |p - q| < \sqrt{\sum_{i=1}^k (p_i - q_i)^2 } < \sqrt{k} \cdot \frac{\epsilon}{\sqrt{k}} = \epsilon. $$ 
 ::::
 :::

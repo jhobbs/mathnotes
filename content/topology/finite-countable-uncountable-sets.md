@@ -86,7 +86,7 @@ This sequence may contain duplicates, so some indices may need to be skipped in 
 
 {% include_demo "countable-union" %}
 
-:::theorem
+:::theorem {label: n-tuples-of-countable-elements-are-countable}
 Let $A$ be a countable set, and let $B_n$ be the set of all $n$-tuples $(a_1, \dots, a_n)$ where $a_k \in A (k = 1, \dots, n),$ and the elements $a_1, \dots, a_n$ need not be distinct. Then $B_n$ is countable.
 
 ::::proof
@@ -97,7 +97,7 @@ $$ B_n = \{(b,a) | b \in B_{n-1}, a \in A\} = \bigcup_{b \in B_{n-1}} ({b} \time
 So, for any given $n-1$-tuple $b$, we form $n$-tuples by appending each element of $a$ to it, and so the set of pairs $(b,a)$ has the same cardinality as $A,$ and is thus countable. $B_n$ is thus the union of the countable set of countable sets (the set of sets formed by appending each element of $A$ to each element of $B_{n-1}$) and is therefore countable itself, by a theorem proved above. Therefore, by induction, every $B_n$ is countable.
 ::::
 
-::::corollary
+::::corollary {label: rationals-are-countable}
 The set of rational numbers is countable.
 
 :::::proof
