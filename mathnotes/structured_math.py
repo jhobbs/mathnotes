@@ -414,6 +414,19 @@ class StructuredMathParser:
 
         return "\n".join(html_parts)
 
+    def _render_block_error(self, error_title: str, error_message: str, line_number: int = None) -> str:
+        """Render a visible error block for parsing errors."""
+        line_info = f" (around line {line_number})" if line_number else ""
+        return f"""<div class="math-block-error">
+    <div class="math-block-error-header">
+        <strong>⚠️ Math Block Error{line_info}</strong>
+    </div>
+    <div class="math-block-error-content">
+        <strong>{error_title}</strong><br>
+        {error_message}
+    </div>
+    </div>"""
+
 
 def process_structured_math_content(
     html_content: str,
