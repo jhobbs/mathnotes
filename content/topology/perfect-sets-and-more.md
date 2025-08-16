@@ -48,7 +48,7 @@ The points of $R^k$ that have only rational coordinates are a subset of $R^k,$ w
 
 We know that @{the rationals are countable|rationals-are-countable}, and because @{$n$-tuples of countable elements are countable|n-tuples-of-countable-elements-are-countable}, $Q^k$ is countable.
 
-To show $Q^k$ is dense, consider an arbitrary point $p$ in $R^k.$ If $p \in Q^k,$ we are done, so assume $p \notin Q^k.$ Now, let $\epsilon > 0.$ To find a point $q \in Q^k$ with $d(p, q) < \epsilon,$ simply truncate the decimal representations of the coordinates of $p$ with enough digits remaining to result in a rational that is within $\epsilon$ of $p,$ i.e.
+To show $Q^k$ is dense, consider an arbitrary point $p$ in $R^k.$ Now, let $\epsilon > 0.$ Since the @{the rationals are dense in the reals|rationals-are-dense-in-reals}, we can pick a $q \in Q^k$ with $d(p, q) < \epsilon,$ by picking rational approximations of the coordinates of $p$ and forming $q$ such that $q$ is within $\epsilon$ of $p,$ i.e.
 
 $$ |p_i - q_i| < \frac{\epsilon}{\sqrt{k}} \implies |p - q| < \sqrt{\sum_{i=1}^k (p_i - q_i)^2 } < \sqrt{k} \cdot \frac{\epsilon}{\sqrt{k}} = \epsilon. $$ 
 ::::
@@ -57,7 +57,7 @@ $$ |p_i - q_i| < \frac{\epsilon}{\sqrt{k}} \implies |p - q| < \sqrt{\sum_{i=1}^k
 ## Base
 
 :::definition "Base"
-A collection ${V_\alpha}$ of open subsets of $X$ is said to be a **base** for $X$ if the following is true: For every $x \in X$ and every open set $G \subset X$ such that $x \in G,$ we have $x \in V_\alpha \subset G$ for some $\alpha.$ In other wrods, every open set in $X$ is the union of a subcollection of ${V_\alpha}.$
+A collection ${V_\alpha}$ of open subsets of $X$ is said to be a **base** for $X$ if the following is true: For every $x \in X$ and every open set $G \subset X$ such that $x \in G,$ we have $x \in V_\alpha \subset G$ for some $\alpha.$ In other words, every open set in $X$ is the union of a subcollection of ${V_\alpha}.$
 :::
 
 :::theorem

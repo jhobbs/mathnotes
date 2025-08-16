@@ -8,7 +8,10 @@ title: Real Numbers
 
 # Real Numbers
 
+
+:::definition reals
 The real numbers $\mathbb{R}$ are a set of objects along with two binary operations $+ : \mathbb{R} \times \mathbb{R} \to \mathbb{R}$ and $\cdot : \mathbb{R} \times \mathbb{R} \to \mathbb{R}$ that satisfy the 9 field axioms along with the Order axiom and the Completeness axiom. That is, the reals are an ordered, complete field.
+:::
 
 We know that a [[field is a commutative division ring|algebra/abstract/rings]].
 
@@ -50,3 +53,35 @@ One fact that follow from this definition is that for $a, b \in \mathbb{R}$, if 
 Another fact is that the absolute value function is a norm, and thus satisfies the triangle inequality. For real $a, b$:
 
 $$ |a + b| \leq |a| + |b| $$
+
+:::definition "Archimedean"
+The Archimedean property is that given two positive numbers $x$ and $y,$ there is an integer $n$ such that $nx > y.$
+:::
+
+:::theorem {label: reals-are-archimedean}
+The real numbers are Archimedean.
+:::
+
+:::theorem {label: rationals-are-dense-in-reals}
+The rationals are @dense in the reals.
+
+::::proof
+Let $x \in \mathbb{R}$ and $\epsilon > 0.$ Pick $n \in \mathbb{N}$ such that $1/n < \epsilon.$ Now, because @{the reals are Archimedean|reals-are-archimedean}, for some $m \in \mathbb{Z}$ we have that $m = \lfloor nx \rfloor.$ Then,
+
+$$ m \leq nx \leq m+1, \quad \frac{m}{n} \leq x \leq \frac{m+1}{n}. $$
+
+Now, if we let $q = \frac{m}{n},$ we have
+
+$$ 0 \leq x - q < \frac{1}{n} < \epsilon, $$
+
+so $|x - q| < \epsilon.$ Therefore, every @neighborhood of $x$ contains some $q \in \mathbb{Q},$ and so $x$ is either a limit point of $\mathbb{Q}$ or else $x \in \mathbb{Q},$ and so the rationals are therefore dense in the reals.
+::::
+
+::::corollary
+If $x, y \in \mathbb{R},$ and $x < y,$ then there exists a $p \in \mathbb{Q}$ such that $x < p < y.$ That is, there is always a rational number between any two distinct real numbers.
+
+:::::proof
+Pick $n \in \mathbb{N}$ such that $n(y - a) > 1.$ Because because @{the reals are Archimedean|reals-are-archimedean}, there is some $k \in \mathbb{Z}$ such that $nx < k < ny$ and $x < n/k < y.$ Thus, $q = n/k \in \mathbb{Q}$ and $r \in (x, y).$
+:::::
+::::
+:::
