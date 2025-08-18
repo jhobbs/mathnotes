@@ -69,3 +69,25 @@ Let $X$ be a @separable @{metric space|metric-space}, and let $x \in G \subset X
 Now, if we let $G$ be the union of all open sets $G_\beta \subset X,$ then $G$ @{is open|union-and-intersection-of-open-and-closed-sets}, and let ${V_\alpha}$ be the union of all the $N_r(q), q \in G \cap E,$ with $r \in Q,$ then every $x \in G$ is in some ${V_\alpha},$ and there are countably many ${V_\alpha},$ so ${V_\alpha}$ is a countable @base for $X.$
 ::::
 :::
+
+:::theorem
+Let $X$ be a metric space in which every infinite subset has a limit point. Then $X$ is @separable.
+
+::::proof
+Let $\delta > 0,$ and pick $x_1 \in X.$ Now, continue picking $x_{j+1}$ such that $d(x_i, x_{j+1}) \geq \delta$ i.e. so that each new point is at least $\delta$ away from each existing point. Suppose this process continues infinitely; then the points $\{x_i\}$ are an infinite subset of $X,$ and thus must have a limit point $p.$ Now, because @{every neighborhood of $p$ must contain infinitely many points in ${x_i}$|neighborhood-of-limit-point-contains-infinitely-many-points}, we can let $r = \delta / 2,$ $N_r{p}$ be a neighborhood of $p,$ and pick $x, y \in \{x_i\}, N_r{p}.$ But, by the triangle inequality
+
+$$ \begin{aligned}
+
+d(x, y) & \leq d(x, p) + d(p, y) \\
+        & < \delta / 2 + \delta / 2 \\
+        & = \delta
+
+\end{aligned} $$
+
+so $d(x,y) < \epsilon,$ which contradicts our assumption that $\{x_i\}$ could be an infinite set where all points were at least $\delta$ apart. Therefore, $\{x_i\}$ has only finitely many points, and $X$ can be covered with finitely many open balls of radius $\delta$ (for if it couldn't be, we could always fit another point into $\{x_i\}.$)
+
+Now, if we let $\delta = 1/n, n=1,2,3,\dots,$ we can consider the set of points $\{x_i\}_n$ as the finite set of points at least $1/n$ apart in $X.$ The collection of all such points can be called ${x_{i_n}\}$ and is dense in $X:$ let $p$ be a point in $X.$ and $N_r{p}, r>0$ a neighborhood of $p.$ If we pick $n$ such that $1/n < r,$ then some $\{x_i\}_n$ will be in $N_r{p},$ because if not, we would have a contradiction with the fact that shown above that no point in $X$ is more than $1/n$ away from a point in $\{x_i\}_n.$
+
+Since each $\{x_i\}_n$ is finite, and there are countably many $\{x_i\}_n,$ the $\{x_{i_n}\}$ is a countably dense subset of $X$ and therefore $X$ is separable.
+::::
+:::
