@@ -70,7 +70,7 @@ Now, if we let $G$ be the union of all open sets $G_\beta \subset X,$ then $G$ @
 ::::
 :::
 
-:::theorem
+:::theorem {label: every-metric-space-where-every-infinite-subset-has-a-limit-point-is-separable}
 Let $X$ be a metric space in which every infinite subset has a limit point. Then $X$ is @separable.
 
 ::::proof
@@ -86,8 +86,23 @@ d(x, y) & \leq d(x, p) + d(p, y) \\
 
 so $d(x,y) < \epsilon,$ which contradicts our assumption that $\{x_i\}$ could be an infinite set where all points were at least $\delta$ apart. Therefore, $\{x_i\}$ has only finitely many points, and $X$ can be covered with finitely many open balls of radius $\delta$ (for if it couldn't be, we could always fit another point into $\{x_i\}.$)
 
-Now, if we let $\delta = 1/n, n=1,2,3,\dots,$ we can consider the set of points $\{x_i\}_n$ as the finite set of points at least $1/n$ apart in $X.$ The collection of all such points can be called ${x_{i_n}\}$ and is dense in $X:$ let $p$ be a point in $X.$ and $N_r{p}, r>0$ a neighborhood of $p.$ If we pick $n$ such that $1/n < r,$ then some $\{x_i\}_n$ will be in $N_r{p},$ because if not, we would have a contradiction with the fact that shown above that no point in $X$ is more than $1/n$ away from a point in $\{x_i\}_n.$
+Now, if we let $\delta = 1/n, n=1,2,3,\dots,$ we can consider the set of points $\{x_i\}_n$ as the finite set of points at least $1/n$ apart in $X.$ The collection of all such points can be called $\{x_{i_n}\}$ and is dense in $X:$ let $p$ be a point in $X.$ and $N_r{p}, r>0$ a neighborhood of $p.$ If we pick $n$ such that $1/n < r,$ then some $\{x_i\}_n$ will be in $N_r{p},$ because if not, we would have a contradiction with the fact that shown above that no point in $X$ is more than $1/n$ away from a point in $\{x_i\}_n.$
 
 Since each $\{x_i\}_n$ is finite, and there are countably many $\{x_i\}_n,$ the $\{x_{i_n}\}$ is a countably dense subset of $X$ and therefore $X$ is separable.
 ::::
+:::
+
+:::theorem
+Every compact metric space has a countable base and is therefore separable.
+
+::::proof
+Let $K$ be a compact metric space. Fix $n \in \mathbb{N}$ (any natural number will do,) then, consider the open cover $\{G_\alpha\}_n$ of balls of radius $1/n$ centered at $x \in K.$ Now, because $K$ is compact, some finite $\{V_\alpha\}_n \subset \{G_\alpha\}_n$ covers $K.$
+
+Now, consider the set of all balls for all $n,$
+
+$$ C = \bigcup_{n=1}^{\infty} \{V_\alpha\}_n $$
+
+Because @{the union of a sequence of countable sets is countable|union-of-a-sequence-of-countable-sets-is-countable}, $C$ is countable. To show $C$ is a base for $K,$ let $G$ be an open subset of $K,$ and let $x \in G.$ Let $\epsilon > 0$ such that $B_{\epsilon}(x) \subset G.$ Pick natural $n$ such that $1/n < \epsilon/2.$ Then, $x \in \{V_\alpha\}_n$ for some $\alpha,$ (because no point in $K$ is more than $1/n$ away from the center of some $\{V_\alpha\}_n$ and therefore $C$ is a countable base of $K.$ Since we can make $\epsilon$ as close to $0$ as we like, the centers of $\{V_\alpha\}_n$ are dense as well as countable, and are therefore a countable dense subset of $K,$ so $K$ is separable.
+::::
+
 :::

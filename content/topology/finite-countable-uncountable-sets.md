@@ -61,7 +61,7 @@ This means that countably infinite sets are the smallest infinite sets. Any infi
 
 ### Intersections and Unions of Sets
 
-:::theorem
+:::theorem {label: union-of-a-sequence-of-countable-sets-is-countable}
 Let $\{E_n\}, n = 1, 2, 3, \dots$ be a sequence of countable sets. Then let $S = \bigcup_{n=1}^\infty E_n.$ Then, $S$ is countable.
 
 ::::proof
