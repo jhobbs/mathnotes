@@ -60,7 +60,7 @@ $$ |p_i - q_i| < \frac{\epsilon}{\sqrt{k}} \implies |p - q| < \sqrt{\sum_{i=1}^k
 A collection ${V_\alpha}$ of open subsets of $X$ is said to be a **base** for $X$ if the following is true: For every $x \in X$ and every open set $G \subset X$ such that $x \in G,$ we have $x \in V_\alpha \subset G$ for some $\alpha.$ In other words, every open set in $X$ is the union of a subcollection of ${V_\alpha}.$
 :::
 
-:::theorem
+:::theorem {label: every-separable-metric-space-has-a-countable-base}
 Every separable metric space has a countable base.
 
 ::::proof
@@ -103,6 +103,26 @@ Now, consider the set of all balls for all $n,$
 $$ C = \bigcup_{n=1}^{\infty} \{V_\alpha\}_n $$
 
 Because @{the union of a sequence of countable sets is countable|union-of-a-sequence-of-countable-sets-is-countable}, $C$ is countable. To show $C$ is a base for $K,$ let $G$ be an open subset of $K,$ and let $x \in G.$ Let $\epsilon > 0$ such that $B_{\epsilon}(x) \subset G.$ Pick natural $n$ such that $1/n < \epsilon/2.$ Then, $x \in \{V_\alpha\}_n$ for some $\alpha,$ (because no point in $K$ is more than $1/n$ away from the center of some $\{V_\alpha\}_n$ and therefore $C$ is a countable base of $K.$ Since we can make $\epsilon$ as close to $0$ as we like, the centers of $\{V_\alpha\}_n$ are dense as well as countable, and are therefore a countable dense subset of $K,$ so $K$ is separable.
+::::
+:::
+
+:::theorem
+Let $X$ be a metric space in which every infinite subset has a limit point. Then $X$ is compact.
+
+::::proof
+By @every-metric-space-where-every-infinite-subset-has-a-limit-point-is-separable, we know that $X$ is separable and by @every-separable-metric-space-has-a-countable-base, we know that $X$ has a countable base. By the definition of @base, we have that every open cover of $X$ has a countable subcover $\{G_n\}, n = 1, 2, 3, \dots.$
+
+Suppose, for the sake of contradiction, that $\{G_n\}$ has no finite subcollection that covers $X.$ Let
+
+$$ F_n = (G_1 \cup \cdots \cup G_n)^c. $$
+
+Then, each $F_n$ must be nonempty (otherwise a finite subcollection of $\{G_n\}$ would cover $X.$ However, since every point in $X$ is in some $G_n,$
+
+$$\bigcap_{n=1}^{\infty} F_n = \emptyset. $$
+
+Now, let $E$ be a set with a point from each $F_n.$ Since there are infinitely many $F_n,$ $E$ is an infinite subset of $X,$ and therefore $E$ has a limit point, $p.$ Now, $p$ must be in some open $G_m,$ and so for some $\epsilon > 0,$ $N_{\epsilon}(p) \subset G_m.$
+
+Now, note that each $F_{n+1} \subset F_n,$ because $F_{n+1}$ is formed by excluding all the points in $F_n$ that are also in $G_{n+1}.$ Because $p$ is a limit point of $E,$ $N_\epsilon{p}$ must contain infinitely many points of $E.$ However, only finitely many points of $E$ can be in $N_{\epsilon}(p) \subset G_m,$ because for $n >= m,$ $F_n$ contains no points in $G_m.$ Therefore, $p$ is not a limit point of $E,$ and no such limit point can exist, contradicting our hypothesis that every infinite subset of $X$ has a limit point. Therefore, $E$ must be finite, and $\{G_n\}$ must have a finite subcollection that covers $X,$ meaning $X$ is compact.
 ::::
 
 :::
