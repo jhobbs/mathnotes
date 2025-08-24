@@ -29,7 +29,7 @@ For the inductive step, suppose as an induction hypothesis that have some $V_n$ 
 For each $n$, let $K_n = \overline{V_n} \cap P.$ Since $\overline{V_n}$ is closed and bounded, $\overline{V_n}$ @{is compact|heine-borel}. Since $x_n \notin \overline{V_{n+1}},$ no point of $P$ lies in $\bigcap_{n=1}^\infty K_n.$ Since $K_n \subset P,$ this implies that $\bigcap_{n=1}^\infty K_n$ is empty. But, each $K_n$ is nonempty, by (iii), and $K_{n+1} \subset K$, by (i). But the @{intersection of nonempty compact nested sets is nonempty|intersection-of-nonempty-nested-compact-sets-is-nonempty}, so we have a contradiction, and our provision assumption that $P$ is countable must be incorrect. Therefore, $P$ is uncountable.
 ::::
 
-::::corollary
+::::corollary {label: every-interval-is-uncountable}
 Every interval $[a, b] (a < b)$ is uncountable, and thus the set of all real numbers is uncountable as it contains uncountable subsets.
 ::::
 :::
@@ -123,6 +123,29 @@ $$\bigcap_{n=1}^{\infty} F_n = \emptyset. $$
 Now, let $E$ be a set with a point from each $F_n.$ Since there are infinitely many $F_n,$ $E$ is an infinite subset of $X,$ and therefore $E$ has a limit point, $p.$ Now, $p$ must be in some open $G_m,$ and so for some $\epsilon > 0,$ $N_{\epsilon}(p) \subset G_m.$
 
 Now, note that each $F_{n+1} \subset F_n,$ because $F_{n+1}$ is formed by excluding all the points in $F_n$ that are also in $G_{n+1}.$ Because $p$ is a limit point of $E,$ $N_\epsilon{p}$ must contain infinitely many points of $E.$ However, only finitely many points of $E$ can be in $N_{\epsilon}(p) \subset G_m,$ because for $n >= m,$ $F_n$ contains no points in $G_m.$ Therefore, $p$ is not a limit point of $E,$ and no such limit point can exist, contradicting our hypothesis that every infinite subset of $X$ has a limit point. Therefore, $E$ must be finite, and $\{G_n\}$ must have a finite subcollection that covers $X,$ meaning $X$ is compact.
+::::
+:::
+
+:::definition "Condensation Point"
+A point $p$ in a metric space $X$ is said to be a **condensation point** of a set $E \subset X$ if every neighborhood of $p$ contains uncountably many points of $E.$ 
+:::
+:::example
+Let $p \in \mathbb{R}, \epsilon > 0$ and let $E = (p, p+\epsilon).$ Then, for any $0 < \delta < \epsilon$ let $N_{\delta}(p)$ be an open ball around $p.$ Then, $N_{\delta}(p) \cap E = (p, p + \delta)$ is an open interval in $E,$ and @{is therefore uncountable|every-interval-is-uncountable}.
+:::
+
+:::theorem
+Suppose $E \subset R^k,$ with $E$ uncountable, and let $P$ be the set of all condensation points of $E.$ Prove that $P$ is perfect and that at most countably many points of $E$ are not in $P,$ that is, that $P^c \cap E$ is at most countable.
+
+::::proof
+Let $\{V_n\}$ be a countable base of $R^k$ (see @euclidean-space-is-separable and @every-separable-metric-space-has-a-countable-base,) and let $W$ be the union of those $V_n$ for which $E \cap V_n$ is at most countable. We will show that $P = W^c.$
+
+Suppose $p \in W^c.$ Then $p$ is in no $V_n$ for which $V_n \cap E$ is at most countable, that is, every neighborhood of $p$ has uncountably many points in $E,$ and thus $p \in P.$
+
+Conversely, suppose $p \in P.$ Suppose, for the sake of contradiction, that $p \in W.$ Then $p \in V_n$ for some $V_n$ where $V_n \cap E$ is at most countable. But, since $p$ is an interior point of this $V_n,$ there is a neighborhood $N(p) \subset V_n,$ and since every neighborhood of $p$ has uncountably many points in $E,$ we have a contradiction, and thus our assumption that $p \in W$ must be incorrect, and therefore $p \in W^c,$ and $P = W^c.$ Furthermore, since $W$ is a @{union of open sets|union-and-intersection-of-open-and-closed-sets}, $W$ is open, and $W^c = P$ @{is closed|open-iff-complement-closed}.
+
+Since $W$ is open, only countably many $V_n$ are required to cover it. Each of these $V_n$ has at most countably many points in $E,$ so $W = P^c$ has at most countably many points in $E,$ that is, there are at most countably many points of $E$ that are not in $P.$
+
+Now, to show all points in $P$ are limit points of $P,$ suppose $p \in P.$ Let $N_{r}(p), r > 0$ be a neighborhood of $p.$ Then, $N_{r}(p) \cap E$ is uncountable. Now, since there are at must countably many points in $E$ that are not in $P,$ there are at most countably many points in $(N_{r}(p) \cap E) \ P,$ and therefore there must be uncountably many points in $N_{r}(p) \cap E \cap P.$ Therefore, every neighborhood of $p$ contains infinitely many points in $P$ other than $p,$ $p$ is a limit point of $P,$ and $P$ is perfect.
 ::::
 
 :::
