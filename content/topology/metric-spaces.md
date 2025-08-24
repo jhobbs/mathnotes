@@ -156,7 +156,7 @@ A point $p$ is a **limit point** of the set $E$ if every neighborhood of $p$ con
 :::
 
 :::definition "Isolated Point"
-If $p \in E$ and $p$ is not a limit point of $E,$ then $p is called an **isolated point** of E.
+If $p \in E$ and $p$ is not a limit point of $E,$ then $p$ is called an **isolated point** of E.
 :::
 
 :::definition "Closed Set"

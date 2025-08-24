@@ -133,7 +133,7 @@ A point $p$ in a metric space $X$ is said to be a **condensation point** of a se
 Let $p \in \mathbb{R}, \epsilon > 0$ and let $E = (p, p+\epsilon).$ Then, for any $0 < \delta < \epsilon$ let $N_{\delta}(p)$ be an open ball around $p.$ Then, $N_{\delta}(p) \cap E = (p, p + \delta)$ is an open interval in $E,$ and @{is therefore uncountable|every-interval-is-uncountable}.
 :::
 
-:::theorem
+:::theorem {label: condensation-points-of-an-uncountable-subset-of-rk-are-perfect}
 Suppose $E \subset R^k,$ with $E$ uncountable, and let $P$ be the set of all condensation points of $E.$ Prove that $P$ is perfect and that at most countably many points of $E$ are not in $P,$ that is, that $P^c \cap E$ is at most countable.
 
 ::::proof
@@ -145,7 +145,24 @@ Conversely, suppose $p \in P.$ Suppose, for the sake of contradiction, that $p \
 
 Since $W$ is open, only countably many $V_n$ are required to cover it. Each of these $V_n$ has at most countably many points in $E,$ so $W = P^c$ has at most countably many points in $E,$ that is, there are at most countably many points of $E$ that are not in $P.$
 
-Now, to show all points in $P$ are limit points of $P,$ suppose $p \in P.$ Let $N_{r}(p), r > 0$ be a neighborhood of $p.$ Then, $N_{r}(p) \cap E$ is uncountable. Now, since there are at must countably many points in $E$ that are not in $P,$ there are at most countably many points in $(N_{r}(p) \cap E) \ P,$ and therefore there must be uncountably many points in $N_{r}(p) \cap E \cap P.$ Therefore, every neighborhood of $p$ contains infinitely many points in $P$ other than $p,$ $p$ is a limit point of $P,$ and $P$ is perfect.
+Now, to show all points in $P$ are limit points of $P,$ suppose $p \in P.$ Let $N_{r}(p), r > 0$ be a neighborhood of $p.$ Then, $N_{r}(p) \cap E$ is uncountable. Now, since there are at must countably many points in $E$ that are not in $P,$ there are at most countably many points in $(N_{r}(p) \cap E) \setminus P,$ and therefore there must be uncountably many points in $N_{r}(p) \cap E \cap P.$ Therefore, every neighborhood of $p$ contains infinitely many points in $P$ other than $p,$ $p$ is a limit point of $P,$ and $P$ is perfect.
+::::
+:::
+
+:::theorem
+Every closed set in a separable metric space is the union of a (possibly empty) perfect set and a set which is at most countable.
+
+::::proof
+Let $X$ be a separable metric space and $E \subset X$ be closed. If $E$ is at most countable, then we are done.
+
+Suppose that $E$ is uncountable. Note that the proof of @condensation-points-of-an-uncountable-subset-of-rk-are-perfect only uses the property that $R^k$ is a separable metric space, and it therefore generalizes to any separable metric space. Thus $E$ is the union of a perfect set - its condensation points, $P$, and a set that is at most countable, $E \setminus P.$
 ::::
 
+::::corollary
+Every @countable @{closed set|closed-set} set in $R^k$ has @{isolated points|isolated-point}.
+
+:::::proof
+Let $E$ be a countable closed set in $R^k.$ Suppose for contradiction that $E$ has no isolated points. Then every point of $E$ is a limit point of $E,$ and thus $E$ is @{perfect|perfect-set}. But, @{every nonempty perfect set in $R^k$ is uncountable|non-empty-perfect-sets-in-rk-are-uncountable}, a contradiction. Thus, our assumption that $E$ has no isolated points is incorrect, and $E$ must contain isolated points.
+:::::
+::::
 :::
