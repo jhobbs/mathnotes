@@ -268,30 +268,32 @@ class TheoremIndexPage(BlockIndexPage):
     context_key = "blocks"
     
     def process_context(self, context: Dict[str, Any], blocks: List) -> Dict[str, Any]:
-        """Filter out proofs and other unwanted nested content from the rendered HTML."""
+        """Filter out nested content from the rendered HTML for cleaner index display."""
         from bs4 import BeautifulSoup
         
-        # Only show top-level blocks (corollaries are nested inside their parents)
+        # Include all theorem-type blocks as separate entries
         filtered_blocks = []
         
         for ref in blocks:
-            if ref.block.parent is None:  # Only top-level blocks
-                # Parse and filter the HTML
-                if ref.block.rendered_html:
-                    soup = BeautifulSoup(ref.block.rendered_html, 'html.parser')
-                    
-                    # Remove proof blocks
-                    for proof in soup.select('.math-proof'):
-                        proof.decompose()
-                    
-                    # Remove example, remark, and note blocks that might be nested
-                    for unwanted in soup.select('.math-example, .math-remark, .math-note'):
-                        unwanted.decompose()
-                    
-                    # Store the filtered HTML back in rendered_html
-                    ref.block.rendered_html = str(soup)
+            # Parse and filter the HTML
+            if ref.block.rendered_html:
+                soup = BeautifulSoup(ref.block.rendered_html, 'html.parser')
                 
-                filtered_blocks.append(ref)
+                # Find the top-level block (the first math-block div)
+                top_block = soup.find('div', class_='math-block')
+                
+                if top_block:
+                    # Remove nested blocks WITHIN this block (but not the block itself)
+                    # Find all nested blocks that are descendants of the top block
+                    for nested in top_block.find_all('div', class_='math-block'):
+                        # Don't remove the top block itself
+                        if nested != top_block:
+                            nested.decompose()
+                
+                # Store the filtered HTML back in rendered_html
+                ref.block.rendered_html = str(soup)
+            
+            filtered_blocks.append(ref)
         
         context[self.context_key] = filtered_blocks
         context['index_title'] = 'Theorem Index'
