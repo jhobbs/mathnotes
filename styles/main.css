@@ -674,6 +674,26 @@ footer {
   margin-left: 0.75em;
   float: right;
   opacity: 0.8;
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Hover state for labels */
+.block-label-ref:hover {
+  opacity: 1;
+  color: var(--color-text);
+}
+
+/* Success state when copied */
+.block-label-ref.copied {
+  color: var(--color-success, var(--color-code-green));
+  opacity: 1;
+}
+
+/* Failure state when copy fails */
+.block-label-ref.failed {
+  color: var(--color-error);
+  opacity: 1;
 }
 
 /* Hide unwanted block types on index pages */
