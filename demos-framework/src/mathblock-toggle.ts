@@ -43,12 +43,21 @@ function toggleMathContent(): void {
 }
 
 function initLabelCopyToClipboard(): void {
+    const REFERENCE_MARK = '※';
+    const COPY_SUCCESS = '✓';
+    const COPY_FAILURE = '✗';
+    const FEEDBACK_DURATION = 1500;
+    
     // Add click handlers to all block reference labels
     const labels = document.querySelectorAll<HTMLElement>('.block-label-ref');
     labels.forEach(label => {
         // Store the original text as a data attribute
         const originalText = label.textContent || '';
         label.dataset.originalText = originalText;
+        
+        // Replace the text with the reference mark and add title for hover
+        label.textContent = REFERENCE_MARK;
+        label.title = originalText;
         
         // Add click handler
         label.addEventListener('click', async (e) => {
@@ -64,24 +73,24 @@ function initLabelCopyToClipboard(): void {
                 await navigator.clipboard.writeText(originalText);
                 
                 // Visual feedback via CSS class
-                label.textContent = '✓ Copied!';
+                label.textContent = COPY_SUCCESS;
                 label.classList.add('copied');
                 
                 setTimeout(() => {
-                    label.textContent = originalText;
+                    label.textContent = REFERENCE_MARK;
                     label.classList.remove('copied');
-                }, 1500);
+                }, FEEDBACK_DURATION);
             } catch (err) {
                 console.error('Failed to copy to clipboard:', err);
                 
                 // Fallback visual feedback via CSS class
-                label.textContent = '✗ Failed';
+                label.textContent = COPY_FAILURE;
                 label.classList.add('failed');
                 
                 setTimeout(() => {
-                    label.textContent = originalText;
+                    label.textContent = REFERENCE_MARK;
                     label.classList.remove('failed');
-                }, 1500);
+                }, FEEDBACK_DURATION);
             }
         });
     });
