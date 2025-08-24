@@ -4,3 +4,4 @@ MarkupSafe==3.0.2
 python-frontmatter==1.1.0
 python-markdown-math==0.9
 PyYAML==6.0.2
+beautifulsoup4==4.12.3

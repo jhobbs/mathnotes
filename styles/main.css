@@ -661,6 +661,17 @@ footer {
   }
 }
 
+.block-reference-label {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--color-code-green);
+  background: var(--color-code-bg);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  user-select: all;
+}
+
 
 /* Embed error styling */
 .embed-error {

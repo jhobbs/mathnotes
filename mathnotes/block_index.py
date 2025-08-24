@@ -27,7 +27,11 @@ class BlockReference:
     def full_url(self) -> str:
         """Get the full URL including the fragment for this block."""
         # Canonical URL now always has trailing slash from content_discovery
-        return f"{self.canonical_url}#{self.block.label}"
+        if self.block.label:
+            return f"{self.canonical_url}#{self.block.label}"
+        else:
+            # For unlabeled blocks, just link to the page
+            return self.canonical_url
 
 
 class BlockIndex:
@@ -35,7 +39,8 @@ class BlockIndex:
 
     def __init__(self, url_mapper):
         self.url_mapper = url_mapper
-        self.index: Dict[str, BlockReference] = {}
+        self.index: Dict[str, BlockReference] = {}  # Label-based index for cross-references
+        self.all_blocks: List[BlockReference] = []  # All blocks, including unlabeled ones
         self._is_built = False
         # Create markdown processor for content rendering
         self.md = Markdown(extensions=["extra"])
@@ -100,15 +105,20 @@ class BlockIndex:
                 }
             )
 
-            # Index only labeled blocks for cross-references
+            # Index all blocks, not just labeled ones
             for block in block_markers.values():
+                ref = BlockReference(
+                    block=block,
+                    file_path=file_path,
+                    canonical_url=f"/mathnotes/{canonical_url}",
+                    page_title=page_title,
+                )
+                
+                # Add to the all_blocks list
+                self.all_blocks.append(ref)
+                
+                # Only add to the label index if it has a label
                 if block.label:
-                    ref = BlockReference(
-                        block=block,
-                        file_path=file_path,
-                        canonical_url=f"/mathnotes/{canonical_url}",
-                        page_title=page_title,
-                    )
                     # Normalize label for storage (case-insensitive lookup)
                     from .structured_math import MathBlock
 
@@ -220,4 +230,4 @@ class BlockIndex:
 
     def find_blocks_by_type(self, block_type: str) -> List[BlockReference]:
         """Find all blocks of a specific type."""
-        return [ref for ref in self.index.values() if ref.block.block_type.value == block_type]
+        return [ref for ref in self.all_blocks if ref.block.block_type.value == block_type]
