@@ -268,34 +268,8 @@ class TheoremIndexPage(BlockIndexPage):
     context_key = "blocks"
     
     def process_context(self, context: Dict[str, Any], blocks: List) -> Dict[str, Any]:
-        """Filter out nested content from the rendered HTML for cleaner index display."""
-        from bs4 import BeautifulSoup
-        
-        # Include all theorem-type blocks as separate entries
-        filtered_blocks = []
-        
-        for ref in blocks:
-            # Parse and filter the HTML
-            if ref.block.rendered_html:
-                soup = BeautifulSoup(ref.block.rendered_html, 'html.parser')
-                
-                # Find the top-level block (the first math-block div)
-                top_block = soup.find('div', class_='math-block')
-                
-                if top_block:
-                    # Remove nested blocks WITHIN this block (but not the block itself)
-                    # Find all nested blocks that are descendants of the top block
-                    for nested in top_block.find_all('div', class_='math-block'):
-                        # Don't remove the top block itself
-                        if nested != top_block:
-                            nested.decompose()
-                
-                # Store the filtered HTML back in rendered_html
-                ref.block.rendered_html = str(soup)
-            
-            filtered_blocks.append(ref)
-        
-        context[self.context_key] = filtered_blocks
+        """Add additional context for theorem index page."""
+        context[self.context_key] = blocks
         context['index_title'] = 'Theorem Index'
         context['index_description'] = 'This page lists all mathematical theorems, lemmas, and corollaries found across the site. Click on any item to jump to its location in the notes.'
         context['no_items_message'] = 'No theorems, lemmas, or corollaries found in the index.'

@@ -42,7 +42,53 @@ function toggleMathContent(): void {
     }
 }
 
+function initLabelCopyToClipboard(): void {
+    // Add click handlers to all block reference labels
+    const labels = document.querySelectorAll<HTMLElement>('.block-label-ref');
+    labels.forEach(label => {
+        // Make the label look clickable
+        label.style.cursor = 'pointer';
+        
+        // Add click handler
+        label.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const text = label.textContent || '';
+            
+            try {
+                await navigator.clipboard.writeText(text);
+                
+                // Visual feedback
+                const originalText = label.textContent;
+                label.textContent = '✓ Copied!';
+                label.style.color = 'var(--color-success, var(--color-code-green))';
+                
+                setTimeout(() => {
+                    label.textContent = originalText;
+                    label.style.color = '';
+                }, 1500);
+            } catch (err) {
+                console.error('Failed to copy to clipboard:', err);
+                
+                // Fallback visual feedback
+                const originalText = label.textContent;
+                label.textContent = '✗ Failed';
+                label.style.color = 'var(--color-error)';
+                
+                setTimeout(() => {
+                    label.textContent = originalText;
+                    label.style.color = '';
+                }, 1500);
+            }
+        });
+    });
+}
+
 export function initMathBlockToggle(): void {
+    // Initialize label copy functionality
+    initLabelCopyToClipboard();
+    
     // Initialize toggle button if there are math blocks on the page
     const mathBlocks = document.querySelectorAll('.math-block');
     if (mathBlocks.length > 0) {

@@ -105,7 +105,7 @@ class BlockIndex:
                 }
             )
 
-            # Index all blocks, not just labeled ones
+            # Index blocks for reference and display
             for block in block_markers.values():
                 ref = BlockReference(
                     block=block,
@@ -114,10 +114,12 @@ class BlockIndex:
                     page_title=page_title,
                 )
                 
-                # Add to the all_blocks list
-                self.all_blocks.append(ref)
+                # Only add top-level blocks to all_blocks (for index pages)
+                # Nested blocks will appear inside their parents
+                if block.parent is None:
+                    self.all_blocks.append(ref)
                 
-                # Only add to the label index if it has a label
+                # Add to the label index if it has a label (for cross-references)
                 if block.label:
                     # Normalize label for storage (case-insensitive lookup)
                     from .structured_math import MathBlock

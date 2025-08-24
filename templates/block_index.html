@@ -25,12 +25,7 @@
             {% for ref in blocks %}
                 <div class="embedded-block" data-embed-label="{{ ref.block.label }}">
                     {{ ref.block.rendered_html|safe }}
-                    <div class="embedded-source">
-                        {% if ref.block.label %}
-                        <span class="block-reference-label">@{{ ref.block.label }}</span> • 
-                        {% endif %}
-                        from <a href="{{ ref.full_url }}">{{ ref.page_title }}</a>
-                    </div>
+                    <div class="embedded-source">from <a href="{{ ref.full_url }}">{{ ref.page_title }}</a></div>
                 </div>
             {% endfor %}
         </div>
