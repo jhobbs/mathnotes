@@ -191,26 +191,115 @@ class DemoViewerPage(Page):
         ]
 
 
-class DefinitionIndexPage(Page):
-    """The definitions index page."""
+class BlockIndexPage(Page):
+    """Base class for block index pages (definitions, theorems, etc.)."""
 
-    endpoint_name = "definition_index"  # For url_for('definition_index')
+    # Subclasses should override these
+    block_types: List[str] = []  # Block types to include
+    endpoint_name: str = ""  # URL endpoint name
+    output_path: str = ""  # Output HTML path
+    template: str = ""  # Template file name
+    page_title: str = ""  # Page title
+    page_description: str = ""  # Page description
+    context_key: str = "blocks"  # Key for blocks in template context
 
     def get_specs(self) -> List[PageSpec]:
-        definitions = self.block_index.find_blocks_by_type("definition")
+        # Collect all blocks of the specified types
+        blocks = []
+        for block_type in self.block_types:
+            blocks.extend(self.block_index.find_blocks_by_type(block_type))
 
-        definitions.sort(key=lambda ref: (ref.block.title or ref.block.label or "").lower())
+        # Sort blocks alphabetically by title or label
+        blocks.sort(key=lambda ref: (ref.block.title or ref.block.label or "").lower())
+
+        # Build context
+        context = {self.context_key: blocks}
+        
+        # Add any additional context processing
+        context = self.process_context(context, blocks)
 
         return [
             PageSpec(
-                output_path="mathnotes/definitions/index.html",
-                template="definition_index.html",
-                title="Definition Index - Mathnotes",
-                description="Index of all mathematical definitions",
+                output_path=self.output_path,
+                template=self.template,
+                title=self.page_title,
+                description=self.page_description,
                 priority=0.6,
-                context={"definitions": definitions},
+                context=context,
             )
         ]
+
+    def process_context(self, context: Dict[str, Any], blocks: List) -> Dict[str, Any]:
+        """Override this to add custom context processing."""
+        return context
+
+
+class DefinitionIndexPage(BlockIndexPage):
+    """The definitions index page."""
+
+    block_types = ["definition"]
+    endpoint_name = "definition_index"
+    output_path = "mathnotes/definitions/index.html"
+    template = "block_index.html"
+    page_title = "Definition Index - Mathnotes"
+    page_description = "Index of all mathematical definitions"
+    context_key = "blocks"
+    
+    def process_context(self, context: Dict[str, Any], blocks: List) -> Dict[str, Any]:
+        """Add template-specific context."""
+        context['index_title'] = 'Definition Index'
+        context['index_description'] = 'This page lists all mathematical definitions found across the site. Click on any definition to jump to its location in the notes.'
+        context['no_items_message'] = 'No definitions found in the index.'
+        context['item_type'] = 'definition'
+        # For backwards compatibility with templates that expect 'definitions'
+        context['definitions'] = blocks
+        return context
+
+
+class TheoremIndexPage(BlockIndexPage):
+    """The theorems index page (including lemmas and corollaries)."""
+
+    block_types = ["theorem", "lemma", "corollary"]
+    endpoint_name = "theorem_index"
+    output_path = "mathnotes/theorems/index.html"
+    template = "block_index.html"
+    page_title = "Theorem Index - Mathnotes"
+    page_description = "Index of all mathematical theorems, lemmas, and corollaries"
+    context_key = "blocks"
+    
+    def process_context(self, context: Dict[str, Any], blocks: List) -> Dict[str, Any]:
+        """Filter out proofs and other unwanted nested content from the rendered HTML."""
+        from bs4 import BeautifulSoup
+        
+        # Only show top-level blocks (corollaries are nested inside their parents)
+        filtered_blocks = []
+        
+        for ref in blocks:
+            if ref.block.parent is None:  # Only top-level blocks
+                # Parse and filter the HTML
+                if ref.block.rendered_html:
+                    soup = BeautifulSoup(ref.block.rendered_html, 'html.parser')
+                    
+                    # Remove proof blocks
+                    for proof in soup.select('.math-proof'):
+                        proof.decompose()
+                    
+                    # Remove example, remark, and note blocks that might be nested
+                    for unwanted in soup.select('.math-example, .math-remark, .math-note'):
+                        unwanted.decompose()
+                    
+                    # Store the filtered HTML back in rendered_html
+                    ref.block.rendered_html = str(soup)
+                
+                filtered_blocks.append(ref)
+        
+        context[self.context_key] = filtered_blocks
+        context['index_title'] = 'Theorem Index'
+        context['index_description'] = 'This page lists all mathematical theorems, lemmas, and corollaries found across the site. Click on any item to jump to its location in the notes.'
+        context['no_items_message'] = 'No theorems, lemmas, or corollaries found in the index.'
+        context['item_type'] = 'theorem/lemma/corollary'
+        
+        return context
 
 
 class ErrorPage(Page):
@@ -289,6 +378,7 @@ class PageRegistry:
         self.register(ContentPages)
         self.register(DemoViewerPage)
         self.register(DefinitionIndexPage)
+        self.register(TheoremIndexPage)
         self.register(ErrorPage)
 
         # Sitemap needs special handling as it needs all other pages
