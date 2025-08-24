@@ -661,15 +661,28 @@ footer {
   }
 }
 
-.block-reference-label {
+/* Block reference labels - shown everywhere with subtle styling */
+.block-label-ref {
+  display: inline-block;
   font-family: var(--font-mono);
-  font-weight: 600;
-  color: var(--color-code-green);
-  background: var(--color-code-bg);
-  padding: 0.1em 0.3em;
-  border-radius: 3px;
-  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: transparent;
+  padding: 0 0.3em;
+  font-size: 0.85em;
   user-select: all;
+  margin-left: 0.75em;
+  float: right;
+  opacity: 0.8;
+}
+
+/* Hide unwanted block types on index pages */
+.block-index-page .math-proof,
+.block-index-page .math-example,
+.block-index-page .math-remark,
+.block-index-page .math-note,
+.block-index-page .math-intuition {
+  display: none;
 }
 
 

@@ -267,3 +267,4 @@ Key debugging tools available:
 ```
 ```
 ```
+- Don't restart/rebuild docker everytime you change typescript, css, python, etc. We have autorebuild built in.

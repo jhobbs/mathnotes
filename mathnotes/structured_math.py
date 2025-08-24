@@ -370,10 +370,10 @@ class StructuredMathParser:
 
         html_parts = [f'<div {" ".join(attrs)}>']
 
-        # Add header if applicable
+        # Add header
+        header_parts = ['<div class="math-block-header">']
+        
         if block.block_type != MathBlockType.PROOF:
-            header_parts = ['<div class="math-block-header">']
-
             if block.title:
                 # Type: Title format
                 header_parts.append(f'<span class="math-block-type">{block.display_name}:</span>')
@@ -381,12 +381,16 @@ class StructuredMathParser:
             else:
                 # Just type without colon
                 header_parts.append(f'<span class="math-block-type">{block.display_name}</span>')
-
-            header_parts.append("</div>")
-            html_parts.extend(header_parts)
         else:
             # For proofs, use bold "Proof" header (without colon)
-            html_parts.append('<div class="math-block-header"><span class="math-block-type">Proof</span></div>')
+            header_parts.append('<span class="math-block-type">Proof</span>')
+        
+        # Add reference label if it exists (for all block types)
+        if block.label:
+            header_parts.append(f'<span class="block-label-ref">@{block.label}</span>')
+        
+        header_parts.append("</div>")
+        html_parts.extend(header_parts)
 
         # Add content - already processed as markdown
         html_parts.append('<div class="math-block-content">')
