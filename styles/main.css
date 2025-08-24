@@ -665,22 +665,22 @@ footer {
 .block-label-ref {
   display: inline-block;
   font-family: var(--font-mono);
-  font-weight: 500;
+  font-weight: 400;
   color: var(--color-text-secondary);
   background: transparent;
   padding: 0 0.3em;
-  font-size: 0.85em;
-  user-select: all;
+  font-size: 0.9em;
+  user-select: none;
   margin-left: 0.75em;
   float: right;
-  opacity: 0.8;
+  opacity: 0.5;
   cursor: pointer;
   transition: color 0.2s ease, opacity 0.2s ease;
 }
 
 /* Hover state for labels */
 .block-label-ref:hover {
-  opacity: 1;
+  opacity: 0.8;
   color: var(--color-text);
 }
 
