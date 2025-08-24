@@ -46,39 +46,41 @@ function initLabelCopyToClipboard(): void {
     // Add click handlers to all block reference labels
     const labels = document.querySelectorAll<HTMLElement>('.block-label-ref');
     labels.forEach(label => {
-        // Make the label look clickable
-        label.style.cursor = 'pointer';
+        // Store the original text as a data attribute
+        const originalText = label.textContent || '';
+        label.dataset.originalText = originalText;
         
         // Add click handler
         label.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
             
-            const text = label.textContent || '';
+            // Don't allow clicks while showing feedback
+            if (label.classList.contains('copied') || label.classList.contains('failed')) {
+                return;
+            }
             
             try {
-                await navigator.clipboard.writeText(text);
+                await navigator.clipboard.writeText(originalText);
                 
-                // Visual feedback
-                const originalText = label.textContent;
+                // Visual feedback via CSS class
                 label.textContent = '✓ Copied!';
-                label.style.color = 'var(--color-success, var(--color-code-green))';
+                label.classList.add('copied');
                 
                 setTimeout(() => {
                     label.textContent = originalText;
-                    label.style.color = '';
+                    label.classList.remove('copied');
                 }, 1500);
             } catch (err) {
                 console.error('Failed to copy to clipboard:', err);
                 
-                // Fallback visual feedback
-                const originalText = label.textContent;
+                // Fallback visual feedback via CSS class
                 label.textContent = '✗ Failed';
-                label.style.color = 'var(--color-error)';
+                label.classList.add('failed');
                 
                 setTimeout(() => {
                     label.textContent = originalText;
-                    label.style.color = '';
+                    label.classList.remove('failed');
                 }, 1500);
             }
         });
