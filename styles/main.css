@@ -193,17 +193,20 @@ article {
 
 /* Block reference links (for tooltips) */
 .block-reference {
-  color: var(--color-link);
-  text-decoration: none;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 0.5px;
+  text-decoration-color: color-mix(in srgb, var(--color-text-muted) 40%, transparent);
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color 0.2s ease;
   
   &:hover {
-    text-decoration: underline;
+    text-decoration-color: var(--color-link);
   }
   
   &:active {
-    text-decoration: underline;
+    text-decoration-color: var(--color-link);
   }
 }
 
