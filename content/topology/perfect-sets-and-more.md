@@ -166,3 +166,14 @@ Let $E$ be a countable closed set in $R^k.$ Suppose for contradiction that $E$ h
 :::::
 ::::
 :::
+
+:::theorem
+Every open set in $R^1$ is the union of an at most @countable union of disjoint segments.
+
+::::proof
+Let $E$ be an open set in $R^1.$ Let $x \in E.$ Let $a = \inf \{ y : (y, x] \subset E \}$ and $b = \sup \{ y : [x, y) \subset E \}.$ Then, $a < x < b,$ because $E$ is open and thus $x$ is an @{interior point|interior-point} of $E$ and there is some @neighborhood around $x$ that is entirely within $E.$ Let $I(x) = (a, b).$ By construction, $I(x)$ is @connected. For all $u \in I(x),$ $I(u)$ must have the same end points as $I(x),$ since if it extended beyond, our construction of $I(x)$ would be contradicted. Also note that for all $v \in E \setminus I(x),$ $I(v) \cap I(x) = \emptyset,$ for if they intersected, they would form an @{open interval|union-and-intersection-of-open-and-closed-sets}. Thus, each $I(x), x \in E$ is either disjoint from all others or identical to some other $I(y), y \in E,$ and $E$ is the union of all such unique $I.$
+
+Now, in each $I,$ we can @{pick a rational number|rationals-are-dense-in-reals}. Because @{the rationals are countable|rationals-are-countable}, we have at most countably many unique $I,$ and $E$ is their union.
+:::: 
+
+:::
