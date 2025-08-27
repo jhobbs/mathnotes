@@ -1,5 +1,4 @@
 import type { DemoConfig, DemoInstance } from '@framework/types';
-import styles from '@/styles/dilution-calculator.module.css';
 
 // Dilution calculator demo
 interface DilutionParameters {
@@ -102,40 +101,40 @@ export const metadata = {
 export default function createDilutionCalculatorDemo(container: HTMLElement, _config?: DemoConfig): DemoInstance {
   // Create the HTML structure
   container.innerHTML = `
-    <div class="${styles.content}" id="dilution-calculator">
+    <div class="content}" id="dilution-calculator">
       <h3>Setup</h3>
       <form>
         <div id="parameters">
-          <div class="${styles.inputGroup}">
+          <div class="inputGroup}">
             <label for="solutionStartingVolume">Solution Starting Volume:</label>
-            <input type="number" id="solutionStartingVolume" class="${styles.input}" step="any">
+            <input type="number" id="solutionStartingVolume" class="input}" step="any">
           </div>
-          <div class="${styles.inputGroup}">
+          <div class="inputGroup}">
             <label for="solutionStartingMass">Solution Starting Mass:</label>
-            <input type="number" id="solutionStartingMass" class="${styles.input}" step="any">
+            <input type="number" id="solutionStartingMass" class="input}" step="any">
           </div>
-          <div class="${styles.inputGroup}">
+          <div class="inputGroup}">
             <label for="inflowVolumeRate">Inflow Volume Rate:</label>
-            <input type="number" id="inflowVolumeRate" class="${styles.input}" step="any">
+            <input type="number" id="inflowVolumeRate" class="input}" step="any">
           </div>
-          <div class="${styles.inputGroup}">
+          <div class="inputGroup}">
             <label for="inflowConcentration">Inflow Concentration:</label>
-            <input type="number" id="inflowConcentration" class="${styles.input}" step="any">
+            <input type="number" id="inflowConcentration" class="input}" step="any">
           </div>
-          <div class="${styles.inputGroup}">
+          <div class="inputGroup}">
             <label for="outflowVolumeRate">Outflow Volume Rate:</label>
-            <input type="number" id="outflowVolumeRate" class="${styles.input}" step="any">
+            <input type="number" id="outflowVolumeRate" class="input}" step="any">
           </div>
-          <div class="${styles.inputGroup}">
+          <div class="inputGroup}">
             <label for="desiredMass">Desired Mass:</label>
-            <input type="number" id="desiredMass" class="${styles.input}" step="any">
+            <input type="number" id="desiredMass" class="input}" step="any">
           </div>
-          <div class="${styles.inputGroup}">
+          <div class="inputGroup}">
             <label for="desiredTime">Desired Time:</label>
-            <input type="number" id="desiredTime" class="${styles.input}" step="any">
+            <input type="number" id="desiredTime" class="input}" step="any">
           </div>
         </div>
-        <button type="button" id="Calculate" class="${styles.button}">Calculate</button>
+        <button type="button" id="Calculate" class="button">Calculate</button>
       </form>
       <h3>Results</h3>
       <div id="results"></div>
@@ -170,14 +169,14 @@ export default function createDilutionCalculatorDemo(container: HTMLElement, _co
 
     for (const [fieldName, value] of Object.entries(results)) {
       const resultDiv = document.createElement('div');
-      resultDiv.className = styles.resultItem;
+      resultDiv.className = 'result-item';
       
       const label = document.createElement('span');
-      label.className = styles.resultLabel;
+      label.className = 'result-label';
       label.textContent = formatFieldName(fieldName) + ':';
       
       const valueSpan = document.createElement('span');
-      valueSpan.className = styles.resultValue;
+      valueSpan.className = 'result-value';
       valueSpan.textContent = typeof value === 'string' ? value : value.toFixed(6);
       
       resultDiv.appendChild(label);

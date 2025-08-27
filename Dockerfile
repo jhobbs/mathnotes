@@ -26,8 +26,8 @@ COPY demos-framework/ ./demos-framework/
 COPY styles/ ./styles/
 COPY demos/ ./demos/
 
-# Build assets with esbuild
-RUN npm run build
+# Run type check first, then build assets with esbuild
+RUN npm run type-check && npm run build
 
 # Stage 3: Python environment for generating HTML
 FROM python:3.12-slim AS builder
