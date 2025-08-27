@@ -1,5 +1,5 @@
-# Dockerfile.playwright  – Playwright 1.54 on Ubuntu 24.04 (noble)
-FROM mcr.microsoft.com/playwright:v1.54.0-noble
+# Dockerfile.playwright  – Playwright 1.55 on Ubuntu 24.04 (noble)
+FROM mcr.microsoft.com/playwright:v1.55.0-noble
 
 WORKDIR /usr/src/app
 
