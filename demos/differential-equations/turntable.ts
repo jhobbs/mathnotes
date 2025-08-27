@@ -136,7 +136,7 @@ class TurntableDemo extends P5DemoBase {
   protected onColorSchemeChange(_isDark: boolean): void {
     // Update UI text colors when color scheme changes
     const labels = this.container.querySelectorAll('.demo-label, .demo-info');
-    labels.forEach(label => {
+    labels.forEach(_label => {
       // Color is handled by CSS classes
     });
     

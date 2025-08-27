@@ -464,7 +464,6 @@ class DiagonalizationDemo extends P5DemoBase {
     const isMobile = p.width < 768;
     this.CELL_SIZE = isMobile ? 30 : 40;
     
-    const titleY = isMobile ? 40 : 30;
     const sequenceTableY = isMobile ? 90 : 80;
     
     // Calculate exact positions based on drawConstructedSequence and drawLabels

@@ -65,14 +65,6 @@ export function isDarkMode(config?: DemoConfig): boolean {
     (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 }
 
-/**
- * Get CSS custom property value
- * @param propertyName - CSS custom property name (e.g., '--color-primary')
- * @returns The computed value of the CSS property
- */
-function getCSSProperty(propertyName: string): string {
-  return getComputedStyle(document.documentElement).getPropertyValue(propertyName).trim();
-}
 
 /**
  * Gets standard demo colors based on dark mode

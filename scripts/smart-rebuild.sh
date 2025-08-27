@@ -64,6 +64,9 @@ mkdir -p /app/static-build
 
 # Initial build
 echo "[$(date)] Initial build starting..."
+# Run TypeScript type check first
+echo "[$(date)] Running TypeScript type check..."
+npm run type-check || { echo "[$(date)] TypeScript type check failed!"; exit 1; }
 npm run build
 touch "$JS_LAST_BUILD"
 python scripts/build_static_simple.py --output /app/static-build/website
@@ -80,6 +83,8 @@ while true; do
     if needs_rebuild "$JS_LAST_BUILD" $JS_DIRS; then
         echo "[$(date)] JavaScript/CSS source changes detected:"
         echo "$CHANGED_FILES" | sed 's/^/  /'
+        echo "Running TypeScript type check..."
+        npm run type-check || { echo "[$(date)] TypeScript type check failed!"; exit 1; }
         echo "Rebuilding JavaScript/CSS bundles..."
         npm run build
         touch "$JS_LAST_BUILD"

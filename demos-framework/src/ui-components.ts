@@ -1,5 +1,4 @@
 import p5 from 'p5';
-import uiStyles from '@/styles/ui-components.module.css';
 
 // Extend p5.Element to include input method for sliders
 interface P5SliderElement extends p5.Element {
@@ -73,11 +72,11 @@ export function createButton(
   text: string,
   parent: HTMLElement,
   onClick: () => void,
-  className: string = 'demo-button'
+  _className: string = 'demo-button'
 ): HTMLButtonElement {
   const button = document.createElement('button');
   button.textContent = text;
-  button.className = uiStyles.button;
+  button.className = 'button';
   button.addEventListener('click', onClick);
   parent.appendChild(button);
   return button;
@@ -95,7 +94,7 @@ export function createSlider(
   step: number,
   parent: HTMLElement,
   onChange?: () => void,
-  className: string = 'demo'
+  _className: string = 'demo'
 ): p5.Element {
   const rowDiv = document.createElement('div');
   rowDiv.className = 'demo-slider-container';
@@ -103,12 +102,12 @@ export function createSlider(
   
   const labelDiv = document.createElement('div');
   labelDiv.textContent = label;
-  labelDiv.className = uiStyles.label;
+  labelDiv.className = 'label';
   rowDiv.appendChild(labelDiv);
   
   const slider = p.createSlider(min, max, value, step) as P5SliderElement;
   slider.parent(rowDiv);
-  slider.class(uiStyles.slider);
+  slider.class('slider');
   // Width is set via CSS class
   
   if (onChange) {
@@ -126,13 +125,13 @@ export function createRadioGroup<T>(
   options: RadioOption<T>[],
   defaultValue: T,
   onChange: (value: T) => void,
-  className: string = 'demo'
+  _className: string = 'demo'
 ): HTMLElement {
   const container = document.createElement('div');
-  container.className = uiStyles.radioGroup;
+  container.className = 'radio-group';
   
   const radioContainer = document.createElement('div');
-  radioContainer.className = uiStyles.radio;
+  radioContainer.className = 'radio';
   
   options.forEach((option) => {
     const label = document.createElement('label');
@@ -165,10 +164,10 @@ export function createCheckbox(
   label: string,
   checked: boolean,
   onChange: (checked: boolean) => void,
-  className: string = 'demo'
+  _className: string = 'demo'
 ): HTMLElement {
   const container = document.createElement('label');
-  container.className = uiStyles.checkboxContainer;
+  container.className = 'checkbox-container';
   
   const input = document.createElement('input');
   input.type = 'checkbox';
@@ -179,7 +178,7 @@ export function createCheckbox(
   });
   
   const labelSpan = document.createElement('span');
-  labelSpan.className = uiStyles.checkboxLabel;
+  labelSpan.className = 'checkbox-label';
   labelSpan.textContent = label;
   
   container.appendChild(input);
@@ -196,20 +195,20 @@ export function createSelect<T>(
   options: SelectOption<T>[],
   defaultValue: T,
   onChange: (value: T) => void,
-  className: string = 'demo'
+  _className: string = 'demo'
 ): HTMLElement {
   const container = document.createElement('div');
   container.className = 'demo-input-container';
   
   if (label) {
     const labelDiv = document.createElement('div');
-    labelDiv.className = uiStyles.label;
+    labelDiv.className = 'label';
     labelDiv.textContent = label;
     container.appendChild(labelDiv);
   }
   
   const select = document.createElement('select');
-  select.className = uiStyles.select;
+  select.className = 'select';
   
   options.forEach(option => {
     const optionEl = document.createElement('option');
@@ -246,13 +245,13 @@ export function createTextInput(
   
   if (label) {
     const labelDiv = document.createElement('div');
-    labelDiv.className = uiStyles.label;
+    labelDiv.className = 'label';
     labelDiv.textContent = label;
     container.appendChild(labelDiv);
   }
   
   const input = document.createElement('input');
-  input.className = uiStyles.textInput;
+  input.className = 'text-input';
   input.type = options.type || 'text';
   input.value = value;
   
@@ -278,13 +277,13 @@ export function createTextInput(
 export function createInfoDisplay(
   label: string,
   initialValue: string = '',
-  className: string = 'demo'
+  _className: string = 'demo'
 ): InfoDisplay {
   const element = document.createElement('div');
-  element.className = uiStyles.infoDisplay;
+  element.className = 'info-display';
   
   const labelSpan = document.createElement('span');
-  labelSpan.className = uiStyles.infoLabel;
+  labelSpan.className = 'info-label';
   labelSpan.textContent = label + ':';
   
   const valueSpan = document.createElement('span');
@@ -385,7 +384,7 @@ export function createControlRow(
  */
 export function createControlColumn(
   controls: HTMLElement[],
-  options: ColumnOptions = {}
+  _options: ColumnOptions = {}
 ): HTMLElement {
   const column = document.createElement('div');
   column.className = 'demo-control-column';
@@ -476,10 +475,10 @@ export function createControlGrid(
 export function createPlayPauseButton(
   isPlaying: boolean,
   onToggle: (playing: boolean) => void,
-  className: string = 'demo'
+  _className: string = 'demo'
 ): HTMLButtonElement {
   const button = document.createElement('button');
-  button.className = uiStyles.button;
+  button.className = 'button';
   button.textContent = isPlaying ? 'Pause' : 'Play';
   
   let playing = isPlaying;
@@ -498,10 +497,10 @@ export function createPlayPauseButton(
  */
 export function createResetButton(
   onReset: () => void,
-  className: string = 'demo'
+  _className: string = 'demo'
 ): HTMLButtonElement {
   const button = document.createElement('button');
-  button.className = uiStyles.button;
+  button.className = 'button';
   button.textContent = 'Reset';
   
   button.addEventListener('click', onReset);
