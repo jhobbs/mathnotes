@@ -24,9 +24,9 @@ Suppose, for the sake of contradiction, that $P$ is countable. Label the points 
 
 As a base step, let $V_1$ be any neighborhood of $x_1;$ let $V_1 = \{ y \in R^k | ~ |y - x_1| < r \}$ (note: subsequent $V_{n+1}$ aren't required to be neighborhoods of $x_{n+1}.$) Then the @closure $\overline{V_1}$ of $V_1$ is $\overline{V_1} =  \{ y \in R^k | ~ |y - x_1| \leq r \}.$
 
-For the inductive step, suppose as an induction hypothesis that have some $V_n$ that's been constructed such that $V_n \cap P$ is not empty. Since every point of $P$ is a limit point of $P,$ we can make a neighborhood $V_{n+1}$ such that (i) $\overline{V_{n+1}},$ (ii) $x_n \notin \overline{V_{n+1}},$ (iii) $V_{n+1} \cap P$ is not empty. Now, $V_{n+1}$ satisfies our induction hypothesis, and since $V_1$ does too, we have ${V_n}$ defined for all $n = 1, 2, 3, \dots.$
+For the inductive step, suppose as an induction hypothesis that we have some $V_n$ that's been constructed such that $V_n \cap P$ is not empty. Since every point of $P$ is a limit point of $P,$ we can make a neighborhood $V_{n+1}$ such that (i) $\overline{V_{n+1}} \subset V_n,$ (ii) $x_n \notin \overline{V_{n+1}},$ (iii) $V_{n+1} \cap P$ is not empty. Now, $V_{n+1}$ satisfies our induction hypothesis, and since $V_1$ does too, we have ${V_n}$ defined for all $n = 1, 2, 3, \dots.$
 
-For each $n$, let $K_n = \overline{V_n} \cap P.$ Since $\overline{V_n}$ is closed and bounded, $\overline{V_n}$ @{is compact|heine-borel}. Since $x_n \notin \overline{V_{n+1}},$ no point of $P$ lies in $\bigcap_{n=1}^\infty K_n.$ Since $K_n \subset P,$ this implies that $\bigcap_{n=1}^\infty K_n$ is empty. But, each $K_n$ is nonempty, by (iii), and $K_{n+1} \subset K$, by (i). But the @{intersection of nonempty compact nested sets is nonempty|intersection-of-nonempty-nested-compact-sets-is-nonempty}, so we have a contradiction, and our provision assumption that $P$ is countable must be incorrect. Therefore, $P$ is uncountable.
+For each $n$, let $K_n = \overline{V_n} \cap P.$ Since $\overline{V_n}$ is closed and bounded, $\overline{V_n}$ @{is compact|heine-borel}. Since $x_n \notin \overline{V_{n+1}},$ no point of $P$ lies in $\bigcap_{n=1}^\infty K_n.$ Since $K_n \subset P,$ this implies that $\bigcap_{n=1}^\infty K_n$ is empty. But, each $K_n$ is nonempty, by (iii), and $K_{n+1} \subset K$, by (i). But the @{intersection of nonempty compact nested sets is nonempty|intersection-of-nonempty-nested-compact-sets-is-nonempty}, so we have a contradiction, so our provisional assumption that $P$ is countable must be incorrect. Therefore, $P$ is uncountable.
 ::::
 
 ::::corollary {label: every-interval-is-uncountable}
@@ -175,5 +175,10 @@ Let $E$ be an open set in $R^1.$ Let $x \in E.$ Let $a = \inf \{ y : (y, x] \sub
 
 Now, in each $I,$ we can @{pick a rational number|rationals-are-dense-in-reals}. Because @{the rationals are countable|rationals-are-countable}, we have at most countably many unique $I,$ and $E$ is their union.
 :::: 
+:::
 
+:::theorem
+If $R^k = \bigcup_{n=1}^{\infty}F_n, where each $F_n$ is a closed subset of $R^k,$ then at least one $F_n$ has a non-empty interior.
+
+Suppose, for the sake of contradiction, that no $F_n$ has a non-empty interior, that is, every $F_n$ is closed with an empty interior. 
 :::
