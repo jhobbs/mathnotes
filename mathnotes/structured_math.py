@@ -348,12 +348,21 @@ class StructuredMathParser:
     def _parse_metadata(self, metadata_str: str) -> Dict[str, Any]:
         """Parse metadata string into dictionary."""
         metadata = {}
-        # Simple key:value parser
-        pairs = metadata_str.split(",")
-        for pair in pairs:
-            if ":" in pair:
-                key, value = pair.split(":", 1)
-                metadata[key.strip()] = value.strip()
+        # For now, we only support synonyms metadata
+        # Format: {synonyms: word1, word2, word3}
+        if "synonyms:" in metadata_str:
+            # Extract everything after "synonyms:"
+            parts = metadata_str.split("synonyms:", 1)
+            if len(parts) > 1:
+                synonyms_value = parts[1].strip()
+                metadata["synonyms"] = synonyms_value
+        # Add support for other metadata in the future
+        # For now, also try to parse label if present
+        if "label:" in metadata_str and "synonyms:" not in metadata_str:
+            parts = metadata_str.split("label:", 1)
+            if len(parts) > 1:
+                label_value = parts[1].strip()
+                metadata["label"] = label_value
         return metadata
 
     def render_block_html(
