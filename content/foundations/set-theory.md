@@ -5,12 +5,12 @@ title: Set Theory
 
 # Set Theory
 
-:::definition "Set"
+:::definition "Set" {synonyms: collection, family}
 A **set** is a collection of objects, considered as a whole.
 :::
 
 :::definition "Element" {synonyms: member}
-The objects that make up a set are called its **elements** or its **members.**
+The objects that make up a @set are called its **elements** or its **members.**
 :::
 
 
