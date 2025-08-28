@@ -82,6 +82,9 @@ def build_global_context(
                 "title": data["title"],
                 "content": data["content"],
                 "url": data.get("url", ""),
+                "is_synonym": data.get("is_synonym", False),
+                "synonym_of": data.get("synonym_of"),
+                "synonym_title": data.get("synonym_title"),
             }
         )
     context["tooltip_data"] = json.dumps(tooltip_list)

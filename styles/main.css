@@ -431,6 +431,21 @@ input, textarea, select {
   text-decoration: underline;
 }
 
+/* Synonyms display in definition headers */
+.block-synonyms {
+  margin-left: var(--space-sm);
+  font-weight: normal;
+  font-style: italic;
+  color: var(--color-text-muted);
+  font-size: 0.95em;
+}
+
+/* Synonym reference styling */
+.synonym-reference {
+  position: relative;
+  font-style: italic;
+}
+
 .math-block-content {
   color: var(--color-text);
   line-height: var(--line-height-relaxed);

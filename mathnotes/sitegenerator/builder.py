@@ -108,6 +108,10 @@ class SiteBuilder:
                 "title": ref.block.title or "",
                 "content": ref.block.content_html,
                 "url": ref.full_url,
+                # Add synonym metadata if applicable
+                "is_synonym": getattr(ref, 'is_synonym', False),
+                "synonym_of": ref.block.title if getattr(ref, 'is_synonym', False) else None,
+                "synonym_title": getattr(ref, 'synonym_title', None),
             }
 
         global_context = build_global_context(base_url=self.base_url, tooltip_data=tooltip_data, is_development=False)

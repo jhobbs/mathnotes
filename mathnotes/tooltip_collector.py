@@ -60,12 +60,31 @@ class TooltipCollectingBlockReferenceProcessor(BlockReferenceProcessor):
             target_block, target_url = self._find_target_block(label, None)
 
             if target_block:
+                # Check if this is a synonym reference
+                is_synonym = False
+                synonym_title = None
+                if self.block_index:
+                    block_ref = self.block_index.get_reference(label)
+                    if block_ref and hasattr(block_ref, 'is_synonym') and block_ref.is_synonym:
+                        is_synonym = True
+                        synonym_title = getattr(block_ref, 'synonym_title', label)
+                
                 # Use the fully rendered HTML
                 html_content = target_block.rendered_html
+                
+                # Build the title/type display
+                if is_synonym and synonym_title:
+                    # For synonyms, show "Definition (member), synonym of Element"
+                    display_type = f"{target_block.block_type.value} ({synonym_title}), synonym of {target_block.title or label}"
+                    display_title = ""  # Don't repeat the title since it's in the type
+                else:
+                    # For regular references, use normal display
+                    display_type = target_block.block_type.value
+                    display_title = target_block.title or ""
 
                 tooltip_data[label] = {
-                    "type": target_block.block_type.value,
-                    "title": target_block.title or "",
+                    "type": display_type,
+                    "title": display_title,
                     "content": html_content,
                     "url": target_url if target_url and not target_url.startswith("#") else "",
                 }

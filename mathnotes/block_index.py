@@ -132,6 +132,29 @@ class BlockIndex:
                             f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
                         )
                     self.index[normalized_label] = ref
+                
+                # Also register synonyms as aliases pointing to the same block
+                if block.synonyms:
+                    for synonym_title, synonym_label in block.synonyms:
+                        normalized_synonym_label = MathBlock.normalize_label_from_title(synonym_label)
+                        
+                        if normalized_synonym_label in self.index:
+                            existing = self.index[normalized_synonym_label]
+                            print(
+                                f"Warning: Synonym label '{synonym_label}' conflicts with existing label in {existing.file_path}"
+                            )
+                        else:
+                            # Create a synonym reference that points to the same block
+                            synonym_ref = BlockReference(
+                                block=block,
+                                file_path=file_path,
+                                canonical_url=f"/mathnotes/{canonical_url}",
+                                page_title=page_title,
+                            )
+                            # Store the synonym title for later use
+                            synonym_ref.synonym_title = synonym_title
+                            synonym_ref.is_synonym = True
+                            self.index[normalized_synonym_label] = synonym_ref
 
     def _render_all_blocks(self):
         """Phase 2: Render all blocks now that the index is complete."""

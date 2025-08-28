@@ -177,8 +177,20 @@ class BlockReferenceProcessor:
         target_block, target_url = self._find_target_block(ref_label, ref_type)
 
         if target_block:
+            # Check if this is a synonym reference
+            is_synonym = False
+            if self.block_index:
+                block_ref = self.block_index.get_reference(ref_label)
+                if block_ref and hasattr(block_ref, 'is_synonym') and block_ref.is_synonym:
+                    is_synonym = True
+            
+            # Add synonym class if applicable
+            css_classes = "block-reference"
+            if is_synonym:
+                css_classes += " synonym-reference"
+            
             # Use the custom link text provided
-            return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
+            return f'<a href="{target_url}" class="{css_classes}" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
         else:
             # Reference not found - return with error styling
             return f'<span class="block-reference-error" data-ref="{ref_text}">@{{{link_text}|{ref_text}}}</span>'
@@ -200,8 +212,20 @@ class BlockReferenceProcessor:
         target_block, target_url = self._find_target_block(ref_label, ref_type)
 
         if target_block:
+            # Check if this is a synonym reference
+            is_synonym = False
+            synonym_title = None
+            if self.block_index:
+                block_ref = self.block_index.get_reference(ref_label)
+                if block_ref and hasattr(block_ref, 'is_synonym') and block_ref.is_synonym:
+                    is_synonym = True
+                    synonym_title = getattr(block_ref, 'synonym_title', ref_label)
+            
             # Generate the link text based on what's available and reference format
-            if ref_type:
+            if is_synonym and synonym_title:
+                # For synonym references, use the synonym title
+                link_text = synonym_title
+            elif ref_type:
                 # For type:label format, always use title or content snippet
                 if target_block.title:
                     link_text = target_block.title
@@ -216,8 +240,13 @@ class BlockReferenceProcessor:
                     # No title: use content snippet for better context
                     link_text = target_block.content_snippet
 
+            # Add synonym class if applicable
+            css_classes = "block-reference"
+            if is_synonym:
+                css_classes += " synonym-reference"
+            
             # Create the link with appropriate URL
-            return f'<a href="{target_url}" class="block-reference" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
+            return f'<a href="{target_url}" class="{css_classes}" data-ref-type="{target_block.block_type.value}" data-ref-label="{ref_label}">{link_text}</a>'
         else:
             # Reference not found - return with error styling
             return f'<span class="block-reference-error" data-ref="{ref_text}">@{ref_text}</span>'
