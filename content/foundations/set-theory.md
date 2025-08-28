@@ -8,7 +8,7 @@ title: Set Theory
 
 ## De Morgan's Laws
 
-:::theorem {complement-of-union-is-intersection-of-complements}
+:::theorem {label: complement-of-union-is-intersection-of-complements}
 The complement of a union is equal to the intersection of complements.
 
 ::::proof
@@ -20,7 +20,7 @@ Suppose $x \in (A \cup B)^c.$ Then, if $x \in A$ or $x \in B,$ then $x \in A \cu
 ::::
 :::
 
-:::theorem {complement-of-interesection-is-union-of-complements}
+:::theorem {label:complement-of-intersection-is-union-of-complements}
 The complement of an intersection is equal to the union of complements.
 
 ::::proof

@@ -177,8 +177,21 @@ Now, in each $I,$ we can @{pick a rational number|rationals-are-dense-in-reals}.
 :::: 
 :::
 
-:::theorem
-If $R^k = \bigcup_{n=1}^{\infty}F_n, where each $F_n$ is a closed subset of $R^k,$ then at least one $F_n$ has a non-empty interior.
+:::theorem "Special case of Blaire's theorem"
+If $R^k = \bigcup_{n=1}^{\infty}F_n,$ where each $F_n$ is a closed subset of $R^k,$ then at least one $F_n$ has a non-empty interior. Equivalently, If $G_n$ is a dense open subset of $R^k,$ for $n = 1, 2, 3, \dots,$ then $\bigcap_{n=1}^\infty G_n$ is not empty (in fact, it is dense in $R^k$.)
 
-Suppose, for the sake of contradiction, that no $F_n$ has a non-empty interior, that is, every $F_n$ is closed with an empty interior. 
+::::proof
+First, note that since $R^k = \bigcup_{n=1}^{\infty}F_n,$ every point in $R^k$ is in some $F_n,$ and so $\bigcap_{n=1}^\infty F_n^c$ @{must be empty|complement-of-union-is-intersection-of-complements}.
+
+Suppose, for the sake of contradiction, that no $F_n$ has a non-empty interior, that is, every $F_n$ is closed with an empty interior. Then, each $F_n^c$ is open. Moreover, since $F_n$ has an empty interior, it has no points for which there exists a neighborhood that contains only points in $F_n,$ that is, every neighborhood of each point of $F_n$ contains a point in $F_n^c,$ so every point in $F_n$ is a limit point of $F_n^c,$ and every point in $R^k$ is either in $F_n^c$ or is a limit point of $F_n^c,$ so each $F_n^c$ is non-empty and dense in $R^k.$
+
+As a base step, let $x_1$ be some point in $R^k,$ and let $B_1$ be an open ball around $x_1.$ Since the interior of $F_1$ is empty, $B_1 \cap F_1^c$ is not empty, and @{is open|union-and-intersection-of-open-and-closed-sets}.
+
+For the inductive step, suppose we have some $B_n$ that's constructed such that $B_n \cap F_n^c$ is non-empty and open. Then, we can pick a point $x_{n+1} \in B_n \cap F_n^c, x_{n+1} \neq x_n,$ and make a ball $B_{n+1}$ around it such that $B_{n+1} \subset B_n \cap F_{n}^c,$ $x_n \notin B_{n+1},$ and $B_{n+1} \cap F_{n+1}^c$ is open and not empty. Now, since $B_{n+1}$ satisfies our induction hypothesis, and since $B_1$ does as well, we have $B_n$ defined for all $n = 1, 2, 3, \dots.$
+
+Since the set of points $\{x_n\}$ is infinite (by induction) and bounded (all points are within $B_1$,) @{it has a limit point $p$ in $R^k.$|bolzano-weierstrass}. Now, suppose, for contradiction, that $p$ is not in every $F_n^c.$ Then, for some $N,$ $p$ is not in $F_N^c.$ Since $p \notin F_N^c$ and $B_{N+1} \subseteq F_N^c$, we have $p \notin B_{N+1}$. Since $B_{N+1}$ is open and $p$ is outside it, $p$ is at some positive distance $\varepsilon$ from any point $q \in B_{N+1}$. But $x_n \in B_n \subseteq B_{N+1}$ for all $n > N$, so all these infinitely many points are at distance at least $\varepsilon$ from $p$. Thus any neighborhood of $p$ with radius less than $\varepsilon$ contains at most finitely many points of $\{x_n\}$, contradicting that $p$ is a limit point.
+
+Now, this means that $p \in \bigcap_{n=1}^\infty F_n^c,$ meaning $\bigcap_{n=1}^\infty F_n^c \neq \emptyset,$ a contradiction! Therefore, our supposition that every $F_n$ has an empty interior must be incorrect, and some $F_n$ must have a non-empty interior.
+::::
+
 :::

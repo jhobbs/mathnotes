@@ -30,7 +30,7 @@ We can denote a metric space on set $X$ with metric $d$ as the tuple $(X, d).$
 
 ## Examples of Metric Spaces
 
-The most important metric spaces are the euclidean spaes $R^n$ together with a norm.
+The most important metric spaces are the euclidean spaces $R^n$ together with a norm.
 
 
 :::theorem
@@ -225,6 +225,11 @@ $$ \left ( \bigcup_{\alpha} E_\alpha \right )^c = \bigcap_{\alpha} \left ( E_{\a
 ::::proof
 Suppose $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$ Then, $x \notin \bigcup_{\alpha} E_\alpha,$ so $x$ is not in any $E_\alpha.$ Therefore, for every $E_\alpha,$ $x \in E_\alpha^c,$ and thus $x \in \bigcap_{\alpha} \left ( E_{\alpha}^c \right ).$ Conversely, suppose $x \in \bigcap_{\alpha} \left ( E_{\alpha}^c \right ).$ Then, $x$ is in every $E_\alpha^c,$ that is, $x$ is not in any $E_\alpha.$ Therefore, $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$
 ::::
+
+::::note
+This is just @{De Morgan's law|complement-of-union-is-intersection-of-complements} extended to arbitrary indexed collections.
+::::
+
 :::
 
 :::theorem {label: open-iff-complement-closed}
@@ -232,7 +237,7 @@ Suppose $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$ Then, $x \notin \b
 A set $E$ is open iff its complement is closed.
 
 ::::proof
-First, consider the case that $E^c$ is empty, and therefore open. If $E^c$ has no limit points, it is vaccuously closed. Suppose $E^c$ has a limit point $x.$ Since $E$ is empty, $x$ must be in $E^c,$ therefore $x$ is closed. Now, consider the case that $E^c$ is empty, and therefore closed. If $E$ is empty, it is open, and the theorem is satisfied. If $E$ is not empty, a point $x$ in $E$ has only points in $E$ in any neighborhood, since all points are in $E,$ and therefore $E$ is open.
+First, consider the case that $E^c$ is empty, and therefore open. If $E^c$ has no limit points, it is vacuously closed. Suppose $E^c$ has a limit point $x.$ Since $E$ is empty, $x$ must be in $E^c,$ therefore $x$ is closed. Now, consider the case that $E^c$ is empty, and therefore closed. If $E$ is empty, it is open, and the theorem is satisfied. If $E$ is not empty, a point $x$ in $E$ has only points in $E$ in any neighborhood, since all points are in $E,$ and therefore $E$ is open.
 
 Now we deal with the cases where neither $E$ nor $E^c$ are empty.
 
@@ -341,7 +346,7 @@ Conversely, let $p \in \overline{B_n}.$ If $p \in B_n,$ $p \in A_i$ for some $i,
 Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \overline{E}.$ Hence $y \in E$ if $E$ is closed.
 
 ::::proof
-Suppose $y \in E.$ Then $y \in \overline{E}.$ Suppose $y \notin E.$ Now, by hypothesis, for every $h > 0,$ there is some $x$ such that $y - h < x < y,$ because otherwise, $x$ would be an uppper bound on $E.$ Therefore, every neighborhood $N_h(y)$ contains some $x \in E,$ and thus $y$ is a limit point of $E$ and $y \in \overline{E}.$
+Suppose $y \in E.$ Then $y \in \overline{E}.$ Suppose $y \notin E.$ Now, by hypothesis, for every $h > 0,$ there is some $x$ such that $y - h < x < y,$ because otherwise, $x$ would be an upper bound on $E.$ Therefore, every neighborhood $N_h(y)$ contains some $x \in E,$ and thus $y$ is a limit point of $E$ and $y \in \overline{E}.$
 ::::
 :::
 
