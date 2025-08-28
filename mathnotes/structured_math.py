@@ -40,6 +40,7 @@ class MathBlock:
     children: List["MathBlock"] = field(default_factory=list)
     parent: Optional["MathBlock"] = None
     content_html: Optional[str] = None  # Stores the inner HTML content (without wrapper)
+    synonyms: List[Tuple[str, str]] = field(default_factory=list)  # List of (synonym_title, synonym_label)
 
     @property
     def css_class(self) -> str:
@@ -239,6 +240,21 @@ class StructuredMathParser:
                 if not label and block_type == MathBlockType.DEFINITION and title:
                     label = MathBlock.normalize_label_from_title(title)
 
+                # Parse synonyms for definitions
+                synonyms = []
+                if block_type == MathBlockType.DEFINITION and "synonyms" in metadata:
+                    synonyms_str = metadata["synonyms"]
+                    # Parse comma-separated synonyms
+                    for synonym_title in synonyms_str.split(","):
+                        synonym_title = synonym_title.strip()
+                        # Remove quotes if present
+                        if synonym_title.startswith('"') and synonym_title.endswith('"'):
+                            synonym_title = synonym_title[1:-1]
+                        if synonym_title:
+                            # Generate label for synonym
+                            synonym_label = MathBlock.normalize_label_from_title(synonym_title)
+                            synonyms.append((synonym_title, synonym_label))
+
                 # Create block
                 block = MathBlock(
                     block_type=block_type,
@@ -247,6 +263,7 @@ class StructuredMathParser:
                     label=label,
                     metadata=metadata,
                     parent=parent_block,
+                    synonyms=synonyms,
                 )
 
                 # Add to parent's children if nested
@@ -384,6 +401,11 @@ class StructuredMathParser:
         else:
             # For proofs, use bold "Proof" header (without colon)
             header_parts.append('<span class="math-block-type">Proof</span>')
+        
+        # Add synonyms if they exist (for definitions)
+        if block.synonyms:
+            synonym_titles = [syn[0] for syn in block.synonyms]
+            header_parts.append(f'<span class="block-synonyms">(also: {", ".join(synonym_titles)})</span>')
         
         # Add reference label if it exists (for all block types)
         if block.label:

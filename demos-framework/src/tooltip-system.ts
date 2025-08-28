@@ -10,6 +10,9 @@ interface TooltipData {
   title: string;
   content: string;
   url?: string;
+  is_synonym?: boolean;
+  synonym_of?: string;
+  synonym_title?: string;
 }
 
 interface TooltipCache {
@@ -248,13 +251,25 @@ class TooltipSystem {
     let content = `
       <div class="math-tooltip-content ${typeClass}">
         <div class="math-tooltip-header">
-          <span class="math-tooltip-type">${typeDisplay}`;
+          <span class="math-tooltip-type">${typeDisplay}: `;
     
-    if (data.title) {
-      content += ` (${data.title})`;
+    // Handle synonym display
+    if (data.is_synonym && data.synonym_title) {
+      content += `${data.synonym_title}`;
+      if (data.synonym_of) {
+        content += `; synonym of ${data.synonym_of}`;
+      }
+    } else if (data.title) {
+      content += `${data.title}`;
+    } else {
+      // If no title, just show the type without colon
+      content = `
+      <div class="math-tooltip-content ${typeClass}">
+        <div class="math-tooltip-header">
+          <span class="math-tooltip-type">${typeDisplay}`;
     }
     
-    content += `:</span>
+    content += `</span>
         </div>
         <div class="math-tooltip-body">
           ${data.content}
