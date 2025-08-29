@@ -87,6 +87,7 @@
   --color-lemma: oklch(58% 0.14 241);
   --color-proposition: oklch(62% 0.12 230);
   --color-corollary: oklch(54% 0.08 250);
+  --color-axiom: oklch(55% 0.16 280);
   --color-proof: var(--base-math-proof);
   --color-example: var(--base-math-example);
   --color-remark: var(--base-math-note);
@@ -101,6 +102,7 @@
   --color-type-proposition: oklch(55% 0.18 300);
   --color-type-lemma: var(--base-warning);
   --color-type-corollary: oklch(50% 0.15 142);
+  --color-type-axiom: oklch(58% 0.16 280);
   --color-type-example: oklch(52% 0.12 85);
   --color-type-note: oklch(48% 0.06 250);
   
@@ -110,6 +112,7 @@
   --color-nested-lemma: color-mix(in oklch, var(--color-lemma) 3%, transparent);
   --color-nested-proposition: color-mix(in oklch, var(--color-proposition) 3%, transparent);
   --color-nested-corollary: color-mix(in oklch, var(--color-corollary) 2.5%, transparent);
+  --color-nested-axiom: color-mix(in oklch, var(--color-axiom) 3%, transparent);
   --color-nested-proof: color-mix(in oklch, var(--color-proof) 3%, transparent);
   --color-nested-example: color-mix(in oklch, var(--color-example) 3%, transparent);
   
@@ -309,6 +312,7 @@
     --color-lemma: oklch(66% 0.14 241);
     --color-proposition: oklch(70% 0.12 230);
     --color-corollary: oklch(62% 0.08 250);
+    --color-axiom: oklch(64% 0.16 280);
     --color-proof: oklch(55% 0.05 250);
     --color-example: oklch(63% 0.13 150);
     --color-remark: oklch(60% 0.06 250);
@@ -323,6 +327,7 @@
     --color-type-proposition: oklch(75% 0.15 300);
     --color-type-lemma: oklch(72% 0.17 40);
     --color-type-corollary: oklch(65% 0.12 142);
+    --color-type-axiom: oklch(68% 0.16 280);
     --color-type-example: oklch(70% 0.10 85);
     --color-type-note: oklch(65% 0.04 250);
     
@@ -332,6 +337,7 @@
     --color-nested-lemma: color-mix(in oklch, var(--color-lemma) 6%, transparent);
     --color-nested-proposition: color-mix(in oklch, var(--color-proposition) 6%, transparent);
     --color-nested-corollary: color-mix(in oklch, var(--color-corollary) 5%, transparent);
+    --color-nested-axiom: color-mix(in oklch, var(--color-axiom) 6%, transparent);
     --color-nested-proof: color-mix(in oklch, var(--color-proof) 6%, transparent);
     --color-nested-example: color-mix(in oklch, var(--color-example) 6%, transparent);
     

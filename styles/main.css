@@ -366,6 +366,11 @@ input, textarea, select {
     background-color: color-mix(in oklch, var(--color-corollary), transparent 96%);
   }
   
+  &.math-axiom {
+    border-color: var(--color-axiom);
+    background-color: color-mix(in oklch, var(--color-axiom), transparent 95%);
+  }
+  
   &.math-proof {
     border-color: var(--color-proof);
     background-color: color-mix(in oklch, var(--color-proof), transparent 95%);
@@ -510,6 +515,10 @@ input, textarea, select {
     background-color: var(--color-nested-corollary);
   }
   
+  &.math-axiom {
+    background-color: var(--color-nested-axiom);
+  }
+  
   &.math-proof {
     background-color: var(--color-nested-proof);
   }
@@ -537,6 +546,10 @@ input, textarea, select {
     
     &.math-corollary {
       background-color: var(--color-nested-corollary);
+    }
+    
+    &.math-axiom {
+      background-color: var(--color-nested-axiom);
     }
     
     &.math-proof {
@@ -833,6 +846,10 @@ footer {
   color: var(--color-type-corollary);
 }
 
+.math-tooltip-content.math-axiom .math-tooltip-type {
+  color: var(--color-type-axiom);
+}
+
 .math-tooltip-content.math-example .math-tooltip-type {
   color: var(--color-type-example);
 }
@@ -861,6 +878,10 @@ footer {
   
   .math-tooltip-content.math-corollary .math-tooltip-type {
     color: var(--color-type-corollary);
+  }
+  
+  .math-tooltip-content.math-axiom .math-tooltip-type {
+    color: var(--color-type-axiom);
   }
   
   .math-tooltip-content.math-example .math-tooltip-type {
