@@ -19,6 +19,7 @@ class MathBlockType(Enum):
     LEMMA = "lemma"
     PROPOSITION = "proposition"
     COROLLARY = "corollary"
+    AXIOM = "axiom"
     PROOF = "proof"
     EXAMPLE = "example"
     REMARK = "remark"
@@ -56,6 +57,7 @@ class MathBlock:
             MathBlockType.LEMMA: "Lemma",
             MathBlockType.PROPOSITION: "Proposition",
             MathBlockType.COROLLARY: "Corollary",
+            MathBlockType.AXIOM: "Axiom",
             MathBlockType.PROOF: "Proof",
             MathBlockType.EXAMPLE: "Example",
             MathBlockType.REMARK: "Remark",
