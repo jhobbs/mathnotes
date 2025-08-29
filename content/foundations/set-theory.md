@@ -13,6 +13,35 @@ A **set** is a collection of objects, considered as a whole.
 The objects that make up a @set are called its **elements** or its **members.**
 :::
 
+:::definition "Membership criterion"
+The **membership criterion** for a @set $X$ is a statement of the form $x \in X \iff P(x),$ where $P(x)$ is a proposition that is true for precisely for those objects $x$ that are @{elements|element} of $X,$ and no others.
+:::
+
+:::axiom "Axiom of Extensionality" {label: axiom-of-extensionality}
+Two @{sets|set} are equal if and only if they have the same @{elements|element}. Formally, for any sets $A$ and $B$:
+
+$$A = B \iff (\forall x)(x \in A \iff x \in B)$$
+:::
+
+:::definition "subset"
+If $X$ and $Y$ are @{sets|set} such that every element of $X$ is also an element of $Y,$ then we say $X$ is a **subset** of $Y,$ denoted as $X \subset Y.$ Formally,
+
+
+$$X \subset Y \iff (\forall x)(x \in X \implies x \in Y)$$
+:::
+
+:::definition "superset"
+If $X$ and $Y$ are @{sets|set} such that every element of $Y$ is also an element of $X,$ then we say $X$ is a **superset** of $Y,$ denoted as $X \supset Y.$ This is the same as $Y \subset X.$
+:::
+
+:::theorem
+Two sets $X$ and $Y$ are equal if and only if $X$ is a subset of $Y$ and $Y$ is a subset of $X.$
+
+::::proof
+Suppose $X$ and $Y$ are sets with $X \subset Y$ and $Y \subset X.$ Now, suppose $x \in X.$ Then, $x \in Y.$ Conversely, suppose $y \in Y.$ Then $y \in X.$ Thus, $(\forall x)(x \in X \iff x \in Y),$ and @{$X = Y$|axiom-of-extensionality}.
+::::
+:::
+
 
 ## De Morgan's Laws
 
