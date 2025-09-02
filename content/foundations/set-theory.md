@@ -42,6 +42,20 @@ Suppose $X$ and $Y$ are sets with $X \subset Y$ and $Y \subset X.$ Now, suppose 
 ::::
 :::
 
+:::definition "Sequence"
+A **sequence** is a function $f$ defined on the @set $J$ of all positive integers.
+:::
+:::note
+If $f(n) = x_n,$ for $n \in J,$ it is customary to denote the @sequence $f$ by the symbol $\{x_n\},$ or sometimes by $x_1, x_2, x_3, \dots.$
+:::
+
+:::definition "Term"
+If $f$ is a sequence denoted as $\{x_n\},$ the values of $f,$ that is, the elements $x_n,$ are called the **terms** of the sequence.
+:::
+
+:::note
+The @{terms|term} of a @sequence need not be distinct.
+:::
 
 ## De Morgan's Laws
 
@@ -67,5 +81,4 @@ $$ (A \cap B)^c = A^c \cup B^c. $$
 
 Suppose $x \in (A \cap B)^c.$ Then, $x$ is not in $A \cap B,$ that is, $x$ is either not in $A$ or it is not in $B$ or it is in neither. If $x$ is not in $A,$ then it is in $A^c,$ and therefore it is in $A^c \cup B^c.$ The same approach works with $B,$ and therefore $x \in  A^c \cup B^c,$ and we have shown $(A \cap B)^c = A^c \cup B^c.$
 ::::
-
 :::
