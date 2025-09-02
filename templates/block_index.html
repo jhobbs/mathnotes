@@ -40,14 +40,15 @@
                                                 <li>
                                                     {% if ref.source_url %}
                                                         <a href="{{ ref.source_url }}">
-                                                            {% if ref.source_title %}
-                                                                {{ ref.source_title }}
+                                                            {{ ref.source_title or ref.source_label or ref.source_file | replace('content/', '') }}
+                                                            {% if ref.is_from_block %}
+                                                                <span class="ref-location">(block)</span>
                                                             {% else %}
-                                                                {{ ref.source_file }}
+                                                                <span class="ref-location">(page)</span>
                                                             {% endif %}
                                                         </a>
                                                     {% else %}
-                                                        {{ ref.source_title or ref.source_file }}
+                                                        {{ ref.source_title or ref.source_label or ref.source_file }}
                                                     {% endif %}
                                                     {% if ref.is_embed %}
                                                         <span class="ref-type">(embedded)</span>
@@ -67,11 +68,7 @@
                                                     <li>
                                                         {% if ref.source_url %}
                                                             <a href="{{ ref.source_url }}">
-                                                                {% if ref.source_title %}
-                                                                    {{ ref.source_title }}
-                                                                {% else %}
-                                                                    {{ ref.source_label or ref.source_file }}
-                                                                {% endif %}
+                                                                {{ ref.source_title or ref.source_label or ref.source_file | replace('content/', '') }}
                                                             </a>
                                                         {% else %}
                                                             {{ ref.source_title or ref.source_label or ref.source_file }}

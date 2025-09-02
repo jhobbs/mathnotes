@@ -16,6 +16,7 @@ class TooltipCollectingBlockReferenceProcessor(BlockReferenceProcessor):
     def __init__(self, block_markers: Dict[str, MathBlock], current_file: str = None, block_index=None):
         super().__init__(block_markers, current_file, block_index)
         self.referenced_labels: Set[str] = set()
+        self.embedded_labels: Set[str] = set()  # Track embeds separately
 
     def _replace_simple_reference(self, match) -> str:
         """Override to track referenced labels."""
@@ -50,6 +51,28 @@ class TooltipCollectingBlockReferenceProcessor(BlockReferenceProcessor):
 
         # Call parent implementation
         return super()._replace_custom_reference(match)
+    
+    def _replace_embed_reference(self, match) -> str:
+        """Override to track embedded labels."""
+        ref_text = match.group(1)
+        
+        # Parse reference format
+        if ":" in ref_text:
+            ref_type, ref_label = ref_text.split(":", 1)
+            ref_label = ref_label.strip()
+        else:
+            ref_label = ref_text.strip()
+        
+        # Track this embed
+        self.embedded_labels.add(ref_label)
+        
+        # If we're just collecting references (no block_markers), return the original text
+        # This happens when we're processing page-level content just to track references
+        if not self.block_markers:
+            return match.group(0)  # Return original @embed{...} text
+        
+        # Otherwise call parent implementation for actual processing
+        return super()._replace_embed_reference(match)
 
     def get_tooltip_data(self) -> Dict[str, Dict[str, Any]]:
         """Collect tooltip data for all referenced blocks."""

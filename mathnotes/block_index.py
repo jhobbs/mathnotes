@@ -57,11 +57,11 @@ class BlockIndex:
         # Phase 1: Scan and index all blocks
         self._scan_directory(content_dir)
 
-        # Phase 2: Render all blocks now that the index is complete
+        # Phase 2: Render all blocks and build reverse index simultaneously
         self._render_all_blocks()
         
-        # Phase 3: Build reverse index by collecting references from all files
-        self._build_reverse_index()
+        # Phase 3: Compute transitive references
+        self.reverse_index.compute_transitive_references(max_depth=3)
 
         self._is_built = True
 
@@ -188,12 +188,73 @@ class BlockIndex:
             file_path = file_info["file_path"]
             canonical_url = file_info["canonical_url"]
             block_markers = file_info["block_markers"]
+            page_title = file_info.get("page_title", "")
 
             # Create a new parser with the complete block index for proper cross-references
             parser = StructuredMathParser(current_file=file_path, block_index=self)
 
             # Initialize rendered blocks storage for this file
             self.rendered_blocks[file_path] = {}
+            
+            # Process page-level references (outside of blocks)
+            # We need to actually remove ALL block content, not just markers
+            # Read the original content
+            with open(file_path, "r", encoding="utf-8") as f:
+                post = frontmatter.load(f)
+                original_content = post.content
+                
+                # Parse again to get content with markers
+                from .structured_math import StructuredMathParser as SMParser
+                temp_parser = SMParser()
+                content_with_markers, _ = temp_parser.parse(original_content)
+                
+                # Now remove all block markers to get only non-block content
+                remaining_content = content_with_markers
+                for marker_id in block_markers.keys():
+                    # Remove the entire line containing the marker
+                    lines = remaining_content.split('\n')
+                    filtered_lines = [line for line in lines if marker_id not in line]
+                    remaining_content = '\n'.join(filtered_lines)
+                
+                # Only process if there's actual content left
+                if remaining_content.strip():
+                    # Process page-level references
+                    from .tooltip_collector import TooltipCollectingBlockReferenceProcessor
+                    page_ref_processor = TooltipCollectingBlockReferenceProcessor(
+                        block_markers={}, current_file=file_path, block_index=self
+                    )
+                    page_ref_processor.process_references(remaining_content)
+                    
+                    # Only add references if we found any
+                    if page_ref_processor.referenced_labels or page_ref_processor.embedded_labels:
+                        # Add page-level references to reverse index
+                        base_url = f"/mathnotes/{canonical_url}"
+                        
+                        # Add regular references
+                        for referenced_label in page_ref_processor.referenced_labels:
+                            self.reverse_index.add_reference(
+                                referenced_label=referenced_label,
+                                source_file=file_path,
+                                source_label=None,  # Page-level, not from a specific block
+                                source_title=page_title,
+                                source_url=base_url,
+                                context="",
+                                is_embed=False,
+                                is_from_block=False  # This is truly page-level
+                            )
+                        
+                        # Add embedded references
+                        for embedded_label in page_ref_processor.embedded_labels:
+                            self.reverse_index.add_reference(
+                                referenced_label=embedded_label,
+                                source_file=file_path,
+                                source_label=None,  # Page-level, not from a specific block
+                                source_title=page_title,
+                                source_url=base_url,
+                                context="",
+                                is_embed=True,
+                                is_from_block=False  # This is truly page-level
+                            )
 
             # Process blocks in dependency order: children before parents
             # First, identify root blocks (blocks without parents) and process recursively
@@ -228,13 +289,84 @@ class BlockIndex:
     ):
         """Process and render a block using the same pipeline as page view."""
         # Process cross-references in the block content (first pass)
-        # Use BlockReferenceProcessor to handle @references and @embed directives
-        from .math_utils import BlockReferenceProcessor
+        # Use TooltipCollectingBlockReferenceProcessor to handle references and track them
+        from .tooltip_collector import TooltipCollectingBlockReferenceProcessor
 
-        block_ref_processor = BlockReferenceProcessor(
+        block_ref_processor = TooltipCollectingBlockReferenceProcessor(
             block_markers=block_markers, current_file=parser.current_file, block_index=parser.block_index
         )
         content_with_refs = block_ref_processor.process_references(block.content)
+        
+        # Get base URL for building URLs
+        file_path_normalized = parser.current_file.replace("\\", "/")
+        canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
+        base_url = f"/mathnotes/{canonical_url}"
+        
+        # Add references to reverse index
+        # For blocks without labels (like nested proofs), find the parent block's info
+        source_label = block.label
+        source_title = block.title or block.label
+        source_url = full_url
+        
+        # Helper to extract a meaningful snippet from block content
+        def get_content_snippet(content: str, max_length: int = 60) -> str:
+            """Extract first meaningful line of text from block content."""
+            import re
+            # Remove math delimiters and clean up
+            clean = re.sub(r'\$[^$]+\$', '...', content)  # Replace inline math
+            clean = re.sub(r'\$\$[^$]+\$\$', '...', clean)  # Replace display math
+            clean = re.sub(r':+\w+', '', clean)  # Remove block markers
+            clean = re.sub(r'@\{[^}]+\}', '', clean)  # Remove references
+            clean = re.sub(r'@\w+', '', clean)  # Remove simple references
+            clean = re.sub(r'\s+', ' ', clean).strip()  # Normalize whitespace
+            
+            if len(clean) > max_length:
+                clean = clean[:max_length-3] + "..."
+            return clean if clean else "Block content"
+        
+        if not block.label and block.parent:
+            # This is a nested block without its own label
+            # Use parent block's info but indicate this is a nested block
+            parent = block.parent
+            while parent and not parent.label:
+                parent = parent.parent
+            
+            if parent and parent.label:
+                source_label = parent.label
+                source_title = f"{block.block_type.value.capitalize()} in {parent.title or parent.label}"
+                source_url = f"{base_url}#{parent.label}" if parent.label else base_url
+            else:
+                # No labeled parent found, use content snippet
+                snippet = get_content_snippet(block.content)
+                source_title = f"{block.block_type.value.capitalize()}: {snippet}"
+        elif not block.label:
+            # Top-level block without label - use content snippet
+            snippet = get_content_snippet(block.content)
+            source_title = f"{block.block_type.value.capitalize()}: {snippet}"
+        
+        # Add regular references
+        for referenced_label in block_ref_processor.referenced_labels:
+            self.reverse_index.add_reference(
+                referenced_label=referenced_label,
+                source_file=parser.current_file,
+                source_label=source_label,
+                source_title=source_title,
+                source_url=source_url,
+                context="",
+                is_embed=False
+            )
+        
+        # Add embedded references
+        for embedded_label in block_ref_processor.embedded_labels:
+            self.reverse_index.add_reference(
+                referenced_label=embedded_label,
+                source_file=parser.current_file,
+                source_label=source_label,
+                source_title=source_title,
+                source_url=source_url,
+                context="",
+                is_embed=True
+            )
 
         # Protect math expressions
         math_protector = MathProtector()
@@ -282,66 +414,3 @@ class BlockIndex:
     def find_blocks_by_type(self, block_type: str) -> List[BlockReference]:
         """Find all blocks of a specific type."""
         return [ref for ref in self.all_blocks if ref.block.block_type.value == block_type]
-    
-    def _build_reverse_index(self):
-        """Phase 3: Build reverse index by scanning all files for references."""
-        content_dir = "content"
-        
-        # Scan all markdown files and collect references
-        for root, dirs, files in os.walk(content_dir):
-            # Skip hidden directories
-            dirs[:] = [d for d in dirs if not d.startswith(".")]
-            
-            for file in files:
-                if file.endswith(".md"):
-                    file_path = os.path.join(root, file)
-                    self._collect_references_from_file(file_path)
-        
-        # Compute transitive references up to depth 3
-        self.reverse_index.compute_transitive_references(max_depth=3)
-    
-    def _collect_references_from_file(self, file_path: str):
-        """Collect all references from a single markdown file."""
-        with open(file_path, "r", encoding="utf-8") as f:
-            post = frontmatter.load(f)
-            content = post.content
-            
-            # Get page title from frontmatter
-            page_title = post.metadata.get("title", None)
-            
-            # Get canonical URL for this file
-            file_path_normalized = file_path.replace("\\", "/")
-            canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
-            base_url = f"/mathnotes/{canonical_url}"
-            
-            # Parse structured math content to identify blocks and their content
-            parser = StructuredMathParser()
-            _, block_markers = parser.parse(content)
-            
-            # For each block in this file, collect references from its content
-            for block in block_markers.values():
-                if block.label:
-                    # Collect references from this block's content
-                    self.reverse_index.collect_references_from_content(
-                        content=block.content,
-                        source_file=file_path,
-                        source_label=block.label,
-                        source_title=block.title or block.label,
-                        source_url=f"{base_url}#{block.label}"
-                    )
-            
-            # Also collect references from content outside of blocks
-            # Remove block content from the main content to avoid duplicates
-            remaining_content = content
-            for marker_id in block_markers.keys():
-                # Remove the marker and its content
-                remaining_content = remaining_content.replace(marker_id, "")
-            
-            # Collect references from the remaining content
-            self.reverse_index.collect_references_from_content(
-                content=remaining_content,
-                source_file=file_path,
-                source_label=None,  # References from page level, not from a specific block
-                source_title=page_title,
-                source_url=base_url
-            )
