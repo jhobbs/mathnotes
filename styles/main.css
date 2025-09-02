@@ -7,7 +7,7 @@
 @import './pages/demo-viewer.module.css';
 @import './pages/index.module.css';
 @import './pages/directory.module.css';
-@import './pages/definition-index.module.css';
+@import './pages/block-index.module.css';
 
 /* Custom media queries for consistent responsive design */
 @custom-media --phone-xs (max-width: 400px);
