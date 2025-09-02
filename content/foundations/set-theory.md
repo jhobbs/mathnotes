@@ -42,15 +42,31 @@ Suppose $X$ and $Y$ are sets with $X \subset Y$ and $Y \subset X.$ Now, suppose 
 ::::
 :::
 
+:::definition "Function" {synonyms: mapping}
+Consider two @{sets|set}, $A$ and $B,$ whose @{elements|element} may be any objects whatsoever, and suppose that with each @element $x$ of $A$ there is associated, in some manner, any @element of $B,$ which we denote by $f(x).$ Then $f$ is said to be a **function** from $A$ to $B.$
+:::
+
+:::definition "Domain"
+If $f$ is a @function from the @set $A$ to the @set $B,$ the @set $A$ is called the **domain** of $f.$
+:::
+
+:::definition "Value"
+If $f$ is a @function from the @set $A$ to the @set $B,$ the @{elements|element} $f(x) \in B$ are called the **values** of $f.$
+:::
+
+:::definition "Range"
+The @set of all @{values|value} of a @function $f$ is called the **range** of $f.$
+:::
+
 :::definition "Sequence"
-A **sequence** is a function $f$ defined on the @set $J$ of all positive integers.
+A **sequence** is a @function $f$ defined on the @set $J$ of all positive integers.
 :::
 :::note
 If $f(n) = x_n,$ for $n \in J,$ it is customary to denote the @sequence $f$ by the symbol $\{x_n\},$ or sometimes by $x_1, x_2, x_3, \dots.$
 :::
 
 :::definition "Term"
-If $f$ is a sequence denoted as $\{x_n\},$ the values of $f,$ that is, the elements $x_n,$ are called the **terms** of the sequence.
+If $f$ is a @sequence denoted as $\{x_n\},$ the @{values|value} of $f,$ that is, the @{elements|element} $x_n,$ are called the **terms** of the @sequence.
 :::
 
 :::note
