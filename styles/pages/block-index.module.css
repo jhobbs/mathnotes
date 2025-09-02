@@ -101,7 +101,8 @@
   margin-right: var(--gap-xs);
 }
 
-.block-index-page .ref-type {
+.block-index-page .ref-type,
+.block-index-page .ref-location {
   margin-left: var(--gap-xs);
   font-size: var(--font-size-xs);
   color: var(--text-secondary);

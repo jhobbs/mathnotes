@@ -21,6 +21,7 @@ class ReferenceInfo:
     source_url: str = ""  # URL to the source
     context: str = ""  # Text context around the reference
     is_embed: bool = False  # Whether this is an embed (@@) or link (@)
+    is_from_block: bool = True  # Whether this reference is from a block (vs page-level)
     
 
 @dataclass
@@ -72,7 +73,8 @@ class ReverseIndex:
                      source_title: Optional[str] = None,
                      source_url: str = "",
                      context: str = "",
-                     is_embed: bool = False):
+                     is_embed: bool = False,
+                     is_from_block: bool = True):
         """Add a reference from source to target label."""
         
         referenced_label = self._normalize_label(referenced_label)
@@ -84,7 +86,8 @@ class ReverseIndex:
             source_title=source_title,
             source_url=source_url,
             context=context,
-            is_embed=is_embed
+            is_embed=is_embed,
+            is_from_block=is_from_block
         )
         
         # Add to reverse index
