@@ -211,12 +211,40 @@ class BlockIndexPage(Page):
 
         # Sort blocks alphabetically by title or label
         blocks.sort(key=lambda ref: (ref.block.title or ref.block.label or "").lower())
+        
+        # Enhance blocks with reverse index information
+        enhanced_blocks = []
+        for ref in blocks:
+            if ref.block.label:
+                # Get references for this block (depth 2 = direct + 1 level of transitive)
+                reverse_entry = self.block_index.reverse_index.get_references_for_label(
+                    ref.block.label, max_depth=2
+                )
+                
+                # Create enhanced block info
+                enhanced_block = {
+                    'block': ref,
+                    'direct_references': reverse_entry.direct_references,
+                    'transitive_references': reverse_entry.transitive_references
+                }
+            else:
+                # Block without label - no references possible
+                enhanced_block = {
+                    'block': ref,
+                    'direct_references': [],
+                    'transitive_references': {}
+                }
+            
+            enhanced_blocks.append(enhanced_block)
 
         # Build context
-        context = {self.context_key: blocks}
+        context = {
+            'blocks': enhanced_blocks,
+            'reference_depth': 2  # Configurable depth for transitive references
+        }
         
         # Add any additional context processing
-        context = self.process_context(context, blocks)
+        context = self.process_context(context, enhanced_blocks)
 
         return [
             PageSpec(
@@ -251,8 +279,6 @@ class DefinitionIndexPage(BlockIndexPage):
         context['index_description'] = 'This page lists all mathematical definitions found across the site. Click on any definition to jump to its location in the notes.'
         context['no_items_message'] = 'No definitions found in the index.'
         context['item_type'] = 'definition'
-        # For backwards compatibility with templates that expect 'definitions'
-        context['definitions'] = blocks
         return context
 
 
@@ -269,12 +295,10 @@ class TheoremIndexPage(BlockIndexPage):
     
     def process_context(self, context: Dict[str, Any], blocks: List) -> Dict[str, Any]:
         """Add additional context for theorem index page."""
-        context[self.context_key] = blocks
         context['index_title'] = 'Theorem Index'
         context['index_description'] = 'This page lists all mathematical theorems, lemmas, and corollaries found across the site. Click on any item to jump to its location in the notes.'
         context['no_items_message'] = 'No theorems, lemmas, or corollaries found in the index.'
         context['item_type'] = 'theorem/lemma/corollary'
-        
         return context
 
 

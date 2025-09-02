@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from markdown import Markdown
 from .structured_math import StructuredMathParser, MathBlock
 from .math_utils import MathProtector
+from .reverse_index import ReverseIndex
 
 
 @dataclass
@@ -46,6 +47,8 @@ class BlockIndex:
         self.md = Markdown(extensions=["extra"])
         # Store rendered HTML for all blocks by file path and marker ID
         self.rendered_blocks: Dict[str, Dict[str, str]] = {}
+        # Initialize reverse index for tracking references
+        self.reverse_index = ReverseIndex()
 
     def build_index(self):
         """Build the global index by scanning all markdown files."""
@@ -56,6 +59,9 @@ class BlockIndex:
 
         # Phase 2: Render all blocks now that the index is complete
         self._render_all_blocks()
+        
+        # Phase 3: Build reverse index by collecting references from all files
+        self._build_reverse_index()
 
         self._is_built = True
 
@@ -63,6 +69,10 @@ class BlockIndex:
         print(
             f"Block index built: {len(self.index)} labeled blocks found, {sum(len(blocks) for blocks in self.rendered_blocks.values())} total blocks rendered"
         )
+        
+        # Log reverse index statistics
+        stats = self.reverse_index.get_summary_stats()
+        print(f"Reverse index built: {stats['blocks_with_references']} blocks referenced, {stats['total_direct_references']} direct references")
 
     def _scan_directory(self, directory: str):
         """Recursively scan a directory for markdown files and index their blocks."""
@@ -132,6 +142,14 @@ class BlockIndex:
                             f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
                         )
                     self.index[normalized_label] = ref
+                    
+                    # Register with reverse index
+                    self.reverse_index.add_block_definition(
+                        label=block.label,
+                        file_path=file_path,
+                        title=block.title or block.label,
+                        url=f"/mathnotes/{canonical_url}#{block.label}"
+                    )
                 
                 # Also register synonyms as aliases pointing to the same block
                 if block.synonyms:
@@ -155,6 +173,14 @@ class BlockIndex:
                             synonym_ref.synonym_title = synonym_title
                             synonym_ref.is_synonym = True
                             self.index[normalized_synonym_label] = synonym_ref
+                            
+                            # Register synonym with reverse index
+                            self.reverse_index.add_block_definition(
+                                label=synonym_label,
+                                file_path=file_path,
+                                title=synonym_title,
+                                url=f"/mathnotes/{canonical_url}#{block.label}"
+                            )
 
     def _render_all_blocks(self):
         """Phase 2: Render all blocks now that the index is complete."""
@@ -256,3 +282,66 @@ class BlockIndex:
     def find_blocks_by_type(self, block_type: str) -> List[BlockReference]:
         """Find all blocks of a specific type."""
         return [ref for ref in self.all_blocks if ref.block.block_type.value == block_type]
+    
+    def _build_reverse_index(self):
+        """Phase 3: Build reverse index by scanning all files for references."""
+        content_dir = "content"
+        
+        # Scan all markdown files and collect references
+        for root, dirs, files in os.walk(content_dir):
+            # Skip hidden directories
+            dirs[:] = [d for d in dirs if not d.startswith(".")]
+            
+            for file in files:
+                if file.endswith(".md"):
+                    file_path = os.path.join(root, file)
+                    self._collect_references_from_file(file_path)
+        
+        # Compute transitive references up to depth 3
+        self.reverse_index.compute_transitive_references(max_depth=3)
+    
+    def _collect_references_from_file(self, file_path: str):
+        """Collect all references from a single markdown file."""
+        with open(file_path, "r", encoding="utf-8") as f:
+            post = frontmatter.load(f)
+            content = post.content
+            
+            # Get page title from frontmatter
+            page_title = post.metadata.get("title", None)
+            
+            # Get canonical URL for this file
+            file_path_normalized = file_path.replace("\\", "/")
+            canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
+            base_url = f"/mathnotes/{canonical_url}"
+            
+            # Parse structured math content to identify blocks and their content
+            parser = StructuredMathParser()
+            _, block_markers = parser.parse(content)
+            
+            # For each block in this file, collect references from its content
+            for block in block_markers.values():
+                if block.label:
+                    # Collect references from this block's content
+                    self.reverse_index.collect_references_from_content(
+                        content=block.content,
+                        source_file=file_path,
+                        source_label=block.label,
+                        source_title=block.title or block.label,
+                        source_url=f"{base_url}#{block.label}"
+                    )
+            
+            # Also collect references from content outside of blocks
+            # Remove block content from the main content to avoid duplicates
+            remaining_content = content
+            for marker_id in block_markers.keys():
+                # Remove the marker and its content
+                remaining_content = remaining_content.replace(marker_id, "")
+            
+            # Collect references from the remaining content
+            self.reverse_index.collect_references_from_content(
+                content=remaining_content,
+                source_file=file_path,
+                source_label=None,  # References from page level, not from a specific block
+                source_title=page_title,
+                source_url=base_url
+            )

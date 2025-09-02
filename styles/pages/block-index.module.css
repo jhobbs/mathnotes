@@ -1,0 +1,134 @@
+/* Block index page specific styles (for definitions and theorems) */
+
+.block-index-page .block-index-container {
+  max-width: var(--width-content-base);
+  margin: 0 auto;
+  padding: var(--gap-base);
+}
+
+.block-index-page h2 {
+  margin-bottom: var(--gap-base);
+}
+
+.block-index-page .index-description {
+  color: var(--text-secondary);
+  margin-bottom: var(--gap-xl);
+  font-size: var(--font-size-base);
+}
+
+.block-index-page .block-count {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--gap-base);
+  font-style: italic;
+}
+
+.block-index-page .blocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl);
+}
+
+.block-index-page .embedded-block {
+  border-left: 3px solid var(--color-border);
+  padding-left: var(--gap-base);
+}
+
+.block-index-page .embedded-source {
+  margin-top: var(--gap-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.block-index-page .no-items {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: var(--gap-2xl);
+  font-style: italic;
+}
+
+/* References section */
+.block-index-page .block-references {
+  margin-top: var(--gap-base);
+  padding: var(--gap-sm);
+  background: var(--color-code-bg);
+  border-radius: var(--radius-sm);
+}
+
+.block-index-page .block-references details {
+  cursor: pointer;
+}
+
+.block-index-page .block-references summary {
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: var(--gap-xs);
+  user-select: none;
+}
+
+.block-index-page .block-references summary:hover {
+  color: var(--text-primary);
+}
+
+.block-index-page .direct-references,
+.block-index-page .transitive-references {
+  margin-top: var(--gap-sm);
+  padding-left: var(--gap-base);
+}
+
+.block-index-page .block-references h4 {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--gap-xs);
+  color: var(--text-secondary);
+}
+
+.block-index-page .block-references ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.block-index-page .block-references li {
+  padding: var(--gap-xs) 0;
+  font-size: var(--font-size-sm);
+}
+
+.block-index-page .block-references li::before {
+  content: "→ ";
+  color: var(--text-secondary);
+  margin-right: var(--gap-xs);
+}
+
+.block-index-page .ref-type {
+  margin-left: var(--gap-xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Dark mode variables */
+@media (prefers-color-scheme: dark) {
+  .block-index-page {
+    --card-background: var(--color-card-bg);
+    --border-color: var(--color-border);
+    --text-secondary: var(--color-text-secondary);
+  }
+  
+  .block-index-page .block-references {
+    background: var(--color-bg-secondary);
+  }
+}
+
+/* Mobile responsive */
+@media (--phone) {
+  .block-index-page .block-references {
+    padding: var(--gap-xs);
+  }
+  
+  .block-index-page .direct-references,
+  .block-index-page .transitive-references {
+    padding-left: var(--gap-sm);
+  }
+}
