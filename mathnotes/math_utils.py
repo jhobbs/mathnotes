@@ -273,19 +273,22 @@ class BlockReferenceProcessor:
             if block.label and MathBlock.normalize_label_from_title(block.label) == normalized_ref_label:
                 # If type is specified, verify it matches
                 if ref_type is None or block.block_type.value == ref_type:
-                    return block, f"#{block.label}"  # Local reference with actual label
+                    # Always use full URL from block index if available
+                    if self.block_index:
+                        block_ref = self.block_index.get_reference(normalized_ref_label)
+                        if block_ref:
+                            return block, block_ref.full_url
+                    # Fallback to local anchor if no index
+                    return block, f"#{block.label}"
 
         # If not found locally check in the global index
-        block_ref = self.block_index.get_reference(normalized_ref_label)
-        if block_ref:
-            # Verify type if specified
-            if ref_type is None or block_ref.block.block_type.value == ref_type:
-                # Check if it's in the same file
-                if block_ref.file_path == self.current_file:
-                    target_url = f"#{block_ref.block.label}"
-                else:
-                    target_url = block_ref.full_url
-                return block_ref.block, target_url
+        if self.block_index:
+            block_ref = self.block_index.get_reference(normalized_ref_label)
+            if block_ref:
+                # Verify type if specified
+                if ref_type is None or block_ref.block.block_type.value == ref_type:
+                    # Always use the full URL
+                    return block_ref.block, block_ref.full_url
 
         return None, None
 

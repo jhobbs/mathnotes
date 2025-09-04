@@ -150,8 +150,11 @@ class BlockIndex:
                 )
                 
                 # Also register synonyms as aliases pointing to the same block
-                if block.synonyms:
-                    for synonym_title, synonym_label in block.synonyms:
+                # Include both manual synonyms and auto-generated synonyms
+                all_synonyms = list(block.synonyms) + list(getattr(block, 'auto_generated_synonyms', []))
+                
+                if all_synonyms:
+                    for synonym_title, synonym_label in all_synonyms:
                         normalized_synonym_label = MathBlock.normalize_label_from_title(synonym_label)
                         
                         if normalized_synonym_label in self.index:

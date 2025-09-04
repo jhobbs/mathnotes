@@ -14,24 +14,24 @@ The objects that make up a @set are called its **elements** or its **members.**
 :::
 
 :::definition "Membership criterion"
-The **membership criterion** for a @set $X$ is a statement of the form $x \in X \iff P(x),$ where $P(x)$ is a proposition that is true for precisely for those objects $x$ that are @{elements|element} of $X,$ and no others.
+The **membership criterion** for a @set $X$ is a statement of the form $x \in X \iff P(x),$ where $P(x)$ is a proposition that is true for precisely for those objects $x$ that are @elements of $X,$ and no others.
 :::
 
 :::axiom "Axiom of Extensionality" {label: axiom-of-extensionality}
-Two @{sets|set} are equal if and only if they have the same @{elements|element}. Formally, for any sets $A$ and $B$:
+Two @sets are equal if and only if they have the same @elements. Formally, for any sets $A$ and $B$:
 
 $$A = B \iff (\forall x)(x \in A \iff x \in B)$$
 :::
 
 :::definition "subset"
-If $X$ and $Y$ are @{sets|set} such that every element of $X$ is also an element of $Y,$ then we say $X$ is a **subset** of $Y,$ denoted as $X \subset Y.$ Formally,
+If $X$ and $Y$ are @sets such that every element of $X$ is also an element of $Y,$ then we say $X$ is a **subset** of $Y,$ denoted as $X \subset Y.$ Formally,
 
 
 $$X \subset Y \iff (\forall x)(x \in X \implies x \in Y)$$
 :::
 
 :::definition "superset"
-If $X$ and $Y$ are @{sets|set} such that every element of $Y$ is also an element of $X,$ then we say $X$ is a **superset** of $Y,$ denoted as $X \supset Y.$ This is the same as $Y \subset X.$
+If $X$ and $Y$ are @sets such that every element of $Y$ is also an element of $X,$ then we say $X$ is a **superset** of $Y,$ denoted as $X \supset Y.$ This is the same as $Y \subset X.$
 :::
 
 :::theorem {label: set-equality-via-subset-inclusion}
@@ -43,7 +43,7 @@ Suppose $X$ and $Y$ are sets with $X \subset Y$ and $Y \subset X.$ Now, suppose 
 :::
 
 :::definition "Function" {synonyms: mapping}
-Consider two @{sets|set}, $A$ and $B,$ whose @{elements|element} may be any objects whatsoever, and suppose that with each @element $x$ of $A$ there is associated, in some manner, any @element of $B,$ which we denote by $f(x).$ Then $f$ is said to be a **function** from $A$ to $B.$
+Consider two @sets, $A$ and $B,$ whose @elements may be any objects whatsoever, and suppose that with each @element $x$ of $A$ there is associated, in some manner, any @element of $B,$ which we denote by $f(x).$ Then $f$ is said to be a **function** from $A$ to $B.$
 :::
 
 :::definition "Domain"
@@ -51,11 +51,11 @@ If $f$ is a @function from the @set $A$ to the @set $B,$ the @set $A$ is called 
 :::
 
 :::definition "Value"
-If $f$ is a @function from the @set $A$ to the @set $B,$ the @{elements|element} $f(x) \in B$ are called the **values** of $f.$
+If $f$ is a @function from the @set $A$ to the @set $B,$ the @elements $f(x) \in B$ are called the **values** of $f.$
 :::
 
 :::definition "Range"
-The @set of all @{values|value} of a @function $f$ is called the **range** of $f.$
+The @set of all @values of a @function $f$ is called the **range** of $f.$
 :::
 
 :::definition "Sequence"
@@ -66,11 +66,11 @@ If $f(n) = x_n,$ for $n \in J,$ it is customary to denote the @sequence $f$ by t
 :::
 
 :::definition "Term"
-If $f$ is a @sequence denoted as $\{x_n\},$ the @{values|value} of $f,$ that is, the @{elements|element} $x_n,$ are called the **terms** of the @sequence.
+If $f$ is a @sequence denoted as $\{x_n\},$ the @values of $f,$ that is, the @elements $x_n,$ are called the **terms** of the @sequence.
 :::
 
 :::note {label: sequence-terms-not-distinct}
-The @{terms|term} of a @sequence need not be distinct.
+The @terms of a @sequence need not be distinct.
 :::
 
 ## De Morgan's Laws
