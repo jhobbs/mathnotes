@@ -42,6 +42,7 @@ class MathBlock:
     parent: Optional["MathBlock"] = None
     content_html: Optional[str] = None  # Stores the inner HTML content (without wrapper)
     synonyms: List[Tuple[str, str]] = field(default_factory=list)  # List of (synonym_title, synonym_label)
+    auto_generated_synonyms: List[Tuple[str, str]] = field(default_factory=list)  # Auto-generated synonyms (not shown in UI)
 
     @property
     def css_class(self) -> str:
@@ -134,6 +135,68 @@ class MathBlock:
         label = re.sub(r"-+", "-", label).strip("-")
 
         return label
+    
+    @staticmethod
+    def generate_plural(word: str) -> Optional[str]:
+        """Generate the plural form of a word.
+        
+        Returns None if the word is already plural or if pluralization doesn't make sense.
+        """
+        if not word:
+            return None
+        
+        # Skip if already plural (basic heuristic)
+        if word.endswith('s') and not word.endswith('ss'):
+            return None
+        
+        # Common irregular plurals
+        irregular_plurals = {
+            'matrix': 'matrices',
+            'vertex': 'vertices', 
+            'index': 'indices',
+            'axis': 'axes',
+            'analysis': 'analyses',
+            'basis': 'bases',
+            'crisis': 'crises',
+            'hypothesis': 'hypotheses',
+            'parenthesis': 'parentheses',
+            'thesis': 'theses',
+            'formula': 'formulas',
+            'datum': 'data',
+            'criterion': 'criteria',
+            'phenomenon': 'phenomena',
+            'radius': 'radii',
+            'locus': 'loci',
+            'focus': 'foci',
+            'nucleus': 'nuclei',
+            'syllabus': 'syllabi',
+            'corpus': 'corpora',
+            'genus': 'genera',
+            # Mathematical terms
+            'modulus': 'moduli',
+            'torus': 'tori',
+            'annulus': 'annuli',
+            'calculus': 'calculi',
+        }
+        
+        word_lower = word.lower()
+        if word_lower in irregular_plurals:
+            # Preserve the original case
+            if word[0].isupper():
+                return irregular_plurals[word_lower].capitalize()
+            return irregular_plurals[word_lower]
+        
+        # Regular plural rules
+        if word.endswith('y'):
+            # If preceded by a consonant, change y to ies
+            if len(word) > 1 and word[-2] not in 'aeiou':
+                return word[:-1] + 'ies'
+            else:
+                return word + 's'
+        elif word.endswith(('s', 'ss', 'sh', 'ch', 'x', 'z', 'o')):
+            return word + 'es'
+        else:
+            return word + 's'
 
 
 class StructuredMathParser:
@@ -295,19 +358,41 @@ class StructuredMathParser:
                         label = f"{block_type.value}-{len(self._block_markers) + 1}"
 
                 # Parse synonyms for definitions
-                synonyms = []
-                if block_type == MathBlockType.DEFINITION and "synonyms" in metadata:
-                    synonyms_str = metadata["synonyms"]
-                    # Parse comma-separated synonyms
-                    for synonym_title in synonyms_str.split(","):
-                        synonym_title = synonym_title.strip()
-                        # Remove quotes if present
-                        if synonym_title.startswith('"') and synonym_title.endswith('"'):
-                            synonym_title = synonym_title[1:-1]
-                        if synonym_title:
-                            # Generate label for synonym
-                            synonym_label = MathBlock.normalize_label_from_title(synonym_title)
-                            synonyms.append((synonym_title, synonym_label))
+                synonyms = []  # Manual synonyms (shown in UI)
+                auto_generated_synonyms = []  # Auto-generated synonyms (not shown in UI)
+                
+                if block_type == MathBlockType.DEFINITION:
+                    # First add manual synonyms from metadata
+                    manual_synonym_labels = set()
+                    if "synonyms" in metadata:
+                        synonyms_str = metadata["synonyms"]
+                        # Parse comma-separated synonyms
+                        for synonym_title in synonyms_str.split(","):
+                            synonym_title = synonym_title.strip()
+                            # Remove quotes if present
+                            if synonym_title.startswith('"') and synonym_title.endswith('"'):
+                                synonym_title = synonym_title[1:-1]
+                            if synonym_title:
+                                # Generate label for synonym
+                                synonym_label = MathBlock.normalize_label_from_title(synonym_title)
+                                synonyms.append((synonym_title, synonym_label))
+                                manual_synonym_labels.add(synonym_label)
+                                
+                                # Also generate plural for manual synonyms
+                                synonym_plural = MathBlock.generate_plural(synonym_title)
+                                if synonym_plural:
+                                    synonym_plural_label = MathBlock.normalize_label_from_title(synonym_plural)
+                                    if synonym_plural_label not in manual_synonym_labels:
+                                        auto_generated_synonyms.append((synonym_plural, synonym_plural_label))
+                    
+                    # Automatically add plural form of title as a synonym
+                    if title:
+                        plural = MathBlock.generate_plural(title)
+                        if plural:
+                            plural_label = MathBlock.normalize_label_from_title(plural)
+                            # Only add if not already in manual synonyms
+                            if plural_label not in manual_synonym_labels:
+                                auto_generated_synonyms.append((plural, plural_label))
 
                 # Create block
                 block = MathBlock(
@@ -318,6 +403,7 @@ class StructuredMathParser:
                     metadata=metadata,
                     parent=parent_block,
                     synonyms=synonyms,
+                    auto_generated_synonyms=auto_generated_synonyms,
                 )
                 
                 # Assert labeling requirements
@@ -480,7 +566,7 @@ class StructuredMathParser:
             # For proofs, use bold "Proof" header (without colon)
             header_parts.append('<span class="math-block-type">Proof</span>')
         
-        # Add synonyms if they exist (for definitions)
+        # Add manual synonyms if they exist (for definitions) - don't show auto-generated ones
         if block.synonyms:
             synonym_titles = [syn[0] for syn in block.synonyms]
             header_parts.append(f'<span class="block-synonyms">(also: {", ".join(synonym_titles)})</span>')
