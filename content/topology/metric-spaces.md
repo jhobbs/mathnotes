@@ -8,7 +8,7 @@ title: Metric Spaces
 
 # Metric Spaces
 
-:::note
+:::note {label: metric-spaces-reference-note}
 This section was developed by following Rudin, *Principles of Mathematical Analysis*, Chapter 2.
 :::
 
@@ -33,7 +33,7 @@ We can denote a metric space on set $X$ with metric $d$ as the tuple $(X, d).$
 The most important metric spaces are the euclidean spaces $R^n$ together with a norm.
 
 
-:::theorem
+:::theorem {label: euclidean-space-is-metric-space}
 $(\mathbb{R}^n, d : \mathbb{R}^n \to \mathbb{R} = | \vec{x} - \vec{y} |)$ is a metric space for any $n \geq 0.$
 
 ::::proof
@@ -52,7 +52,7 @@ Therefore, $d$ is a metric on $R^n$ and $(R^n, d)$ is a metric space.
 :::
 
 
-:::remark
+:::remark {label: rn-vector-space-vs-metric-space}
 Note that $R^n$ by itself is just a vector space, but together with a norm forms a metric space. The proof above relies on the properties of norms without going into detail - norms are similar to distance metrics but they are even stricter because they require homogeneity - $a|x| = |ax|.$
 
 We could define other, non-norm metrics on $R^n,$ such as the **discrete metric,** which works for any set $X.$
@@ -71,7 +71,7 @@ d(x, y) = \begin{cases}
 $$
 :::
 
-:::remark
+:::remark {label: discrete-metric-satisfies-axioms}
 It's easy to see that this satisfies the metric axioms above for any set.
 
 Also note that every subset $Y$ of a metric space $X$ is also a metric space, since if the metric axioms hold for all points in $X,$ that necessarily includes the points in $Y.$
@@ -115,7 +115,7 @@ whenever $\vec{x}, \vec{y} \in E,$ and $0 < \lambda < 1.$
 In geometric terms, this means a set is convex if we can connect any two points in the set with a line segment whose points are all within the set.
 :::
 
-:::theorem
+:::theorem {label: balls-are-convex}
 All balls are convex.
 
 ::::proof
@@ -143,7 +143,7 @@ Similar proofs can be used to show that closed balls and $k$-cells are also conv
 
 ## Elements and Subsets of a Metric Space
 
-:::note
+:::note {label: metric-space-context}
 Assume we have a metric space $(X, d).$
 :::
 
@@ -217,7 +217,7 @@ From this, it's evident that a finite set of points has no limit points. That is
 ::::
 :::
 
-:::theorem
+:::theorem {label: complement-of-union-is-intersection-of-complements-general}
 Let ${E_\alpha}$ be a collection of sets. Then
 
 $$ \left ( \bigcup_{\alpha} E_\alpha \right )^c = \bigcap_{\alpha} \left ( E_{\alpha}^c \right ). $$
@@ -247,7 +247,7 @@ Conversely, assume $E$ is open. Let $x$ be a limit point of $E^c.$ Suppose, for 
 ::::
 :::
 
-:::remark
+:::remark {label: open-closed-intuition}
 For some intuition, consider $U = [0, 4], E = [0,3].$ Any point $x$ in $E$ has a neighborhood $N_r(x)$ that contains only points in $E$ with as $r < d(x, 3),$ so it is open. Since 3 must be in $E^c,$ we have $E^c = [3,4],$ which is obviously closed. Here, 3 is the boundary between the two sets - it is a limit point for both sets - and it has to be in one set or the other. So, $E$ is open, but not closed, since it doesn't contain one of its limit points, 3. $E^c$ is closed because if $x$ is a limit point of $E^c,$ it would be a contradiction for it to be in $E,$ which is open and only contains interior points of $E.$ $E^c$ is also not open, because 3 has no neighborhoods that contain only points of $E^c.$
 :::
 
@@ -278,7 +278,7 @@ In parts (c) and (d) of the above theorem, finiteness of the collections of sets
 ::::
 :::
 
-:::theorem
+:::theorem {label: limit-points-form-closed-set}
 Let $E'$ be the set of all limit points of a set $E$ in space $X.$ Then $E'$ is closed.
 
 ::::proof
@@ -310,7 +310,7 @@ By (a) and (c), $\overline{E}$ is the smallest closed subset of $X$ that contain
 ::::
 :::
 
-:::theorem
+:::theorem {label: set-and-closure-have-same-limit-points}
 If $E$ is a set in a metric space, then $E$ and $\overline{E}$ have the same limit points.
 
 ::::proof
@@ -322,7 +322,7 @@ Conversely, suppose $p$ is a limit point of $\overline{E}.$ Then, every neighbor
 ::::
 :::
 
-:::theorem
+:::theorem {label: set-and-its-limit-points-may-have-different-limit-points}
 A set $E$ and its limit points $E'$ do not necessarily have the same limit points. 
 ::::proof
 Consider $P = \{\frac{1}{n} | n \in \mathbb{N}\}.$ Then $P$ has one limit point, $0,$ but $P' = \{0\}$ has no limit points, since the only number that contains $0$ in all its neighborhoods is $0$ itself (see @only-infinite-sets-have-limit-points.)
@@ -330,7 +330,7 @@ Consider $P = \{\frac{1}{n} | n \in \mathbb{N}\}.$ Then $P$ has one limit point,
 :::
 
 
-:::theorem
+:::theorem {label: closure-distributes-over-finite-unions}
 Closure distributes over finite unions.
 
 If $B_n = \bigcup_{i=i}^n A_i,$ then $\overline{B_n} = \bigcup_{i=1}^n \overline{A_i}, n = 1, 2, 3, \dots.$ 

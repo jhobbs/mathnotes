@@ -34,7 +34,7 @@ $$X \subset Y \iff (\forall x)(x \in X \implies x \in Y)$$
 If $X$ and $Y$ are @{sets|set} such that every element of $Y$ is also an element of $X,$ then we say $X$ is a **superset** of $Y,$ denoted as $X \supset Y.$ This is the same as $Y \subset X.$
 :::
 
-:::theorem
+:::theorem {label: set-equality-via-subset-inclusion}
 Two sets $X$ and $Y$ are equal if and only if $X$ is a subset of $Y$ and $Y$ is a subset of $X.$
 
 ::::proof
@@ -61,7 +61,7 @@ The @set of all @{values|value} of a @function $f$ is called the **range** of $f
 :::definition "Sequence"
 A **sequence** is a @function $f$ defined on the @set $J$ of all positive integers.
 :::
-:::note
+:::note {label: sequence-notation}
 If $f(n) = x_n,$ for $n \in J,$ it is customary to denote the @sequence $f$ by the symbol $\{x_n\},$ or sometimes by $x_1, x_2, x_3, \dots.$
 :::
 
@@ -69,7 +69,7 @@ If $f(n) = x_n,$ for $n \in J,$ it is customary to denote the @sequence $f$ by t
 If $f$ is a @sequence denoted as $\{x_n\},$ the @{values|value} of $f,$ that is, the @{elements|element} $x_n,$ are called the **terms** of the @sequence.
 :::
 
-:::note
+:::note {label: sequence-terms-not-distinct}
 The @{terms|term} of a @sequence need not be distinct.
 :::
 
@@ -87,7 +87,7 @@ Suppose $x \in (A \cup B)^c.$ Then, if $x \in A$ or $x \in B,$ then $x \in A \cu
 ::::
 :::
 
-:::theorem {label:complement-of-intersection-is-union-of-complements}
+:::theorem {label: complement-of-intersection-is-union-of-complements}
 The complement of an intersection is equal to the union of complements.
 
 ::::proof

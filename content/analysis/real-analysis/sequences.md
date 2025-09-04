@@ -12,7 +12,7 @@ title: Sequences
 A **real sequence** of numbers if a function $f$ from $\mathbb{N}$ to $\mathbb{R}$.
 :::
 
-:::note
+:::note {label: real-sequence-notation}
 A @{real sequence|real-sequence} is a special case of a @sequence.
 
 Typically, we say $a_1 = f(1), a_2 = f(2), a_3 = f(3), \dots$ and write the sequence as a list $a_1, a_2, a_3, \dots.$ When it's possible to give a rule $f(n)$ for the $n$th term of a sequence, we can write $a_n = f(n)$ and refer to the sequence using just the rule. For example, $a_n = \frac{3n}{n+1} = 3/2, 6/3, 9/4, \dots$

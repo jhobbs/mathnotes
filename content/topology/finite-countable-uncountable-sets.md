@@ -7,7 +7,7 @@ title: Finite, Countable, and Uncountable Sets
 
 # Finite, Countable, and Uncountable Sets
 
-:::note
+:::note {label: finite-countable-reference-note}
 This section was developed by following Rudin, *Principles of Mathematical Analysis*, Chapter 2. The definitions and theorems are directly or nearly directly from there, but the proofs are at least attempts at expressing my own understanding.
 :::
 
@@ -39,7 +39,7 @@ A set $A$ is said to be **at most countable** if $A$ is finite or countable.
 
 ### Countably Infinite Sets
 
-:::theorem
+:::theorem {label: infinite-subset-of-countable-is-countable}
 Every infinite subset $E$ of a countably infinite set $A$ is countable.
 
 ::::proof
@@ -110,7 +110,7 @@ Rational numbers just formed from pairs of integers: $(a, b) \to a/b, b \neq 0,$
 
 ### Uncountably Infinite Sets
 
-:::theorem
+:::theorem {label: binary-sequences-are-uncountable}
 Let $A$ be the set of all sequences whose elements are the digits $0$ and $1$. This set $A$ is uncountable.
 
 ::::proof
@@ -125,8 +125,8 @@ That is, the $n$th digit of $p$ will be the opposite of whatever the $n$th digit
 This approach to proving this theorem is due to Cantor and is called diagonalization, and the animation below illustrates why.
 ::::
 
-::::corollary
-There set of real numbers is uncountable.
+::::corollary {label: reals-are-uncountable}
+The set of real numbers is uncountable.
 ::::
 
 ::::proof

@@ -4,7 +4,7 @@ layout: page
 title: Connected Sets
 ---
 
-:::note
+:::note {label: connected-sets-reference-note}
 This section was developed by following Rudin, *Principles of Mathematical Analysis*, Chapter 2.
 :::
 
@@ -24,7 +24,7 @@ We have a different - less general, but compatible - definition of connected fro
 
 This theorem helps connect the two definitions.
 
-:::theorem
+:::theorem {label: connected-sets-in-r1-are-intervals}
 A subset $E$ of the real line $R^1$ is connected if and only if it has the following property: If $x \in E, y \in E,$ and $x < z < y,$ then $z \in E.$
 
 ::::proof

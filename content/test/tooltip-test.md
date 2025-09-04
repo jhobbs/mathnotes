@@ -27,7 +27,7 @@ Let $V$ be a finite-dimensional vector space and $W$ be a subspace of $V$. Then:
 $$\dim(W) \leq \dim(V)$$
 with equality if and only if $W = V$.
 
-:::proof
+:::proof {label: dim-theorem-proof}
 Let $\{w_1, \ldots, w_k\}$ be a basis for $W$. Since $W \subseteq V$, these vectors are linearly independent in $V$. By the basis extension theorem, we can extend this to a basis of $V$.
 :::
 :::
@@ -57,7 +57,7 @@ A subset $W$ of a vector space $V$ is a subspace if and only if:
 2. $W$ is closed under addition
 3. $W$ is closed under scalar multiplication
 
-:::example
+:::example {label: symmetric-matrices-subspace}
 The set of all $n \times n$ symmetric matrices forms a subspace of $M_n(\mathbb{R})$.
 :::
 :::

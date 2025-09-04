@@ -48,26 +48,32 @@
   font-style: italic;
 }
 
-/* References section */
-.block-index-page .block-references {
+/* References section - embedded in blocks, hidden by default */
+.block-references-section {
+  display: none;
+}
+
+/* Show references only on block index pages */
+.block-index-page .block-references-section {
+  display: block;
   margin-top: var(--gap-base);
   padding: var(--gap-sm);
   background: var(--color-code-bg);
   border-radius: var(--radius-sm);
 }
 
-.block-index-page .block-references details {
+.block-index-page .block-references-section details {
   cursor: pointer;
 }
 
-.block-index-page .block-references summary {
+.block-index-page .block-references-section summary {
   font-weight: 500;
   color: var(--text-secondary);
   padding: var(--gap-xs);
   user-select: none;
 }
 
-.block-index-page .block-references summary:hover {
+.block-index-page .block-references-section summary:hover {
   color: var(--text-primary);
 }
 
@@ -77,25 +83,25 @@
   padding-left: var(--gap-base);
 }
 
-.block-index-page .block-references h4 {
+.block-index-page .block-references-section h4 {
   font-size: var(--font-size-sm);
   font-weight: 600;
   margin-bottom: var(--gap-xs);
   color: var(--text-secondary);
 }
 
-.block-index-page .block-references ul {
+.block-index-page .block-references-section ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.block-index-page .block-references li {
+.block-index-page .block-references-section li {
   padding: var(--gap-xs) 0;
   font-size: var(--font-size-sm);
 }
 
-.block-index-page .block-references li::before {
+.block-index-page .block-references-section li::before {
   content: "→ ";
   color: var(--text-secondary);
   margin-right: var(--gap-xs);
@@ -117,14 +123,14 @@
     --text-secondary: var(--color-text-secondary);
   }
   
-  .block-index-page .block-references {
+  .block-index-page .block-references-section {
     background: var(--color-bg-secondary);
   }
 }
 
 /* Mobile responsive */
 @media (--phone) {
-  .block-index-page .block-references {
+  .block-index-page .block-references-section {
     padding: var(--gap-xs);
   }
   

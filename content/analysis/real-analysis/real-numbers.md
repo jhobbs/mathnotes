@@ -77,7 +77,7 @@ $$ 0 \leq x - q < \frac{1}{n} < \epsilon, $$
 so $|x - q| < \epsilon.$ Therefore, every @neighborhood of $x$ contains some $q \in \mathbb{Q},$ and so $x$ is either a limit point of $\mathbb{Q}$ or else $x \in \mathbb{Q},$ and so the rationals are therefore dense in the reals.
 ::::
 
-::::corollary
+::::corollary {label: rational-between-any-two-reals}
 If $x, y \in \mathbb{R},$ and $x < y,$ then there exists a $p \in \mathbb{Q}$ such that $x < p < y.$ That is, there is always a rational number between any two distinct real numbers.
 
 :::::proof

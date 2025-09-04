@@ -203,6 +203,9 @@ class StructuredMathParser:
         """
         processed_lines = []
         i = start_idx
+        
+        # Track counts of nested blocks by type for auto-numbering
+        nested_block_counts = {}
 
         while i < len(lines):
             line = lines[i]
@@ -241,6 +244,55 @@ class StructuredMathParser:
                 label = metadata.get("label")
                 if not label and block_type == MathBlockType.DEFINITION and title:
                     label = MathBlock.normalize_label_from_title(title)
+                
+                # Auto-generate labels for proof blocks and certain nested blocks
+                if not label:
+                    # Generate label for proof blocks
+                    if block_type == MathBlockType.PROOF:
+                        if parent_block and parent_block.label:
+                            # Nested proof - use parent's label with count if needed
+                            base_label = f"proof-of-{parent_block.label}"
+                            # Check if we need to add a count to make it unique
+                            block_type_key = f"{id(parent_block)}-proof"
+                            if block_type_key not in nested_block_counts:
+                                nested_block_counts[block_type_key] = 0
+                            nested_block_counts[block_type_key] += 1
+                            count = nested_block_counts[block_type_key]
+                            if count == 1:
+                                label = base_label
+                            else:
+                                label = f"{base_label}-{count}"
+                        else:
+                            # Top-level proof or parent has no label - generate unique label
+                            # Use the block count to ensure uniqueness
+                            label = f"proof-{len(self._block_markers) + 1}"
+                    
+                    # Generate labels for nested non-corollary/non-lemma blocks
+                    elif parent_block and parent_block.label and block_type in [
+                        MathBlockType.NOTE,
+                        MathBlockType.EXAMPLE,
+                        MathBlockType.REMARK,
+                        MathBlockType.INTUITION,
+                        MathBlockType.EXERCISE,
+                        MathBlockType.SOLUTION,
+                    ]:
+                        # Count how many blocks of this type we've seen under this parent
+                        block_type_key = f"{id(parent_block)}-{block_type.value}"
+                        if block_type_key not in nested_block_counts:
+                            nested_block_counts[block_type_key] = 0
+                        nested_block_counts[block_type_key] += 1
+                        count = nested_block_counts[block_type_key]
+                        
+                        # Generate label based on parent and type
+                        if count == 1:
+                            label = f"{parent_block.label}-{block_type.value}"
+                        else:
+                            label = f"{parent_block.label}-{block_type.value}-{count}"
+                    
+                    # Generate implicit labels for all other unlabeled blocks
+                    else:
+                        # Use block type and count to generate unique label
+                        label = f"{block_type.value}-{len(self._block_markers) + 1}"
 
                 # Parse synonyms for definitions
                 synonyms = []
@@ -267,6 +319,20 @@ class StructuredMathParser:
                     parent=parent_block,
                     synonyms=synonyms,
                 )
+                
+                # Assert labeling requirements
+                # Top-level theorems, lemmas, propositions, corollaries, and axioms MUST have explicit labels
+                if parent_block is None and block_type in [
+                    MathBlockType.THEOREM,
+                    MathBlockType.LEMMA,
+                    MathBlockType.PROPOSITION,
+                    MathBlockType.COROLLARY,
+                    MathBlockType.AXIOM,
+                ]:
+                    assert label, f"Top-level {block_type.value} blocks must have an explicit label (title: {title})"
+                
+                # All blocks should now have labels (either explicit or implicit)
+                assert label, f"All blocks should have labels after implicit generation, but {block_type.value} has none"
 
                 # Add to parent's children if nested
                 if parent_block:
@@ -301,6 +367,7 @@ class StructuredMathParser:
                             nested_level = len(nested_start_match.group(1)) - 3
                             if nested_level == level + 1:
                                 # This is a direct child block
+                                # Note: nested_block_counts is scoped to this level, child blocks get their own
                                 child_lines, next_i = self._parse_blocks(lines, i, block, nested_level)
                                 block_content_lines.extend(child_lines)
                                 i = next_i
@@ -387,9 +454,9 @@ class StructuredMathParser:
 
         attrs = [f'class="{" ".join(css_classes)}"']
 
-        if block.label:
-            attrs.append(f'id="{block.label}"')
-            attrs.append(f'data-label="{block.label}"')
+        # All blocks now have labels
+        attrs.append(f'id="{block.label}"')
+        attrs.append(f'data-label="{block.label}"')
 
         # Add any additional metadata as data attributes
         for key, value in block.metadata.items():
@@ -418,9 +485,8 @@ class StructuredMathParser:
             synonym_titles = [syn[0] for syn in block.synonyms]
             header_parts.append(f'<span class="block-synonyms">(also: {", ".join(synonym_titles)})</span>')
         
-        # Add reference label if it exists (for all block types)
-        if block.label:
-            header_parts.append(f'<span class="block-label-ref">@{block.label}</span>')
+        # Add reference label (all blocks now have labels)
+        header_parts.append(f'<span class="block-label-ref">@{block.label}</span>')
         
         header_parts.append("</div>")
         html_parts.extend(header_parts)

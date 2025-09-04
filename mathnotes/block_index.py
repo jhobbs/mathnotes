@@ -27,12 +27,8 @@ class BlockReference:
     @property
     def full_url(self) -> str:
         """Get the full URL including the fragment for this block."""
-        # Canonical URL now always has trailing slash from content_discovery
-        if self.block.label:
-            return f"{self.canonical_url}#{self.block.label}"
-        else:
-            # For unlabeled blocks, just link to the page
-            return self.canonical_url
+        # All blocks now have labels (either explicit or implicit)
+        return f"{self.canonical_url}#{self.block.label}"
 
 
 class BlockIndex:
@@ -57,11 +53,14 @@ class BlockIndex:
         # Phase 1: Scan and index all blocks
         self._scan_directory(content_dir)
 
-        # Phase 2: Render all blocks and build reverse index simultaneously
-        self._render_all_blocks()
+        # Phase 2: Build the reverse index by collecting all references
+        self._collect_all_references()
         
         # Phase 3: Compute transitive references
-        self.reverse_index.compute_transitive_references(max_depth=3)
+        self.reverse_index.compute_transitive_references()
+        
+        # Phase 4: Render all blocks with reference information now available
+        self._render_all_blocks()
 
         self._is_built = True
 
@@ -129,27 +128,26 @@ class BlockIndex:
                 if block.parent is None:
                     self.all_blocks.append(ref)
                 
-                # Add to the label index if it has a label (for cross-references)
-                if block.label:
-                    # Normalize label for storage (case-insensitive lookup)
-                    from .structured_math import MathBlock
+                # Add to the label index for cross-references (all blocks now have labels)
+                # Normalize label for storage (case-insensitive lookup)
+                from .structured_math import MathBlock
 
-                    normalized_label = MathBlock.normalize_label_from_title(block.label)
+                normalized_label = MathBlock.normalize_label_from_title(block.label)
 
-                    if normalized_label in self.index:
-                        existing = self.index[normalized_label]
-                        print(
-                            f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
-                        )
-                    self.index[normalized_label] = ref
-                    
-                    # Register with reverse index
-                    self.reverse_index.add_block_definition(
-                        label=block.label,
-                        file_path=file_path,
-                        title=block.title or block.label,
-                        url=f"/mathnotes/{canonical_url}#{block.label}"
+                if normalized_label in self.index:
+                    existing = self.index[normalized_label]
+                    print(
+                        f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
                     )
+                self.index[normalized_label] = ref
+                
+                # Register with reverse index
+                self.reverse_index.add_block_definition(
+                    label=block.label,
+                    file_path=file_path,
+                    title=block.title or block.label,
+                    url=f"/mathnotes/{canonical_url}#{block.label}"
+                )
                 
                 # Also register synonyms as aliases pointing to the same block
                 if block.synonyms:
@@ -183,7 +181,7 @@ class BlockIndex:
                             )
 
     def _render_all_blocks(self):
-        """Phase 2: Render all blocks now that the index is complete."""
+        """Phase 4: Render all blocks now that the index and references are complete."""
         for file_info in self._pending_files:
             file_path = file_info["file_path"]
             canonical_url = file_info["canonical_url"]
@@ -195,66 +193,6 @@ class BlockIndex:
 
             # Initialize rendered blocks storage for this file
             self.rendered_blocks[file_path] = {}
-            
-            # Process page-level references (outside of blocks)
-            # We need to actually remove ALL block content, not just markers
-            # Read the original content
-            with open(file_path, "r", encoding="utf-8") as f:
-                post = frontmatter.load(f)
-                original_content = post.content
-                
-                # Parse again to get content with markers
-                from .structured_math import StructuredMathParser as SMParser
-                temp_parser = SMParser()
-                content_with_markers, _ = temp_parser.parse(original_content)
-                
-                # Now remove all block markers to get only non-block content
-                remaining_content = content_with_markers
-                for marker_id in block_markers.keys():
-                    # Remove the entire line containing the marker
-                    lines = remaining_content.split('\n')
-                    filtered_lines = [line for line in lines if marker_id not in line]
-                    remaining_content = '\n'.join(filtered_lines)
-                
-                # Only process if there's actual content left
-                if remaining_content.strip():
-                    # Process page-level references
-                    from .tooltip_collector import TooltipCollectingBlockReferenceProcessor
-                    page_ref_processor = TooltipCollectingBlockReferenceProcessor(
-                        block_markers={}, current_file=file_path, block_index=self
-                    )
-                    page_ref_processor.process_references(remaining_content)
-                    
-                    # Only add references if we found any
-                    if page_ref_processor.referenced_labels or page_ref_processor.embedded_labels:
-                        # Add page-level references to reverse index
-                        base_url = f"/mathnotes/{canonical_url}"
-                        
-                        # Add regular references
-                        for referenced_label in page_ref_processor.referenced_labels:
-                            self.reverse_index.add_reference(
-                                referenced_label=referenced_label,
-                                source_file=file_path,
-                                source_label=None,  # Page-level, not from a specific block
-                                source_title=page_title,
-                                source_url=base_url,
-                                context="",
-                                is_embed=False,
-                                is_from_block=False  # This is truly page-level
-                            )
-                        
-                        # Add embedded references
-                        for embedded_label in page_ref_processor.embedded_labels:
-                            self.reverse_index.add_reference(
-                                referenced_label=embedded_label,
-                                source_file=file_path,
-                                source_label=None,  # Page-level, not from a specific block
-                                source_title=page_title,
-                                source_url=base_url,
-                                context="",
-                                is_embed=True,
-                                is_from_block=False  # This is truly page-level
-                            )
 
             # Process blocks in dependency order: children before parents
             # First, identify root blocks (blocks without parents) and process recursively
@@ -269,8 +207,8 @@ class BlockIndex:
 
                 # Now process this block
                 base_url = f"/mathnotes/{canonical_url}"
-                # canonical_url now always has trailing slash from content_discovery
-                full_url = f"{base_url}#{block.label}" if block.label else base_url
+                # All blocks now have labels, so we can always add the fragment
+                full_url = f"{base_url}#{block.label}"
                 self._process_block_content(block, block_markers, parser, full_url)
                 # Store the rendered HTML by marker ID
                 self.rendered_blocks[file_path][marker_id] = block.rendered_html
@@ -283,6 +221,119 @@ class BlockIndex:
 
         # Clean up temporary storage
         del self._pending_files
+    
+    def _collect_all_references(self):
+        """Phase 2: Collect all references to build the reverse index."""
+        for file_info in self._pending_files:
+            file_path = file_info["file_path"]
+            canonical_url = file_info["canonical_url"]
+            block_markers = file_info["block_markers"]
+            page_title = file_info.get("page_title", "")
+            
+            # Process page-level references (outside of blocks)
+            with open(file_path, "r", encoding="utf-8") as f:
+                post = frontmatter.load(f)
+                original_content = post.content
+                
+                # Parse again to get content with markers
+                from .structured_math import StructuredMathParser as SMParser
+                temp_parser = SMParser()
+                content_with_markers, _ = temp_parser.parse(original_content)
+                
+                # Now remove all block markers to get only non-block content
+                remaining_content = content_with_markers
+                for marker_id in block_markers.keys():
+                    lines = remaining_content.split('\n')
+                    filtered_lines = [line for line in lines if marker_id not in line]
+                    remaining_content = '\n'.join(filtered_lines)
+                
+                # Only process if there's actual content left
+                if remaining_content.strip():
+                    from .tooltip_collector import TooltipCollectingBlockReferenceProcessor
+                    page_ref_processor = TooltipCollectingBlockReferenceProcessor(
+                        block_markers={}, current_file=file_path, block_index=self
+                    )
+                    page_ref_processor.process_references(remaining_content)
+                    
+                    if page_ref_processor.referenced_labels or page_ref_processor.embedded_labels:
+                        base_url = f"/mathnotes/{canonical_url}"
+                        
+                        for referenced_label in page_ref_processor.referenced_labels:
+                            self.reverse_index.add_reference(
+                                referenced_label=referenced_label,
+                                source_file=file_path,
+                                source_label=None,
+                                source_title=page_title,
+                                source_url=base_url,
+                                context="",
+                                is_embed=False,
+                                is_from_block=False
+                            )
+                        
+                        for embedded_label in page_ref_processor.embedded_labels:
+                            self.reverse_index.add_reference(
+                                referenced_label=embedded_label,
+                                source_file=file_path,
+                                source_label=None,
+                                source_title=page_title,
+                                source_url=base_url,
+                                context="",
+                                is_embed=True,
+                                is_from_block=False
+                            )
+            
+            # Collect references from all blocks
+            def collect_block_references(block, marker_id):
+                """Recursively collect references from a block and its children."""
+                # First process child blocks
+                for child_marker_id, child_block in block_markers.items():
+                    if child_block.parent == block:
+                        collect_block_references(child_block, child_marker_id)
+                
+                # Collect references from this block
+                from .tooltip_collector import TooltipCollectingBlockReferenceProcessor
+                block_ref_processor = TooltipCollectingBlockReferenceProcessor(
+                    block_markers=block_markers, current_file=file_path, block_index=self
+                )
+                block_ref_processor.process_references(block.content)
+                
+                # Add references to reverse index
+                base_url = f"/mathnotes/{canonical_url}"
+                # All blocks now have labels, so we can always add the fragment
+                full_url = f"{base_url}#{block.label}"
+                
+                # Determine source info for the reference
+                # Now that all blocks have labels (either explicit or implicit), this is simpler
+                source_label = block.label
+                source_title = block.title or block.label
+                
+                # Add references
+                for referenced_label in block_ref_processor.referenced_labels:
+                    self.reverse_index.add_reference(
+                        referenced_label=referenced_label,
+                        source_file=file_path,
+                        source_label=source_label,
+                        source_title=source_title,
+                        source_url=full_url,
+                        context="",
+                        is_embed=False
+                    )
+                
+                for embedded_label in block_ref_processor.embedded_labels:
+                    self.reverse_index.add_reference(
+                        referenced_label=embedded_label,
+                        source_file=file_path,
+                        source_label=source_label,
+                        source_title=source_title,
+                        source_url=full_url,
+                        context="",
+                        is_embed=True
+                    )
+            
+            # Process all root blocks
+            for marker_id, block in block_markers.items():
+                if block.parent is None:
+                    collect_block_references(block, marker_id)
 
     def _process_block_content(
         self, block: MathBlock, block_markers: Dict[str, MathBlock], parser: StructuredMathParser, full_url: str
@@ -302,71 +353,7 @@ class BlockIndex:
         canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
         base_url = f"/mathnotes/{canonical_url}"
         
-        # Add references to reverse index
-        # For blocks without labels (like nested proofs), find the parent block's info
-        source_label = block.label
-        source_title = block.title or block.label
-        source_url = full_url
-        
-        # Helper to extract a meaningful snippet from block content
-        def get_content_snippet(content: str, max_length: int = 60) -> str:
-            """Extract first meaningful line of text from block content."""
-            import re
-            # Remove math delimiters and clean up
-            clean = re.sub(r'\$[^$]+\$', '...', content)  # Replace inline math
-            clean = re.sub(r'\$\$[^$]+\$\$', '...', clean)  # Replace display math
-            clean = re.sub(r':+\w+', '', clean)  # Remove block markers
-            clean = re.sub(r'@\{[^}]+\}', '', clean)  # Remove references
-            clean = re.sub(r'@\w+', '', clean)  # Remove simple references
-            clean = re.sub(r'\s+', ' ', clean).strip()  # Normalize whitespace
-            
-            if len(clean) > max_length:
-                clean = clean[:max_length-3] + "..."
-            return clean if clean else "Block content"
-        
-        if not block.label and block.parent:
-            # This is a nested block without its own label
-            # Use parent block's info but indicate this is a nested block
-            parent = block.parent
-            while parent and not parent.label:
-                parent = parent.parent
-            
-            if parent and parent.label:
-                source_label = parent.label
-                source_title = f"{block.block_type.value.capitalize()} in {parent.title or parent.label}"
-                source_url = f"{base_url}#{parent.label}" if parent.label else base_url
-            else:
-                # No labeled parent found, use content snippet
-                snippet = get_content_snippet(block.content)
-                source_title = f"{block.block_type.value.capitalize()}: {snippet}"
-        elif not block.label:
-            # Top-level block without label - use content snippet
-            snippet = get_content_snippet(block.content)
-            source_title = f"{block.block_type.value.capitalize()}: {snippet}"
-        
-        # Add regular references
-        for referenced_label in block_ref_processor.referenced_labels:
-            self.reverse_index.add_reference(
-                referenced_label=referenced_label,
-                source_file=parser.current_file,
-                source_label=source_label,
-                source_title=source_title,
-                source_url=source_url,
-                context="",
-                is_embed=False
-            )
-        
-        # Add embedded references
-        for embedded_label in block_ref_processor.embedded_labels:
-            self.reverse_index.add_reference(
-                referenced_label=embedded_label,
-                source_file=parser.current_file,
-                source_label=source_label,
-                source_title=source_title,
-                source_url=source_url,
-                context="",
-                is_embed=True
-            )
+        # Note: References are now collected in the separate _collect_all_references phase
 
         # Protect math expressions
         math_protector = MathProtector()
@@ -397,7 +384,77 @@ class BlockIndex:
 
         # Render the complete block HTML using the same method as page view
         # This will wrap the content and replace child markers with full child HTML
-        block.rendered_html = parser.render_block_html(block, html_content, block_markers, self.md, full_url)
+        rendered_html = parser.render_block_html(block, html_content, block_markers, self.md, full_url)
+        
+        # Add reference information (all blocks now have labels)
+        # Get references for this block
+        reverse_entry = self.reverse_index.get_references_for_label(block.label)
+        
+        if reverse_entry.direct_references or reverse_entry.transitive_references:
+            # Build reference HTML that will be hidden by default via CSS
+            ref_html = ['<div class="block-references-section">']
+            ref_html.append('<details>')
+            
+            # Count references
+            direct_count = len(reverse_entry.direct_references)
+            transitive_count = sum(len(refs) for refs in reverse_entry.transitive_references.values())
+            summary_parts = [f'{direct_count} direct']
+            if transitive_count > 0:
+                summary_parts.append(f'{transitive_count} transitive')
+            ref_html.append(f'<summary>Referenced by ({", ".join(summary_parts)})</summary>')
+            
+            # Direct references
+            if reverse_entry.direct_references:
+                ref_html.append('<div class="direct-references">')
+                ref_html.append('<h4>Direct references:</h4>')
+                ref_html.append('<ul>')
+                for ref in reverse_entry.direct_references:
+                    ref_html.append('<li>')
+                    if ref.source_url:
+                        ref_html.append(f'<a href="{ref.source_url}">')
+                        ref_html.append(ref.source_title or ref.source_label or ref.source_file.replace('content/', ''))
+                        ref_html.append('</a>')
+                    else:
+                        ref_html.append(ref.source_title or ref.source_label or ref.source_file)
+                    if ref.is_embed:
+                        ref_html.append(' <span class="ref-type">(embedded)</span>')
+                    ref_html.append('</li>')
+                ref_html.append('</ul>')
+                ref_html.append('</div>')
+            
+            # Transitive references
+            if reverse_entry.transitive_references:
+                ref_html.append('<div class="transitive-references">')
+                for depth, refs in reverse_entry.transitive_references.items():
+                    ref_html.append(f'<h4>Transitive (depth {depth}):</h4>')
+                    ref_html.append('<ul>')
+                    for ref in refs:
+                        ref_html.append('<li>')
+                        if ref.source_url:
+                            ref_html.append(f'<a href="{ref.source_url}">')
+                            ref_html.append(ref.source_title or ref.source_label or ref.source_file.replace('content/', ''))
+                            ref_html.append('</a>')
+                        else:
+                            ref_html.append(ref.source_title or ref.source_label or ref.source_file)
+                        ref_html.append('</li>')
+                    ref_html.append('</ul>')
+                ref_html.append('</div>')
+            
+            ref_html.append('</details>')
+            ref_html.append('</div>')
+            
+            # Insert the reference HTML before the closing </div> of the math block
+            # The rendered HTML ends with </div></div> (content div and block div)
+            reference_section = ''.join(ref_html)
+            
+            # The HTML has two closing divs at the end (content div and block div)
+            # We want to insert the reference section just before the final closing div
+            # So we need to find the last </div> and insert before it
+            last_div_idx = rendered_html.rfind('</div>')
+            if last_div_idx != -1:
+                rendered_html = rendered_html[:last_div_idx] + reference_section + rendered_html[last_div_idx:]
+        
+        block.rendered_html = rendered_html
 
     def get_reference(self, label: str) -> Optional[BlockReference]:
         """Get a block reference by its label."""
