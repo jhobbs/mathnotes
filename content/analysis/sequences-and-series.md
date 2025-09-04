@@ -40,7 +40,7 @@ The @sequence $\{p_n\}$ is said to be **bounded** if its @{range|range-sequence}
 In the following theorems, let $\{p_n\}$ be a @sequence in a @metric-space $X.$
 :::
 
-:::theorem {label: sequence-converges-iff-neighborhood-contains-all-but-finitely-many}
+:::theorem {label: sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}
 $\{p_n\}$ converges to $p \in X$ if and only if every neighborhood of $p$ contains $p_n$ for all but finitely many $n.$
 
 ::::proof
@@ -48,4 +48,29 @@ Suppose $\{p_n\}$ @{converges|converge} to $p \in X.$ Let $\epsilon > 0.$ For so
 
 Conversely, suppose every @neighborhood of $p$ contains all but finitely many $p_n,$ i.e., for all but $N$ elements of $\{p_n\}.$ Let $\epsilon > 0.$ Then, $p_n \in B_\epsilon(p)$ whenever $n \geq N,$ therefore, $d(p, p_n) < \epsilon.$
 ::::
+:::
+
+:::theorem {label: limits-of-sequences-are-unique}
+If $p \in X, p' \in X$ and $\{p_n\}$ converges to $p$ and $p',$ then $p = p'.$
+
+::::proof
+Suppose, for contradiction, that $p \neq p'.$ Then, $\epsilon = d(p, p') > 0.$ Let $\delta = \epsilon/2$ and $B_\delta(p), B_\delta(p')$ be @{open balls|ball} around $p$ and $p',$ respectively. This means that @{only finitely many points from $\{p_n\}$ are not in $B_\delta(p)$|sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. However, since $B_\delta(p)$ and $B_\delta(p')$ are disjoint by construction, this means only finitely many points of $\{p_n\}$ are in $B_\delta(p'),$ a contradiction. Therefore, our assumption that $p \neq p'$ is incorrect, so $p = p'.$
+::::
+:::
+
+:::theorem {label: convergent-sequences-are-bounded}
+If $\{p_n\}$ @{converges|converge}, then $\{p_n\}$ is @{bounded|bounded-sequence}.
+
+::::proof
+Let $\epsilon > 0.$ @{Only finitely many points in $\{p_n\}$ lie outside of $B_\epsilon(p)$|sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. That is, for some integer $N,$ only the points $p_n$ where $n \leq N$ lie outside of $B_\epsilon(p).$ Let $\delta = \max\{\epsilon, d(p, p_1), d(p, p_2), \dots, d(p, p_n)\}, n = 1, 2, \dots, N.$ Then, $d(p, p_n) < \delta$ for all $n = 1, 2, 3, \dots.$
+::::
+:::
+
+:::theorem {label: limit-point-implies-convergent-sequence}
+If $E \subset X$ and if $p$ is a @limit-point of $E,$ then there is a @sequence $\{p_n\}$ in $E$ such that $p = \lim_{n \to \infty} p_n.$
+
+::::proof
+For each $n = 1,2,3 \dots,$ @{there is a point $p_n \in E$ such that $d(p, p_n) < 1/n$|limit-point}. Let $\epsilon > 0,$ and pick $N$ so that $N \epsilon > 1.$ Then, if $n > N,$ $d(p, p_n) < \epsilon,$ so $\lim_{n \to \infty} p_n = p$.
+::::
+
 :::
