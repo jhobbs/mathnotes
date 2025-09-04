@@ -65,6 +65,10 @@ class ReverseIndex:
             self.label_info[normalized_label] = (file_path, title, url)
             if normalized_label not in self.index:
                 self.index[normalized_label] = ReverseIndexEntry(normalized_label)
+            # Ensure the block exists in reference_graph even if it doesn't reference anything
+            # This is needed for transitive reference computation
+            if normalized_label not in self.reference_graph:
+                self.reference_graph[normalized_label] = set()
     
     def add_reference(self, 
                      referenced_label: str,
@@ -196,14 +200,17 @@ class ReverseIndex:
                 is_embed=True
             )
     
-    def compute_transitive_references(self, max_depth: int = 2):
+    def compute_transitive_references(self):
         """
-        Compute transitive references up to specified depth.
+        Compute all transitive references to completion.
         
         For each block, find all blocks that reference it transitively:
-        - Depth 1: Direct references (already stored)
-        - Depth 2: Blocks that reference blocks that reference this one
-        - Depth 3: And so on...
+        - Depth 1: Blocks that reference blocks that directly reference this one
+        - Depth 2: Blocks that reference blocks at depth 1
+        - And so on until no new references are found
+        
+        Note: Direct references are stored separately and are NOT included
+        in transitive_references.
         """
         
         # Build reverse graph (referenced_label -> set of labels that reference it)
@@ -218,9 +225,15 @@ class ReverseIndex:
             
             # Use BFS to find transitive references at each depth
             visited = {label}  # Don't include self-references
-            current_level = {label}
             
-            for depth in range(1, max_depth + 1):
+            # Start with direct referencers (not stored as transitive)
+            direct_referencers = reverse_graph.get(label, set())
+            visited.update(direct_referencers)
+            current_level = direct_referencers
+            
+            # Now find all transitive references until exhausted
+            depth = 1
+            while current_level:
                 next_level = set()
                 
                 for current_label in current_level:
@@ -231,6 +244,7 @@ class ReverseIndex:
                             visited.add(referencing_label)
                             
                             # Create reference info for this transitive reference
+                                
                             if referencing_label in self.label_info:
                                 file_path, title, url = self.label_info[referencing_label]
                                 ref_info = ReferenceInfo(
@@ -247,45 +261,25 @@ class ReverseIndex:
                                 entry.transitive_references[depth].append(ref_info)
                 
                 current_level = next_level
+                depth += 1
+        
     
-    def get_references_for_label(self, label: str, max_depth: int = 0) -> ReverseIndexEntry:
+    def get_references_for_label(self, label: str) -> ReverseIndexEntry:
         """
         Get all references for a given label.
         
         Args:
             label: The label to look up
-            max_depth: Maximum transitive depth (0 = direct only)
         
         Returns:
-            ReverseIndexEntry with direct and transitive references
+            ReverseIndexEntry with direct and all transitive references
         """
         normalized_label = self._normalize_label(label)
         
         if normalized_label not in self.index:
             return ReverseIndexEntry(normalized_label)
         
-        entry = self.index[normalized_label]
-        
-        # Filter transitive references by depth
-        if max_depth > 0:
-            filtered_transitive = {}
-            for depth in range(1, max_depth + 1):
-                if depth in entry.transitive_references:
-                    filtered_transitive[depth] = entry.transitive_references[depth]
-            
-            # Create a new entry with filtered transitive references
-            return ReverseIndexEntry(
-                label=entry.label,
-                direct_references=entry.direct_references,
-                transitive_references=filtered_transitive
-            )
-        else:
-            # Return only direct references
-            return ReverseIndexEntry(
-                label=entry.label,
-                direct_references=entry.direct_references,
-                transitive_references={}
-            )
+        return self.index[normalized_label]
     
     def _normalize_label(self, label: Optional[str]) -> str:
         """Normalize a label for consistent lookups."""

@@ -6,7 +6,7 @@ title: Compact Sets
 
 # Compact Sets
 
-:::note
+:::note {label: compact-sets-reference-note}
 This section was developed by following Rudin, *Principles of Mathematical Analysis*, Chapter 2.
 :::
 
@@ -20,7 +20,7 @@ A subset $K$ of a metric space $X$ is said to be **compact** if every open cover
 $$ K \subset G_{\alpha_1} \cup \cdots \cup G_{\alpha_n}. $$
 :::
 
-:::theorem
+:::theorem {label: finite-sets-are-compact}
 Every finite set is compact.
 
 ::::proof
@@ -36,7 +36,7 @@ so $\{G_\alpha\}, \alpha \in A_0$ is a finite sub-cover of the original open cov
 ::::
 :::
 
-:::theorem
+:::theorem {label: compact-relative-to-subspace}
 Suppose $K \subset Y \subset X.$ Then $K$ is compact relative to $X$ iff $K$ is compact relative to $Y.$
 
 ::::proof
@@ -74,7 +74,7 @@ Suppose $F \subset K \subset X,$ with $F$ closed relative to $X,$ and $K$ compac
 If $F^c \in \Phi,$ we may, but aren't required, to exclude it, and still have a finite open cover of $F.$
 ::::
 
-::::corollary
+::::corollary {label: intersection-of-closed-and-compact-is-compact}
 If $F$ is closed and $K$ is compact, then $F \cap K$ is compact.
 
 :::::proof

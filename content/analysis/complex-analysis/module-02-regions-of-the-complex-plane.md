@@ -7,7 +7,7 @@ title: Regions of the Complex Plane
 
 # Regions of the Complex Plane
 
-:::note
+:::note {label: complex-regions-overlap-note}
 This overlaps with the definitions in [[metric-spaces]] - I need to combine these!
 :::
 

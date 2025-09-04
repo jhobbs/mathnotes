@@ -26,62 +26,6 @@
                 <div class="embedded-block" data-embed-label="{{ item.block.block.label }}">
                     {{ item.block.block.rendered_html|safe }}
                     <div class="embedded-source">from <a href="{{ item.block.full_url }}">{{ item.block.page_title }}</a></div>
-                    
-                    {% if item.direct_references or item.transitive_references %}
-                        <div class="block-references">
-                            <details>
-                                <summary>Referenced by ({{ item.direct_references|length }} direct{% if item.transitive_references %}, {{ item.transitive_references.values()|map('length')|sum }} transitive{% endif %})</summary>
-                                
-                                {% if item.direct_references %}
-                                    <div class="direct-references">
-                                        <h4>Direct references:</h4>
-                                        <ul>
-                                            {% for ref in item.direct_references %}
-                                                <li>
-                                                    {% if ref.source_url %}
-                                                        <a href="{{ ref.source_url }}">
-                                                            {{ ref.source_title or ref.source_label or ref.source_file | replace('content/', '') }}
-                                                            {% if ref.is_from_block %}
-                                                                <span class="ref-location">(block)</span>
-                                                            {% else %}
-                                                                <span class="ref-location">(page)</span>
-                                                            {% endif %}
-                                                        </a>
-                                                    {% else %}
-                                                        {{ ref.source_title or ref.source_label or ref.source_file }}
-                                                    {% endif %}
-                                                    {% if ref.is_embed %}
-                                                        <span class="ref-type">(embedded)</span>
-                                                    {% endif %}
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                {% endif %}
-                                
-                                {% if item.transitive_references %}
-                                    <div class="transitive-references">
-                                        {% for depth, refs in item.transitive_references.items() %}
-                                            <h4>Transitive (depth {{ depth }}):</h4>
-                                            <ul>
-                                                {% for ref in refs %}
-                                                    <li>
-                                                        {% if ref.source_url %}
-                                                            <a href="{{ ref.source_url }}">
-                                                                {{ ref.source_title or ref.source_label or ref.source_file | replace('content/', '') }}
-                                                            </a>
-                                                        {% else %}
-                                                            {{ ref.source_title or ref.source_label or ref.source_file }}
-                                                        {% endif %}
-                                                    </li>
-                                                {% endfor %}
-                                            </ul>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </details>
-                        </div>
-                    {% endif %}
                 </div>
             {% endfor %}
         </div>

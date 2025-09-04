@@ -6,7 +6,7 @@ title: Perfect Sets and More
 
 ## Perfect Sets
 
-:::note
+:::note {label: perfect-sets-reference-note}
 This section was developed by following Rudin, *Principles of Mathematical Analysis*, Chapter 2.
 :::
 
@@ -92,7 +92,7 @@ Since each $\{x_i\}_n$ is finite, and there are countably many $\{x_i\}_n,$ the 
 ::::
 :::
 
-:::theorem
+:::theorem {label: compact-metric-space-has-countable-base}
 Every compact metric space has a countable base and is therefore separable.
 
 ::::proof
@@ -106,7 +106,7 @@ Because @{the union of a sequence of countable sets is countable|union-of-a-sequ
 ::::
 :::
 
-:::theorem
+:::theorem {label: infinite-subset-has-limit-point-implies-compact}
 Let $X$ be a metric space in which every infinite subset has a limit point. Then $X$ is compact.
 
 ::::proof
@@ -129,7 +129,7 @@ Now, note that each $F_{n+1} \subset F_n,$ because $F_{n+1}$ is formed by exclud
 :::definition "Condensation Point"
 A point $p$ in a metric space $X$ is said to be a **condensation point** of a set $E \subset X$ if every neighborhood of $p$ contains uncountably many points of $E.$ 
 :::
-:::example
+:::example {label: condensation-point-example}
 Let $p \in \mathbb{R}, \epsilon > 0$ and let $E = (p, p+\epsilon).$ Then, for any $0 < \delta < \epsilon$ let $N_{\delta}(p)$ be an open ball around $p.$ Then, $N_{\delta}(p) \cap E = (p, p + \delta)$ is an open interval in $E,$ and @{is therefore uncountable|every-interval-is-uncountable}.
 :::
 
@@ -149,7 +149,7 @@ Now, to show all points in $P$ are limit points of $P,$ suppose $p \in P.$ Let $
 ::::
 :::
 
-:::theorem
+:::theorem {label: cantor-bendixson-theorem}
 Every closed set in a separable metric space is the union of a (possibly empty) perfect set and a set which is at most countable.
 
 ::::proof
@@ -158,7 +158,7 @@ Let $X$ be a separable metric space and $E \subset X$ be closed. If $E$ is at mo
 Suppose that $E$ is uncountable. Note that the proof of @condensation-points-of-an-uncountable-subset-of-rk-are-perfect only uses the property that $R^k$ is a separable metric space, and it therefore generalizes to any separable metric space. Thus $E$ is the union of a perfect set - its condensation points, $P$, and a set that is at most countable, $E \setminus P.$
 ::::
 
-::::corollary
+::::corollary {label: countable-closed-set-has-isolated-points}
 Every @countable @{closed set|closed-set} set in $R^k$ has @{isolated points|isolated-point}.
 
 :::::proof
@@ -167,7 +167,7 @@ Let $E$ be a countable closed set in $R^k.$ Suppose for contradiction that $E$ h
 ::::
 :::
 
-:::theorem
+:::theorem {label: open-set-in-r1-is-countable-union-of-disjoint-segments}
 Every open set in $R^1$ is the union of an at most @countable union of disjoint segments.
 
 ::::proof
@@ -177,7 +177,7 @@ Now, in each $I,$ we can @{pick a rational number|rationals-are-dense-in-reals}.
 :::: 
 :::
 
-:::theorem "Special case of Blaire's theorem"
+:::theorem "Special case of Blaire's theorem" {label: baire-category-theorem-special-case}
 If $R^k = \bigcup_{n=1}^{\infty}F_n,$ where each $F_n$ is a closed subset of $R^k,$ then at least one $F_n$ has a non-empty interior. Equivalently, If $G_n$ is a dense open subset of $R^k,$ for $n = 1, 2, 3, \dots,$ then $\bigcap_{n=1}^\infty G_n$ is not empty (in fact, it is dense in $R^k$.)
 
 ::::proof

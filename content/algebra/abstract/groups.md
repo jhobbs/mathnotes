@@ -87,7 +87,7 @@ The **order** of a finite group is the number of its elements. The order of grou
 Any subgroup of a cyclic group is also cyclic - a cyclic subgroup.
 :::
 
-:::theorem
+:::theorem {label: cyclic-subgroup-generated-by-powers}
 Let $G = \langle a \rangle$ be a cyclic group with $n$ elements. Let $b \in G$ and $b = a^s$. Then $b$ generates a cyclic subgroup of $G$ containing $\frac{n}{d}$ elements, where $d = \gcd(s, n)$. Two cyclic subgroups $\langle a^s \rangle$ and $\langle a^t \rangle$ are equal if and only if $\gcd(s,n) = \gcd(t, n)$.
 
 ::::proof
@@ -131,7 +131,7 @@ Here, the top row is the input and the bottom row is the output, column-wise.
 A permutation is a bijection $\phi : A \to A$, that is, a bijection from a set onto itself.
 :::
 
-:::note
+:::note {label: permutations-usually-finite}
 Generally, we talk about permutations on finite sets, but this doesn't seem to be a hard and fast rule.
 :::
 
@@ -146,7 +146,7 @@ Permutations can be "multiplied", which is just composition. So if we have two p
 Permutation multiplication of permutations of a set forms a group:
 
 
-:::theorem
+:::theorem {label: permutations-form-group}
 Let $A$ be a nonempty set, and $S_A$ be the collection of all permutations of $A$. Then $S_A$ is a group under permutation multiplication.
 :::
 
@@ -191,7 +191,7 @@ A cycle in $S_n$ may be written as $(a_1, a_2, \cdots, a_k)$ - this is called cy
 Two or more than two cycles are **disjoint** if no element appears in more than one cycle.
 :::
 
-:::theorem
+:::theorem {label: permutation-as-product-of-disjoint-cycles}
 Every permutation $\sigma$ of a finite set is a product of disjoint cycles.
 :::
 
@@ -209,7 +209,7 @@ A permutation of a finite set is **even** if it is the product of an even number
 A permutation of a finite set is odd if it is the product of an odd number of transpositions.
 :::
 
-:::theorem
+:::theorem {label: permutation-parity-is-well-defined}
 A permutation in $S_n$ can be written as either a product of an odd number of transpositions or a product of an even number of transpositions, but not both.
 :::
 
@@ -248,7 +248,7 @@ From the example above, the index of $3\mathbb{Z}$ in $\mathbb{Z}$ is $3$ since 
 
 Here's a proof from a homework exercise I did.
 
-:::theorem
+:::theorem {label: lagrange-theorem-for-indices}
 Suppose $H$ and $K$ are subgroups of a group $G$ such that $K \leq H \leq G,$ and suppose that $(H : K)$ and $(G : H)$ are both finite. Then $(G : K) = (G: H)(H :K)$ is finite.
 
 ::::intuition

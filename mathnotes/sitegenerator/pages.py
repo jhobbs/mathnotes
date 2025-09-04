@@ -216,9 +216,9 @@ class BlockIndexPage(Page):
         enhanced_blocks = []
         for ref in blocks:
             if ref.block.label:
-                # Get references for this block (depth 2 = direct + 1 level of transitive)
+                # Get all references for this block
                 reverse_entry = self.block_index.reverse_index.get_references_for_label(
-                    ref.block.label, max_depth=2
+                    ref.block.label
                 )
                 
                 # Create enhanced block info
