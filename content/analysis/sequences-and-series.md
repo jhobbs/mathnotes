@@ -72,5 +72,101 @@ If $E \subset X$ and if $p$ is a @limit-point of $E,$ then there is a @sequence 
 ::::proof
 For each $n = 1,2,3 \dots,$ @{there is a point $p_n \in E$ such that $d(p, p_n) < 1/n$|limit-point}. Let $\epsilon > 0,$ and pick $N$ so that $N \epsilon > 1.$ Then, if $n > N,$ $d(p, p_n) < \epsilon,$ so $\lim_{n \to \infty} p_n = p$.
 ::::
+:::
 
+:::theorem {label: sums-and-products-of-sequences}
+Suppose $\{s_n\}$ and $\{t_n\}$ are complex @sequences, and $\lim_{n \to \infty} s_n = s, \lim_{n \to \infty} t_n = t.$ Then
+
+(a) $\lim_{n \to \infty} (s_n + t_n) = s + t;$
+
+(b) $\lim_{n \to \infty} c s_n = cs,$ for any number $c;$
+
+(c) $\lim_{n \to \infty} (c + s_n) = c + s,$ for any number $c;$
+
+(d) $\lim_{n \to \infty} s_n t_n = st;$
+
+(e) $\lim_{n \to \infty} \frac{1}{s_n} = \frac{1}{s}, s_n \neq 0, s \neq 0.$
+
+::::proof
+
+For (a), let $\epsilon > 0,$ pick $N_s$ such that $|s_n - s| < \epsilon/2$ when $n \geq N_s,$ and pick $N_t$ such that $|t_n - s| < \epsilon/2$ when $n \geq N_t.$ Then, let $N = \max\{N_s, N_t\}.$ Then, when $n \geq N,$
+
+$$ \begin{aligned}
+
+ |(s_n + t_n) - (s + t) | & = | (s_n - s) + (t_n - t)| \\
+                          & \leq |s_n - s| + |t_n - t| \\
+                          & < \epsilon.
+\end{aligned}
+$$
+
+For (b), If $c = 0,$ let $\epsilon > 0,$ and then $|c s_n - c s| = 0 < \epsilon.$ Otherwise,
+
+Let $\epsilon / |c| > 0.$ For some $N,$ when $n \geq N,$ we have
+
+$$ \begin{aligned}
+
+|s_n - s| < \epsilon / |c| & \iff |c| |s_n - s| < \epsilon  \\
+                     & \iff |cs_n - cs | < \epsilon.
+\end{aligned}
+$$
+
+For (c), let $\epsilon > 0.$ For some $N,$ when $n \geq N,$ we have
+
+$$ |(s_n + c) - (s + c)| = |s_n - s| < \epsilon. $$
+
+For (d), first note the identity
+
+$$ s_n t_n - st = (s_n - s)(t_n - t) + s(t_n - t) + t(s_n - s). \tag{1} $$
+
+Now, let $\epsilon > 0.$ Pick $N_s$ such that $|s_n - s| < \sqrt{\epsilon}$ when $n \geq N_s,$ and pick $N_t$ such that $|t_n - s| < \sqrt{\epsilon}$ when $n \geq N_t.$ Then, let $N = \max\{N_s, N_t\}.$ Then, when $n \geq N,$
+
+$$ |(s_n - s)(t_n - t)| < \epsilon, $$
+
+which means
+
+$$ \lim_{n \to \infty}(s_n - s)(t_n - t) = 0. $$
+
+Applying this, along with the results of (a) and (b) to (1) gives:
+
+
+$$ \begin{aligned}
+
+\lim_{n \to \infty} (s_n t_n - st) & = \lim_{n \to \infty} ((s_n - s)(t_n - t) + s(t_n - t) + t(s_n - s)) \\
+                                   & = \lim_{n \to \infty} (s(t_n - t) + t(s_n - s)) \\
+                                   & = \lim_{n \to \infty} (s(t_n - t)) + \lim_{n \to \infty} (t(s_n - s)) \\
+                                   & = s * 0 + t * 0 \\
+                                   & = 0.
+        
+
+\end{aligned}
+$$
+
+For (e), pick $m$ such that when $n \geq m, |s_n - s| < \frac{1}{2}|s|,$ so we have that
+
+$$ \begin{aligned}
+
+|s_n - s| < \frac{1}{2}|s| & \iff |s_n| + |s| < \frac{1}{2}|s| \\
+                           & \iff |s_n| < -\frac{1}{2}|s| \\
+                           & \iff |s_n| > \frac{1}{2}|s| \\
+                           & \iff \frac{1}{2 |s_n|}|s| < 1.
+
+\end{aligned}
+$$
+
+Now, let $\epsilon > 0.$ For some integer $N > m,$ when $n \geq M,$ we have that
+
+$$ |s_n - s | < \frac{1}{2}|s|^2 \epsilon. $$
+
+Thus, when $n \geq N,$
+
+$$ \begin{aligned}
+
+\left | \frac{1}{s_n} - \frac{1}{s} \right | & = \left | \frac{s_n - s}{s_n s} \right | \\
+                                             & = \frac{|s_n - s|}{|s_n s|} \\
+                                             & < \frac{1}{2 |s_n||s|}|s|^2 \epsilon \\
+                                             & = \frac{1}{2 |s_n|}|s| \epsilon \\
+                                             & < \epsilon.
+\end{aligned}
+$$
+::::
 :::
