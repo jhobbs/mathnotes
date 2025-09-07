@@ -171,7 +171,7 @@ $$
 ::::
 :::
 
-:::theorem {label: sequence-in-rk-converges-iff-its-components-converge}
+:::theorem "A sequence in $R^k$ converges iff its components converge" {label: sequence-in-rk-converges-iff-its-components-converge}
 (a) Suppose $\vec{x}_n \in R^k, (n = 1, 2, 3, \dots)$ and $\vec{x}_n = (\alpha_{1,n}, \dots, \alpha_{k,n}).$
 
 Then, $\{\vec{x}_n\}$ @converges to $\vec{x} = (\alpha_1, \dots, \alpha_k)$ if and only if
@@ -198,6 +198,8 @@ Therefore, $n \geq N$ implies that
 $$ |\vec{x_n} - \vec{x}| = \sqrt{\sum_{j=1}^k |\alpha_{j,n} - \alpha_j|^2} < \epsilon, $$
 
 so $\vec{x}_n \to \vec{x}. $
+
+Part (b) follows from part (a) and @sequence-in-rk-converges-iff-its-components-converge. 
 
 ::::
 
