@@ -170,3 +170,35 @@ $$ \begin{aligned}
 $$
 ::::
 :::
+
+:::theorem {label: sequence-in-rk-converges-iff-its-components-converge}
+(a) Suppose $\vec{x}_n \in R^k, (n = 1, 2, 3, \dots)$ and $\vec{x}_n = (\alpha_{1,n}, \dots, \alpha_{k,n}).$
+
+Then, $\{\vec{x}_n\}$ @converges to $\vec{x} = (\alpha_1, \dots, \alpha_k)$ if and only if
+
+$$ \lim_{n \to \infty} \alpha_{j,n} = \alpha_j, \quad (1 \leq j \leq k). $$
+
+(b) Suppose $\{\vec{x}_n\}, \{\vec{y}_n\}$ are @sequences in $R^k,$ $\{\beta_n\}$ is a sequence of real numbers, and $\vec{x}_n \to \vec{x}, \vec{y}_n \to \vec{y}, \beta_n \to \beta.$ Then
+
+$$ \lim_{n \to \infty} (\vec{x}_n + \vec{y}_n) = \vec{x} + \vec{y}, \quad \lim_{n \to \infty} \vec{x}_n \cdot \vec{y}_n = \vec{x} \cdot \vec{y}, \quad \lim_{n \to \infty} \beta_n \vec{x}_n = \beta \vec{x}. $$
+
+::::proof
+For (a), assume $\vec x_{n} \to \vec x.$ Then, from the definition of the @norm,
+
+$$ |\alpha_{j,n} - \alpha_j | \leq |\vec{x}_n - \vec{x} |, $$
+
+that is, the distance from $\alpha_{k,n}$ to $\alpha_{n}$ is always less than or equal to the distance from $\vec{x}_n$ to $\vec{x}.$ Therefore, for $\epsilon > 0,$ $|\vec{x}_n - \vec{x}| < \epsilon \implies |\alpha_{j,n} - \alpha_j| < \epsilon,$ and we can pick $n$ to make this true for as small of $\epsilon$ as we'd like. Therefore, $\lim_{n \to \infty} \alpha_{j, n} = \alpha_j.$
+
+Conversely, assume $\lim_{n \to \infty} \alpha_{j, n} = \alpha_j.$ Let $\epsilon > 0.$ For some integer $N,$ when $n \geq N$ we have
+
+$$ |\alpha_{j,n} - \alpha_{j}| \leq \frac{\epsilon}{\sqrt{k}}, \quad (1 \leq j \leq k). $$
+
+Therefore, $n \geq N$ implies that
+
+$$ |\vec{x_n} - \vec{x}| = \sqrt{\sum_{j=1}^k |\alpha_{j,n} - \alpha_j|^2} < \epsilon, $$
+
+so $\vec{x}_n \to \vec{x}. $
+
+::::
+
+:::
