@@ -200,7 +200,31 @@ $$ |\vec{x_n} - \vec{x}| = \sqrt{\sum_{j=1}^k |\alpha_{j,n} - \alpha_j|^2} < \ep
 so $\vec{x}_n \to \vec{x}. $
 
 Part (b) follows from part (a) and @sequence-in-rk-converges-iff-its-components-converge. 
-
 ::::
+:::
 
+# Subsequences
+
+:::definition "Subsequence"
+Given a @sequence $\{p_n\},$ consider a @sequence $\{n_k\}$ of positive integers, such that $n_1 < n_2 < n_3 < \cdots.$ Then the @sequence $\{p_{n_i}\}$ is called a **subsequence** of $\{p_n\}.$
+:::
+
+:::definition "Subsequential limit"
+If a subsequence $\{p_{n_i}\}$ of $\{p_n\}$ @converges, its @limit is called a **subsequential limit** of $\{p_n\}.$
+:::
+
+:::theorem
+A sequence $\{p_n\}$ converges to $p$ if and only if every subsequence of $\{p_n\}$ converges to $p.$
+
+::::proof
+Suppose that $\{p_n\}$ @converges to $p.$ Suppose some @subsequence $\{p_{n_i}\}$ converges to $q,$ and suppose, for contradiction, that $q \neq p.$ Now, following an argument similar to the @{proof that limits of sequences are unique|limits-of-sequences-are-unique}, we can see that if $p \neq q,$ arbitrary neighborhoods around both can't contain all but finitely many points, so we have a contradiction, and $p = q.$ 
+
+Conversely, suppose every @subsequence of $\{p_n\}$ @converges to $p.$ Then, $\{p_n\}$ is a @subsequence of itself, so it @converges to $p.$
+::::
+:::
+
+:::theorem
+(a) If $\{p_n\}$ is a @sequence in a @compact @{metric space|metric-space} $X,$ then some @subsequence of $\{p_n\}$ converges to a point in $X.$
+
+(b) Every @bounded @sequence in $R^k$ contains a convergent @subsequence.
 :::
