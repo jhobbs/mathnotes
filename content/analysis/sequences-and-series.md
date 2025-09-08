@@ -29,11 +29,11 @@ The set of all points $p_n$ of a sequence $\{p_n\} (n = 1, 2, 3, \dots)$ is the 
 :::
 
 :::note {label: sequence-range-cardinality}
-The @{range|range-sequence} of a @sequence may be @finite or it may be @infinite.
+The @range-sequence of a @sequence may be @finite or it may be @infinite.
 :::
 
 :::definition "Bounded (sequence)"
-The @sequence $\{p_n\}$ is said to be **bounded** if its @{range|range-sequence} is @bounded.
+The @sequence $\{p_n\}$ is said to be **bounded** if its @range-sequence is @bounded.
 :::
 
 :::note {label: sequence-theorems-context}
@@ -59,7 +59,7 @@ Suppose, for contradiction, that $p \neq p'.$ Then, $\epsilon = d(p, p') > 0.$ L
 :::
 
 :::theorem {label: convergent-sequences-are-bounded}
-If $\{p_n\}$ @converges, then $\{p_n\}$ is @{bounded|bounded-sequence}.
+If $\{p_n\}$ @converges, then $\{p_n\}$ is @bounded-sequence.
 
 ::::proof
 Let $\epsilon > 0.$ @{Only finitely many points in $\{p_n\}$ lie outside of $B_\epsilon(p)$|sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. That is, for some integer $N,$ only the points $p_n$ where $n \leq N$ lie outside of $B_\epsilon(p).$ Let $\delta = \max\{\epsilon, d(p, p_1), d(p, p_2), \dots, d(p, p_n)\}, n = 1, 2, \dots, N.$ Then, $d(p, p_n) < \delta$ for all $n = 1, 2, 3, \dots.$
@@ -224,7 +224,7 @@ Conversely, suppose every @subsequence of $\{p_n\}$ @converges to $p.$ Then, $\{
 :::
 
 :::theorem
-(a) If $\{p_n\}$ is a @sequence in a @compact @{metric space|metric-space} $X,$ then some @subsequence of $\{p_n\}$ converges to a point in $X.$
+(a) If $\{p_n\}$ is a @sequence in a @compact @metric-space $X,$ then some @subsequence of $\{p_n\}$ @converges to a point in $X.$
 
 (b) Every @bounded @sequence in $R^k$ contains a convergent @subsequence.
 :::

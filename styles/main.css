@@ -448,7 +448,7 @@ input, textarea, select {
 /* Synonym reference styling */
 .synonym-reference {
   position: relative;
-  font-style: italic;
+  /* Removed italic styling - synonyms now display the same as regular references */
 }
 
 .math-block-content {
