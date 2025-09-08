@@ -224,7 +224,12 @@ class BlockReferenceProcessor:
             # Generate the link text based on what's available and reference format
             if is_synonym and synonym_title:
                 # For synonym references, use the synonym title
-                link_text = synonym_title
+                # For definitions, show in lowercase (same as the main label)
+                from .structured_math import MathBlockType
+                if target_block.block_type == MathBlockType.DEFINITION:
+                    link_text = synonym_title.lower()
+                else:
+                    link_text = synonym_title
             elif ref_type:
                 # For type:label format, always use title or content snippet
                 if target_block.title:
@@ -234,8 +239,14 @@ class BlockReferenceProcessor:
             else:
                 # For simple @label format
                 if target_block.title:
-                    # Has title: preserve case as written in reference
-                    link_text = ref_label
+                    # For definitions with titles, use the title in lowercase
+                    # This makes @metric-space show as "metric space" instead of "metric-space"
+                    from .structured_math import MathBlockType
+                    if target_block.block_type == MathBlockType.DEFINITION:
+                        link_text = target_block.title.lower()
+                    else:
+                        # For non-definitions, preserve case as written in reference
+                        link_text = ref_label
                 else:
                     # No title: use content snippet for better context
                     link_text = target_block.content_snippet

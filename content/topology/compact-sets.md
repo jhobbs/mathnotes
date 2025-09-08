@@ -11,7 +11,7 @@ This section was developed by following Rudin, *Principles of Mathematical Analy
 :::
 
 :::definition "Open Cover"
-An **open cover** of a set $E$ in a @{metric space|metric-space} $X$ is a collection $\{G_\alpha\}$ of open subsets of $X$ such that $E \subset \bigcup_\alpha G_\alpha.$
+An **open cover** of a set $E$ in a @metric-space $X$ is a collection $\{G_\alpha\}$ of open subsets of $X$ such that $E \subset \bigcup_\alpha G_\alpha.$
 :::
 
 :::definition "Compact" {label: compact}
