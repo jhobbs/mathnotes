@@ -159,16 +159,16 @@ A point $p$ is a **limit point** of the set $E$ if every neighborhood of $p$ con
 If $p \in E$ and $p$ is not a limit point of $E,$ then $p$ is called an **isolated point** of E.
 :::
 
-:::definition "Closed Set"
-$E$ is **closed** if every limit point of $E$ is a point of $E.$
+:::definition "Closed"
+A set $E$ is **closed** if every limit point of $E$ is a point of $E.$
 :::
 
 :::definition "Interior Point"
 A point $p$ is an **interior point** of $E$ if there is a neighborhood $N$ of $p$ such that $N \subset E.$
 :::
 
-:::definition "Open Set"
-$E$ is open if every point of $E$ is an interior point of $E.$
+:::definition "Open"
+A set $E$ is open if every @point of $E$ is an @interior-point of $E.$
 :::
 
 :::definition "Complement (of a Set)"

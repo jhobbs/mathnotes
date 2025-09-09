@@ -159,7 +159,7 @@ Suppose that $E$ is uncountable. Note that the proof of @condensation-points-of-
 ::::
 
 ::::corollary {label: countable-closed-set-has-isolated-points}
-Every @countable @closed-set set in $R^k$ has @isolated-points.
+Every @countable @closed @set set in $R^k$ has @isolated-points.
 
 :::::proof
 Let $E$ be a countable closed set in $R^k.$ Suppose for contradiction that $E$ has no isolated points. Then every point of $E$ is a limit point of $E,$ and thus $E$ is @perfect-set. But, @{every nonempty perfect set in $R^k$ is uncountable|non-empty-perfect-sets-in-rk-are-uncountable}, a contradiction. Thus, our assumption that $E$ has no isolated points is incorrect, and $E$ must contain isolated points.
