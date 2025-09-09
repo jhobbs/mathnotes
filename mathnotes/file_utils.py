@@ -4,6 +4,7 @@ File system utilities for the Mathnotes application.
 
 from pathlib import Path
 from typing import List, Dict
+import frontmatter
 
 
 def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, str]) -> List[Dict]:
@@ -28,8 +29,20 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
                 canonical_url = file_to_canonical.get(file_path)
                 # canonical_url already has trailing slash from content_discovery
                 url = canonical_url
+                
+                # Try to get title from frontmatter, fall back to filename
+                try:
+                    with open(item, "r", encoding="utf-8") as f:
+                        post = frontmatter.load(f)
+                        title = post.metadata.get("title", "").strip()
+                        if not title:
+                            # Fall back to filename-based title
+                            title = item.stem.replace("-", " ").title()
+                except Exception:
+                    # If anything goes wrong reading the file, use filename
+                    title = item.stem.replace("-", " ").title()
 
-                items.append({"name": item.stem.replace("-", " ").title(), "path": url, "is_subdir": False})
+                items.append({"name": title, "path": url, "is_subdir": False})
             elif item.is_dir() and not item.name.startswith(".") and not item.name.startswith("__"):
                 # Recursively get files from subdirectories
                 subdir_content = process_directory(item, depth + 1)
