@@ -223,8 +223,23 @@ Conversely, suppose every @subsequence of $\{p_n\}$ @converges to $p.$ Then, $\{
 ::::
 :::
 
-:::theorem
-(a) If $\{p_n\}$ is a @sequence in a @compact @metric-space $X,$ then some @subsequence of $\{p_n\}$ @converges to a point in $X.$
+:::theorem {label: sequence-in-compact-metric-space-has-a-convergent-subsequence}
+If $\{p_n\}$ is a @sequence in a @compact @metric-space $X,$ then some @subsequence of $\{p_n\}$ @converges to a point in $X.$
+::::proof
+Let $E$ be the range of $\{p_n\}.$ If $E$ is @finite, then at least one @point $p$ in $E$ must be repeated infinitely many times in $\{p_n\}.$ If we let $\{n_i\}$ be the indices of the occurrences of $p$ in $\{p_n\}:$
 
-(b) Every @bounded @sequence in $R^k$ contains a convergent @subsequence.
+$$ p_{n_1} = p_{n_2} = \cdots = p, $$
+
+then the @subsequence $\{p_{n_i}\}$ @converges to $p.$
+
+On the other hand, if $E$ is @infinite, then @{$E$ has a limit point $p \in X$|infinite-subset-of-compact-set-has-limit-point}. Pick $n_1$ so that $d(p, p_{n_1} < 1.$ Now, after picking $n_1, \dots, n_{i -1},$ @{we can pick $n_i > n_{i-1}$ such that $d(p, p_{n_i}) < 1/i$|neighborhood-of-limit-point-contains-infinitely-many-points}, so $\{p_{n_i}\}$ @converges to $p.$
+::::
+:::
+
+:::theorem "Bolzano-Weierstrass"
+Every @bounded @sequence in $R^k$ contains a convergent @subsequence.
+
+::::proof
+Note that any @bounded @sequence $\{p_n\} \subset R^k$ is a @subset of some @{closed|closed-set}, @bounded and @{thus compact|heine-borel} @k-cell in $R^k.$ Therefore, $\{p_n\}$ is a @sequence in a @compact @metric-space, and @{has a convergent subsequence|sequence-in-compact-metric-space-has-a-convergent-subsequence}.
+::::
 :::

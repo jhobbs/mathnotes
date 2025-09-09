@@ -9,7 +9,7 @@ title: Set Theory
 A **set** is a collection of objects, considered as a whole.
 :::
 
-:::definition "Element" {synonyms: member}
+:::definition "Element" {synonyms: member, point}
 The objects that make up a @set are called its **elements** or its **members.**
 :::
 

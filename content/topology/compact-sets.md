@@ -179,7 +179,7 @@ Without proof here, (b) and (c) are equivalent in any metric space, but (a) does
 ::::
 :::
 
-:::theorem "Bolzano-Weierstass" {label: bolzano-weierstrass}
+:::theorem "Weierstrass" {label: weierstrass}
 Every bounded infinite subset of $R^k$ has a limit point in $R^k.$
 
 ::::proof
