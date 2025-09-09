@@ -243,3 +243,23 @@ Every @bounded @sequence in $R^k$ contains a convergent @subsequence.
 Note that any @bounded @sequence $\{p_n\} \subset R^k$ is a @subset of some @{closed|closed-set}, @bounded and @{thus compact|heine-borel} @k-cell in $R^k.$ Therefore, $\{p_n\}$ is a @sequence in a @compact @metric-space, and @{has a convergent subsequence|sequence-in-compact-metric-space-has-a-convergent-subsequence}.
 ::::
 :::
+
+:::theorem {label: subsequential-limits-of-a-metric-space-form-a-closed-set}
+The @subsequential-limits of a @sequence $\{p_n\}$ in a @metric-space $X$ form a @{closed|closed-set} @subset of $X.$
+
+::::proof
+Let $E^*$ be the @set of all @subsequential-limits of $\{p_n\}$ and let $q$ be a @limit-point of $E^*.$ We want to show that $q \in E^*.$
+
+First, note that if the range of $\{p_n\}$ is just $\{q\},$ then $q$ is the only @subsequential-limit of $\{p_n\}.$ In this case, $E* = \{q\}$ is a singleton and is @{closed|closed-set}, as it vacuously contains all of its @limit-points. So, assume this is not the case.
+
+Choose $n_1$ so that $p_{n_1} \neq q,$ and let $\delta = d(q, p_{n_1}).$ Suppose $n_1, \dots, n_{i-1}$ are chosen. Since $q$ is a limit point of $E^*,$ there is an $x \in E^*$ with $d(q, x) < \frac{\delta}{2^i}.$ Since $x \in E^*$ and is thus the @limit of some @subsequence of $\{p_n\},$ there is an $n_i > n_{i-1}$ such that $d(x, p_{n_i}) < \frac{\delta}{2^i}.$ Now, via the triangle inequality,
+
+$$ \begin{aligned} d(q, p_{n_i}) & \leq d(q, x) + d(x, p_{n_i}) \\
+                                 & < \frac{\delta}{2^i} + \frac{\delta}{2^i} \\
+                                 & = \frac{2\delta}{2^i} = \frac{\delta}{2^{i-1}}, \quad i = 1, 2, 3, \dots.
+\end{aligned}
+$$
+
+This means that $\{p_{n_i}\}$ @converges to $q,$ and so $q \in E^*,$ and $E^*$ is @closed.
+::::
+:::
