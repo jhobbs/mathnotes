@@ -126,7 +126,7 @@ References to blocks without titles:
 
 References to definitions with auto-generated labels:
 - @open-set should link to the "Open Set" definition
-- @closed-set should link to the "Closed Set" definition  
+- @closed @set should link to the "Closed Set" definition  
 - @complex-number-real-part should link to the complex number definition
 
 ## End of Test
