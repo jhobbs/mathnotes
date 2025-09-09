@@ -263,3 +263,7 @@ $$
 This means that $\{p_{n_i}\}$ @converges to $q,$ because we can find a $p_{n_i}$ as close as desired to $q.$ Therefore $q$ is a @subsequential-limit of $\{p_n\}$ and so $q \in E^*,$ and $E^*$ is @closed.
 ::::
 :::
+
+:::note
+The @{theorem above|subsequential-limits-of-a-metric-space-form-a-closed-set} tells us about the long term behavior of a @sequence, even if it doesn't @converge. The @set of all @subsequential-limits of $\{p_n\}$ gives us the set of all points that are approached arbitrarily closely infinitely often in $\{p_n\}.$ It's basically the set of points that $\{p_n\}$ likes to hang out around!
+:::
