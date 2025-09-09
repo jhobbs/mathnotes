@@ -1,12 +1,12 @@
 ---
-description: Sequences and Series in Euclidean and Metric Spaces
+description: Sequences in Euclidean and Metric Spaces
 layout: page
-title: Sequences and Series
+title: Sequences in Euclidean and Metric Spaces
 ---
 
 # Sequences
 
-Review the definition of a sequence
+Review the definition of a sequence:
 
 @embed{sequence}
 
