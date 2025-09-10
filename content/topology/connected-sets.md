@@ -11,7 +11,7 @@ This section was developed by following Rudin, *Principles of Mathematical Analy
 # Connected Sets
 
 :::definition "Separated"
-Two subsets $A$ and $B$ of a metric space $X$ are said to be **separated** if both $A \cap \overline{B}$ and $\overline{A} \cap B$ are empty, i.e., if no point of $A$ lies in the closure of $B$ and no point of $B$ lies in the closure of $A.$
+Two subsets $A$ and $B$ of a metric space $X$ are said to be **separated** if both $A \cap \closure{B}$ and $\closure{A} \cap B$ are empty, i.e., if no point of $A$ lies in the closure of $B$ and no point of $B$ lies in the closure of $A.$
 :::
 
 :::definition "Connected"
@@ -40,10 +40,10 @@ Conversely, suppose, for the sake of contradiction, that $E$ is not connected. T
 
 $$ z = \sup{(A \cap [x, y])}. $$
 
-By @sup-is-in-closure-of-bounded-nonempty-set-of-reals, $z \in \overline{A},$ and because $A$ and $B$ are separated, $z \notin B.$ Therefore $x \leq z < y.$
+By @sup-is-in-closure-of-bounded-nonempty-set-of-reals, $z \in \closure{A},$ and because $A$ and $B$ are separated, $z \notin B.$ Therefore $x \leq z < y.$
 
 If $z \notin A,$ it follows that $x < z < y,$ and $z \notin E.$
 
-If $z \in A,$ then $z \notin \overline{B},$ hence there exists $z_1$ such that $z < z_1 < y$ and $z_1 \notin B$ (because $z \notin \overline{B}$ means there is a neighborhood of $z$ that contains no points of $B$.) Thus, $x < z_1 < y$ and $z_1 \notin E.$
+If $z \in A,$ then $z \notin \closure{B},$ hence there exists $z_1$ such that $z < z_1 < y$ and $z_1 \notin B$ (because $z \notin \closure{B}$ means there is a neighborhood of $z$ that contains no points of $B$.) Thus, $x < z_1 < y$ and $z_1 \notin E.$
 ::::
 :::

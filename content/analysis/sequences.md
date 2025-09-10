@@ -289,3 +289,12 @@ Suppose $\{p_n\}$ is a @Cauchy-sequence. Then, let $\epsilon > 0.$ For some inte
 Conversely, suppose $lim_{N \to \infty} \diam{E_N} = 0.$ Then, @{every neighborhood of $0$ contains $\{\diam{E_N}\}$ for all but finitely many N|sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. Let $\epsilon > 0.$ Then, pick $N$ such that $\diam{E_n} < \epsilon.$ Letting $m, n \geq N,$ we have that $d(p_m, p_n) \leq \diam{E_n} < \epsilon.$
 ::::
 :::
+
+hi testing
+
+:::theorem
+If $\closure{E}$ is the @closure of a @set $E$ in a @metric-space $X,$ then
+
+$$ \diam{\closure{E}} = \diam{E}. $$
+
+:::
