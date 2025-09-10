@@ -87,7 +87,7 @@ $$ \cosh{z} = \cos{y} \cosh{x} + \sin{y} \sinh{xi}. $$
 
 The remaining complex hyperbolic functions are defined as usual
 
-$$ \tanh{z} = \frac{\sinh{z}}{\cosh{z}}; \quad \coth{z} = \frac{\cosh{z}}{\sinh{z}}; \quad \text{sech}{~z} = \frac{1}{\cosh{z}}; \quad \text{csch}{~z} = \frac{1}{\sinh{z}} $$
+$$ \tanh{z} = \frac{\sinh{z}}{\cosh{z}}; \quad \coth{z} = \frac{\cosh{z}}{\sinh{z}}; \quad \sech{~z} = \frac{1}{\cosh{z}}; \quad \csch{~z} = \frac{1}{\sinh{z}} $$
 
 The derivatives are as expected.
 
@@ -109,15 +109,15 @@ $$ \log{\left ( \frac{z_1}{z_2} \right )} =  \log{z_1} - \log{z_2} + 2 k \pi i$$
 
 The principal logarithm is defined using the principal argument, such that
 
-$$ \text{Log}{z} = \ln{|z|} + (\text{Arg}{z})i $$
+$$ \Log{z} = \ln{|z|} + (\Arg{z})i $$
 
-and is analytic in the domain $\|z\| > 0, -\pi < \text{Arg}{z} < \pi.$ It is also called the prinicpal branch of $\log{z}$.
+and is analytic in the domain $\|z\| > 0, -\pi < \Arg{z} < \pi.$ It is also called the prinicpal branch of $\log{z}$.
 
-Points on the negative real aixs and $z = 0$ are singularities of $\text{Log}{z}$, but they are not isolated singularities.
+Points on the negative real aixs and $z = 0$ are singularities of $\Log{z}$, but they are not isolated singularities.
 
-The deriviative of $\text{Log}{z}$ is
+The deriviative of $\Log{z}$ is
 
-$$ \frac{d}{dz} \text{Log}{z} = \frac{1}{z} $$
+$$ \frac{d}{dz} \Log{z} = \frac{1}{z} $$
 
 We can choose other branches of $\arg{z}$ and get different branches. For example, if we choose $\arg_\phi{z}$, we get
 
@@ -125,4 +125,4 @@ $$ \log_\phi{z} = \ln{|z|} + (\arg_\phi{z})i. $$
 
 These branches are analytic on any domain that does not contain $z = 0$ (the branch point) or points on the branch cut (the half-line through $z=0$ making an angle of $\phi$ radians ith the positive real axis.)
 
-We can define branch cuts that aren't straight lines too. For example, branch points of the function $\text{Log}{\left \[ f(z)\right \]}$ are the zeroes of $f(z)$ and branch cuts are where $f(z)$ is real and negative.
+We can define branch cuts that aren't straight lines too. For example, branch points of the function $\Log{\left \[ f(z)\right \]}$ are the zeroes of $f(z)$ and branch cuts are where $f(z)$ is real and negative.

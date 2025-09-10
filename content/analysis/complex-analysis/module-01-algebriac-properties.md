@@ -52,7 +52,7 @@ $$ z = r\cos\theta + ir\sin\theta = r(cos\theta + i\sin\theta) $$
 
 which is called the **polar form of z**.
 
-The polar angle $\theta$ in the figure above is called the **principal argument of z**, written as $\text{Arg} z$, and is defined to be an angle in $(-\pi, \pi]$ satisfying the two equalities:
+The polar angle $\theta$ in the figure above is called the **principal argument of z**, written as $\Arg z$, and is defined to be an angle in $(-\pi, \pi]$ satisfying the two equalities:
 
 $$ \cos\theta = \frac{x}{\lvert z \rvert}, \quad \sin\theta = \frac{y}{\lvert z \rvert} $$
 
@@ -62,11 +62,11 @@ $$ tan{\theta} = \frac{y}{x}, $$
 
 as long as $x$ is non-zero.
 
-We can use $\text{Arctan}\frac{y}{x}$ to find the principal argument; if $z$ is in the first or fourth quadrants, it gives it directly. If $z$ is in the second quadrant, we must add $\pi$ to $\text{Arctan}\frac{y}{x}$, and if $z$ is in the third quadrant we must subtract $\pi$ from $\text{Arctan}\frac{y}{x}$.
+We can use $\Arctan\frac{y}{x}$ to find the principal argument; if $z$ is in the first or fourth quadrants, it gives it directly. If $z$ is in the second quadrant, we must add $\pi$ to $\Arctan\frac{y}{x}$, and if $z$ is in the third quadrant we must subtract $\pi$ from $\Arctan\frac{y}{x}$.
 
 Writing it as $\text{arg}z$ means that instead of taking the **principal value** of $\theta$, we have a multivalued function giving all possible angles satisfying those two equalities:
 
-$$ \text{arg} z = \text{Arg}z \pm 2n\pi,~n = 1,2,3 $$
+$$ \text{arg} z = \Argz \pm 2n\pi,~n = 1,2,3 $$
 
 Sometimes, $\text{arg}z$ is taken to mean any argument of $z,$ so that it's still single valued.
 

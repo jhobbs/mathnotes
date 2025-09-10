@@ -17,20 +17,20 @@ One way to visualize this is to shine a flashlight from a direction perpendicula
 
 The notation and formula for projection of $\vec{u}$ onto $\vec{v}$ is:
 
-$$ \text{proj}_{\vec{v}} \vec{u} = \frac{\vec{u} \cdot \vec{v}}{|| \vec{v} ||^2} \vec{v} $$
+$$ \proj_{\vec{v}} \vec{u} = \frac{\vec{u} \cdot \vec{v}}{|| \vec{v} ||^2} \vec{v} $$
 
 ## Component
 
 The length of the projection of $\vec{u}$ in the direction of $\vec{v}$ is called the **component** of $\vec{u}$ in the direction of $\vec{v}$ and is written as:
 
 
-$$ \text{comp}_v u =  || \text{proj}_{\vec{v}} \vec{u} || = \frac{\vec{u} \cdot \vec{v}}{|| \vec{v} ||} $$
+$$ \comp_v u =  || \proj_{\vec{v}} \vec{u} || = \frac{\vec{u} \cdot \vec{v}}{|| \vec{v} ||} $$
 
 
 ## Orthogonal
 
 The orthogonal projection of $\vec{u}$ onto $\vec{v}$ is given as:
 
-$$ \text{orth}_\vec{v} \vec{u} = \vec{u} -  \text{proj}_{\vec{v}} \vec{u} $$
+$$ \orth_\vec{v} \vec{u} = \vec{u} -  \proj_{\vec{v}} \vec{u} $$
 
 This is the component of $\vec{u}$ that is orthogonal to $\vec{v}$.

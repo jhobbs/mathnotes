@@ -31,7 +31,7 @@ which defines the derivative of $f$ at the point $z$. This equation defines the 
 
 The usual rules for real derivatives work for complex derivatives too, that is, sum, product, quotient, power and chain rules all remain in effect.
 
-However, the real derivatives rules don't help with functions like $\Re{(z)}, \Im{(z)}, \|z\|$ or $\text{Arg}{z}.$ We could use the limit definition of the derivative, but there is a better way.
+However, the real derivatives rules don't help with functions like $\Re{(z)}, \Im{(z)}, \|z\|$ or $\Arg{z}.$ We could use the limit definition of the derivative, but there is a better way.
 
 Also, we might have a complex function defined in terms of its real and imginary parts rather than in terms of $z$, i.e. $f(z) = \frac{x}{x^2 + y^2} + \frac{-y}{x^2 + y^2}i$. We could try to rewrite $f(z)$ in terms of $z$, but this could be hard.
 

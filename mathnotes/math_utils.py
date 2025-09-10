@@ -245,8 +245,8 @@ class BlockReferenceProcessor:
                     if target_block.block_type == MathBlockType.DEFINITION:
                         link_text = target_block.title.lower()
                     else:
-                        # For non-definitions, preserve case as written in reference
-                        link_text = ref_label
+                        # For non-definitions, use the title with its original capitalization
+                        link_text = target_block.title
                 else:
                     # No title: use content snippet for better context
                     link_text = target_block.content_snippet
