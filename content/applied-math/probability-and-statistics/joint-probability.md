@@ -56,12 +56,12 @@ $$ f_{X+Y}(n) = \sum_k f_X(k)f_Y(n - k). $$
 ## Covariance and Correlation Coefficient
 Covariance is a measure of the joint variability of two random variables. 
 
-$$ \text{Cov}(X,Y) = E[(X - E[X])(Y - E[Y])]. $$
+$$ \Cov(X,Y) = E[(X - E[X])(Y - E[Y])]. $$
 
 If large $X$ values go with large $Y$ values and small $X$ goes with small $Y$, covariance will be positive. The covariance will be negative if large $X$ values go with small $Y$ values and vice-versa. An altenative, equivalent form of covariance is:
 
-$$ \text{Cov}(X,Y) = E[XY] - E[X]E[Y]. $$
+$$ \Cov(X,Y) = E[XY] - E[X]E[Y]. $$
 
 The correlation coefficient of $X$ and $Y$, $\rho_{x,y},$ is given by
 
-$$ \rho_{x,y} = \frac{\text{Cov}{(X, Y)}}{\sigma_X \sigma_Y}. $$
+$$ \rho_{x,y} = \frac{\Cov{(X, Y)}}{\sigma_X \sigma_Y}. $$

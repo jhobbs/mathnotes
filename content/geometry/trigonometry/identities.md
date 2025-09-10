@@ -31,4 +31,4 @@ $$ \sin{(a - b)} = \sin{a}\cos{b}-\cos{a}\sin{b} $$
 
 $$ a \cos x + b \sin x = \sqrt{a^2 + b^2} \cos{(x - \arctan2{(b, a)})} $$
 
-$$ a \cos x + b \sin x = \sqrt{a^2 + b^2} \cos{(x + \text{Arctan}{(-b/a))})} $$
+$$ a \cos x + b \sin x = \sqrt{a^2 + b^2} \cos{(x + \Arctan{(-b/a))})} $$

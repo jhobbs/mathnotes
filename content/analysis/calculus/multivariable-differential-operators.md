@@ -22,7 +22,7 @@ The gradient points in the direction of steepest ascent of the function $f$ at a
 
 For a vector field $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimensional space $\mathbb{R}^3$, with each copmonent function $F_i$ depending on the variables $x$, $y$, and $z$, the curl of $\vec{F}$ is defined as
 
-$$ \text{curl} \vec{F} = \nabla \times \vec{F} = \left ( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z} \right ) \mathbf{\hat{i}} + \left ( \frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x} \right ) \mathbf{\hat{j}} + \left ( \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y} \right ) \mathbf{\hat{k}} $$
+$$ \curl \vec{F} = \nabla \times \vec{F} = \left ( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z} \right ) \mathbf{\hat{i}} + \left ( \frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x} \right ) \mathbf{\hat{j}} + \left ( \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y} \right ) \mathbf{\hat{k}} $$
 
 The curl at a point in the field is represented by a vector whose length and direction denote the magnitude and axis of the maximum circulation. Circulation is the line integral of a vector field around a closed curve.
 
@@ -36,7 +36,7 @@ $$ \nabla \times \vec{F} = \begin{vmatrix} \mathbf{\hat{i}} & \mathbf{\hat{j}} &
 
 The divergence of a vector field quantifies the extent to which the vector field behaves as a source or a sink at a given point. For a vector field $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimension space $\mathbb{R}^3$, the divergence is defined as
 
-$$ \text{div} \vec{F} = \nabla \cdot \vec{F} = \frac{\partial F_1}{\partial x} + \frac{\partial F_2}{\partial y} + \frac{\partial F_3}{\partial z}. $$
+$$ \div \vec{F} = \nabla \cdot \vec{F} = \frac{\partial F_1}{\partial x} + \frac{\partial F_2}{\partial y} + \frac{\partial F_3}{\partial z}. $$
 
 Divergence gives a scalar value for each point, i.e., it is a scalar field. A positive value indicates a net flow away from the point, while a negative value indicates a net flow towards a point.
 

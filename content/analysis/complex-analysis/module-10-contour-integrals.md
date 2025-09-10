@@ -31,10 +31,10 @@ You can add an arrow to the circle to indicate clockwise vs counterclockwise dir
 
 Some additional properties:
 
-$$ \text{Re} \int_C f(z) dz = \int_C \text{Re}[f(z)dz]; $$
+$$ \Re \int_C f(z) dz = \int_C \Re[f(z)dz]; $$
 
 
-$$ \text{Im} \int_C f(z) dz = \int_C \text{Im}[f(z)dz]; $$
+$$ \Im \int_C f(z) dz = \int_C \Im[f(z)dz]; $$
 
 $$ \left | \int_C f(z) dz \right | \le \int_C |f(z)||dz| \le ML $$
 

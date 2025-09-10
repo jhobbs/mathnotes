@@ -76,16 +76,16 @@ is called the **Riemann Sum** for the partition $P$ and points $T,$ and is denot
 
 Let $P = \{x_0, x_1, \cdots, x_n\}$ be a partition of $[a,b].$ The **norm** of $P$ is given by
 
-$$ \text{norm}{P} = \max{\{ |x_k - x_{k-1} | | k \in \{1,2,\dots,n\} \}}. $$
+$$ \norm{P} = \max{\{ |x_k - x_{k-1} | | k \in \{1,2,\dots,n\} \}}. $$
 
 The limit of the sum as the norm of the partition approaches zero is said to equal $I,$ written as
 
-$$ \lim_{\text{norm}P \to 0} S(f, P, T) = I,$$
+$$ \lim_{\normP \to 0} S(f, P, T) = I,$$
 
-if for every $\epsilon < 0,$ there exists a $\delta > 0$ such that for any partition $P$ of $[a,b]$ with $\text{norm}P < \delta$ and for any points $T,$ is is the case that
+if for every $\epsilon < 0,$ there exists a $\delta > 0$ such that for any partition $P$ of $[a,b]$ with $\normP < \delta$ and for any points $T,$ is is the case that
 
 $$ |S(f, P, T)| <  \epsilon. $$
 
 *Riemann Integral Evaluation Theorem:* If $f$ is a Riemann integrable function on $[a,b],$ then
 
-$$ \lim_{\text{norm}P \to 0} S(f, P, T) = \int_a^{b} f(x) dx. $$
+$$ \lim_{\normP \to 0} S(f, P, T) = \int_a^{b} f(x) dx. $$
