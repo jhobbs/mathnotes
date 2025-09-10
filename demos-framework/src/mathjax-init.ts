@@ -14,7 +14,24 @@ export async function initMathJax() {
       processEscapes: true,
       packages: {'[+]': ['enclose']},
       macros: {
-        vec: ['\\mathbf{#1}', 1]
+        vec: ['\\mathbf{#1}', 1],
+        diam: '\\operatorname{diam}',
+        curl: '\\operatorname{curl}',
+        div: '\\operatorname{div}',
+        Arg: '\\operatorname{Arg}',
+        Log: '\\operatorname{Log}',
+        Span: '\\operatorname{Span}',
+        Cov: '\\operatorname{Cov}',
+        proj: '\\operatorname{proj}',
+        comp: '\\operatorname{comp}',
+        orth: '\\operatorname{orth}',
+        norm: '\\operatorname{norm}',
+        ord: '\\operatorname{ord}',
+        sech: '\\operatorname{sech}',
+        csch: '\\operatorname{csch}',
+        Arctan: '\\operatorname{Arctan}',
+        Re: '\\operatorname{Re}',
+        Im: '\\operatorname{Im}'
       }
     },
     startup: {
