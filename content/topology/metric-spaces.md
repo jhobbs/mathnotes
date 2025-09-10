@@ -287,38 +287,38 @@ Let $p \in X, p \notin E'.$ Then some neighborhood $N$ of $p$ contains no points
 :::
 
 :::definition "Closure"
-If $X$ is a metric space, $E \subset X,$ and $E'$ denotes the set of all limit points of $E$ in $X,$ then the **closure** of $E$ is the set $\overline{E} = E \cup E'.$
+If $X$ is a metric space, $E \subset X,$ and $E'$ denotes the set of all limit points of $E$ in $X,$ then the **closure** of $E$ is the set $\closure{E} = E \cup E'.$
 :::
 
 :::theorem {label: set-is-its-closure-iff-it-is-closed}
 If $X$ is a metric space and $E \subset X,$ then
 
-(a) $\overline{E}$ is closed.
+(a) $\closure{E}$ is closed.
 
-(b) $E = \overline{E}$ iff $E$ is closed.
+(b) $E = \closure{E}$ iff $E$ is closed.
 
-(c) $\overline{E} \subset F$ for every closed set $F \subset X$ such that $E \subset F.$
+(c) $\closure{E} \subset F$ for every closed set $F \subset X$ such that $E \subset F.$
 
-By (a) and (c), $\overline{E}$ is the smallest closed subset of $X$ that contains $E.$
+By (a) and (c), $\closure{E}$ is the smallest closed subset of $X$ that contains $E.$
 
 ::::proof
-(a) Suppose $p \in X$ and $p \notin \overline{E}.$ Then $p$ is not in $E$ and is not in $E',$ and is in fact in $\overline{E}^c.$ Now, since $p$ is not a limit point of $E,$ it has some neighborhood $N_r(p)$ that does not intersect $E.$ Any point $x$ in $N_r(p)$ is an interior point of $N_r(p)$, and therefore has its own neighborhood $N_\epsilon{(x)}$ that does not intersect $E,$ and therefore $x$ is not a limit point of $E.$ Thus, any point in $\overline{E}^c$ is an interior point of $\overline{E}^c,$ and $\overline{E}^c$ is therefore open and its complement, $\overline{E},$ is closed (since a set is open iff its complement is closed.)
+(a) Suppose $p \in X$ and $p \notin \closure{E}.$ Then $p$ is not in $E$ and is not in $E',$ and is in fact in $\closure{E}^c.$ Now, since $p$ is not a limit point of $E,$ it has some neighborhood $N_r(p)$ that does not intersect $E.$ Any point $x$ in $N_r(p)$ is an interior point of $N_r(p)$, and therefore has its own neighborhood $N_\epsilon{(x)}$ that does not intersect $E,$ and therefore $x$ is not a limit point of $E.$ Thus, any point in $\closure{E}^c$ is an interior point of $\closure{E}^c,$ and $\closure{E}^c$ is therefore open and its complement, $\closure{E},$ is closed (since a set is open iff its complement is closed.)
 
-(b) Suppose $E$ is closed. Then it contains its limit points, so $E = E \cup E' = \overline{E}.$ Conversely, suppose $E = \overline{E}.$ By (a), $E$ is closed.
+(b) Suppose $E$ is closed. Then it contains its limit points, so $E = E \cup E' = \closure{E}.$ Conversely, suppose $E = \closure{E}.$ By (a), $E$ is closed.
 
-(c) Suppose that $E \subset F \subset X,$ and that $F$ is closed. Suppose $p \in \overline{E}.$ If $p \in E,$ then $p \in F$ because $E \subset F.$ If $p \in E',$ then it must be in $F$ also, since $F$ contains all points of $E,$ and is closed, and thus must contain the limit points of $E.$  
+(c) Suppose that $E \subset F \subset X,$ and that $F$ is closed. Suppose $p \in \closure{E}.$ If $p \in E,$ then $p \in F$ because $E \subset F.$ If $p \in E',$ then it must be in $F$ also, since $F$ contains all points of $E,$ and is closed, and thus must contain the limit points of $E.$  
 ::::
 :::
 
 :::theorem {label: set-and-closure-have-same-limit-points}
-If $E$ is a set in a metric space, then $E$ and $\overline{E}$ have the same limit points.
+If $E$ is a set in a metric space, then $E$ and $\closure{E}$ have the same limit points.
 
 ::::proof
 If $E$ is closed, then we are done, because @{a set equals its closure if it is closed|set-is-its-closure-iff-it-is-closed}. 
 
-Suppose $p$ is a limit point of $E.$ Then every neighborhood of $p$ contains some $q \in E, q \neq p.$ Since $q \in E, ~ q \in \overline{E}$, so $p$ is a limit point of $\overline{E}.$
+Suppose $p$ is a limit point of $E.$ Then every neighborhood of $p$ contains some $q \in E, q \neq p.$ Since $q \in E, ~ q \in \closure{E}$, so $p$ is a limit point of $\closure{E}.$
 
-Conversely, suppose $p$ is a limit point of $\overline{E}.$ Then, every neighborhood $N$ of $p$ contains a point of $q \in \overline{E}, q \neq p.$ If $q \in E,$ then $N$ clearly contains a point in $E.$ Otherwise, $q \in E', q \not in E.$ Now, since $q \in N$ and @{every neighborhood is an open set|every-neighborhood-is-an-open-set}, $q$ has some neighborhood $M \subset N.$ Since $q \in E',$ $M$ contains some point $s \in E.$ Since $M \subset N,$ $s \in N,$ and therefore $N$ contains a point in $E.$ Thus, all neighborhoods of $p$ contain some point in $E,$ and $p$ is a limit point of $E.$
+Conversely, suppose $p$ is a limit point of $\closure{E}.$ Then, every neighborhood $N$ of $p$ contains a point of $q \in \closure{E}, q \neq p.$ If $q \in E,$ then $N$ clearly contains a point in $E.$ Otherwise, $q \in E', q \not in E.$ Now, since $q \in N$ and @{every neighborhood is an open set|every-neighborhood-is-an-open-set}, $q$ has some neighborhood $M \subset N.$ Since $q \in E',$ $M$ contains some point $s \in E.$ Since $M \subset N,$ $s \in N,$ and therefore $N$ contains a point in $E.$ Thus, all neighborhoods of $p$ contain some point in $E,$ and $p$ is a limit point of $E.$
 ::::
 :::
 
@@ -333,20 +333,20 @@ Consider $P = \{\frac{1}{n} | n \in \mathbb{N}\}.$ Then $P$ has one limit point,
 :::theorem {label: closure-distributes-over-finite-unions}
 Closure distributes over finite unions.
 
-If $B_n = \bigcup_{i=i}^n A_i,$ then $\overline{B_n} = \bigcup_{i=1}^n \overline{A_i}, n = 1, 2, 3, \dots.$ 
+If $B_n = \bigcup_{i=i}^n A_i,$ then $\closure{B_n} = \bigcup_{i=1}^n \closure{A_i}, n = 1, 2, 3, \dots.$ 
 
 ::::proof
-Let $p \in \bigcup_{i=1}^n \overline{A_i}.$ Then, $p \in \overline{A_i}$ for some $i.$ If $p \in A_i,$ then $p \in \bigcup_{i=i}^n A_i = B_n,$ so $p \in \overline{B_n}.$ If $p$ is in some $A_{i}',$ then every neighborhood of $p$ contains some point $q \in A_i, q \neq p,$ and since $A_i \subset B_n,$ $q \in B_n,$ so $p \in \overline{B_n}.$
+Let $p \in \bigcup_{i=1}^n \closure{A_i}.$ Then, $p \in \closure{A_i}$ for some $i.$ If $p \in A_i,$ then $p \in \bigcup_{i=i}^n A_i = B_n,$ so $p \in \closure{B_n}.$ If $p$ is in some $A_{i}',$ then every neighborhood of $p$ contains some point $q \in A_i, q \neq p,$ and since $A_i \subset B_n,$ $q \in B_n,$ so $p \in \closure{B_n}.$
 
-Conversely, let $p \in \overline{B_n}.$ If $p \in B_n,$ $p \in A_i$ for some $i,$ and thus $p \in \overline{A_i} \subset \bigcup_{i=1}^n \overline{A_i}.$ If $p$ is only in $B_{n}',$ suppose for contradiction that $p \notin \bigcup_{i=1}^n \overline{A_i}.$ For each $i,$ let $N_i$ be a neighborhood centered at $p$ with $N_i \cap A_i = \emptyset.$ Then, $N = \bigcap_{i=1}^n N_i$ is a neighborhood of $p$ (see @union-and-intersection-of-open-and-closed-sets,) but $N \cap N_i = \emptyset$ for all $i,$ so $N \cap B_n = \emptyset.$ But, this contradicts our hypothesis that $p \in \overline{B_n},$ so our contradictory assumption must be invalid, and $p \in \bigcup_{i=1}^n \overline{A_i}.$
+Conversely, let $p \in \closure{B_n}.$ If $p \in B_n,$ $p \in A_i$ for some $i,$ and thus $p \in \closure{A_i} \subset \bigcup_{i=1}^n \closure{A_i}.$ If $p$ is only in $B_{n}',$ suppose for contradiction that $p \notin \bigcup_{i=1}^n \closure{A_i}.$ For each $i,$ let $N_i$ be a neighborhood centered at $p$ with $N_i \cap A_i = \emptyset.$ Then, $N = \bigcap_{i=1}^n N_i$ is a neighborhood of $p$ (see @union-and-intersection-of-open-and-closed-sets,) but $N \cap N_i = \emptyset$ for all $i,$ so $N \cap B_n = \emptyset.$ But, this contradicts our hypothesis that $p \in \closure{B_n},$ so our contradictory assumption must be invalid, and $p \in \bigcup_{i=1}^n \closure{A_i}.$
 ::::
 :::
 
 :::theorem {label: sup-is-in-closure-of-bounded-nonempty-set-of-reals}
-Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \overline{E}.$ Hence $y \in E$ if $E$ is closed.
+Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \closure{E}.$ Hence $y \in E$ if $E$ is closed.
 
 ::::proof
-Suppose $y \in E.$ Then $y \in \overline{E}.$ Suppose $y \notin E.$ Now, by hypothesis, for every $h > 0,$ there is some $x$ such that $y - h < x < y,$ because otherwise, $x$ would be an upper bound on $E.$ Therefore, every neighborhood $N_h(y)$ contains some $x \in E,$ and thus $y$ is a limit point of $E$ and $y \in \overline{E}.$
+Suppose $y \in E.$ Then $y \in \closure{E}.$ Suppose $y \notin E.$ Now, by hypothesis, for every $h > 0,$ there is some $x$ such that $y - h < x < y,$ because otherwise, $x$ would be an upper bound on $E.$ Therefore, every neighborhood $N_h(y)$ contains some $x \in E,$ and thus $y$ is a limit point of $E$ and $y \in \closure{E}.$
 ::::
 :::
 

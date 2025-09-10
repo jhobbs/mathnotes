@@ -31,7 +31,8 @@ export async function initMathJax() {
         csch: '\\operatorname{csch}',
         Arctan: '\\operatorname{Arctan}',
         Re: '\\operatorname{Re}',
-        Im: '\\operatorname{Im}'
+        Im: '\\operatorname{Im}',
+        closure: ['\\overline{#1}', 1]
       }
     },
     startup: {
