@@ -9,7 +9,7 @@ title: Real Numbers
 # Real Numbers
 
 
-:::definition reals
+:::definition "Real Numbers" {synonyms: reals}
 The real numbers $\mathbb{R}$ are a set of objects along with two binary operations $+ : \mathbb{R} \times \mathbb{R} \to \mathbb{R}$ and $\cdot : \mathbb{R} \times \mathbb{R} \to \mathbb{R}$ that satisfy the 9 field axioms along with the Order axiom and the Completeness axiom. That is, the reals are an ordered, complete field.
 :::
 
@@ -27,9 +27,29 @@ A more familiar and equivalent way of stating this can be achieved by defining $
 
 Note that rational numbers also satisfy the field axioms and the Order axiom. Complex numbers satisfy the field axioms but not the Order axiom because there is no total ordering that can be defined on complex numbers.
 
-To give the Completeness axiom, we must first define what a least upper bound is. The number $m$ is said to be an **upper bound** of a nonempty set $A$ if $x \leq m$ for all $x \in A$. The number $L$ is said to be the **least upper bound** of the set $A$ if it's an upper bound of $A$ and if $L \leq m$ for all upper bounds $m$ of $A$. Note that neither an upper bound nor a least upper bound need to be in $A$.
+To give the Completeness axiom, we must first define what a least upper bound is.
 
-The least upper bound is also known as the **supremum.** There is also a concept of a **greatest lower bound**, which is a lower bound that is greater than or equal to every other lower bound. The greatest lower bound is also known as the **infimum.**
+:::definition "Upper bound"
+The number $m$ is said to be an **upper bound** of a nonempty @set $A$ if $x \leq m$ for all $x \in A$.
+:::
+
+:::definition "Least upper bound" {synonyms: supremum}
+The number $L$ is said to be the **least upper bound** of the set $A$ if it's an @upper-bound of $A$ and if $L \leq m$ for all @upper-bounds $m$ of $A$.
+ 
+The least upper bound is also known as the **supremum.**
+:::
+:::note
+Neither an @upper-bound nor a @least-upper-bound need to be in $A$.
+:::
+
+
+:::definition "Lower bound"
+The number $m$ is said to be a **lower bound** of a nonempty @set $A$ if $x \geq m$ for all $x \in A.$
+:::
+
+:::definition "Greatest lower bound" {synonyms: infimum}
+There is also a concept of a **greatest lower bound**, which is a @lower-bound that is greater than or equal to every other @lower-bound. The greatest lower bound is also known as the **infimum.**
+:::
 
 The **Completeness axiom** states that every nonempty subset $A$ of $\mathbb{R}$ that's bounded above has a least upper bound.
 

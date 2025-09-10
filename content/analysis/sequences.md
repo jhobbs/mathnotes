@@ -267,3 +267,25 @@ This means that $\{p_{n_i}\}$ @converges to $q,$ because we can find a $p_{n_i}$
 :::note
 The @{theorem above|subsequential-limits-of-a-metric-space-form-a-closed-set} tells us about the long term behavior of a @sequence, even if it doesn't @converge. The @set of all @subsequential-limits of $\{p_n\}$ gives us the set of all points that are approached arbitrarily closely infinitely often in $\{p_n\}.$ It's basically the set of points that $\{p_n\}$ likes to hang out around! $E^*$ being @closed means that if there is a point in $X$ that the points of $E^*$ get arbitrarily close to, then it is also a point $\{p_n\}$ likes to hang out around.
 :::
+
+# Cauchy Sequences
+
+:::definition "Cauchy Sequence" {synonyms: Cauchy}
+A @sequence $\{p_n\}$ in a @metric-space $X$ is said to be a **Cauchy sequence** if for every $\epsilon > 0$ there is an integer $N$ such that $d(p_n, p_m) < \epsilon$ is $n \geq N$ and $m \geq N.$
+:::
+
+:::definition "Diameter"
+Let $E$ be a nonempty @subset of a @metric-space $X,$ and let $S$ be the @set of all @real-numbers of the form $d(p,q),$ with $p, q \in E.$ The @supremum of $S$ is called the **diameter** of $E.$
+:::
+
+:::theorem
+if $\{p_n\}$ is a @sequence in $X$ and if $E_n$ consists of the @points $p_N, p_{N+1}, p_{N+2}, \dots,$ then $\{p_n\}$ is a @Cauchy-sequence if and only if
+
+$$ lim_{N \to \infty} \diam{E_N} = 0. $$
+
+::::proof
+Suppose $\{p_n\}$ is a @Cauchy-sequence. Then, let $\epsilon > 0.$ For some integer $N,$ $d(p_n, p_m) < \epsilon$ when $n, m \geq N.$ Therefore, $\diam{E_N} < \epsilon.$ Since $\epsilon$ was arbitrary, we can see that the sequence $\{\diam{E_N}\}$ converges to $0.$
+
+Conversely, suppose $lim_{N \to \infty} \diam{E_N} = 0.$ Then, @{every neighborhood of $0$ contains $\{\diam{E_N}\}$ for all but finitely many N|sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. Let $\epsilon > 0.$ Then, pick $N$ such that $\diam{E_n} < \epsilon.$ Letting $m, n \geq N,$ we have that $d(p_m, p_n) \leq \diam{E_n} < \epsilon.$
+::::
+:::
