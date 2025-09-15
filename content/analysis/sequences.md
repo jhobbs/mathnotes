@@ -14,6 +14,10 @@ Review the definition of a sequence:
 A sequence $\{p_n\}$ in a @metric-space $X$ is said to **converge** if there is a point $p \in X$ with the following property: For every $\epsilon > 0,$ there is an integer $N$ such that $n \geq N$ implies that $d(p_n, p) < \epsilon.$ 
 :::
 
+:::definition "Convergent"
+If a @sequence @converges, it is said to be a **convergent** @sequence.
+:::
+
 :::definition "Limit"
 If a @sequence $\{p_n\}$ converges to $p,$ we say that $p$ is the **limit** of $\{p_n\},$ denoted as:
 
@@ -278,10 +282,10 @@ A @sequence $\{p_n\}$ in a @metric-space $X$ is said to be a **Cauchy sequence**
 Let $E$ be a nonempty @subset of a @metric-space $X,$ and let $S$ be the @set of all @real-numbers of the form $d(p,q),$ with $p, q \in E.$ The @supremum of $S$ is called the **diameter** of $E.$
 :::
 
-:::theorem
-if $\{p_n\}$ is a @sequence in $X$ and if $E_n$ consists of the @points $p_N, p_{N+1}, p_{N+2}, \dots,$ then $\{p_n\}$ is a @Cauchy-sequence if and only if
+:::theorem {label: limit-of-diameter-of-remaining-points-in-cauchy-sequence-is-zero}
+if $\{p_n\}$ is a @sequence in $X$ and if $E_N$ consists of the @points $p_N, p_{N+1}, p_{N+2}, \dots,$ then $\{p_n\}$ is a @Cauchy-sequence if and only if
 
-$$ lim_{N \to \infty} \diam{E_N} = 0. $$
+$$ \lim_{N \to \infty} \diam{E_N} = 0. $$
 
 ::::proof
 Suppose $\{p_n\}$ is a @Cauchy-sequence. Then, let $\epsilon > 0.$ For some integer $N,$ $d(p_n, p_m) < \epsilon$ when $n, m \geq N.$ Therefore, $\diam{E_N} < \epsilon.$ Since $\epsilon$ was arbitrary, we can see that the sequence $\{\diam{E_N}\}$ converges to $0.$
@@ -317,11 +321,61 @@ Therefore, $\diam{\closure{E}} \leq 2 \epsilon + \diam{E},$ and since $\epsilon$
 :::theorem {label: nested-sequence-of-compact-sets-with-lim-diam-zero-has-singleton-intersection}
 If $K_n$ is a @sequence of nonempty @compact @sets in $X$ such that $K_{n+1} \subset K_n, (n = 1, 2, 3, \dots)$ and if
 
-$$ \lim+{n \to \infty} \diam K_n = 0, $$
+$$ \lim_{n \to \infty} \diam K_n = 0, $$
 
 then $\bigcap_{1}^\infty K_n$ consists of exactly one @point.
 
 ::::proof
 Let $K = \bigcap_{1}^\infty K_n.$ Then $K$ @{is not empty|intersection-of-nonempty-nested-compact-sets-is-nonempty}. Assume for the sake of contradiction that $K$ contains more than one point. Then, $\diam{K} > 0.$ But, for each $n, K \subset K_n,$ so that $\diam{K_n} \geq \diam{K}.$ But, this contradicts our given that $\lim+{n \to \infty} \diam K_n = 0,$ so our assumption that $K$ contains more than one @point must be invalid, and thus $K$ contains exactly one point.
 ::::
+:::
+
+:::theorem {label: every-convergent-sequence-in-a-metric-space-is-a-cauchy-sequence}
+
+Every convergent @sequence in a @metric-space $X$ is a @Cauchy-sequence.
+
+::::proof
+Suppose $\{p_n\}$ is a convergent @sequence in a @metric-space $X.$ Let $\epsilon > 0.$ Then for some $N, d(p, p_n) < \epsilon$ when $n \geq N.$ Thus,
+
+$$ d(p_n, p_m) \leq d(p, p_n) + d(p, p_m) <  2 \epsilon $$
+
+whenever $n, m \geq N,$ and so $\{p_n\}$ is @Cauchy.
+::::
+:::
+
+:::theorem {label: cauchy-sequences-in-compact-metric-spaces-are-convergent}
+If $X$ is a @compact @metric-space and if $\{p_n\}$ is a @cauchy-sequence in $X,$ then $\{p_n\}$ @converges to some point of $X.$
+
+
+::::proof
+Let $\{p_n\}$ be a @cauchy-sequence in the @compact @metric-space $X.$ For $N = 1, 2, 3, \dots,$ let $E_n$  bet the set consisting of $p_{N}, p_{N+1}, p_{N+2}, \dots.$ Then
+
+$$ \lim_{N \to \infty}{\diam{\closure{E_N}}}= 0, $$
+
+by @{two|limit-of-diameter-of-remaining-points-in-cauchy-sequence-is-zero} @{theorems|diameter-of-set-equals-diameter-of-closure} above. Each $\closure{E_n}$ is a @closed @subset of the @compact space $X,$ and @{is thus @compact|closed-subsets-of-compact-sets-are-compact}. Also, $E_{N+1} \subset E_{N},$ which @{implies that $\closure{E_{N+1}} \subset \closure{E_{N}}$|set-is-its-closure-iff-it-is-closed}. Now, we have that @{there is a unique $p \in X$ which lies in every $\closure{E_n}.$|nested-sequence-of-compact-sets-with-lim-diam-zero-has-singleton-intersection}
+
+Let $\epsilon > 0.$ Since $\lim_{N \to \infty}{\diam{\closure{E_N}}}= 0,$ there is an integer $N_0$ such that $\diam{\closure{E_n}} < \epsilon$ if $N \geq N_0.$ Since $p \in \closure{E_n},$ we have that $d(p, q) < \epsilon$ for every $q \in \closure{E_N}$ and thus for every $q \in E_n.$ That is, $d(p, p_n) < \epsilon$ if $n \geq N_0,$ so $\{p_n\}$ converges to $p.$
+::::
+:::
+
+:::theorem {label: every-cauchy-sequence-in-rk-converges}
+In $R^k,$ every @cauchy-sequence @converges.
+
+::::proof
+Let $\{\vec{x}_n\}$ be a @cauchy-sequence in $R^k.$ Define $E_N$ as in @{the proof above|proof-of-cauchy-sequences-in-compact-metric-spaces-are-convergent}, but with $\vec{x}_i$ in place of $p_i.$ For some $N, \diam{E_n} < 1.$ The @range-sequence of $\{\vec{x}_n\}$ is the union of $E_n$ and the @finite @set $\{\vec{x}_1, \dots, \vec{x}_{N-1}\}.$ Hence, $\{\vec{x}_n\}$ is @bounded-sequence (since the finite set of points can be contained in some bounding box, and the remaining points can be contained in some @ball with @diameter 1.) Since $\closure{\{\vec{x}_n\}}$ is @bounded, it is @compact, and thus $\{\vec{x}_n\}$ is a subset of a @compact @metric-space (its closure), and so @{converges|cauchy-sequences-in-compact-metric-spaces-are-convergent}.
+::::
+:::
+
+:::theorem "Cauchy criterion for convergence" {label: cauchy-criterion-for-convergence}
+A sequence @converges in $R^k$ if and only if it is a @cauchy-sequence.
+
+::::proof
+Suppose $\{p_n\} \subset R^k$ @converges. Then, because $R^k$ is a @metric-space, @{$\{p_n\}$ is @cauchy|every-convergent-sequence-in-a-metric-space-is-a-cauchy-sequence}.
+
+Conversely, suppose $\{p_n\} \subset R^k$ is @cauchy. Then, @{$\{p_n\}$ converges|every-cauchy-sequence-in-rk-converges}.
+::::
+:::
+
+:::note
+An important difference between the definition of a @convergent @sequence and a @cauchy-sequence is that the @limit is explicitly involved in the former, but not the latter. Thus, @{we may be able to decide|cauchy-sequences-in-compact-metric-spaces-are-convergent} whether or not a given @sequence @converges without knowledge of the @limit to which it may @converge.
 :::
