@@ -290,11 +290,38 @@ Conversely, suppose $lim_{N \to \infty} \diam{E_N} = 0.$ Then, @{every neighborh
 ::::
 :::
 
-hi testing
-
-:::theorem
+:::theorem {label: diameter-of-set-equals-diameter-of-closure}
 If $\closure{E}$ is the @closure of a @set $E$ in a @metric-space $X,$ then
 
 $$ \diam{\closure{E}} = \diam{E}. $$
 
+
+::::proof
+Because $E \subset \closure{E},$ $\diam{E} \leq \diam{\closure{E}}.$
+
+Conversely, Let $p, q \in \closure{E},$ and $p', q' \in E,$ such that $d(p, p') < \epsilon, d(q, q') < \epsilon.$ Therefore, by the triangle inequality,
+
+$$ \begin{aligned}
+
+d(p,q) & \leq d(p, p') + d(p', q') + d(q', q) \\
+       & < 2 \epsilon + d(p', q') \\
+       & \leq 2 \epsilon + \diam{E}.
+
+\end{aligned}
+$$
+
+Therefore, $\diam{\closure{E}} \leq 2 \epsilon + \diam{E},$ and since $\epsilon$ was arbitrary, $\diam{\closure{E}} = \diam{E}.$
+::::
+:::
+
+:::theorem {label: nested-sequence-of-compact-sets-with-lim-diam-zero-has-singleton-intersection}
+If $K_n$ is a @sequence of nonempty @compact @sets in $X$ such that $K_{n+1} \subset K_n, (n = 1, 2, 3, \dots)$ and if
+
+$$ \lim+{n \to \infty} \diam K_n = 0, $$
+
+then $\bigcap_{1}^\infty K_n$ consists of exactly one @point.
+
+::::proof
+Let $K = \bigcap_{1}^\infty K_n.$ Then $K$ @{is not empty|intersection-of-nonempty-nested-compact-sets-is-nonempty}. Assume for the sake of contradiction that $K$ contains more than one point. Then, $\diam{K} > 0.$ But, for each $n, K \subset K_n,$ so that $\diam{K_n} \geq \diam{K}.$ But, this contradicts our given that $\lim+{n \to \infty} \diam K_n = 0,$ so our assumption that $K$ contains more than one @point must be invalid, and thus $K$ contains exactly one point.
+::::
 :::
