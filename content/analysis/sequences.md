@@ -343,10 +343,14 @@ whenever $n, m \geq N,$ and so $\{p_n\}$ is @Cauchy.
 ::::
 :::
 
-:::theorem {label: cauchy-sequences-in-compact-metric-spaces-are-convergent}
-If $X$ is a @compact @metric-space and if $\{p_n\}$ is a @cauchy-sequence in $X,$ then $\{p_n\}$ @converges to some point of $X.$
+:::definition "Complete"
+A @metric-space in which every @cauchy-sequence @converges is said to be **complete**.
+:::
 
+:::theorem {label: compact-metric-spaces-are-complete}
+@Compact @metric-spaces are @complete.
 
+That is, if $X$ is a @compact @metric-space and if $\{p_n\}$ is a @cauchy-sequence in $X,$ then $\{p_n\}$ @converges to some point of $X.$
 ::::proof
 Let $\{p_n\}$ be a @cauchy-sequence in the @compact @metric-space $X.$ For $N = 1, 2, 3, \dots,$ let $E_n$  bet the set consisting of $p_{N}, p_{N+1}, p_{N+2}, \dots.$ Then
 
@@ -358,11 +362,13 @@ Let $\epsilon > 0.$ Since $\lim_{N \to \infty}{\diam{\closure{E_N}}}= 0,$ there 
 ::::
 :::
 
-:::theorem {label: every-cauchy-sequence-in-rk-converges}
-In $R^k,$ every @cauchy-sequence @converges.
+:::theorem {label: euclidean-spaces-are-complete}
+All Euclidean spaces are complete
+
+That is, in $R^k,$ every @cauchy-sequence @converges.
 
 ::::proof
-Let $\{\vec{x}_n\}$ be a @cauchy-sequence in $R^k.$ Define $E_N$ as in @{the proof above|proof-of-cauchy-sequences-in-compact-metric-spaces-are-convergent}, but with $\vec{x}_i$ in place of $p_i.$ For some $N, \diam{E_n} < 1.$ The @range-sequence of $\{\vec{x}_n\}$ is the union of $E_n$ and the @finite @set $\{\vec{x}_1, \dots, \vec{x}_{N-1}\}.$ Hence, $\{\vec{x}_n\}$ is @bounded-sequence (since the finite set of points can be contained in some bounding box, and the remaining points can be contained in some @ball with @diameter 1.) Since $\closure{\{\vec{x}_n\}}$ is @bounded, it is @compact, and thus $\{\vec{x}_n\}$ is a subset of a @compact @metric-space (its closure), and so @{converges|cauchy-sequences-in-compact-metric-spaces-are-convergent}.
+Let $\{\vec{x}_n\}$ be a @cauchy-sequence in $R^k.$ Define $E_N$ as in @{the proof above|proof-of-compact-metric-spaces-are-complete}, but with $\vec{x}_i$ in place of $p_i.$ For some $N, \diam{E_n} < 1.$ The @range-sequence of $\{\vec{x}_n\}$ is the union of $E_n$ and the @finite @set $\{\vec{x}_1, \dots, \vec{x}_{N-1}\}.$ Hence, $\{\vec{x}_n\}$ is @bounded-sequence (since the finite set of points can be contained in some bounding box, and the remaining points can be contained in some @ball with @diameter 1.) Since $\closure{\{\vec{x}_n\}}$ is @bounded, it is @compact, and thus $\{\vec{x}_n\}$ is a subset of a @compact @metric-space (its closure), and so @{converges|compact-metric-spaces-are-complete}.
 ::::
 :::
 
@@ -372,10 +378,18 @@ A sequence @converges in $R^k$ if and only if it is a @cauchy-sequence.
 ::::proof
 Suppose $\{p_n\} \subset R^k$ @converges. Then, because $R^k$ is a @metric-space, @{$\{p_n\}$ is @cauchy|every-convergent-sequence-in-a-metric-space-is-a-cauchy-sequence}.
 
-Conversely, suppose $\{p_n\} \subset R^k$ is @cauchy. Then, @{$\{p_n\}$ converges|every-cauchy-sequence-in-rk-converges}.
+Conversely, suppose $\{p_n\} \subset R^k$ is @cauchy. Then, @{$\{p_n\}$ converges|euclidean-spaces-are-complete}.
 ::::
 :::
 
 :::note
-An important difference between the definition of a @convergent @sequence and a @cauchy-sequence is that the @limit is explicitly involved in the former, but not the latter. Thus, @{we may be able to decide|cauchy-sequences-in-compact-metric-spaces-are-convergent} whether or not a given @sequence @converges without knowledge of the @limit to which it may @converge.
+An important difference between the definition of a @convergent @sequence and a @cauchy-sequence is that the @limit is explicitly involved in the former, but not the latter. Thus, @{we may be able to decide|compact-metric-spaces-are-complete} whether or not a given @sequence @converges without knowledge of the @limit to which it may @converge.
+:::
+
+:::theorem
+Every @closed @subset $E$ of a @complete @metric-space $X$ is @complete.
+
+::::proof
+Let $\{p_n\} \subset E$ be a @cauchy-sequence. Then, it converges to some point $p \in X,$ and actually $p \in E,$ because $E$ is @closed. Therefore, $E$ is @complete.
+::::
 :::
