@@ -393,3 +393,9 @@ Every @closed @subset $E$ of a @complete @metric-space $X$ is @complete.
 Let $\{p_n\} \subset E$ be a @cauchy-sequence. Then, it converges to some point $p \in X,$ and actually $p \in E,$ because $E$ is @closed. Therefore, $E$ is @complete.
 ::::
 :::
+
+:::example
+Not all @metric-spaces are @complete. For example, the space of all rationals with $d(x, y) = |x - y|$ is not @complete.
+:::
+
+For more content specifically on real sequences, see [[real-sequences]].

@@ -3,7 +3,7 @@ description: Covers convergent and divergent sequences with epsilon-N definition
   limit laws, monotone convergence theorem, subsequences, Bolzano-Weierstrass theorem,
   and Cauchy sequences.
 layout: page
-title: Sequences
+title: Real Sequences
 ---
 
 # Sequences
