@@ -21,15 +21,18 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
     path = Path(section_path)
 
     def process_directory(dir_path: Path, depth: int = 0) -> List[Dict]:
-        items = []
-        for item in sorted(dir_path.iterdir()):
+        files = []
+        directories = []
+
+        # First, separate files and directories
+        for item in dir_path.iterdir():
             if item.is_file() and item.suffix == ".md":
                 file_path_raw = str(item.relative_to(Path(".")))
                 file_path = file_path_raw.replace("\\", "/")
                 canonical_url = file_to_canonical.get(file_path)
                 # canonical_url already has trailing slash from content_discovery
                 url = canonical_url
-                
+
                 # Try to get title from frontmatter, fall back to filename
                 try:
                     with open(item, "r", encoding="utf-8") as f:
@@ -42,18 +45,33 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
                     # If anything goes wrong reading the file, use filename
                     title = item.stem.replace("-", " ").title()
 
-                items.append({"name": title, "path": url, "is_subdir": False})
+                files.append({"name": title, "path": url, "is_subdir": False, "_item": item})
             elif item.is_dir() and not item.name.startswith(".") and not item.name.startswith("__"):
                 # Recursively get files from subdirectories
                 subdir_content = process_directory(item, depth + 1)
                 if subdir_content:
-                    items.append(
+                    directories.append(
                         {
                             "name": item.name.replace("-", " ").title(),
                             "is_subdir": True,
                             "files": subdir_content,
+                            "_item": item,
                         }
                     )
+
+        # Sort files and directories separately by their item names
+        files.sort(key=lambda x: x["_item"].name.lower())
+        directories.sort(key=lambda x: x["_item"].name.lower())
+
+        # Remove the temporary _item field and combine: files first, then directories
+        items = []
+        for f in files:
+            del f["_item"]
+            items.append(f)
+        for d in directories:
+            del d["_item"]
+            items.append(d)
+
         return items
 
     return process_directory(path)
