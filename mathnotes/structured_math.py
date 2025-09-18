@@ -43,6 +43,7 @@ class MathBlock:
     content_html: Optional[str] = None  # Stores the inner HTML content (without wrapper)
     synonyms: List[Tuple[str, str]] = field(default_factory=list)  # List of (synonym_title, synonym_label)
     auto_generated_synonyms: List[Tuple[str, str]] = field(default_factory=list)  # Auto-generated synonyms (not shown in UI)
+    tags: List[str] = field(default_factory=list)  # List of tags for categorization
 
     @property
     def css_class(self) -> str:
@@ -394,6 +395,19 @@ class StructuredMathParser:
                             if plural_label not in manual_synonym_labels:
                                 auto_generated_synonyms.append((plural, plural_label))
 
+                # Parse tags from metadata
+                tags = []
+                if "tags" in metadata:
+                    tags_str = metadata["tags"]
+                    # Parse comma-separated tags
+                    for tag in tags_str.split(","):
+                        tag = tag.strip()
+                        # Remove quotes if present
+                        if tag.startswith('"') and tag.endswith('"'):
+                            tag = tag[1:-1]
+                        if tag:
+                            tags.append(tag)
+
                 # Create block
                 block = MathBlock(
                     block_type=block_type,
@@ -404,6 +418,7 @@ class StructuredMathParser:
                     parent=parent_block,
                     synonyms=synonyms,
                     auto_generated_synonyms=auto_generated_synonyms,
+                    tags=tags,
                 )
                 
                 # Assert labeling requirements
@@ -503,21 +518,35 @@ class StructuredMathParser:
     def _parse_metadata(self, metadata_str: str) -> Dict[str, Any]:
         """Parse metadata string into dictionary."""
         metadata = {}
-        # For now, we only support synonyms metadata
-        # Format: {synonyms: word1, word2, word3}
+
+        # Parse different metadata fields
+        # Support multiple fields in same metadata block
+        # e.g., {label: foo, synonyms: bar, baz, tags: tag1, tag2}
+
+        # Split by commas but be careful of nested structures
+        # Simple approach: extract each known field separately
+
+        # Parse label
+        if "label:" in metadata_str:
+            # Extract label value - find the next comma or end
+            label_match = re.search(r'label:\s*([^,}]+)', metadata_str)
+            if label_match:
+                metadata["label"] = label_match.group(1).strip()
+
+        # Parse synonyms
         if "synonyms:" in metadata_str:
-            # Extract everything after "synonyms:"
-            parts = metadata_str.split("synonyms:", 1)
-            if len(parts) > 1:
-                synonyms_value = parts[1].strip()
-                metadata["synonyms"] = synonyms_value
-        # Add support for other metadata in the future
-        # For now, also try to parse label if present
-        if "label:" in metadata_str and "synonyms:" not in metadata_str:
-            parts = metadata_str.split("label:", 1)
-            if len(parts) > 1:
-                label_value = parts[1].strip()
-                metadata["label"] = label_value
+            # Extract synonyms - everything after "synonyms:" until next field or end
+            synonyms_match = re.search(r'synonyms:\s*([^}]*?)(?:,\s*(?:label|tags):|$|})', metadata_str)
+            if synonyms_match:
+                metadata["synonyms"] = synonyms_match.group(1).strip()
+
+        # Parse tags
+        if "tags:" in metadata_str:
+            # Extract tags - everything after "tags:" until next field or end
+            tags_match = re.search(r'tags:\s*([^}]*?)(?:,\s*(?:label|synonyms):|$|})', metadata_str)
+            if tags_match:
+                metadata["tags"] = tags_match.group(1).strip()
+
         return metadata
 
     def render_block_html(
@@ -570,7 +599,12 @@ class StructuredMathParser:
         if block.synonyms:
             synonym_titles = [syn[0] for syn in block.synonyms]
             header_parts.append(f'<span class="block-synonyms">(also: {", ".join(synonym_titles)})</span>')
-        
+
+        # Add tags if they exist
+        if block.tags:
+            tags_html = ''.join([f'<span class="block-tag">{tag}</span>' for tag in block.tags])
+            header_parts.append(f'<span class="block-tags">{tags_html}</span>')
+
         # Add reference label (all blocks now have labels)
         header_parts.append(f'<span class="block-label-ref">@{block.label}</span>')
         
