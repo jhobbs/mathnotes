@@ -6,7 +6,7 @@ title: Continuity in Euclidean and Metric Spaces
 
 # Limits of Functions
 
-:::definition
+:::definition "Limit"
 Let $X$ and $Y$ be @metric-spaces; suppose $E \subset X,$ $f : E \to Y,$ and $p$ is a @limit-point of $E.$ We write $f(x) \to q$ as $x \to p,$ or
 
 $$ \lim_{x \to p} f(x) = q $$
@@ -25,7 +25,7 @@ In the above definition, the symbols $d_X$ and $d_Y$ refer to distances in $X$ a
 Furthermore, while $p \in X,$ $p$ need not be a point of $E.$ In fact, even if $p \in E,$ it's possible that $f(p) \neq \lim_{x \to p} f(x).$
 :::
 
-:::theorem {label: limit-of-a-function-is-a-limit-of-a-sequence}
+:::theorem {label: limit-of-a-function-characterized-by-limits-of-sequences}
 Let $X$ and $Y$ be @metric-spaces; suppose $E \subset X,$ $f : E \to Y,$ and $p$ is a @limit-point of $E.$ Then
 
 $$ \lim_{x \to p} f(x) = q \tag{a} $$
@@ -44,7 +44,40 @@ Suppose that (a) is true and let $\{p_n\} \subset E$ be a @sequence such that (c
 Conversely, suppose that (a) is false. Then, for some $\epsilon > 0,$ that for every $\delta > 0$ there exists a point $x \in E$ such that $d_Y(f(x), q) \geq \epsilon$ but $0 < d_X(x, p) < \delta.$ If we let $\delta_n = 1/n, n = 1, 2, 3, \dots,$ and each $x_n$ a point such that $0 < d_X(x_n, p) < \delta_n,$ then $\{x_n\}$ is a @sequence satisfying (c). However, since $d_Y(f(x_n), q) \geq \epsilon$ for all $n,$ (b) does not hold.
 ::::
 
-::::corollary {label: limits-of-a-function-at-a-point-is-unique}
+::::corollary {label: limit-of-a-function-at-a-point-is-unique-if-it-exists}
 If $f$ has a @limit at $p,$ this @limit is unique.
+
+:::::proof
+This follows directly from the facts that @{limits of sequences are unique|limits-of-sequences-are-unique} and that @{limits of functions are characterized by limits of sequences|limit-of-a-function-characterized-by-limits-of-sequences}.
+:::::
+::::
+:::
+
+:::theorem
+Suppose $E \subset X,$ a @metric-space, $p$ is a @limit-point of $E,$ $f$ and $g$ are complex functions on $E,$ and
+
+$$ \lim_{x \to p} f(x) = A, \quad \lim_{x \to p} g(x) = B. $$
+
+Then:
+
+$$ \lim_{x \to p} (f + g)(x) = A + B. $$
+
+$$ \lim_{x \to p} (fg)(x) = AB. $$
+
+$$ \lim_{x \to p} (\frac{f}{g})(x) = \frac{A}{B}, B \neq 0. $$
+
+
+::::proof
+This follows directly from the that @{limits of functions are characterized by limits of sequences|limit-of-a-function-characterized-by-limits-of-sequences}, and the @{algebraic properties of sequences of limits|sums-and-products-of-sequences}.
+::::
+
+::::remark
+If $\vec{f}$ and $\vec{g}$ map $E$ into $R^k,$ then (a) remains true, and (b) becomes
+
+$$ \lim_{x \to p} (f \cdot g)(x) = A \cdot B. $$
+
+That is, the @limit of an @inner-product of vector valued functions is the @inner-product of their @limits.
+
+(See @sequence-in-rk-converges-iff-its-components-converge).
 ::::
 :::
