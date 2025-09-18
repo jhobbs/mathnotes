@@ -280,9 +280,18 @@ class StructuredMathParser:
                 colons = start_match.group(1)
                 level = len(colons) - 3  # ::: is level 0, :::: is level 1, etc.
 
-                # If this block is at a deeper level than expected, stop processing
+                # If this block is at a deeper level than expected, it's an error
                 if level > expected_level:
-                    return processed_lines, i
+                    # This is a nested block without a parent - error
+                    error_html = self._render_block_error(
+                        f"Invalid nesting level for {start_match.group(2).lower()} block",
+                        f"Block uses {colons} ({len(colons)} colons) but should use {':::' + ':' * expected_level} ({3 + expected_level} colons) at this nesting level",
+                        line_number=start_idx + i + 1,  # Convert to 1-based line numbering
+                    )
+                    processed_lines.append(error_html)
+                    # Skip this line and continue
+                    i += 1
+                    continue
 
                 # If this block is at a shallower level than expected, stop processing
                 if level < expected_level:
