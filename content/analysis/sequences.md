@@ -18,7 +18,7 @@ A sequence $\{p_n\}$ in a @metric-space $X$ is said to **converge** if there is 
 If a @sequence @converges, it is said to be a **convergent** @sequence.
 :::
 
-:::definition "Limit"
+:::definition "Limit (Sequence)" {label: limit-sequence}
 If a @sequence $\{p_n\}$ converges to $p,$ we say that $p$ is the **limit** of $\{p_n\},$ denoted as:
 
 $$ \lim_{n \to \infty} p_n = p. $$
@@ -214,7 +214,7 @@ Given a @sequence $\{p_n\},$ consider a @sequence $\{n_k\}$ of positive integers
 :::
 
 :::definition "Subsequential limit"
-If a subsequence $\{p_{n_i}\}$ of $\{p_n\}$ @converges, its @limit is called a **subsequential limit** of $\{p_n\}.$
+If a subsequence $\{p_{n_i}\}$ of $\{p_n\}$ @converges, its @limit-sequence is called a **subsequential limit** of $\{p_n\}.$
 :::
 
 :::theorem
@@ -256,7 +256,7 @@ Let $E^*$ be the @set of all @subsequential-limits of $\{p_n\}$ and let $q$ be a
 
 First, note that if the range of $\{p_n\}$ is just $\{q\},$ then $q$ is the only @subsequential-limit of $\{p_n\}.$ In this case, $E* = \{q\}$ is a singleton and is @closed @set, as it vacuously contains all of its @limit-points. So, assume this is not the case.
 
-Choose $n_1$ so that $p_{n_1} \neq q,$ and let $\delta = d(q, p_{n_1}).$ Suppose $n_1, \dots, n_{i-1}$ are chosen. Since $q$ is a limit point of $E^*,$ there is an $x \in E^*$ with $d(q, x) < \frac{\delta}{2^i}.$ Since $x \in E^*$ and is thus the @limit of some @subsequence of $\{p_n\},$ there is an $n_i > n_{i-1}$ such that $d(x, p_{n_i}) < \frac{\delta}{2^i}.$ Now, via the triangle inequality,
+Choose $n_1$ so that $p_{n_1} \neq q,$ and let $\delta = d(q, p_{n_1}).$ Suppose $n_1, \dots, n_{i-1}$ are chosen. Since $q$ is a limit point of $E^*,$ there is an $x \in E^*$ with $d(q, x) < \frac{\delta}{2^i}.$ Since $x \in E^*$ and is thus the @limit-sequence of some @subsequence of $\{p_n\},$ there is an $n_i > n_{i-1}$ such that $d(x, p_{n_i}) < \frac{\delta}{2^i}.$ Now, via the triangle inequality,
 
 $$ \begin{aligned} d(q, p_{n_i}) & \leq d(q, x) + d(x, p_{n_i}) \\
                                  & < \frac{\delta}{2^i} + \frac{\delta}{2^i} \\
@@ -383,7 +383,7 @@ Conversely, suppose $\{p_n\} \subset R^k$ is @cauchy. Then, @{$\{p_n\}$ converge
 :::
 
 :::note
-An important difference between the definition of a @convergent @sequence and a @cauchy-sequence is that the @limit is explicitly involved in the former, but not the latter. Thus, @{we may be able to decide|compact-metric-spaces-are-complete} whether or not a given @sequence @converges without knowledge of the @limit to which it may @converge.
+An important difference between the definition of a @convergent @sequence and a @cauchy-sequence is that the @limit-sequence is explicitly involved in the former, but not the latter. Thus, @{we may be able to decide|compact-metric-spaces-are-complete} whether or not a given @sequence @converges without knowledge of the @limit-sequence to which it may @converge.
 :::
 
 :::theorem
