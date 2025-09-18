@@ -81,3 +81,19 @@ That is, the @limit of an @inner-product of vector valued functions is the @inne
 (See @sequence-in-rk-converges-iff-its-components-converge).
 ::::
 :::
+
+# Continuous Functions
+
+:::definition "Continuous"
+Suppose $X$ and $Y$ are @metric-spaces, $E \subset X, p \in E,$ and $f : E \to Y.$ Then $f$ is said to be **continuous at $p$** if for every $\epsilon > 0$ there exists a $\delta > 0$ such that
+
+$$ d_Y(f(x), f(p)) < \epsilon $$
+
+for all points $x \in E$ for which $d_X(x, p) < \delta.$
+
+If $f$ is **continuous** at every @point of $E,$ then $f$ is said to be **continuous on $E$.**
+:::
+
+:::note
+A more geometric way to view continuity is that for any @ball $B(f(p))$ centered at $f(p),$ there is some @ball $B(p)$ centered at $p$ for which every point in $B(p)$ (including $p$) is mapped by $f$ to some point in $B(f(p)).$
+:::
