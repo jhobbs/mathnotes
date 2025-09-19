@@ -93,7 +93,20 @@ for all points $x \in E$ for which $d_X(x, p) < \delta.$
 
 If $f$ is **continuous** at every @point of $E,$ then $f$ is said to be **continuous on $E$.**
 :::
-
 :::note
 A more geometric way to view continuity is that for any @ball $B(f(p))$ centered at $f(p),$ there is some @ball $B(p)$ centered at $p$ for which every point in $B(p)$ (including $p$) is mapped by $f$ to some point in $B(f(p)).$
+
+Also, note that if $p$ is an @isolated-point of $E,$ then the definition of @continuous implies that every @function $f$ which has $E$ as its @domain of definition is @continuous at $p.$ This is because for any $\epsilon > 0$ we choose, we can pick $\delta > 0$ so that the only point $x \in E$ for which $d_X(x, p) < \delta$ is $x = p,$ and so
+
+$$ d_Y(f(x), f(p)) = 0 < \epsilon. $$
+
+Also note that, unlike the definition of @limit, the definition of @continuous requires $f$ to be defined at $p$ in order to be @continuous at $p.$
+:::
+
+:::theorem {label: function-is-continuous-at-point-iff-limit-at-point-equals-function-at-point}
+Suppose $X$ and $Y$ are @metric-spaces, $E \subset X, p \in E,$ with $p$ a @limit-point of $E,$ and $f : E \to Y.$ Then, $f$ is @continuous if and only if $\lim_{x \to p} f(x) = f(p).$
+
+::::proof
+Note that the definition of a @function having a @limit at @point in a @metric-space is different from the definition of a @function being @continuous at a @point in a @metric-space only in that the @continuous definition requires the @function to be defined at the @point (and equal to the @limit at the @point.)
+::::
 :::
