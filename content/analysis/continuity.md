@@ -110,3 +110,43 @@ Suppose $X$ and $Y$ are @metric-spaces, $E \subset X, p \in E,$ with $p$ a @limi
 Note that the definition of a @function having a @limit at @point in a @metric-space is different from the definition of a @function being @continuous at a @point in a @metric-space only in that the @continuous definition requires the @function to be defined at the @point (and equal to the @limit at the @point.)
 ::::
 :::
+
+:::definition "Composition" {synonym: composite}
+Suppose $X, Y, Z$ are @metric-spaces, $E \subset X,$ $f: E \to Y,$ $g: f(E) \to Z,$ $h: E \to Z$ with
+
+$$ h(x) = g(f(x)) \quad (x \in E). $$
+
+The @function $h$ is called the **composition** or the **composite** of $f$ and $g.$ The notation
+
+$$ h = g \circ f $$
+
+is frequently used.
+:::
+
+:::theorem {label: composition-of-continuous-functions-is-continuous}
+Suppose $X, Y, Z$ are @metric-spaces, $E \subset X,$ $f: E \to Y,$ $g: f(E) \to Z,$ $h: E \to Z$ with
+
+$$ h(x) = g(f(x)) \quad (x \in E). $$
+
+If $f$ is @continuous at a point $p \in E$ and if $g$ is @continuous at the point $f(p),$ then $h$ is @continuous at $p.$
+
+::::proof
+Let $\epsilon > 0.$ Since $g$ is @continuous at $f(p),$ there exists $\eta > 0$ such that
+
+$$ d_Z(g(y), g(f(p))) < \epsilon \text{ if } d_Y(y, f(p)) < \eta \text{ and } y \in f(E). $$
+
+Since $f$ is @continuous at $p,$ there exists $\delta > 0$ such that
+
+$$ d_Y(f(x), f(p)) < \eta \text{ if } d_X(x, p) < \delta \text{ and } x \in E. $$
+
+It follows that
+
+$$ d_Z(h(x), h(p)) = d_z(g(f(x)), g(f(p))) < \epsilon $$
+
+if $d_X(x, p) < \delta$ and $x \in E.$ Thus, $h$ is @continuous at $p.$
+::::
+
+::::intuition
+Basically, since $g$ is continuous, we can control how close its output is to $g(f(p))$ by controlling how close its input is to $f(p),$ which we can certainly do, since $f$ is also continuous, and we can control how close its output is to $f(p)$ by controlling how close its input is to $p.$
+::::
+:::
