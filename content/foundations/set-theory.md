@@ -73,6 +73,11 @@ If $f$ is a @sequence denoted as $\{x_n\},$ the @values of $f,$ that is, the @el
 The @terms of a @sequence need not be distinct.
 :::
 
+:::definition "Inverse Image"
+If $f: A \to B$ and $E \subset(B),$ then $f^{-1}(E)$ denotes the @set of all $x \in A$ such that $f(x) \in E.$ We call $f^{-1}(E)$ the **inverse image** of $E$ under $f.$
+:::
+
+
 ## De Morgan's Laws
 
 :::theorem {label: complement-of-union-is-intersection-of-complements}
@@ -98,3 +103,5 @@ $$ (A \cap B)^c = A^c \cup B^c. $$
 Suppose $x \in (A \cap B)^c.$ Then, $x$ is not in $A \cap B,$ that is, $x$ is either not in $A$ or it is not in $B$ or it is in neither. If $x$ is not in $A,$ then it is in $A^c,$ and therefore it is in $A^c \cup B^c.$ The same approach works with $B,$ and therefore $x \in  A^c \cup B^c,$ and we have shown $(A \cap B)^c = A^c \cup B^c.$
 ::::
 :::
+
+
