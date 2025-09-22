@@ -150,3 +150,14 @@ if $d_X(x, p) < \delta$ and $x \in E.$ Thus, $h$ is @continuous at $p.$
 Basically, since $g$ is continuous, we can control how close its output is to $g(f(p))$ by controlling how close its input is to $f(p),$ which we can certainly do, since $f$ is also continuous, and we can control how close its output is to $f(p)$ by controlling how close its input is to $p.$
 ::::
 :::
+
+:::theorem {label: mapping-continuous-iff-inverse-images-of-open-sets-are-open}
+A @mapping $f$ of a @metric-space $X$ into a @metric-space $Y$ is @continuous on X if and only if $f^{-1}(V)$ is @open in $X$ for every @open set $V$ in $Y$ (see @inverse-image.)
+
+::::proof
+Assume $f$ is continuous on $X$ and $V$ is an @open set in $Y.$ Suppose, for the sake of contradiction, that $f^{-1}(V)$ is not open. Then, some point $p \in f^{-1}(V)$ is not an @interior-point of $f^{-1}(V),$ which means there is no @neighborhood of $p$ that contains only points in $f^{-1}(V),$ that is, every neighborhood of $p$ contains some point $q$ that is not in $f^{-1}(V),$ i.e., $f(q) \notin V.$ Now, since $V$ is open and $f(p) \in V,$ there is some $\epsilon > 0$ for which $B_\epsilon(f(p)) \subset V,$ but, since all neighborhoods of $p$ contain some $q \notin f^{-1}(V),$ there is no $\delta > 0$ for which all points within $\delta$ of $p$ are mapped to $B_\epsilon(f(p))$ by $f,$ a contradiction, since $f$ is continuous on $X$ by hypothesis. Therefore, our assumption is incorrect and $f^{-1}(V)$ is open.
+
+Conversely, suppose $f^{-1}(V)$ is @open in $X$ for every @open set $V$ in $Y.$ Let $V$ be an @open set in $Y.$ Assume, for the sake of contradiction that there is some $p \in f^{-1}(V)$ at which $f$ is not continuous. Let $\epsilon > 0.$ Then, there is no $\delta > 0$ for which $B_\delta(p)$ contains only points that are mapped by $f$ to $V,$ i.e. every @neighborhood of $p$ contains some point that is not in $f^{-1}(V),$ and therefore $p$ is not an @interior-point of $f^{-1}(V),$ and $f^{-1}(V)$ is not open, a contradiction. Thus, our assumption must be incorrect, and there is no such $p,$ and since entire space $Y$ is an @open @subset of itself, $f$ must be continuous on all of $X.$
+::::
+
+:::
