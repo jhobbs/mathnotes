@@ -8,15 +8,60 @@ title: Multivariable Differential Operators
 
 # Multivariable Differential Operators
 
+First, some preliminary definitions.
+
+
+:::definition "Vector Function"
+Let $P$ be any @point in a @domain-of-definition. Then we define a **vector function** $\vec{v}$ whose @values are @vectors, that is,
+
+$$ \vec{v} = \vec{v}(P) = [v_1(P), v_2(P), v_3(P)] $$
+
+that depends on points $P$ in space.
+:::
+
+:::definition "Vector Field"
+We say that a @vector-function defines a **vector field** in a @domain-of-definition.
+:::
+
+:::definition "Scalar Function" {synonyms: "scalar field"}
+Let $P$ be any @point in a @domain-of-definition. Then we define a **scalar function** $f,$ whose @values are @scalars, that is,
+
+$$ f = f(p) $$
+
+that depends on $P.$
+:::
+
 These are some differential operators that apply to multivariable and/or vector valued functions.
 
-## Gradient
+## Vector Differential Operator
 
-Given a scalar function $f : \mathbb{R}^n \to \mathbb{R}$, the gradient of $f$, denoted as $\nabla f$, is defined as the vector of its partial derivatives. Specifically, for a function $f(x_1, x_2, \cdots, x_n)$, the gradient is given by
+:::definition "del" {synonyms: "vector differential operator", nabla}
+In Euclidean space $\mathbb{R}^n$ with coordinates $(x_1, \dots, x_n)$ and standard basis $(\vec{e}_1, \dots, \vec{e}_n),$ **del** is a vector operator whose $x_1, \dots, x_n$ components are the partial derivative operators $\frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n}; $ that is
+
+$$ \nabla = \sum_{i = 1}^n \vec{e}_i \frac{\partial}{\partial x_i} = \left ( \frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n} \right ). $$
+
+:::
+
+
+## Gradient
+:::definition "Gradient"
+Given a @scalar-function $f : \mathbb{R}^n \to \mathbb{R}$, the gradient of $f$, denoted as $\nabla f$, is defined as the vector of its partial derivatives. Specifically, for a function $f(x_1, x_2, \cdots, x_n)$, the gradient is given by
 
 $$ \nabla f = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\  \frac{\partial f}{\partial x_2} \\\ \vdots \\\ \frac{\partial f}{\partial x_n} \end{bmatrix} $$
+:::
 
+:::remark
+We can write the @gradient as either a row @vector or a column @vector. Different texts use different conventions. I'll show it here as a row vector, while we used a column vector above, just to mix it up.
+
+In three-dimensional Euclidean space, the @gradient of a function $f,$ if it exists, is given by
+
+$$ \nabla f = \frac{\partial f}{\partial x} \vec{i} + \frac{\partial f}{\partial y} \vec{j} + \frac{\partial f}{\partial z} \vec{k} = \left [ \frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}, \frac{\partial f}{\partial z} \right ] $$ 
+:::
+
+:::theorem
 The gradient points in the direction of steepest ascent of the function $f$ at any given point and its magnitude gives the rate of ascent.
+:::
+
 
 ## Curl
 
