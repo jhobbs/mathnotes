@@ -18,6 +18,7 @@ export async function initMathJax() {
         diam: '\\operatorname{diam}',
         curl: '\\operatorname{curl}',
         div: '\\operatorname{div}',
+        grad: '\\operatorname{grad}',
         Arg: '\\operatorname{Arg}',
         Log: '\\operatorname{Log}',
         Span: '\\operatorname{Span}',

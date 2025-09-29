@@ -46,7 +46,7 @@ Suppose $X$ and $Y$ are sets with $X \subset Y$ and $Y \subset X.$ Now, suppose 
 Consider two @sets, $A$ and $B,$ whose @elements may be any objects whatsoever, and suppose that with each @element $x$ of $A$ there is associated, in some manner, any @element of $B,$ which we denote by $f(x).$ Then $f$ is said to be a **function** from $A$ to $B.$
 :::
 
-:::definition "Domain" {synonyms: "domain of definition"}
+:::definition "Domain of Definition"
 If $f$ is a @function from the @set $A$ to the @set $B,$ the @set $A$ is called the **domain** of $f.$
 :::
 

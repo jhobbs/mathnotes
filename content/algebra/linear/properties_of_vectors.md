@@ -116,6 +116,18 @@ If $\vec{x}$ and $\vec{y}$ are vectors in $\mathbb{R}^n,$ then their **inner pro
 $$ \vec{X} \cdot \vec{y} = \sum_{i = 1}^n x_i y_i. $$
 :::
 
+:::theorem {label: cos-characterization-of-dot-product}
+The @dot-product of $\vec{u}$ and $\vec{v}$ is
+
+$$ \vec{u} \cdot \vec{v} = |\vec{u}||\vec{v}|\cos{\theta} $$
+
+where $\theta$ is the angle between $\vec{u}$ and $\vec{v}.$
+:::
+
+:::definition "Perpendicular" {synonyms: orthogonal}
+Two vectors $\vec{u}$ and $\vec{v}$ are said to be **perpendicular** or **orthogonal** if the angle between them is $\pi/2$ radians, or, equivalently, if the inner product $\vec{u} \cdot \vec{v} = 0.$
+:::
+
 :::definition "Parallel"
 Two vectors $\vec{x}$ and $\vec{y}$ are said to be **parallel** if $\vec{x}$ is a scalar multiple of $\vec{y}$, i.e., if there exists some scalar $c$ where $\vec{x} = c \vec{y}.$
 :::
