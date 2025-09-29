@@ -96,7 +96,7 @@ If $f$ is **continuous** at every @point of $E,$ then $f$ is said to be **contin
 :::note
 A more geometric way to view continuity is that for any @ball $B(f(p))$ centered at $f(p),$ there is some @ball $B(p)$ centered at $p$ for which every point in $B(p)$ (including $p$) is mapped by $f$ to some point in $B(f(p)).$
 
-Also, note that if $p$ is an @isolated-point of $E,$ then the definition of @continuous implies that every @function $f$ which has $E$ as its @domain of definition is @continuous at $p.$ This is because for any $\epsilon > 0$ we choose, we can pick $\delta > 0$ so that the only point $x \in E$ for which $d_X(x, p) < \delta$ is $x = p,$ and so
+Also, note that if $p$ is an @isolated-point of $E,$ then the definition of @continuous implies that every @function $f$ which has $E$ as its @domain-of-definition is @continuous at $p.$ This is because for any $\epsilon > 0$ we choose, we can pick $\delta > 0$ so that the only point $x \in E$ for which $d_X(x, p) < \delta$ is $x = p,$ and so
 
 $$ d_Y(f(x), f(p)) = 0 < \epsilon. $$
 
