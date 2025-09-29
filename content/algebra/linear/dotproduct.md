@@ -19,7 +19,7 @@ $$ \vec{x} \cdot \vec{y} = (x_1, x_2, \cdots, x_n) \cdots (y_1, y_2, \cdots, y_n
 
 One geometric interpretation of the dot product of $\vec{u}$ and $\vec{v}$ is that it's the [[component|projection]] of $\vec{u}$ in the direction of $\vec{v}$ times the magnitude of $\vec{v}$. Thus, one $\vec{u}$ and $\vec{v}$ are pointing in generally the same direction it's positive, in generally opposite directions it's negative, and when they're perpindicular (orthogonal) it is $0$.
 
-Indeed, the cosine of the angle between two unit vectors is the the dot product between them, and in general, the cosine of the angle $\theta$ between two vectors $\vec{u}$ and $\vec{v}$ is the dot product of the unit vectors in their respective directions:
+Indeed, the cosine of the angle between two unit vectors is the dot product between them, and in general, the cosine of the angle $\theta$ between two vectors $\vec{u}$ and $\vec{v}$ is the dot product of the unit vectors in their respective directions:
 
 $$ \cos{\theta} =  \frac{\vec{u}}{||\vec{u}||} \cdot \frac{\vec{v}}{||\vec{v}||} = \frac{\vec{u} \cdot \vec{v}}{||\vec{u}|| ~ ||\vec{v}||} $$ 
 

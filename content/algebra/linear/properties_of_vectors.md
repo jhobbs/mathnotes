@@ -45,11 +45,11 @@ The geometric representation of vector $\vec{x}$ is, in an $n$ dimensional space
 Physically, a vector has a magnitude and a direction.
 :::
 
-:::define "Free vector"
+:::definition "Free vector"
 A @vector whose endpoints are not fixed at particular @points is called a **free vector.**
 :::
 
-:::define "Bound vector"
+:::definition "Bound vector"
 A @vector with a fixed endpoint is called a **bound vector.**
 :::
 
@@ -132,6 +132,32 @@ Two vectors $\vec{u}$ and $\vec{v}$ are said to be **perpendicular** or **orthog
 Two vectors $\vec{x}$ and $\vec{y}$ are said to be **parallel** if $\vec{x}$ is a scalar multiple of $\vec{y}$, i.e., if there exists some scalar $c$ where $\vec{x} = c \vec{y}.$
 :::
 
+:::definition "Cross Product" {synonyms: "Vector Product", "Outer Product"}
+The **cross product** $\vec{a} \times \vec{b}$ (read "a cross b") of two @vectors $\vec{a}$ and $\vec{b}$ is the @vector $\vec{v}$ denoted by
+
+$$ \vec{v} = \vec{a} \times \vec{b}. $$
+
+I. If $\vec{a} = \vec{0}$ or $\vec{b} = \vec{0},$ then we define $\vec{v} = \vec{a} \times \vec{b} = \vec{0}.$
+
+II. If both @vectors are nonzero @vectors, then @vector $\vec{v}$ has the @length
+
+$$ \tag{1} |\vec{v}| = |\vec{a} \times \vec{b}| = |\vec{a}||\vec{b}|\sin{\theta}, $$
+
+where $\theta$ is the angle between $\vec{a}$ and $\vec{b}.$ Furthermore, $\vec{a}$ and $\vec{b}$ form the sides of a parallelogram on a plane in space. The area of this parallelogram is precisely given by (1), such that the length $|\vec{v}|$ of the @vector $\vec{v}$ is equal to the area of the parallelogram.
+
+III. If $\vec{a}$ and $\vec{b}$ lie in the same straight line, i.e. $\vec{a}$ and $\vec{b}$ have the same or opposite @directions, then $\theta$ is $0 \degree$ or $180 \degree$ so that $\sin \theta = 0.$ In that case $|\vec{v}| = 0,$  so that $\vec{v} = \vec{a} \times \vec{b} = \vec{0}. $$
+
+IV. If cases I and III do not occur, then $\vec{v}$ is a nonzero vector. The @direction of $\vec{v} = \vec{a} \times \vec{b}$ is @perpendicular to both $\vec{a}$ and $\vec{b}$ such that $\vec{a}, \vec{b}, \vec{v},$ precisely in this order, form a right-handed triple 
+:::
+:::remark
+If $\vec{a} = (a_1, a_2, a_3)$ and $\vec{b} = (b_1, b_2, b_3),$ then we use the symbolic determinant to find the @cross-product, in this fashion:
+
+$$ \vec{v} = \vec{a} \times \vec{b} =  \begin{vmatrix}\vec{i} & \vec{j} & \vec{k}\\a_1 & a_2 & a_3\\b_1 & b_2 & b_3\end{vmatrix} = \begin{vmatrix} a_2 & a_3 \\ b_2 & b_3 \end{vmatrix} \vec{i} - \begin{vmatrix} a_1 & a_3 \\ b_1 & b_3 \end{vmatrix} \vec{j} + \begin{vmatrix} a_1 & a_2 \\ b_1 & b_2 \end{vmatrix} \vec{k}. $$
+:::
+
+{% include_demo "cross-product" %}
+
+:::definition "Linear Combination"
 Let $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n} \in \mathbb{R}^n$ and $c_1, c_2, \cdots, c_3 \in \mathbb{R}.$ Then, the vector
 
 $$ \vec{v} = c_1 \vec{v_1} +  c_2 \vec{v_2} + \cdots + c_n \vec{v_n} $$
@@ -143,3 +169,4 @@ Let $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n} \in \mathbb{R}^n.$ The set of all l
 That is:
 
 $$ \Span{\left(\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}\right)} = \left\{ \vec{v} \in \mathbb{R}^n : \vec{v} = c_1 \vec{v_1} + c_2 \vec{v_2} + \cdots + c_n \vec{v_n} ~ \text{for some scalars} ~ c_1, c_2, \cdots, c_n \right\} $$
+:::

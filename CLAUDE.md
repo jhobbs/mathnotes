@@ -64,6 +64,16 @@ docker-compose up --build
 
 # Check TypeScript type errors
 npm run type-check
+
+# IMPORTANT: Check for TypeScript build errors in Docker
+# When demos don't appear or features don't work, ALWAYS check:
+docker ps -a | grep static-builder  # Check if container exited
+docker logs mathnotes-static-builder  # See TypeScript errors and build logs
+
+# If the static-builder container has exited with errors:
+# 1. Fix the TypeScript errors
+# 2. Restart the builder: docker restart mathnotes-static-builder
+# 3. Watch the logs: docker logs -f mathnotes-static-builder
 ```
 
 ### Demo Screenshots and AI Descriptions
