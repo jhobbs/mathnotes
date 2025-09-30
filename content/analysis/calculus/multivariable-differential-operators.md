@@ -59,6 +59,93 @@ For a space curve given parametrically by $\vec{r}(t),$ the **tangent vector** (
 $$ \vec{T}(t) = \frac{\vec{r}'(t)}{||\vec{r}'(t)||} $$
 :::
 
+## Differentiation
+:::remark
+If $f$ is a real @function with @domain-of-definition $(a, b) \subset R^1$ and if $x \in (a,b),$ then $f'(x)$ is usually defined to be the real number
+
+$$ lim_{h \to 0} \frac{(x+h) - f(x)}{h}, $$
+
+provided this limit exists. Thus,
+
+$$ f(x + h) - f(x) = f'(x)h + r(h) \tag{8} $$
+
+where the "remainder" $r(h)$ is small, that is,
+
+$$ \lim_{h \to 0} = \frac{r(h)}{h} = 0. $$
+
+Note that (8) expresses the difference $f(x+h) - f(x)$ as the sum of the linear @function that takes $h$ to $f'(x)h,$ plus a small remainder. We can therefore view the derivative of $f$ at $x$ as the linear operator on $R^1$ that takes $h$ to $f'(x)h.$
+:::
+:::note
+On linearity: every real number $\alpha$ gives rise to a linear operator on $R^1:$
+
+$$ L_\alpha{x} = \alpha x. $$
+
+Conversely, every linear function from $R^1$ to $R^1$ is multiplication by some real number. Thus, we have a $1-1$ correspondence between $R^1$ and $L(R^1)$ (the set of all linear transformations on $R^1$.)
+:::
+:::remark
+Now, consider a @function $\vec{f}$ that maps $(a, b) \subset R^1$ into $R^m.$ Then $\vec{f}'(x)$ is defined to be the @vector $y \in R^m$ (if one exists) for which
+
+$$ \lim_{h \to 0} \left ( \frac{\vec{f}(x+h) - \vec{f}(x)}{h}  - \vec{y} \right ) = 0. $$
+
+This can be rewritten as
+
+$$ \vec{f}(x + h) - \vec{f}(x) = h \vec{y} + \vec{r}(h), $$
+
+where $\vec{r}(h)/h \to \vec{0}$ as $h \to 0.$ Again, the right side is a linear function of $h.$ Every $\vec{y} \in R^m$ gives a linear transformation of $R^1$ into $R^m:$
+
+$$L_\vec{y}{h} = h \vec{y}, $$
+
+which gives us an identification of $R^m$ with $L(R^1, R^m)$ (the set of all linear transformations from $R^1$ to $R^m$,) allowing us to say $\vec{f}'(x) \in L(R^1, R^m)$.
+
+Therefore, if $\vec{f}$ is a @differentiable @function of $(a, b) \subset R^1$ into $R^m,$ and if $x \in (a, b),$ then $\vec{f}'(x)$ is the linear transformation of $R^1$ into $R^m$ that satisfies
+
+$$ \lim_{h \to 0} \frac{\vec{f}(x + h) - \vec{f}(x) - \vec{f}'(x) h}{h} = \vec{0}, $$
+
+or, equivalently,
+
+
+$$ \lim_{h \to 0} \frac{|\vec{f}(x + h) - \vec{f}(x) - \vec{f}'(x) h|}{|h|} = 0. $$
+
+We can now take on the general $R^n \to R^m$ case.
+:::
+
+:::definition "Differentiable"
+Suppose $E$ is an @open @set in $R^n,$ $\vec{f} : E \to R^m,$ and $\vec{x} \in E.$ If there exists a linear transformation $A : R^n \to R^m$ such that
+
+$$ \lim_{\vec{h} \to \vec{0}} \frac{|\vec{f}(\vec{x} + \vec{h}) - \vec{f}(\vec{x}) - A\vec{h}|}{|\vec{h}|} = 0, \tag{14} $$
+
+then we say that $\vec{f}$ is **differentiable** at $\vec{x}$ and we write
+
+$$ \vec{f}'(\vec{x}) = A. $$
+
+If $\vec{f}$ is differentiable at every $\vec{x} \in E,$ we say that $\vec{f}$ is **differentiable in** $E.$
+
+Note that in (14), $\vec{h} \in R^n.$ If $|\vec{h}|$ is small enough, then $\vec{x} + \vec{h} \in E,$ because $E$ is @open. Therefore, $\vec{f}(\vec{x} + \vec{h})$ is defined, $\vec{f}(\vec{x} + \vec{h}) \in R^m,$ and since $A \in L(R^n, R^m),$ $A \vec{h} \in R^m.$ Therefore,
+
+$$ \vec{f}(\vec{x} + \vec{h}) - \vec{f}(\vec{x}) - A \vec{h} \in R^m. $$
+
+The norm in the numerator of (14) is that of $R^m,$ while the norm in the denominator is the $R^n$-norm.
+
+We can also rewrite (14) as
+
+$$ \vec{f}(\vec{x} + \vec{h}) - \vec{f}(\vec{x}) = \vec{f}'(\vec{x})\vec{h} + \vec{r}(\vec{h}), \tag{17} $$
+
+where the remainder $\vec{r}(\vec{h})$ satisfies
+
+$$ \lim_{\vec{h} \to \vec{0}} \frac{|\vec{r}(\vec{h})|}{|\vec{h}|} = 0. $$
+
+This means that for a fixed $\vec{x}$ and a small $\vec{h},$ the left side of (17) is approximately equal to $\vec{f}'(\vec{x})\vec{h},$ that is, to the value of a linear transformation applied to $\vec{h}.$
+
+:::
+
+:::definition "Total Derivative" {synonym: differential}
+The derivative defined above in @differentiable is called the **total derivative** of $\vec{f}$ at $\vec{f},$ or the **differential** of $\vec{f}$ at $\vec{x}.$
+:::
+
+:::theorem "Total derivatives are unique" {label: total-derivatives-are-unique}
+Suppose $E$ is an @open @set in $R^n,$ $\vec{f} : E \to R^m,$ and $\vec{x} \in E,$ and that $A_1$ and $A_2$ are @total-derivatives of $\vec{f}$ at $\vec{x}.$  Then, $A_1 = A_2.$
+:::
+
 These are some differential operators that apply to multivariable and/or vector valued functions.
 
 ## Vector Differential Operator
@@ -116,7 +203,7 @@ which tells us that that @direction and @magnitude of $\grad{f}$ are independent
 :::
 
 :::definition "Level Surface"
-Let $S$ be a surface represented by $f(x, y, z) = c,$ where $c$ is constant and $f$ is differentiable. Such a surface is called a **level surface** of $f,$ and for different $c,$ we get different level surfaces.
+Let $S$ be a surface represented by $f(x, y, z) = c,$ where $c$ is constant and $f$ is @differentiable. Such a surface is called a **level surface** of $f,$ and for different $c,$ we get different level surfaces.
 :::
 
 :::definition "Tangent Plane"
@@ -132,7 +219,7 @@ A @vector in the @direction of the @surface-normal of a surface $S$ at point $P$
 :::
 
 :::theorem {label: gradient-as-surface-normal-vector}
-Let $f$ be a differentiable @scalar-function in space. Let $f(x,y,z) = c$ (with $c$ constant) represent a surface $S.$ Then, if the @gradient of $f$ at a point $P$ of $S$ is not the @zero-vector, it is a @surface-normal-vector of $S$ at $P.$ 
+Let $f$ be a @differentiable @scalar-function in space. Let $f(x,y,z) = c$ (with $c$ constant) represent a surface $S.$ Then, if the @gradient of $f$ at a point $P$ of $S$ is not the @zero-vector, it is a @surface-normal-vector of $S$ at $P.$ 
 
 ::::proof
 Any curve $C$ lying in $S$ can be parameterized as $\vec{r} = [x(t), y(t), z(t)]$ such that
@@ -203,11 +290,11 @@ If the @curl of a @vector-field is $\vec{0},$ i.e. if $\curl{\vec{v}} = 0,$ the 
 :::
 
 :::theorem {label: grad-div-curl-related}
-Gradient fields are @irrotational. That is, if a continuously differentiable @vector-function is the @gradient of a @scalar-function $f,$ then its @curl is the @zero-vector:
+Gradient fields are @irrotational. That is, if a continuously @differentiable @vector-function is the @gradient of a @scalar-function $f,$ then its @curl is the @zero-vector:
 
 $$ \curl(\grad{f}) = \vec{0}. $$
 
-Furthermore, the @divergence of the @curl of a twice continuously differentiable @vector-function $\vec{v}$ is zero:
+Furthermore, the @divergence of the @curl of a twice continuously @differentiable @vector-function $\vec{v}$ is zero:
 
 $$ \div(\curl{\vec{v}}) = 0. $$
 :::
@@ -218,7 +305,7 @@ $\curl{\vec{v}}$ is a @vector. It has a @length and a @direction that are indepe
 
 ## Laplacian
 :::definition "Laplacian"
-The Laplace operator is a second-order differential operator in the $n$-dimensional Euclidean space, defined as the divergence $(\nabla \cdot)$ of the gradient $(\nabla f$). Thus, if $f$ is a twice-differentiable real-valued function, then the Laplacian of $f$ is the real-valued function defined by
+The Laplace operator is a second-order differential operator in the $n$-dimensional Euclidean space, defined as the divergence $(\nabla \cdot)$ of the gradient $(\nabla f$). Thus, if $f$ is a twice @differentiable real-valued function, then the Laplacian of $f$ is the real-valued function defined by
 
 $$ \Delta f = \nabla^2 f = \nabla \cdot \nabla f. $$
 
@@ -252,9 +339,6 @@ $$ \nabla^2 f = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial
 
 that is, $f$ has a @Laplacian of $0.$
 :::
-
-
-## Total Derivative
 
 ## Exterior Derivative
 
