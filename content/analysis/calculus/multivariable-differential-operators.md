@@ -175,6 +175,10 @@ An important theorem related to divergence is the Divergence Theorem (also known
 $$ \iiint_V (\nabla \cdot \vec{F}) dV = \oint_s \vec{F} \cdot d\vec{S} $$ 
 :::
 
+:::definition "incompressible"
+Let $\vec{v}$ be the velocity @vector of of the motion of particles in a fluid. If $\div{\vec{v}} = 0,$ then the fluid has constant density and is said to be **incompressible.**
+:::
+
 ## Curl
 
 
@@ -194,8 +198,12 @@ Curl can also be expressed as the determinant of a 3x3 matrix involving the unit
 $$ \nabla \times \vec{F} = \begin{vmatrix} \mathbf{\vec{i}} & \mathbf{\vec{j}} & \mathbf{\vec{k}}  \\\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\\ F_1 & F_2 & F_3  \end{vmatrix} $$
 :::
 
+:::definition "Irrotational"
+If the @curl of a @vector-field is $\vec{0},$ i.e. if $\curl{\vec{v}} = 0,$ the field is said to be **irrotational.**
+:::
+
 :::theorem {label: grad-div-curl-related}
-Gradient fields are irrotational. That is, if a continuously differentiable @vector-function is the @gradient of a @scalar-function $f,$ then its @curl is the @zero-vector:
+Gradient fields are @irrotational. That is, if a continuously differentiable @vector-function is the @gradient of a @scalar-function $f,$ then its @curl is the @zero-vector:
 
 $$ \curl(\grad{f}) = \vec{0}. $$
 

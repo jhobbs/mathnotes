@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@types/p5": "^1.7.6",
+    "@types/plotly.js": "^3.0.6",
     "autoprefixer": "^10.4.16",
     "esbuild": "^0.19.11",
     "glob": "^10.3.10",
@@ -24,6 +25,7 @@
   "dependencies": {
     "mathjax": "^3.2.2",
     "mathjs": "^11.11.0",
-    "p5": "^1.9.0"
+    "p5": "^1.9.0",
+    "plotly.js-dist-min": "^3.1.1"
   }
 }
