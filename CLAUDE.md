@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Mathnotes is a static site generator that renders mathematics notes with interactive demonstrations into static HTML files served by nginx. The application features:
 - Structured mathematical content with semantic markup (theorems, proofs, definitions)
-- TypeScript/p5.js interactive demos with bundled JavaScript
+- TypeScript interactive demos using p5.js for 2D/WebGL graphics and Plotly.js for 3D scientific visualizations
 - Wiki-style cross-references using `[[slug]]` syntax
 - Dark mode support with automatic detection
 - Comprehensive security headers with Content Security Policy
@@ -135,7 +135,9 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
    - MathJax handles final LaTeX rendering client-side
    - For detailed explanation of the parsing pipeline, see [PARSING.md](./PARSING.md)
 
-3. **Demo System**: TypeScript demos are registered in `demos-framework/src/main.ts` and loaded dynamically with code splitting.
+3. **Demo System**: TypeScript demos are registered in `demos-framework/src/main.ts` and loaded dynamically with code splitting. Demos can use:
+   - **p5.js** (`P5DemoBase` class): For 2D canvas graphics, WebGL, and creative coding
+   - **Plotly.js** (direct `DemoInstance` implementation): For 3D scientific visualizations with built-in camera controls
 
 4. **CSP Implementation**: No inline JavaScript or inline event handlers are permitted. All JavaScript must be in external files to keep content static and cacheable.
 
@@ -165,6 +167,17 @@ This prevents markdown from interfering with LaTeX syntax.
 - TypeScript source in `mathnotes/demos/`
 - Automatic dark mode support
 - CSP-compliant (no inline scripts or event handlers)
+
+**Visualization Library Choices**:
+- **p5.js**: Best for 2D canvas graphics, particle systems, cellular automata, WebGL custom shaders
+  - Extend `P5DemoBase` class for automatic canvas management and responsive sizing
+  - Built-in draw loop and event handling
+  - Examples: `game-of-life`, `electric-field`, `pendulum`
+- **Plotly.js**: Best for 3D scientific visualizations, vector fields, data plots
+  - Implement `DemoInstance` directly
+  - Built-in 3D camera controls (rotate, zoom, pan)
+  - Native support for 3D arrows (cone traces), meshes, scatter plots
+  - Examples: `cross-product`
 
 ### File Movement Protocol
 When moving/renaming content files:
@@ -215,10 +228,18 @@ Development mode auto-detected via:
 - CSS processed with PostCSS
 - For CSS configuration and guidelines, see [STYLE.md](./STYLE.md)
 
-### Python Dependencies
+### Dependencies
+
+**Python**:
 - Python 3.11+ required
 - Key packages: Jinja2, Markdown 3.5.1, python-frontmatter 1.0.1
 - Dev tools: pytest, black, flake8, mypy, tox
+
+**JavaScript/TypeScript**:
+- Node.js 24.x
+- TypeScript 5.3+
+- Visualization: p5.js, Plotly.js (plotly.js-dist-min)
+- Build tools: esbuild, PostCSS
 
 ## Deployment
 
