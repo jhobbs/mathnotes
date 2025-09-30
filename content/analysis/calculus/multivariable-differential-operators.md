@@ -103,7 +103,6 @@ $$ \lim_{h \to 0} \frac{\vec{f}(x + h) - \vec{f}(x) - \vec{f}'(x) h}{h} = \vec{0
 
 or, equivalently,
 
-
 $$ \lim_{h \to 0} \frac{|\vec{f}(x + h) - \vec{f}(x) - \vec{f}'(x) h|}{|h|} = 0. $$
 
 We can now take on the general $R^n \to R^m$ case.
@@ -135,7 +134,6 @@ where the remainder $\vec{r}(\vec{h})$ satisfies
 $$ \lim_{\vec{h} \to \vec{0}} \frac{|\vec{r}(\vec{h})|}{|\vec{h}|} = 0. $$
 
 This means that for a fixed $\vec{x}$ and a small $\vec{h},$ the left side of (17) is approximately equal to $\vec{f}'(\vec{x})\vec{h},$ that is, to the value of a linear transformation applied to $\vec{h}.$
-
 :::
 
 :::definition "Total Derivative" {synonym: differential}
@@ -144,6 +142,16 @@ The derivative defined above in @differentiable is called the **total derivative
 
 :::theorem "Total derivatives are unique" {label: total-derivatives-are-unique}
 Suppose $E$ is an @open @set in $R^n,$ $\vec{f} : E \to R^m,$ and $\vec{x} \in E,$ and that $A_1$ and $A_2$ are @total-derivatives of $\vec{f}$ at $\vec{x}.$  Then, $A_1 = A_2.$
+:::
+
+:::definition "Continuously Differentiable"
+A @differentiable @function $\vec{f}$ of an @open @set $E \subset R^n$ into $R^m$ is said to be **continuously differentiable** in $E$ if $\vec{f}'$ is a @continuous function of $E$ into $L(R^n, R^m).$ More explicitly, it is required that to every $\vec{x} \in E$ and to every $\epsilon > 0$ corresponds a $\delta > 0$ such that
+
+$$ ||\vec{f}'(\vec{y}) - \vec{f}'(\vec{x})|| < \epsilon $$
+
+if $\vec{y} \in E$ and $|\vec{x} - \vec{y}| < \delta.$
+
+If this is the case, we also say that $\vec{f}$ is a $\mathscr{C}'$-mapping or that $\vec{f} \in \mathscr{C}'(E).$
 :::
 
 These are some differential operators that apply to multivariable and/or vector valued functions.
@@ -290,11 +298,11 @@ If the @curl of a @vector-field is $\vec{0},$ i.e. if $\curl{\vec{v}} = 0,$ the 
 :::
 
 :::theorem {label: grad-div-curl-related}
-Gradient fields are @irrotational. That is, if a continuously @differentiable @vector-function is the @gradient of a @scalar-function $f,$ then its @curl is the @zero-vector:
+Gradient fields are @irrotational. That is, if a @continuously-differentiable @vector-function is the @gradient of a @scalar-function $f,$ then its @curl is the @zero-vector:
 
 $$ \curl(\grad{f}) = \vec{0}. $$
 
-Furthermore, the @divergence of the @curl of a twice continuously @differentiable @vector-function $\vec{v}$ is zero:
+Furthermore, the @divergence of the @curl of a twice @continuously-differentiable @vector-function $\vec{v}$ is zero:
 
 $$ \div(\curl{\vec{v}}) = 0. $$
 :::
