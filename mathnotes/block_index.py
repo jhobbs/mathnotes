@@ -369,6 +369,9 @@ class BlockIndex:
         # Restore math expressions
         html_content = math_protector.restore_math(html_content)
 
+        # Fix relative image paths (same as in markdown_processor.py)
+        html_content = self._fix_relative_image_paths(html_content, parser.current_file)
+
         # Fix escaped asterisks and tildes (same as in markdown_processor.py)
         html_content = html_content.replace(r"\*", "*")
         html_content = html_content.replace(r"\~", "~")
@@ -474,3 +477,19 @@ class BlockIndex:
     def find_blocks_by_type(self, block_type: str) -> List[BlockReference]:
         """Find all blocks of a specific type."""
         return [ref for ref in self.all_blocks if ref.block.block_type.value == block_type]
+
+    def _fix_relative_image_paths(self, html_content: str, filepath: str) -> str:
+        """Fix image paths in HTML to ensure they're absolute paths under /mathnotes/."""
+        import re
+        import os
+
+        # Get directory path
+        directory = os.path.dirname(filepath).replace("content/", "", 1).replace("content", "")
+
+        # Prepend to anything that's not http/https/data/absolute
+        # Using replace to clean up any double slashes
+        return re.sub(
+            r'<img([^>]*\s)src="(?!(?:https?:|data:|/))([^"]+)"',
+            lambda m: f'<img{m.group(1)}src="{f"/mathnotes/{directory}/{m.group(2)}".replace("//", "/")}"',
+            html_content,
+        )
