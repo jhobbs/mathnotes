@@ -250,6 +250,16 @@ In other words, given a @vector-field $\vec{F},$ a potential function $\phi$ is 
 $$ \vec{F} = - \grad{\phi} \quad \text{or} \quad \vec{F} = \grad{\phi}. $$
 :::
 
+### Normal Derivative
+
+:::definition "Normal Derivative"
+The **normal derivative** is the @directional-derivative in the @direction of the @normal-vector.
+:::
+
+:::remark
+The @normal-derivative tells us how the value of a @function changes as we move in the @direction normal (@orthogonal) to a curve or surface.
+:::
+
 ## Divergence
 
 :::definition "Divergence"
