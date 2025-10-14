@@ -41,7 +41,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'dilution-visual': () => import('@demos/differential-equations/dilution-visual'),
   'game-of-life': () => import('@demos/cellular-automata/game-of-life'),
   'elementary-cellular-automata': () => import('@demos/cellular-automata/elementary-cellular-automata'),
-  'cross-product': () => import('@demos/linear-algebra/cross-product')
+  'cross-product': () => import('@demos/linear-algebra/cross-product'),
+  'binary-network': () => import('@demos/network/binary-network')
 };
 
 // Store for loaded metadata
