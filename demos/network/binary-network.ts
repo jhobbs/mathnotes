@@ -24,6 +24,11 @@ class BinaryNetworkDemo implements DemoInstance {
   private k = 2; // Number of incoming connections per node
   private animationInterval?: number;
 
+  // Activity tracking
+  private stateHistory = new Map<string, number[]>(); // History of states for each node
+  private activityWindow = 20; // Number of steps to track
+  private previousStates = new Map<string, number>(); // Previous state for change detection
+
   // UI Elements
   private toggleBtn!: HTMLButtonElement;
   private resetBtn!: HTMLButtonElement;
@@ -31,6 +36,7 @@ class BinaryNetworkDemo implements DemoInstance {
   private kSlider!: HTMLInputElement;
   private numNodesSlider!: HTMLInputElement;
   private initialActiveSlider!: HTMLInputElement;
+  private activityWindowSlider!: HTMLInputElement;
   private runningStatus!: HTMLElement;
   private generationInfo!: HTMLElement;
   private activeNodesInfo!: HTMLElement;
@@ -222,6 +228,44 @@ class BinaryNetworkDemo implements DemoInstance {
       this.initializeNetwork();
     });
 
+    // Activity window slider
+    const activityWindowRow = document.createElement('div');
+    activityWindowRow.style.display = 'flex';
+    activityWindowRow.style.gap = 'var(--space-md)';
+    activityWindowRow.style.alignItems = 'center';
+    slidersContainer.appendChild(activityWindowRow);
+
+    const activityWindowLabel = document.createElement('label');
+    activityWindowLabel.textContent = 'Activity window:';
+    activityWindowLabel.style.fontWeight = '500';
+    activityWindowRow.appendChild(activityWindowLabel);
+
+    this.activityWindowSlider = document.createElement('input');
+    this.activityWindowSlider.type = 'range';
+    this.activityWindowSlider.min = '5';
+    this.activityWindowSlider.max = '50';
+    this.activityWindowSlider.value = '20';
+    this.activityWindowSlider.style.flex = '1';
+    activityWindowRow.appendChild(this.activityWindowSlider);
+
+    const activityWindowValue = document.createElement('span');
+    activityWindowValue.textContent = '20';
+    activityWindowValue.style.minWidth = '40px';
+    activityWindowValue.style.fontWeight = '500';
+    activityWindowRow.appendChild(activityWindowValue);
+
+    this.activityWindowSlider.addEventListener('input', () => {
+      activityWindowValue.textContent = this.activityWindowSlider.value;
+      this.activityWindow = parseInt(this.activityWindowSlider.value);
+      // Trim histories to new window size
+      this.stateHistory.forEach((history, nodeId) => {
+        if (history.length > this.activityWindow) {
+          this.stateHistory.set(nodeId, history.slice(-this.activityWindow));
+        }
+      });
+      this.updateNodeColors();
+    });
+
     // Info row
     const infoRow = document.createElement('div');
     infoRow.style.display = 'flex';
@@ -288,16 +332,24 @@ class BinaryNetworkDemo implements DemoInstance {
     this.runningStatus.textContent = 'No';
     this.generationInfo.textContent = '0';
 
+    // Reset activity tracking
+    this.stateHistory.clear();
+    this.previousStates.clear();
+
     // Generate nodes with random binary functions
     const nodes: NetworkNode[] = [];
     const numFunctions = Math.pow(2, Math.pow(2, this.k)); // 2^(2^k)
     const initialActiveProb = parseInt(this.initialActiveSlider.value) / 100;
     for (let i = 0; i < this.numNodes; i++) {
+      const state = Math.random() < initialActiveProb ? 1 : 0;
       nodes.push({
         id: `n${i}`,
-        state: Math.random() < initialActiveProb ? 1 : 0,
+        state: state,
         func: Math.floor(Math.random() * numFunctions)
       });
+      // Initialize tracking
+      this.stateHistory.set(`n${i}`, []);
+      this.previousStates.set(`n${i}`, state);
     }
 
     // Generate directed edges - each node gets exactly k incoming connections
@@ -356,6 +408,12 @@ class BinaryNetworkDemo implements DemoInstance {
       this.cy.fit(undefined, 50); // 50px padding
     });
 
+    // Store initial positions for activity-based clustering
+    this.cy.nodes().forEach((node: any) => {
+      node.data('baseX', node.position('x'));
+      node.data('baseY', node.position('y'));
+    });
+
     // Add click handler for nodes
     this.cy.on('tap', 'node', (event: any) => {
       const node = event.target;
@@ -368,9 +426,69 @@ class BinaryNetworkDemo implements DemoInstance {
     this.updateInfoDisplays();
   }
 
+  private getActivityLevel(nodeId: string): number {
+    const history = this.stateHistory.get(nodeId);
+    if (!history || history.length < 2) return 0;
+
+    // Count state changes in the history
+    let changes = 0;
+    for (let i = 1; i < history.length; i++) {
+      if (history[i] !== history[i - 1]) {
+        changes++;
+      }
+    }
+
+    // Return activity as a ratio (0 to 1)
+    return changes / (history.length - 1);
+  }
+
+  private getActivityColor(nodeId: string, currentState: number): string {
+    const activity = this.getActivityLevel(nodeId);
+
+    // Color scheme based on activity level:
+    // Low activity (stable): blue tones
+    // High activity (changing): red/orange tones
+    // Different colors for active (state=1) vs inactive (state=0)
+
+    if (currentState === 1) {
+      // Active node colors: from stable blue to hot red
+      if (this.isDark) {
+        return this.interpolateColor('#2980b9', '#e74c3c', activity);
+      } else {
+        return this.interpolateColor('#3498db', '#c0392b', activity);
+      }
+    } else {
+      // Inactive node colors: from stable gray to warm orange
+      if (this.isDark) {
+        return this.interpolateColor('#555', '#e67e22', activity);
+      } else {
+        return this.interpolateColor('#bdc3c7', '#d35400', activity);
+      }
+    }
+  }
+
+  private interpolateColor(color1: string, color2: string, ratio: number): string {
+    // Parse hex colors
+    const c1 = {
+      r: parseInt(color1.slice(1, 3), 16),
+      g: parseInt(color1.slice(3, 5), 16),
+      b: parseInt(color1.slice(5, 7), 16)
+    };
+    const c2 = {
+      r: parseInt(color2.slice(1, 3), 16),
+      g: parseInt(color2.slice(3, 5), 16),
+      b: parseInt(color2.slice(5, 7), 16)
+    };
+
+    // Interpolate
+    const r = Math.round(c1.r + (c2.r - c1.r) * ratio);
+    const g = Math.round(c1.g + (c2.g - c1.g) * ratio);
+    const b = Math.round(c1.b + (c2.b - c1.b) * ratio);
+
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+  }
+
   private getCytoscapeStyle(): any[] {
-    const activeColor = this.isDark ? '#3498db' : '#2980b9';
-    const inactiveColor = this.isDark ? '#555' : '#bdc3c7';
     const edgeColor = this.isDark ? '#444' : '#95a5a6';
     const textColor = this.isDark ? '#fff' : '#000';
 
@@ -379,7 +497,7 @@ class BinaryNetworkDemo implements DemoInstance {
         selector: 'node',
         style: {
           'background-color': (ele: NodeSingular) => {
-            return ele.data('state') === 1 ? activeColor : inactiveColor;
+            return this.getActivityColor(ele.id(), ele.data('state'));
           },
           'width': 30,
           'height': 30,
@@ -407,10 +525,70 @@ class BinaryNetworkDemo implements DemoInstance {
   }
 
   private updateNodeStyle(node: NodeSingular): void {
-    const activeColor = this.isDark ? '#3498db' : '#2980b9';
-    const inactiveColor = this.isDark ? '#555' : '#bdc3c7';
+    node.style('background-color', this.getActivityColor(node.id(), node.data('state')));
+  }
 
-    node.style('background-color', node.data('state') === 1 ? activeColor : inactiveColor);
+  private updateNodeColors(): void {
+    if (!this.cy) return;
+    this.cy.nodes().forEach((node: any) => {
+      this.updateNodeStyle(node);
+    });
+  }
+
+  private applyActivityClustering(): void {
+    if (!this.cy || this.generation < this.activityWindow / 2) return;
+
+    const nodes = this.cy.nodes();
+    const activityLevels = new Map<string, number>();
+
+    // Calculate activity levels for all nodes
+    nodes.forEach((node: any) => {
+      const activity = this.getActivityLevel(node.id());
+      activityLevels.set(node.id(), activity);
+    });
+
+    // Group nodes by activity level (into 5 buckets: 0-0.2, 0.2-0.4, 0.4-0.6, 0.6-0.8, 0.8-1.0)
+    const activityGroups = new Map<number, string[]>();
+    for (let i = 0; i < 5; i++) {
+      activityGroups.set(i, []);
+    }
+
+    nodes.forEach((node: any) => {
+      const activity = activityLevels.get(node.id()) || 0;
+      const bucket = Math.min(4, Math.floor(activity * 5));
+      activityGroups.get(bucket)!.push(node.id());
+    });
+
+    // Calculate target positions for each group (arranged in a circle)
+    const centerX = this.cy.width() / 2;
+    const centerY = this.cy.height() / 2;
+    const radius = Math.min(this.cy.width(), this.cy.height()) / 3;
+
+    const groupCenters = new Map<number, { x: number; y: number }>();
+    for (let i = 0; i < 5; i++) {
+      const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2; // Start at top
+      groupCenters.set(i, {
+        x: centerX + radius * Math.cos(angle),
+        y: centerY + radius * Math.sin(angle)
+      });
+    }
+
+    // Smoothly adjust node positions toward their group centers
+    const adjustmentStrength = 0.1; // How strongly to pull toward group center
+
+    nodes.forEach((node: any) => {
+      const activity = activityLevels.get(node.id()) || 0;
+      const bucket = Math.min(4, Math.floor(activity * 5));
+      const groupCenter = groupCenters.get(bucket)!;
+      const baseX = node.data('baseX') || node.position('x');
+      const baseY = node.data('baseY') || node.position('y');
+
+      // Interpolate between base position and group center
+      const targetX = baseX + (groupCenter.x - baseX) * adjustmentStrength;
+      const targetY = baseY + (groupCenter.y - baseY) * adjustmentStrength;
+
+      node.position({ x: targetX, y: targetY });
+    });
   }
 
   private startAnimation(): void {
@@ -465,15 +643,31 @@ class BinaryNetworkDemo implements DemoInstance {
       }
     });
 
-    // Apply next state to all nodes
+    // Apply next state to all nodes and track state changes
     nodes.forEach((node: any) => {
-      const nextState = nextStates.get(node.id())!;
+      const nodeId = node.id();
+      const nextState = nextStates.get(nodeId)!;
+
+      // Update state history
+      const history = this.stateHistory.get(nodeId) || [];
+      history.push(nextState);
+
+      // Keep history within the window size
+      if (history.length > this.activityWindow) {
+        history.shift();
+      }
+      this.stateHistory.set(nodeId, history);
+
+      // Update node state and style
       node.data('state', nextState);
       this.updateNodeStyle(node);
     });
 
     this.generation++;
     this.updateInfoDisplays();
+
+    // Apply activity-based clustering to group active nodes
+    this.applyActivityClustering();
   }
 
   private updateInfoDisplays(): void {
