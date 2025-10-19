@@ -358,6 +358,40 @@ $$ \nabla^2 f = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial
 that is, $f$ has a @Laplacian of $0.$
 :::
 
+## Hessian
+
+:::definition "Hessian Matrix" {synonyms: "Hessian"}
+
+Suppose $f ~ : ~ \mathbb{R}^n \to \mathbb{R}$ is a @function taking as input a @vector $\vec{x} \in \mathbb{R}^n$ and outputting a @scalar $f(\vec{x}) \in \mathbb{R}.$ If all second-order @partial-derivatives of $f$ exist, then the **Hessian matrix** $\vec{H}$ of $f$ is a square $n \times n$ @matrix, usually defined and arranged as 
+
+$$ 
+
+\mathbf H_f= \begin{bmatrix}
+  \dfrac{\partial^2 f}{\partial x_1^2} & \dfrac{\partial^2 f}{\partial x_1\,\partial x_2} & \cdots & \dfrac{\partial^2 f}{\partial x_1\,\partial x_n} \\[2.2ex]
+  \dfrac{\partial^2 f}{\partial x_2\,\partial x_1} & \dfrac{\partial^2 f}{\partial x_2^2} & \cdots & \dfrac{\partial^2 f}{\partial x_2\,\partial x_n} \\[2.2ex]
+  \vdots & \vdots & \ddots & \vdots \\[2.2ex]
+  \dfrac{\partial^2 f}{\partial x_n\,\partial x_1} & \dfrac{\partial^2 f}{\partial x_n\,\partial x_2} & \cdots & \dfrac{\partial^2 f}{\partial x_n^2}
+\end{bmatrix}.
+
+$$
+
+That is, the @entry of the $i$th row and the $j$th column is
+
+$$ (\vec{H}_f)_{i,j} = \frac{\partial^2 f}{\partial x_i \partial x_j}. $$
+
+For a @function $f ~ : ~ \mathbb{R}^3 \to \mathbb{R},$ this is
+
+$$ \vec{H} =
+\begin{bmatrix}
+    \dfrac{\partial^2 f}{\partial x^2} & \dfrac{\partial^2 f}{\partial x \partial y} & \dfrac{\partial^2 f}{\partial x \partial z}\\
+    \dfrac{\partial^2 f}{\partial y \partial x} & \dfrac{\partial^2 f}{\partial y^2} & \dfrac{\partial^2 f}{\partial y \partial z}\\
+    \dfrac{\partial^2 f}{\partial z \partial x} & \dfrac{\partial^2 f}{\partial z \partial y} & \dfrac{\partial^2 f}{\partial z^2}\\
+\end{bmatrix}.
+$$
+:::
+
+Note that the @Laplacian of $f$ is equal to the @trace of the @Hessian of $f.$ In this way, the @Laplacian is to the @Hessian what @divergence is to the @Jacobian. 
+
 ## Jacobian
 
 :::definition "Jacobian Matrix" {synonyms: "Jacobian", "Total Derivative"}
@@ -590,8 +624,26 @@ So, if we dropped a tiny paddle wheel into the flow:
 * Its spin rate is $\frac{1}{2} || \nabla \times \vec{F} ||.$ 
 
 
+### Jacobian Related to Directional Derivative
+This is mostly covered above, so just note that the @Jacobian is a sort of machine for producing @directional-derivatives:
+
+$$ D_\vec{v} F = \vec{J} \vec{v}, $$
+
+where the multiplication on the right is matrix-vector multiplication, i.e. the image of $\vec{J}$ when applied to $\vec{v}.$
+
+### Jacobian Related to Laplacian
+
+Algebraically,
+
+$$ \nabla^2 f  = \nabla \cdot (\nabla f). $$
+
+To unpack that, we're saying that the @Laplacian is the @divergence of the @gradient of $f.$ Now, when we take the @gradient of $f,$ we get a @vector-field that has the first @partial-derivatives of $f.$  Now, if we take the @Jacobian of that @gradient, we get $\nabla (\nabla f)),$ which is the @Hessian of $f.$ Now, if we take the @trace of that @Hessian, we get the @Laplacian, which is the sum of the pure second @derivatives of $f.$
+
+Geometrically, the @Hessian is telling us how the @gradient of $f$ curves near a point, and taking the trace of it tells us the total or average @curvature at that point.
+
+If $\nabla^2 f = 0,$ the gradient's inflow and outflow balance in every direction: the field is @harmonic and locally curvature-neutral. 
+
 ## Exterior Derivative
 
 
 
-## Hessian
