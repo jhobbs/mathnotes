@@ -358,9 +358,101 @@ $$ \nabla^2 f = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial
 that is, $f$ has a @Laplacian of $0.$
 :::
 
+## Jacobian
+
+:::definition "Jacobian Matrix" {synonyms: "Jacobian", "Total Derivative"}
+
+Let $\vec{f} ~ : ~ \mathbb{R}^n \to \mathbb{R}^m$ be a @function such that each of its first-order @partial-derivatives exists on $\mathbb{R}^n.$ This @function takes a point $\vec{x} = (x_1, \dots, x_n) \in \mathbb{R}^n$ as input and produces the @vector $\vec{f}(\vec{x}) = (f_1(\vec{x}), \dots, f_m(\vec{x})) \in \mathbb{R}^m$ as output. Then the **Jacobian matrix** of $\vec{f},$ denoted $\vec{J}_{\vec{f}},$ is the $m \times n$ @matrix whose $(i,j)$ @entry is $\frac{\partial f_i}{\partial x_j};$ explicitly
+
+$$ \begin{bmatrix} \dfrac{\partial \mathbf{f}}{\partial x_1} & \cdots & \dfrac{\partial \mathbf{f}}{\partial x_n}
+\end{bmatrix}
+= \begin{bmatrix}
+  \nabla^{\mathsf{T}} f_1 \\  
+  \vdots \\
+  \nabla^{\mathsf{T}} f_m   
+\end{bmatrix}
+= \begin{bmatrix}
+    \dfrac{\partial f_1}{\partial x_1} & \cdots & \dfrac{\partial f_1}{\partial x_n}\\
+    \vdots                             & \ddots & \vdots\\
+    \dfrac{\partial f_m}{\partial x_1} & \cdots & \dfrac{\partial f_m}{\partial x_n}
+\end{bmatrix}, $$
+
+where $\nabla^{\mathsf{T}} f_i$ is the @transpose (@row-vector) of the @gradient of the $i$-th @component.
+:::
+
+:::remark
+For a @vector valued @function,
+
+$$ \vec{F} : \mathbb{R}^n \to \mathbb{R}^m, $$
+
+the @Jacobian $\vec{J}(\vec{x})$ is the @linear-map that best @approximates $\vec{F}$ near $\vec{x}:$
+
+$$ \vec{F}(\vec{x_0} + \vec{\Delta x}) \approx \vec{F(x_0)} + \vec{J(x_0)} \vec{\Delta x}. $$
+
+At a point $x_0 \in \mathbb{R}^n,$ the @directional-derivative of $F$ in the @direction of $\vec{v} \in \mathbb{R}^n$ is
+
+$$ D_{\vec{v}} \vec{F(x_0)} = \vec{J(x_0)} \vec{v}. $$
+:::
+
+## Related to Gradient
+
+:::remark
+Given a @vector-field $F:$
+
+$$
+\vec{F} = \begin{bmatrix}
+  F_1(x,y,z) \\  
+  F_2(x,y,z) \\
+  F_3(x,y,z) \\   
+\end{bmatrix} : \mathbb{R}^3 \to \mathbb{R}^3,
+$$
+
+each component $F_i$ is itself a @scalar-field, and so we can take the @gradient of each one:
+
+$$ \nabla F_1 = \begin{bmatrix}
+  \dfrac{\partial F_1}{\partial x} \\  
+  \dfrac{\partial F_1}{\partial y}  \\
+  \dfrac{\partial F_1}{\partial z}  \\   
+\end{bmatrix}, \quad
+\nabla F_2 = \begin{bmatrix}
+  \dfrac{\partial F_2}{\partial x} \\  
+  \dfrac{\partial F_2}{\partial y}  \\
+  \dfrac{\partial F_2}{\partial z}  \\   
+\end{bmatrix}, \quad
+\nabla F_3 = \begin{bmatrix}
+  \dfrac{\partial F_3}{\partial x} \\  
+  \dfrac{\partial F_3}{\partial y}  \\
+  \dfrac{\partial F_3}{\partial z}  \\   
+\end{bmatrix}.
+$$
+
+Now, the @Jacobian of $\vec{F}$ is the @matrix that contains all of these @gradients:
+
+$$ \vec{J} = \nabla \vec{F} =  
+\vec{F} = \begin{bmatrix}
+  (\nabla F_1)^\mathsf{T} \\  
+  (\nabla F_2)^\mathsf{T} \\  
+  (\nabla F_3)^\mathsf{T} \\  
+\end{bmatrix} = 
+\begin{bmatrix}
+    \dfrac{\partial F_1}{\partial x} & \dfrac{\partial F_1}{\partial y} & \dfrac{\partial F_1}{\partial z}\\
+    \dfrac{\partial F_2}{\partial x} & \dfrac{\partial F_2}{\partial y} & \dfrac{\partial F_2}{\partial z}\\
+    \dfrac{\partial F_3}{\partial x} & \dfrac{\partial F_3}{\partial y} & \dfrac{\partial F_3}{\partial z}\\
+\end{bmatrix}.
+$$
+
+Here:
+
+* The @rows are the @transposes of @gradients of each @component of $\vec{F}.$
+
+* The @columns tell how each @coordinate @direction affects all @components of $\vec{F}.$
+
+Thus the @Jacobian tells us how each @component of $\vec{F}$ changes with every @coordinate. It can be viewed as the "@gradient of a @vector-field."
+:::
+
+
 ## Exterior Derivative
 
-## Jacobian
 
 
 ## Hessian
