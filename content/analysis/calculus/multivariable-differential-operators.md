@@ -394,7 +394,7 @@ At a point $x_0 \in \mathbb{R}^n,$ the @directional-derivative of $F$ in the @di
 $$ D_{\vec{v}} \vec{F(x_0)} = \vec{J(x_0)} \vec{v}. $$
 :::
 
-## Related to Gradient
+### Related to Gradient
 
 :::remark
 Given a @vector-field $F:$
