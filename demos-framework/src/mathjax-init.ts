@@ -33,6 +33,7 @@ export async function initMathJax() {
         Arctan: '\\operatorname{Arctan}',
         Re: '\\operatorname{Re}',
         Im: '\\operatorname{Im}',
+        tr: ['\\operatorname{tr}{#1}', 1],
         closure: ['\\overline{#1}', 1]
       }
     },
