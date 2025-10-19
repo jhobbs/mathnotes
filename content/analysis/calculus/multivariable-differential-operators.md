@@ -394,7 +394,7 @@ At a point $x_0 \in \mathbb{R}^n,$ the @directional-derivative of $F$ in the @di
 $$ D_{\vec{v}} \vec{F(x_0)} = \vec{J(x_0)} \vec{v}. $$
 :::
 
-### Related to Gradient
+### Jacobian Related to Gradient
 
 :::remark
 Given a @vector-field $F:$
@@ -449,6 +449,145 @@ Here:
 
 Thus the @Jacobian tells us how each @component of $\vec{F}$ changes with every @coordinate. It can be viewed as the "@gradient of a @vector-field."
 :::
+
+### Jacobian Related to Divergence
+
+Given a @vector-field $F:$
+
+$$
+\vec{F} = \begin{bmatrix}
+  F_1(x,y,z) \\  
+  F_2(x,y,z) \\
+  F_3(x,y,z) \\   
+\end{bmatrix} : \mathbb{R}^3 \to \mathbb{R}^3,
+$$
+
+with a @Jacobian
+
+
+$$ \vec{J} = \nabla \vec{F} =  
+\begin{bmatrix}
+    \dfrac{\partial F_1}{\partial x} & \dfrac{\partial F_1}{\partial y} & \dfrac{\partial F_1}{\partial z}\\
+    \dfrac{\partial F_2}{\partial x} & \dfrac{\partial F_2}{\partial y} & \dfrac{\partial F_2}{\partial z}\\
+    \dfrac{\partial F_3}{\partial x} & \dfrac{\partial F_3}{\partial y} & \dfrac{\partial F_3}{\partial z}\\
+\end{bmatrix},
+$$
+
+@divergence is the @sum of the @diagonal @entries of this @matrix:
+
+$$ \nabla \cdot \vec{F} = \dfrac{\partial F_1}{\partial x} + \dfrac{\partial F_@}{\partial y} + \dfrac{\partial F_3}{\partial z} = \tr{\vec{J}}.$$
+
+So, algebraically, @divergence is the @trace of the @Jacobian.
+
+The **trace** measures how much the @linear-transformation represented by $\vec{J}$ stretches space along its coordinate axes - it's the infinitesimal "net expansion rate."
+
+Geometrically, if we have a very small cube of points centered at $\vec{x_0},$ with a side length of $dx,$ then each corner of that cube corresponds to a slightly different $\vec{x} = \vec{x_0} + \vec{\Delta x}.$ If we take all the points in the box and map them through $\vec{F},$ the cube's image becomes a tiny, possibly deformed box in the $\vec{F}$-space. The way the box stretches, shears and rotates is determined by $\vec{J}.$ The change in volume of that box is determined by $\det{(\vec{J})}$ (the determinant of the Jacobian.)
+
+For an infinitesimally small cube, the @determinant can be expanded as
+
+$$ \det{(\vec{I} + \vec{J} \epsilon)} \approx 1 + \epsilon \tr(\vec{J}), $$
+
+for tiny $\epsilon.$ Here, the @trace of $\vec{J},$
+
+$$ \tr{\vec{J}} = \dfrac{\partial F_1}{\partial x} +  \dfrac{\partial F_2}{\partial y} + \dfrac{\partial F_3}{\partial z} = \nabla \cdot \vec{F} $$
+
+is exactly the @divergence. Each of these terms tells us how much the points in an infinitesimally small box around $\vec{x_0}$ are stretched/compressed in each coordinate direction.
+
+Physically, for example, if $\vec{F}$ represents a velocity field, $\dfrac{\partial F_1}{\partial x}$ says how much the $x$-component of the velocity changes as you move along $x.$ Note that if $F_1$ is constant with respect to $x,$ this term is $0,$ which means there is no stretch/compression along that axis, and if we think of the velocity being that of a fluid, the same amount of fluid will flow into any region in the $x$ direction as flows out in the $x$ direction.
+
+### Jacobian Related to Curl
+
+Given a @vector-field $F:$
+
+$$
+\vec{F} = \begin{bmatrix}
+  F_1(x,y,z) \\  
+  F_2(x,y,z) \\
+  F_3(x,y,z) \\   
+\end{bmatrix} : \mathbb{R}^3 \to \mathbb{R}^3,
+$$
+
+with a @Jacobian
+
+
+$$ \vec{J} = \nabla \vec{F} =  
+\begin{bmatrix}
+    \dfrac{\partial F_1}{\partial x} & \dfrac{\partial F_1}{\partial y} & \dfrac{\partial F_1}{\partial z}\\
+    \dfrac{\partial F_2}{\partial x} & \dfrac{\partial F_2}{\partial y} & \dfrac{\partial F_2}{\partial z}\\
+    \dfrac{\partial F_3}{\partial x} & \dfrac{\partial F_3}{\partial y} & \dfrac{\partial F_3}{\partial z}\\
+\end{bmatrix},
+$$
+
+We can split $\vec{J}$ into its @symmetric and @antisymmetric  parts:
+
+$$ \vec{J} = \vec{S} + \vec{A}, \quad \vec{S} = \frac{1}{2}(\vec{J} + \vec{J}^{\mathsf{T}}), \quad \vec{A} = \frac{1}{2}(\vec{J} - \vec{J}^\mathsf{T}). $$
+
+Now,
+
+* $\vec{S}$ encodes stretching/shearing.
+
+* $\vec{A}$ encodes local rotation.
+
+The @components of $\vec{A}$ are:
+
+$$ \vec{A} = \frac{1}{2}
+\begin{bmatrix}
+    0 & \dfrac{\partial F_1}{\partial y} - \dfrac{\partial F_2}{\partial x} & \dfrac{\partial F_1}{\partial z} - \dfrac{\partial F_3}{\partial x} \\
+    \dfrac{\partial F_2}{\partial x} - \dfrac{\partial F_1}{\partial y}   & 0 & \dfrac{\partial F_2}{\partial z} - \dfrac{\partial F_3}{\partial y} \\
+    \dfrac{\partial F_3}{\partial x} - \dfrac{\partial F_1}{\partial z}  & \dfrac{\partial F_3}{\partial y} - \dfrac{\partial F_2}{\partial z}  & 0 \\
+\end{bmatrix}.
+$$
+
+If we let $\vec{\omega} = (\omega_x, \omega_y, \omega_z),$ we can write $\vec{A}$ as
+
+$$
+\vec{A} =  
+\begin{bmatrix}
+    0 & - \omega_z & \omega_y \\
+    \omega_z & 0 & - \omega_x \\
+    - \omega_y & \omega_x & 0 \\
+\end{bmatrix}.
+$$
+
+Then,
+
+$$ \vec{\omega} = \frac{1}{2} \nabla \times \vec{F}, $$
+
+so @curl is twice the @axial-vector of the @antisymmetric part of the @Jacobian.
+
+Geometrically, if we linearize $\vec{F}$ near some point $\vec{x_0},$
+
+$$ \vec{F}(\vec{x_0} + \vec{\Delta x}) \approx \vec{F(x_0)} + \vec{J(x_0)} \vec{\Delta x}. $$
+
+The matrix $\vec{J}$ is acting on small displacements. When we apply $\vec{A}$ to $\vec{\Delta x},$ we get
+
+$$ \vec{A} \vec{\Delta x} = \vec{\omega} \times \vec{\Delta x}. $$
+
+Then,
+
+* The @direction of $\vec{\omega}}}$ is the axis of rotation (via the right-hand rule).
+
+* The @magnitude $||\omega||$ is the local @angular-velocity (half the @curl @magnitude.)
+
+More visually, if we take a small @ball of @points around $\vec{x_0},$
+
+* The symmetric part $\vec{S}$ of $\vec{J}$ turns the ball into an @ellipsoid (by stretching/shearing it).
+
+* The antisymmetric part $\vec{A}$ spins the ball about the axis $\omega$ without changing its shape or volume.
+
+Thus, @divergence comes from the @trace of $S$ and @curl comes from $A.$ 
+
+Physically, if $F$ is a velocity field of a fluid, then:
+
+$$ \nabla \times \vec{F} = 2 \omega $$
+
+means that the fluid near that point is rotating like a tiny rigid body, with @angular-velocity $\vec{\omega.}$
+
+So, if we dropped a tiny paddle wheel into the flow:
+
+* The wheel's axis aligns with $\nabla \times \vec{F}.$
+
+* Its spin rate is $\frac{1}{2} || \nabla \times \vec{F} ||.$ 
 
 
 ## Exterior Derivative
