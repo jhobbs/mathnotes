@@ -16,9 +16,32 @@ A **homeomorphism** is a @bijective and @continuous @function between @topologic
 
 :::definition "Manifold"
 A **manifold** is a @topological-space that resembles @euclidean-space near each point. That is, an $n$-dimensional manifold is a topological space with the property that each @point has a @neighborhood that is @homeomorphic to an @open @subset of $n$-dimensional Euclidean space.
-
-Another way to put this is that we can approximate a $k$-manifold as closely as we'd like with a $k$-plane.
 :::
+
+:::remark
+Another way to put this is that we can approximate a $k$-manifold as closely as we'd like with a $k$-plane. We call this $k$-plane (a line in 1-dimenions, a plane in 2, a half-space in 3, etc) the @tangent-space.
+:::
+
+:::definition "Tangent Space"
+If $M$ is locally given by a smooth parametrization
+
+$$ \varphi : U \subset \mathbb{R}^k \to M \subset \mathbb{R}^n, $$
+
+
+and $p = \varphi(u_0)$, then
+
+$$
+T_p M = \operatorname{span}\left\{
+\frac{\partial \varphi}{\partial u_1}(u_0),
+\frac{\partial \varphi}{\partial u_2}(u_0),
+\dots,
+\frac{\partial \varphi}{\partial u_k}(u_0)
+\right\}.
+$$
+
+So it’s the collection of all possible velocity vectors of curves on the manifold passing through $p,$ and is a $k$-dimensional linear subspace of $\mathbb{R}^n.$
+:::
+
 
 :::example
 One dimensional manifolds include lines and circles, but not curves that cross themselves. Two dimensional manifolds are also called surfaces, and include planes, discs, torus and more. A solid ball is a 3d manifold.
@@ -31,19 +54,19 @@ We will be interested primarily in @manifolds with @boundaries.
 :::definition "Boundary" {synonym: boundaries}
 The points on a @manifold whose @neighborhoods are @homeomorphic to a @neighborhood in a half $k$-ball form the **boundary** of the @manifold. Formally,
 
-$$ \partial M = \{p \in M | \text{there exists a chart } (U, p) \text{ with } \phi(p) \in \mathbb{R}^{k-1} \times {0} \subset \mathbb{H}^k \}. $$
+$$ \partial M = \{p \in M | \text{there exists a chart } (U, p) \text{ with } \varphi(p) \in \mathbb{R}^{k-1} \times {0} \subset \mathbb{H}^k \}. $$
 
 That is, $p$ is a boundary point, if, in local coordinates, it maps to the edge of the half-space model.
 :::
 
 :::remark
-The @chart $\phi$ maps points on the manifold to local coordinates. For example, points on the sphere
+The @chart $\varphi$ maps points on the manifold to local coordinates. For example, points on the sphere
 
 $$ S^2  = {(x,y,z) : x^2 + y^2 + z^2 = 1} $$
 
-can be assigned coordinates via a chart (with $N$ representing the north pole) $(U = S^2 \setminus {N}, \phi)$ with
+can be assigned coordinates via a chart (with $N$ representing the north pole) $(U = S^2 \setminus {N}, \varphi)$ with
 
-$$ \phi(x,y,z) = \left ( \frac{x}{1 - z}, \frac{y}{1 - z} \right ). $$
+$$ \varphi(x,y,z) = \left ( \frac{x}{1 - z}, \frac{y}{1 - z} \right ). $$
 
 These local coordinates can then be used to refer to any point on the sphere. So, the definition of a @boundary of a manifold above talks about the points that can be mapped to some $k$-vector that has a $0$ in its last dimension. Therefore, the boundary itself is of a dimension $k - 1.$
 
