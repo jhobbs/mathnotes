@@ -3,7 +3,7 @@ description: Vector calculus operators including gradient, curl, divergence, and
   with geometric interpretations, mathematical definitions, and applications to physics
   and engineering.
 layout: page
-title: Multivariable Differential Operators
+title: Vector Differential Calculus
 ---
 
 # Multivariable Differential Operators
