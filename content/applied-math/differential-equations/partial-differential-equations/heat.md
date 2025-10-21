@@ -26,7 +26,7 @@ Using alternative notation, this can be written
 
 $$ \frac{\partial u}{\partial t}(x,t) = \alpha \frac{\partial^2 u}{\partial x^2}(x,t). $$
 
-Notice that $\frac{\partial^2 u}{\partial x^2}$ is the [[Laplacian|analysis/calculus/multivariable-differential-operators]] in one dimension. In higher dimensions, the heat equation can be adjusted to account for the additional heat flow contribution along the other axes by the simple modification
+Notice that $\frac{\partial^2 u}{\partial x^2}$ is the @Laplacian in one dimension. In higher dimensions, the heat equation can be adjusted to account for the additional heat flow contribution along the other axes by the simple modification
 
 $$ \frac{\partial u}{\partial t} = \alpha \nabla^2 u, $$
 
