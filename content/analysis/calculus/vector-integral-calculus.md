@@ -135,9 +135,39 @@ f(r\cos\theta,r\sin\theta,z)\, r\, dr\, d\theta\, dz. $$
 
 
 ### Divergence Theorem of Gauss
+The Divergence Theorem allows us to translate between a volume integral over an enclosed region and a surface integral over the surface enclosing that region, and vice-versa.
 
 :::theorem "Divergence Theorem of Gauss" {label: divergence-theorem}
 Let $T$ be a closed bounded region in a space whose @boundary is a @piecewise @smooth @orientable surface $S.$ Let $\vec{F}(x,y,z)$ be a @vector-function that is @continuous and has @continuous first @partial-derivatives in some @domain containing $T.$ Then
 
 $$ \iiint_T \div{\vec{F}} dV = \iint_S \vec{F} \cdot \vec{n} dA. $$
 :::
+
+### Stoke's Theorem
+
+Stoke's Theorem allows us to translate between a line integral around a boundary of a surface and an integral over that surface.
+
+:::theorem "Stoke's Theorem"
+Let $S$ be a @piecewise @smooth oriented surface in space and let the @boundary of $S$ be a piecewise smooth simple closed curve $C.$ Let $\vec{F}(x,y,z)$ be a @continuous @vector-function that has @continuous first @partial-derivatives in a domain in space containing $S.$ Then
+
+$$ \iint_S (\curl{\vec{F}}) \cdot \vec{n} dA = \oint_C \vec{F} \cdot \vec{r'}(s) ds. \tag{2} $$
+
+Here $\vec{n}$ is a @unit @normal-vector of $S.$ $\vec{r'} = d \vec{r}/ds$ is the @unit @tangent-vector and $s$ the arc length of $C.$
+
+In components, (2) becomes
+
+$$ \iint_R \left [ \left ( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z}\right ) N_1 +
+
+\left ( \frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x}\right ) N_2 +
+
+ \left ( \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y}\right ) N_3
+
+\right ] du dv \\
+= \oint_{\overline{C}} (F_1 dx + F_2 dy + F_3 dz).
+
+$$
+
+Here, $ \vec{F} = [F_1, F_2, F_3], \vec{N} = [N_1, N_2, N_3], \vec{n}dA = \vec{N} du dv, \vec{r'} ds = [dx, dy, dz],$ and $R$ is the region with boundary curve $\overline{C}$ in the $uv$-plane corresponding to $S$ represented by $\vec{r}(u,v).$
+:::
+
+
