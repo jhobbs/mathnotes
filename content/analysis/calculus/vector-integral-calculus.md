@@ -127,6 +127,13 @@ $$ \iiint_T f(x,y,z) dx dy dz = \iiint_T f(x,y,z) dV. $$
 Such integrals can be evaluated via three successive integrations.
 :::
 
+Note: for cylindrical coordinates, we need to include $r$ as a scaling factor in the integrand:
+
+$$ \iiint_T f\,dV
+=\int_{z_0}^{z_1}\!\int_{\theta_0}^{\theta_1}\!\int_{r_0(\theta,z)}^{\,r_1(\theta,z)}
+f(r\cos\theta,r\sin\theta,z)\, r\, dr\, d\theta\, dz. $$
+
+
 ### Divergence Theorem of Gauss
 
 :::theorem "Divergence Theorem of Gauss" {label: divergence-theorem}
