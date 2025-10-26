@@ -79,23 +79,6 @@ All parameterizations of the curve lead to the same value.
 :::
 
 :::remark
-We can express @line-integrals over @vector-fields generally as follows.
-:::
-
-:::definition "Line Integral of Vector Function"
-A **line integral** of a @vector-function $\vec{F}(\vec{r})$ over a curve $C: \vec{r}(t)$ is defined by
-
-$$ \int_{C} \vec{F}(\vec{r}) \cdot d \vec{r} = \int_{a}^{b} \vec{F}(\vec{r}(t)) \cdot \vec{r}'(t) dt \tag{a} $$
-
-where $\vec{r}(t)$ is the parametric representation of $C.$
-
-Writing (a) in terms of components, with $d \vec{r} = [dx, dy, dz]$ and $' = d/dt,$ we get
-
-$$ \int_{C} \int_{C} \vec{F}(\vec{r}) \cdot d \vec{r} = \int_{C} (F_1 dx + F_2 dy + F_3 dz) = \int_{a}^{b} (F_1 x' + F_2 y' + F_3 z') dt). $$
-
-:::
-
-:::remark
 For some integrals, it does not matter what path is taken between two points; the value is always the same. Such line integrals are said to be independent of path.
 :::
 
