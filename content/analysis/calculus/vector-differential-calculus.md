@@ -242,6 +242,12 @@ Therefore, $\grad{f}$ is @orthogonal to all the vectors $\vec{r}'$ in the @tange
 ::::
 :::
 
+:::theorem {label: find-tangent-plane}
+If $S$ is given by $F(x,y,z) = 0,$ then at $P = (x_0, y_0, z_0),$ the tangent plane is
+
+$$ \nabla F(P) \cdot \langle x - x_0, y - y_0, z - z_0 \rangle = 0. $$
+:::
+
 :::definition "Potential Function"
 A **potential function** is a @scalar-function whose @gradient is a @vector-field. They allow representing certain @vector-fields in a simpler, more fundamental form.
 

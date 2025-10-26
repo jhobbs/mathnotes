@@ -33,9 +33,9 @@ The usual rules for real derivatives work for complex derivatives too, that is, 
 
 However, the real derivatives rules don't help with functions like $\Re{(z)}, \Im{(z)}, \|z\|$ or $\Arg{z}.$ We could use the limit definition of the derivative, but there is a better way.
 
-Also, we might have a complex function defined in terms of its real and imginary parts rather than in terms of $z$, i.e. $f(z) = \frac{x}{x^2 + y^2} + \frac{-y}{x^2 + y^2}i$. We could try to rewrite $f(z)$ in terms of $z$, but this could be hard.
+Also, we might have a complex function defined in terms of its real and imaginary parts rather than in terms of $z$, i.e. $f(z) = \frac{x}{x^2 + y^2} + \frac{-y}{x^2 + y^2}i$. We could try to rewrite $f(z)$ in terms of $z$, but this could be hard.
 
-Morever, it's not yet clear how to tell when a complex combination $u(x,y) + v(x,y)i$ of real functions $u(x,y)$ and $v(x,y)$ define a function $f(z)$ of $z = x + yi$.
+Moreover, it's not yet clear how to tell when a complex combination $u(x,y) + v(x,y)i$ of real functions $u(x,y)$ and $v(x,y)$ define a function $f(z)$ of $z = x + yi$.
 
 The following theorem is super important and helps clear all of that up. It may be the most important theorem in complex analysis.
 
@@ -43,7 +43,7 @@ A function $f(z) = u(x,y) + v(x,y)i$ is analytic in an open set $S$ if and only 
 
 $$ \frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}, \quad \frac{\partial v}{\partial x} = - \frac{\partial u}{\partial y}. \tag{c} $$
 
-From the proof of this theorem, we also get two fomulas for calculating $f'$ when $f$ is specified in terms of its real and imaginary parts. When $f(z) = u(x,y) + v(x,y)i$, and $f'(z)$ exists,
+From the proof of this theorem, we also get two formulas for calculating $f'$ when $f$ is specified in terms of its real and imaginary parts. When $f(z) = u(x,y) + v(x,y)i$, and $f'(z)$ exists,
 
 $$ f'(z) = \frac{\partial u}{\partial x} + \frac{\partial v}{\partial x}i = \frac{\partial v}{\partial y} - \frac{\partial u}{\partial y}i.$$
 
