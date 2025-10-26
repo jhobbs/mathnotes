@@ -116,3 +116,21 @@ at every point, except perhaps for some edges or cusps, such as for cubes and co
 
 $$ \iint_S \vec{F} \cdot \vec{n} dA = \iint_R \vec{F}(\vec{r}(u,v)) \cdot \vec{N}(u,v) du dv. $$
 :::
+
+## Volume Integrals
+
+:::definition "Volume Integral" {synonyms: "triple integral"}
+If $T$ is a closed, bounded, three-dimensional region of space, and $f(x,y,z)$ is defined and @continuous in a @domain containing $T,$ then the **volume integral** of $f(x,y,z)$ over the region $T$ is denoted by
+
+$$ \iiint_T f(x,y,z) dx dy dz = \iiint_T f(x,y,z) dV. $$
+
+Such integrals can be evaluated via three successive integrations.
+:::
+
+### Divergence Theorem of Gauss
+
+:::theorem "Divergence Theorem of Gauss" {label: divergence-theorem}
+Let $T$ be a closed bounded region in a space whose @boundary is a @piecewise @smooth @orientable surface $S.$ Let $\vec{F}(x,y,z)$ be a @vector-function that is @continuous and has @continuous first @partial-derivatives in some @domain containing $T.$ Then
+
+$$ \iiint_T \div{\vec{F}} dV = \iint_S \vec{F} \cdot \vec{n} dA. $$
+:::
