@@ -13,4 +13,5 @@ CONTENT_DIRS = [
     "content/discrete-math",
     "content/foundations",
     "content/test",
+    "content/machine-learning",
 ]
