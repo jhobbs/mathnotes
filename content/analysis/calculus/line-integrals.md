@@ -106,13 +106,3 @@ If a line integral is independent of path in a domain $D$, and $C$ is a closed, 
 
 $$ \oint_C Pdx + Qdy = 0 $$
 :::
-
-:::remark
-When a line integral is required around a closed curve, and the line integral is not independent of path, Green's theorem can sometimes be used.
-:::
-
-:::theorem "Green's Theorem" {label: greens-theorem}
-Suppose $P(x,y)$ and $Q(x,y)$ have continuous first partial derivatives in a domain containing a simple, closed, piecewise smooth curve $C$ and its interior $R.$ Then
-
-$$ \oint_C Pdx + Qdy = \iint_R \left ( \frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} \right ) dA. $$
-:::
