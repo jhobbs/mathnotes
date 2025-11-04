@@ -107,6 +107,7 @@ class MathnotesIndexPage(Page):
             "topology": "Topology",
             "discrete-math": "Discrete",
             "algebra": "Algebra",
+            "machine-learning": "Machine Learning",
         }
 
         sections = []
