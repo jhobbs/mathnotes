@@ -106,3 +106,7 @@ $$ L_{\text{Hamming}} = \frac{1}{m} d_h{(\hat{y}, y)}. $$
 Hamming Loss is great way to evaluate the performance of a binary classifier once it's trained, but it doesn't make a good way to evaluate during training, because it's not @differentiable. It's not @differentiable because there is not a @continuous transition from $0$ to $1$ in the model's output - there is just a step function there. In reality, we're likely to have some stage of our model that outputs a value in $[0,1]$ - the probability of our object being in our @target-class, and then apply a threshold to that to get our final binary value, i.e. if the probability is over $p = 0.5,$ set $\hat{y}$ to $1.$ This is a @smooth @function from $\mathbb{R}^n$ to $[0,1]$ and is thus likely to be @differentiable. We want a @differentiable @function because it allows us to perform gradient loss and similar operations.
 
 However, after a model is trained, @hamming-loss really is the perfect way to evaluate its performance.
+
+## Bias vs Variance
+
+
