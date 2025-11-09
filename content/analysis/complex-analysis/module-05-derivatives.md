@@ -57,7 +57,7 @@ Moreover, it's not yet clear how to tell when a @complex-combination $u(x,y) + v
 
 The following theorem is super important and helps clear all of that up. It may be the most important theorem in complex analysis.
 
-:::theorem "Cauchy-Riemann Equations"
+:::theorem "Cauchy-Riemann Equations" {label: cauchy-riemann-equations}
 A function $f(z) = u(x,y) + v(x,y)i$ is @analytic in an @open @set $S$ if and only if the first @partial-derivatives of $u(x,y)$ and $v(x,y)$ are @continuous on $S$ and satisfy the Cauchy-Riemann equations therein
 
 $$ \frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}, \quad \frac{\partial v}{\partial x} = - \frac{\partial u}{\partial y}. \tag{c} $$
@@ -134,7 +134,7 @@ $$ f'(x_0 + i y_0) = v_y - i u_y. \tag{b} $$
 
 Now, comparing (a) and (b) we have
 
-$$ u_x + i v_x = v_y - i u_y, \quad u_x = v_y, u_y = - v_x. \square $$
+$$ u_x + i v_x = v_y - i u_y, \quad u_x = v_y, u_y = - v_x.$$
 ::::
 :::
 

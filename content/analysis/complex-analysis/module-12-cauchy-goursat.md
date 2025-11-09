@@ -12,6 +12,25 @@ If $f(z)$ is @analytic in a @simply-connected @domain $D,$ then for every @simpl
 $$ \oint_C f(z) dz = 0. $$
 
 ::::proof
+Let $f(z) = u(x,y) + i(v,y).$ By the definition of the @contour-integral, we have
+
+
+$$ \int_{C} f(z) dz = \int_C (u+vi)(dx + dyi) = \int_C ( u dx - vdy ) + i \int_C (vdx + udy). $$
+
+Because $f$ is analytic, the @cauchy-riemann-equations tell us that $u(x,y)$ and $v(x,y)$ have continuous first partial derivatives, and therefore, we can apply @greens-theorem. Now, we can take the first integral and transform it
+
+$$ \int_C ( u dx + (-vdy) ) = -\iint_R \left ( v_x + u_y \right) dxdy. $$
+
+But, by @cauchy-riemann-equations, $v_x = -u_y,$ so this integral evaluates to $0.$
+
+Now, for the second integral, using @greens-theorem again, we get
+
+$$ i \int_C (vdx + udy) = i\iint_R (u_x - v_y) dxdy, $$
+
+and by @cauchy-riemann-equations, $u_x = v_y,$ so this integral also evaluates to $0,$ which makes the overall integral $0$ as well.
+
+
+
 ::::
 
 :::
