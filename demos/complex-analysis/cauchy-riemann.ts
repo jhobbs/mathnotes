@@ -450,6 +450,12 @@ class CauchyRiemannDemo implements DemoInstance {
     const f_z0_dy = this.evaluateFunction(this.x0, this.y0 + this.deltaY);
     if (!f_z0_dx || !f_z0_dy) return;
 
+    // Evaluate at z0 + Δz (the full delta: Δx + iΔy)
+    const z_plus_delta_x = this.x0 + this.deltaX;
+    const z_plus_delta_y = this.y0 + this.deltaY;
+    const f_z0_plus_delta = this.evaluateFunction(z_plus_delta_x, z_plus_delta_y);
+    if (!f_z0_plus_delta) return;
+
     // Compute partial derivatives
     const partials = this.computePartialDerivatives(this.x0, this.y0);
     if (!partials) return;
@@ -545,6 +551,16 @@ class CauchyRiemannDemo implements DemoInstance {
       hovertemplate: `z₀ = ${this.x0.toFixed(2)} + ${this.y0.toFixed(2)}i<extra></extra>`
     });
 
+    // New position z₀ + Δz
+    preimageData.push({
+      x: [z_plus_delta_x],
+      y: [z_plus_delta_y],
+      mode: 'markers',
+      name: 'z₀ + Δz',
+      marker: { size: 10, color: '#00CED1' },
+      hovertemplate: `z₀ + Δz = ${z_plus_delta_x.toFixed(2)} + ${z_plus_delta_y.toFixed(2)}i<extra></extra>`
+    });
+
     // Delta vectors
     preimageData.push(this.createArrowTrace(
       { x: this.x0, y: this.y0 },
@@ -601,6 +617,16 @@ class CauchyRiemannDemo implements DemoInstance {
       name: 'f(z₀)',
       marker: { size: 10, color: '#FFD700' },
       hovertemplate: `f(z₀) = ${f_z0.x.toFixed(2)} + ${f_z0.y.toFixed(2)}i<extra></extra>`
+    });
+
+    // Transformed point at z₀ + Δz
+    imageData.push({
+      x: [f_z0_plus_delta.x],
+      y: [f_z0_plus_delta.y],
+      mode: 'markers',
+      name: 'f(z₀ + Δz)',
+      marker: { size: 10, color: '#00CED1' },
+      hovertemplate: `f(z₀ + Δz) = ${f_z0_plus_delta.x.toFixed(2)} + ${f_z0_plus_delta.y.toFixed(2)}i<extra></extra>`
     });
 
     // Finite difference vectors
