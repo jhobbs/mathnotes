@@ -17,7 +17,7 @@ Let $f(z) = u(x,y) + i(v,y).$ By the definition of the @contour-integral, we hav
 
 $$ \int_{C} f(z) dz = \int_C (u+vi)(dx + dyi) = \int_C ( u dx - vdy ) + i \int_C (vdx + udy). $$
 
-Because $f$ is analytic, the @cauchy-riemann-equations tell us that $u(x,y)$ and $v(x,y)$ have continuous first partial derivatives, and therefore, we can apply @greens-theorem. Now, we can take the first integral and transform it
+Because $f$ is @analytic, the @cauchy-riemann-equations tell us that $u(x,y)$ and $v(x,y)$ have continuous first partial derivatives, and therefore, we can apply @greens-theorem. Now, we can take the first integral and transform it
 
 $$ \int_C ( u dx + (-vdy) ) = -\iint_R \left ( v_x + u_y \right) dxdy. $$
 
