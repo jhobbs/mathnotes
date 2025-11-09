@@ -140,13 +140,40 @@ $$ u_x + i v_x = v_y - i u_y, \quad u_x = v_y, u_y = - v_x. \square $$
 
 See [this page for the proof of the converse theorem](https://personal.math.ubc.ca/~feldman/m300/cauchyRiemann.pdf).
 
+:::note
 From the proof of this theorem, we also get two formulas for calculating $f'$ when $f$ is specified in terms of its real and imaginary parts. When $f(z) = u(x,y) + v(x,y)i$, and $f'(z)$ exists,
 
 $$ f'(z) = \frac{\partial u}{\partial x} + \frac{\partial v}{\partial x}i = \frac{\partial v}{\partial y} - \frac{\partial u}{\partial y}i.$$
+:::
 
+:::remark
 Now we know how to calculate a derivative of a function defined in terms of $z$ (use the derivative rules) or in terms of its real and imaginary parts (use the formula above.)
+:::
 
-Theorem (c) also makes it very clear that the real and imaginary parts of a complex function are not independent; they must satisfy the Cauchy-Riemann equations in order to be analytic. This property is one of the main things that distinguishes the behavior of complex valued functions from general functions on $\mathbb{R}^2$.
+:::intuition
+Theorem (c) also makes it very clear that the real and imaginary parts of a complex function are not independent; they must satisfy the Cauchy-Riemann equations in order to be @analytic. This property is one of the main things that distinguishes the behavior of complex valued functions from general functions on $\mathbb{R}^2$.
+
+To look a bit more at that relationship, we can write the derivative of $f(z) = f'(z) = a + ib.$
+
+Now, we can approximate the @differential of $f$ near $z$ as
+
+$$ \Delta f \approx  f'(z) \Delta Z. $$
+
+If we take a small real step, $\Delta z = \Delta x,$ along the real axis, we get
+
+$$ \Delta f \approx f'(z) \Delta x = (a + ib) \Delta x. \tag{c} $$
+
+That is a @vector in the $uv$-plane (the output plane) pointing in the direction $\arg(f'(z)).$
+
+Now, if we take a small imaginary step, $\Delta z = i\Delta y,$ along the imaginary axis, we get
+
+$$ \Delta f \approx f'(z) i \Delta y = i(a + ib) \Delta y = (-b + ia) \Delta y. \tag{d} $$
+
+That's is a @vector in the $uv$-plane as well, with the same magnitude as the vector in (c), but in the direction $i \arg(f'(z)),$ that is, (d) has the same magnitude as (c), but is rotated by 90 degrees as its multiplied by $i.$
+
+So, the two vectors are of equal magnitude and are orthogonal. 
+:::
+
 
 Some other potentially useful theorems:
 
