@@ -643,6 +643,7 @@ class CauchyRiemannDemo implements DemoInstance {
       plot_bgcolor: this.isDark ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.9)',
       font: { color: this.isDark ? '#fff' : '#000' },
       margin: { l: 50, r: 20, t: 40, b: 50 },
+      dragmode: 'pan',
       xaxis: {
         gridcolor: this.isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
         zerolinecolor: this.isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
@@ -686,7 +687,10 @@ class CauchyRiemannDemo implements DemoInstance {
 
     const config = {
       responsive: true,
-      displayModeBar: false
+      displayModeBar: true,
+      modeBarButtonsToRemove: ['toImage'],
+      displaylogo: false,
+      scrollZoom: true
     };
 
     Plotly.newPlot(this.preimagePlot, preimageData, preimageLayout, config);
