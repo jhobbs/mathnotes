@@ -5,6 +5,18 @@ layout: page
 title: Cauchy-Goursat Theorem
 ---
 
+# Cauchy's Integral Theorem
+:::theorem "Cauchy's Integral Theorem" {label: @cauchys-integral-theorem}
+If $f(z)$ is @analytic in a @simply-connected @domain $D,$ then for every @simple @closed @path $C$ in $D,$
+
+$$ \oint_C f(z) dz = 0. $$
+
+::::proof
+::::
+
+:::
+
+
 # Cauchy-Goursat Theorem
 
 First, a less general theorem that can be shown using Green's theorem:
