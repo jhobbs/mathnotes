@@ -9,9 +9,10 @@ title: Contour Integrals
 
 A contour integral is essentially a [[line integral|analysis/calculus/line-integrals]] in the complex plane.
 
+:::definition "Contour Integral"
 Given a smooth curve $C$ in a domain $D$ and $f(z) = u(x,y) + v(x,y)i$ a contiuous function defined along $C$, we say that
 
-$$ \int_{C} f(z) dz = \int_C (u+vi)(dx + dyi) = \int_C u dx - vdy + i \int_C vdx + u dy. $$
+$$ \int_{C} f(z) dz = \int_C (u+vi)(dx + dyi) = \int_C ( u dx - vdy ) + i \int_C (vdx + udy). $$
 
 We can parameterize $C$ such that
 
@@ -20,6 +21,7 @@ $$ C : z = z(t) = x(t) + y(t)i, \quad \alpha \le t \le \beta $$
 Then we have 
 
 $$ \int_C f(z) dz = \int_\alpha^\beta f[z(t)]z'(t) dt $$
+:::
 
 One trick we can use is that when the modulus of a function is constant, we can use the argument of $z$ as a parameter by writing $C: z = e^{\theta i}, \arg{\alpha} \le \theta \le \arg{\beta}$
 
