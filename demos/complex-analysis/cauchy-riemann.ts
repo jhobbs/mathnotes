@@ -50,6 +50,11 @@ class CauchyRiemannDemo implements DemoInstance {
   // Grid parameters
   private gridRange: number = 3;  // Grid extends from -3 to 3
 
+  // Adaptive sampling parameters
+  private minSamples: number = 64;  // Base samples along each line
+  private maxRefineLevel: number = 6;  // Maximum refinement depth
+  private angleThreshold: number = Math.PI / 180 * 2;  // Refine when turn angle > 2 degrees
+
   async init(container: HTMLElement, config: DemoConfig): Promise<void> {
     this.container = container;
     this.isDark = isDarkMode(config);
@@ -356,50 +361,188 @@ class CauchyRiemannDemo implements DemoInstance {
     return eq1_satisfied && eq2_satisfied;
   }
 
-  private generateGrid(): { x: number[][], y: number[][] } {
-    const xGrid: number[][] = [];
-    const yGrid: number[][] = [];
+  // Adaptive sampling for parametric curves
+  private sampleAdaptive(
+    paramFunc: (t: number) => Point2D | null,
+    tMin: number,
+    tMax: number,
+    minN: number = this.minSamples,
+    level: number = 0
+  ): Point2D[] {
+    // Start with uniform samples
+    const tValues: number[] = [];
+    for (let i = 0; i < minN; i++) {
+      tValues.push(tMin + (i * (tMax - tMin)) / (minN - 1));
+    }
 
-    // Generate grid at integer coordinates to match Plotly's grid
-    const gridStep = 1.0; // Use integer spacing
+    let points: (Point2D | null)[] = tValues.map(t => paramFunc(t));
+
+    // Remove null points
+    const validIndices: number[] = [];
+    const validPoints: Point2D[] = [];
+    const validTs: number[] = [];
+
+    for (let i = 0; i < points.length; i++) {
+      if (points[i] !== null) {
+        validIndices.push(i);
+        validPoints.push(points[i]!);
+        validTs.push(tValues[i]);
+      }
+    }
+
+    if (validPoints.length < 2) return validPoints;
+
+    // Refine based on turning angle
+    const refine = (ts: number[], pts: Point2D[], lvl: number): { ts: number[], pts: Point2D[] } => {
+      if (lvl >= this.maxRefineLevel) return { ts, pts };
+
+      let refined = false;
+      const newTs: number[] = [ts[0]];
+      const newPts: Point2D[] = [pts[0]];
+
+      for (let i = 0; i < ts.length - 1; i++) {
+        const t0 = ts[i];
+        const t1 = ts[i + 1];
+        const p0 = pts[i];
+        const p1 = pts[i + 1];
+
+        // Sample midpoint
+        const tm = 0.5 * (t0 + t1);
+        const pm = paramFunc(tm);
+
+        if (pm === null) {
+          newTs.push(t1);
+          newPts.push(p1);
+          continue;
+        }
+
+        // Calculate turning angle using the triangle p0, pm, p1
+        const v0 = { x: pm.x - p0.x, y: pm.y - p0.y };
+        const v1 = { x: p1.x - pm.x, y: p1.y - pm.y };
+        const dot = v0.x * v1.x + v0.y * v1.y;
+        const n0 = Math.hypot(v0.x, v0.y);
+        const n1 = Math.hypot(v1.x, v1.y);
+
+        let angle = 0;
+        if (n0 > 0 && n1 > 0) {
+          const cosAngle = Math.max(-1, Math.min(1, dot / (n0 * n1)));
+          angle = Math.acos(cosAngle);
+        }
+
+        if (angle > this.angleThreshold) {
+          // Refine this segment
+          refined = true;
+          newTs.push(tm);
+          newPts.push(pm);
+        }
+
+        newTs.push(t1);
+        newPts.push(p1);
+      }
+
+      if (refined) {
+        return refine(newTs, newPts, lvl + 1);
+      }
+      return { ts: newTs, pts: newPts };
+    };
+
+    const result = refine(validTs, validPoints, level);
+    return result.pts;
+  }
+
+  // Generate lines for the grid (not a 2D array but individual lines)
+  private generateGridLines(): {
+    verticalLines: Point2D[][], // Lines with constant x (vertical in preimage)
+    horizontalLines: Point2D[][] // Lines with constant y (horizontal in preimage)
+  } {
+    const gridStep = 1.0;
     const min = -Math.ceil(this.gridRange);
     const max = Math.ceil(this.gridRange);
     const numLines = Math.floor((max - min) / gridStep) + 1;
 
+    const verticalLines: Point2D[][] = [];
+    const horizontalLines: Point2D[][] = [];
+
+    // Generate vertical lines (constant x)
     for (let i = 0; i < numLines; i++) {
-      xGrid[i] = [];
-      yGrid[i] = [];
       const xConst = min + i * gridStep;
+      const line: Point2D[] = [];
       for (let j = 0; j < numLines; j++) {
-        const yConst = min + j * gridStep;
-        xGrid[i][j] = xConst;
-        yGrid[i][j] = yConst;
+        const y = min + j * gridStep;
+        line.push({ x: xConst, y: y });
       }
+      verticalLines.push(line);
     }
 
-    return { x: xGrid, y: yGrid };
+    // Generate horizontal lines (constant y)
+    for (let j = 0; j < numLines; j++) {
+      const yConst = min + j * gridStep;
+      const line: Point2D[] = [];
+      for (let i = 0; i < numLines; i++) {
+        const x = min + i * gridStep;
+        line.push({ x: x, y: yConst });
+      }
+      horizontalLines.push(line);
+    }
+
+    return { verticalLines, horizontalLines };
   }
 
-  private transformGrid(xGrid: number[][], yGrid: number[][]): { u: number[][], v: number[][] } {
-    const uGrid: number[][] = [];
-    const vGrid: number[][] = [];
+  // Transform a single line with adaptive sampling
+  private transformLineAdaptive(line: Point2D[], isVertical: boolean): Point2D[] {
+    if (line.length < 2) return [];
 
-    for (let i = 0; i < xGrid.length; i++) {
-      uGrid[i] = [];
-      vGrid[i] = [];
-      for (let j = 0; j < xGrid[i].length; j++) {
-        const result = this.evaluateFunction(xGrid[i][j], yGrid[i][j]);
-        if (result) {
-          uGrid[i][j] = result.x;
-          vGrid[i][j] = result.y;
-        } else {
-          uGrid[i][j] = 0;
-          vGrid[i][j] = 0;
-        }
+    // Create a parametric function for the line
+    const paramFunc = (t: number): Point2D | null => {
+      if (isVertical) {
+        // Vertical line: constant x, varying y
+        const x = line[0].x;
+        const yMin = line[0].y;
+        const yMax = line[line.length - 1].y;
+        const y = yMin + t * (yMax - yMin);
+        return this.evaluateFunction(x, y);
+      } else {
+        // Horizontal line: constant y, varying x
+        const y = line[0].y;
+        const xMin = line[0].x;
+        const xMax = line[line.length - 1].x;
+        const x = xMin + t * (xMax - xMin);
+        return this.evaluateFunction(x, y);
+      }
+    };
+
+    // Use adaptive sampling on the parametric curve
+    return this.sampleAdaptive(paramFunc, 0, 1);
+  }
+
+  // Transform grid lines with adaptive sampling
+  private transformGridLines(
+    verticalLines: Point2D[][],
+    horizontalLines: Point2D[][]
+  ): {
+    transformedVertical: Point2D[][],
+    transformedHorizontal: Point2D[][]
+  } {
+    const transformedVertical: Point2D[][] = [];
+    const transformedHorizontal: Point2D[][] = [];
+
+    // Transform vertical lines (constant x in preimage)
+    for (const line of verticalLines) {
+      const transformed = this.transformLineAdaptive(line, true);
+      if (transformed.length > 0) {
+        transformedVertical.push(transformed);
       }
     }
 
-    return { u: uGrid, v: vGrid };
+    // Transform horizontal lines (constant y in preimage)
+    for (const line of horizontalLines) {
+      const transformed = this.transformLineAdaptive(line, false);
+      if (transformed.length > 0) {
+        transformedHorizontal.push(transformed);
+      }
+    }
+
+    return { transformedVertical, transformedHorizontal };
   }
 
   private createArrowTrace(from: Point2D, to: Point2D, color: string, name: string): any {
@@ -501,9 +644,9 @@ class CauchyRiemannDemo implements DemoInstance {
       </div>
     `;
 
-    // Generate grids
-    const grid = this.generateGrid();
-    const transformedGrid = this.transformGrid(grid.x, grid.y);
+    // Generate grid lines
+    const gridLines = this.generateGridLines();
+    const transformedLines = this.transformGridLines(gridLines.verticalLines, gridLines.horizontalLines);
 
     // Create pre-image plot
     const preimageData: any[] = [];
@@ -512,11 +655,13 @@ class CauchyRiemannDemo implements DemoInstance {
     const xGridColor = this.isDark ? 'rgba(255, 180, 180, 0.4)' : 'rgba(220, 100, 100, 0.4)'; // Red-ish for constant x lines (vertical in pre-image)
     const yGridColor = this.isDark ? 'rgba(180, 180, 255, 0.4)' : 'rgba(100, 100, 220, 0.4)'; // Blue-ish for constant y lines (horizontal in pre-image)
 
-    // Grid lines (horizontal - constant y)
-    for (let i = 0; i < grid.x.length; i++) {
+    // Add horizontal lines (constant y) to preimage
+    for (const line of gridLines.horizontalLines) {
+      const xCoords = line.map(p => p.x);
+      const yCoords = line.map(p => p.y);
       preimageData.push({
-        x: grid.x[i],
-        y: grid.y[i],
+        x: xCoords,
+        y: yCoords,
         mode: 'lines',
         line: { color: yGridColor, width: 1 },
         showlegend: false,
@@ -524,17 +669,13 @@ class CauchyRiemannDemo implements DemoInstance {
       });
     }
 
-    // Grid lines (vertical - constant x)
-    for (let j = 0; j < grid.x[0].length; j++) {
-      const xCol = [];
-      const yCol = [];
-      for (let i = 0; i < grid.x.length; i++) {
-        xCol.push(grid.x[i][j]);
-        yCol.push(grid.y[i][j]);
-      }
+    // Add vertical lines (constant x) to preimage
+    for (const line of gridLines.verticalLines) {
+      const xCoords = line.map(p => p.x);
+      const yCoords = line.map(p => p.y);
       preimageData.push({
-        x: xCol,
-        y: yCol,
+        x: xCoords,
+        y: yCoords,
         mode: 'lines',
         line: { color: xGridColor, width: 1 },
         showlegend: false,
@@ -580,11 +721,13 @@ class CauchyRiemannDemo implements DemoInstance {
     // Create image plot
     const imageData: any[] = [];
 
-    // Transformed grid (horizontal lines - originally constant y)
-    for (let i = 0; i < transformedGrid.u.length; i++) {
+    // Add transformed horizontal lines (originally constant y)
+    for (const line of transformedLines.transformedHorizontal) {
+      const xCoords = line.map(p => p.x);
+      const yCoords = line.map(p => p.y);
       imageData.push({
-        x: transformedGrid.u[i],
-        y: transformedGrid.v[i],
+        x: xCoords,
+        y: yCoords,
         mode: 'lines',
         line: { color: yGridColor, width: 1 },
         showlegend: false,
@@ -592,17 +735,13 @@ class CauchyRiemannDemo implements DemoInstance {
       });
     }
 
-    // Transformed grid (vertical lines - originally constant x)
-    for (let j = 0; j < transformedGrid.u[0].length; j++) {
-      const uCol = [];
-      const vCol = [];
-      for (let i = 0; i < transformedGrid.u.length; i++) {
-        uCol.push(transformedGrid.u[i][j]);
-        vCol.push(transformedGrid.v[i][j]);
-      }
+    // Add transformed vertical lines (originally constant x)
+    for (const line of transformedLines.transformedVertical) {
+      const xCoords = line.map(p => p.x);
+      const yCoords = line.map(p => p.y);
       imageData.push({
-        x: uCol,
-        y: vCol,
+        x: xCoords,
+        y: yCoords,
         mode: 'lines',
         line: { color: xGridColor, width: 1 },
         showlegend: false,
