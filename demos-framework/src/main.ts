@@ -42,7 +42,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'game-of-life': () => import('@demos/cellular-automata/game-of-life'),
   'elementary-cellular-automata': () => import('@demos/cellular-automata/elementary-cellular-automata'),
   'cross-product': () => import('@demos/linear-algebra/cross-product'),
-  'binary-network': () => import('@demos/network/binary-network')
+  'binary-network': () => import('@demos/network/binary-network'),
+  'cauchy-riemann': () => import('@demos/complex-analysis/cauchy-riemann')
 };
 
 // Store for loaded metadata
