@@ -45,6 +45,7 @@ class CauchyRiemannDemo implements DemoInstance {
   private deltaY: number = 0.2;
   private isDark: boolean = false;
   private resizeObserver: ResizeObserver | null = null;
+  private plotsInitialized: boolean = false;
 
   // Grid parameters
   private gridRange: number = 3;  // Grid extends from -3 to 3
@@ -670,6 +671,7 @@ class CauchyRiemannDemo implements DemoInstance {
       font: { color: this.isDark ? '#fff' : '#000' },
       margin: { l: 50, r: 20, t: 40, b: 50 },
       dragmode: 'pan',
+      uirevision: 'preserve-zoom',
       xaxis: {
         gridcolor: this.isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
         zerolinecolor: this.isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
@@ -719,8 +721,14 @@ class CauchyRiemannDemo implements DemoInstance {
       scrollZoom: true
     };
 
-    Plotly.newPlot(this.preimagePlot, preimageData, preimageLayout, config);
-    Plotly.newPlot(this.imagePlot, imageData, imageLayout, config);
+    if (!this.plotsInitialized) {
+      Plotly.newPlot(this.preimagePlot, preimageData, preimageLayout, config);
+      Plotly.newPlot(this.imagePlot, imageData, imageLayout, config);
+      this.plotsInitialized = true;
+    } else {
+      Plotly.react(this.preimagePlot, preimageData, preimageLayout, config);
+      Plotly.react(this.imagePlot, imageData, imageLayout, config);
+    }
   }
 
   cleanup(): void {
