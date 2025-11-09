@@ -229,6 +229,13 @@ class CauchyRiemannDemo implements DemoInstance {
     input.style.width = '200px';
     input.addEventListener('input', onChange);
 
+    // Prevent arrow keys from propagating when typing
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.stopPropagation();
+      }
+    });
+
     container.appendChild(labelEl);
     container.appendChild(input);
     document.body.appendChild(container); // Temporarily attach to get parentElement
@@ -263,8 +270,14 @@ class CauchyRiemannDemo implements DemoInstance {
     input.style.fontFamily = 'var(--font-mono, monospace)';
     input.addEventListener('input', onChange);
 
-    // Add keyboard shortcuts for fine control
+    // Add keyboard shortcuts for fine control and prevent arrow key propagation
     input.addEventListener('keydown', (e) => {
+      // Prevent arrow keys from propagating when typing
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.stopPropagation();
+      }
+
+      // Fine control with Shift+Arrow
       if (e.key === 'ArrowUp' && e.shiftKey) {
         e.preventDefault();
         input.value = (parseFloat(input.value) + 0.1).toFixed(2);

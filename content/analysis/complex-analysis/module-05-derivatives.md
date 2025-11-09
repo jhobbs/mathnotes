@@ -171,9 +171,10 @@ $$ \Delta f \approx f'(z) i \Delta y = i(a + ib) \Delta y = (-b + ia) \Delta y. 
 
 That's is a @vector in the $uv$-plane as well, with the same magnitude as the vector in (c), but in the direction $i \arg(f'(z)),$ that is, (d) has the same magnitude as (c), but is rotated by 90 degrees as its multiplied by $i.$
 
-So, the two vectors are of equal magnitude and are orthogonal. 
+So, the two vectors are of equal magnitude and are orthogonal.
 :::
 
+{% include_demo "cauchy-riemann" %}
 
 Some other potentially useful theorems:
 
