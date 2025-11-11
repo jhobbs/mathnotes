@@ -45,7 +45,7 @@ We can factor the denominator of $f(z)$ to get
 
 $$ f(z) = \frac{z}{z^2 - 3z + z} = \frac{z}{(z - 1)(z - 2)}. $$
 
-This makes it evident that $f(z)$ has singularities at $z = 1, 2$, and our domain of definition is an annular disc centered at $z = 3$, with an internal disc of raidus $1$ and an annulus of width $1$ outside of that:
+This makes it evident that $f(z)$ has singularities at $z = 1, 2$, and our domain of definition is an annular disc centered at $z = 3$, with an internal disc of radius $1$ and an annulus of width $1$ outside of that:
 
 ![Annular disc.png](annulus.png)
 

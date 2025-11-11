@@ -44,7 +44,7 @@ Matching coefficients on the left and right, it's clear that $a_1 = 0$, and that
 
 $$ (k+1)a_{k+1} + 2a_{k-1} = 0. \tag{g} $$
 
-Here, (g) is a recurrence relation that we can use to determine $a_{k+1} in terms of $a_{k-1}$, that is
+Here, (g) is a recurrence relation that we can use to determine $a_{k+1}$ in terms of $a_{k-1}$, that is
 
 $$ a_{k+1} = - \frac{2}{k+1}a_{k-1}. $$
 
