@@ -52,9 +52,7 @@ The radius of the @circle-of-convergence is called the **radius of convergence.*
 
 :::theorem
 Every @power-series representation of (or, Taylor series for) an @entire-function has an infinite @radius-of-convergence.
-
 :::
-
 
 :::theorem "A theorem about the uniqueness of Taylor series as @power-series expansions"
 If $f$ has a @power-series expansion about a point $z_0$ with nonzero @radius-of-convergence, it must be the @Taylor-series about $z_0$.
@@ -66,7 +64,6 @@ The @radius-of-convergence of the Taylor series for a function $f(z)$ about a po
 
 Here are some important and useful Maclaurin series that we can often use to find those of other functions:
 
-
 $$ e^z = 1 + z + \frac{z^2}{2!} + \frac{z^3}{3!} + \cdots = \sum_{n=0}^{\infty} \frac{1}{n!}z^n, |z| < \infty, $$
 
 $$ \sin{z} = z - \frac{z^3}{3!} + \frac{z^5}{5!} - \frac{z^7}{7!} + \cdots = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!}z^{2n+1}, |z| < \infty, $$
@@ -74,3 +71,33 @@ $$ \sin{z} = z - \frac{z^3}{3!} + \frac{z^5}{5!} - \frac{z^7}{7!} + \cdots = \su
 $$ \cos{z} = z - \frac{z^2}{2!} + \frac{z^4}{4!} - \frac{z^6}{6!} + \cdots = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n)!}z^{2n}, |z| < \infty, $$
 
 $$ \frac{1}{1 - z} = 1 + z + z^2 + z^3 + \cdots = \sum_{n = 0}^{\infty} z^n, |z| < 1. $$
+
+## Finding the Center and Radius of Convergence
+
+Given a @power-series, we often want to know the center and radius of its @circle-of-convergence. Finding its center is easy, from the form
+
+$$ \sum_{n=0}^{\infty} a_n (z - z_0)^n, $$
+
+the center is simply $z_0.$ When $z = z_0,$ all terms in the series become $0$ and so the @power-series always @converges there.
+
+To find the @radius-of-convergence, we can shift the power series to be centered at $0,$ which makes it easier to manipulate.
+
+To do this, let $w = z - z_0$ (or, if we have something like $\sum_{n=0}^{\infty} a_n (z - z_0)^{2n},$ then let $w = (z-z_0)^2.$
+
+Now, the series becomes
+
+$$ \sum_{n=0}^{\infty} a_n w^n. $$
+
+Now, we can proceed with either to the ratio test or the root test. First, the root test.
+
+$$ \left | \frac{a_{n+1}w^{a_{n+1}}}{a_n w^n} \right | = \left | \frac{a_{n+1}}{a_n} \right | |w|. $$
+
+Here we can see that $w$ contributes only a factor of $|w|,$ which doesn't depend on $n.$ So, when we take the limit as $n \to \infty,$ all of the $n$-dependence is in the coefficient ratio $|a_{n+1}/a_n|.$ Thus,
+
+$$ L = \lim_{n \to \infty} \left | \frac{a_{n+1}}{a_n} \right | \implies \text{series converges if} |w| < 1/L. $$
+
+So, our radius of convergence here is $1/L.$ Note that if we had something like $w = (z - z_0)^{mn},$ then our radius of convergence would be $(1/L)^{1/m}.$
+
+Similarly with the root test, we end up with something like
+
+$$ |w| < \frac{1}{\limsup{|a_n|^{1/n}}}. $$
