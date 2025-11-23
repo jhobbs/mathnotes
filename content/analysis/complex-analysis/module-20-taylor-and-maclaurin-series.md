@@ -101,3 +101,19 @@ So, our radius of convergence here is $1/L.$ Note that if we had something like 
 Similarly with the root test, we end up with something like
 
 $$ |w| < \frac{1}{\limsup{|a_n|^{1/n}}}. $$
+
+## Binomial Series
+
+:::theorem "Binomial Series" {label: binomial-series}
+For complex $z$ and complex $\alpha,$ we have
+
+$$ (1 + z)^{\alpha} = \sum_{n=0}^{\infty} \binom{\alpha}{n} z^n. $$
+
+If $|z| < 1,$ the series converges absolutely for any any complex $\alpha,$ including negative integers.
+
+Other convergence conditions are [listed here](https://en.wikipedia.org/wiki/Binomial_series).
+:::
+
+:::remark
+This can be viewed as an extension of the @binomial-theorem.
+:::
