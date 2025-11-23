@@ -9,13 +9,16 @@ title: Random Variables and Probability Distributions
 
 ## Random Variables
 
-A **random variable** is a function that associates a real number with each element in the sample space. For sample space $S$, we have $X: S \to \mathbb{R}$ and for $s \in S$, we have $x = X(s),$ where $x$ is a value of the random variable.
+
+:::define "Random Variable"
+A **random variable** is a @function that associates a @real number with each @element in the @sample-space. For @sample-space $S$, we have $X: S \to \mathbb{R}$ and for $s \in S$, we have $x = X(s),$ where $x$ is a @value of the random variable.
+:::
 
 Random variables don't have to map to all reals; for example, **Bernoulli random variables** map to either 0 or 1.
 
 Returning to sample spaces briefly, if a sample space contains a finite number of possibilities, or an unending sequence with as many elements as there are whole numbers (countably infinite), it is called a **discrete sample space**.
 
-If a sample space contians an infinite number of possibilities equal to the number of points on a line segment, it is called a **continuous sample space**.
+If a sample space contains an infinite number of possibilities equal to the number of points on a line segment, it is called a **continuous sample space**.
 
 Similarly, a random variable is called a **discrete random variable** if its set of possible outcomes is countable, or a **continuous random variable** if it takes values on a continuous scale. Discrete random variables tend to represent counted data, while continuous random variables tend to represent measured data.
 
