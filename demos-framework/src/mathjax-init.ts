@@ -34,6 +34,7 @@ export async function initMathJax() {
         Re: '\\operatorname{Re}',
         Im: '\\operatorname{Im}',
         tr: ['\\operatorname{tr}{#1}', 1],
+        Res: '\\operatorname{Res}',
         closure: ['\\overline{#1}', 1]
       }
     },
