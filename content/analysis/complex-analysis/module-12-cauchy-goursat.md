@@ -78,7 +78,7 @@ If $C$ is a simple, closed, piecewise smooth curve and $z_0$ is interior to $C$,
 $$ \oint_C \frac{1}{z - z_0} dz = 2 \pi i. $$
 
 ::::intuition
-See @integral-of-one-over-z-around-unit-circle and consider path independence and the principle of path deformation.
+See @integral-of-one-over-z-around-unit-circle and consider path independence and the principle of path deformation. Consider toy contours, particularly a collapsed keyhole contour around the singularity.
 ::::
 :::
 
