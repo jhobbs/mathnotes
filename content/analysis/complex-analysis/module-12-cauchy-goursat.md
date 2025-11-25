@@ -31,31 +31,36 @@ and by @cauchy-riemann-equations, $u_x = v_y,$ so this integral also evaluates t
 ::::
 :::
 
-
 # Cauchy-Goursat Theorem
 
 First, a less general theorem that can be shown using Green's theorem:
 
+:::theorem "Cauchy Integral Theorem" {label: cauchy-integral-theorem}
 If the derivative $f'$ of a complex function $f$ is continuous in a domain containing a simple, closed, piecewise smooth curve $C$ and its interior, then
 
 $$ \oint_c f(z) dz = 0. $$
+:::
 
 The Cauchy-Goursat Theorem is more general and doesn't require continuity of $f'$:
-
+:::theorem "Cauchy-Goursat Theorem" {label: cauchy-goursat-theorem}
 If $f$ is analytic inside and on a closed, piecewise smooth curve $C$, then
 
 $$ \oint_c f(z) dz = 0. $$
+:::
 
+:::note
 Note that $f$ has to be analytic both on and inside the piecewise smooth curve $C$. This means that if $C$ encloses a singularity, then Cauchy-Goursat can't be applied directly.
+:::
 
 In these cases we can apply an extension of Cauchy-Goursat:
 
+:::theorem
 Let $C$ be a simple, closed piecewise smooth curve, and $C_1$, $C_2$, $\dots$, $C_n$ be disjoint, simple, closed piecewise smooth curves in the interior of $C$. If $f$ is analytic at all points that are both inside or on $C$, and outside or on each $C_j$, then
 
 $$ \oint_c f(z) dz = \sum_{j=1}^n \oint_{C_j} f(z) dz. $$
+:::
 
 This arms us with a method to find the following contour integral:
-
 
 $$ \oint_C \frac{1}{z^2 - 1}, \quad C : |z| = 4. $$
 
@@ -67,9 +72,15 @@ Now we can find our contour integral by evaluating the contour integrals on path
 
 A useful theorem to proceed from here is the following:
 
+:::theorem
 If $C$ is a simple, closed, piecewise smooth curve and $z_0$ is interior to $C$, then:
 
 $$ \oint_C \frac{1}{z - z_0} dz = 2 \pi i. $$
+
+::::intuition
+See @integral-of-one-over-z-around-unit-circle and consider path independence and the principle of path deformation.
+::::
+:::
 
 Now, via partial fraction decomposition we have
 
