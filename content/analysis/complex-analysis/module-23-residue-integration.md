@@ -40,10 +40,24 @@ Instead of finding the @laurent-series, we can use these handy formulas.
 
 ### Simple pole at $z_0$
 
-First formula:
-
+:::theorem "First Simple Pole Residue Formula" {label: first-simple-pole-residue-formula}
 $$ \Res_{z=z_0} f(z) = b_1 = \lim_{z \to z_0} (z - z_0) f(z). $$
+:::
 
-Second formula:
-
+:::theorem "Second Simple Pole Residue Formula" {label: second-simple-pole-residue-formula}
 $$ \Res_{z=z_0} f(z) = \Res_{z=z_0} \frac{p(z)}{q(z)} = \frac{p(z_0)}{q'(z_0)}. $$
+:::
+
+### Poles of any Order at $z_0$
+
+:::theorem {label: residue-at-mth-order-pole}
+\Res_{z=z_0} f(z) = \frac{1}{(m - 1)!} \lim_{z \to z_0} \left { \frac{d^{m-1}}{dz^{m-1}} \left [ (z - z_0)^m f(z) \right ] \right }.
+:::
+
+### Several Singularities Inside the Contour
+
+:::theorem "Residue Theorem" {label: residue-theorem}
+Let $f(z)$ be @analytic inside a simple closed path $C$ and on $C,$ except for finitely many @singular-points $z_1, z_2, \dots, z_k$ inside $C.$ Then,
+
+$$ \oint_C f(z) dz = 2 \pi i \sum_{j=1}^{k} \Res_{z = z_j} f(z). $$
+:::
