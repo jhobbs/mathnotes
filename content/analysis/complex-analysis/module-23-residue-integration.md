@@ -51,7 +51,13 @@ $$ \Res_{z=z_0} f(z) = \Res_{z=z_0} \frac{p(z)}{q(z)} = \frac{p(z_0)}{q'(z_0)}. 
 ### Poles of any Order at $z_0$
 
 :::theorem {label: residue-at-mth-order-pole}
-\Res_{z=z_0} f(z) = \frac{1}{(m - 1)!} \lim_{z \to z_0} \left { \frac{d^{m-1}}{dz^{m-1}} \left [ (z - z_0)^m f(z) \right ] \right }.
+$$ \Res_{z=z_0} f(z) = \frac{1}{(m - 1)!} \lim_{z \to z_0} \left \{ \frac{d^{m-1}}{dz^{m-1}} \left [ (z - z_0)^m f(z) \right ] \right \}. $$
+:::
+:::remark
+For second order poles $(m = 2)$, this gives
+
+$$ \Res_{z = z_0} f(z) = \lim_{z \to z_0} \{[(z - z_0)^2 f(z)]' \}. $$
+
 :::
 
 ### Several Singularities Inside the Contour

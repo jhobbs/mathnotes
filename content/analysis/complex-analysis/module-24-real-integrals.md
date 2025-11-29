@@ -83,3 +83,58 @@ Now, $z^4 + 1$ has 4 zeros, but only two of them, $z_1 = e^{i \pi / 4}$ and $z_2
 Using the @residue-theorem, we have then that
 
 $$ I = \frac{1}{2} * 2 \pi i * (\Res{z \to z_1}f(z) + \Res{z \to z_2}f(z)) = \frac{\sqrt{2}}{4} \pi. $$
+
+Putting this all together, we have, in general, with the conditions specified,
+
+$$ \int_{-\infty}^{\infty} f(x) dx = 2 * \pi * \sum \Res f(z). $$
+
+## Improper Integrals with Simple Poles on the Real Axis
+
+:::definition "Cauchy Principal Value"
+Let's say we have an integral
+
+$$ \int_A^{B} f(x) dx \tag{a} $$
+
+whose integrand becomes infinite at a point $a$ in the interval of integration.
+
+Then, (a) means, by definition
+
+$$ \int_A^{B} f(x) dx = \lim_{\epsilon \to 0} \int_A^{a - \epsilon} f(x) dx + \lim_{\eta \to 0} \int_{a + \eta}^{B} f(x) dx. $$
+
+However, it may be the case that neither limit exists when both $\epsilon$ and $\eta$ approach $0$ independently, but that the limit
+
+$$ \lim_{\epsilon \to 0} \left [ \int_A^{a - \epsilon} f(x) dx +  \int_{a + \epsilon}^{B} f(x) dx \right ] $$
+
+does exist.
+
+This @limit is called the **Cauchy principal value** of the integral and is written as
+
+$$ \text{pr. v. } \int_A^{B} f(x) dx. $$
+:::
+
+This principal value can exist, although the integral itself is undefined. We can use this for the following theorem in the case there are @simple @poles on the real axis and we have an integral from $-\infty$ to $\infty.$
+
+:::theorem "Simple Poles on the Real Axis"
+If $f(z)$ has a @simple @pole at $z = a$ on the real axis, then
+
+$$ \lim_{r \to 0} \int_{C_2} f(z) dz = \pi i \Res{z=a} f(z), $$
+
+as illustrated below
+
+![Principal Value](principal-value.png)
+:::
+
+Putting this all together, we get, for an integral that has poles off of the real axis and simple poles on the real axis, we get
+
+$$ \text{pr. v. } \int_{- \infty}^{\infty} f(x) dx = 2 \pi i \sum \Res f(z) + \pi i \sum \Res f(z), $$
+
+where the first sum covers all the poles in the upper half-plane and the second over all the poles on the real axis (which must be simple.
+
+For example, given the situation illustrated below:
+
+![Real and Complex Poles](real-and-complex-poles.png)
+
+we have
+
+$$ \text{pr. v. } \int_{- \infty}^{\infty} f(x) dx = 2 \pi i \left ( \Res_{z \to z_1}f(z) + \Res_{z \to z_2}f(z) \right )  + \pi i \left (  \Res_{z \to a_1}f(z) + \Res_{z \to a_2}f(z) + \Res_{z \to a_3}f(z) \right ). $$
+
