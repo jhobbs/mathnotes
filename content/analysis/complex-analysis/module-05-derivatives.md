@@ -61,6 +61,12 @@ The following theorem is super important and helps clear all of that up. It may 
 A function $f(z) = u(x,y) + v(x,y)i$ is @analytic in an @open @set $S$ if and only if the first @partial-derivatives of $u(x,y)$ and $v(x,y)$ are @continuous on $S$ and satisfy the Cauchy-Riemann equations therein
 
 $$ \frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}, \quad \frac{\partial v}{\partial x} = - \frac{\partial u}{\partial y}. \tag{c} $$
+
+In polar form, we have $z = r(\cos{\theta} + i \sin{\theta})$ and set $f(z) = u(r, \theta), + i v(r, \theta),$
+
+so the condition is then
+
+$$ u_r = \frac{1}{r} v_{\theta}, \quad v_r =  - \frac{1}{r} u_{\theta}. $$ 
 :::
 
 We can break this theorem down into a couple of parts - that if a function is analytic, the CR equations hold, and that if the CR equations hold, the function is analytic.
