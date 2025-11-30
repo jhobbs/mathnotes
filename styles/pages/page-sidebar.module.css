@@ -1,0 +1,314 @@
+/* Page sidebar and navigation styles */
+
+/* ===== HAMBURGER BUTTON ===== */
+/* Always visible on pages with sidebar */
+.has-sidebar .sidebar-toggle {
+  display: flex;
+  background: none;
+  border: none;
+  padding: var(--space-sm);
+  cursor: pointer;
+  flex-direction: column;
+  gap: 4px;
+  margin-right: var(--space-sm);
+}
+
+.sidebar-toggle {
+  display: none;
+}
+
+.hamburger-line {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: var(--color-text);
+  border-radius: 1px;
+  transition: transform var(--transition-base), opacity var(--transition-base);
+}
+
+/* Hamburger animation when open */
+.sidebar-open .sidebar-toggle .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(4px, 4px);
+}
+
+.sidebar-open .sidebar-toggle .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.sidebar-open .sidebar-toggle .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ===== OVERLAY ===== */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: color-mix(in oklch, var(--color-black) 50%, transparent);
+  z-index: var(--z-overlay);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.sidebar-open .sidebar-overlay {
+  display: block;
+  opacity: 1;
+}
+
+/* ===== PAGE LAYOUT ===== */
+.page-layout {
+  display: flex;
+  gap: var(--space-xl);
+}
+
+/* ===== SIDEBAR ===== */
+/* Hidden by default on all screen sizes, slides in when .sidebar-open */
+.page-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 80vw;
+  z-index: var(--z-modal);
+  background-color: var(--color-bg);
+  transform: translateX(-100%);
+  transition: transform var(--transition-base);
+  padding-top: var(--space-lg);
+  overflow-y: auto;
+}
+
+.sidebar-open .page-sidebar {
+  transform: translateX(0);
+}
+
+.sidebar-nav {
+  padding: var(--space-sm);
+  height: 100%;
+  background-color: var(--color-code-bg);
+  border: none;
+  border-right: var(--border-width-thin) solid var(--color-border);
+  overflow-y: auto;
+}
+
+/* Parent folder link */
+.sidebar-parent {
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+}
+
+.sidebar-parent a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  transition: color var(--transition-fast);
+}
+
+.sidebar-parent a:hover {
+  color: var(--color-link);
+}
+
+/* Section styling */
+.sidebar-section {
+  margin-bottom: var(--space-md);
+}
+
+.sidebar-section:last-child {
+  margin-bottom: 0;
+}
+
+.sidebar-section-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-heading);
+  margin: 0 0 var(--space-sm) 0;
+  padding: 0;
+}
+
+.sidebar-section-title.muted {
+  color: var(--color-text-secondary);
+  font-weight: normal;
+}
+
+/* ===== NAV TREE ===== */
+.sidebar-tree {
+  margin-top: var(--space-sm);
+}
+
+.nav-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Nested trees get indentation */
+.nav-tree .nav-tree {
+  padding-left: var(--space-md);
+}
+
+.nav-item {
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item a {
+  display: block;
+  padding: var(--space-xs) var(--space-sm);
+  margin: 0 calc(-1 * var(--space-sm));
+  color: var(--color-link);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.nav-item a:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-link-hover);
+}
+
+/* Current page */
+.nav-item.current > a {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 500;
+}
+
+/* Folder styling */
+.folder-toggle {
+  display: block;
+  padding: var(--space-xs) var(--space-sm);
+  margin: 0 calc(-1 * var(--space-sm));
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.folder-toggle:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-heading);
+}
+
+.nav-folder.expanded > .folder-toggle {
+  color: var(--color-heading);
+}
+
+.folder-icon {
+  display: inline-block;
+  width: 1em;
+  font-size: 0.7em;
+  text-align: center;
+  margin-right: var(--space-xs);
+}
+
+/* Collapsed folder children */
+.folder-children.collapsed {
+  display: none;
+}
+
+/* ===== PAGE CONTENT ===== */
+.page-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ===== PREV/NEXT NAVIGATION ===== */
+.page-nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-left: auto;
+}
+
+.nav-prev,
+.nav-next {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-link);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  max-width: 200px;
+}
+
+.nav-prev:hover,
+.nav-next:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-link-hover);
+}
+
+.nav-arrow {
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.nav-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-prev.disabled,
+.nav-next.disabled {
+  visibility: hidden;
+}
+
+/* ===== HEADER ADJUSTMENTS FOR PAGES WITH SIDEBAR ===== */
+.has-sidebar .header-content {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.has-sidebar header h1 {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ===== MOBILE STYLES ===== */
+@media (max-width: 768px) {
+  /* Hide nav labels on mobile, show only arrows */
+  .nav-label {
+    display: none;
+  }
+
+  .nav-prev,
+  .nav-next {
+    padding: var(--space-xs);
+  }
+
+  .nav-arrow {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* ===== TABLET STYLES ===== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .nav-label {
+    max-width: 120px;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .page-sidebar,
+  .sidebar-toggle,
+  .page-nav-arrows {
+    display: none;
+  }
+
+  .page-layout {
+    display: block;
+  }
+}

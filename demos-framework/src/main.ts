@@ -11,6 +11,9 @@ import { initMathBlockToggle } from './mathblock-toggle';
 // Import section toggle functionality for index page
 import { initSectionToggle } from './section-toggle';
 
+// Import sidebar toggle functionality for content pages
+import { initSidebarToggle } from './sidebar-toggle';
+
 // Import demo viewer functionality
 import { initDemoViewer } from './demo-viewer';
 
@@ -74,7 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (isIndexPage) {
     initSectionToggle();
   }
-  
+
+  // Initialize sidebar toggle for content pages with sidebar
+  const hasSidebar = document.body.classList.contains('has-sidebar');
+  if (hasSidebar) {
+    initSidebarToggle();
+  }
+
   // Initialize demo viewer if on demo viewer page
   const isDemoViewerPage = document.body.classList.contains('demo-viewer-page');
   if (isDemoViewerPage) {

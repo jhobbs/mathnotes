@@ -61,10 +61,16 @@
 <body class="{% block body_class %}{% endblock %}">
     <header>
         <div class="header-content">
+            <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
             <h1><a href="{% block header_link %}{{ url_for('index') }}{% endblock %}">{% block header_title %}lacunary - {{ config.SITE_TITLE }}{% endblock %}</a></h1>
             {% block header_extra %}{% endblock %}
         </div>
     </header>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
     
     <main>
         {% block content %}{% endblock %}

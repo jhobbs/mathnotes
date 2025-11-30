@@ -9,6 +9,8 @@ from typing import Dict, Any, List
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 
+from mathnotes.navigation import get_page_navigation
+
 logger = logging.getLogger(__name__)
 
 
@@ -154,12 +156,16 @@ class ContentPages(Page):
             # Build output path
             output_path = f"mathnotes/{canonical_url}/index.html"
 
+            # Build navigation data for sidebar and prev/next
+            navigation = get_page_navigation(md_path, self.url_mapper.file_to_canonical)
+
             # Build context
             context = {
                 "content": result.get("content", ""),
                 "path": md_path,
                 "frontmatter": result.get("frontmatter", {}),
                 "canonical_url": result.get("canonical_url", ""),
+                "navigation": navigation,
             }
 
             specs.append(
