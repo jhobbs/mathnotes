@@ -111,7 +111,17 @@ This can be interpreted geometrically that multiplying by a complex number cause
 
 We can use this proprety to easily compute powers of complex numbers, which is sometimes called **DeMoivre's theorem**:
 
+
+:::theorem "de Moivre's Theorem" {label: de-moivres-}
 $$ z^n = r^n ( \cos{n\theta} + i \sin{n \theta} ) $$
+:::
+
+:::theorem "nth root of z" {label: nth-root-of-z}
+For complex $z$ and integer $n,$ with $z = r(\cos{x} + i \sin{x}),$ we have
+
+$$ r^{\frac{1}{n}} \left ( \cos{\frac{x + 2 \pi k}{n}} + i \sin{\frac{x + 2 \pi k}{n}} \right ). $$
+
+:::
 
 ## Square Root of Complex Numbers
 
