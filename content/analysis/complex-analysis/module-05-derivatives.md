@@ -62,7 +62,7 @@ A function $f(z) = u(x,y) + v(x,y)i$ is @analytic in an @open @set $S$ if and on
 
 $$ \frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}, \quad \frac{\partial v}{\partial x} = - \frac{\partial u}{\partial y}. \tag{c} $$
 
-In polar form, we have $z = r(\cos{\theta} + i \sin{\theta})$ and set $f(z) = u(r, \theta), + i v(r, \theta),$
+In polar form, we have $z = r(\cos{\theta} + i \sin{\theta})$ and set $f(z) = u(r, \theta) + i v(r, \theta),$
 
 so the condition is then
 

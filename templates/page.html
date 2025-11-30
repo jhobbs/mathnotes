@@ -6,10 +6,69 @@
 
 {% block header_link %}{{ url_for('mathnotes_index') }}{% endblock %}
 
+{% block body_class %}has-sidebar{% endblock %}
+
+{% block header_extra %}
+<nav class="page-nav-arrows">
+    {% if navigation.prev_page %}
+    <a href="{{ navigation.prev_page.url }}" class="nav-prev" title="{{ navigation.prev_page.title }}">
+        <span class="nav-arrow">&larr;</span>
+        <span class="nav-label">{{ navigation.prev_page.title }}</span>
+    </a>
+    {% else %}
+    <span class="nav-prev disabled"></span>
+    {% endif %}
+    {% if navigation.next_page %}
+    <a href="{{ navigation.next_page.url }}" class="nav-next" title="{{ navigation.next_page.title }}">
+        <span class="nav-label">{{ navigation.next_page.title }}</span>
+        <span class="nav-arrow">&rarr;</span>
+    </a>
+    {% else %}
+    <span class="nav-next disabled"></span>
+    {% endif %}
+</nav>
+{% endblock %}
+
+{% macro render_tree(items) %}
+<ul class="nav-tree">
+    {% for item in items %}
+    <li class="nav-item nav-{{ item.type }}{% if item.is_current %} current{% endif %}{% if item.expanded %} expanded{% endif %}">
+        {% if item.type == "page" %}
+        <a href="{{ item.url }}">{{ item.title }}</a>
+        {% else %}
+        <span class="folder-toggle">
+            <span class="folder-icon">{% if item.expanded %}&#9660;{% else %}&#9654;{% endif %}</span>
+            {{ item.name }}
+        </span>
+        {% if item.children %}
+        <div class="folder-children{% if not item.expanded %} collapsed{% endif %}">
+            {{ render_tree(item.children) }}
+        </div>
+        {% endif %}
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endmacro %}
+
 {% block content %}
-<article>
-    {{ content|safe }}
-</article>
+<div class="page-layout">
+    <aside class="page-sidebar" id="page-sidebar">
+        <nav class="sidebar-nav">
+            <div class="sidebar-parent">
+                <a href="/mathnotes/">&larr; Main</a>
+            </div>
+
+            <div class="sidebar-tree">
+                {{ render_tree(navigation.tree.children) }}
+            </div>
+        </nav>
+    </aside>
+
+    <article class="page-content">
+        {{ content|safe }}
+    </article>
+</div>
 {% endblock %}
 
 {% block footer %}
