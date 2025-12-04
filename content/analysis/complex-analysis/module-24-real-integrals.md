@@ -86,7 +86,7 @@ $$ I = \frac{1}{2} * 2 \pi i * (\Res{z \to z_1}f(z) + \Res{z \to z_2}f(z)) = \fr
 
 Putting this all together, we have, in general, with the conditions specified,
 
-$$ \int_{-\infty}^{\infty} f(x) dx = 2 * \pi * \sum \Res f(z). $$
+$$ \int_{-\infty}^{\infty} f(x) dx = 2 \pi i \sum \Res f(z). $$
 
 ## Improper Integrals with Simple Poles on the Real Axis
 
