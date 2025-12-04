@@ -96,7 +96,9 @@ Here we can see that $w$ contributes only a factor of $|w|,$ which doesn't depen
 
 $$ L = \lim_{n \to \infty} \left | \frac{a_{n+1}}{a_n} \right | \implies \text{series converges if} |w| < 1/L. $$
 
-So, our radius of convergence here is $1/L.$ Note that if we had something like $w = (z - z_0)^{mn},$ then our radius of convergence would be $(1/L)^{1/m}.$
+So, our radius of convergence for our $w$ series here is $1/L.$ We have to bring $z$ back, so for example, if we had something like $w = (z - z_0)^{mn},$ then our radius of convergence would be $(1/L)^{1/m}.$ We get that by
+
+$$ |w| < R \implies |z^m| < R \implies |z| < R^{1/m}. $$
 
 Similarly with the root test, we end up with something like
 

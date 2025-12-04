@@ -56,10 +56,10 @@ These functions are also $2 \pi$ periodic like their real counterparts.
 
 The real and imaginary parts of $\sin{z}$ and $\cos{z}$ can be expressed as
 
-$$ \sin{z} = \sin{(x + yi)} = \sin{x} \cosh{x} + \cos{x}\sinh{yi} $$
+$$ \sin{z} = \sin{(x + yi)} = \sin{x} \cosh{x} + i \cos{x}\sinh{y} $$
 
 
-$$ \cos{z} = \cos{(x + yi)} = \cos{x} \cosh{y} - \sin{x} \sinh{yi} $$
+$$ \cos{z} = \cos{(x + yi)} = \cos{x} \cosh{y} - i \sin{x} \sinh{y} $$
 
 $\cos{z}$ and $\sin{z}$ are entire functions. They have the same zeros as the real versions and the expected derivatives.
 
@@ -81,9 +81,9 @@ $$ \sinh{(iz)} = i\sin{z}, \quad \cosh{iz} = \cos{z}. $$
 
 The real and imaginary parts of $\sinh{z}$ and $\cosh{z}$ are given as
 
-$$ \sinh{z} = \cos{y} \sinh{x} + \sin{y} \cosh{xi}, $$
+$$ \sinh{z} = \cos{y} \sinh{x} + i \sin{y} \cosh{x}, $$
 
-$$ \cosh{z} = \cos{y} \cosh{x} + \sin{y} \sinh{xi}. $$
+$$ \cosh{z} = \cos{y} \cosh{x} + i \sin{y} \sinh{x}. $$
 
 The remaining complex hyperbolic functions are defined as usual
 
@@ -111,11 +111,11 @@ The principal logarithm is defined using the principal argument, such that
 
 $$ \Log{z} = \ln{|z|} + (\Arg{z})i $$
 
-and is analytic in the domain $\|z\| > 0, -\pi < \Arg{z} < \pi.$ It is also called the prinicpal branch of $\log{z}$.
+and is analytic in the domain $\|z\| > 0, -\pi < \Arg{z} < \pi.$ It is also called the principal branch of $\log{z}$.
 
 Points on the negative real aixs and $z = 0$ are singularities of $\Log{z}$, but they are not isolated singularities.
 
-The deriviative of $\Log{z}$ is
+The derivative of $\Log{z}$ is
 
 $$ \frac{d}{dz} \Log{z} = \frac{1}{z} $$
 
@@ -125,4 +125,10 @@ $$ \log_\phi{z} = \ln{|z|} + (\arg_\phi{z})i. $$
 
 These branches are analytic on any domain that does not contain $z = 0$ (the branch point) or points on the branch cut (the half-line through $z=0$ making an angle of $\phi$ radians ith the positive real axis.)
 
-We can define branch cuts that aren't straight lines too. For example, branch points of the function $\Log{\left \[ f(z)\right \]}$ are the zeroes of $f(z)$ and branch cuts are where $f(z)$ is real and negative.
+We can define branch cuts that aren't straight lines too. For example, branch points of the function $\Log{ \left [ f(z) \right ] }$ are the zeroes of $f(z)$ and branch cuts are where $f(z)$ is real and negative.
+
+## General Powers of z
+
+For a complex number $a,$
+
+$$ a^z = e^{z * \ln{a}}. $$

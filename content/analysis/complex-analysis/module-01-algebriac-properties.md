@@ -109,7 +109,9 @@ $$ z_1 \cdot z_2 = r_1 r_2 (cos(\theta_1 + \theta_2) + isin(\theta_1 + \theta_2)
 
 This can be interpreted geometrically that multiplying by a complex number causes rotation in the complex plane.
 
-We can use this proprety to easily compute powers of complex numbers, which is sometimes called **DeMoivre's theorem**:
+Note that when we take the conjugate of a number $z = r e^{i\theta}$ we get $\overline{z} = r^{-i\theta}.$ This is a number with the same magnitude as $z$ but with the opposite angle. On the unit circle, where all numbers have the same magnitude, we have $z \overline{z} = 1$ because multiplying $z$ by its conjugate rotates it exactly how much it was rotated, but in the opposite direction.
+
+We can use this property to easily compute powers of complex numbers, which is sometimes called **DeMoivre's theorem**:
 
 
 :::theorem "de Moivre's Theorem" {label: de-moivres-}
@@ -139,9 +141,9 @@ $$ X = x^2 - y^2, \quad Y = 2xy $$
 
 Now we have two equations and two unknowns, and when they are solved, we will have the two square roots of $Z$.
 
-By definition, the **principal square root** of $Z$ is the square root with the nonnegative real part.
+By definition, the **principal square root** of $Z$ is the square root with the non-negative real part.
 
-## Complex Quadratrics
+## Complex Quadratics
 
 We can use the quadratic formula to solve quadratics in a complex variable with complex coefficients, that is where
 
