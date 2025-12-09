@@ -46,7 +46,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'elementary-cellular-automata': () => import('@demos/cellular-automata/elementary-cellular-automata'),
   'cross-product': () => import('@demos/linear-algebra/cross-product'),
   'binary-network': () => import('@demos/network/binary-network'),
-  'cauchy-riemann': () => import('@demos/complex-analysis/cauchy-riemann')
+  'cauchy-riemann': () => import('@demos/complex-analysis/cauchy-riemann'),
+  'contour-drawing': () => import('@demos/complex-analysis/contour-drawing')
 };
 
 // Store for loaded metadata
