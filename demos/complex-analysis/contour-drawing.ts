@@ -32,7 +32,7 @@ class ContourDrawingDemo implements DemoInstance {
 
   // Configuration
   private axisRange = { min: -5, max: 5 };
-  private closeThresholdPixels = 6; // Auto-close if within this many pixels of start (matches start marker radius)
+  private closeThresholdPixels = 7; // Auto-close if within this many pixels of start (matches start marker radius)
 
   // Cached layout for Plotly.react
   private currentLayout: any;
@@ -186,12 +186,12 @@ class ContourDrawingDemo implements DemoInstance {
         mode: 'markers',
         type: 'scatter',
         marker: {
-          size: 12,
+          size: 14,
           color: '#f39c12',
           symbol: 'circle',
           line: { color: this.isDark ? '#fff' : '#000', width: 1 }
         },
-        hovertemplate: 'Start: (%{x:.2f}, %{y:.2f})<extra></extra>'
+        hoverinfo: 'skip'
       });
     }
 
@@ -349,13 +349,6 @@ class ContourDrawingDemo implements DemoInstance {
   }
 
   private continueDrawing(point: Point2D): void {
-    // Only add point if it's far enough from the last point (avoid clutter)
-    if (this.points.length > 0) {
-      const last = this.points[this.points.length - 1];
-      const dist = Math.hypot(point.x - last.x, point.y - last.y);
-      if (dist < 0.05) return; // Minimum distance threshold
-    }
-
     this.points.push(point);
     this.pointsDisplay.update(String(this.points.length));
     this.updatePlot();
