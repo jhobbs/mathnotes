@@ -1,4 +1,4 @@
-import { isDarkMode } from '@framework/demo-utils';
+import { isDarkMode, getCssColors } from '@framework/demo-utils';
 import { DemoInstance, DemoConfig, DemoMetadata } from '@framework/types';
 import {
   createControlPanel,
@@ -32,6 +32,7 @@ class ContourDrawingDemo implements DemoInstance {
 
   // Configuration
   private axisRange = { min: -5, max: 5 };
+  private readonly SAMPLE_POINT_COUNT = 75;
   private closeThresholdPixels = 7; // Auto-close if within this many pixels of start (matches start marker radius)
 
   // Cached layout for Plotly.react
@@ -165,8 +166,9 @@ class ContourDrawingDemo implements DemoInstance {
     const traces: any[] = [];
 
     if (this.points.length > 0) {
+      const cssColors = getCssColors(this.isDark);
       // Main contour line
-      const lineColor = this.state === 'closed' ? '#27ae60' : '#e74c3c';
+      const lineColor = this.state === 'closed' ? cssColors.warning : cssColors.error;
       traces.push({
         x: this.points.map(p => p.x),
         y: this.points.map(p => p.y),
@@ -174,7 +176,8 @@ class ContourDrawingDemo implements DemoInstance {
         type: 'scatter',
         line: {
           color: lineColor,
-          width: 2
+          width: 2,
+          simplify: false
         },
         hoverinfo: 'skip'
       });
@@ -193,6 +196,24 @@ class ContourDrawingDemo implements DemoInstance {
         },
         hoverinfo: 'skip'
       });
+
+      // Sample points - only when closed
+      if (this.state === 'closed') {
+        const samplePoints = this.getSamplePoints();
+        if (samplePoints.length > 1) {
+          traces.push({
+            x: samplePoints.map(p => p.x),
+            y: samplePoints.map(p => p.y),
+            mode: 'markers',
+            type: 'scatter',
+            marker: {
+              size: 4,
+              color: cssColors.accent
+            },
+            hoverinfo: 'skip'
+          });
+        }
+      }
     }
 
     return traces;
@@ -260,6 +281,53 @@ class ContourDrawingDemo implements DemoInstance {
     const xRange = fullLayout.xaxis.range;
     const unitsPerPixel = (xRange[1] - xRange[0]) / plotWidth;
     return pixels * unitsPerPixel;
+  }
+
+  private getSamplePoints(): Point2D[] {
+    const N = this.SAMPLE_POINT_COUNT;
+    const totalPoints = this.points.length;
+
+    if (totalPoints <= 1) return [];
+
+    // Calculate cumulative arc length
+    const cumLength: number[] = [0];
+    for (let i = 1; i < totalPoints; i++) {
+      const dx = this.points[i].x - this.points[i - 1].x;
+      const dy = this.points[i].y - this.points[i - 1].y;
+      cumLength.push(cumLength[i - 1] + Math.hypot(dx, dy));
+    }
+    const totalLength = cumLength[totalPoints - 1];
+
+    if (totalLength === 0) return [];
+
+    const sampleCount = Math.min(N, totalPoints);
+    const samples: Point2D[] = [];
+
+    // Sample at even arc length intervals
+    for (let i = 0; i < sampleCount; i++) {
+      const targetLength = (i / (sampleCount - 1)) * totalLength;
+
+      // Find segment containing targetLength
+      let segIdx = 0;
+      while (segIdx < totalPoints - 1 && cumLength[segIdx + 1] < targetLength) {
+        segIdx++;
+      }
+
+      // Interpolate within segment
+      if (segIdx >= totalPoints - 1) {
+        samples.push({ ...this.points[totalPoints - 1] });
+      } else {
+        const segStart = cumLength[segIdx];
+        const segEnd = cumLength[segIdx + 1];
+        const t = segEnd > segStart ? (targetLength - segStart) / (segEnd - segStart) : 0;
+        samples.push({
+          x: this.points[segIdx].x + t * (this.points[segIdx + 1].x - this.points[segIdx].x),
+          y: this.points[segIdx].y + t * (this.points[segIdx + 1].y - this.points[segIdx].y)
+        });
+      }
+    }
+
+    return samples;
   }
 
   private handleMouseDown(e: MouseEvent): void {
@@ -349,7 +417,22 @@ class ContourDrawingDemo implements DemoInstance {
   }
 
   private continueDrawing(point: Point2D): void {
-    this.points.push(point);
+    const lastPoint = this.points[this.points.length - 1];
+    const dx = point.x - lastPoint.x;
+    const dy = point.y - lastPoint.y;
+    const dist = Math.hypot(dx, dy);
+    const pixelSize = this.pixelsToPlotUnits(1);
+    const steps = Math.max(1, Math.round(dist / pixelSize));
+
+    // Fill in all pixel-sized steps from last point to new point
+    for (let i = 1; i <= steps; i++) {
+      const t = i / steps;
+      this.points.push({
+        x: lastPoint.x + dx * t,
+        y: lastPoint.y + dy * t
+      });
+    }
+
     this.pointsDisplay.update(String(this.points.length));
     this.updatePlot();
   }
@@ -373,12 +456,13 @@ class ContourDrawingDemo implements DemoInstance {
       this.state = 'closed';
       this.statusDisplay.update('Contour closed');
       this.pointsDisplay.update(String(this.points.length));
+      this.updatePlot();
     } else {
       // Pause - can be resumed
       this.state = 'paused';
       this.statusDisplay.update('Paused - click to continue');
+      this.updatePlot();
     }
-    this.updatePlot();
   }
 
   private resumeDrawing(): void {

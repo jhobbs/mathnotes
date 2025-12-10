@@ -84,7 +84,7 @@ while true; do
         echo "[$(date)] JavaScript/CSS source changes detected:"
         echo "$CHANGED_FILES" | sed 's/^/  /'
         echo "Running TypeScript type check..."
-        npm run type-check || { echo "[$(date)] TypeScript type check failed!"; exit 1; }
+        npm run type-check || { echo "[$(date)] TypeScript type check failed!"; continue; }
         echo "Rebuilding JavaScript/CSS bundles..."
         npm run build
         touch "$JS_LAST_BUILD"
