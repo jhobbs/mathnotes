@@ -61,56 +61,103 @@ export function createDemoContainer(
  * Detects if dark mode is active
  */
 export function isDarkMode(config?: DemoConfig): boolean {
-  return config?.darkMode ?? 
+  return config?.darkMode ??
     (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 }
 
+// Single source of truth for color values (RGB tuples)
+type RGB = readonly [number, number, number];
+
+const COLOR_VALUES = {
+  dark: {
+    background: [30, 30, 30] as RGB,
+    foreground: [220, 220, 220] as RGB,
+    stroke: [200, 200, 200] as RGB,
+    fill: [180, 180, 180] as RGB,
+    text: [224, 224, 224] as RGB,
+    accent: [100, 150, 255] as RGB,
+    grid: [60, 60, 60] as RGB,
+    axis: [150, 150, 150] as RGB,
+    error: [255, 87, 87] as RGB,
+    success: [87, 255, 87] as RGB,
+    warning: [255, 193, 7] as RGB,
+    info: [33, 150, 243] as RGB,
+    surface: [45, 45, 45] as RGB,
+    surfaceAlt: [60, 60, 60] as RGB,
+    liquid: [173, 216, 230] as RGB,
+    liquidDark: [25, 118, 210] as RGB,
+  },
+  light: {
+    background: [255, 255, 255] as RGB,
+    foreground: [30, 30, 30] as RGB,
+    stroke: [0, 0, 0] as RGB,
+    fill: [50, 50, 50] as RGB,
+    text: [51, 51, 51] as RGB,
+    accent: [50, 100, 200] as RGB,
+    grid: [200, 200, 200] as RGB,
+    axis: [100, 100, 100] as RGB,
+    error: [211, 47, 47] as RGB,
+    success: [46, 125, 50] as RGB,
+    warning: [245, 124, 0] as RGB,
+    info: [25, 118, 210] as RGB,
+    surface: [245, 245, 245] as RGB,
+    surfaceAlt: [235, 235, 235] as RGB,
+    liquid: [173, 216, 230] as RGB,
+    liquidDark: [0, 0, 139] as RGB,
+  },
+} as const;
 
 /**
- * Gets standard demo colors based on dark mode
+ * Gets standard demo colors as p5.Color objects (for p5.js demos)
  */
 export function getDemoColors(p: p5, config?: DemoConfig): DemoColors {
-  const isDark = isDarkMode(config);
-  
-  if (isDark) {
-    return {
-      background: p.color(30, 30, 30),
-      foreground: p.color(220, 220, 220),
-      stroke: p.color(200, 200, 200),
-      fill: p.color(180, 180, 180),
-      text: p.color(224, 224, 224),  // Light gray text for dark mode
-      accent: p.color(100, 150, 255),
-      grid: p.color(60, 60, 60),
-      axis: p.color(150, 150, 150),
-      error: p.color(255, 87, 87),
-      success: p.color(87, 255, 87),
-      warning: p.color(255, 193, 7),
-      info: p.color(33, 150, 243),
-      surface: p.color(45, 45, 45),
-      surfaceAlt: p.color(60, 60, 60),
-      liquid: p.color(173, 216, 230),
-      liquidDark: p.color(25, 118, 210)
-    };
-  } else {
-    return {
-      background: p.color(255, 255, 255),
-      foreground: p.color(30, 30, 30),
-      stroke: p.color(0, 0, 0),
-      fill: p.color(50, 50, 50),
-      text: p.color(51, 51, 51),  // Dark gray text for light mode
-      accent: p.color(50, 100, 200),
-      grid: p.color(200, 200, 200),
-      axis: p.color(100, 100, 100),
-      error: p.color(211, 47, 47),
-      success: p.color(46, 125, 50),
-      warning: p.color(245, 124, 0),
-      info: p.color(25, 118, 210),
-      surface: p.color(245, 245, 245),
-      surfaceAlt: p.color(235, 235, 235),
-      liquid: p.color(173, 216, 230),
-      liquidDark: p.color(0, 0, 139)
-    };
-  }
+  const v = isDarkMode(config) ? COLOR_VALUES.dark : COLOR_VALUES.light;
+  return {
+    background: p.color(...v.background),
+    foreground: p.color(...v.foreground),
+    stroke: p.color(...v.stroke),
+    fill: p.color(...v.fill),
+    text: p.color(...v.text),
+    accent: p.color(...v.accent),
+    grid: p.color(...v.grid),
+    axis: p.color(...v.axis),
+    error: p.color(...v.error),
+    success: p.color(...v.success),
+    warning: p.color(...v.warning),
+    info: p.color(...v.info),
+    surface: p.color(...v.surface),
+    surfaceAlt: p.color(...v.surfaceAlt),
+    liquid: p.color(...v.liquid),
+    liquidDark: p.color(...v.liquidDark),
+  };
+}
+
+export type CssColors = { [K in keyof typeof COLOR_VALUES.dark]: string };
+
+/**
+ * Gets standard demo colors as CSS rgb() strings (for Plotly/non-p5 demos)
+ */
+export function getCssColors(isDark: boolean): CssColors {
+  const v = isDark ? COLOR_VALUES.dark : COLOR_VALUES.light;
+  const toRgb = (c: RGB) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+  return {
+    background: toRgb(v.background),
+    foreground: toRgb(v.foreground),
+    stroke: toRgb(v.stroke),
+    fill: toRgb(v.fill),
+    text: toRgb(v.text),
+    accent: toRgb(v.accent),
+    grid: toRgb(v.grid),
+    axis: toRgb(v.axis),
+    error: toRgb(v.error),
+    success: toRgb(v.success),
+    warning: toRgb(v.warning),
+    info: toRgb(v.info),
+    surface: toRgb(v.surface),
+    surfaceAlt: toRgb(v.surfaceAlt),
+    liquid: toRgb(v.liquid),
+    liquidDark: toRgb(v.liquidDark),
+  };
 }
 
 /**
