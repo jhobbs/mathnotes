@@ -35,7 +35,9 @@ class ContourDrawingDemo implements DemoInstance {
   // Animation state
   private complexPoints: Complex[] = [];
   private fourierCoefficients: Complex[] = [];
-  private currentVectorIndex: number = -1;
+  // Precomputed vectors: animationVectors[frameIndex][coefficientIndex]
+  private animationVectors: Complex[][] = [];
+  private currentFrameIndex: number = 0;
   private animationTimer: number | null = null;
 
   // Configuration
@@ -46,6 +48,7 @@ class ContourDrawingDemo implements DemoInstance {
     '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
     '#f58231', '#911eb4', '#42d4f4', '#f032e6'
   ];
+  private readonly ANIMATION_FRAME_COUNT = 100;
 
   // Cached layout for Plotly.react
   private currentLayout: any;
@@ -226,15 +229,16 @@ class ContourDrawingDemo implements DemoInstance {
           });
         }
 
-        // Draw Fourier coefficient vectors tip-to-tail
-        if (this.fourierCoefficients.length > 0) {
+        // Draw Fourier coefficient vectors tip-to-tail for current animation frame
+        if (this.animationVectors.length > 0) {
+          const frameVectors = this.animationVectors[this.currentFrameIndex];
           let currentX = 0;
           let currentY = 0;
 
-          for (let i = 0; i < this.fourierCoefficients.length; i++) {
-            const c = this.fourierCoefficients[i];
-            const nextX = currentX + c.re;
-            const nextY = currentY + c.im;
+          for (let i = 0; i < frameVectors.length; i++) {
+            const v = frameVectors[i];
+            const nextX = currentX + v.re;
+            const nextY = currentY + v.im;
 
             traces.push({
               x: [currentX, nextX],
@@ -504,7 +508,8 @@ class ContourDrawingDemo implements DemoInstance {
       this.fourierCoefficients = this.calculateFourierCoefficients(this.complexPoints);
       console.log('Fourier coefficients:', this.fourierCoefficients);
 
-      // Start vector animation
+      // Precompute animation frames and start animation
+      this.computeAnimationVectors();
       this.startVectorAnimation();
     } else {
       // Pause - can be resumed
@@ -537,15 +542,47 @@ class ContourDrawingDemo implements DemoInstance {
     return coefficients;
   }
 
+  /**
+   * Precompute all animation frames.
+   *
+   * We have M frames total, splitting a full rotation into M parts.
+   * For frame j: t_j = (2π * j) / M
+   *
+   * For each coefficient c_n, the vector at frame j is:
+   *   v_n(t_j) = c_n * e^(i * n * t_j)
+   *
+   * This rotates coefficient n by angle (n * t_j), so higher frequency
+   * coefficients rotate faster. When drawn tip-to-tail, the tip of the
+   * last vector traces out the reconstructed contour.
+   */
+  private computeAnimationVectors(): void {
+    const M = this.ANIMATION_FRAME_COUNT;
+    const N = this.fourierCoefficients.length;
+    this.animationVectors = [];
+
+    for (let j = 0; j < M; j++) {
+      const t_j = (2 * Math.PI * j) / M;
+      const frameVectors: Complex[] = [];
+
+      for (let n = 0; n < N; n++) {
+        // v_n(t_j) = c_n * e^(i*n*t_j)
+        const angle = n * t_j;
+        const expTerm = complex(Math.cos(angle), Math.sin(angle));
+        frameVectors.push(multiply(this.fourierCoefficients[n], expTerm) as Complex);
+      }
+
+      this.animationVectors.push(frameVectors);
+    }
+  }
+
   private startVectorAnimation(): void {
-    this.currentVectorIndex = 0;
+    this.currentFrameIndex = 0;
     this.updatePlot();
 
     this.animationTimer = window.setInterval(() => {
-      // Skip last point since it's same as first (closed contour)
-      this.currentVectorIndex = (this.currentVectorIndex + 1) % (this.complexPoints.length - 1);
+      this.currentFrameIndex = (this.currentFrameIndex + 1) % this.ANIMATION_FRAME_COUNT;
       this.updatePlot();
-    }, 250);
+    }, 50); // ~20fps for smooth animation
   }
 
   private stopVectorAnimation(): void {
@@ -559,7 +596,8 @@ class ContourDrawingDemo implements DemoInstance {
     this.stopVectorAnimation();
     this.complexPoints = [];
     this.fourierCoefficients = [];
-    this.currentVectorIndex = -1;
+    this.animationVectors = [];
+    this.currentFrameIndex = 0;
     this.points = [];
     this.state = 'idle';
     this.statusDisplay.update('Click to start drawing');
