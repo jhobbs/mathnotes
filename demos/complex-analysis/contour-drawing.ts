@@ -39,18 +39,21 @@ class ContourDrawingDemo implements DemoInstance {
   private animationVectors: Complex[][] = [];
   private currentFrameIndex: number = 0;
   private animationTimer: number | null = null;
-  // Trail of tip positions as animation progresses
-  private trailPoints: Point2D[] = [];
+  // Precomputed trail: trailX[j], trailY[j] = tip position at frame j
+  private trailX: number[] = [];
+  private trailY: number[] = [];
 
   // Configuration
   private axisRange = { min: -5, max: 5 };
-  private readonly SAMPLE_POINT_COUNT = 8;
-  private closeThresholdPixels = 7; // Auto-close if within this many pixels of start (matches start marker radius)
+  private readonly SAMPLE_POINT_COUNT = 10;
+  private closeThresholdPixels = 8; // Auto-close if within this many pixels of start (marker radius 7 + border 1)
   private readonly VECTOR_COLORS = [
     '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
-    '#f58231', '#911eb4', '#42d4f4', '#f032e6'
+    '#f58231', '#911eb4', '#42d4f4', '#f032e6',
+    '#bfef45', '#fabed4', '#469990', '#dcbeff',
+    '#9a6324', '#fffac8', '#800000', '#aaffc3'
   ];
-  private readonly ANIMATION_FRAME_COUNT = 100;
+  private readonly ANIMATION_FRAME_COUNT = 300;
 
   // Cached layout for Plotly.react
   private currentLayout: any;
@@ -232,20 +235,19 @@ class ContourDrawingDemo implements DemoInstance {
         }
 
         // Draw Fourier coefficient vectors tip-to-tail for current animation frame
+        // Trace order: trail (trace 3), then 8 vector traces (traces 4-11)
         if (this.animationVectors.length > 0) {
-          // Draw the trail that has been traced so far
-          if (this.trailPoints.length > 1) {
-            traces.push({
-              x: this.trailPoints.map(p => p.x),
-              y: this.trailPoints.map(p => p.y),
-              mode: 'lines',
-              type: 'scatter',
-              line: { color: cssColors.success, width: 2 },
-              hoverinfo: 'skip'
-            });
-          }
+          // Trail trace - initially empty, will be updated via restyle
+          traces.push({
+            x: this.trailX.slice(0, this.currentFrameIndex + 1),
+            y: this.trailY.slice(0, this.currentFrameIndex + 1),
+            mode: 'lines',
+            type: 'scatter',
+            line: { color: cssColors.success, width: 2 },
+            hoverinfo: 'skip'
+          });
 
-          // Draw the vectors for the current frame
+          // Vector traces for current frame
           const frameVectors = this.animationVectors[this.currentFrameIndex];
           let currentX = 0;
           let currentY = 0;
@@ -254,14 +256,15 @@ class ContourDrawingDemo implements DemoInstance {
             const v = frameVectors[i];
             const nextX = currentX + v.re;
             const nextY = currentY + v.im;
+            const color = this.VECTOR_COLORS[i % this.VECTOR_COLORS.length];
 
             traces.push({
               x: [currentX, nextX],
               y: [currentY, nextY],
               mode: 'lines+markers',
               type: 'scatter',
-              line: { color: this.VECTOR_COLORS[i], width: 2 },
-              marker: { size: [0, 6], color: this.VECTOR_COLORS[i] },
+              line: { color, width: 2 },
+              marker: { size: [0, 6], color },
               hoverinfo: 'skip'
             });
 
@@ -474,6 +477,7 @@ class ContourDrawingDemo implements DemoInstance {
 
   private continueDrawing(point: Point2D): void {
     const lastPoint = this.points[this.points.length - 1];
+    const startPoint = this.points[0];
     const dx = point.x - lastPoint.x;
     const dy = point.y - lastPoint.y;
     const dist = Math.hypot(dx, dy);
@@ -483,10 +487,22 @@ class ContourDrawingDemo implements DemoInstance {
     // Fill in all pixel-sized steps from last point to new point
     for (let i = 1; i <= steps; i++) {
       const t = i / steps;
-      this.points.push({
+      const newPoint = {
         x: lastPoint.x + dx * t,
         y: lastPoint.y + dy * t
-      });
+      };
+      this.points.push(newPoint);
+
+      // Check if we've entered the start marker zone (only after we have enough points)
+      if (this.points.length > 10) {
+        const distToStart = Math.hypot(newPoint.x - startPoint.x, newPoint.y - startPoint.y);
+        const threshold = this.pixelsToPlotUnits(this.closeThresholdPixels);
+        if (distToStart <= threshold) {
+          // Smoothly close to start point
+          this.closeContour();
+          return;
+        }
+      }
     }
 
     this.pointsDisplay.update(String(this.points.length));
@@ -507,31 +523,38 @@ class ContourDrawingDemo implements DemoInstance {
     const threshold = this.pixelsToPlotUnits(this.closeThresholdPixels);
 
     if (dist <= threshold) {
-      // Close the contour
-      this.points.push({ ...startPoint });
-      this.state = 'closed';
-      this.statusDisplay.update('Contour closed');
-      this.pointsDisplay.update(String(this.points.length));
-      this.updatePlot();
-
-      // Convert sample points to complex numbers and log
-      const samplePoints = this.getSamplePoints();
-      this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
-      console.log('Contour sample points as complex numbers:', this.complexPoints);
-
-      // Calculate Fourier coefficients
-      this.fourierCoefficients = this.calculateFourierCoefficients(this.complexPoints);
-      console.log('Fourier coefficients:', this.fourierCoefficients);
-
-      // Precompute animation frames and start animation
-      this.computeAnimationVectors();
-      this.startVectorAnimation();
+      this.closeContour();
     } else {
       // Pause - can be resumed
       this.state = 'paused';
       this.statusDisplay.update('Paused - click to continue');
       this.updatePlot();
     }
+  }
+
+  private closeContour(): void {
+    const startPoint = this.points[0];
+
+    // Just add the start point to close the loop
+    this.points.push({ ...startPoint });
+
+    this.state = 'closed';
+    this.statusDisplay.update('Contour closed');
+    this.pointsDisplay.update(String(this.points.length));
+    this.updatePlot();
+
+    // Convert sample points to complex numbers and log
+    const samplePoints = this.getSamplePoints();
+    this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
+    console.log('Contour sample points as complex numbers:', this.complexPoints);
+
+    // Calculate Fourier coefficients
+    this.fourierCoefficients = this.calculateFourierCoefficients(this.complexPoints);
+    console.log('Fourier coefficients:', this.fourierCoefficients);
+
+    // Precompute animation frames and start animation
+    this.computeAnimationVectors();
+    this.startVectorAnimation();
   }
 
   private resumeDrawing(): void {
@@ -558,7 +581,7 @@ class ContourDrawingDemo implements DemoInstance {
   }
 
   /**
-   * Precompute all animation frames.
+   * Precompute all animation frames and trail positions.
    *
    * We have M frames total, splitting a full rotation into M parts.
    * For frame j: t_j = (2π * j) / M
@@ -569,50 +592,79 @@ class ContourDrawingDemo implements DemoInstance {
    * This rotates coefficient n by angle (n * t_j), so higher frequency
    * coefficients rotate faster. When drawn tip-to-tail, the tip of the
    * last vector traces out the reconstructed contour.
+   *
+   * We also precompute the trail (tip positions) so we can slice it
+   * for progressive drawing without runtime array operations.
    */
   private computeAnimationVectors(): void {
     const M = this.ANIMATION_FRAME_COUNT;
     const N = this.fourierCoefficients.length;
     this.animationVectors = [];
+    this.trailX = [];
+    this.trailY = [];
 
     for (let j = 0; j < M; j++) {
       const t_j = (2 * Math.PI * j) / M;
       const frameVectors: Complex[] = [];
+      let tipX = 0;
+      let tipY = 0;
 
       for (let n = 0; n < N; n++) {
         // v_n(t_j) = c_n * e^(i*n*t_j)
         const angle = n * t_j;
         const expTerm = complex(Math.cos(angle), Math.sin(angle));
-        frameVectors.push(multiply(this.fourierCoefficients[n], expTerm) as Complex);
+        const v = multiply(this.fourierCoefficients[n], expTerm) as Complex;
+        frameVectors.push(v);
+        tipX += v.re;
+        tipY += v.im;
       }
 
       this.animationVectors.push(frameVectors);
+      this.trailX.push(tipX);
+      this.trailY.push(tipY);
     }
   }
 
   private startVectorAnimation(): void {
     this.currentFrameIndex = 0;
-    this.trailPoints = [];
-    this.addCurrentTipToTrail();
-    this.updatePlot();
+    this.updatePlot(); // Initial setup with all traces
 
     this.animationTimer = window.setInterval(() => {
       this.currentFrameIndex = (this.currentFrameIndex + 1) % this.ANIMATION_FRAME_COUNT;
-      this.addCurrentTipToTrail();
-      this.updatePlot();
-    }, 50); // ~20fps for smooth animation
+      this.updateAnimatedTraces();
+    }, 16); // ~60fps for smooth animation
   }
 
-  private addCurrentTipToTrail(): void {
-    if (this.animationVectors.length === 0) return;
-    const frameVectors = this.animationVectors[this.currentFrameIndex];
-    let tipX = 0;
-    let tipY = 0;
+  private updateAnimatedTraces(): void {
+    const frameIdx = this.currentFrameIndex;
+
+    // Trail: slice precomputed arrays up to current frame (inclusive)
+    const trailXSlice = this.trailX.slice(0, frameIdx + 1);
+    const trailYSlice = this.trailY.slice(0, frameIdx + 1);
+
+    // Vectors for current frame
+    const frameVectors = this.animationVectors[frameIdx];
+    const vectorXs: number[][] = [];
+    const vectorYs: number[][] = [];
+
+    let currentX = 0;
+    let currentY = 0;
     for (const v of frameVectors) {
-      tipX += v.re;
-      tipY += v.im;
+      const nextX = currentX + v.re;
+      const nextY = currentY + v.im;
+      vectorXs.push([currentX, nextX]);
+      vectorYs.push([currentY, nextY]);
+      currentX = nextX;
+      currentY = nextY;
     }
-    this.trailPoints.push({ x: tipX, y: tipY });
+
+    // Update trail (trace 3) and vectors (traces 4 to 3+N)
+    const N = frameVectors.length;
+    const traceIndices = [3, ...Array.from({ length: N }, (_, i) => 4 + i)];
+    Plotly.restyle(this.plotDiv, {
+      x: [trailXSlice, ...vectorXs],
+      y: [trailYSlice, ...vectorYs]
+    }, traceIndices);
   }
 
   private stopVectorAnimation(): void {
@@ -628,7 +680,8 @@ class ContourDrawingDemo implements DemoInstance {
     this.fourierCoefficients = [];
     this.animationVectors = [];
     this.currentFrameIndex = 0;
-    this.trailPoints = [];
+    this.trailX = [];
+    this.trailY = [];
     this.points = [];
     this.state = 'idle';
     this.statusDisplay.update('Click to start drawing');
