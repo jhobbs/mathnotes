@@ -39,6 +39,8 @@ class ContourDrawingDemo implements DemoInstance {
   private animationVectors: Complex[][] = [];
   private currentFrameIndex: number = 0;
   private animationTimer: number | null = null;
+  // Trail of tip positions as animation progresses
+  private trailPoints: Point2D[] = [];
 
   // Configuration
   private axisRange = { min: -5, max: 5 };
@@ -231,6 +233,19 @@ class ContourDrawingDemo implements DemoInstance {
 
         // Draw Fourier coefficient vectors tip-to-tail for current animation frame
         if (this.animationVectors.length > 0) {
+          // Draw the trail that has been traced so far
+          if (this.trailPoints.length > 1) {
+            traces.push({
+              x: this.trailPoints.map(p => p.x),
+              y: this.trailPoints.map(p => p.y),
+              mode: 'lines',
+              type: 'scatter',
+              line: { color: cssColors.success, width: 2 },
+              hoverinfo: 'skip'
+            });
+          }
+
+          // Draw the vectors for the current frame
           const frameVectors = this.animationVectors[this.currentFrameIndex];
           let currentX = 0;
           let currentY = 0;
@@ -577,12 +592,27 @@ class ContourDrawingDemo implements DemoInstance {
 
   private startVectorAnimation(): void {
     this.currentFrameIndex = 0;
+    this.trailPoints = [];
+    this.addCurrentTipToTrail();
     this.updatePlot();
 
     this.animationTimer = window.setInterval(() => {
       this.currentFrameIndex = (this.currentFrameIndex + 1) % this.ANIMATION_FRAME_COUNT;
+      this.addCurrentTipToTrail();
       this.updatePlot();
     }, 50); // ~20fps for smooth animation
+  }
+
+  private addCurrentTipToTrail(): void {
+    if (this.animationVectors.length === 0) return;
+    const frameVectors = this.animationVectors[this.currentFrameIndex];
+    let tipX = 0;
+    let tipY = 0;
+    for (const v of frameVectors) {
+      tipX += v.re;
+      tipY += v.im;
+    }
+    this.trailPoints.push({ x: tipX, y: tipY });
   }
 
   private stopVectorAnimation(): void {
@@ -598,6 +628,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.fourierCoefficients = [];
     this.animationVectors = [];
     this.currentFrameIndex = 0;
+    this.trailPoints = [];
     this.points = [];
     this.state = 'idle';
     this.statusDisplay.update('Click to start drawing');
