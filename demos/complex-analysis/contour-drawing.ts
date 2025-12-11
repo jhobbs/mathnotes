@@ -477,7 +477,6 @@ class ContourDrawingDemo implements DemoInstance {
 
   private continueDrawing(point: Point2D): void {
     const lastPoint = this.points[this.points.length - 1];
-    const startPoint = this.points[0];
     const dx = point.x - lastPoint.x;
     const dy = point.y - lastPoint.y;
     const dist = Math.hypot(dx, dy);
@@ -487,22 +486,10 @@ class ContourDrawingDemo implements DemoInstance {
     // Fill in all pixel-sized steps from last point to new point
     for (let i = 1; i <= steps; i++) {
       const t = i / steps;
-      const newPoint = {
+      this.points.push({
         x: lastPoint.x + dx * t,
         y: lastPoint.y + dy * t
-      };
-      this.points.push(newPoint);
-
-      // Check if we've entered the start marker zone (only after we have enough points)
-      if (this.points.length > 10) {
-        const distToStart = Math.hypot(newPoint.x - startPoint.x, newPoint.y - startPoint.y);
-        const threshold = this.pixelsToPlotUnits(this.closeThresholdPixels);
-        if (distToStart <= threshold) {
-          // Smoothly close to start point
-          this.closeContour();
-          return;
-        }
-      }
+      });
     }
 
     this.pointsDisplay.update(String(this.points.length));
