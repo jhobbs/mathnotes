@@ -10,11 +10,13 @@ import {
 } from '@framework/ui-components';
 // @ts-ignore
 import Plotly from 'plotly.js-dist-min';
+import { complex, Complex, multiply, add, divide } from 'mathjs';
 
 interface Point2D {
   x: number;
   y: number;
 }
+
 
 type DrawingMode = 'click-drag-click' | 'freehand';
 type DrawingState = 'idle' | 'drawing' | 'paused' | 'closed';
@@ -30,10 +32,20 @@ class ContourDrawingDemo implements DemoInstance {
   private points: Point2D[] = [];
   private isDark: boolean;
 
+  // Animation state
+  private complexPoints: Complex[] = [];
+  private fourierCoefficients: Complex[] = [];
+  private currentVectorIndex: number = -1;
+  private animationTimer: number | null = null;
+
   // Configuration
   private axisRange = { min: -5, max: 5 };
-  private readonly SAMPLE_POINT_COUNT = 75;
+  private readonly SAMPLE_POINT_COUNT = 8;
   private closeThresholdPixels = 7; // Auto-close if within this many pixels of start (matches start marker radius)
+  private readonly VECTOR_COLORS = [
+    '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
+    '#f58231', '#911eb4', '#42d4f4', '#f032e6'
+  ];
 
   // Cached layout for Plotly.react
   private currentLayout: any;
@@ -176,7 +188,7 @@ class ContourDrawingDemo implements DemoInstance {
         type: 'scatter',
         line: {
           color: lineColor,
-          width: 2,
+          width: 3,
           simplify: false
         },
         hoverinfo: 'skip'
@@ -212,6 +224,31 @@ class ContourDrawingDemo implements DemoInstance {
             },
             hoverinfo: 'skip'
           });
+        }
+
+        // Draw Fourier coefficient vectors tip-to-tail
+        if (this.fourierCoefficients.length > 0) {
+          let currentX = 0;
+          let currentY = 0;
+
+          for (let i = 0; i < this.fourierCoefficients.length; i++) {
+            const c = this.fourierCoefficients[i];
+            const nextX = currentX + c.re;
+            const nextY = currentY + c.im;
+
+            traces.push({
+              x: [currentX, nextX],
+              y: [currentY, nextY],
+              mode: 'lines+markers',
+              type: 'scatter',
+              line: { color: this.VECTOR_COLORS[i], width: 2 },
+              marker: { size: [0, 6], color: this.VECTOR_COLORS[i] },
+              hoverinfo: 'skip'
+            });
+
+            currentX = nextX;
+            currentY = nextY;
+          }
         }
       }
     }
@@ -457,6 +494,18 @@ class ContourDrawingDemo implements DemoInstance {
       this.statusDisplay.update('Contour closed');
       this.pointsDisplay.update(String(this.points.length));
       this.updatePlot();
+
+      // Convert sample points to complex numbers and log
+      const samplePoints = this.getSamplePoints();
+      this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
+      console.log('Contour sample points as complex numbers:', this.complexPoints);
+
+      // Calculate Fourier coefficients
+      this.fourierCoefficients = this.calculateFourierCoefficients(this.complexPoints);
+      console.log('Fourier coefficients:', this.fourierCoefficients);
+
+      // Start vector animation
+      this.startVectorAnimation();
     } else {
       // Pause - can be resumed
       this.state = 'paused';
@@ -470,7 +519,47 @@ class ContourDrawingDemo implements DemoInstance {
     this.statusDisplay.update('Drawing... move mouse');
   }
 
+  private calculateFourierCoefficients(z: Complex[]): Complex[] {
+    const N = z.length;
+    const coefficients: Complex[] = [];
+
+    // c_n = (1/N) * sum_{k=0}^{N-1} z_k * e^{-2πink/N}
+    for (let n = 0; n < N; n++) {
+      let sum: Complex = complex(0, 0);
+      for (let k = 0; k < N; k++) {
+        const angle = -2 * Math.PI * n * k / N;
+        const expTerm = complex(Math.cos(angle), Math.sin(angle));
+        sum = add(sum, multiply(z[k], expTerm)) as Complex;
+      }
+      coefficients.push(divide(sum, N) as Complex);
+    }
+
+    return coefficients;
+  }
+
+  private startVectorAnimation(): void {
+    this.currentVectorIndex = 0;
+    this.updatePlot();
+
+    this.animationTimer = window.setInterval(() => {
+      // Skip last point since it's same as first (closed contour)
+      this.currentVectorIndex = (this.currentVectorIndex + 1) % (this.complexPoints.length - 1);
+      this.updatePlot();
+    }, 250);
+  }
+
+  private stopVectorAnimation(): void {
+    if (this.animationTimer !== null) {
+      clearInterval(this.animationTimer);
+      this.animationTimer = null;
+    }
+  }
+
   private resetDrawing(): void {
+    this.stopVectorAnimation();
+    this.complexPoints = [];
+    this.fourierCoefficients = [];
+    this.currentVectorIndex = -1;
     this.points = [];
     this.state = 'idle';
     this.statusDisplay.update('Click to start drawing');
@@ -504,6 +593,7 @@ class ContourDrawingDemo implements DemoInstance {
 
   // DemoInstance interface
   cleanup(): void {
+    this.stopVectorAnimation();
     this.detachEventListeners();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
