@@ -45,7 +45,7 @@ class ContourDrawingDemo implements DemoInstance {
 
   // Configuration
   private axisRange = { min: -5, max: 5 };
-  private readonly SAMPLE_POINT_COUNT = 10;
+  private readonly SAMPLE_POINT_COUNT = 11;
   private closeThresholdPixels = 8; // Auto-close if within this many pixels of start (marker radius 7 + border 1)
   private readonly VECTOR_COLORS = [
     '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
@@ -549,15 +549,25 @@ class ContourDrawingDemo implements DemoInstance {
     this.statusDisplay.update('Drawing... move mouse');
   }
 
+  // For N=11: index 0,1,2,3,4,5,6,7,8,9,10 → freq 0,-1,+1,-2,+2,-3,+3,-4,+4,-5,+5
+  private indexToFrequency(index: number): number {
+    if (index === 0) return 0;
+    const magnitude = Math.ceil(index / 2);
+    const sign = index % 2 === 1 ? -1 : 1;
+    return sign * magnitude;
+  }
+
   private calculateFourierCoefficients(z: Complex[]): Complex[] {
     const N = z.length;
     const coefficients: Complex[] = [];
 
-    // c_n = (1/N) * sum_{k=0}^{N-1} z_k * e^{-2πink/N}
+    // c_f = (1/N) * sum_{k=0}^{N-1} z_k * e^{-2πifk/N}
+    // where f = indexToFrequency(n, N) gives symmetric frequencies
     for (let n = 0; n < N; n++) {
+      const freq = this.indexToFrequency(n);
       let sum: Complex = complex(0, 0);
       for (let k = 0; k < N; k++) {
-        const angle = -2 * Math.PI * n * k / N;
+        const angle = -2 * Math.PI * freq * k / N;
         const expTerm = complex(Math.cos(angle), Math.sin(angle));
         sum = add(sum, multiply(z[k], expTerm)) as Complex;
       }
@@ -573,12 +583,13 @@ class ContourDrawingDemo implements DemoInstance {
    * We have M frames total, splitting a full rotation into M parts.
    * For frame j: t_j = (2π * j) / M
    *
-   * For each coefficient c_n, the vector at frame j is:
-   *   v_n(t_j) = c_n * e^(i * n * t_j)
+   * For each coefficient c_f (at frequency f), the vector at frame j is:
+   *   v_f(t_j) = c_f * e^(i * f * t_j)
    *
-   * This rotates coefficient n by angle (n * t_j), so higher frequency
-   * coefficients rotate faster. When drawn tip-to-tail, the tip of the
-   * last vector traces out the reconstructed contour.
+   * Using symmetric frequencies (e.g., -5 to +5 for N=11):
+   * - Positive frequencies rotate counterclockwise
+   * - Negative frequencies rotate clockwise
+   * - Frequency 0 (DC component) doesn't rotate
    *
    * We also precompute the trail (tip positions) so we can slice it
    * for progressive drawing without runtime array operations.
@@ -597,8 +608,9 @@ class ContourDrawingDemo implements DemoInstance {
       let tipY = 0;
 
       for (let n = 0; n < N; n++) {
-        // v_n(t_j) = c_n * e^(i*n*t_j)
-        const angle = n * t_j;
+        // v_f(t_j) = c_f * e^(i*f*t_j) where f is the actual frequency
+        const freq = this.indexToFrequency(n);
+        const angle = freq * t_j;
         const expTerm = complex(Math.cos(angle), Math.sin(angle));
         const v = multiply(this.fourierCoefficients[n], expTerm) as Complex;
         frameVectors.push(v);
