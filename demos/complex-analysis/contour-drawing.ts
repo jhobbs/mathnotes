@@ -59,6 +59,9 @@ class ContourDrawingDemo implements DemoInstance {
   private pointsDisplay!: InfoDisplay;
   private nInput!: HTMLInputElement;
   private nError!: HTMLSpanElement;
+  private kCoefficients = 11;  // Number of coefficients to use, defaults to N
+  private kInput!: HTMLInputElement;
+  private kError!: HTMLSpanElement;
   private delayInput!: HTMLInputElement;
   private delayError!: HTMLSpanElement;
   private hideOriginal: boolean = false;
@@ -148,6 +151,21 @@ class ContourDrawingDemo implements DemoInstance {
     this.delayError.style.fontSize = '0.85em';
     this.delayError.style.display = 'none';
 
+    // K input for number of coefficients (low-pass filter)
+    this.kInput = this.createNumberInput('K =', this.kCoefficients, 1, 256, 1, () => this.handleKChange());
+
+    // Error display for K
+    this.kError = document.createElement('span');
+    this.kError.style.color = '#e74c3c';
+    this.kError.style.fontSize = '0.85em';
+    this.kError.style.display = 'none';
+
+    // Note about K
+    const kNote = document.createElement('span');
+    kNote.textContent = '(coefficients to use)';
+    kNote.style.fontSize = '0.85em';
+    kNote.style.opacity = '0.7';
+
     // Instructions
     const instructions1 = document.createElement('div');
     instructions1.textContent = 'Click and drag to draw a closed loop. On touch: drag finger in a closed loop.';
@@ -178,7 +196,8 @@ class ContourDrawingDemo implements DemoInstance {
     // Arrange controls
     const row0 = createControlRow([this.statusDisplay.element]);
     const row1 = createControlRow([resetButton, this.pointsDisplay.element]);
-    const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError, this.delayInput.parentElement!, this.delayError]);
+    const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError, this.kInput.parentElement!, kNote, this.kError]);
+    const row2a = createControlRow([this.delayInput.parentElement!, this.delayError]);
     const row2b = createControlRow([this.hideOriginalContainer, this.progressiveContainer]);
     const row3 = createControlRow([instructions1]);
     const row4 = createControlRow([instructions2]);
@@ -186,6 +205,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.controlPanel.appendChild(row0);
     this.controlPanel.appendChild(row1);
     this.controlPanel.appendChild(row2);
+    this.controlPanel.appendChild(row2a);
     this.controlPanel.appendChild(row2b);
     this.controlPanel.appendChild(row3);
     this.controlPanel.appendChild(row4);
@@ -694,7 +714,9 @@ class ContourDrawingDemo implements DemoInstance {
       let tipX = 0;
       let tipY = 0;
 
-      for (let n = 0; n < N; n++) {
+      // Use only kCoefficients (low-pass filter effect)
+      const coeffsToUse = Math.min(this.kCoefficients, N);
+      for (let n = 0; n < coeffsToUse; n++) {
         // v_f(t_j) = c_f * e^(i*f*t_j) where f is the actual frequency
         const freq = this.indexToFrequency(n);
         const angle = freq * t_j;
@@ -769,6 +791,11 @@ class ContourDrawingDemo implements DemoInstance {
       if (checkbox) checkbox.checked = false;
     }
 
+    // Reset K to match N
+    this.kCoefficients = this.samplePointCount;
+    this.kInput.value = String(this.samplePointCount);
+    this.kError.style.display = 'none';
+
     this.render();
   }
 
@@ -791,6 +818,32 @@ class ContourDrawingDemo implements DemoInstance {
     }
     this.nError.style.display = 'none';
     this.samplePointCount = value;
+    // Update K to match N (default behavior)
+    this.kCoefficients = value;
+    this.kInput.value = String(value);
+    this.kError.style.display = 'none';
+    this.recalculateFromContour();
+  }
+
+  private handleKChange(): void {
+    const value = parseInt(this.kInput.value, 10);
+    if (isNaN(value)) {
+      this.kError.textContent = 'Must be a number';
+      this.kError.style.display = 'inline';
+      return;
+    }
+    if (value < 1) {
+      this.kError.textContent = 'Min is 1';
+      this.kError.style.display = 'inline';
+      return;
+    }
+    if (value > this.samplePointCount) {
+      this.kError.textContent = `Max is ${this.samplePointCount}`;
+      this.kError.style.display = 'inline';
+      return;
+    }
+    this.kError.style.display = 'none';
+    this.kCoefficients = value;
     this.recalculateFromContour();
   }
 
