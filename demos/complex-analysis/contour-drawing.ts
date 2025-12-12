@@ -172,7 +172,26 @@ class ContourDrawingDemo implements DemoInstance {
     this.plotDiv.style.height = '500px';
     this.plotDiv.style.touchAction = 'none'; // Prevent browser gestures
     this.plotDiv.style.cursor = 'crosshair';
-    this.container.appendChild(this.plotDiv);
+
+    // Description below the plot
+    const description = document.createElement('div');
+    description.style.fontSize = '0.9em';
+    description.style.opacity = '0.8';
+    description.style.textAlign = 'center';
+    description.style.marginTop = 'var(--spacing-sm, 0.5rem)';
+    const line1 = document.createElement('div');
+    line1.textContent = 'Discrete Fourier Transform for Contour Approximation.';
+    line1.style.fontWeight = 'bold';
+    const line2 = document.createElement('div');
+    line2.textContent = 'Each vector rotates at a different frequency; their sum traces an approximation of the contour.';
+    description.appendChild(line1);
+    description.appendChild(line2);
+
+    // Wrap plot and description together
+    const plotWrapper = document.createElement('div');
+    plotWrapper.appendChild(this.plotDiv);
+    plotWrapper.appendChild(description);
+    this.container.appendChild(plotWrapper);
   }
 
   private setupPlot(): void {
