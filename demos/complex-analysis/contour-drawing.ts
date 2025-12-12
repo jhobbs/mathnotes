@@ -5,6 +5,7 @@ import {
   createButton,
   createInfoDisplay,
   createControlRow,
+  createCheckbox,
   InfoDisplay
 } from '@framework/ui-components';
 import { complex, Complex, multiply, add, divide } from 'mathjs';
@@ -59,6 +60,8 @@ class ContourDrawingDemo implements DemoInstance {
   private nError!: HTMLSpanElement;
   private delayInput!: HTMLInputElement;
   private delayError!: HTMLSpanElement;
+  private hideOriginal: boolean = false;
+  private hideOriginalContainer: HTMLElement | null = null;
 
   // Resize handling
   private resizeObserver: ResizeObserver | null = null;
@@ -152,16 +155,26 @@ class ContourDrawingDemo implements DemoInstance {
     instructions2.style.fontSize = '0.85em';
     instructions2.style.opacity = '0.7';
 
+    // Hide original checkbox (hidden until contour closes)
+    this.hideOriginalContainer = createCheckbox(
+      'Hide original',
+      this.hideOriginal,
+      (checked: boolean) => { this.hideOriginal = checked; }
+    );
+    this.hideOriginalContainer.style.display = 'none';
+
     // Arrange controls
     const row0 = createControlRow([this.statusDisplay.element]);
     const row1 = createControlRow([resetButton, this.pointsDisplay.element]);
     const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError, this.delayInput.parentElement!, this.delayError]);
+    const row2b = createControlRow([this.hideOriginalContainer]);
     const row3 = createControlRow([instructions1]);
     const row4 = createControlRow([instructions2]);
 
     this.controlPanel.appendChild(row0);
     this.controlPanel.appendChild(row1);
     this.controlPanel.appendChild(row2);
+    this.controlPanel.appendChild(row2b);
     this.controlPanel.appendChild(row3);
     this.controlPanel.appendChild(row4);
 
@@ -276,7 +289,9 @@ class ContourDrawingDemo implements DemoInstance {
     ctx.stroke();
 
     // Contour path (draw first so trail appears on top)
-    if (this.points.length > 0) {
+    // Skip drawing original when hideOriginal is enabled and contour is closed
+    const showOriginal = !this.hideOriginal || this.state !== 'closed';
+    if (this.points.length > 0 && showOriginal) {
       const lineColor = this.state === 'closed' ? cssColors.warning : cssColors.error;
       ctx.strokeStyle = lineColor;
       ctx.lineWidth = 3;
@@ -579,6 +594,12 @@ class ContourDrawingDemo implements DemoInstance {
     this.state = 'closed';
     this.statusDisplay.update('Contour closed');
     this.pointsDisplay.update(String(this.points.length));
+
+    // Show the hide original checkbox
+    if (this.hideOriginalContainer) {
+      this.hideOriginalContainer.style.display = '';
+    }
+
     this.render();
 
     // Convert sample points to complex numbers and log
@@ -704,6 +725,15 @@ class ContourDrawingDemo implements DemoInstance {
     this.state = 'idle';
     this.statusDisplay.update('Draw a closed loop: any path that ends where it starts! Make it fancy!');
     this.pointsDisplay.update('0');
+
+    // Hide and reset the hide original checkbox
+    this.hideOriginal = false;
+    if (this.hideOriginalContainer) {
+      this.hideOriginalContainer.style.display = 'none';
+      const checkbox = this.hideOriginalContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      if (checkbox) checkbox.checked = false;
+    }
+
     this.render();
   }
 
