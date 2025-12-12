@@ -108,8 +108,16 @@ class ContourDrawingDemo implements DemoInstance {
     // Reset button
     const resetButton = createButton('Reset', document.createElement('div'), () => this.resetDrawing());
 
-    // Status and points displays
-    this.statusDisplay = createInfoDisplay('Status', 'Draw a closed loop (end at start)');
+    // Status display (not using createInfoDisplay to avoid the colon)
+    const statusElement = document.createElement('div');
+    statusElement.className = 'info-display';
+    const statusSpan = document.createElement('span');
+    statusSpan.textContent = 'Draw a closed loop: any path that ends where it starts! Make it fancy!';
+    statusElement.appendChild(statusSpan);
+    this.statusDisplay = {
+      element: statusElement,
+      update: (value: string) => { statusSpan.textContent = value; }
+    };
     this.pointsDisplay = createInfoDisplay('Points', '0');
 
     // N input for number of sample points (highest frequency is N/2)
@@ -705,7 +713,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.trailY = [];
     this.points = [];
     this.state = 'idle';
-    this.statusDisplay.update('Draw a closed loop (end at start)');
+    this.statusDisplay.update('Draw a closed loop: any path that ends where it starts! Make it fancy!');
     this.pointsDisplay.update('0');
     this.updatePlot();
   }
