@@ -43,7 +43,7 @@ class ContourDrawingDemo implements DemoInstance {
   // Configuration
   private axisRange = { min: -5, max: 5 };
   private samplePointCount = 11;
-  private frameDelay = 50;
+  private frameDelay = 10;
   private closeThresholdPixels = 8; // Auto-close if within this many pixels of start (marker radius 7 + border 1)
   private readonly VECTOR_COLORS = [
     '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
@@ -51,7 +51,8 @@ class ContourDrawingDemo implements DemoInstance {
     '#bfef45', '#fabed4', '#469990', '#dcbeff',
     '#9a6324', '#fffac8', '#800000', '#aaffc3'
   ];
-  private readonly ANIMATION_FRAME_COUNT = 150;
+  private readonly ANIMATION_FRAME_COUNT = 400;
+  private readonly INITIAL_STATUS = 'Draw a closed path! Make it fancy!';
 
   // UI displays
   private statusDisplay!: InfoDisplay;
@@ -62,6 +63,9 @@ class ContourDrawingDemo implements DemoInstance {
   private delayError!: HTMLSpanElement;
   private hideOriginal: boolean = false;
   private hideOriginalContainer: HTMLElement | null = null;
+  private progressive: boolean = false;
+  private progressiveContainer: HTMLElement | null = null;
+  private progressiveN: number = 2;
 
   // Resize handling
   private resizeObserver: ResizeObserver | null = null;
@@ -112,7 +116,7 @@ class ContourDrawingDemo implements DemoInstance {
     statusElement.className = 'info-display';
     statusElement.style.minHeight = '1.5em';
     const statusSpan = document.createElement('span');
-    statusSpan.textContent = 'Draw a closed loop: any path that ends where it starts! Make it fancy!';
+    statusSpan.textContent = this.INITIAL_STATUS;
     statusElement.appendChild(statusSpan);
     this.statusDisplay = {
       element: statusElement,
@@ -163,11 +167,19 @@ class ContourDrawingDemo implements DemoInstance {
     );
     this.hideOriginalContainer.style.display = 'none';
 
+    // Progressive checkbox (hidden until contour closes)
+    this.progressiveContainer = createCheckbox(
+      'Progressive',
+      this.progressive,
+      (checked: boolean) => { this.handleProgressiveChange(checked); }
+    );
+    this.progressiveContainer.style.display = 'none';
+
     // Arrange controls
     const row0 = createControlRow([this.statusDisplay.element]);
     const row1 = createControlRow([resetButton, this.pointsDisplay.element]);
     const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError, this.delayInput.parentElement!, this.delayError]);
-    const row2b = createControlRow([this.hideOriginalContainer]);
+    const row2b = createControlRow([this.hideOriginalContainer, this.progressiveContainer]);
     const row3 = createControlRow([instructions1]);
     const row4 = createControlRow([instructions2]);
 
@@ -595,9 +607,12 @@ class ContourDrawingDemo implements DemoInstance {
     this.statusDisplay.update('Contour closed');
     this.pointsDisplay.update(String(this.points.length));
 
-    // Show the hide original checkbox
+    // Show the hide original and progressive checkboxes
     if (this.hideOriginalContainer) {
       this.hideOriginalContainer.style.display = '';
+    }
+    if (this.progressiveContainer) {
+      this.progressiveContainer.style.display = '';
     }
 
     this.render();
@@ -702,6 +717,16 @@ class ContourDrawingDemo implements DemoInstance {
 
     this.animationTimer = window.setInterval(() => {
       this.currentFrameIndex = (this.currentFrameIndex + 1) % this.ANIMATION_FRAME_COUNT;
+
+      // Check if we completed a full loop in progressive mode
+      if (this.progressive && this.currentFrameIndex === 0) {
+        // Double N, or reset to 2 if we've reached 128
+        this.progressiveN = this.progressiveN >= 128 ? 2 : this.progressiveN * 2;
+        this.samplePointCount = this.progressiveN;
+        this.nInput.value = String(this.progressiveN);
+        this.recalculateProgressiveFrame();
+      }
+
       this.render();
     }, this.frameDelay);
   }
@@ -723,7 +748,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.trailY = [];
     this.points = [];
     this.state = 'idle';
-    this.statusDisplay.update('Draw a closed loop: any path that ends where it starts! Make it fancy!');
+    this.statusDisplay.update(this.INITIAL_STATUS);
     this.pointsDisplay.update('0');
 
     // Hide and reset the hide original checkbox
@@ -731,6 +756,16 @@ class ContourDrawingDemo implements DemoInstance {
     if (this.hideOriginalContainer) {
       this.hideOriginalContainer.style.display = 'none';
       const checkbox = this.hideOriginalContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      if (checkbox) checkbox.checked = false;
+    }
+
+    // Hide and reset the progressive checkbox
+    this.progressive = false;
+    this.progressiveN = 2;
+    this.nInput.disabled = false;
+    if (this.progressiveContainer) {
+      this.progressiveContainer.style.display = 'none';
+      const checkbox = this.progressiveContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
       if (checkbox) checkbox.checked = false;
     }
 
@@ -757,6 +792,21 @@ class ContourDrawingDemo implements DemoInstance {
     this.nError.style.display = 'none';
     this.samplePointCount = value;
     this.recalculateFromContour();
+  }
+
+  private handleProgressiveChange(checked: boolean): void {
+    this.progressive = checked;
+    if (checked) {
+      // Start progressive mode: set N=2 and begin
+      this.progressiveN = 2;
+      this.samplePointCount = 2;
+      this.nInput.value = '2';
+      this.nInput.disabled = true;
+      this.recalculateFromContour();
+    } else {
+      // Exit progressive mode: re-enable N input
+      this.nInput.disabled = false;
+    }
   }
 
   private handleDelayChange(): void {
@@ -797,6 +847,15 @@ class ContourDrawingDemo implements DemoInstance {
 
     this.computeAnimationVectors();
     this.startVectorAnimation();
+  }
+
+  private recalculateProgressiveFrame(): void {
+    // Recalculate Fourier with new N but don't restart animation timer
+    const samplePoints = this.getSamplePoints();
+    this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
+    this.fourierCoefficients = this.calculateFourierCoefficients(this.complexPoints);
+    this.computeAnimationVectors();
+    // currentFrameIndex stays at 0, animation continues
   }
 
   private createNumberInput(label: string, defaultValue: number, min: number, max: number,
