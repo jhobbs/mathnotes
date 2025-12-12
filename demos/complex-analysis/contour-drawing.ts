@@ -50,7 +50,7 @@ class ContourDrawingDemo implements DemoInstance {
     '#bfef45', '#fabed4', '#469990', '#dcbeff',
     '#9a6324', '#fffac8', '#800000', '#aaffc3'
   ];
-  private readonly ANIMATION_FRAME_COUNT = 300;
+  private readonly ANIMATION_FRAME_COUNT = 150;
 
   // Cached layout for Plotly.react
   private currentLayout: any;
@@ -60,6 +60,7 @@ class ContourDrawingDemo implements DemoInstance {
   private statusDisplay!: InfoDisplay;
   private pointsDisplay!: InfoDisplay;
   private nInput!: HTMLInputElement;
+  private nError!: HTMLSpanElement;
 
   // Resize handling
   private resizeObserver: ResizeObserver | null = null;
@@ -109,7 +110,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.pointsDisplay = createInfoDisplay('Points', '0');
 
     // N input for number of sample points (highest frequency is N/2)
-    this.nInput = this.createNumberInput('N =', this.samplePointCount, 2, 128, 1, () => this.handleNChange());
+    this.nInput = this.createNumberInput('N =', this.samplePointCount, 2, 64, 1, () => this.handleNChange());
 
     // Note about N
     const nNote = document.createElement('span');
@@ -117,9 +118,15 @@ class ContourDrawingDemo implements DemoInstance {
     nNote.style.fontSize = '0.85em';
     nNote.style.opacity = '0.7';
 
+    // Error display for N
+    this.nError = document.createElement('span');
+    this.nError.style.color = '#e74c3c';
+    this.nError.style.fontSize = '0.85em';
+    this.nError.style.display = 'none';
+
     // Arrange controls
     const row1 = createControlRow([resetButton, this.statusDisplay.element, this.pointsDisplay.element]);
-    const row2 = createControlRow([this.nInput.parentElement!, nNote]);
+    const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError]);
 
     this.controlPanel.appendChild(row1);
     this.controlPanel.appendChild(row2);
@@ -619,7 +626,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.animationTimer = window.setInterval(() => {
       this.currentFrameIndex = (this.currentFrameIndex + 1) % this.ANIMATION_FRAME_COUNT;
       this.updateAnimatedTraces();
-    }, 16); // ~60fps for smooth animation
+    }, 16);
   }
 
   private updateAnimatedTraces(): void {
@@ -678,9 +685,22 @@ class ContourDrawingDemo implements DemoInstance {
 
   private handleNChange(): void {
     const value = parseInt(this.nInput.value, 10);
-    if (isNaN(value) || value < 2 || value > 128) {
+    if (isNaN(value)) {
+      this.nError.textContent = 'Must be a number';
+      this.nError.style.display = 'inline';
       return;
     }
+    if (value < 2) {
+      this.nError.textContent = 'Min is 2';
+      this.nError.style.display = 'inline';
+      return;
+    }
+    if (value > 64) {
+      this.nError.textContent = 'Max is 64';
+      this.nError.style.display = 'inline';
+      return;
+    }
+    this.nError.style.display = 'none';
     this.samplePointCount = value;
     this.recalculateFromContour();
   }
