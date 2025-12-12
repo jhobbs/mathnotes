@@ -146,7 +146,7 @@ class ContourDrawingDemo implements DemoInstance {
 
     // Instructions
     const instructions1 = document.createElement('div');
-    instructions1.textContent = 'Click to start, draw a closed loop, click to stop. On touch: drag finger in a closed loop.';
+    instructions1.textContent = 'Click and drag to draw a closed loop. On touch: drag finger in a closed loop.';
     instructions1.style.fontSize = '0.85em';
     instructions1.style.opacity = '0.7';
 
@@ -342,8 +342,8 @@ class ContourDrawingDemo implements DemoInstance {
 
   private attachEventListeners(): void {
     this.plotDiv.addEventListener('mousedown', this.boundMouseDown);
-    this.plotDiv.addEventListener('mousemove', this.boundMouseMove);
-    this.plotDiv.addEventListener('mouseup', this.boundMouseUp);
+    document.addEventListener('mousemove', this.boundMouseMove);
+    document.addEventListener('mouseup', this.boundMouseUp);
     this.plotDiv.addEventListener('touchstart', this.boundTouchStart, { passive: false });
     this.plotDiv.addEventListener('touchmove', this.boundTouchMove, { passive: false });
     this.plotDiv.addEventListener('touchend', this.boundTouchEnd);
@@ -351,8 +351,8 @@ class ContourDrawingDemo implements DemoInstance {
 
   private detachEventListeners(): void {
     this.plotDiv.removeEventListener('mousedown', this.boundMouseDown);
-    this.plotDiv.removeEventListener('mousemove', this.boundMouseMove);
-    this.plotDiv.removeEventListener('mouseup', this.boundMouseUp);
+    document.removeEventListener('mousemove', this.boundMouseMove);
+    document.removeEventListener('mouseup', this.boundMouseUp);
     this.plotDiv.removeEventListener('touchstart', this.boundTouchStart);
     this.plotDiv.removeEventListener('touchmove', this.boundTouchMove);
     this.plotDiv.removeEventListener('touchend', this.boundTouchEnd);
@@ -450,19 +450,11 @@ class ContourDrawingDemo implements DemoInstance {
   private handleMouseDown(e: MouseEvent): void {
     if (this.state === 'closed') return;
 
-    // Resume from paused doesn't require clicking in plot area
-    if (this.state === 'paused') {
-      this.resumeDrawing();
-      return;
-    }
-
     const point = this.pixelToPlot(e.clientX, e.clientY);
     if (!point) return;
 
-    if (this.state === 'idle') {
+    if (this.state === 'idle' || this.state === 'paused') {
       this.startDrawing(point);
-    } else if (this.state === 'drawing') {
-      this.endDrawing();
     }
   }
 
@@ -476,7 +468,9 @@ class ContourDrawingDemo implements DemoInstance {
   }
 
   private handleMouseUp(_e: MouseEvent): void {
-    // No-op for click-drag-click mode
+    if (this.state === 'drawing') {
+      this.endDrawing();
+    }
   }
 
   private handleTouchStart(e: TouchEvent): void {
