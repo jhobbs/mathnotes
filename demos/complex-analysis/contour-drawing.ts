@@ -43,6 +43,7 @@ class ContourDrawingDemo implements DemoInstance {
   // Configuration
   private axisRange = { min: -5, max: 5 };
   private samplePointCount = 11;
+  private frameDelay = 16;
   private closeThresholdPixels = 8; // Auto-close if within this many pixels of start (marker radius 7 + border 1)
   private readonly VECTOR_COLORS = [
     '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
@@ -61,6 +62,8 @@ class ContourDrawingDemo implements DemoInstance {
   private pointsDisplay!: InfoDisplay;
   private nInput!: HTMLInputElement;
   private nError!: HTMLSpanElement;
+  private delayInput!: HTMLInputElement;
+  private delayError!: HTMLSpanElement;
 
   // Resize handling
   private resizeObserver: ResizeObserver | null = null;
@@ -110,7 +113,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.pointsDisplay = createInfoDisplay('Points', '0');
 
     // N input for number of sample points (highest frequency is N/2)
-    this.nInput = this.createNumberInput('N =', this.samplePointCount, 2, 64, 1, () => this.handleNChange());
+    this.nInput = this.createNumberInput('N =', this.samplePointCount, 2, 128, 1, () => this.handleNChange());
 
     // Note about N
     const nNote = document.createElement('span');
@@ -124,12 +127,36 @@ class ContourDrawingDemo implements DemoInstance {
     this.nError.style.fontSize = '0.85em';
     this.nError.style.display = 'none';
 
+    // Delay input
+    this.delayInput = this.createNumberInput('Delay (ms) =', this.frameDelay, 0, 500, 1, () => this.handleDelayChange());
+
+    // Error display for delay
+    this.delayError = document.createElement('span');
+    this.delayError.style.color = '#e74c3c';
+    this.delayError.style.fontSize = '0.85em';
+    this.delayError.style.display = 'none';
+
+    // Instructions
+    const instructions1 = document.createElement('div');
+    instructions1.textContent = 'Click to start, draw a closed loop, click to stop. On touch: drag finger in a closed loop.';
+    instructions1.style.fontSize = '0.85em';
+    instructions1.style.opacity = '0.7';
+
+    const instructions2 = document.createElement('div');
+    instructions2.textContent = 'Change N after drawing to see how different sample counts affect the approximation.';
+    instructions2.style.fontSize = '0.85em';
+    instructions2.style.opacity = '0.7';
+
     // Arrange controls
     const row1 = createControlRow([resetButton, this.statusDisplay.element, this.pointsDisplay.element]);
-    const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError]);
+    const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError, this.delayInput.parentElement!, this.delayError]);
+    const row3 = createControlRow([instructions1]);
+    const row4 = createControlRow([instructions2]);
 
     this.controlPanel.appendChild(row1);
     this.controlPanel.appendChild(row2);
+    this.controlPanel.appendChild(row3);
+    this.controlPanel.appendChild(row4);
 
     // Plot container
     this.plotDiv = document.createElement('div');
@@ -626,7 +653,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.animationTimer = window.setInterval(() => {
       this.currentFrameIndex = (this.currentFrameIndex + 1) % this.ANIMATION_FRAME_COUNT;
       this.updateAnimatedTraces();
-    }, 16);
+    }, this.frameDelay);
   }
 
   private updateAnimatedTraces(): void {
@@ -695,14 +722,40 @@ class ContourDrawingDemo implements DemoInstance {
       this.nError.style.display = 'inline';
       return;
     }
-    if (value > 64) {
-      this.nError.textContent = 'Max is 64';
+    if (value > 128) {
+      this.nError.textContent = 'Max is 128';
       this.nError.style.display = 'inline';
       return;
     }
     this.nError.style.display = 'none';
     this.samplePointCount = value;
     this.recalculateFromContour();
+  }
+
+  private handleDelayChange(): void {
+    const value = parseInt(this.delayInput.value, 10);
+    if (isNaN(value)) {
+      this.delayError.textContent = 'Must be a number';
+      this.delayError.style.display = 'inline';
+      return;
+    }
+    if (value < 0) {
+      this.delayError.textContent = 'Min is 0';
+      this.delayError.style.display = 'inline';
+      return;
+    }
+    if (value > 500) {
+      this.delayError.textContent = 'Max is 500';
+      this.delayError.style.display = 'inline';
+      return;
+    }
+    this.delayError.style.display = 'none';
+    this.frameDelay = value;
+    // Restart animation with new delay if running
+    if (this.animationTimer !== null && this.state === 'closed') {
+      this.stopVectorAnimation();
+      this.startVectorAnimation();
+    }
   }
 
   private recalculateFromContour(): void {
