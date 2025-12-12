@@ -2,7 +2,6 @@ import { isDarkMode, getCssColors } from '@framework/demo-utils';
 import { DemoInstance, DemoConfig, DemoMetadata } from '@framework/types';
 import {
   createControlPanel,
-  createRadioGroup,
   createButton,
   createInfoDisplay,
   createControlRow,
@@ -18,7 +17,6 @@ interface Point2D {
 }
 
 
-type DrawingMode = 'click-drag-click' | 'freehand';
 type DrawingState = 'idle' | 'drawing' | 'paused' | 'closed';
 
 class ContourDrawingDemo implements DemoInstance {
@@ -27,7 +25,6 @@ class ContourDrawingDemo implements DemoInstance {
   private controlPanel!: HTMLElement;
 
   // State
-  private mode: DrawingMode = 'click-drag-click';
   private state: DrawingState = 'idle';
   private points: Point2D[] = [];
   private isDark: boolean;
@@ -45,7 +42,7 @@ class ContourDrawingDemo implements DemoInstance {
 
   // Configuration
   private axisRange = { min: -5, max: 5 };
-  private readonly SAMPLE_POINT_COUNT = 11;
+  private samplePointCount = 11;
   private closeThresholdPixels = 8; // Auto-close if within this many pixels of start (marker radius 7 + border 1)
   private readonly VECTOR_COLORS = [
     '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
@@ -62,6 +59,7 @@ class ContourDrawingDemo implements DemoInstance {
   // UI displays
   private statusDisplay!: InfoDisplay;
   private pointsDisplay!: InfoDisplay;
+  private nInput!: HTMLInputElement;
 
   // Resize handling
   private resizeObserver: ResizeObserver | null = null;
@@ -103,27 +101,25 @@ class ContourDrawingDemo implements DemoInstance {
     // Control panel
     this.controlPanel = createControlPanel(this.container);
 
-    // Mode selection
-    const modeRadio = createRadioGroup<DrawingMode>(
-      'contour-drawing-mode',
-      [
-        { value: 'click-drag-click', label: 'Click-Drag-Click' },
-        { value: 'freehand', label: 'Freehand (Touch)' }
-      ],
-      this.mode,
-      (mode) => this.setMode(mode)
-    );
-
     // Reset button
     const resetButton = createButton('Reset', document.createElement('div'), () => this.resetDrawing());
 
     // Status and points displays
-    this.statusDisplay = createInfoDisplay('Status', 'Click to start drawing');
+    this.statusDisplay = createInfoDisplay('Status', 'Draw a closed loop (end at start)');
     this.pointsDisplay = createInfoDisplay('Points', '0');
 
+    // N input for number of sample points (highest frequency is N/2)
+    this.nInput = this.createNumberInput('N =', this.samplePointCount, 2, 128, 1, () => this.handleNChange());
+
+    // Note about N
+    const nNote = document.createElement('span');
+    nNote.textContent = '(sample points; max freq = N/2)';
+    nNote.style.fontSize = '0.85em';
+    nNote.style.opacity = '0.7';
+
     // Arrange controls
-    const row1 = createControlRow([modeRadio, resetButton]);
-    const row2 = createControlRow([this.statusDisplay.element, this.pointsDisplay.element]);
+    const row1 = createControlRow([resetButton, this.statusDisplay.element, this.pointsDisplay.element]);
+    const row2 = createControlRow([this.nInput.parentElement!, nNote]);
 
     this.controlPanel.appendChild(row1);
     this.controlPanel.appendChild(row2);
@@ -227,8 +223,9 @@ class ContourDrawingDemo implements DemoInstance {
             mode: 'markers',
             type: 'scatter',
             marker: {
-              size: 4,
-              color: cssColors.accent
+              size: 8,
+              color: '#ffffff',
+              line: { color: '#000000', width: 2 }
             },
             hoverinfo: 'skip'
           });
@@ -343,7 +340,7 @@ class ContourDrawingDemo implements DemoInstance {
   }
 
   private getSamplePoints(): Point2D[] {
-    const N = this.SAMPLE_POINT_COUNT;
+    const N = this.samplePointCount;
     const totalPoints = this.points.length;
 
     if (totalPoints <= 1) return [];
@@ -364,7 +361,7 @@ class ContourDrawingDemo implements DemoInstance {
 
     // Sample at even arc length intervals
     for (let i = 0; i < sampleCount; i++) {
-      const targetLength = (i / (sampleCount - 1)) * totalLength;
+      const targetLength = (i / sampleCount) * totalLength;
 
       // Find segment containing targetLength
       let segIdx = 0;
@@ -401,17 +398,10 @@ class ContourDrawingDemo implements DemoInstance {
     const point = this.pixelToPlot(e.clientX, e.clientY);
     if (!point) return;
 
-    if (this.mode === 'click-drag-click') {
-      if (this.state === 'idle') {
-        this.startDrawing(point);
-      } else if (this.state === 'drawing') {
-        this.endDrawing();
-      }
-    } else {
-      // Freehand mode - start on mousedown
-      if (this.state === 'idle') {
-        this.startDrawing(point);
-      }
+    if (this.state === 'idle') {
+      this.startDrawing(point);
+    } else if (this.state === 'drawing') {
+      this.endDrawing();
     }
   }
 
@@ -425,9 +415,7 @@ class ContourDrawingDemo implements DemoInstance {
   }
 
   private handleMouseUp(_e: MouseEvent): void {
-    if (this.mode === 'freehand' && this.state === 'drawing') {
-      this.endDrawing();
-    }
+    // No-op for click-drag-click mode
   }
 
   private handleTouchStart(e: TouchEvent): void {
@@ -683,17 +671,64 @@ class ContourDrawingDemo implements DemoInstance {
     this.trailY = [];
     this.points = [];
     this.state = 'idle';
-    this.statusDisplay.update('Click to start drawing');
+    this.statusDisplay.update('Draw a closed loop (end at start)');
     this.pointsDisplay.update('0');
     this.updatePlot();
   }
 
-  private setMode(mode: DrawingMode): void {
-    this.mode = mode;
-    if (this.state === 'drawing') {
-      // Reset if switching modes mid-draw
-      this.resetDrawing();
+  private handleNChange(): void {
+    const value = parseInt(this.nInput.value, 10);
+    if (isNaN(value) || value < 2 || value > 128) {
+      return;
     }
+    this.samplePointCount = value;
+    this.recalculateFromContour();
+  }
+
+  private recalculateFromContour(): void {
+    if (this.state !== 'closed') return;
+
+    this.stopVectorAnimation();
+
+    // Recalculate with new N
+    const samplePoints = this.getSamplePoints();
+    this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
+    this.fourierCoefficients = this.calculateFourierCoefficients(this.complexPoints);
+
+    this.computeAnimationVectors();
+    this.startVectorAnimation();
+  }
+
+  private createNumberInput(label: string, defaultValue: number, min: number, max: number,
+                           step: number, onChange: () => void): HTMLInputElement {
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+    container.style.alignItems = 'center';
+    container.style.gap = '0.5rem';
+
+    const labelEl = document.createElement('label');
+    labelEl.textContent = label;
+    labelEl.style.fontWeight = 'bold';
+
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.value = defaultValue.toString();
+    input.min = min.toString();
+    input.max = max.toString();
+    input.step = step.toString();
+    input.style.padding = '0.25rem 0.5rem';
+    input.style.borderRadius = '0.25rem';
+    input.style.border = '1px solid var(--color-border, #ccc)';
+    input.style.background = this.isDark ? 'rgba(255,255,255,0.1)' : 'white';
+    input.style.color = 'var(--color-text, inherit)';
+    input.style.width = '60px';
+    input.style.fontFamily = 'var(--font-mono, monospace)';
+    input.addEventListener('input', onChange);
+
+    container.appendChild(labelEl);
+    container.appendChild(input);
+
+    return input;
   }
 
   private setupResizeObserver(): void {
