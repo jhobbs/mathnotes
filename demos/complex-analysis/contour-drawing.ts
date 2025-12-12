@@ -111,6 +111,7 @@ class ContourDrawingDemo implements DemoInstance {
     // Status display (not using createInfoDisplay to avoid the colon)
     const statusElement = document.createElement('div');
     statusElement.className = 'info-display';
+    statusElement.style.minHeight = '1.5em';
     const statusSpan = document.createElement('span');
     statusSpan.textContent = 'Draw a closed loop: any path that ends where it starts! Make it fancy!';
     statusElement.appendChild(statusSpan);
@@ -156,11 +157,13 @@ class ContourDrawingDemo implements DemoInstance {
     instructions2.style.opacity = '0.7';
 
     // Arrange controls
-    const row1 = createControlRow([resetButton, this.statusDisplay.element, this.pointsDisplay.element]);
+    const row0 = createControlRow([this.statusDisplay.element]);
+    const row1 = createControlRow([resetButton, this.pointsDisplay.element]);
     const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError, this.delayInput.parentElement!, this.delayError]);
     const row3 = createControlRow([instructions1]);
     const row4 = createControlRow([instructions2]);
 
+    this.controlPanel.appendChild(row0);
     this.controlPanel.appendChild(row1);
     this.controlPanel.appendChild(row2);
     this.controlPanel.appendChild(row3);
@@ -513,7 +516,7 @@ class ContourDrawingDemo implements DemoInstance {
   private startDrawing(point: Point2D): void {
     this.points = [point];
     this.state = 'drawing';
-    this.statusDisplay.update('Drawing... move mouse');
+    this.statusDisplay.update('Drawing...');
     this.pointsDisplay.update('1');
     this.updatePlot();
   }
