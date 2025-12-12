@@ -7,8 +7,6 @@ import {
   createControlRow,
   InfoDisplay
 } from '@framework/ui-components';
-// @ts-ignore
-import Plotly from 'plotly.js-dist-min';
 import { complex, Complex, multiply, add, divide } from 'mathjs';
 
 interface Point2D {
@@ -21,7 +19,8 @@ type DrawingState = 'idle' | 'drawing' | 'paused' | 'closed';
 
 class ContourDrawingDemo implements DemoInstance {
   private container: HTMLElement;
-  private plotDiv!: HTMLElement;
+  private canvas!: HTMLCanvasElement;
+  private ctx!: CanvasRenderingContext2D;
   private controlPanel!: HTMLElement;
 
   // State
@@ -43,7 +42,7 @@ class ContourDrawingDemo implements DemoInstance {
   // Configuration
   private axisRange = { min: -5, max: 5 };
   private samplePointCount = 11;
-  private frameDelay = 16;
+  private frameDelay = 50;
   private closeThresholdPixels = 8; // Auto-close if within this many pixels of start (marker radius 7 + border 1)
   private readonly VECTOR_COLORS = [
     '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
@@ -52,10 +51,6 @@ class ContourDrawingDemo implements DemoInstance {
     '#9a6324', '#fffac8', '#800000', '#aaffc3'
   ];
   private readonly ANIMATION_FRAME_COUNT = 150;
-
-  // Cached layout for Plotly.react
-  private currentLayout: any;
-  private plotConfig: any;
 
   // UI displays
   private statusDisplay!: InfoDisplay;
@@ -91,9 +86,10 @@ class ContourDrawingDemo implements DemoInstance {
 
   init(): DemoInstance {
     this.setupUI();
-    this.setupPlot();
+    this.setupCanvas();
     this.attachEventListeners();
     this.setupResizeObserver();
+    this.render();
     return this;
   }
 
@@ -122,7 +118,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.pointsDisplay = createInfoDisplay('Points', '0');
 
     // N input for number of sample points (highest frequency is N/2)
-    this.nInput = this.createNumberInput('N =', this.samplePointCount, 2, 128, 1, () => this.handleNChange());
+    this.nInput = this.createNumberInput('N =', this.samplePointCount, 2, 256, 1, () => this.handleNChange());
 
     // Note about N
     const nNote = document.createElement('span');
@@ -169,14 +165,23 @@ class ContourDrawingDemo implements DemoInstance {
     this.controlPanel.appendChild(row3);
     this.controlPanel.appendChild(row4);
 
-    // Plot container
-    this.plotDiv = document.createElement('div');
-    this.plotDiv.style.width = '100%';
-    this.plotDiv.style.height = '500px';
-    this.plotDiv.style.touchAction = 'none'; // Prevent browser gestures
-    this.plotDiv.style.cursor = 'crosshair';
+    // Canvas container - square aspect ratio
+    const canvasWrapper = document.createElement('div');
+    canvasWrapper.style.width = '100%';
+    canvasWrapper.style.maxWidth = '500px';
+    canvasWrapper.style.aspectRatio = '1';
+    canvasWrapper.style.position = 'relative';
+    canvasWrapper.style.margin = '0 auto';
 
-    // Description below the plot
+    this.canvas = document.createElement('canvas');
+    this.canvas.style.width = '100%';
+    this.canvas.style.height = '100%';
+    this.canvas.style.display = 'block';
+    this.canvas.style.touchAction = 'none'; // Prevent browser gestures
+    this.canvas.style.cursor = 'crosshair';
+    canvasWrapper.appendChild(this.canvas);
+
+    // Description below the canvas
     const description = document.createElement('div');
     description.style.fontSize = '0.9em';
     description.style.opacity = '0.8';
@@ -190,217 +195,217 @@ class ContourDrawingDemo implements DemoInstance {
     description.appendChild(line1);
     description.appendChild(line2);
 
-    // Wrap plot and description together
+    // Wrap canvas and description together
     const plotWrapper = document.createElement('div');
-    plotWrapper.appendChild(this.plotDiv);
+    plotWrapper.appendChild(canvasWrapper);
     plotWrapper.appendChild(description);
     this.container.appendChild(plotWrapper);
   }
 
-  private setupPlot(): void {
-    const zerolineColor = this.isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
-    const gridColor = this.isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)';
-
-    this.currentLayout = {
-      xaxis: {
-        range: [this.axisRange.min, this.axisRange.max],
-        zeroline: true,
-        zerolinewidth: 2,
-        zerolinecolor: zerolineColor,
-        gridcolor: gridColor,
-        fixedrange: true,
-        constrain: 'domain',
-        scaleanchor: 'y',
-        scaleratio: 1,
-        title: 'Re(z)'
-      },
-      yaxis: {
-        range: [this.axisRange.min, this.axisRange.max],
-        zeroline: true,
-        zerolinewidth: 2,
-        zerolinecolor: zerolineColor,
-        gridcolor: gridColor,
-        fixedrange: true,
-        constrain: 'domain',
-        title: 'Im(z)'
-      },
-      dragmode: false,
-      paper_bgcolor: 'transparent',
-      plot_bgcolor: this.isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.95)',
-      font: { color: this.isDark ? '#fff' : '#000' },
-      margin: { l: 50, r: 50, t: 20, b: 50 },
-      showlegend: false,
-      uirevision: 'constant'
-    };
-
-    this.plotConfig = {
-      responsive: true,
-      displayModeBar: false,
-      staticPlot: false
-    };
-
-    Plotly.newPlot(this.plotDiv, this.getPlotData(), this.currentLayout, this.plotConfig);
+  private setupCanvas(): void {
+    const rect = this.canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    this.canvas.width = rect.width * dpr;
+    this.canvas.height = rect.height * dpr;
+    this.ctx = this.canvas.getContext('2d')!;
+    this.ctx.scale(dpr, dpr);
   }
 
-  private getPlotData(): any[] {
-    const traces: any[] = [];
+  private plotToCanvas(p: Point2D): { x: number; y: number } {
+    const rect = this.canvas.getBoundingClientRect();
+    const range = this.axisRange.max - this.axisRange.min;
+    const x = ((p.x - this.axisRange.min) / range) * rect.width;
+    const y = rect.height - ((p.y - this.axisRange.min) / range) * rect.height;
+    return { x, y };
+  }
 
+  private canvasToPlot(cx: number, cy: number): Point2D {
+    const rect = this.canvas.getBoundingClientRect();
+    const range = this.axisRange.max - this.axisRange.min;
+    const x = this.axisRange.min + (cx / rect.width) * range;
+    const y = this.axisRange.max - (cy / rect.height) * range;
+    return { x, y };
+  }
+
+  private render(): void {
+    const rect = this.canvas.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const ctx = this.ctx;
+    const cssColors = getCssColors(this.isDark);
+
+    // Clear and fill background
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = this.isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.95)';
+    ctx.fillRect(0, 0, width, height);
+
+    // Grid lines
+    const gridColor = this.isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)';
+    ctx.strokeStyle = gridColor;
+    ctx.lineWidth = 1;
+    for (let i = this.axisRange.min; i <= this.axisRange.max; i++) {
+      if (i === 0) continue; // Skip zero lines, drawn separately
+      const { x } = this.plotToCanvas({ x: i, y: 0 });
+      const { y } = this.plotToCanvas({ x: 0, y: i });
+      // Vertical line
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+      ctx.stroke();
+      // Horizontal line
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
+    }
+
+    // Zero lines (axes)
+    const zerolineColor = this.isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
+    ctx.strokeStyle = zerolineColor;
+    ctx.lineWidth = 2;
+    const origin = this.plotToCanvas({ x: 0, y: 0 });
+    // X-axis
+    ctx.beginPath();
+    ctx.moveTo(0, origin.y);
+    ctx.lineTo(width, origin.y);
+    ctx.stroke();
+    // Y-axis
+    ctx.beginPath();
+    ctx.moveTo(origin.x, 0);
+    ctx.lineTo(origin.x, height);
+    ctx.stroke();
+
+    // Contour path (draw first so trail appears on top)
     if (this.points.length > 0) {
-      const cssColors = getCssColors(this.isDark);
-      // Main contour line
       const lineColor = this.state === 'closed' ? cssColors.warning : cssColors.error;
-      traces.push({
-        x: this.points.map(p => p.x),
-        y: this.points.map(p => p.y),
-        mode: 'lines',
-        type: 'scatter',
-        line: {
-          color: lineColor,
-          width: 3,
-          simplify: false
-        },
-        hoverinfo: 'skip'
-      });
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let i = 0; i < this.points.length; i++) {
+        const pt = this.plotToCanvas(this.points[i]);
+        if (i === 0) {
+          ctx.moveTo(pt.x, pt.y);
+        } else {
+          ctx.lineTo(pt.x, pt.y);
+        }
+      }
+      ctx.stroke();
 
-      // Start point marker
-      traces.push({
-        x: [this.points[0].x],
-        y: [this.points[0].y],
-        mode: 'markers',
-        type: 'scatter',
-        marker: {
-          size: 14,
-          color: '#f39c12',
-          symbol: 'circle',
-          line: { color: this.isDark ? '#fff' : '#000', width: 1 }
-        },
-        hoverinfo: 'skip'
-      });
-
-      // Sample points - only when closed
+      // Sample points (when closed)
       if (this.state === 'closed') {
         const samplePoints = this.getSamplePoints();
         if (samplePoints.length > 1) {
-          traces.push({
-            x: samplePoints.map(p => p.x),
-            y: samplePoints.map(p => p.y),
-            mode: 'markers',
-            type: 'scatter',
-            marker: {
-              size: 8,
-              color: '#ffffff',
-              line: { color: '#000000', width: 2 }
-            },
-            hoverinfo: 'skip'
-          });
-        }
-
-        // Draw Fourier coefficient vectors tip-to-tail for current animation frame
-        // Trace order: trail (trace 3), then 8 vector traces (traces 4-11)
-        if (this.animationVectors.length > 0) {
-          // Trail trace - initially empty, will be updated via restyle
-          traces.push({
-            x: this.trailX.slice(0, this.currentFrameIndex + 1),
-            y: this.trailY.slice(0, this.currentFrameIndex + 1),
-            mode: 'lines',
-            type: 'scatter',
-            line: { color: cssColors.success, width: 2 },
-            hoverinfo: 'skip'
-          });
-
-          // Vector traces for current frame
-          const frameVectors = this.animationVectors[this.currentFrameIndex];
-          let currentX = 0;
-          let currentY = 0;
-
-          for (let i = 0; i < frameVectors.length; i++) {
-            const v = frameVectors[i];
-            const nextX = currentX + v.re;
-            const nextY = currentY + v.im;
-            const color = this.VECTOR_COLORS[i % this.VECTOR_COLORS.length];
-
-            traces.push({
-              x: [currentX, nextX],
-              y: [currentY, nextY],
-              mode: 'lines+markers',
-              type: 'scatter',
-              line: { color, width: 2 },
-              marker: { size: [0, 6], color },
-              hoverinfo: 'skip'
-            });
-
-            currentX = nextX;
-            currentY = nextY;
+          ctx.fillStyle = '#ffffff';
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2;
+          for (const sp of samplePoints) {
+            const pt = this.plotToCanvas(sp);
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
           }
         }
       }
+
+      // Start point marker
+      const startPt = this.plotToCanvas(this.points[0]);
+      ctx.fillStyle = '#f39c12';
+      ctx.strokeStyle = this.isDark ? '#fff' : '#000';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(startPt.x, startPt.y, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
     }
 
-    return traces;
-  }
+    // Trail trace (drawn after contour so it's visible on top)
+    if (this.state === 'closed' && this.trailX.length > 0) {
+      ctx.strokeStyle = cssColors.success;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const trailEnd = this.currentFrameIndex + 1;
+      for (let i = 0; i < trailEnd && i < this.trailX.length; i++) {
+        const pt = this.plotToCanvas({ x: this.trailX[i], y: this.trailY[i] });
+        if (i === 0) {
+          ctx.moveTo(pt.x, pt.y);
+        } else {
+          ctx.lineTo(pt.x, pt.y);
+        }
+      }
+      ctx.stroke();
+    }
 
-  private updatePlot(): void {
-    Plotly.react(this.plotDiv, this.getPlotData(), this.currentLayout, this.plotConfig);
+    // Fourier vectors (when animating)
+    if (this.state === 'closed' && this.animationVectors.length > 0) {
+      const frameVectors = this.animationVectors[this.currentFrameIndex];
+      let currentX = 0;
+      let currentY = 0;
+
+      for (let i = 0; i < frameVectors.length; i++) {
+        const v = frameVectors[i];
+        const nextX = currentX + v.re;
+        const nextY = currentY + v.im;
+        const color = this.VECTOR_COLORS[i % this.VECTOR_COLORS.length];
+
+        const start = this.plotToCanvas({ x: currentX, y: currentY });
+        const end = this.plotToCanvas({ x: nextX, y: nextY });
+
+        // Vector line
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+        ctx.stroke();
+
+        // Tip marker
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(end.x, end.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        currentX = nextX;
+        currentY = nextY;
+      }
+    }
   }
 
   private attachEventListeners(): void {
-    this.plotDiv.addEventListener('mousedown', this.boundMouseDown);
+    this.canvas.addEventListener('mousedown', this.boundMouseDown);
     document.addEventListener('mousemove', this.boundMouseMove);
     document.addEventListener('mouseup', this.boundMouseUp);
-    this.plotDiv.addEventListener('touchstart', this.boundTouchStart, { passive: false });
-    this.plotDiv.addEventListener('touchmove', this.boundTouchMove, { passive: false });
-    this.plotDiv.addEventListener('touchend', this.boundTouchEnd);
+    this.canvas.addEventListener('touchstart', this.boundTouchStart, { passive: false });
+    this.canvas.addEventListener('touchmove', this.boundTouchMove, { passive: false });
+    this.canvas.addEventListener('touchend', this.boundTouchEnd);
   }
 
   private detachEventListeners(): void {
-    this.plotDiv.removeEventListener('mousedown', this.boundMouseDown);
+    this.canvas.removeEventListener('mousedown', this.boundMouseDown);
     document.removeEventListener('mousemove', this.boundMouseMove);
     document.removeEventListener('mouseup', this.boundMouseUp);
-    this.plotDiv.removeEventListener('touchstart', this.boundTouchStart);
-    this.plotDiv.removeEventListener('touchmove', this.boundTouchMove);
-    this.plotDiv.removeEventListener('touchend', this.boundTouchEnd);
+    this.canvas.removeEventListener('touchstart', this.boundTouchStart);
+    this.canvas.removeEventListener('touchmove', this.boundTouchMove);
+    this.canvas.removeEventListener('touchend', this.boundTouchEnd);
   }
 
   private pixelToPlot(clientX: number, clientY: number): Point2D | null {
-    const fullLayout = (this.plotDiv as any)._fullLayout;
-    if (!fullLayout || !fullLayout.xaxis || !fullLayout.yaxis) return null;
-
-    const rect = this.plotDiv.getBoundingClientRect();
-    const xaxis = fullLayout.xaxis;
-    const yaxis = fullLayout.yaxis;
-
-    // Use Plotly's internal offset and length which account for constrain: 'domain'
-    const plotLeft = xaxis._offset;
-    const plotTop = yaxis._offset;
-    const plotWidth = xaxis._length;
-    const plotHeight = yaxis._length;
-
-    // Convert to plot-relative coordinates
-    const relX = clientX - rect.left - plotLeft;
-    const relY = clientY - rect.top - plotTop;
+    const rect = this.canvas.getBoundingClientRect();
+    const relX = clientX - rect.left;
+    const relY = clientY - rect.top;
 
     // Check bounds
-    if (relX < 0 || relX > plotWidth || relY < 0 || relY > plotHeight) {
+    if (relX < 0 || relX > rect.width || relY < 0 || relY > rect.height) {
       return null;
     }
 
-    // Map to axis ranges (y is inverted)
-    const xRange = xaxis.range;
-    const yRange = yaxis.range;
-    const plotX = xRange[0] + (relX / plotWidth) * (xRange[1] - xRange[0]);
-    const plotY = yRange[1] - (relY / plotHeight) * (yRange[1] - yRange[0]);
-
-    return { x: plotX, y: plotY };
+    return this.canvasToPlot(relX, relY);
   }
 
   private pixelsToPlotUnits(pixels: number): number {
-    const fullLayout = (this.plotDiv as any)._fullLayout;
-    if (!fullLayout || !fullLayout.xaxis) return 0.1; // fallback
-
-    const plotWidth = fullLayout.xaxis._length;
-    const xRange = fullLayout.xaxis.range;
-    const unitsPerPixel = (xRange[1] - xRange[0]) / plotWidth;
-    return pixels * unitsPerPixel;
+    const rect = this.canvas.getBoundingClientRect();
+    const range = this.axisRange.max - this.axisRange.min;
+    return (pixels / rect.width) * range;
   }
 
   private getSamplePoints(): Point2D[] {
@@ -518,7 +523,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.state = 'drawing';
     this.statusDisplay.update('Drawing...');
     this.pointsDisplay.update('1');
-    this.updatePlot();
+    this.render();
   }
 
   private continueDrawing(point: Point2D): void {
@@ -539,7 +544,7 @@ class ContourDrawingDemo implements DemoInstance {
     }
 
     this.pointsDisplay.update(String(this.points.length));
-    this.updatePlot();
+    this.render();
   }
 
   private endDrawing(): void {
@@ -561,7 +566,7 @@ class ContourDrawingDemo implements DemoInstance {
       // Pause - can be resumed
       this.state = 'paused';
       this.statusDisplay.update('Paused - click to continue');
-      this.updatePlot();
+      this.render();
     }
   }
 
@@ -574,7 +579,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.state = 'closed';
     this.statusDisplay.update('Contour closed');
     this.pointsDisplay.update(String(this.points.length));
-    this.updatePlot();
+    this.render();
 
     // Convert sample points to complex numbers and log
     const samplePoints = this.getSamplePoints();
@@ -672,44 +677,12 @@ class ContourDrawingDemo implements DemoInstance {
 
   private startVectorAnimation(): void {
     this.currentFrameIndex = 0;
-    this.updatePlot(); // Initial setup with all traces
+    this.render();
 
     this.animationTimer = window.setInterval(() => {
       this.currentFrameIndex = (this.currentFrameIndex + 1) % this.ANIMATION_FRAME_COUNT;
-      this.updateAnimatedTraces();
+      this.render();
     }, this.frameDelay);
-  }
-
-  private updateAnimatedTraces(): void {
-    const frameIdx = this.currentFrameIndex;
-
-    // Trail: slice precomputed arrays up to current frame (inclusive)
-    const trailXSlice = this.trailX.slice(0, frameIdx + 1);
-    const trailYSlice = this.trailY.slice(0, frameIdx + 1);
-
-    // Vectors for current frame
-    const frameVectors = this.animationVectors[frameIdx];
-    const vectorXs: number[][] = [];
-    const vectorYs: number[][] = [];
-
-    let currentX = 0;
-    let currentY = 0;
-    for (const v of frameVectors) {
-      const nextX = currentX + v.re;
-      const nextY = currentY + v.im;
-      vectorXs.push([currentX, nextX]);
-      vectorYs.push([currentY, nextY]);
-      currentX = nextX;
-      currentY = nextY;
-    }
-
-    // Update trail (trace 3) and vectors (traces 4 to 3+N)
-    const N = frameVectors.length;
-    const traceIndices = [3, ...Array.from({ length: N }, (_, i) => 4 + i)];
-    Plotly.restyle(this.plotDiv, {
-      x: [trailXSlice, ...vectorXs],
-      y: [trailYSlice, ...vectorYs]
-    }, traceIndices);
   }
 
   private stopVectorAnimation(): void {
@@ -731,7 +704,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.state = 'idle';
     this.statusDisplay.update('Draw a closed loop: any path that ends where it starts! Make it fancy!');
     this.pointsDisplay.update('0');
-    this.updatePlot();
+    this.render();
   }
 
   private handleNChange(): void {
@@ -746,8 +719,8 @@ class ContourDrawingDemo implements DemoInstance {
       this.nError.style.display = 'inline';
       return;
     }
-    if (value > 128) {
-      this.nError.textContent = 'Max is 128';
+    if (value > 256) {
+      this.nError.textContent = 'Max is 256';
       this.nError.style.display = 'inline';
       return;
     }
@@ -832,7 +805,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.resizeObserver = new ResizeObserver(() => {
       this.resize();
     });
-    this.resizeObserver.observe(this.container);
+    this.resizeObserver.observe(this.canvas.parentElement!);
   }
 
   // Public interface for external use
@@ -852,12 +825,12 @@ class ContourDrawingDemo implements DemoInstance {
       this.resizeObserver.disconnect();
       this.resizeObserver = null;
     }
-    Plotly.purge(this.plotDiv);
   }
 
   resize(): void {
-    if (this.plotDiv) {
-      Plotly.Plots.resize(this.plotDiv);
+    if (this.canvas) {
+      this.setupCanvas();
+      this.render();
     }
   }
 }
