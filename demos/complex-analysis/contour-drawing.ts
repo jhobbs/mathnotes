@@ -190,10 +190,10 @@ class ContourDrawingDemo implements DemoInstance {
     this.controlPanel.appendChild(row3);
     this.controlPanel.appendChild(row4);
 
-    // Canvas container - square aspect ratio
+    // Canvas container - square aspect ratio, 500x500 target
     const canvasWrapper = document.createElement('div');
-    canvasWrapper.style.width = '100%';
-    canvasWrapper.style.maxWidth = '500px';
+    canvasWrapper.style.width = '500px';
+    canvasWrapper.style.maxWidth = '100%';
     canvasWrapper.style.aspectRatio = '1';
     canvasWrapper.style.position = 'relative';
     canvasWrapper.style.margin = '0 auto';
