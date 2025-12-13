@@ -220,7 +220,7 @@ class ContourDrawingDemo implements DemoInstance {
 
     this.canvas = document.createElement('canvas');
     this.canvas.style.width = '100%';
-    this.canvas.style.height = '100%';
+    this.canvas.style.aspectRatio = '1'; // Maintain square even when height:auto is forced by mobile CSS
     this.canvas.style.display = 'block';
     this.canvas.style.touchAction = 'none'; // Prevent browser gestures
     this.canvas.style.cursor = 'crosshair';
