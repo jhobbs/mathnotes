@@ -71,6 +71,7 @@ class ContourDrawingDemo implements DemoInstance {
   private progressiveN: number = 2;
   private loadedFromUrl: boolean = false;
   private copyLinkButton: HTMLButtonElement | null = null;
+  private resetButton: HTMLButtonElement | null = null;
 
   // Resize handling
   private resizeObserver: ResizeObserver | null = null;
@@ -125,7 +126,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.controlPanel = createControlPanel(this.container);
 
     // Reset button
-    const resetButton = createButton('Reset', document.createElement('div'), () => this.resetDrawing());
+    this.resetButton = createButton('Reset', document.createElement('div'), () => this.resetDrawing());
 
     // Status display (not using createInfoDisplay to avoid the colon)
     const statusElement = document.createElement('div');
@@ -213,7 +214,7 @@ class ContourDrawingDemo implements DemoInstance {
 
     // Arrange controls
     const row0 = createControlRow([this.statusDisplay.element]);
-    const row1 = createControlRow([resetButton, this.pointsDisplay.element]);
+    const row1 = createControlRow([this.resetButton, this.pointsDisplay.element]);
     const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError, this.kInput.parentElement!, kNote, this.kError]);
     const row2a = createControlRow([this.delayInput.parentElement!, this.delayError]);
     const row2b = createControlRow([this.hideOriginalContainer, this.progressiveContainer, shareButtonContainer]);
@@ -735,9 +736,14 @@ class ContourDrawingDemo implements DemoInstance {
       if (checkbox) checkbox.checked = true;
     }
 
-    // Show copy link button
+    // Show share button
     if (this.copyLinkButton) {
       this.copyLinkButton.style.display = '';
+    }
+
+    // Change reset button to invite users to draw their own
+    if (this.resetButton) {
+      this.resetButton.textContent = 'Make Your Own!';
     }
 
     // Start with K=2 coefficients (progressive mode will increase it)
@@ -900,6 +906,11 @@ class ContourDrawingDemo implements DemoInstance {
     if (this.copyLinkButton) {
       this.copyLinkButton.style.display = 'none';
       this.copyLinkButton.textContent = 'Share!';
+    }
+
+    // Reset button text
+    if (this.resetButton) {
+      this.resetButton.textContent = 'Reset';
     }
 
     // Reset K to match N
