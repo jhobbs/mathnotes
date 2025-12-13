@@ -42,7 +42,7 @@ class ContourDrawingDemo implements DemoInstance {
 
   // Configuration
   private axisRange = { min: -5, max: 5 };
-  private samplePointCount = 11;
+  private samplePointCount = 32;
   private frameDelay = 10;
   private closeThresholdPixels = 8; // Auto-close if within this many pixels of start (marker radius 7 + border 1)
   private readonly VECTOR_COLORS = [
@@ -59,7 +59,7 @@ class ContourDrawingDemo implements DemoInstance {
   private pointsDisplay!: InfoDisplay;
   private nInput!: HTMLInputElement;
   private nError!: HTMLSpanElement;
-  private kCoefficients = 11;  // Number of coefficients to use, defaults to N
+  private kCoefficients = 32;
   private kInput!: HTMLInputElement;
   private kError!: HTMLSpanElement;
   private delayInput!: HTMLInputElement;
@@ -913,9 +913,12 @@ class ContourDrawingDemo implements DemoInstance {
       this.resetButton.textContent = 'Reset';
     }
 
-    // Reset K to match N
-    this.kCoefficients = this.samplePointCount;
-    this.kInput.value = String(this.samplePointCount);
+    // Reset N and K to defaults
+    this.samplePointCount = 32;
+    this.nInput.value = '32';
+    this.nError.style.display = 'none';
+    this.kCoefficients = 32;
+    this.kInput.value = '32';
     this.kError.style.display = 'none';
 
     this.render();
