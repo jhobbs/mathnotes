@@ -984,6 +984,13 @@ class ContourDrawingDemo implements DemoInstance {
     } else {
       // Exit progressive mode: re-enable N input
       this.nInput.disabled = false;
+
+      // For URL-loaded: set K to full 64 coefficients
+      if (this.loadedFromUrl) {
+        this.kCoefficients = COEFF_COUNT;
+        this.kInput.value = String(COEFF_COUNT);
+        this.recalculateFromContour();
+      }
     }
   }
 
@@ -1017,6 +1024,13 @@ class ContourDrawingDemo implements DemoInstance {
     if (this.state !== 'closed') return;
 
     this.stopVectorAnimation();
+
+    // For URL-loaded drawings: coefficients are fixed, just recompute animation
+    if (this.loadedFromUrl) {
+      this.computeAnimationVectors();
+      this.startVectorAnimation();
+      return;
+    }
 
     // Recalculate with new N
     const samplePoints = this.getSamplePoints();
