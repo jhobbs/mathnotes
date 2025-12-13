@@ -42,7 +42,7 @@ class ContourDrawingDemo implements DemoInstance {
 
   // Configuration
   private axisRange = { min: -5, max: 5 };
-  private samplePointCount = 32;
+  private samplePointCount = 256;
   private frameDelay = 10;
   private closeThresholdPixels = 8; // Auto-close if within this many pixels of start (marker radius 7 + border 1)
   private readonly VECTOR_COLORS = [
@@ -59,13 +59,13 @@ class ContourDrawingDemo implements DemoInstance {
   private pointsDisplay!: InfoDisplay;
   private nInput!: HTMLInputElement;
   private nError!: HTMLSpanElement;
-  private kCoefficients = 32;
+  private kCoefficients = 64;
   private kInput!: HTMLInputElement;
   private kError!: HTMLSpanElement;
   private delayInput!: HTMLInputElement;
   private delayError!: HTMLSpanElement;
-  private hideOriginal: boolean = false;
-  private hideOriginalContainer: HTMLElement | null = null;
+  private showOriginal: boolean = true;
+  private showOriginalContainer: HTMLElement | null = null;
   private progressive: boolean = false;
   private progressiveContainer: HTMLElement | null = null;
   private progressiveN: number = 2;
@@ -191,13 +191,13 @@ class ContourDrawingDemo implements DemoInstance {
     instructions2.style.fontSize = '0.85em';
     instructions2.style.opacity = '0.7';
 
-    // Hide original checkbox (hidden until contour closes)
-    this.hideOriginalContainer = createCheckbox(
-      'Hide original',
-      this.hideOriginal,
-      (checked: boolean) => { this.hideOriginal = checked; }
+    // Show original checkbox (hidden until contour closes)
+    this.showOriginalContainer = createCheckbox(
+      'Show original',
+      this.showOriginal,
+      (checked: boolean) => { this.showOriginal = checked; }
     );
-    this.hideOriginalContainer.style.display = 'none';
+    this.showOriginalContainer.style.display = 'none';
 
     // Progressive checkbox (hidden until contour closes)
     this.progressiveContainer = createCheckbox(
@@ -217,7 +217,7 @@ class ContourDrawingDemo implements DemoInstance {
     const row1 = createControlRow([this.resetButton, this.pointsDisplay.element]);
     const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError, this.kInput.parentElement!, kNote, this.kError]);
     const row2a = createControlRow([this.delayInput.parentElement!, this.delayError]);
-    const row2b = createControlRow([this.hideOriginalContainer, this.progressiveContainer, shareButtonContainer]);
+    const row2b = createControlRow([this.showOriginalContainer, this.progressiveContainer, shareButtonContainer]);
     const row3 = createControlRow([instructions1]);
     const row4 = createControlRow([instructions2]);
 
@@ -303,46 +303,49 @@ class ContourDrawingDemo implements DemoInstance {
     ctx.fillStyle = this.isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.95)';
     ctx.fillRect(0, 0, width, height);
 
-    // Grid lines
-    const gridColor = this.isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)';
-    ctx.strokeStyle = gridColor;
-    ctx.lineWidth = 1;
-    for (let i = this.axisRange.min; i <= this.axisRange.max; i++) {
-      if (i === 0) continue; // Skip zero lines, drawn separately
-      const { x } = this.plotToCanvas({ x: i, y: 0 });
-      const { y } = this.plotToCanvas({ x: 0, y: i });
-      // Vertical line
+    // Only show grid/axes when showOriginal is enabled or contour is not closed yet
+    const showOriginalAndGrid = this.showOriginal || this.state !== 'closed';
+
+    if (showOriginalAndGrid) {
+      // Grid lines
+      const gridColor = this.isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)';
+      ctx.strokeStyle = gridColor;
+      ctx.lineWidth = 1;
+      for (let i = this.axisRange.min; i <= this.axisRange.max; i++) {
+        if (i === 0) continue; // Skip zero lines, drawn separately
+        const { x } = this.plotToCanvas({ x: i, y: 0 });
+        const { y } = this.plotToCanvas({ x: 0, y: i });
+        // Vertical line
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+        // Horizontal line
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // Zero lines (axes)
+      const zerolineColor = this.isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
+      ctx.strokeStyle = zerolineColor;
+      ctx.lineWidth = 2;
+      const origin = this.plotToCanvas({ x: 0, y: 0 });
+      // X-axis
       ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
+      ctx.moveTo(0, origin.y);
+      ctx.lineTo(width, origin.y);
       ctx.stroke();
-      // Horizontal line
+      // Y-axis
       ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
+      ctx.moveTo(origin.x, 0);
+      ctx.lineTo(origin.x, height);
       ctx.stroke();
     }
 
-    // Zero lines (axes)
-    const zerolineColor = this.isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
-    ctx.strokeStyle = zerolineColor;
-    ctx.lineWidth = 2;
-    const origin = this.plotToCanvas({ x: 0, y: 0 });
-    // X-axis
-    ctx.beginPath();
-    ctx.moveTo(0, origin.y);
-    ctx.lineTo(width, origin.y);
-    ctx.stroke();
-    // Y-axis
-    ctx.beginPath();
-    ctx.moveTo(origin.x, 0);
-    ctx.lineTo(origin.x, height);
-    ctx.stroke();
-
     // Contour path (draw first so trail appears on top)
-    // Skip drawing original when hideOriginal is enabled and contour is closed
-    const showOriginal = !this.hideOriginal || this.state !== 'closed';
-    if (this.points.length > 0 && showOriginal) {
+    if (this.points.length > 0 && showOriginalAndGrid) {
       const lineColor = this.state === 'closed' ? cssColors.warning : cssColors.error;
       ctx.strokeStyle = lineColor;
       ctx.lineWidth = 3;
@@ -646,9 +649,13 @@ class ContourDrawingDemo implements DemoInstance {
     this.statusDisplay.update('Contour closed');
     this.pointsDisplay.update(String(this.points.length));
 
-    // Show the hide original, progressive checkboxes, and copy link button
-    if (this.hideOriginalContainer) {
-      this.hideOriginalContainer.style.display = '';
+    // Show the show original, progressive checkboxes, and copy link button
+    // Uncheck show original by default when contour completes
+    this.showOriginal = false;
+    if (this.showOriginalContainer) {
+      this.showOriginalContainer.style.display = '';
+      const checkbox = this.showOriginalContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      if (checkbox) checkbox.checked = false;
     }
     if (this.progressiveContainer) {
       this.progressiveContainer.style.display = '';
@@ -714,12 +721,12 @@ class ContourDrawingDemo implements DemoInstance {
     this.state = 'closed';
     this.points = []; // No original path
 
-    // Set up hide original mode (there's nothing to show anyway)
-    this.hideOriginal = true;
-    if (this.hideOriginalContainer) {
-      this.hideOriginalContainer.style.display = '';
-      const checkbox = this.hideOriginalContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      if (checkbox) checkbox.checked = true;
+    // Hide original (there's nothing to show anyway for URL-loaded)
+    this.showOriginal = false;
+    if (this.showOriginalContainer) {
+      this.showOriginalContainer.style.display = '';
+      const checkbox = this.showOriginalContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      if (checkbox) checkbox.checked = false;
     }
 
     // Set up progressive mode starting at K=2
@@ -883,12 +890,12 @@ class ContourDrawingDemo implements DemoInstance {
     this.statusDisplay.update(this.INITIAL_STATUS);
     this.pointsDisplay.update('0');
 
-    // Hide and reset the hide original checkbox
-    this.hideOriginal = false;
-    if (this.hideOriginalContainer) {
-      this.hideOriginalContainer.style.display = 'none';
-      const checkbox = this.hideOriginalContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      if (checkbox) checkbox.checked = false;
+    // Hide and reset the show original checkbox
+    this.showOriginal = true;
+    if (this.showOriginalContainer) {
+      this.showOriginalContainer.style.display = 'none';
+      const checkbox = this.showOriginalContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      if (checkbox) checkbox.checked = true;
     }
 
     // Hide and reset the progressive checkbox
@@ -914,11 +921,11 @@ class ContourDrawingDemo implements DemoInstance {
     }
 
     // Reset N and K to defaults
-    this.samplePointCount = 32;
-    this.nInput.value = '32';
+    this.samplePointCount = 256;
+    this.nInput.value = '256';
     this.nError.style.display = 'none';
-    this.kCoefficients = 32;
-    this.kInput.value = '32';
+    this.kCoefficients = 64;
+    this.kInput.value = '64';
     this.kError.style.display = 'none';
 
     this.render();
