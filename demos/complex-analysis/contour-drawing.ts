@@ -9,12 +9,12 @@ import {
   InfoDisplay
 } from '@framework/ui-components';
 import { complex, Complex, multiply, add, divide } from 'mathjs';
+import { encodeCoeffs, decodeCoeffs, COEFF_COUNT, SAMPLE_COUNT_FOR_ENCODING } from './fourier-encoding';
 
 interface Point2D {
   x: number;
   y: number;
 }
-
 
 type DrawingState = 'idle' | 'drawing' | 'paused' | 'closed';
 
@@ -69,6 +69,8 @@ class ContourDrawingDemo implements DemoInstance {
   private progressive: boolean = false;
   private progressiveContainer: HTMLElement | null = null;
   private progressiveN: number = 2;
+  private loadedFromUrl: boolean = false;
+  private copyLinkButton: HTMLButtonElement | null = null;
 
   // Resize handling
   private resizeObserver: ResizeObserver | null = null;
@@ -99,7 +101,18 @@ class ContourDrawingDemo implements DemoInstance {
     this.setupCanvas();
     this.attachEventListeners();
     this.setupResizeObserver();
-    this.render();
+
+    // Check for coefficients in URL parameter
+    const params = new URLSearchParams(window.location.search);
+    const coeffParam = params.get('c');
+    if (coeffParam) {
+      const decoded = decodeCoeffs(coeffParam);
+      const coeffs = decoded.map(c => complex(c.re, c.im));
+      this.loadFromCoefficients(coeffs);
+    } else {
+      this.render();
+    }
+
     return this;
   }
 
@@ -193,12 +206,17 @@ class ContourDrawingDemo implements DemoInstance {
     );
     this.progressiveContainer.style.display = 'none';
 
+    // Share button (hidden until contour closes)
+    const shareButtonContainer = document.createElement('div');
+    this.copyLinkButton = createButton('Share!', shareButtonContainer, () => this.copyLinkToClipboard());
+    this.copyLinkButton.style.display = 'none';
+
     // Arrange controls
     const row0 = createControlRow([this.statusDisplay.element]);
     const row1 = createControlRow([resetButton, this.pointsDisplay.element]);
     const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError, this.kInput.parentElement!, kNote, this.kError]);
     const row2a = createControlRow([this.delayInput.parentElement!, this.delayError]);
-    const row2b = createControlRow([this.hideOriginalContainer, this.progressiveContainer]);
+    const row2b = createControlRow([this.hideOriginalContainer, this.progressiveContainer, shareButtonContainer]);
     const row3 = createControlRow([instructions1]);
     const row4 = createControlRow([instructions2]);
 
@@ -627,12 +645,15 @@ class ContourDrawingDemo implements DemoInstance {
     this.statusDisplay.update('Contour closed');
     this.pointsDisplay.update(String(this.points.length));
 
-    // Show the hide original and progressive checkboxes
+    // Show the hide original, progressive checkboxes, and copy link button
     if (this.hideOriginalContainer) {
       this.hideOriginalContainer.style.display = '';
     }
     if (this.progressiveContainer) {
       this.progressiveContainer.style.display = '';
+    }
+    if (this.copyLinkButton) {
+      this.copyLinkButton.style.display = '';
     }
 
     this.render();
@@ -654,6 +675,80 @@ class ContourDrawingDemo implements DemoInstance {
   private resumeDrawing(): void {
     this.state = 'drawing';
     this.statusDisplay.update('Drawing... move mouse');
+  }
+
+  private copyLinkToClipboard(): void {
+    // Sample 256 points, compute 64 coefficients for sharing
+    const samplePoints = this.getSamplePointsForEncoding();
+    const complexPoints = samplePoints.map(p => complex(p.x, p.y));
+    const coeffs = this.calculateFourierCoefficients(complexPoints);
+    // Take first 64 coefficients for encoding
+    const encoded = encodeCoeffs(coeffs.slice(0, COEFF_COUNT));
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('c', encoded);
+
+    navigator.clipboard.writeText(url.toString()).then(() => {
+      this.copyLinkButton!.textContent = 'Copied!';
+      setTimeout(() => {
+        if (this.copyLinkButton) {
+          this.copyLinkButton.textContent = 'Share!';
+        }
+      }, 1500);
+    });
+  }
+
+  private getSamplePointsForEncoding(): Point2D[] {
+    // Get 256 sample points for URL encoding, independent of current N
+    const savedN = this.samplePointCount;
+    this.samplePointCount = SAMPLE_COUNT_FOR_ENCODING;
+    const samples = this.getSamplePoints();
+    this.samplePointCount = savedN;
+    return samples;
+  }
+
+  private loadFromCoefficients(coeffs: Complex[]): void {
+    this.loadedFromUrl = true;
+    this.fourierCoefficients = coeffs;
+    this.state = 'closed';
+    this.points = []; // No original path
+
+    // Set up hide original mode (there's nothing to show anyway)
+    this.hideOriginal = true;
+    if (this.hideOriginalContainer) {
+      this.hideOriginalContainer.style.display = '';
+      const checkbox = this.hideOriginalContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      if (checkbox) checkbox.checked = true;
+    }
+
+    // Set up progressive mode starting at K=2
+    // N is fixed at 64 (the number of encoded coefficients)
+    // Progressive mode controls K (how many coefficients to use)
+    this.progressive = true;
+    this.progressiveN = 2;
+    this.samplePointCount = COEFF_COUNT; // We have 64 coefficients
+    this.nInput.value = String(COEFF_COUNT);
+    this.nInput.disabled = true;
+    if (this.progressiveContainer) {
+      this.progressiveContainer.style.display = '';
+      const checkbox = this.progressiveContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      if (checkbox) checkbox.checked = true;
+    }
+
+    // Show copy link button
+    if (this.copyLinkButton) {
+      this.copyLinkButton.style.display = '';
+    }
+
+    // Start with K=2 coefficients (progressive mode will increase it)
+    this.kCoefficients = 2;
+    this.kInput.value = '2';
+
+    this.statusDisplay.update('Loaded from link');
+    this.pointsDisplay.update('–');
+
+    this.computeAnimationVectors();
+    this.startVectorAnimation();
   }
 
   // For N=11: index 0,1,2,3,4,5,6,7,8,9,10 → freq 0,-1,+1,-2,+2,-3,+3,-4,+4,-5,+5
@@ -742,10 +837,19 @@ class ContourDrawingDemo implements DemoInstance {
 
       // Check if we completed a full loop in progressive mode
       if (this.progressive && this.currentFrameIndex === 0) {
-        // Double N, or reset to 2 if we've reached 128
-        this.progressiveN = this.progressiveN >= 128 ? 2 : this.progressiveN * 2;
-        this.samplePointCount = this.progressiveN;
-        this.nInput.value = String(this.progressiveN);
+        // Double progressiveN, or reset to 2 if we've reached the limit
+        const maxN = this.loadedFromUrl ? COEFF_COUNT : 128;
+        this.progressiveN = this.progressiveN >= maxN ? 2 : this.progressiveN * 2;
+
+        if (this.loadedFromUrl) {
+          // URL-loaded: progressiveN controls K (coefficients), N is fixed at 64
+          this.kCoefficients = this.progressiveN;
+          this.kInput.value = String(this.progressiveN);
+        } else {
+          // User-drawn: progressiveN controls N (samples), K follows N
+          this.samplePointCount = this.progressiveN;
+          this.nInput.value = String(this.progressiveN);
+        }
         this.recalculateProgressiveFrame();
       }
 
@@ -789,6 +893,13 @@ class ContourDrawingDemo implements DemoInstance {
       this.progressiveContainer.style.display = 'none';
       const checkbox = this.progressiveContainer.querySelector('input[type="checkbox"]') as HTMLInputElement;
       if (checkbox) checkbox.checked = false;
+    }
+
+    // Hide share button and reset URL state
+    this.loadedFromUrl = false;
+    if (this.copyLinkButton) {
+      this.copyLinkButton.style.display = 'none';
+      this.copyLinkButton.textContent = 'Share!';
     }
 
     // Reset K to match N
@@ -903,6 +1014,13 @@ class ContourDrawingDemo implements DemoInstance {
   }
 
   private recalculateProgressiveFrame(): void {
+    // For URL-loaded drawings: we already have all 64 coefficients stored,
+    // kCoefficients was already updated by the animation loop
+    if (this.loadedFromUrl) {
+      this.computeAnimationVectors();
+      return;
+    }
+
     // Recalculate Fourier with new N but don't restart animation timer
     const samplePoints = this.getSamplePoints();
     this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
