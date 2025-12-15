@@ -2,6 +2,7 @@
 // Encodes 64 complex numbers with DEFLATE compression + URL-safe base64
 
 import { deflateSync, inflateSync } from 'fflate';
+import { max as mathMax, min as mathMin, round, abs, number } from 'mathjs';
 
 export const COEFF_COUNT = 64;
 const COEFF_RANGE = 512.0;
@@ -20,10 +21,10 @@ export function encodeCoeffs(coeffs: ComplexLike[]): string {
 
   for (let i = 0; i < COEFF_COUNT; i++) {
     const c = i < coeffs.length ? coeffs[i] : { re: 0, im: 0 };
-    const re = Math.max(-COEFF_RANGE, Math.min(COEFF_RANGE, c.re));
-    const im = Math.max(-COEFF_RANGE, Math.min(COEFF_RANGE, c.im));
-    const reQ = Math.round(re * COEFF_SCALE);
-    const imQ = Math.round(im * COEFF_SCALE);
+    const re = number(mathMax(-COEFF_RANGE, mathMin(COEFF_RANGE, c.re)));
+    const im = number(mathMax(-COEFF_RANGE, mathMin(COEFF_RANGE, c.im)));
+    const reQ = number(round(re * COEFF_SCALE));
+    const imQ = number(round(im * COEFF_SCALE));
     view.setInt16(i * 4, reQ, false);     // big-endian
     view.setInt16(i * 4 + 2, imQ, false); // big-endian
   }
@@ -117,8 +118,8 @@ export function runTests(): boolean {
 
   // Check first 3 values are close
   for (let i = 0; i < 3; i++) {
-    const err_re = Math.abs(decoded1[i].re - test1[i].re);
-    const err_im = Math.abs(decoded1[i].im - test1[i].im);
+    const err_re = number(abs(decoded1[i].re - test1[i].re));
+    const err_im = number(abs(decoded1[i].im - test1[i].im));
     if (err_re > 0.02 || err_im > 0.02) {
       console.log(`  FAIL: coefficient ${i} error too large: re=${err_re}, im=${err_im}`);
       passed = false;
@@ -145,8 +146,8 @@ export function runTests(): boolean {
   console.log('  Encoded length:', encoded2.length);
 
   for (let i = 0; i < 64; i++) {
-    const err_re = Math.abs(decoded2[i].re - test2[i].re);
-    const err_im = Math.abs(decoded2[i].im - test2[i].im);
+    const err_re = number(abs(decoded2[i].re - test2[i].re));
+    const err_im = number(abs(decoded2[i].im - test2[i].im));
     if (err_re > 0.02 || err_im > 0.02) {
       console.log(`  FAIL: coefficient ${i} error too large: re=${err_re}, im=${err_im}`);
       passed = false;
@@ -166,8 +167,8 @@ export function runTests(): boolean {
   console.log('  Decoded:', decoded3.slice(0, 2));
 
   for (let i = 0; i < 2; i++) {
-    const err_re = Math.abs(decoded3[i].re - test3[i].re);
-    const err_im = Math.abs(decoded3[i].im - test3[i].im);
+    const err_re = number(abs(decoded3[i].re - test3[i].re));
+    const err_im = number(abs(decoded3[i].im - test3[i].im));
     if (err_re > 0.02 || err_im > 0.02) {
       console.log(`  FAIL: coefficient ${i} error too large: re=${err_re}, im=${err_im}`);
       passed = false;

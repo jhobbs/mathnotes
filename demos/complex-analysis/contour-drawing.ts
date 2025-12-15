@@ -8,8 +8,18 @@ import {
   createCheckbox,
   InfoDisplay
 } from '@framework/ui-components';
-import { complex, Complex, multiply, add, divide } from 'mathjs';
+import { complex, Complex, multiply, add, divide, exp, pi as PI, hypot, number, min, max, round, ceil } from 'mathjs';
 import { encodeCoeffs, decodeCoeffs, COEFF_COUNT, SAMPLE_COUNT_FOR_ENCODING } from './fourier-encoding';
+
+// Type for numeric mathjs results we know won't be BigNumber/Fraction/Matrix
+type NumericResult = number | bigint | Complex;
+
+// Helper to extract real part from a mathjs result (number, bigint, or Complex)
+function toReal(val: NumericResult): number {
+  if (typeof val === 'number') return val;
+  if (typeof val === 'bigint') return Number(val);
+  return val.re;
+}
 
 interface Point2D {
   x: number;
@@ -370,7 +380,7 @@ class ContourDrawingDemo implements DemoInstance {
           for (const sp of samplePoints) {
             const pt = this.plotToCanvas(sp);
             ctx.beginPath();
-            ctx.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+            ctx.arc(pt.x, pt.y, 4, 0, number(multiply(PI, 2)));
             ctx.fill();
             ctx.stroke();
           }
@@ -383,7 +393,7 @@ class ContourDrawingDemo implements DemoInstance {
       ctx.strokeStyle = this.isDark ? '#fff' : '#000';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.arc(startPt.x, startPt.y, 7, 0, Math.PI * 2);
+      ctx.arc(startPt.x, startPt.y, 7, 0, number(multiply(PI, 2)));
       ctx.fill();
       ctx.stroke();
     }
@@ -431,7 +441,7 @@ class ContourDrawingDemo implements DemoInstance {
         // Tip marker
         ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.arc(end.x, end.y, 3, 0, Math.PI * 2);
+        ctx.arc(end.x, end.y, 3, 0, number(multiply(PI, 2)));
         ctx.fill();
 
         currentX = nextX;
@@ -488,13 +498,13 @@ class ContourDrawingDemo implements DemoInstance {
     for (let i = 1; i < totalPoints; i++) {
       const dx = this.points[i].x - this.points[i - 1].x;
       const dy = this.points[i].y - this.points[i - 1].y;
-      cumLength.push(cumLength[i - 1] + Math.hypot(dx, dy));
+      cumLength.push(cumLength[i - 1] + number(hypot(dx, dy)));
     }
     const totalLength = cumLength[totalPoints - 1];
 
     if (totalLength === 0) return [];
 
-    const sampleCount = Math.min(N, totalPoints);
+    const sampleCount = number(min(N, totalPoints));
     const samples: Point2D[] = [];
 
     // Sample at even arc length intervals
@@ -599,9 +609,9 @@ class ContourDrawingDemo implements DemoInstance {
     const lastPoint = this.points[this.points.length - 1];
     const dx = point.x - lastPoint.x;
     const dy = point.y - lastPoint.y;
-    const dist = Math.hypot(dx, dy);
+    const dist = number(hypot(dx, dy));
     const pixelSize = this.pixelsToPlotUnits(1);
-    const steps = Math.max(1, Math.round(dist / pixelSize));
+    const steps = number(max(1, round(dist / pixelSize)));
 
     // Fill in all pixel-sized steps from last point to new point
     for (let i = 1; i <= steps; i++) {
@@ -626,7 +636,7 @@ class ContourDrawingDemo implements DemoInstance {
     // Check if close enough to start point to auto-close
     const lastPoint = this.points[this.points.length - 1];
     const startPoint = this.points[0];
-    const dist = Math.hypot(lastPoint.x - startPoint.x, lastPoint.y - startPoint.y);
+    const dist = number(hypot(lastPoint.x - startPoint.x, lastPoint.y - startPoint.y));
     const threshold = this.pixelsToPlotUnits(this.closeThresholdPixels);
 
     if (dist <= threshold) {
@@ -767,7 +777,7 @@ class ContourDrawingDemo implements DemoInstance {
   // For N=11: index 0,1,2,3,4,5,6,7,8,9,10 → freq 0,-1,+1,-2,+2,-3,+3,-4,+4,-5,+5
   private indexToFrequency(index: number): number {
     if (index === 0) return 0;
-    const magnitude = Math.ceil(index / 2);
+    const magnitude = number(ceil(index / 2));
     const sign = index % 2 === 1 ? -1 : 1;
     return sign * magnitude;
   }
@@ -782,8 +792,8 @@ class ContourDrawingDemo implements DemoInstance {
       const freq = this.indexToFrequency(n);
       let sum: Complex = complex(0, 0);
       for (let k = 0; k < N; k++) {
-        const angle = -2 * Math.PI * freq * k / N;
-        const expTerm = complex(Math.cos(angle), Math.sin(angle));
+        const angle = toReal(multiply(-2, PI, freq, k, 1/N) as NumericResult);
+        const expTerm = exp(complex(0, angle)) as Complex;
         sum = add(sum, multiply(z[k], expTerm)) as Complex;
       }
       coefficients.push(divide(sum, N) as Complex);
@@ -817,18 +827,18 @@ class ContourDrawingDemo implements DemoInstance {
     this.trailY = [];
 
     for (let j = 0; j < M; j++) {
-      const t_j = (2 * Math.PI * j) / M;
+      const t_j = multiply(2, PI, j, 1/M);
       const frameVectors: Complex[] = [];
       let tipX = 0;
       let tipY = 0;
 
       // Use only kCoefficients (low-pass filter effect)
-      const coeffsToUse = Math.min(this.kCoefficients, N);
+      const coeffsToUse = number(min(this.kCoefficients, N));
       for (let n = 0; n < coeffsToUse; n++) {
         // v_f(t_j) = c_f * e^(i*f*t_j) where f is the actual frequency
         const freq = this.indexToFrequency(n);
-        const angle = freq * t_j;
-        const expTerm = complex(Math.cos(angle), Math.sin(angle));
+        const angle = toReal(multiply(freq, t_j) as NumericResult);
+        const expTerm = exp(complex(0, angle)) as Complex;
         const v = multiply(this.fourierCoefficients[n], expTerm) as Complex;
         frameVectors.push(v);
         tipX += v.re;
