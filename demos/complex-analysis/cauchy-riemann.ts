@@ -3,6 +3,19 @@ import { DemoInstance, DemoConfig, DemoMetadata } from '@framework/types';
 // @ts-ignore
 import Plotly from 'plotly.js-dist-min';
 import * as math from 'mathjs';
+import {
+  pi as PI, abs, hypot, max as mathMax, min as mathMin, acos, sqrt, ceil, floor, number, Complex
+} from 'mathjs';
+
+// Type for numeric mathjs results we know won't be BigNumber/Fraction/Matrix
+type NumericResult = number | bigint | Complex;
+
+// Helper to extract real part from a mathjs result (number, bigint, or Complex)
+function toReal(val: NumericResult): number {
+  if (typeof val === 'number') return val;
+  if (typeof val === 'bigint') return Number(val);
+  return val.re;
+}
 
 interface Point2D {
   x: number;
@@ -53,7 +66,7 @@ class CauchyRiemannDemo implements DemoInstance {
   // Adaptive sampling parameters
   private minSamples: number = 64;  // Base samples along each line
   private maxRefineLevel: number = 6;  // Maximum refinement depth
-  private angleThreshold: number = Math.PI / 180 * 2;  // Refine when turn angle > 2 degrees
+  private angleThreshold: number = number(PI) / 180 * 2;  // Refine when turn angle > 2 degrees
 
   async init(container: HTMLElement, config: DemoConfig): Promise<void> {
     this.container = container;
@@ -369,8 +382,8 @@ class CauchyRiemannDemo implements DemoInstance {
 
   private checkCauchyRiemannEquations(partials: PartialDerivatives): boolean {
     const tolerance = 0.001;
-    const eq1_satisfied = Math.abs(partials.dudx - partials.dvdy) < tolerance;
-    const eq2_satisfied = Math.abs(partials.dvdx + partials.dudy) < tolerance;
+    const eq1_satisfied = number(abs(partials.dudx - partials.dvdy)) < tolerance;
+    const eq2_satisfied = number(abs(partials.dvdx + partials.dudy)) < tolerance;
     return eq1_satisfied && eq2_satisfied;
   }
 
@@ -433,13 +446,13 @@ class CauchyRiemannDemo implements DemoInstance {
         const v0 = { x: pm.x - p0.x, y: pm.y - p0.y };
         const v1 = { x: p1.x - pm.x, y: p1.y - pm.y };
         const dot = v0.x * v1.x + v0.y * v1.y;
-        const n0 = Math.hypot(v0.x, v0.y);
-        const n1 = Math.hypot(v1.x, v1.y);
+        const n0 = number(hypot(v0.x, v0.y));
+        const n1 = number(hypot(v1.x, v1.y));
 
         let angle = 0;
         if (n0 > 0 && n1 > 0) {
-          const cosAngle = Math.max(-1, Math.min(1, dot / (n0 * n1)));
-          angle = Math.acos(cosAngle);
+          const cosAngle = number(mathMax(-1, mathMin(1, dot / (n0 * n1))));
+          angle = toReal(acos(cosAngle));
         }
 
         if (angle > this.angleThreshold) {
@@ -469,19 +482,19 @@ class CauchyRiemannDemo implements DemoInstance {
     horizontalLines: Point2D[][] // Lines with constant y (horizontal in preimage)
   } {
     const gridStep = 1.0;
-    const min = -Math.ceil(this.gridRange);
-    const max = Math.ceil(this.gridRange);
-    const numLines = Math.floor((max - min) / gridStep) + 1;
+    const minVal = -number(ceil(this.gridRange));
+    const maxVal = number(ceil(this.gridRange));
+    const numLines = number(floor((maxVal - minVal) / gridStep)) + 1;
 
     const verticalLines: Point2D[][] = [];
     const horizontalLines: Point2D[][] = [];
 
     // Generate vertical lines (constant x)
     for (let i = 0; i < numLines; i++) {
-      const xConst = min + i * gridStep;
+      const xConst = minVal + i * gridStep;
       const line: Point2D[] = [];
       for (let j = 0; j < numLines; j++) {
-        const y = min + j * gridStep;
+        const y = minVal + j * gridStep;
         line.push({ x: xConst, y: y });
       }
       verticalLines.push(line);
@@ -489,10 +502,10 @@ class CauchyRiemannDemo implements DemoInstance {
 
     // Generate horizontal lines (constant y)
     for (let j = 0; j < numLines; j++) {
-      const yConst = min + j * gridStep;
+      const yConst = minVal + j * gridStep;
       const line: Point2D[] = [];
       for (let i = 0; i < numLines; i++) {
-        const x = min + i * gridStep;
+        const x = minVal + i * gridStep;
         line.push({ x: x, y: yConst });
       }
       horizontalLines.push(line);
@@ -577,7 +590,7 @@ class CauchyRiemannDemo implements DemoInstance {
         angleref: 'previous',
         color: color
       },
-      hovertemplate: `${name}<br>Δ = (${dx.toFixed(3)}, ${dy.toFixed(3)})<br>|Δ| = ${Math.sqrt(dx*dx + dy*dy).toFixed(3)}<extra></extra>`
+      hovertemplate: `${name}<br>Δ = (${dx.toFixed(3)}, ${dy.toFixed(3)})<br>|Δ| = ${toReal(sqrt(dx*dx + dy*dy)).toFixed(3)}<extra></extra>`
     };
   }
 
@@ -634,10 +647,10 @@ class CauchyRiemannDemo implements DemoInstance {
     const diff_dx = { x: f_z0_dx.x - f_z0.x, y: f_z0_dx.y - f_z0.y };
     const diff_dy = { x: f_z0_dy.x - f_z0.x, y: f_z0_dy.y - f_z0.y };
 
-    const mag_dx = Math.sqrt(diff_dx.x * diff_dx.x + diff_dx.y * diff_dx.y);
-    const mag_dy = Math.sqrt(diff_dy.x * diff_dy.x + diff_dy.y * diff_dy.y);
-    const angle = Math.acos((diff_dx.x * diff_dy.x + diff_dx.y * diff_dy.y) /
-                           (mag_dx * mag_dy || 1)) * 180 / Math.PI;
+    const mag_dx = toReal(sqrt(diff_dx.x * diff_dx.x + diff_dx.y * diff_dx.y));
+    const mag_dy = toReal(sqrt(diff_dy.x * diff_dy.x + diff_dy.y * diff_dy.y));
+    const angle = toReal(acos((diff_dx.x * diff_dy.x + diff_dx.y * diff_dy.y) /
+                           (mag_dx * mag_dy || 1))) * 180 / number(PI);
 
     // Update validation display
     const crIcon = crSatisfied ? '✓' : '✗';
