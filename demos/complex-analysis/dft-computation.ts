@@ -30,8 +30,9 @@ import {
   DrawingState,
   CanvasPlotUtils,
   ContourDrawingManager,
-  indexToFrequency,
+  indexToFrequencyTraditional,
   pointsToComplex,
+  expI,
   DFT_COLORS
 } from './contour-shared';
 
@@ -498,7 +499,7 @@ class DFTComputationDemo implements DemoInstance {
 
     // Fill in the rest of the trail
     const { coeffN, k, rotationFrame } = this.animState;
-    const freq = indexToFrequency(coeffN);
+    const freq = indexToFrequencyTraditional(coeffN, this.N);
     const zK = this.complexSamples[k];
     const fullAngle = divide(multiply(-2, PI, freq, k), this.N);
 
@@ -523,7 +524,7 @@ class DFTComputationDemo implements DemoInstance {
     this.stateHistory.push(this.cloneAnimationState(this.animState));
 
     const { coeffN, k, phase } = this.animState;
-    const freq = indexToFrequency(coeffN);
+    const freq = indexToFrequencyTraditional(coeffN, this.N);
 
     switch (phase) {
       case 'show_sample':
@@ -542,9 +543,9 @@ class DFTComputationDemo implements DemoInstance {
         break;
 
       case 'show_product': {
-        // Calculate and store the product
-        const angle = toReal(divide(multiply(-2, PI, freq, k), this.N) as NumericResult);
-        const rotationFactor = exp(complex(0, angle)) as Complex;
+        // Calculate and store the product - keep in mathjs throughout
+        const angle = divide(multiply(-2, PI, freq, k), this.N);
+        const rotationFactor = expI(angle);
         const product = multiply(this.complexSamples[k], rotationFactor) as Complex;
         this.animState.products.push(product);
         this.animState.phase = 'add_to_sum';
@@ -624,7 +625,7 @@ class DFTComputationDemo implements DemoInstance {
     }
 
     const { coeffN, k, rotationFrame } = this.animState;
-    const freq = indexToFrequency(coeffN);
+    const freq = indexToFrequencyTraditional(coeffN, this.N);
     const zK = this.complexSamples[k];
 
     // Calculate the interpolated angle based on current frame
@@ -665,7 +666,7 @@ class DFTComputationDemo implements DemoInstance {
     }
 
     const { coeffN, k, phase } = this.animState;
-    const freq = indexToFrequency(coeffN);
+    const freq = indexToFrequencyTraditional(coeffN, this.N);
     const freqStr = freq >= 0 ? `+${freq}` : `${freq}`;
 
     let info = `Computing c${coeffN} (freq=${freqStr}): `;
@@ -782,8 +783,7 @@ class DFTComputationDemo implements DemoInstance {
     for (let k = 0; k < this.N; k++) {
       // e^(i * 2πk/N) - keeps everything in mathjs until final render
       const angle = divide(multiply(2, PI, k), this.N);
-      const iAngle = multiply(complex(0, 1), angle) as Complex;
-      samples.push(exp(iAngle) as Complex);
+      samples.push(expI(angle));
     }
     return samples;
   }
@@ -798,9 +798,8 @@ class DFTComputationDemo implements DemoInstance {
 
     // Arc samples using e^(i * πk/(arcSamples-1)) for k=0..arcSamples-1
     for (let k = 0; k < arcSamples; k++) {
-      const angle = divide(multiply(PI, k), arcSamples > 1 ? arcSamples - 1 : 1);
-      const iAngle = multiply(complex(0, 1), angle) as Complex;
-      samples.push(exp(iAngle) as Complex);
+      const angle = divide(multiply(PI, k), arcSamples - 1);
+      samples.push(expI(angle));
     }
 
     // Line samples from (-1, 0) to (1, 0), excluding endpoints
@@ -821,9 +820,8 @@ class DFTComputationDemo implements DemoInstance {
 
     // Arc samples using e^(i * (π + πk/(arcSamples-1))) for k=0..arcSamples-1
     for (let k = 0; k < arcSamples; k++) {
-      const angle = add(PI, divide(multiply(PI, k), arcSamples > 1 ? arcSamples - 1 : 1));
-      const iAngle = multiply(complex(0, 1), angle) as Complex;
-      samples.push(exp(iAngle) as Complex);
+      const angle = add(PI, divide(multiply(PI, k), arcSamples - 1));
+      samples.push(expI(angle));
     }
 
     // Line samples from (1, 0) to (-1, 0), excluding endpoints
@@ -962,15 +960,15 @@ class DFTComputationDemo implements DemoInstance {
     if (!this.animState) return;
 
     const { coeffN, k, phase, accumulatedSum, products, isAnimatingRotation, rotationTrail } = this.animState;
-    const freq = indexToFrequency(coeffN);
+    const freq = indexToFrequencyTraditional(coeffN, this.N);
 
     const origin: Point2D = { x: 0, y: 0 };
     const zK = this.complexSamples[k];
     const zKPoint: Point2D = { x: zK.re, y: zK.im };
 
-    // Calculate full rotation factor
-    const fullAngle = toReal(divide(multiply(-2, PI, freq, k), this.N) as NumericResult);
-    const rotationFactor = exp(complex(0, fullAngle)) as Complex;
+    // Calculate full rotation factor - keep in mathjs
+    const fullAngle = divide(multiply(-2, PI, freq, k), this.N);
+    const rotationFactor = expI(fullAngle);
     const rotationPoint: Point2D = { x: rotationFactor.re, y: rotationFactor.im };
 
     // Calculate full product
@@ -983,7 +981,7 @@ class DFTComputationDemo implements DemoInstance {
     // Draw based on phase
     if (phase === 'show_sample' || phase === 'show_rotation' || phase === 'show_product' || phase === 'add_to_sum') {
       // Always show original z_k vector (as ghost during rotation)
-      const zKColor = (phase === 'show_rotation' && isAnimatingRotation)
+      const zKColor = (phase !== 'show_sample')
         ? (this.isDark ? 'rgba(255, 215, 0, 0.3)' : 'rgba(255, 215, 0, 0.4)')
         : DFT_COLORS.samplePoints;
       this.plotUtils.drawVectorWithArrowhead(origin, zKPoint, zKColor, 3);
@@ -1060,7 +1058,7 @@ class DFTComputationDemo implements DemoInstance {
     }
 
     const { coeffN, products, phase } = this.animState;
-    const freq = indexToFrequency(coeffN);
+    const freq = indexToFrequencyTraditional(coeffN, this.N);
 
     // Legend
     ctx.font = '9px sans-serif';
@@ -1246,8 +1244,8 @@ class DFTComputationDemo implements DemoInstance {
       const y = coeffStartY + (row + 1) * coeffRowHeight;
       const negIdx = 1 + row * 2;  // 1, 3, 5, 7
       const posIdx = 2 + row * 2;  // 2, 4, 6, 8
-      const negFreq = indexToFrequency(negIdx);
-      const posFreq = indexToFrequency(posIdx);
+      const negFreq = indexToFrequencyTraditional(negIdx, this.N);
+      const posFreq = indexToFrequencyTraditional(posIdx, this.N);
 
       // Left column (negative)
       drawCoeffVector(negIdx, 5, y, `${negFreq}:`);

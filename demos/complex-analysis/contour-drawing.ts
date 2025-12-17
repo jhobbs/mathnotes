@@ -8,8 +8,9 @@ import {
   createCheckbox,
   InfoDisplay
 } from '@framework/ui-components';
-import { complex, Complex, multiply, add, divide, exp, pi as PI, hypot, number, min, max, round, ceil } from 'mathjs';
+import { complex, Complex, multiply, exp, pi as PI, hypot, number, min, max, round } from 'mathjs';
 import { encodeCoeffs, decodeCoeffs, COEFF_COUNT, SAMPLE_COUNT_FOR_ENCODING } from './fourier-encoding';
+import { indexToFrequency, calculateFourierCoefficients } from './contour-shared';
 
 // Type for numeric mathjs results we know won't be BigNumber/Fraction/Matrix
 type NumericResult = number | bigint | Complex;
@@ -682,7 +683,7 @@ class ContourDrawingDemo implements DemoInstance {
     console.log('Contour sample points as complex numbers:', this.complexPoints);
 
     // Calculate Fourier coefficients
-    this.fourierCoefficients = this.calculateFourierCoefficients(this.complexPoints);
+    this.fourierCoefficients = calculateFourierCoefficients(this.complexPoints);
     console.log('Fourier coefficients:', this.fourierCoefficients);
 
     // Precompute animation frames and start animation
@@ -699,7 +700,7 @@ class ContourDrawingDemo implements DemoInstance {
     // Sample 256 points, compute 64 coefficients for sharing
     const samplePoints = this.getSamplePointsForEncoding();
     const complexPoints = samplePoints.map(p => complex(p.x, p.y));
-    const coeffs = this.calculateFourierCoefficients(complexPoints);
+    const coeffs = calculateFourierCoefficients(complexPoints);
     // Take first 64 coefficients for encoding
     const encoded = encodeCoeffs(coeffs.slice(0, COEFF_COUNT));
 
@@ -774,34 +775,6 @@ class ContourDrawingDemo implements DemoInstance {
     this.startVectorAnimation();
   }
 
-  // For N=11: index 0,1,2,3,4,5,6,7,8,9,10 → freq 0,-1,+1,-2,+2,-3,+3,-4,+4,-5,+5
-  private indexToFrequency(index: number): number {
-    if (index === 0) return 0;
-    const magnitude = number(ceil(index / 2));
-    const sign = index % 2 === 1 ? -1 : 1;
-    return sign * magnitude;
-  }
-
-  private calculateFourierCoefficients(z: Complex[]): Complex[] {
-    const N = z.length;
-    const coefficients: Complex[] = [];
-
-    // c_f = (1/N) * sum_{k=0}^{N-1} z_k * e^{-2πifk/N}
-    // where f = indexToFrequency(n, N) gives symmetric frequencies
-    for (let n = 0; n < N; n++) {
-      const freq = this.indexToFrequency(n);
-      let sum: Complex = complex(0, 0);
-      for (let k = 0; k < N; k++) {
-        const angle = toReal(multiply(-2, PI, freq, k, 1/N) as NumericResult);
-        const expTerm = exp(complex(0, angle)) as Complex;
-        sum = add(sum, multiply(z[k], expTerm)) as Complex;
-      }
-      coefficients.push(divide(sum, N) as Complex);
-    }
-
-    return coefficients;
-  }
-
   /**
    * Precompute all animation frames and trail positions.
    *
@@ -836,7 +809,7 @@ class ContourDrawingDemo implements DemoInstance {
       const coeffsToUse = number(min(this.kCoefficients, N));
       for (let n = 0; n < coeffsToUse; n++) {
         // v_f(t_j) = c_f * e^(i*f*t_j) where f is the actual frequency
-        const freq = this.indexToFrequency(n);
+        const freq = indexToFrequency(n);
         const angle = toReal(multiply(freq, t_j) as NumericResult);
         const expTerm = exp(complex(0, angle)) as Complex;
         const v = multiply(this.fourierCoefficients[n], expTerm) as Complex;
@@ -1052,7 +1025,7 @@ class ContourDrawingDemo implements DemoInstance {
     // Recalculate with new N
     const samplePoints = this.getSamplePoints();
     this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
-    this.fourierCoefficients = this.calculateFourierCoefficients(this.complexPoints);
+    this.fourierCoefficients = calculateFourierCoefficients(this.complexPoints);
 
     this.computeAnimationVectors();
     this.startVectorAnimation();
@@ -1069,7 +1042,7 @@ class ContourDrawingDemo implements DemoInstance {
     // Recalculate Fourier with new N but don't restart animation timer
     const samplePoints = this.getSamplePoints();
     this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
-    this.fourierCoefficients = this.calculateFourierCoefficients(this.complexPoints);
+    this.fourierCoefficients = calculateFourierCoefficients(this.complexPoints);
     this.computeAnimationVectors();
     // currentFrameIndex stays at 0, animation continues
   }

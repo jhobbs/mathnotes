@@ -36,8 +36,66 @@ Starting with $k=0, $ we have $z_0,$ which is at $1.$ Our first rotation doesn't
 
 Now at $k=1$, our second sample point $z_1$ is pointing at $\frac{2 \pi}{9}.$ The imaginary component of our exponential $e^{-2 \pi i n k / N}$ gives us
 
-$$ -2 \pi i (-1) (1) / 9} = \frac{2 \pi}{9}. $$
+$$ -2 \pi i (-1) (1) / 9 = \frac{2 \pi}{9}. $$
 
 So, our sample point and our rotation are the same. When we multiply them in exponential form, we add the angles, and get $\frac{4 \pi}{9}.$ We take the exponential from our first sample and add it to this exponential, which gives us their average, and we get $\frac{2 \pi}{9}$ as our summation vector so far.
 
 Next at $k=2,$ our sample point is at $\frac{4 \pi}{9}$ and our rotation vector is too. The resulting angle is $\frac{8 \pi}{9}.$ Our summation vector now points at $\frac{5 \pi}{9},$ midway between its previous value and the value of this sample.
+
+
+## math on the unit circle
+
+The $n$th roots of @unity. There are $n$ $nth$ roots of 1. So, $z^{1} = 1$ has 1 solution, $1$ itself. $z^{2} = 1$ has 2 solutions, $1$ and $-1.$ Note that $-1$ is on the opposite side of the unit circle from $1.$ $z^3$ has 3 solutions: $1, e^{2 \pi / 3}$ and $e^{4 \pi / 3}.$  The general pattern is that the $n$th roots of unity are given by
+
+$$ e^{i(2 k \pi)/n}, \quad k = 0, \dots, n-1. $$
+
+Now, multiplying these roots by each other can be accomplished by adding their exponents, which are just terms in $i \pi / n,$ i.e. the product of $1$ and $-1$ is
+
+$$ 1 * -1 = e^{0(i 2 \pi /2)} * e^{1(i 2 \pi /2)} = e^{(0 + 1)(i 2 \pi / 2)} = e^{i \pi} = -1. $$
+
+Note that the resultant product is a root of unity as well, and in general the $nth$ roots of unit form a @cyclic @abelian @group under multiplication.
+
+It also turns out that this group is isomorphic to $\mathbb{Z}_n$ under addition modulo $n.$ The multiplication we gave above is equivalent to $0 + 1 = 1$ on $\mathbb{Z}_2,$ and just like $-1 * -1 = 1,$ $1 + 1 = 0$ on $\mathbb{Z}_2.$
+
+:::theorem
+The $n$th roots of unity under multiplication are isomorphic to $\mathbb{Z}_n$ under addition.
+
+::::proof
+Let
+
+$$ \mu_n = \{e^{2 pi i k /n} : k = 0, 1, \dots, n - 1\} $$
+
+be the $n$th roots of unity, and
+
+$$ \mathbb{Z}_n = \{ 0, 1, \dots, n - 1 \} $$
+
+be the first $n$ non-negative integers under addition modulo $n.$
+
+Let
+
+$$ \phi : \mathbb{Z}_n \to \mu_n, \quad \phi(k) = e^{2 \pi i k / n} $$
+
+be a mapping we will show to be an isomorphism.
+
+First, note that $\mu_n$ and $\mathbb{Z}_n$ are obviously the same cardinality, by their definitions.
+
+Now, suppose $a, b < n-1.$ Then
+
+$$ \phi(a + b) = e^{2 \pi i (a + b) / n} = e^{2 \pi i a / n} * e^{2 \pi i b / n} = \phi(a) * \phi(b), $$
+
+so $\phi$ is a @group-homomorphism.
+
+Now,  $e_{\mu_n}$ is 1, that is, $e^{2 \pi i (0) / n,$ so $\ker{\phi} = {0}.$ But, $0$ is $e_{\mathbb{Z}_n},$ and so $\phi$ is @injective, and an @isomorphism, and $\mu_n$ and $\mathbb{Z}_n$ are isomorphic.
+::::
+:::
+
+One more fact worth noting, now that we've established this isomorphism. On the unit circle, a negative rotation (clockwise) by $\phi$ is equal to a positive rotation (counterclockwise) by $2 \pi - \phi.$ This is easy to see:
+
+$$ -(\phi) \equiv 2 \pi + (-\phi) \pmod{2 \pi} = 2 \pi - \phi. $$
+
+Thus, the $-k$th $n$th root of unit, $e^{2 \pi i (k)}$ equals the $(n - k)$th root of unity (because the $n$th $n$th root of unity corresponds to a full rotation). This corresponds to $-k \equiv n - k \pmod{n}$ on $\mathbb{Z}_n.$ For example, $-4 = 9 - 4 = 5$ on $\mathbb{Z}_9,$ and $e^{2 \pi i (5)/9} = e^{2 \pi i (-4)/9}$ on $\mu_{n}.$
+
+
+
+
+Coming soon... roots of unity as the elements of basis vectors for $\mathbb{C}^n,$ and DFT as computing the inner product (basically, cosine similarity * magnitude) between the sample points and these basis vectors. That is, DFT is a change of basis onto these basis vectors, it is literally projecting onto these.
