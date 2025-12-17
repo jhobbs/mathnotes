@@ -100,12 +100,40 @@ Coming soon... roots of unity as the elements of basis vectors for $\mathbb{C}^n
 
 ## Sample Points as Vectors in $\mathbb{C}^n.$
 
-Let's say we have a contour on the complex plane, and we take $n$ sample points on it, in order, so $z_0, z_1, \dots, z_n.$ We can view these sample points as forming a vector in $\mathbb{C}^n:$
+Let's say we have a contour on the complex plane, and we take $n$ sample points on it, in order, so $z_0, z_1, \dots, z_n.$ We can view these sample points (which form a @sequence) as forming a vector in $\mathbb{C}^n:$
 
-$$ \langle z_0, z_1, \dots, z_n \rangle. $$
+$$ ( z_0, z_1, \dots, z_n ). $$
 
 Now, the standard basis for $\mathbb{C}^n$ is the same as that of $\mathbb{R}^n,$ which is $\{ e_1, e_2, \dots, e_n \},$ where $e_k$ is a $n$-dimensional vector with a 1 in the $k$th position and 0's in the other position, i.e.
 
-$$ e_1 = \langle 1, 0, \dots, 0 \rangle, \quad e_2 = \langle 0, 1, \dots, 0 \rangle, \dots $$
+$$ e_1 = ( 1, 0, \dots, 0 ), \quad e_2 = ( 0, 1, \dots, 0 ), \dots $$
 
-It's easy to see that these basis vectors are linearly independent; to see that they span $\mathbb{C}^n$, suppose $w = \langle w_1, w_2, \dots, w_n. \rangle.$ Then, $w_1 * e_1 + w_2 * e_2 + \cdots + w_n * e_n = w,$ that is, the components of $w$ (which are complex numbers) are exactly the scalar coefficients we need to multiply by our basis vectors to form $w,$ so this basis spans $\mathbb{C}^n.$
+It's easy to see that these basis vectors are @orthogonal (and therefore @linearly-independent); to see that they span $\mathbb{C}^n$, suppose $w = ( w_1, w_2, \dots, w_n. ).$ Then, $w_1 * e_1 + w_2 * e_2 + \cdots + w_n * e_n = w,$ that is, the components of $w$ (which are complex numbers) are exactly the scalar coefficients we need to multiply by our basis vectors to form $w,$ so this basis spans $\mathbb{C}^n.$
+
+### $\mathbb{C}^n$ is an Inner Product Space
+
+Now, we can equip this vector space with an @inner-product,
+
+$$ \langle z, w \rangle = \sum_{k=0}^{N-1} z_k \overline{w_k}. $$
+
+To see that this is indeed an inner product, we'll show the required properties hold
+
+For @conjugate-symmetry, let $z_k = a + bi$ and let $w_k = c + di.$ Then,
+
+$$ z_k \overline{w_k} = (a + bi)(c - di) = ac - adi + cbi + bd = (ac + bd) + (cb - ad)i, $$
+
+and
+
+$$ \overline{w_k \overline{z_k}} = \overline{(c + di)(a - bi)} = \overline{ac + adi - cbi + bd} = (ac + bd) - (ad - cb)i = (ac + bd) + (cb - ad)i, $$
+
+and since $k$ is arbitrary, it holds for any respective pair of components in $z$ and $w,$ and so $\langle z, w \rangle = \overline{\langle w, z \rangle}.$
+
+For @linearity in the first argument, let $w, v, z \in \mathbb{C}^n, a, b \in \mathbb{C}.$ Then
+
+$$ \langle ax + by, z \rangle = (a x_1 + b y_1) * z_1 + (a x_2 + b y_2) * z_2 + \cdots = a(x_1 * z_1) + a(x_2 * z_2) + \cdots + b(y_1 * z_1) + b(y_2 * z_2) + \cdots = a \langle x, z \rangle + b \langle x, z \rangle. $$
+
+Now, to show @positive-definiteness let $z = a + bi.$ Then,
+
+$$ \langle z, z \rangle = z \overline{z} = 1 > 0. $$
+
+Since $\mathbbC{}^n$ is an inner-product space, we can use the inner product to compare how well aligned two vectors are, and to perform projections.
