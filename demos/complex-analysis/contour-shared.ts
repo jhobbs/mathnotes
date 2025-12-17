@@ -7,16 +7,6 @@ import {
   min, max, ceil, floor, round
 } from 'mathjs';
 
-// Type for numeric mathjs results we know won't be BigNumber/Fraction/Matrix
-type NumericResult = number | bigint | Complex;
-
-// Helper to extract real part from a mathjs result (number, bigint, or Complex)
-function toReal(val: NumericResult): number {
-  if (typeof val === 'number') return val;
-  if (typeof val === 'bigint') return Number(val);
-  return val.re;
-}
-
 // ============================================================================
 // Types
 // ============================================================================
@@ -576,8 +566,22 @@ export function indexToFrequency(index: number): number {
   return sign * magnitude;
 }
 
+// Traditional DFT ordering: 0,1,2,...,floor(N/2), then negative freqs
+// For N=9: index 0,1,2,3,4,5,6,7,8 -> freq 0,1,2,3,4,-4,-3,-2,-1
+export function indexToFrequencyTraditional(index: number, N: number): number {
+  if (index <= N / 2) return index;
+  return index - N;
+}
+
 export function pointsToComplex(points: Point2D[]): Complex[] {
   return points.map(p => complex(p.x, p.y));
+}
+
+// Compute e^(i*angle) keeping everything in mathjs types
+// This is the core rotation operation used throughout DFT computations
+export function expI(angle: number | Complex | ReturnType<typeof multiply>): Complex {
+  const iAngle = multiply(complex(0, 1), angle) as Complex;
+  return exp(iAngle) as Complex;
 }
 
 export function calculateFourierCoefficients(z: Complex[], coeffCount?: number): Complex[] {
@@ -590,8 +594,8 @@ export function calculateFourierCoefficients(z: Complex[], coeffCount?: number):
     const freq = indexToFrequency(n);
     let sum: Complex = complex(0, 0);
     for (let k = 0; k < N; k++) {
-      const angle = toReal(multiply(-2, PI, freq, k, 1/N) as NumericResult);
-      const expTerm = exp(complex(0, angle)) as Complex;
+      const angle = divide(multiply(-2, PI, freq, k), N);
+      const expTerm = expI(angle);
       sum = add(sum, multiply(z[k], expTerm)) as Complex;
     }
     coefficients.push(divide(sum, N) as Complex);
