@@ -85,7 +85,7 @@ $$ \phi(a + b) = e^{2 \pi i (a + b) / n} = e^{2 \pi i a / n} * e^{2 \pi i b / n}
 
 so $\phi$ is a @group-homomorphism.
 
-Now,  $e_{\mu_n}$ is 1, that is, $e^{2 \pi i (0) / n,$ so $\ker{\phi} = {0}.$ But, $0$ is $e_{\mathbb{Z}_n},$ and so $\phi$ is @injective, and an @isomorphism, and $\mu_n$ and $\mathbb{Z}_n$ are isomorphic.
+Now,  $e_{\mu_n}$ is 1, that is, $e^{2 \pi i (0) / n},$ so $\ker{\phi} = {0}.$ But, $0$ is $e_{\mathbb{Z}_n},$ and so $\phi$ is @injective, and an @isomorphism, and $\mu_n$ and $\mathbb{Z}_n$ are isomorphic.
 ::::
 :::
 
@@ -96,6 +96,16 @@ $$ -(\phi) \equiv 2 \pi + (-\phi) \pmod{2 \pi} = 2 \pi - \phi. $$
 Thus, the $-k$th $n$th root of unit, $e^{2 \pi i (k)}$ equals the $(n - k)$th root of unity (because the $n$th $n$th root of unity corresponds to a full rotation). This corresponds to $-k \equiv n - k \pmod{n}$ on $\mathbb{Z}_n.$ For example, $-4 = 9 - 4 = 5$ on $\mathbb{Z}_9,$ and $e^{2 \pi i (5)/9} = e^{2 \pi i (-4)/9}$ on $\mu_{n}.$
 
 
-
-
 Coming soon... roots of unity as the elements of basis vectors for $\mathbb{C}^n,$ and DFT as computing the inner product (basically, cosine similarity * magnitude) between the sample points and these basis vectors. That is, DFT is a change of basis onto these basis vectors, it is literally projecting onto these.
+
+## Sample Points as Vectors in $\mathbb{C}^n.$
+
+Let's say we have a contour on the complex plane, and we take $n$ sample points on it, in order, so $z_0, z_1, \dots, z_n.$ We can view these sample points as forming a vector in $\mathbb{C}^n:$
+
+$$ \langle z_0, z_1, \dots, z_n \rangle. $$
+
+Now, the standard basis for $\mathbb{C}^n$ is the same as that of $\mathbb{R}^n,$ which is $\{ e_1, e_2, \dots, e_n \},$ where $e_k$ is a $n$-dimensional vector with a 1 in the $k$th position and 0's in the other position, i.e.
+
+$$ e_1 = \langle 1, 0, \dots, 0 \rangle, \quad e_2 = \langle 0, 1, \dots, 0 \rangle, \dots $$
+
+It's easy to see that these basis vectors are linearly independent; to see that they span $\mathbb{C}^n$, suppose $w = \langle w_1, w_2, \dots, w_n. \rangle.$ Then, $w_1 * e_1 + w_2 * e_2 + \cdots + w_n * e_n = w,$ that is, the components of $w$ (which are complex numbers) are exactly the scalar coefficients we need to multiply by our basis vectors to form $w,$ so this basis spans $\mathbb{C}^n.$
