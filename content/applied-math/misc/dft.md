@@ -112,11 +112,20 @@ It's easy to see that these basis vectors are @orthogonal (and therefore @linear
 
 ### $\mathbb{C}^n$ is an Inner Product Space
 
-Now, we can equip this vector space with an @inner-product,
+Now, we can equip this vector space with an @inner-product
 
-$$ \langle z, w \rangle = \sum_{k=0}^{N-1} z_k \overline{w_k}. $$
+:::theorem "\mathbb{C}^N is an inner product space" {label: complex-inner-product-space}
 
-To see that this is indeed an inner product, we'll show the required properties hold
+The @function
+
+$$ \langle z, w \rangle = \sum_{k=0}^{N-1} z_k \overline{w_k} $$
+
+defined on $z, w \in \mathbb{C}^N$ is an @inner-product, and so $\mathbb{C}^N$ ($N$ a positive integer) forms an @inner-product-space.
+
+::::proof
+Since $\mathbb{C}$ is a @field, $\mathbb{C}^N$ is obviously a @vector-space.
+
+To see that this is indeed an inner product, we'll show the required properties hold.
 
 For @conjugate-symmetry, let $z_k = a + bi$ and let $w_k = c + di.$ Then,
 
@@ -135,5 +144,153 @@ $$ \langle ax + by, z \rangle = (a x_1 + b y_1) * z_1 + (a x_2 + b y_2) * z_2 + 
 Now, to show @positive-definiteness let $z = a + bi.$ Then,
 
 $$ \langle z, z \rangle = z \overline{z} = 1 > 0. $$
+::::
+:::
 
-Since $\mathbbC{}^n$ is an inner-product space, we can use the inner product to compare how well aligned two vectors are, and to perform projections.
+:::remark
+Since $\mathbb{C}^n$ is an inner-product space, we can use the inner product to compare how well aligned two vectors are, and to perform projections.
+:::
+
+## Fourier Basis
+
+We can use complex numbers representing varying degrees of rotation around the unit circle to form a basis vector. Given a sample count $N,$ we can make a basis from the $N$ vectors whose elements are defined as
+
+$$ \phi_n = \left ( e^{2 \pi i n k / N} \right )_{k=0}^{N-1}, \quad n = 0, \dots, N-1. $$
+
+To work on intuition some, let's take the case $N = 3.$
+
+Then for $n = 0,$
+
+$$ \phi_0 = \left (e^{2 \pi i (0)(0)/ 3}, e^{2 \pi i (0)(1)/ 3}, e^{2 \pi i (0)(2)/ 3} \right ) = (1, 1, 1), $$
+
+$n = 1,$ 
+
+$$ \phi_1 = \left (e^{2 \pi i (1)(0)/ 3}, e^{2 \pi i (1)(1)/ 3}, e^{2 \pi i (1)(2)/ 3} \right ) = (1, e^{2 \pi i / 3}, e^{-2 \pi i / 3} ), $$
+
+and $n = 2,$
+
+$$ \phi_2 = \left (e^{2 \pi i (2)(0)/ 3}, e^{2 \pi i (2)(1)/ 3}, e^{2 \pi i (2)(2)/ 3} \right ) = (1, e^{-2 \pi i / 3}, e^{2 \pi i / 3} ), $$
+
+If we use our isomorphism $\mathbb{Z}_3,$ we have
+a
+$$ \phi_0 = (0, 0, 0), \quad \phi_1 = (0, 1, 2), \quad \phi_2 = (0, 2, 1). $$
+
+Each of these values $n = 0, 1, 2$ represents a different frequency. For $n = 0,$ our total angle swept across all points is $2 \pi * 0 = 0.$ For $n = 1$ the total angle swept is $2 * \pi * 1 = 2 \pi.$ For $n = 2$ the total angle swept is $2 * pi * 2 = 4 \pi.$ So, we can say that basis vector $\phi_n$ is associated with (represents?) rotation at frequency $n.$
+
+Now note that $\phi_2 = \phi_{-1}$ equals the conjugate of $\phi_1.$ It appears that the conjugate of the basis vector representing rotation at frequency $n$ represents rotation at frequency $-n.$
+
+For odd $N,$ one basis vector represents no rotation - no frequency - aka DC - this is for $n=0.$ Then, for each $n$ up to $(N-1)/2,$ we have a positive $n$ frequency vector and a matching $-n$ frequency vector. The vectors representing each pair of frequencies are made up of sample points which are conjugates of each other (reflections of each other across the $x$-axis, or alternatively, rotations by the same increments in opposite directions.) That is, the $k$th point in the vector for $-n$ is the conjugate of the $k$th point in the vector for $n.$
+
+For even $N,$ we have a similar situation, except there is an additional frequency at $N/2$ that is sometimes called the Nyquist frequency. This frequency has only real components and is therefore its own conjugate. The $k$th element of this vector is given by
+
+$$ \phi_{N/2}(k) = e^{\pi i k} = (-1)^k. $$
+
+
+:::theorem "Fourier Basis" {label: fourier-basis}
+Let $N$ be a positive integer. Then the vectors
+
+$$ \phi_n = (e^{2 \pi i n k  / N})_{k=0}^{N-1} $$
+
+for $n = 0, \dots, N-1$ form a basis for $\mathbb{C}^N.$
+
+::::proof
+To show linear independence, we will show a stronger condition, orthogonality, holds.
+
+For $m,n,k \in \mathbb{Z}_N, m \neq n$ we can write that the $k$th entry of $\phi_m$ is
+
+$$ \phi_m(k) = e^{\frac{2 * \pi * i}{N} ( km \pmod{N} )}, $$
+
+and that the conjugate of the $k$th entry of $\phi_n$ is
+
+$$ \overline{\phi_n(k)} = e^{\frac{2 * \pi * i}{N} ( -kn \pmod{N} )}. $$
+
+Then, in our inner product between $\phi_m$ and $\phi_n$, the $k$th term is
+
+$$ \phi_m(k) \overline{\phi_n(k)} = e^{\frac{2 * \pi * i}{N} ( km \pmod{N} )} e^{\frac{2 * \pi * i}{N} ( -kn \pmod{N} )} = e^{\frac{2 * \pi * i}{N} ( k(m-n) \pmod{N} )}. $$
+
+Thus, for $r = m - n \pmod{N},$
+
+$$ \langle \phi_m, \phi_n \rangle = \sum_{k=0}^{N-1} e^{\frac{2 \pi i}{N} kr}. $$
+
+Now we need to show that this sum is $0.$ Note that if we let $w = e^{\frac{2 \pi i}{N} r},$ we can rewrite this as
+
+$$ \langle \phi_m, \phi_n \rangle = \sum_{k=0}^{N-1} w^k. $$
+
+Lets designate this sum $S_N$ and write it as
+
+$$ S_N = 1 + w + w^2 + \cdots + w^{N-1}. $$
+
+Then
+
+$$ \begin{aligned}
+S_N & = 1 + w + w^2 + \cdots + w^{N-1} \\
+wS_N & = w + w^2 + w^3 + \cdots + w^{N}
+\end{aligned} $$
+
+Subtracting the second equation from the first gives
+
+$$ \begin{aligned}
+S_N - wS_N & = (1 + w + w^2 + \cdots + w^{N-1}) - (w + w^2 + w^3 + \cdots + w^{N}) \\
+           & = 1 - w^N,
+\end{aligned} $$
+
+because everything in the middle cancels out.
+
+Now, we can factor out $1 - w$ from the left hand side to get
+
+$$ \begin{aligned}
+(1 - w)S_N & = 1 - w^N \\
+S_N & = \frac{1 - w^N}{1 - w} \\
+\sum_{k=0}^{N-1} w^k & = \frac{1 - w^N}{1 - w}.
+\end{aligned} $$
+
+Substituting back in $e^{\frac{2 \pi i}{N} r}$ for $w$ we get
+
+$$ \begin{aligned}
+
+\sum_{k=0}^{N-1} e^{\frac{2 \pi i}{N} r k} & = \frac{1 -  e^{\frac{2 \pi i}{N} r N}}{1 - e^{\frac{2 \pi i}{N} r}} \\
+                                           & = \frac{1 - 1^r}{1 - e^{\frac{2 \pi i}{N} r}} \\
+                                           & = 0.
+\end{aligned}
+$$
+
+Thus, $\langle \phi_m, \phi_n \rangle = 0,$ and so when $m \neq n,$ $\phi_m$ an $\phi_n$ are @orthogonal and therefore @linearly-independent.
+
+Now we need to show that $\phi_0 \dots \phi_{N-1}$ span $\mathbb{C}^N.$
+
+Let $u = (z_0, z_1, \dots, z_{N-1}) \in \mathbb{C}^N.$ We need to find $c_0, c_1, \dots, c_{N-1}$ such that
+
+$$ u = c_0 \phi_0 + c_1 \phi_1 + \cdots + c_{N-1} \phi_{N-1}. $$
+
+That is, we want constants $c_0 \cdots c_{N-1}$ such that
+
+$$ u = \sum_{n=0}^{N-1} c_n \phi_n. $$
+
+To find some specific $c_m,$ we can take the inner product of both sides with respect to $\phi_m$ to get
+
+$$ \langle u, \phi_m \rangle = \left \langle \sum_{n=0}^{N-1} c_n \phi_n, \phi_m \right \rangle. $$
+
+@Linearity in the first argument of the @inner-product allows us to rewrite the right side to get
+
+$$ \langle u, \phi_m \rangle = \sum_{n=0}^{N-1} c_n  \left \langle \phi_n, \phi_m \right \rangle. $$
+
+Now, we know that
+
+$$ \left \langle \phi_n, \phi_m \right \rangle =
+\begin{cases}
+\text{N}, & n = m, \\
+0, & n \neq m.
+\end{cases}
+$$
+
+so the inner product on the right-hand side is $0$ except when $n = m,$ and this reduces to
+
+$$ \langle u, \phi_m \rangle = c_m N. $$
+
+Therefore,
+
+$$ c_m = \frac{\langle u, \phi_m \rangle}{N}. $$
+
+This shows that the Fourier basis described here indeed spans $\mathbb{C}^N,$ and shows how to compute the Fourier coefficients $c_0 \dots c_{N-1}.$
+::::
+:::
