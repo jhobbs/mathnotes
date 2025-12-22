@@ -216,33 +216,9 @@ Now we need to show that this sum is $0.$ Note that if we let $w = e^{\frac{2 \p
 
 $$ \langle \phi_m, \phi_n \rangle = \sum_{k=0}^{N-1} w^k. $$
 
-Lets designate this sum $S_N$ and write it as
+From @finite-geometric-series, we have that
 
-$$ S_N = 1 + w + w^2 + \cdots + w^{N-1}. $$
-
-Then
-
-$$ \begin{aligned}
-S_N & = 1 + w + w^2 + \cdots + w^{N-1} \\
-wS_N & = w + w^2 + w^3 + \cdots + w^{N}
-\end{aligned} $$
-
-Subtracting the second equation from the first gives
-
-$$ \begin{aligned}
-S_N - wS_N & = (1 + w + w^2 + \cdots + w^{N-1}) - (w + w^2 + w^3 + \cdots + w^{N}) \\
-           & = 1 - w^N,
-\end{aligned} $$
-
-because everything in the middle cancels out.
-
-Now, we can factor out $1 - w$ from the left hand side to get
-
-$$ \begin{aligned}
-(1 - w)S_N & = 1 - w^N \\
-S_N & = \frac{1 - w^N}{1 - w} \\
-\sum_{k=0}^{N-1} w^k & = \frac{1 - w^N}{1 - w}.
-\end{aligned} $$
+$$ \sum_{k=0}^{N-1} w^k = \frac{1 - w^N}{1 - w}. $$
 
 Substituting back in $e^{\frac{2 \pi i}{N} r}$ for $w$ we get
 
@@ -258,21 +234,21 @@ Thus, $\langle \phi_m, \phi_n \rangle = 0,$ and so when $m \neq n,$ $\phi_m$ an 
 
 Now we need to show that $\phi_0 \dots \phi_{N-1}$ span $\mathbb{C}^N.$
 
-Let $u = (z_0, z_1, \dots, z_{N-1}) \in \mathbb{C}^N.$ We need to find $c_0, c_1, \dots, c_{N-1}$ such that
+Let $\vec{u} = (z_0, z_1, \dots, z_{N-1}) \in \mathbb{C}^N.$ We need to find $c_0, c_1, \dots, c_{N-1}$ such that
 
-$$ u = c_0 \phi_0 + c_1 \phi_1 + \cdots + c_{N-1} \phi_{N-1}. $$
+$$ \vec{u} = c_0 \phi_0 + c_1 \phi_1 + \cdots + c_{N-1} \phi_{N-1}. $$
 
 That is, we want constants $c_0 \cdots c_{N-1}$ such that
 
-$$ u = \sum_{n=0}^{N-1} c_n \phi_n. $$
+$$ \vec{u}u = \sum_{n=0}^{N-1} c_n \phi_n. $$
 
 To find some specific $c_m,$ we can take the inner product of both sides with respect to $\phi_m$ to get
 
-$$ \langle u, \phi_m \rangle = \left \langle \sum_{n=0}^{N-1} c_n \phi_n, \phi_m \right \rangle. $$
+$$ \langle \vec{u}, \phi_m \rangle = \left \langle \sum_{n=0}^{N-1} c_n \phi_n, \phi_m \right \rangle. $$
 
 @Linearity in the first argument of the @inner-product allows us to rewrite the right side to get
 
-$$ \langle u, \phi_m \rangle = \sum_{n=0}^{N-1} c_n  \left \langle \phi_n, \phi_m \right \rangle. $$
+$$ \langle \vec{u}, \phi_m \rangle = \sum_{n=0}^{N-1} c_n  \left \langle \phi_n, \phi_m \right \rangle. $$
 
 Now, we know that
 
@@ -285,12 +261,67 @@ $$
 
 so the inner product on the right-hand side is $0$ except when $n = m,$ and this reduces to
 
-$$ \langle u, \phi_m \rangle = c_m N. $$
+$$ \langle \vec{u}, \phi_m \rangle = c_m N. $$
 
 Therefore,
 
-$$ c_m = \frac{\langle u, \phi_m \rangle}{N}. $$
+$$ c_m = \frac{\langle \vec{u}, \phi_m \rangle}{N}. $$
 
 This shows that the Fourier basis described here indeed spans $\mathbb{C}^N,$ and shows how to compute the Fourier coefficients $c_0 \dots c_{N-1}.$
 ::::
 :::
+:::remark
+The Fourier Coefficient $c_m,$ given as
+
+$$ c_m = \frac{\langle \vec{u}, \phi_m \rangle}{N}. $$
+
+Is just the @scalar-projection of $\vec{u}$ onto $\phi_m.$ It is a complex number, and $|c_m|$ is proportional to the amplitude of the frequency $m$ present in $\vec{u},$ while $\Arg{c_m}$ gives the phase of frequency $m$ in $\vec{u}.$
+
+::::note
+We've given this $c_m$ as the inner product divided by $N.$ This is allowed but not typical. In order to make
+
+$$ IDFT(DFT(\vec{x})) = \vec{x}, $$
+
+we need $\frac{1}{N}$ as a factor in either the DFT or the IDFT, but typically, it's done in the IDFT.
+::::
+:::
+
+Now we're ready to see the DFT as a change of basis from the standard basis for $\mathbb{C}^N$ to the DFT (Fourier) Basis for $\mathbb{C}^N.$ The DFT is given as
+
+$$ \vec{X}[n] = \langle \vec{x}[k], \phi_n \rangle = \sum_{k=0}^{N-1} \vec{x}[k] e^{-2 \pi i n k / N}, $$
+
+and the IDFT is given as
+
+$$ \vec{x}[k] = \frac{1}{N} \sum_{n=0}^{N-1} X[n] e^{2 \pi i n k / N}. $$
+
+If we collect the conjugates of the $\phi_k$ vectors as rows in a matrix we get
+
+$$ F =
+\begin{pmatrix}
+\phi_0^{*} \\
+\phi_1^{*} \\
+\vdots \\
+\phi_{N-1}^{*}
+\end{pmatrix}
+
+= \begin{pmatrix}
+e^{-2\pi i\,0\cdot 0/N} & e^{-2\pi i\,0\cdot 1/N} & \cdots & e^{-2\pi i\,0\cdot (N-1)/N} \\
+e^{-2\pi i\,1\cdot 0/N} & e^{-2\pi i\,1\cdot 1/N} & \cdots & e^{-2\pi i\,1\cdot (N-1)/N} \\
+\vdots & \vdots & \ddots & \vdots \\
+e^{-2\pi i\,(N-1)\cdot 0/N} & e^{-2\pi i\,(N-1)\cdot 1/N} & \cdots & e^{-2\pi i\,(N-1)\cdot (N-1)/N}
+\end{pmatrix}.
+$$
+
+Then, given a vector $\vec{x}$ in $\mathbb{C}^N,$ we can compute its DFT via matrix vector multiplication as
+
+$$ \vec{X} = F \vec{x}, $$
+
+and we can invert it via IDFT using the conjugate rows of $F$ as
+
+$$ \vec{x} = \frac{1}{N} F^{*} \vec{X}. $$
+
+:::note
+In practice, while this matrix multiplication approach works, it can be optimized. This isn't an arbitrary matrix - it has some particular structure, and it can be factored to come up with a more efficient operation. This is what the Fast Fourier Transform does.
+:::
+
+
