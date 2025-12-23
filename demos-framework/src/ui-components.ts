@@ -502,8 +502,59 @@ export function createResetButton(
   const button = document.createElement('button');
   button.className = 'button';
   button.textContent = 'Reset';
-  
+
   button.addEventListener('click', onReset);
-  
+
   return button;
+}
+
+/**
+ * Result from createNumberInput containing the input element and its container
+ */
+export interface NumberInputResult {
+  input: HTMLInputElement;
+  container: HTMLElement;
+}
+
+/**
+ * Creates a number input with label, useful for configurable demo parameters.
+ * Returns both the input element and its container for flexible layout.
+ */
+export function createNumberInput(
+  label: string,
+  defaultValue: number,
+  min: number,
+  max: number,
+  step: number,
+  onChange: () => void,
+  isDark: boolean
+): NumberInputResult {
+  const container = document.createElement('div');
+  container.style.display = 'flex';
+  container.style.alignItems = 'center';
+  container.style.gap = '0.5rem';
+
+  const labelEl = document.createElement('label');
+  labelEl.textContent = label;
+  labelEl.style.fontWeight = 'bold';
+
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.value = defaultValue.toString();
+  input.min = min.toString();
+  input.max = max.toString();
+  input.step = step.toString();
+  input.style.padding = '0.25rem 0.5rem';
+  input.style.borderRadius = '0.25rem';
+  input.style.border = '1px solid var(--color-border, #ccc)';
+  input.style.background = isDark ? 'rgba(255,255,255,0.1)' : 'white';
+  input.style.color = 'var(--color-text, inherit)';
+  input.style.width = '80px';
+  input.style.fontFamily = 'var(--font-mono, monospace)';
+  input.addEventListener('input', onChange);
+
+  container.appendChild(labelEl);
+  container.appendChild(input);
+
+  return { input, container };
 }
