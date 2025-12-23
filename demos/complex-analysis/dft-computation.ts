@@ -15,16 +15,7 @@ import {
   pi as PI, cos, sin, sqrt, atan2, number,
   floor, abs, max
 } from 'mathjs';
-
-// Type for numeric mathjs results we know won't be BigNumber/Fraction/Matrix
-type NumericResult = number | bigint | Complex;
-
-// Helper to extract real part from a mathjs result (number, bigint, or Complex)
-function toReal(val: NumericResult): number {
-  if (typeof val === 'number') return val;
-  if (typeof val === 'bigint') return Number(val);
-  return val.re;
-}
+import { toReal, NumericResult } from './dft-shared';
 import {
   Point2D,
   DrawingState,
