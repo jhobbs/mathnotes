@@ -3,6 +3,12 @@ layout: page
 title: Discrete Fourier Transform
 ---
 
+{% include_demo "contour-drawing" %}
+
+The demo above shows how closed contours can be approximated via sums of complex exponentials. The process involves taking samples, performing a Discrete Fourier Transform on them, and then using the resulting Fourier Coefficients for complex exponentials. This is sometimes referred to as epicycles. This page gets into how the Discrete Fourier Transform Works.
+
+# Preliminary rambling notes
+
 1. Take a closed contour $C.$
 
 2. Take $N$ sample points along it, separated evenly by arc length.
@@ -23,7 +29,6 @@ $$ c_n = \frac{1}{N} \sum_{k=0}^{N-1} z_k e^{-2 \pi i n k / N} $$
 
 * rotation speed = $n$ 
 
-
 Seems to be measuring how well the sample points move around the unit circle at the same rate as the rotation vector?
 
 Let's take $N = 9$ and talk about what happens when our curve is a unit circle.
@@ -42,8 +47,11 @@ So, our sample point and our rotation are the same. When we multiply them in exp
 
 Next at $k=2,$ our sample point is at $\frac{4 \pi}{9}$ and our rotation vector is too. The resulting angle is $\frac{8 \pi}{9}.$ Our summation vector now points at $\frac{5 \pi}{9},$ midway between its previous value and the value of this sample.
 
+The demo below shows how each individual Fourier Coefficient calculation works by taking a sample point and rotating it.
 
-## math on the unit circle
+{% include_demo "dft-computation" %}
+
+## Math on the Unit Circle
 
 The $n$th roots of @unity. There are $n$ $nth$ roots of 1. So, $z^{1} = 1$ has 1 solution, $1$ itself. $z^{2} = 1$ has 2 solutions, $1$ and $-1.$ Note that $-1$ is on the opposite side of the unit circle from $1.$ $z^3$ has 3 solutions: $1, e^{2 \pi / 3}$ and $e^{4 \pi / 3}.$  The general pattern is that the $n$th roots of unity are given by
 
@@ -323,5 +331,9 @@ $$ \vec{x} = \frac{1}{N} F^{*} \vec{X}. $$
 :::note
 In practice, while this matrix multiplication approach works, it can be optimized. This isn't an arbitrary matrix - it has some particular structure, and it can be factored to come up with a more efficient operation. This is what the Fast Fourier Transform does.
 :::
+
+The demo below allows drawing a contour and then editing the Fourier coefficients. Playing with this helps gives some intuition for what the coefficients represent, and it also shows one of the applications of DFT - filtering and amplifying components of a signal.
+
+{% include_demo "dft-editor" %}
 
 
