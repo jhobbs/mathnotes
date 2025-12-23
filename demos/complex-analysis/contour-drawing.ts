@@ -275,7 +275,10 @@ class ContourDrawingDemo implements DemoInstance {
       },
       {
         onStateChange: (state) => this.handleContourStateChange(state),
-        onPointsChange: (count) => this.pointsDisplay.update(String(count)),
+        onPointsChange: (count) => {
+          this.pointsDisplay.update(String(count));
+          this.render();
+        },
         onContourClosed: () => this.handleContourClosed()
       }
     );

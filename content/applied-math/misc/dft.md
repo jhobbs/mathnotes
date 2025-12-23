@@ -332,8 +332,6 @@ $$ \vec{x} = \frac{1}{N} F^{*} \vec{X}. $$
 In practice, while this matrix multiplication approach works, it can be optimized. This isn't an arbitrary matrix - it has some particular structure, and it can be factored to come up with a more efficient operation. This is what the Fast Fourier Transform does.
 :::
 
-The demo below allows drawing a contour and then editing the Fourier coefficients. Playing with this helps gives some intuition for what the coefficients represent, and it also shows one of the applications of DFT - filtering and amplifying components of a signal.
+The demo below allows drawing a contour and then editing the Fourier coefficients. Playing with this helps gives some intuition for what the coefficients represent, and it also shows one of the applications of DFT - filtering and amplifying components of a signal. Try drawing a closed contour that wraps around the origin three times counter-clockwise. What's the biggest component? Try drawing a similar shape, but go clockwise, maybe go clockwise 4 times.
 
 {% include_demo "dft-editor" %}
-
-
