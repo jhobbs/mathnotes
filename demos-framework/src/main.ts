@@ -48,7 +48,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'binary-network': () => import('@demos/network/binary-network'),
   'cauchy-riemann': () => import('@demos/complex-analysis/cauchy-riemann'),
   'contour-drawing': () => import('@demos/complex-analysis/contour-drawing'),
-  'dft-computation': () => import('@demos/complex-analysis/dft-computation')
+  'dft-computation': () => import('@demos/complex-analysis/dft-computation'),
+  'dft-editor': () => import('@demos/complex-analysis/dft-editor')
 };
 
 // Store for loaded metadata

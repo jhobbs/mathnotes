@@ -8,36 +8,30 @@ import {
   createCheckbox,
   InfoDisplay
 } from '@framework/ui-components';
-import { complex, Complex, multiply, exp, pi as PI, hypot, number, min, max, round } from 'mathjs';
+import { complex, Complex, multiply, exp, pi as PI, number, min } from 'mathjs';
 import { encodeCoeffs, decodeCoeffs, COEFF_COUNT, SAMPLE_COUNT_FOR_ENCODING } from './fourier-encoding';
-import { indexToFrequency, calculateFourierCoefficients } from './contour-shared';
-
-// Type for numeric mathjs results we know won't be BigNumber/Fraction/Matrix
-type NumericResult = number | bigint | Complex;
-
-// Helper to extract real part from a mathjs result (number, bigint, or Complex)
-function toReal(val: NumericResult): number {
-  if (typeof val === 'number') return val;
-  if (typeof val === 'bigint') return Number(val);
-  return val.re;
-}
-
-interface Point2D {
-  x: number;
-  y: number;
-}
-
-type DrawingState = 'idle' | 'drawing' | 'paused' | 'closed';
+import {
+  Point2D,
+  DrawingState,
+  CanvasPlotUtils,
+  ContourDrawingManager,
+  indexToFrequency,
+  calculateFourierCoefficients,
+  VECTOR_COLORS
+} from './contour-shared';
+import { toReal, NumericResult, AnimationTimer, setupResizeObserver, renderTrail } from './dft-shared';
 
 class ContourDrawingDemo implements DemoInstance {
   private container: HTMLElement;
   private canvas!: HTMLCanvasElement;
-  private ctx!: CanvasRenderingContext2D;
   private controlPanel!: HTMLElement;
+
+  // Shared utilities
+  private plotUtils!: CanvasPlotUtils;
+  private contourManager!: ContourDrawingManager;
 
   // State
   private state: DrawingState = 'idle';
-  private points: Point2D[] = [];
   private isDark: boolean;
 
   // Animation state
@@ -46,7 +40,7 @@ class ContourDrawingDemo implements DemoInstance {
   // Precomputed vectors: animationVectors[frameIndex][coefficientIndex]
   private animationVectors: Complex[][] = [];
   private currentFrameIndex: number = 0;
-  private animationTimer: number | null = null;
+  private animationTimer = new AnimationTimer();
   // Precomputed trail: trailX[j], trailY[j] = tip position at frame j
   private trailX: number[] = [];
   private trailY: number[] = [];
@@ -55,13 +49,6 @@ class ContourDrawingDemo implements DemoInstance {
   private axisRange = { min: -5, max: 5 };
   private samplePointCount = 256;
   private frameDelay = 10;
-  private closeThresholdPixels = 8; // Auto-close if within this many pixels of start (marker radius 7 + border 1)
-  private readonly VECTOR_COLORS = [
-    '#e6194b', '#3cb44b', '#ffe119', '#4363d8',
-    '#f58231', '#911eb4', '#42d4f4', '#f032e6',
-    '#bfef45', '#fabed4', '#469990', '#dcbeff',
-    '#9a6324', '#fffac8', '#800000', '#aaffc3'
-  ];
   private readonly ANIMATION_FRAME_COUNT = 400;
   private readonly INITIAL_STATUS = 'Draw a closed path! Make it fancy!';
 
@@ -87,32 +74,16 @@ class ContourDrawingDemo implements DemoInstance {
   // Resize handling
   private resizeObserver: ResizeObserver | null = null;
 
-  // Bound event handlers (for cleanup)
-  private boundMouseDown: (e: MouseEvent) => void;
-  private boundMouseMove: (e: MouseEvent) => void;
-  private boundMouseUp: (e: MouseEvent) => void;
-  private boundTouchStart: (e: TouchEvent) => void;
-  private boundTouchMove: (e: TouchEvent) => void;
-  private boundTouchEnd: (e: TouchEvent) => void;
-
   constructor(container: HTMLElement, config?: DemoConfig) {
     this.container = container;
     this.isDark = isDarkMode(config || {});
-
-    // Bind event handlers
-    this.boundMouseDown = this.handleMouseDown.bind(this);
-    this.boundMouseMove = this.handleMouseMove.bind(this);
-    this.boundMouseUp = this.handleMouseUp.bind(this);
-    this.boundTouchStart = this.handleTouchStart.bind(this);
-    this.boundTouchMove = this.handleTouchMove.bind(this);
-    this.boundTouchEnd = this.handleTouchEnd.bind(this);
   }
 
   init(): DemoInstance {
     this.setupUI();
     this.setupCanvas();
-    this.attachEventListeners();
-    this.setupResizeObserver();
+    this.setupContourManager();
+    this.setupResizeObserverInternal();
 
     // Check for coefficients in URL parameter
     const params = new URLSearchParams(window.location.search);
@@ -282,383 +253,48 @@ class ContourDrawingDemo implements DemoInstance {
     const dpr = window.devicePixelRatio || 1;
     this.canvas.width = rect.width * dpr;
     this.canvas.height = rect.height * dpr;
-    this.ctx = this.canvas.getContext('2d')!;
-    this.ctx.scale(dpr, dpr);
+    const ctx = this.canvas.getContext('2d')!;
+    ctx.scale(dpr, dpr);
+
+    this.plotUtils = new CanvasPlotUtils(
+      this.canvas,
+      ctx,
+      this.axisRange,
+      this.isDark
+    );
   }
 
-  private plotToCanvas(p: Point2D): { x: number; y: number } {
-    const rect = this.canvas.getBoundingClientRect();
-    const range = this.axisRange.max - this.axisRange.min;
-    const x = ((p.x - this.axisRange.min) / range) * rect.width;
-    const y = rect.height - ((p.y - this.axisRange.min) / range) * rect.height;
-    return { x, y };
-  }
-
-  private canvasToPlot(cx: number, cy: number): Point2D {
-    const rect = this.canvas.getBoundingClientRect();
-    const range = this.axisRange.max - this.axisRange.min;
-    const x = this.axisRange.min + (cx / rect.width) * range;
-    const y = this.axisRange.max - (cy / rect.height) * range;
-    return { x, y };
-  }
-
-  private render(): void {
-    const rect = this.canvas.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const ctx = this.ctx;
-    const cssColors = getCssColors(this.isDark);
-
-    // Clear and fill background
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = this.isDark ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.95)';
-    ctx.fillRect(0, 0, width, height);
-
-    // Only show grid/axes when showOriginal is enabled or contour is not closed yet
-    const showOriginalAndGrid = this.showOriginal || this.state !== 'closed';
-
-    if (showOriginalAndGrid) {
-      // Grid lines
-      const gridColor = this.isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)';
-      ctx.strokeStyle = gridColor;
-      ctx.lineWidth = 1;
-      for (let i = this.axisRange.min; i <= this.axisRange.max; i++) {
-        if (i === 0) continue; // Skip zero lines, drawn separately
-        const { x } = this.plotToCanvas({ x: i, y: 0 });
-        const { y } = this.plotToCanvas({ x: 0, y: i });
-        // Vertical line
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-        // Horizontal line
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
+  private setupContourManager(): void {
+    this.contourManager = new ContourDrawingManager(
+      this.canvas,
+      this.plotUtils,
+      {
+        axisRange: this.axisRange,
+        closeThresholdPixels: 8,
+        isDark: this.isDark
+      },
+      {
+        onStateChange: (state) => this.handleContourStateChange(state),
+        onPointsChange: (count) => this.pointsDisplay.update(String(count)),
+        onContourClosed: () => this.handleContourClosed()
       }
-
-      // Zero lines (axes)
-      const zerolineColor = this.isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
-      ctx.strokeStyle = zerolineColor;
-      ctx.lineWidth = 2;
-      const origin = this.plotToCanvas({ x: 0, y: 0 });
-      // X-axis
-      ctx.beginPath();
-      ctx.moveTo(0, origin.y);
-      ctx.lineTo(width, origin.y);
-      ctx.stroke();
-      // Y-axis
-      ctx.beginPath();
-      ctx.moveTo(origin.x, 0);
-      ctx.lineTo(origin.x, height);
-      ctx.stroke();
-    }
-
-    // Contour path (draw first so trail appears on top)
-    if (this.points.length > 0 && showOriginalAndGrid) {
-      const lineColor = this.state === 'closed' ? cssColors.warning : cssColors.error;
-      ctx.strokeStyle = lineColor;
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      for (let i = 0; i < this.points.length; i++) {
-        const pt = this.plotToCanvas(this.points[i]);
-        if (i === 0) {
-          ctx.moveTo(pt.x, pt.y);
-        } else {
-          ctx.lineTo(pt.x, pt.y);
-        }
-      }
-      ctx.stroke();
-
-      // Sample points (when closed)
-      if (this.state === 'closed') {
-        const samplePoints = this.getSamplePoints();
-        if (samplePoints.length > 1) {
-          ctx.fillStyle = '#ffffff';
-          ctx.strokeStyle = '#000000';
-          ctx.lineWidth = 2;
-          for (const sp of samplePoints) {
-            const pt = this.plotToCanvas(sp);
-            ctx.beginPath();
-            ctx.arc(pt.x, pt.y, 4, 0, number(multiply(PI, 2)));
-            ctx.fill();
-            ctx.stroke();
-          }
-        }
-      }
-
-      // Start point marker
-      const startPt = this.plotToCanvas(this.points[0]);
-      ctx.fillStyle = '#f39c12';
-      ctx.strokeStyle = this.isDark ? '#fff' : '#000';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(startPt.x, startPt.y, 7, 0, number(multiply(PI, 2)));
-      ctx.fill();
-      ctx.stroke();
-    }
-
-    // Trail trace (drawn after contour so it's visible on top)
-    if (this.state === 'closed' && this.trailX.length > 0) {
-      ctx.strokeStyle = cssColors.success;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      const trailEnd = this.currentFrameIndex + 1;
-      for (let i = 0; i < trailEnd && i < this.trailX.length; i++) {
-        const pt = this.plotToCanvas({ x: this.trailX[i], y: this.trailY[i] });
-        if (i === 0) {
-          ctx.moveTo(pt.x, pt.y);
-        } else {
-          ctx.lineTo(pt.x, pt.y);
-        }
-      }
-      ctx.stroke();
-    }
-
-    // Fourier vectors (when animating)
-    if (this.state === 'closed' && this.animationVectors.length > 0) {
-      const frameVectors = this.animationVectors[this.currentFrameIndex];
-      let currentX = 0;
-      let currentY = 0;
-
-      for (let i = 0; i < frameVectors.length; i++) {
-        const v = frameVectors[i];
-        const nextX = currentX + v.re;
-        const nextY = currentY + v.im;
-        const color = this.VECTOR_COLORS[i % this.VECTOR_COLORS.length];
-
-        const start = this.plotToCanvas({ x: currentX, y: currentY });
-        const end = this.plotToCanvas({ x: nextX, y: nextY });
-
-        // Vector line
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(start.x, start.y);
-        ctx.lineTo(end.x, end.y);
-        ctx.stroke();
-
-        // Tip marker
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(end.x, end.y, 3, 0, number(multiply(PI, 2)));
-        ctx.fill();
-
-        currentX = nextX;
-        currentY = nextY;
-      }
-    }
+    );
+    this.contourManager.attachEventListeners();
   }
 
-  private attachEventListeners(): void {
-    this.canvas.addEventListener('mousedown', this.boundMouseDown);
-    document.addEventListener('mousemove', this.boundMouseMove);
-    document.addEventListener('mouseup', this.boundMouseUp);
-    this.canvas.addEventListener('touchstart', this.boundTouchStart, { passive: false });
-    this.canvas.addEventListener('touchmove', this.boundTouchMove, { passive: false });
-    this.canvas.addEventListener('touchend', this.boundTouchEnd);
-  }
-
-  private detachEventListeners(): void {
-    this.canvas.removeEventListener('mousedown', this.boundMouseDown);
-    document.removeEventListener('mousemove', this.boundMouseMove);
-    document.removeEventListener('mouseup', this.boundMouseUp);
-    this.canvas.removeEventListener('touchstart', this.boundTouchStart);
-    this.canvas.removeEventListener('touchmove', this.boundTouchMove);
-    this.canvas.removeEventListener('touchend', this.boundTouchEnd);
-  }
-
-  private pixelToPlot(clientX: number, clientY: number): Point2D | null {
-    const rect = this.canvas.getBoundingClientRect();
-    const relX = clientX - rect.left;
-    const relY = clientY - rect.top;
-
-    // Check bounds
-    if (relX < 0 || relX > rect.width || relY < 0 || relY > rect.height) {
-      return null;
-    }
-
-    return this.canvasToPlot(relX, relY);
-  }
-
-  private pixelsToPlotUnits(pixels: number): number {
-    const rect = this.canvas.getBoundingClientRect();
-    const range = this.axisRange.max - this.axisRange.min;
-    return (pixels / rect.width) * range;
-  }
-
-  private getSamplePoints(): Point2D[] {
-    const N = this.samplePointCount;
-    const totalPoints = this.points.length;
-
-    if (totalPoints <= 1) return [];
-
-    // Calculate cumulative arc length
-    const cumLength: number[] = [0];
-    for (let i = 1; i < totalPoints; i++) {
-      const dx = this.points[i].x - this.points[i - 1].x;
-      const dy = this.points[i].y - this.points[i - 1].y;
-      cumLength.push(cumLength[i - 1] + number(hypot(dx, dy)));
-    }
-    const totalLength = cumLength[totalPoints - 1];
-
-    if (totalLength === 0) return [];
-
-    const sampleCount = number(min(N, totalPoints));
-    const samples: Point2D[] = [];
-
-    // Sample at even arc length intervals
-    for (let i = 0; i < sampleCount; i++) {
-      const targetLength = (i / sampleCount) * totalLength;
-
-      // Find segment containing targetLength
-      let segIdx = 0;
-      while (segIdx < totalPoints - 1 && cumLength[segIdx + 1] < targetLength) {
-        segIdx++;
-      }
-
-      // Interpolate within segment
-      if (segIdx >= totalPoints - 1) {
-        samples.push({ ...this.points[totalPoints - 1] });
-      } else {
-        const segStart = cumLength[segIdx];
-        const segEnd = cumLength[segIdx + 1];
-        const t = segEnd > segStart ? (targetLength - segStart) / (segEnd - segStart) : 0;
-        samples.push({
-          x: this.points[segIdx].x + t * (this.points[segIdx + 1].x - this.points[segIdx].x),
-          y: this.points[segIdx].y + t * (this.points[segIdx + 1].y - this.points[segIdx].y)
-        });
-      }
-    }
-
-    return samples;
-  }
-
-  private handleMouseDown(e: MouseEvent): void {
-    if (this.state === 'closed') return;
-
-    const point = this.pixelToPlot(e.clientX, e.clientY);
-    if (!point) return;
-
-    if (this.state === 'idle' || this.state === 'paused') {
-      this.startDrawing(point);
-    }
-  }
-
-  private handleMouseMove(e: MouseEvent): void {
-    if (this.state !== 'drawing') return;
-
-    const point = this.pixelToPlot(e.clientX, e.clientY);
-    if (!point) return;
-
-    this.continueDrawing(point);
-  }
-
-  private handleMouseUp(_e: MouseEvent): void {
-    if (this.state === 'drawing') {
-      this.endDrawing();
-    }
-  }
-
-  private handleTouchStart(e: TouchEvent): void {
-    e.preventDefault();
-    if (this.state === 'closed' || e.touches.length !== 1) return;
-
-    // Resume from paused doesn't require touching in plot area
-    if (this.state === 'paused') {
-      this.resumeDrawing();
-      return;
-    }
-
-    const touch = e.touches[0];
-    const point = this.pixelToPlot(touch.clientX, touch.clientY);
-    if (!point) return;
-
-    if (this.state === 'idle') {
-      this.startDrawing(point);
-    }
-  }
-
-  private handleTouchMove(e: TouchEvent): void {
-    e.preventDefault();
-    if (this.state !== 'drawing' || e.touches.length !== 1) return;
-
-    const touch = e.touches[0];
-    const point = this.pixelToPlot(touch.clientX, touch.clientY);
-    if (!point) return;
-
-    this.continueDrawing(point);
-  }
-
-  private handleTouchEnd(e: TouchEvent): void {
-    e.preventDefault();
-    if (this.state === 'drawing') {
-      this.endDrawing();
-    }
-  }
-
-  private startDrawing(point: Point2D): void {
-    this.points = [point];
-    this.state = 'drawing';
-    this.statusDisplay.update('Drawing...');
-    this.pointsDisplay.update('1');
-    this.render();
-  }
-
-  private continueDrawing(point: Point2D): void {
-    const lastPoint = this.points[this.points.length - 1];
-    const dx = point.x - lastPoint.x;
-    const dy = point.y - lastPoint.y;
-    const dist = number(hypot(dx, dy));
-    const pixelSize = this.pixelsToPlotUnits(1);
-    const steps = number(max(1, round(dist / pixelSize)));
-
-    // Fill in all pixel-sized steps from last point to new point
-    for (let i = 1; i <= steps; i++) {
-      const t = i / steps;
-      this.points.push({
-        x: lastPoint.x + dx * t,
-        y: lastPoint.y + dy * t
-      });
-    }
-
-    this.pointsDisplay.update(String(this.points.length));
-    this.render();
-  }
-
-  private endDrawing(): void {
-    if (this.points.length < 3) {
-      // Not enough points, reset
-      this.resetDrawing();
-      return;
-    }
-
-    // Check if close enough to start point to auto-close
-    const lastPoint = this.points[this.points.length - 1];
-    const startPoint = this.points[0];
-    const dist = number(hypot(lastPoint.x - startPoint.x, lastPoint.y - startPoint.y));
-    const threshold = this.pixelsToPlotUnits(this.closeThresholdPixels);
-
-    if (dist <= threshold) {
-      this.closeContour();
-    } else {
-      // Pause - can be resumed
-      this.state = 'paused';
+  private handleContourStateChange(state: DrawingState): void {
+    this.state = state;
+    if (state === 'drawing') {
+      this.statusDisplay.update('Drawing...');
+    } else if (state === 'paused') {
       this.statusDisplay.update('Paused - click to continue');
-      this.render();
     }
+    this.render();
   }
 
-  private closeContour(): void {
-    const startPoint = this.points[0];
-
-    // Just add the start point to close the loop
-    this.points.push({ ...startPoint });
-
+  private handleContourClosed(): void {
     this.state = 'closed';
     this.statusDisplay.update('Contour closed');
-    this.pointsDisplay.update(String(this.points.length));
 
     // Show the show original, progressive checkboxes, and copy link button
     // Uncheck show original by default when contour completes
@@ -677,23 +313,82 @@ class ContourDrawingDemo implements DemoInstance {
 
     this.render();
 
-    // Convert sample points to complex numbers and log
-    const samplePoints = this.getSamplePoints();
+    // Convert sample points to complex numbers
+    const samplePoints = this.contourManager.getSamplePoints(this.samplePointCount);
     this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
-    console.log('Contour sample points as complex numbers:', this.complexPoints);
 
     // Calculate Fourier coefficients
     this.fourierCoefficients = calculateFourierCoefficients(this.complexPoints);
-    console.log('Fourier coefficients:', this.fourierCoefficients);
 
     // Precompute animation frames and start animation
     this.computeAnimationVectors();
     this.startVectorAnimation();
   }
 
-  private resumeDrawing(): void {
-    this.state = 'drawing';
-    this.statusDisplay.update('Drawing... move mouse');
+  private render(): void {
+    const cssColors = getCssColors(this.isDark);
+
+    // Clear and fill background
+    this.plotUtils.clearAndFillBackground();
+
+    // Only show grid/axes when showOriginal is enabled or contour is not closed yet
+    const showOriginalAndGrid = this.showOriginal || this.state !== 'closed';
+
+    if (showOriginalAndGrid) {
+      this.plotUtils.renderGridAndAxes();
+    }
+
+    // Contour path (draw first so trail appears on top)
+    const points = this.contourManager.getPoints();
+    if (points.length > 0 && showOriginalAndGrid) {
+      const lineColor = this.state === 'closed' ? cssColors.warning : cssColors.error;
+      this.contourManager.renderContour(
+        lineColor,
+        true, // showStartMarker
+        this.state === 'closed', // showSamplePoints
+        this.samplePointCount
+      );
+    }
+
+    // Trail trace (drawn after contour so it's visible on top)
+    if (this.state === 'closed' && this.trailX.length > 0) {
+      renderTrail(
+        this.plotUtils,
+        this.trailX,
+        this.trailY,
+        this.currentFrameIndex + 1,
+        cssColors.success,
+        2
+      );
+    }
+
+    // Fourier vectors (when animating)
+    if (this.state === 'closed' && this.animationVectors.length > 0) {
+      const frameVectors = this.animationVectors[this.currentFrameIndex];
+      let currentX = 0;
+      let currentY = 0;
+
+      for (let i = 0; i < frameVectors.length; i++) {
+        const v = frameVectors[i];
+        const nextX = currentX + v.re;
+        const nextY = currentY + v.im;
+        const color = VECTOR_COLORS[i % VECTOR_COLORS.length];
+
+        // Vector line
+        this.plotUtils.drawVector(
+          { x: currentX, y: currentY },
+          { x: nextX, y: nextY },
+          color,
+          2
+        );
+
+        // Tip marker
+        this.plotUtils.drawPoint({ x: nextX, y: nextY }, 3, color);
+
+        currentX = nextX;
+        currentY = nextY;
+      }
+    }
   }
 
   private copyLinkToClipboard(): void {
@@ -719,18 +414,13 @@ class ContourDrawingDemo implements DemoInstance {
 
   private getSamplePointsForEncoding(): Point2D[] {
     // Get 256 sample points for URL encoding, independent of current N
-    const savedN = this.samplePointCount;
-    this.samplePointCount = SAMPLE_COUNT_FOR_ENCODING;
-    const samples = this.getSamplePoints();
-    this.samplePointCount = savedN;
-    return samples;
+    return this.contourManager.getSamplePoints(SAMPLE_COUNT_FOR_ENCODING);
   }
 
   private loadFromCoefficients(coeffs: Complex[]): void {
     this.loadedFromUrl = true;
     this.fourierCoefficients = coeffs;
     this.state = 'closed';
-    this.points = []; // No original path
 
     // Hide original (there's nothing to show anyway for URL-loaded)
     this.showOriginal = false;
@@ -828,7 +518,7 @@ class ContourDrawingDemo implements DemoInstance {
     this.currentFrameIndex = 0;
     this.render();
 
-    this.animationTimer = window.setInterval(() => {
+    this.animationTimer.start(() => {
       this.currentFrameIndex = (this.currentFrameIndex + 1) % this.ANIMATION_FRAME_COUNT;
 
       // Check if we completed a full loop in progressive mode
@@ -853,22 +543,15 @@ class ContourDrawingDemo implements DemoInstance {
     }, this.frameDelay);
   }
 
-  private stopVectorAnimation(): void {
-    if (this.animationTimer !== null) {
-      clearInterval(this.animationTimer);
-      this.animationTimer = null;
-    }
-  }
-
   private resetDrawing(): void {
-    this.stopVectorAnimation();
+    this.animationTimer.stop();
+    this.contourManager.reset();
     this.complexPoints = [];
     this.fourierCoefficients = [];
     this.animationVectors = [];
     this.currentFrameIndex = 0;
     this.trailX = [];
     this.trailY = [];
-    this.points = [];
     this.state = 'idle';
     this.statusDisplay.update(this.INITIAL_STATUS);
     this.pointsDisplay.update('0');
@@ -1004,8 +687,8 @@ class ContourDrawingDemo implements DemoInstance {
     this.delayError.style.display = 'none';
     this.frameDelay = value;
     // Restart animation with new delay if running
-    if (this.animationTimer !== null && this.state === 'closed') {
-      this.stopVectorAnimation();
+    if (this.animationTimer.isRunning() && this.state === 'closed') {
+      this.animationTimer.stop();
       this.startVectorAnimation();
     }
   }
@@ -1013,7 +696,7 @@ class ContourDrawingDemo implements DemoInstance {
   private recalculateFromContour(): void {
     if (this.state !== 'closed') return;
 
-    this.stopVectorAnimation();
+    this.animationTimer.stop();
 
     // For URL-loaded drawings: coefficients are fixed, just recompute animation
     if (this.loadedFromUrl) {
@@ -1023,7 +706,7 @@ class ContourDrawingDemo implements DemoInstance {
     }
 
     // Recalculate with new N
-    const samplePoints = this.getSamplePoints();
+    const samplePoints = this.contourManager.getSamplePoints(this.samplePointCount);
     this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
     this.fourierCoefficients = calculateFourierCoefficients(this.complexPoints);
 
@@ -1040,7 +723,7 @@ class ContourDrawingDemo implements DemoInstance {
     }
 
     // Recalculate Fourier with new N but don't restart animation timer
-    const samplePoints = this.getSamplePoints();
+    const samplePoints = this.contourManager.getSamplePoints(this.samplePointCount);
     this.complexPoints = samplePoints.map(p => complex(p.x, p.y));
     this.fourierCoefficients = calculateFourierCoefficients(this.complexPoints);
     this.computeAnimationVectors();
@@ -1079,16 +762,16 @@ class ContourDrawingDemo implements DemoInstance {
     return input;
   }
 
-  private setupResizeObserver(): void {
-    this.resizeObserver = new ResizeObserver(() => {
-      this.resize();
-    });
-    this.resizeObserver.observe(this.canvas.parentElement!);
+  private setupResizeObserverInternal(): void {
+    this.resizeObserver = setupResizeObserver(
+      this.canvas.parentElement!,
+      () => this.resize()
+    );
   }
 
   // Public interface for external use
   public getPoints(): Point2D[] {
-    return [...this.points];
+    return this.contourManager.getPoints();
   }
 
   public isClosed(): boolean {
@@ -1097,8 +780,8 @@ class ContourDrawingDemo implements DemoInstance {
 
   // DemoInstance interface
   cleanup(): void {
-    this.stopVectorAnimation();
-    this.detachEventListeners();
+    this.animationTimer.stop();
+    this.contourManager.detachEventListeners();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
       this.resizeObserver = null;
