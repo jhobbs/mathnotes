@@ -6,20 +6,20 @@ import {
   createInfoDisplay,
   createControlRow,
   createCheckbox,
+  createNumberInput,
   InfoDisplay
 } from '@framework/ui-components';
-import { complex, Complex, multiply, exp, pi as PI, number, min } from 'mathjs';
+import { complex, Complex } from 'mathjs';
 import { encodeCoeffs, decodeCoeffs, COEFF_COUNT, SAMPLE_COUNT_FOR_ENCODING } from './fourier-encoding';
 import {
   Point2D,
   DrawingState,
   CanvasPlotUtils,
   ContourDrawingManager,
-  indexToFrequency,
   calculateFourierCoefficients,
   VECTOR_COLORS
 } from './contour-shared';
-import { toReal, NumericResult, AnimationTimer, setupResizeObserver, renderTrail } from './dft-shared';
+import { AnimationTimer, setupResizeObserver, renderTrail, computeEpicycleFrames, EpicycleFrame } from './dft-shared';
 
 class ContourDrawingDemo implements DemoInstance {
   private container: HTMLElement;
@@ -37,13 +37,10 @@ class ContourDrawingDemo implements DemoInstance {
   // Animation state
   private complexPoints: Complex[] = [];
   private fourierCoefficients: Complex[] = [];
-  // Precomputed vectors: animationVectors[frameIndex][coefficientIndex]
-  private animationVectors: Complex[][] = [];
+  // Precomputed animation frames
+  private animationFrames: EpicycleFrame[] = [];
   private currentFrameIndex: number = 0;
   private animationTimer = new AnimationTimer();
-  // Precomputed trail: trailX[j], trailY[j] = tip position at frame j
-  private trailX: number[] = [];
-  private trailY: number[] = [];
 
   // Configuration
   private axisRange = { min: -5, max: 5 };
@@ -56,11 +53,14 @@ class ContourDrawingDemo implements DemoInstance {
   private statusDisplay!: InfoDisplay;
   private pointsDisplay!: InfoDisplay;
   private nInput!: HTMLInputElement;
+  private nInputContainer!: HTMLElement;
   private nError!: HTMLSpanElement;
   private kCoefficients = 64;
   private kInput!: HTMLInputElement;
+  private kInputContainer!: HTMLElement;
   private kError!: HTMLSpanElement;
   private delayInput!: HTMLInputElement;
+  private delayInputContainer!: HTMLElement;
   private delayError!: HTMLSpanElement;
   private showOriginal: boolean = true;
   private showOriginalContainer: HTMLElement | null = null;
@@ -124,7 +124,9 @@ class ContourDrawingDemo implements DemoInstance {
     this.pointsDisplay = createInfoDisplay('Points', '0');
 
     // N input for number of sample points (highest frequency is N/2)
-    this.nInput = this.createNumberInput('N =', this.samplePointCount, 2, 256, 1, () => this.handleNChange());
+    const nResult = createNumberInput('N =', this.samplePointCount, 2, 256, 1, () => this.handleNChange(), this.isDark);
+    this.nInput = nResult.input;
+    this.nInputContainer = nResult.container;
 
     // Note about N
     const nNote = document.createElement('span');
@@ -139,7 +141,9 @@ class ContourDrawingDemo implements DemoInstance {
     this.nError.style.display = 'none';
 
     // Delay input
-    this.delayInput = this.createNumberInput('Delay (ms) =', this.frameDelay, 0, 500, 1, () => this.handleDelayChange());
+    const delayResult = createNumberInput('Delay (ms) =', this.frameDelay, 0, 500, 1, () => this.handleDelayChange(), this.isDark);
+    this.delayInput = delayResult.input;
+    this.delayInputContainer = delayResult.container;
 
     // Error display for delay
     this.delayError = document.createElement('span');
@@ -148,7 +152,9 @@ class ContourDrawingDemo implements DemoInstance {
     this.delayError.style.display = 'none';
 
     // K input for number of coefficients (low-pass filter)
-    this.kInput = this.createNumberInput('K =', this.kCoefficients, 1, 256, 1, () => this.handleKChange());
+    const kResult = createNumberInput('K =', this.kCoefficients, 1, 256, 1, () => this.handleKChange(), this.isDark);
+    this.kInput = kResult.input;
+    this.kInputContainer = kResult.container;
 
     // Error display for K
     this.kError = document.createElement('span');
@@ -197,8 +203,8 @@ class ContourDrawingDemo implements DemoInstance {
     // Arrange controls
     const row0 = createControlRow([this.statusDisplay.element]);
     const row1 = createControlRow([this.resetButton, this.pointsDisplay.element]);
-    const row2 = createControlRow([this.nInput.parentElement!, nNote, this.nError, this.kInput.parentElement!, kNote, this.kError]);
-    const row2a = createControlRow([this.delayInput.parentElement!, this.delayError]);
+    const row2 = createControlRow([this.nInputContainer, nNote, this.nError, this.kInputContainer, kNote, this.kError]);
+    const row2a = createControlRow([this.delayInputContainer, this.delayError]);
     const row2b = createControlRow([this.showOriginalContainer, this.progressiveContainer, shareButtonContainer]);
     const row3 = createControlRow([instructions1]);
     const row4 = createControlRow([instructions2]);
@@ -354,11 +360,13 @@ class ContourDrawingDemo implements DemoInstance {
     }
 
     // Trail trace (drawn after contour so it's visible on top)
-    if (this.state === 'closed' && this.trailX.length > 0) {
+    if (this.state === 'closed' && this.animationFrames.length > 0) {
+      const trailX = this.animationFrames.map(f => f.tipX);
+      const trailY = this.animationFrames.map(f => f.tipY);
       renderTrail(
         this.plotUtils,
-        this.trailX,
-        this.trailY,
+        trailX,
+        trailY,
         this.currentFrameIndex + 1,
         cssColors.success,
         2
@@ -366,13 +374,13 @@ class ContourDrawingDemo implements DemoInstance {
     }
 
     // Fourier vectors (when animating)
-    if (this.state === 'closed' && this.animationVectors.length > 0) {
-      const frameVectors = this.animationVectors[this.currentFrameIndex];
+    if (this.state === 'closed' && this.animationFrames.length > 0) {
+      const frame = this.animationFrames[this.currentFrameIndex];
       let currentX = 0;
       let currentY = 0;
 
-      for (let i = 0; i < frameVectors.length; i++) {
-        const v = frameVectors[i];
+      for (let i = 0; i < frame.vectors.length; i++) {
+        const v = frame.vectors[i];
         const nextX = currentX + v.re;
         const nextY = currentY + v.im;
         const color = VECTOR_COLORS[i % VECTOR_COLORS.length];
@@ -469,52 +477,14 @@ class ContourDrawingDemo implements DemoInstance {
   }
 
   /**
-   * Precompute all animation frames and trail positions.
-   *
-   * We have M frames total, splitting a full rotation into M parts.
-   * For frame j: t_j = (2π * j) / M
-   *
-   * For each coefficient c_f (at frequency f), the vector at frame j is:
-   *   v_f(t_j) = c_f * e^(i * f * t_j)
-   *
-   * Using symmetric frequencies (e.g., -5 to +5 for N=11):
-   * - Positive frequencies rotate counterclockwise
-   * - Negative frequencies rotate clockwise
-   * - Frequency 0 (DC component) doesn't rotate
-   *
-   * We also precompute the trail (tip positions) so we can slice it
-   * for progressive drawing without runtime array operations.
+   * Precompute all animation frames using the shared epicycle computation.
    */
   private computeAnimationVectors(): void {
-    const M = this.ANIMATION_FRAME_COUNT;
-    const N = this.fourierCoefficients.length;
-    this.animationVectors = [];
-    this.trailX = [];
-    this.trailY = [];
-
-    for (let j = 0; j < M; j++) {
-      const t_j = multiply(2, PI, j, 1/M);
-      const frameVectors: Complex[] = [];
-      let tipX = 0;
-      let tipY = 0;
-
-      // Use only kCoefficients (low-pass filter effect)
-      const coeffsToUse = number(min(this.kCoefficients, N));
-      for (let n = 0; n < coeffsToUse; n++) {
-        // v_f(t_j) = c_f * e^(i*f*t_j) where f is the actual frequency
-        const freq = indexToFrequency(n);
-        const angle = toReal(multiply(freq, t_j) as NumericResult);
-        const expTerm = exp(complex(0, angle)) as Complex;
-        const v = multiply(this.fourierCoefficients[n], expTerm) as Complex;
-        frameVectors.push(v);
-        tipX += v.re;
-        tipY += v.im;
-      }
-
-      this.animationVectors.push(frameVectors);
-      this.trailX.push(tipX);
-      this.trailY.push(tipY);
-    }
+    this.animationFrames = computeEpicycleFrames({
+      coefficients: this.fourierCoefficients,
+      kCoefficients: this.kCoefficients,
+      frameCount: this.ANIMATION_FRAME_COUNT
+    });
   }
 
   private startVectorAnimation(): void {
@@ -551,10 +521,8 @@ class ContourDrawingDemo implements DemoInstance {
     this.contourManager.reset();
     this.complexPoints = [];
     this.fourierCoefficients = [];
-    this.animationVectors = [];
+    this.animationFrames = [];
     this.currentFrameIndex = 0;
-    this.trailX = [];
-    this.trailY = [];
     this.state = 'idle';
     this.statusDisplay.update(this.INITIAL_STATUS);
     this.pointsDisplay.update('0');
@@ -731,38 +699,6 @@ class ContourDrawingDemo implements DemoInstance {
     this.fourierCoefficients = calculateFourierCoefficients(this.complexPoints);
     this.computeAnimationVectors();
     // currentFrameIndex stays at 0, animation continues
-  }
-
-  private createNumberInput(label: string, defaultValue: number, min: number, max: number,
-                           step: number, onChange: () => void): HTMLInputElement {
-    const container = document.createElement('div');
-    container.style.display = 'flex';
-    container.style.alignItems = 'center';
-    container.style.gap = '0.5rem';
-
-    const labelEl = document.createElement('label');
-    labelEl.textContent = label;
-    labelEl.style.fontWeight = 'bold';
-
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.value = defaultValue.toString();
-    input.min = min.toString();
-    input.max = max.toString();
-    input.step = step.toString();
-    input.style.padding = '0.25rem 0.5rem';
-    input.style.borderRadius = '0.25rem';
-    input.style.border = '1px solid var(--color-border, #ccc)';
-    input.style.background = this.isDark ? 'rgba(255,255,255,0.1)' : 'white';
-    input.style.color = 'var(--color-text, inherit)';
-    input.style.width = '60px';
-    input.style.fontFamily = 'var(--font-mono, monospace)';
-    input.addEventListener('input', onChange);
-
-    container.appendChild(labelEl);
-    container.appendChild(input);
-
-    return input;
   }
 
   private setupResizeObserverInternal(): void {

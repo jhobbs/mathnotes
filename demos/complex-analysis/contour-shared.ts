@@ -16,7 +16,7 @@ export interface Point2D {
   y: number;
 }
 
-export type DrawingState = 'idle' | 'drawing' | 'paused' | 'closed';
+export type DrawingState = 'idle' | 'drawing' | 'paused' | 'closed' | 'done';
 
 export interface AxisRange {
   min: number;
@@ -27,6 +27,7 @@ export interface ContourConfig {
   axisRange?: AxisRange;
   closeThresholdPixels?: number;
   isDark: boolean;
+  autoClose?: boolean;  // default true - set to false for open paths
 }
 
 export interface ContourCallbacks {
@@ -432,7 +433,7 @@ export class ContourDrawingManager {
   }
 
   private handleMouseDown(e: MouseEvent): void {
-    if (this.state === 'closed') return;
+    if (this.state === 'closed' || this.state === 'done') return;
 
     const point = this.pixelToPlot(e.clientX, e.clientY);
     if (!point) return;
@@ -459,7 +460,7 @@ export class ContourDrawingManager {
 
   private handleTouchStart(e: TouchEvent): void {
     e.preventDefault();
-    if (this.state === 'closed' || e.touches.length !== 1) return;
+    if (this.state === 'closed' || this.state === 'done' || e.touches.length !== 1) return;
 
     if (this.state === 'paused') {
       this.resumeDrawing();
@@ -526,6 +527,14 @@ export class ContourDrawingManager {
       return;
     }
 
+    // For open paths (autoClose: false), just mark as done
+    if (this.config.autoClose === false) {
+      this.state = 'done';
+      this.callbacks.onStateChange?.(this.state);
+      return;
+    }
+
+    // Auto-close behavior (default)
     const lastPoint = this.points[this.points.length - 1];
     const startPoint = this.points[0];
     const dist = number(hypot(lastPoint.x - startPoint.x, lastPoint.y - startPoint.y));
