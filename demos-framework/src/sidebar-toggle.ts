@@ -87,11 +87,20 @@ export function initSidebarToggle(): void {
       left: 0;
       top: 0;
       bottom: 0;
-      width: 100px;
+      width: 0;
       z-index: 999;
       pointer-events: none;
     `;
     document.body.appendChild(hoverZone);
+
+    // Update hover zone width to match the left edge of the content area
+    function updateHoverZoneWidth(): void {
+      const content = document.querySelector('.page-content');
+      const marginWidth = content?.getBoundingClientRect().left ?? 0;
+      hoverZone.style.width = `${marginWidth}px`;
+    }
+    updateHoverZoneWidth();
+    window.addEventListener('resize', updateHoverZoneWidth);
 
     // Enable/disable hover zone based on sidebar state
     function updateHoverZone(): void {
