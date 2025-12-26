@@ -50,7 +50,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'contour-drawing': () => import('@demos/complex-analysis/contour-drawing'),
   'dft-computation': () => import('@demos/complex-analysis/dft-computation'),
   'dft-editor': () => import('@demos/complex-analysis/dft-editor'),
-  'open-path-dft': () => import('@demos/complex-analysis/open-path-dft')
+  'open-path-dft': () => import('@demos/complex-analysis/open-path-dft'),
+  'complex-frequency': () => import('@demos/complex-analysis/complex-frequency')
 };
 
 // Store for loaded metadata
