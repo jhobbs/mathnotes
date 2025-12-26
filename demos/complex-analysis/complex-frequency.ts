@@ -308,6 +308,23 @@ class ComplexFrequencyDemo implements DemoInstance {
       ctx.lineTo(phasorX, centerY);
       ctx.stroke();
 
+      // Arrowhead for blue vector
+      const blueAngle = phasorX >= centerX ? 0 : Math.PI;
+      const headLen = 10;
+      ctx.fillStyle = '#3b82f6';
+      ctx.beginPath();
+      ctx.moveTo(phasorX, centerY);
+      ctx.lineTo(
+        phasorX - headLen * Math.cos(blueAngle - Math.PI / 6),
+        centerY + headLen * Math.sin(blueAngle - Math.PI / 6)
+      );
+      ctx.lineTo(
+        phasorX - headLen * Math.cos(blueAngle + Math.PI / 6),
+        centerY + headLen * Math.sin(blueAngle + Math.PI / 6)
+      );
+      ctx.closePath();
+      ctx.fill();
+
       // Projection line from phasor point to x-axis
       ctx.strokeStyle = 'rgba(59, 130, 246, 0.5)';
       ctx.lineWidth = 1;
@@ -321,12 +338,38 @@ class ComplexFrequencyDemo implements DemoInstance {
 
     // Draw imaginary component (vertical vector) - sine
     if (this.showImaginary) {
+      // Dashed vector on y-axis (from origin)
       ctx.strokeStyle = '#ef4444';
       ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
       ctx.lineTo(centerX, phasorY);
       ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Solid tail-to-tip vector (from tip of blue cos vector)
+      ctx.beginPath();
+      ctx.moveTo(phasorX, centerY);
+      ctx.lineTo(phasorX, phasorY);
+      ctx.stroke();
+
+      // Arrowhead for red tail-to-tip vector
+      const redAngle = phasorY <= centerY ? Math.PI / 2 : -Math.PI / 2;
+      const headLen = 10;
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.moveTo(phasorX, phasorY);
+      ctx.lineTo(
+        phasorX - headLen * Math.cos(redAngle - Math.PI / 6),
+        phasorY + headLen * Math.sin(redAngle - Math.PI / 6)
+      );
+      ctx.lineTo(
+        phasorX - headLen * Math.cos(redAngle + Math.PI / 6),
+        phasorY + headLen * Math.sin(redAngle + Math.PI / 6)
+      );
+      ctx.closePath();
+      ctx.fill();
 
       // Projection line from phasor point to y-axis
       ctx.strokeStyle = 'rgba(239, 68, 68, 0.5)';
