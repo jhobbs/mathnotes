@@ -187,8 +187,8 @@ class ComplexFrequencyDemo implements DemoInstance {
   }
 
   private animate(): void {
-    // Advance time
-    this.time += 0.03 * this.frequency;
+    // Advance time at constant rate (frequency multiplies t in the formula, not the rate)
+    this.time += 0.03;
     this.render();
   }
 
@@ -207,9 +207,10 @@ class ComplexFrequencyDemo implements DemoInstance {
     const centerY = height / 2;
     const radius = Math.min(width, height) * 0.35;
 
-    // Current values (computed analytically)
-    const currentRe = this.amplitude * Math.cos(this.time + this.phase);
-    const currentIm = this.amplitude * Math.sin(this.time + this.phase);
+    // Current values (computed analytically): A * e^(i(ωt + φ))
+    const theta = this.frequency * this.time + this.phase;
+    const currentRe = this.amplitude * Math.cos(theta);
+    const currentIm = this.amplitude * Math.sin(theta);
 
     // Scale factor for plotting
     const scale = radius / Math.max(this.amplitude, 1);
@@ -263,7 +264,7 @@ class ComplexFrequencyDemo implements DemoInstance {
       for (let i = 0; i <= steps; i++) {
         const y = (i / steps) * height;
         const spatialPhase = k * (y - centerY);
-        const waveValue = this.amplitude * Math.cos(this.time + this.phase - spatialPhase);
+        const waveValue = this.amplitude * Math.cos(theta - spatialPhase);
         const x = centerX + waveValue * scale;
 
         if (i === 0) {
@@ -287,7 +288,7 @@ class ComplexFrequencyDemo implements DemoInstance {
       for (let i = 0; i <= steps; i++) {
         const x = (i / steps) * width;
         const spatialPhase = k * (x - centerX);
-        const waveValue = this.amplitude * Math.sin(this.time + this.phase - spatialPhase);
+        const waveValue = this.amplitude * Math.sin(theta - spatialPhase);
         const y = centerY - waveValue * scale;
 
         if (i === 0) {
@@ -429,20 +430,37 @@ class ComplexFrequencyDemo implements DemoInstance {
       ctx.fill();
     }
 
-    // Display current values in both rectangular and exponential form
-    const theta = this.time + this.phase;
-    // Normalize angle to [0, 2π)
-    const thetaNorm = ((theta % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-    const thetaPi = (thetaNorm / Math.PI).toFixed(2);
-
+    // Display formula with ω, t, and φ all shown separately
     ctx.font = '14px monospace';
     ctx.textAlign = 'left';
     ctx.fillStyle = '#22c55e';
+
+    // ω (frequency) as string
+    const omegaStr = this.frequency.toFixed(1);
+
+    // t (time) normalized to [0, 2π) and expressed in units of π
+    const tNorm = ((this.time % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+    const tPi = (tNorm / Math.PI).toFixed(2);
+
+    // φ (phase) in units of π
+    const phiPi = this.phase / Math.PI;
+    const phaseStr = phiPi === 0 ? '' :
+                     phiPi > 0 ? ` + ${phiPi.toFixed(1)}π` :
+                     ` - ${Math.abs(phiPi).toFixed(1)}π`;
+    const ampStr = this.amplitude.toFixed(2);
+
+    // Build the ω·t term
+    const omegaTStr = `${omegaStr}·${tPi}π`;
+
+    // Line 1: Exponential form z = A·e^(i(ω·t + φ))
+    ctx.fillText(`z = ${ampStr}·e^(i(${omegaTStr}${phaseStr}))`, 20, 25);
+
+    // Line 2: Trig form
+    ctx.fillText(`  = ${ampStr}·(cos(${omegaTStr}${phaseStr}) + i·sin(${omegaTStr}${phaseStr}))`, 20, 42);
+
+    // Line 3: Current instantaneous value
     const sign = currentIm >= 0 ? '+' : '-';
-    ctx.fillText(
-      `z = ${currentRe.toFixed(2)} ${sign} ${Math.abs(currentIm).toFixed(2)}i = ${this.amplitude.toFixed(2)}e^(i·${thetaPi}π)`,
-      20, 25
-    );
+    ctx.fillText(`  = ${currentRe.toFixed(2)} ${sign} ${Math.abs(currentIm).toFixed(2)}i`, 20, 59);
   }
 
   private setupResizeObserverInternal(): void {
