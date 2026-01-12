@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 
 from mathnotes.navigation import get_page_navigation
+from mathnotes.sources import get_sources_for_page
 
 logger = logging.getLogger(__name__)
 
@@ -159,6 +160,11 @@ class ContentPages(Page):
             # Build navigation data for sidebar and prev/next
             navigation = get_page_navigation(md_path, self.url_mapper.file_to_canonical)
 
+            # Collect sources from directory hierarchy and frontmatter
+            frontmatter = result.get("frontmatter", {})
+            frontmatter_sources = frontmatter.get("sources")
+            sources = get_sources_for_page(md_path, frontmatter_sources)
+
             # Build context
             context = {
                 "content": result.get("content", ""),
@@ -166,6 +172,7 @@ class ContentPages(Page):
                 "frontmatter": result.get("frontmatter", {}),
                 "canonical_url": result.get("canonical_url", ""),
                 "navigation": navigation,
+                "sources": sources,
             }
 
             specs.append(

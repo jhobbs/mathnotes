@@ -14,6 +14,9 @@ import { initSectionToggle } from './section-toggle';
 // Import sidebar toggle functionality for content pages
 import { initSidebarToggle } from './sidebar-toggle';
 
+// Import sources toggle functionality for page sources section
+import { initSourcesToggle } from './sources-toggle';
+
 // Import demo viewer functionality
 import { initDemoViewer } from './demo-viewer';
 
@@ -87,6 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const hasSidebar = document.body.classList.contains('has-sidebar');
   if (hasSidebar) {
     initSidebarToggle();
+    // Initialize sources toggle for pages with sources
+    initSourcesToggle();
   }
 
   // Initialize demo viewer if on demo viewer page

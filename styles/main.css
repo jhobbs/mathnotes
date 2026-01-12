@@ -2,6 +2,7 @@
 @import './theme.css';
 @import './utilities.css';
 @import './demo-components.css';
+@import './components/sources.css';
 
 /* Page-specific styles */
 @import './pages/demo-viewer.module.css';
