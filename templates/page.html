@@ -92,9 +92,10 @@
                         <span class="source-type">{{ source.type }}</span>
                         {% endif %}
                     </div>
-                    {% if source.section or source.isbn or source.notes or source.accessed %}
+                    {% if source.section or source.published or source.isbn or source.notes or source.accessed %}
                     <div class="source-meta">
                         {% if source.section %}<span class="source-section">{{ source.section }}</span>{% endif %}
+                        {% if source.published %}<span class="source-published">{{ source.published }}</span>{% endif %}
                         {% if source.isbn %}<span class="source-isbn">ISBN: {{ source.isbn }}</span>{% endif %}
                         {% if source.accessed %}<span class="source-accessed">Accessed: {{ source.accessed }}</span>{% endif %}
                         {% if source.notes %}<span class="source-notes">{{ source.notes }}</span>{% endif %}
