@@ -41,9 +41,16 @@ class Page(ABC):
         self.block_index = site_context.get("block_index")
         self.markdown_processor = site_context.get("markdown_processor")
         self.base_url = site_context.get("base_url", "")
+        self._specs_cache: List[PageSpec] | None = None
+
+    def get_specs(self) -> List[PageSpec]:
+        """Return cached specs, computing them only once."""
+        if self._specs_cache is None:
+            self._specs_cache = self._compute_specs()
+        return self._specs_cache
 
     @abstractmethod
-    def get_specs(self) -> List[PageSpec]:
+    def _compute_specs(self) -> List[PageSpec]:
         """Return list of PageSpec objects for this page type.
 
         This method defines what files to generate. It can return:
@@ -81,7 +88,7 @@ class HomePage(Page):
 
     endpoint_name = "index"  # For url_for('index')
 
-    def get_specs(self) -> List[PageSpec]:
+    def _compute_specs(self) -> List[PageSpec]:
         return [
             PageSpec(
                 output_path="index.html",
@@ -98,7 +105,7 @@ class MathnotesIndexPage(Page):
 
     endpoint_name = "mathnotes_index"  # For url_for('mathnotes_index')
 
-    def get_specs(self) -> List[PageSpec]:
+    def _compute_specs(self) -> List[PageSpec]:
         from mathnotes.file_utils import get_all_content_for_section
         from mathnotes.config import CONTENT_DIRS
 
@@ -144,7 +151,7 @@ class MathnotesIndexPage(Page):
 class ContentPages(Page):
     """All markdown content pages."""
 
-    def get_specs(self) -> List[PageSpec]:
+    def _compute_specs(self) -> List[PageSpec]:
         specs = []
 
         # Generate a spec for each content page
@@ -193,7 +200,7 @@ class DemoViewerPage(Page):
 
     endpoint_name = "demos"  # For url_for('demos')
 
-    def get_specs(self) -> List[PageSpec]:
+    def _compute_specs(self) -> List[PageSpec]:
         return [
             PageSpec(
                 output_path="demos/index.html",
@@ -217,7 +224,7 @@ class BlockIndexPage(Page):
     page_description: str = ""  # Page description
     context_key: str = "blocks"  # Key for blocks in template context
 
-    def get_specs(self) -> List[PageSpec]:
+    def _compute_specs(self) -> List[PageSpec]:
         # Collect all blocks of the specified types
         blocks = []
         for block_type in self.block_types:
@@ -319,7 +326,7 @@ class TheoremIndexPage(BlockIndexPage):
 class ErrorPage(Page):
     """404 error page."""
 
-    def get_specs(self) -> List[PageSpec]:
+    def _compute_specs(self) -> List[PageSpec]:
         return [
             PageSpec(
                 output_path="404.html",
@@ -344,7 +351,7 @@ class SitemapPage(Page):
         super().__init__(site_context)
         self.all_pages = all_pages
 
-    def get_specs(self) -> List[PageSpec]:
+    def _compute_specs(self) -> List[PageSpec]:
         # Collect URLs from all pages
         urls = []
 
