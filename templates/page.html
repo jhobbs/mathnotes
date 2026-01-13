@@ -67,10 +67,9 @@
 
     <article class="page-content">
         {{ content|safe }}
-    </article>
 
-    {% if sources %}
-    <footer class="sources-section">
+        {% if sources %}
+        <footer class="sources-section">
         <button class="sources-toggle" data-sources="toggle" type="button">
             <span class="sources-icon">&#9654;</span>
             <span class="sources-label">Sources ({{ sources|length }})</span>
@@ -105,8 +104,9 @@
                 {% endfor %}
             </ul>
         </div>
-    </footer>
-    {% endif %}
+        </footer>
+        {% endif %}
+    </article>
 </div>
 {% endblock %}
 
