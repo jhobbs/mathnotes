@@ -192,6 +192,7 @@ class ContentPages(Page):
                     context=context,
                 )
             )
+
         return specs
 
 

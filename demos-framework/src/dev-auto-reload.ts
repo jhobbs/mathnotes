@@ -35,17 +35,19 @@ class DevAutoReload {
         const response = await fetch('/rebuild-timestamp.txt');
         if (response.ok) {
           const timestamp = (await response.text()).trim();
-          
+
           // If timestamp changed, reload the page
           if (this.lastTimestamp !== null && timestamp !== this.lastTimestamp) {
-            console.log('Content changed, reloading...');
+            console.log(`Content changed (${this.lastTimestamp} -> ${timestamp}), reloading...`);
             this.stopPolling();
             window.location.reload();
           }
+        } else {
+          console.debug(`Timestamp fetch returned ${response.status}, waiting for rebuild...`);
         }
       } catch (error) {
         // Might be rebuilding, keep polling
-        console.debug('Timestamp check failed, might be rebuilding...');
+        console.debug('Timestamp fetch failed, might be rebuilding...');
       }
     }, this.pollInterval);
   }

@@ -50,3 +50,5 @@ The function describing the path taken by a particle starting at a @phase-point 
 :::definition "Phase Portrait"
 A drawing that shows the different @trajectories taken from different @phase-points in a system is called a **phase portrait.**
 :::
+
+A man a dream

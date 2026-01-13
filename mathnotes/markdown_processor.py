@@ -2,6 +2,7 @@
 Markdown processing utilities for the Mathnotes application.
 """
 
+import os
 import re
 from pathlib import Path
 from typing import Dict, Optional
@@ -10,6 +11,19 @@ import markdown
 from .structured_math import StructuredMathParser, process_structured_math_content
 from .math_utils import MathProtector
 from .tooltip_collector import TooltipCollectingBlockReferenceProcessor, collect_tooltip_data_from_html
+
+# Module-level cache for rendered markdown
+_render_cache: Dict[str, tuple] = {}  # filepath -> (mtime, result)
+
+
+def clear_markdown_cache():
+    """Clear the markdown rendering cache."""
+    _render_cache.clear()
+
+
+def invalidate_markdown_file(filepath: str):
+    """Invalidate cache for a specific file."""
+    _render_cache.pop(filepath, None)
 
 
 # Markdown configuration
@@ -36,6 +50,16 @@ class MarkdownProcessor:
         Returns:
             Dictionary with content, metadata, and other rendering info
         """
+        # Check cache first
+        try:
+            current_mtime = os.path.getmtime(filepath)
+            if filepath in _render_cache:
+                cached_mtime, cached_result = _render_cache[filepath]
+                if cached_mtime >= current_mtime:
+                    return cached_result
+        except OSError:
+            pass
+
         # Track demos for this render
         integrated_demos = []
 
@@ -138,7 +162,7 @@ class MarkdownProcessor:
             # Generate description from frontmatter or content
             description = self._generate_description(post.metadata, html_content)
 
-            return {
+            result = {
                 "content": html_content,
                 "metadata": post.metadata,
                 "title": post.metadata.get("title", Path(filepath).stem.replace("-", " ").title()),
@@ -148,6 +172,14 @@ class MarkdownProcessor:
                 "has_integrated_demos": len(integrated_demos) > 0,
                 "tooltip_data": tooltip_data,
             }
+
+            # Cache the result
+            try:
+                _render_cache[filepath] = (os.path.getmtime(filepath), result)
+            except OSError:
+                pass
+
+            return result
 
     def _replace_wiki_link(self, match):
         """Replace wiki-style links with proper markdown links."""

@@ -8,18 +8,37 @@ from pathlib import Path
 from typing import Dict, List, Any
 import frontmatter
 
+# Module-level caches
+_title_cache: Dict[str, str] = {}
+_folder_pages_cache: Dict[str, List[Dict[str, Any]]] = {}
+_nav_tree_cache: Dict[str, Dict[str, Any]] = {}
+
+
+def clear_navigation_cache():
+    """Clear all navigation caches. Call when content changes."""
+    _title_cache.clear()
+    _folder_pages_cache.clear()
+    _nav_tree_cache.clear()
+
 
 def get_page_title(file_path: Path) -> str:
     """Get the title from a markdown file's frontmatter, or derive from filename."""
+    cache_key = str(file_path)
+    if cache_key in _title_cache:
+        return _title_cache[cache_key]
+
+    title = file_path.stem.replace("-", " ").title()
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             post = frontmatter.load(f)
-            title = post.metadata.get("title", "").strip()
-            if title:
-                return title
+            fm_title = post.metadata.get("title", "").strip()
+            if fm_title:
+                title = fm_title
     except Exception:
         pass
-    return file_path.stem.replace("-", " ").title()
+
+    _title_cache[cache_key] = title
+    return title
 
 
 def get_pages_in_folder(folder_path: Path, file_to_canonical: Dict[str, str]) -> List[Dict[str, Any]]:
@@ -28,9 +47,14 @@ def get_pages_in_folder(folder_path: Path, file_to_canonical: Dict[str, str]) ->
 
     Returns list of dicts with: url, title, filename, file_path
     """
+    cache_key = str(folder_path)
+    if cache_key in _folder_pages_cache:
+        return _folder_pages_cache[cache_key]
+
     pages = []
 
     if not folder_path.exists() or not folder_path.is_dir():
+        _folder_pages_cache[cache_key] = pages
         return pages
 
     for item in folder_path.iterdir():
@@ -47,6 +71,7 @@ def get_pages_in_folder(folder_path: Path, file_to_canonical: Dict[str, str]) ->
                 })
 
     pages.sort(key=lambda x: x["filename"])
+    _folder_pages_cache[cache_key] = pages
     return pages
 
 

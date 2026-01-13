@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Debug ID to detect duplicate processes
+SHELL_ID=$(head -c 4 /dev/urandom | od -An -tu4 | tr -d ' ' | cut -c1-4)
+echo "[SHELL:$SHELL_ID] Shell script starting at $(date +%H:%M:%S.%3N)"
+
 # State files to track last build times
 JS_LAST_BUILD="/tmp/js_last_build"
 STATIC_LAST_BUILD="/tmp/static_last_build"
@@ -62,46 +66,48 @@ mkdir -p /version
 git describe --always --tags > /version/version.txt || echo "unknown" > /version/version.txt
 mkdir -p /app/static-build
 
-# Initial build
+# Initial JS/CSS build
 echo "[$(date)] Initial build starting..."
-# Run TypeScript type check first
 echo "[$(date)] Running TypeScript type check..."
 npm run type-check || { echo "[$(date)] TypeScript type check failed!"; exit 1; }
 npm run build
 touch "$JS_LAST_BUILD"
-python scripts/build_static_simple.py --output /app/static-build/website
-touch "$STATIC_LAST_BUILD"
-# Write initial timestamp for browser auto-refresh
-date +%s > /app/static-build/website/rebuild-timestamp.txt
-echo "[$(date)] Initial build complete"
+echo "[$(date)] JS/CSS build complete"
 
-# Main loop
+# Start Python watcher in background for content changes
+# This keeps the site builder warm between rebuilds for fast incremental builds
+echo "[$(date)] Starting persistent Python watcher..."
+python scripts/watch_and_build.py --output /app/static-build/website &
+PYTHON_PID=$!
+
+# Trap to kill Python watcher on exit
+trap "kill $PYTHON_PID 2>/dev/null" EXIT
+
+# Main loop - only handles JS/CSS rebuilds now
+# Content rebuilds are handled by the Python watcher
 while true; do
     sleep 0.1  # Check every 100ms for near-instant rebuilds
-    
+
     # Check if JavaScript/CSS needs rebuilding
     if needs_rebuild "$JS_LAST_BUILD" $JS_DIRS; then
-        echo "[$(date)] JavaScript/CSS source changes detected:"
+        # Small random delay to detect duplicate processes
+        sleep 0.0$(head -c 2 /dev/urandom | od -An -tu2 | tr -d ' ' | cut -c1-2)
+        echo "[SHELL:$SHELL_ID] $(date +%H:%M:%S.%3N) JavaScript/CSS source changes detected:"
         echo "$CHANGED_FILES" | sed 's/^/  /'
-        echo "Running TypeScript type check..."
+        echo "[SHELL:$SHELL_ID] Running TypeScript type check..."
         npm run type-check || { echo "[$(date)] TypeScript type check failed!"; continue; }
         echo "Rebuilding JavaScript/CSS bundles..."
         npm run build
         touch "$JS_LAST_BUILD"
-        # Force static rebuild since bundled output changed
-        rm -f "$STATIC_LAST_BUILD"
-        # Write timestamp for browser auto-refresh (JS/CSS changes)
-        date +%s > /app/static-build/website/rebuild-timestamp.txt
+        # Signal Python watcher that JS/CSS rebuild is complete
+        touch /tmp/js_rebuild_complete
+        echo "[SHELL:$SHELL_ID] $(date +%H:%M:%S.%3N) JS/CSS rebuild complete"
     fi
-    
-    # Check if static site needs rebuilding
-    if needs_rebuild "$STATIC_LAST_BUILD" $STATIC_DIRS; then
-        echo "[$(date)] Content changes detected:"
-        echo "$CHANGED_FILES" | sed 's/^/  /'
-        echo "Rebuilding static site..."
-        python scripts/build_static_simple.py --output /app/static-build/website
-        touch "$STATIC_LAST_BUILD"
-        # Write timestamp for browser auto-refresh
-        date +%s > /app/static-build/website/rebuild-timestamp.txt
+
+    # Check if Python watcher is still running
+    if ! kill -0 $PYTHON_PID 2>/dev/null; then
+        echo "[$(date)] Python watcher died, restarting..."
+        python scripts/watch_and_build.py --output /app/static-build/website &
+        PYTHON_PID=$!
     fi
 done
