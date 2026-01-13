@@ -24,7 +24,7 @@ You can see that when $x$ is to the right of $0,$ the flow is to the right, and 
 At some points, there is no flow.
 
 :::definition "fixed point" {synonyms: "equilibrium"}
-A point at which the change in position of a system is $0$ is called a **fixed point.**
+A point at which the change in position of a system is $0$ is called a **fixed point.** We denote a fixed point at $x_p$ as $x^* = x_p.$
 :::
 
 :::definition "Stable"
@@ -37,4 +37,16 @@ A @fixed-point where nearby points flow away from it is said to be **unstable.**
 
 :::remark
 The convention, when drawing a dynamical system as a vector field is to draw filled in circles for @stable @fixed-points and empty circles for @unstable @fixed-points.
+:::
+
+:::definition "Phase point"
+The starting point, $x_0,$ where we place a particle is called a **phase point.**
+:::
+
+:::definition "Trajectory"
+The function describing the path taken by a particle starting at a @phase-point is called a **trajectory** and represents a solution to a @differential-equation with @initial-conditions $x = x_0.$
+:::
+
+:::definition "Phase Portrait"
+A drawing that shows the different @trajectories taken from different @phase-points in a system is called a **phase portrait.**
 :::
