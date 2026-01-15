@@ -51,4 +51,11 @@ The function describing the path taken by a particle starting at a @phase-point 
 A drawing that shows the different @trajectories taken from different @phase-points in a system is called a **phase portrait.**
 :::
 
-A man a dream
+We can also visualize trajectories by plotting $x(t)$ vs $t.$ Click near the left edge to set an initial condition and watch the trajectory evolve over time.
+
+{% include_demo "time-evolution" %}
+
+:::definition "Globally stable"
+A @fixed-point $x^*$ that is approached from any starting position on the real line (other than that at $x^*$ itself) is said to be **globally stable.**
+
+## Application: Population Growth
