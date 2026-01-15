@@ -55,6 +55,10 @@ We can also visualize trajectories by plotting $x(t)$ vs $t.$ Click near the lef
 
 {% include_demo "time-evolution" %}
 
+Here's both views together. Click in either view to spawn a particle and watch it evolve in both simultaneously.
+
+{% include_demo "phase-and-time" %}
+
 :::definition "Globally stable"
 A @fixed-point $x^*$ that is approached from any starting position on the real line (other than that at $x^*$ itself) is said to be **globally stable.**
 

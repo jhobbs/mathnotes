@@ -56,7 +56,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'open-path-dft': () => import('@demos/complex-analysis/open-path-dft'),
   'complex-frequency': () => import('@demos/complex-analysis/complex-frequency'),
   'flows-on-the-line': () => import('@demos/dynamical-systems/flows-on-the-line'),
-  'time-evolution': () => import('@demos/dynamical-systems/time-evolution')
+  'time-evolution': () => import('@demos/dynamical-systems/time-evolution'),
+  'phase-and-time': () => import('@demos/dynamical-systems/phase-and-time')
 };
 
 // Store for loaded metadata
