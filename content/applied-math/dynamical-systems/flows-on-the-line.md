@@ -15,8 +15,6 @@ where $x = x(t)$ is a @real-valued @function of time $t,$ and $f(x)$ is a @smoot
 
 We can interpret a @differential-equation of this form as a as a @vector-field. $f(x)$ tells us in which direction and at what magnitude we move at any point on the real line (where $f(x)$ is defined.) We can do this by plotting $\dot{x}$ vs $x.$
 
-Here is a demo of that below. Click on the real line to place a particle and see where it flows.
-
 {% include_demo "flows-on-the-line" %}
 
 You can see that when $x$ is to the right of $0,$ the flow is to the right, and when $x$ is to the left of 0 the flow is to the left.
@@ -51,15 +49,43 @@ The function describing the path taken by a particle starting at a @phase-point 
 A drawing that shows the different @trajectories taken from different @phase-points in a system is called a **phase portrait.**
 :::
 
-We can also visualize trajectories by plotting $x(t)$ vs $t.$ Click near the left edge to set an initial condition and watch the trajectory evolve over time.
+We can also visualize trajectories by plotting $x(t)$ vs $t.$
 
 {% include_demo "time-evolution" %}
 
-Here's both views together. Click in either view to spawn a particle and watch it evolve in both simultaneously.
+Here's both views together.
 
 {% include_demo "phase-and-time" %}
 
 :::definition "Globally stable"
 A @fixed-point $x^*$ that is approached from any starting position on the real line (other than that at $x^*$ itself) is said to be **globally stable.**
+:::
 
 ## Application: Population Growth
+
+A very simple model of population growth is just exponential growth. You can model this as
+
+$$ \dot{N} = r{N}, $$
+
+where $r > 0.$ You can see by modeling this on the demo's above that population just goes to infinity with this. This is not realistic. A better model assumes there is a certain carrying capacity $K$, where if the population $N$ exceeds $K$, growth actually becomes negative. This is modeled using the logistic equation
+
+$$ \dot{N} = rN(1 - \frac{N}{K}). $$
+
+## Linear Stability Analysis
+
+While it's nice to have a visual intuition for whether a @fixed-point is stable or not, sometimes it's also nice to know analytically.
+
+:::theorem {label: linear-stability-analysis}
+Let $x^*$ be a fixed point of $\dot{x} = f(x).$ Then, if $f'(x) \neq 0,$ if $f'(x^*)$ is negative, then $x^*$ is a @stable @fixed-point
+. If $f'(x^*)$ is positive, then $x^*$ is an @unstable @fixed-point.
+
+::::remark
+This comes from letting $u(t) = x(t) - x^*$ be a small perturbation away from $x^*,$ differentiating it, writing its @taylor-series, then noticing that $f(x^*) = 0$ and terms greater than the linear term matter less than the linear term and writing
+
+$$ \dot{u} = f'(x^*)u. $$
+
+This is called  the **linearization** about $x^*.$
+
+It also only works if $f'(x) \neq 0.$ If that's not the case, the best bet is to fall back to graphical analysis or to solve explicitly if possible.
+::::
+:::

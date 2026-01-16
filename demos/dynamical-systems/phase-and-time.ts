@@ -102,6 +102,19 @@ class PhaseAndTimeDemo {
     this.canvasRow.appendChild(this.phaseContainer);
     this.canvasRow.appendChild(this.timeContainer);
     this.containerEl.appendChild(this.canvasRow);
+
+    // Add instructions
+    if (metadata.instructions) {
+      const instructionsEl = document.createElement('div');
+      instructionsEl.className = 'demo-info';
+      instructionsEl.style.marginTop = 'var(--spacing-md, 1rem)';
+      instructionsEl.style.textAlign = 'center';
+      instructionsEl.textContent = typeof metadata.instructions === 'function'
+        ? metadata.instructions()
+        : metadata.instructions;
+      this.containerEl.appendChild(instructionsEl);
+    }
+
     this.container.appendChild(this.containerEl);
   }
 
@@ -630,7 +643,8 @@ class PhaseAndTimeDemo {
 export const metadata: DemoMetadata = {
   title: 'Phase Portrait & Time Evolution',
   category: 'Dynamical Systems',
-  description: 'Combined view showing phase portrait (left) and time evolution (right) for 1D dynamical systems ẋ = f(x). Click on either view to spawn synchronized particles.'
+  description: 'Combined view showing phase portrait (left) and time evolution (right) for 1D dynamical systems ẋ = f(x).',
+  instructions: 'Click on the x-axis in the left view or on the t = 0 axis in the right view to spawn a particle visible in both.'
 };
 
 export default function createPhaseAndTimeDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

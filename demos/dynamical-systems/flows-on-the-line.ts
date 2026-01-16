@@ -320,7 +320,8 @@ class FlowsOnTheLineDemo extends P5DemoBase {
 export const metadata: DemoMetadata = {
   title: 'Flows on the Line',
   category: 'Dynamical Systems',
-  description: 'Interactive phase portrait for 1D dynamical systems ẋ = f(x). Click on the number line to spawn particles and watch them flow.'
+  description: 'Interactive phase portrait for 1D dynamical systems ẋ = f(x).',
+  instructions: 'Click on the x-axis (horizontal number line) to spawn a particle and watch it flow.'
 };
 
 export default function createFlowsOnTheLineDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

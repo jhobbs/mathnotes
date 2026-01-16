@@ -334,7 +334,8 @@ class TimeEvolutionDemo extends P5DemoBase {
 export const metadata: DemoMetadata = {
   title: 'Time Evolution',
   category: 'Dynamical Systems',
-  description: 'Interactive x(t) vs t plot for 1D dynamical systems ẋ = f(x). Click near the left edge to set initial conditions and watch trajectories evolve.'
+  description: 'Interactive x(t) vs t plot for 1D dynamical systems ẋ = f(x).',
+  instructions: 'Click on the left edge (t = 0 axis) to set an initial x value and watch the trajectory evolve over time.'
 };
 
 export default function createTimeEvolutionDemo(container: HTMLElement, config?: DemoConfig): DemoInstance {

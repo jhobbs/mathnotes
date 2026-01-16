@@ -175,7 +175,7 @@ def main():
 
                 logger.info(f"[ID:{PROCESS_ID}] Rebuild complete in {build_time:.2f}s")
             except Exception as e:
-                logger.error(f"Build failed: {e}")
+                logger.exception(f"Build failed: {e}")
 
             pending_changes = []
             # Re-get mtimes after build in case more changes happened
