@@ -214,8 +214,10 @@ class TimeEvolutionDemo extends P5DemoBase {
       const x = this.xMin + i * step;
       const dfx = this.df(x);
 
-      // Check for sign change in derivative
-      if (prevDf * dfx < 0) {
+      // Check for near-zero at sample point
+      if (Math.abs(dfx) < zeroThreshold) {
+        candidates.push(x);
+      } else if (prevDf * dfx < 0) {
         // Bisection to find the zero of df
         let lo = prevX, hi = x;
         for (let j = 0; j < 50; j++) {
