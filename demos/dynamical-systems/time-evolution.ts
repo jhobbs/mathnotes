@@ -2,19 +2,7 @@
 import p5 from 'p5';
 import type { DemoConfig, DemoInstance, DemoMetadata } from '@framework/types';
 import { P5DemoBase } from '@framework';
-import { parse, derivative } from 'mathjs';
-import type { MathNode, EvalFunction } from 'mathjs';
-
-type StabilityType = 'stable' | 'unstable' | 'half-stable-left' | 'half-stable-right';
-
-interface FixedPoint {
-  x: number;
-  stability: StabilityType;
-}
-
-interface CriticalPoint {
-  x: number;
-}
+import { FlowDynamics, PRESETS, TRAJECTORY_COLORS } from './shared/flow-dynamics';
 
 interface TrajectoryPoint {
   t: number;
@@ -24,40 +12,29 @@ interface TrajectoryPoint {
 interface Trajectory {
   points: TrajectoryPoint[];
   color: string;
-  active: boolean; // still animating
+  active: boolean;
 }
 
-// Color palette for trajectories
-const TRAJECTORY_COLORS = [
-  '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
-  '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabed4'
-];
-
 class TimeEvolutionDemo extends P5DemoBase {
-  // Function state
+  // Shared dynamics
+  private dynamics: FlowDynamics;
   private exprString: string = 'sin(x)';
-  private compiledF: EvalFunction | null = null;
-  private compiledDf: EvalFunction | null = null;
-  private parseError: boolean = false;
 
   // View parameters
   private tMin: number = 0;
-  private tMax: number = 20;
   private xMin: number = -10;
   private xMax: number = 10;
 
-  // Fixed points, critical points, and trajectories
-  private fixedPoints: FixedPoint[] = [];
-  private criticalPoints: CriticalPoint[] = [];
+  // Trajectories
   private trajectories: Trajectory[] = [];
   private colorIndex: number = 0;
-
 
   // UI elements
   private inputEl!: HTMLInputElement;
 
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
+    this.dynamics = new FlowDynamics(this.xMin, this.xMax);
   }
 
   protected getStylePrefix(): string {
@@ -76,239 +53,21 @@ class TimeEvolutionDemo extends P5DemoBase {
     return 0.6;
   }
 
-  private f(x: number): number {
-    if (!this.compiledF) return 0;
-    try {
-      const result = this.compiledF.evaluate({ x });
-      return typeof result === 'number' ? result : 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  private df(x: number): number {
-    if (!this.compiledDf) return 0;
-    try {
-      const result = this.compiledDf.evaluate({ x });
-      return typeof result === 'number' ? result : 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  private parseExpression(): void {
-    try {
-      const node: MathNode = parse(this.exprString);
-      this.compiledF = node.compile();
-      const dfNode = derivative(node, 'x');
-      this.compiledDf = dfNode.compile();
-      this.parseError = false;
-      this.inputEl.style.borderColor = '';
-    } catch {
-      this.parseError = true;
-      this.compiledF = null;
-      this.compiledDf = null;
-      this.inputEl.style.borderColor = 'red';
-    }
-  }
-
-  private newtonRaphson(x0: number, tol: number = 1e-10, maxIter: number = 100): number | null {
-    if (!this.compiledF || !this.compiledDf) return null;
-
-    let x = x0;
-    for (let i = 0; i < maxIter; i++) {
-      const fx = this.f(x);
-      const dfx = this.df(x);
-      if (Math.abs(dfx) < 1e-14) return null;
-      const xNew = x - fx / dfx;
-      if (Math.abs(xNew - x) < tol) return xNew;
-      x = xNew;
-    }
-    return null;
-  }
-
-  private findFixedPoints(): void {
-    this.fixedPoints = [];
-    if (this.parseError) return;
-
-    const numSamples = 200;
-    const step = (this.xMax - this.xMin) / numSamples;
-    const candidates: number[] = [];
-    const zeroThreshold = 1e-10;
-
-    let prevX = this.xMin;
-    let prevY = this.f(this.xMin);
-
-    if (Math.abs(prevY) < zeroThreshold) {
-      const root = this.newtonRaphson(prevX);
-      candidates.push(root !== null ? root : prevX);
-    }
-
-    for (let i = 1; i <= numSamples; i++) {
-      const x = this.xMin + i * step;
-      const y = this.f(x);
-
-      if (Math.abs(y) < zeroThreshold) {
-        const root = this.newtonRaphson(x);
-        candidates.push(root !== null ? root : x);
-      } else if (prevY * y < 0) {
-        const midpoint = (prevX + x) / 2;
-        const root = this.newtonRaphson(midpoint);
-        if (root !== null && root >= this.xMin && root <= this.xMax) {
-          candidates.push(root);
-        }
-      }
-
-      prevX = x;
-      prevY = y;
-    }
-
-    const tolerance = 1e-6;
-    const derivThreshold = 1e-6;
-    for (const c of candidates) {
-      const isDuplicate = this.fixedPoints.some(fp => Math.abs(fp.x - c) < tolerance);
-      if (!isDuplicate) {
-        const dfx = this.df(c);
-        let stability: StabilityType;
-
-        if (Math.abs(dfx) < derivThreshold) {
-          const delta = 0.01;
-          const fLeft = this.f(c - delta);
-          const fRight = this.f(c + delta);
-
-          if (fLeft > 0 && fRight > 0) {
-            stability = 'half-stable-left';
-          } else if (fLeft < 0 && fRight < 0) {
-            stability = 'half-stable-right';
-          } else if (fLeft > 0 && fRight < 0) {
-            stability = 'stable';
-          } else {
-            stability = 'unstable';
-          }
-        } else if (dfx < 0) {
-          stability = 'stable';
-        } else {
-          stability = 'unstable';
-        }
-
-        this.fixedPoints.push({ x: c, stability });
-      }
-    }
-
-    this.fixedPoints.sort((a, b) => a.x - b.x);
-  }
-
-  private findCriticalPoints(): void {
-    this.criticalPoints = [];
-    if (this.parseError) return;
-
-    const numSamples = 200;
-    const step = (this.xMax - this.xMin) / numSamples;
-    const candidates: number[] = [];
-    const zeroThreshold = 1e-8;
-
-    let prevX = this.xMin;
-    let prevDf = this.df(this.xMin);
-
-    for (let i = 1; i <= numSamples; i++) {
-      const x = this.xMin + i * step;
-      const dfx = this.df(x);
-
-      // Check for near-zero at sample point
-      if (Math.abs(dfx) < zeroThreshold) {
-        candidates.push(x);
-      } else if (prevDf * dfx < 0) {
-        // Bisection to find the zero of df
-        let lo = prevX, hi = x;
-        for (let j = 0; j < 50; j++) {
-          const mid = (lo + hi) / 2;
-          const dfMid = this.df(mid);
-          if (Math.abs(dfMid) < zeroThreshold) {
-            candidates.push(mid);
-            break;
-          }
-          if (this.df(lo) * dfMid < 0) {
-            hi = mid;
-          } else {
-            lo = mid;
-          }
-        }
-        candidates.push((lo + hi) / 2);
-      }
-
-      prevX = x;
-      prevDf = dfx;
-    }
-
-    // Deduplicate
-    const tolerance = 1e-4;
-    for (const c of candidates) {
-      const isDuplicate = this.criticalPoints.some(cp => Math.abs(cp.x - c) < tolerance);
-      // Also skip if it's at a fixed point (where f(x) = 0)
-      const isFixedPoint = this.fixedPoints.some(fp => Math.abs(fp.x - c) < tolerance);
-      if (!isDuplicate && !isFixedPoint) {
-        this.criticalPoints.push({ x: c });
-      }
-    }
-
-    this.criticalPoints.sort((a, b) => a.x - b.x);
-  }
-
-  private computeTimeScale(): void {
-    // Find the characteristic timescale from stable equilibria
-    // Near a stable point x*, decay is ~ e^(f'(x*)·t), so τ = -1/f'(x*)
-
-    let maxTau = 0;
-
-    for (const fp of this.fixedPoints) {
-      if (fp.stability === 'stable' || fp.stability === 'half-stable-left' || fp.stability === 'half-stable-right') {
-        const dfx = this.df(fp.x);
-        if (dfx < -1e-6) {
-          const tau = -1 / dfx;
-          maxTau = Math.max(maxTau, tau);
-        }
-      }
-    }
-
-    if (maxTau > 0) {
-      // Show ~5 time constants (gets to ~99% of equilibrium)
-      this.tMax = Math.min(Math.max(maxTau * 5, 5), 100);
-    } else {
-      // No stable points or can't compute - estimate from typical velocity
-      let maxVelocity = 0;
-      const numSamples = 50;
-      for (let i = 0; i <= numSamples; i++) {
-        const x = this.xMin + (i / numSamples) * (this.xMax - this.xMin);
-        maxVelocity = Math.max(maxVelocity, Math.abs(this.f(x)));
-      }
-
-      if (maxVelocity > 0.1) {
-        // Time to cross the visible range
-        const crossTime = (this.xMax - this.xMin) / maxVelocity;
-        this.tMax = Math.min(Math.max(crossTime * 2, 5), 50);
-      } else {
-        this.tMax = 20; // default
-      }
-    }
-  }
-
   private updateFunction(): void {
-    this.parseExpression();
-    this.findFixedPoints();
-    this.findCriticalPoints();
-    this.computeTimeScale();
+    const success = this.dynamics.update(this.exprString);
+    this.inputEl.style.borderColor = success ? '' : 'red';
     this.trajectories = [];
     this.colorIndex = 0;
   }
 
   private worldToScreen(p: p5, wt: number, wx: number): { x: number; y: number } {
-    const sx = p.map(wt, this.tMin, this.tMax, 0, p.width);
+    const sx = p.map(wt, this.tMin, this.dynamics.tMax, 0, p.width);
     const sy = p.map(wx, this.xMin, this.xMax, p.height, 0);
     return { x: sx, y: sy };
   }
 
   private screenToWorld(p: p5, sx: number, sy: number): { t: number; x: number } {
-    const wt = p.map(sx, 0, p.width, this.tMin, this.tMax);
+    const wt = p.map(sx, 0, p.width, this.tMin, this.dynamics.tMax);
     const wx = p.map(sy, p.height, 0, this.xMin, this.xMax);
     return { t: wt, x: wx };
   }
@@ -334,7 +93,6 @@ class TimeEvolutionDemo extends P5DemoBase {
         return;
       }
 
-      // Only spawn if click is near left edge (t ≈ 0)
       const t0Screen = this.worldToScreen(p, 0, 0).x;
       if (Math.abs(p.mouseX - t0Screen) < 30) {
         const world = this.screenToWorld(p, p.mouseX, p.mouseY);
@@ -355,8 +113,7 @@ class TimeEvolutionDemo extends P5DemoBase {
   }
 
   private updateTrajectories(): void {
-    // How much time to advance per frame (in world time units)
-    const dtFrame = this.tMax / 300; // ~300 frames to cross the screen
+    const dtFrame = this.dynamics.tMax / 300;
 
     for (const traj of this.trajectories) {
       if (!traj.active) continue;
@@ -366,16 +123,14 @@ class TimeEvolutionDemo extends P5DemoBase {
       let t = lastPoint.t;
       let x = lastPoint.x;
 
-      // Adaptive integration: subdivide until steps are small enough
       let tRemaining = dtFrame;
-      const maxDx = 0.1; // max position change per substep
-      const minDt = 1e-6; // prevent infinite loops
+      const maxDx = 0.1;
+      const minDt = 1e-6;
 
       while (tRemaining > minDt) {
-        const velocity = this.f(x);
+        const velocity = this.dynamics.f(x);
         const absVel = Math.abs(velocity);
 
-        // Compute step size: limit dx to maxDx
         let dt = absVel > 0.01 ? Math.min(tRemaining, maxDx / absVel) : tRemaining;
         dt = Math.max(dt, minDt);
         dt = Math.min(dt, tRemaining);
@@ -387,8 +142,7 @@ class TimeEvolutionDemo extends P5DemoBase {
 
       traj.points.push({ t, x });
 
-      // Deactivate if out of bounds
-      if (t > this.tMax || x < this.xMin - 1 || x > this.xMax + 1) {
+      if (t > this.dynamics.tMax || x < this.xMin - 1 || x > this.xMax + 1) {
         traj.active = false;
       }
     }
@@ -451,16 +205,7 @@ class TimeEvolutionDemo extends P5DemoBase {
     presetRow.style.gap = 'var(--spacing-sm, 0.5rem)';
     presetRow.style.flexWrap = 'wrap';
 
-    const presets = [
-      { label: 'sin(x)', expr: 'sin(x)' },
-      { label: 'x(1-x)', expr: 'x*(1-x)' },
-      { label: 'x²-1', expr: 'x^2-1' },
-      { label: 'x-x³', expr: 'x-x^3' },
-      { label: 'x²', expr: 'x^2' },
-      { label: '-x²', expr: '-x^2' }
-    ];
-
-    for (const preset of presets) {
+    for (const preset of PRESETS) {
       const btn = document.createElement('button');
       btn.textContent = preset.label;
       btn.style.padding = '0.25rem 0.5rem';
@@ -483,22 +228,19 @@ class TimeEvolutionDemo extends P5DemoBase {
     p.stroke(this.colors.stroke);
     p.strokeWeight(1);
 
-    // t-axis (horizontal, at x=0 if visible, otherwise at bottom)
     const x0Screen = this.worldToScreen(p, 0, 0).y;
     const tAxisY = (x0Screen >= 0 && x0Screen <= p.height) ? x0Screen : p.height - 20;
     p.line(0, tAxisY, p.width, tAxisY);
 
-    // x-axis (vertical, at t=0)
     const t0Screen = this.worldToScreen(p, 0, 0).x;
     p.line(t0Screen, 0, t0Screen, p.height);
 
-    // Tick marks on t-axis - compute nice tick interval
     p.textAlign(p.CENTER, p.TOP);
     p.textSize(10);
     p.fill(this.colors.stroke);
-    const tRange = this.tMax - this.tMin;
+    const tRange = this.dynamics.tMax - this.tMin;
     const tTickStep = tRange <= 10 ? 2 : tRange <= 25 ? 5 : tRange <= 50 ? 10 : 20;
-    for (let t = 0; t <= this.tMax; t += tTickStep) {
+    for (let t = 0; t <= this.dynamics.tMax; t += tTickStep) {
       const sx = this.worldToScreen(p, t, 0).x;
       p.stroke(this.colors.stroke);
       p.line(sx, tAxisY - 3, sx, tAxisY + 3);
@@ -506,7 +248,6 @@ class TimeEvolutionDemo extends P5DemoBase {
       p.text(Math.round(t).toString(), sx, tAxisY + 5);
     }
 
-    // Tick marks on x-axis
     p.textAlign(p.RIGHT, p.CENTER);
     for (let x = Math.ceil(this.xMin); x <= Math.floor(this.xMax); x += 2) {
       if (x === 0) continue;
@@ -517,7 +258,6 @@ class TimeEvolutionDemo extends P5DemoBase {
       p.text(x.toString(), t0Screen - 5, sy);
     }
 
-    // Axis labels
     p.textAlign(p.CENTER, p.TOP);
     p.text('t', p.width - 10, tAxisY + 5);
     p.textAlign(p.RIGHT, p.CENTER);
@@ -532,7 +272,7 @@ class TimeEvolutionDemo extends P5DemoBase {
     p.strokeWeight(1.5);
     p.drawingContext.setLineDash([8, 4]);
 
-    for (const fp of this.fixedPoints) {
+    for (const fp of this.dynamics.fixedPoints) {
       const sy = this.worldToScreen(p, 0, fp.x).y;
 
       if (fp.stability === 'stable') {
@@ -556,7 +296,7 @@ class TimeEvolutionDemo extends P5DemoBase {
     p.strokeWeight(1);
     p.drawingContext.setLineDash([4, 4]);
 
-    for (const cp of this.criticalPoints) {
+    for (const cp of this.dynamics.criticalPoints) {
       const sy = this.worldToScreen(p, 0, cp.x).y;
       p.line(0, sy, p.width, sy);
     }
@@ -570,7 +310,6 @@ class TimeEvolutionDemo extends P5DemoBase {
     for (const traj of this.trajectories) {
       if (traj.points.length < 2) continue;
 
-      // Draw trail
       p.stroke(traj.color);
       p.strokeWeight(2);
       p.noFill();
@@ -581,7 +320,6 @@ class TimeEvolutionDemo extends P5DemoBase {
       }
       p.endShape();
 
-      // Draw particle at current position (if still active)
       if (traj.active) {
         const lastPt = traj.points[traj.points.length - 1];
         const screen = this.worldToScreen(p, lastPt.t, lastPt.x);
