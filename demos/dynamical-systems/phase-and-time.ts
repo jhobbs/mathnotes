@@ -39,10 +39,6 @@ class PhaseAndTimeDemo {
   private yMax: number = 2;
   private tMin: number = 0;
 
-  // Search bounds (wider than view)
-  private readonly searchMin: number = -20;
-  private readonly searchMax: number = 20;
-
   // Shared particles
   private particles: Particle[] = [];
   private colorIndex: number = 0;
@@ -61,7 +57,7 @@ class PhaseAndTimeDemo {
     this.container = container;
     this.config = config;
     this._isDarkMode = isDarkMode(config);
-    this.dynamics = new FlowDynamics(this.searchMin, this.searchMax);
+    this.dynamics = new FlowDynamics();
   }
 
   init(): DemoInstance {
@@ -326,6 +322,7 @@ class PhaseAndTimeDemo {
         p.background(this.colors.background);
         this.updateParticles();
         this.drawPhaseAxes(p);
+        this.drawPhaseCriticalLines(p);
         this.drawPhaseCurve(p);
         this.drawPhaseFlowArrows(p);
         this.drawPhaseFixedPoints(p);
@@ -400,6 +397,21 @@ class PhaseAndTimeDemo {
       p.noStroke();
       p.text(x.toString(), sx, y0 + 5);
     }
+  }
+
+  private drawPhaseCriticalLines(p: p5): void {
+    const criticalColor = this._isDarkMode ? '#888888' : '#999999';
+
+    p.stroke(criticalColor);
+    p.strokeWeight(1);
+    p.drawingContext.setLineDash([4, 4]);
+
+    for (const cp of this.dynamics.criticalPoints) {
+      const sx = this.phaseWorldToScreen(p, cp.x, 0).x;
+      p.line(sx, 0, sx, p.height);
+    }
+
+    p.drawingContext.setLineDash([]);
   }
 
   private drawPhaseCurve(p: p5): void {

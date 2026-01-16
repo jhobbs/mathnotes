@@ -14,8 +14,6 @@ class FlowsOnTheLineDemo extends P5DemoBase {
   private exprString: string = 'sin(x)';
 
   // View parameters
-  private xMin: number = -10;
-  private xMax: number = 10;
   private yMin: number = -2;
   private yMax: number = 2;
 
@@ -30,7 +28,7 @@ class FlowsOnTheLineDemo extends P5DemoBase {
 
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
-    this.dynamics = new FlowDynamics(this.xMin, this.xMax);
+    this.dynamics = new FlowDynamics();
   }
 
   protected getStylePrefix(): string {
@@ -56,13 +54,15 @@ class FlowsOnTheLineDemo extends P5DemoBase {
   }
 
   private worldToScreen(p: p5, wx: number, wy: number): { x: number; y: number } {
-    const sx = p.map(wx, this.xMin, this.xMax, 0, p.width);
+    const { xMin, xMax } = this.dynamics.viewRange;
+    const sx = p.map(wx, xMin, xMax, 0, p.width);
     const sy = p.map(wy, this.yMin, this.yMax, p.height, 0);
     return { x: sx, y: sy };
   }
 
   private screenToWorld(p: p5, sx: number, sy: number): { x: number; y: number } {
-    const wx = p.map(sx, 0, p.width, this.xMin, this.xMax);
+    const { xMin, xMax } = this.dynamics.viewRange;
+    const wx = p.map(sx, 0, p.width, xMin, xMax);
     const wy = p.map(sy, p.height, 0, this.yMin, this.yMax);
     return { x: wx, y: wy };
   }
@@ -77,6 +77,7 @@ class FlowsOnTheLineDemo extends P5DemoBase {
       p.background(this.colors.background);
 
       this.drawAxes(p);
+      this.drawCriticalLines(p);
       this.drawCurve(p);
       this.drawFlowArrows(p);
       this.drawFixedPoints(p);
@@ -187,7 +188,8 @@ class FlowsOnTheLineDemo extends P5DemoBase {
     p.textSize(10);
     p.fill(this.colors.stroke);
     p.noStroke();
-    for (let x = Math.ceil(this.xMin); x <= Math.floor(this.xMax); x++) {
+    const { xMin, xMax } = this.dynamics.viewRange;
+    for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
       if (x === 0) continue;
       const sx = this.worldToScreen(p, x, 0).x;
       p.stroke(this.colors.stroke);
@@ -197,9 +199,25 @@ class FlowsOnTheLineDemo extends P5DemoBase {
     }
   }
 
+  private drawCriticalLines(p: p5): void {
+    const criticalColor = this.isDarkMode ? '#888888' : '#999999';
+
+    p.stroke(criticalColor);
+    p.strokeWeight(1);
+    p.drawingContext.setLineDash([4, 4]);
+
+    for (const cp of this.dynamics.criticalPoints) {
+      const sx = this.worldToScreen(p, cp.x, 0).x;
+      p.line(sx, 0, sx, p.height);
+    }
+
+    p.drawingContext.setLineDash([]);
+  }
+
   private drawCurve(p: p5): void {
     if (this.dynamics.parseError) return;
 
+    const { xMin, xMax } = this.dynamics.viewRange;
     p.stroke(this.isDarkMode ? '#6699ff' : '#3366cc');
     p.strokeWeight(2);
     p.noFill();
@@ -207,7 +225,7 @@ class FlowsOnTheLineDemo extends P5DemoBase {
     p.beginShape();
     const numPoints = 400;
     for (let i = 0; i <= numPoints; i++) {
-      const x = this.xMin + (i / numPoints) * (this.xMax - this.xMin);
+      const x = xMin + (i / numPoints) * (xMax - xMin);
       const y = this.dynamics.f(x);
       const yc = Math.max(this.yMin - 1, Math.min(this.yMax + 1, y));
       const screen = this.worldToScreen(p, x, yc);
@@ -254,6 +272,7 @@ class FlowsOnTheLineDemo extends P5DemoBase {
   private drawFlowArrows(p: p5): void {
     if (this.dynamics.parseError) return;
 
+    const { xMin, xMax } = this.dynamics.viewRange;
     const y0 = this.worldToScreen(p, 0, 0).y;
     const arrowSpacing = 0.5;
     const arrowSize = 8;
@@ -262,7 +281,7 @@ class FlowsOnTheLineDemo extends P5DemoBase {
     p.stroke(this.colors.stroke);
     p.strokeWeight(2);
 
-    for (let x = Math.ceil(this.xMin / arrowSpacing) * arrowSpacing; x <= this.xMax; x += arrowSpacing) {
+    for (let x = Math.ceil(xMin / arrowSpacing) * arrowSpacing; x <= xMax; x += arrowSpacing) {
       const nearFixedPoint = this.dynamics.fixedPoints.some(fp => Math.abs(fp.x - x) < fixedPointClearance);
       if (nearFixedPoint) continue;
 
@@ -291,7 +310,8 @@ class FlowsOnTheLineDemo extends P5DemoBase {
       const velocity = this.dynamics.f(particle.x);
       particle.x += velocity * this.dt;
 
-      if (particle.x < this.xMin - 1 || particle.x > this.xMax + 1) {
+      const { xMin, xMax } = this.dynamics.viewRange;
+      if (particle.x < xMin - 1 || particle.x > xMax + 1) {
         toRemove.push(i);
         continue;
       }

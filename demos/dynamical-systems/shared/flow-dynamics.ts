@@ -28,8 +28,8 @@ export class FlowDynamics {
   private _viewRange: ViewRange;
 
   constructor(
-    private xMin: number = -10,
-    private xMax: number = 10
+    private xMin: number = -5,
+    private xMax: number = 5
   ) {
     this._viewRange = { xMin, xMax };
   }

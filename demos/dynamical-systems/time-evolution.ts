@@ -23,10 +23,6 @@ class TimeEvolutionDemo extends P5DemoBase {
   // View parameters
   private tMin: number = 0;
 
-  // Search bounds (wider than view, view range computed dynamically)
-  private readonly searchMin: number = -20;
-  private readonly searchMax: number = 20;
-
   // Trajectories
   private trajectories: Trajectory[] = [];
   private colorIndex: number = 0;
@@ -36,7 +32,7 @@ class TimeEvolutionDemo extends P5DemoBase {
 
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
-    this.dynamics = new FlowDynamics(this.searchMin, this.searchMax);
+    this.dynamics = new FlowDynamics();
   }
 
   protected getStylePrefix(): string {
