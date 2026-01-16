@@ -13,6 +13,11 @@ export interface CriticalPoint {
   x: number;
 }
 
+export interface ViewRange {
+  xMin: number;
+  xMax: number;
+}
+
 export class FlowDynamics {
   private compiledF: EvalFunction | null = null;
   private compiledDf: EvalFunction | null = null;
@@ -20,11 +25,14 @@ export class FlowDynamics {
   private _fixedPoints: FixedPoint[] = [];
   private _criticalPoints: CriticalPoint[] = [];
   private _tMax: number = 20;
+  private _viewRange: ViewRange;
 
   constructor(
     private xMin: number = -10,
     private xMax: number = 10
-  ) {}
+  ) {
+    this._viewRange = { xMin, xMax };
+  }
 
   get parseError(): boolean {
     return this._parseError;
@@ -40,6 +48,10 @@ export class FlowDynamics {
 
   get tMax(): number {
     return this._tMax;
+  }
+
+  get viewRange(): ViewRange {
+    return this._viewRange;
   }
 
   f(x: number): number {
@@ -249,11 +261,39 @@ export class FlowDynamics {
     }
   }
 
+  computeViewRange(): void {
+    const defaultRange = this.xMax - this.xMin;
+
+    if (this._fixedPoints.length > 0) {
+      const xs = this._fixedPoints.map(fp => fp.x);
+      const minFp = Math.min(...xs);
+      const maxFp = Math.max(...xs);
+      const span = maxFp - minFp;
+
+      if (span < 0.1) {
+        // Single fixed point or cluster - center on it with reasonable range
+        const center = (minFp + maxFp) / 2;
+        this._viewRange = { xMin: center - 3, xMax: center + 3 };
+      } else if (span < defaultRange * 0.4) {
+        // Multiple fixed points in a reasonable range - auto-scale
+        const padding = Math.max(span * 0.5, 1);
+        this._viewRange = { xMin: minFp - padding, xMax: maxFp + padding };
+      } else {
+        // Fixed points spread too wide - use default range
+        this._viewRange = { xMin: this.xMin, xMax: this.xMax };
+      }
+    } else {
+      // No fixed points - use default range
+      this._viewRange = { xMin: this.xMin, xMax: this.xMax };
+    }
+  }
+
   update(exprString: string): boolean {
     const success = this.parseExpression(exprString);
     this.findFixedPoints();
     this.findCriticalPoints();
     this.computeTimeScale();
+    this.computeViewRange();
     return success;
   }
 }

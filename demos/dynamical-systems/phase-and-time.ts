@@ -34,12 +34,14 @@ class PhaseAndTimeDemo {
   private dynamics: FlowDynamics;
   private exprString: string = 'sin(x)';
 
-  // View parameters
-  private xMin: number = -10;
-  private xMax: number = 10;
+  // View parameters (xMin/xMax computed dynamically from dynamics.viewRange)
   private yMin: number = -2;
   private yMax: number = 2;
   private tMin: number = 0;
+
+  // Search bounds (wider than view)
+  private readonly searchMin: number = -20;
+  private readonly searchMax: number = 20;
 
   // Shared particles
   private particles: Particle[] = [];
@@ -59,7 +61,7 @@ class PhaseAndTimeDemo {
     this.container = container;
     this.config = config;
     this._isDarkMode = isDarkMode(config);
-    this.dynamics = new FlowDynamics(this.xMin, this.xMax);
+    this.dynamics = new FlowDynamics(this.searchMin, this.searchMax);
   }
 
   init(): DemoInstance {
@@ -264,7 +266,8 @@ class PhaseAndTimeDemo {
       particle.trail.push({ t: particle.t, x: particle.x });
 
       // Deactivate if out of bounds or reached end of time
-      if (particle.t > tMax || particle.x < this.xMin - 1 || particle.x > this.xMax + 1) {
+      const { xMin, xMax } = this.dynamics.viewRange;
+      if (particle.t > tMax || particle.x < xMin - 1 || particle.x > xMax + 1) {
         particle.active = false;
         continue;
       }
@@ -282,27 +285,31 @@ class PhaseAndTimeDemo {
 
   // Phase portrait coordinate transforms
   private phaseWorldToScreen(p: p5, wx: number, wy: number): { x: number; y: number } {
-    const sx = p.map(wx, this.xMin, this.xMax, 0, p.width);
+    const { xMin, xMax } = this.dynamics.viewRange;
+    const sx = p.map(wx, xMin, xMax, 0, p.width);
     const sy = p.map(wy, this.yMin, this.yMax, p.height, 0);
     return { x: sx, y: sy };
   }
 
   private phaseScreenToWorld(p: p5, sx: number, sy: number): { x: number; y: number } {
-    const wx = p.map(sx, 0, p.width, this.xMin, this.xMax);
+    const { xMin, xMax } = this.dynamics.viewRange;
+    const wx = p.map(sx, 0, p.width, xMin, xMax);
     const wy = p.map(sy, p.height, 0, this.yMin, this.yMax);
     return { x: wx, y: wy };
   }
 
   // Time evolution coordinate transforms
   private timeWorldToScreen(p: p5, wt: number, wx: number): { x: number; y: number } {
+    const { xMin, xMax } = this.dynamics.viewRange;
     const sx = p.map(wt, this.tMin, this.dynamics.tMax, 0, p.width);
-    const sy = p.map(wx, this.xMin, this.xMax, p.height, 0);
+    const sy = p.map(wx, xMin, xMax, p.height, 0);
     return { x: sx, y: sy };
   }
 
   private timeScreenToWorld(p: p5, sx: number, sy: number): { t: number; x: number } {
+    const { xMin, xMax } = this.dynamics.viewRange;
     const wt = p.map(sx, 0, p.width, this.tMin, this.dynamics.tMax);
-    const wx = p.map(sy, p.height, 0, this.xMin, this.xMax);
+    const wx = p.map(sy, p.height, 0, xMin, xMax);
     return { t: wt, x: wx };
   }
 
@@ -384,7 +391,8 @@ class PhaseAndTimeDemo {
     p.textSize(10);
     p.fill(this.colors.stroke);
     p.noStroke();
-    for (let x = Math.ceil(this.xMin); x <= Math.floor(this.xMax); x += 2) {
+    const { xMin, xMax } = this.dynamics.viewRange;
+    for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x += 2) {
       if (x === 0) continue;
       const sx = this.phaseWorldToScreen(p, x, 0).x;
       p.stroke(this.colors.stroke);
@@ -397,6 +405,7 @@ class PhaseAndTimeDemo {
   private drawPhaseCurve(p: p5): void {
     if (this.dynamics.parseError) return;
 
+    const { xMin, xMax } = this.dynamics.viewRange;
     p.stroke(this._isDarkMode ? '#6699ff' : '#3366cc');
     p.strokeWeight(2);
     p.noFill();
@@ -404,7 +413,7 @@ class PhaseAndTimeDemo {
     p.beginShape();
     const numPoints = 400;
     for (let i = 0; i <= numPoints; i++) {
-      const x = this.xMin + (i / numPoints) * (this.xMax - this.xMin);
+      const x = xMin + (i / numPoints) * (xMax - xMin);
       const y = this.dynamics.f(x);
       const yc = Math.max(this.yMin - 1, Math.min(this.yMax + 1, y));
       const screen = this.phaseWorldToScreen(p, x, yc);
@@ -451,6 +460,7 @@ class PhaseAndTimeDemo {
   private drawPhaseFlowArrows(p: p5): void {
     if (this.dynamics.parseError) return;
 
+    const { xMin, xMax } = this.dynamics.viewRange;
     const y0 = this.phaseWorldToScreen(p, 0, 0).y;
     const arrowSpacing = 0.5;
     const arrowSize = 8;
@@ -459,7 +469,7 @@ class PhaseAndTimeDemo {
     p.stroke(this.colors.stroke);
     p.strokeWeight(2);
 
-    for (let x = Math.ceil(this.xMin / arrowSpacing) * arrowSpacing; x <= this.xMax; x += arrowSpacing) {
+    for (let x = Math.ceil(xMin / arrowSpacing) * arrowSpacing; x <= xMax; x += arrowSpacing) {
       const nearFixedPoint = this.dynamics.fixedPoints.some(fp => Math.abs(fp.x - x) < fixedPointClearance);
       if (nearFixedPoint) continue;
 
@@ -514,7 +524,8 @@ class PhaseAndTimeDemo {
     }
 
     p.textAlign(p.RIGHT, p.CENTER);
-    for (let x = Math.ceil(this.xMin); x <= Math.floor(this.xMax); x += 2) {
+    const { xMin, xMax } = this.dynamics.viewRange;
+    for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x += 2) {
       if (x === 0) continue;
       const sy = this.timeWorldToScreen(p, 0, x).y;
       p.stroke(this.colors.stroke);

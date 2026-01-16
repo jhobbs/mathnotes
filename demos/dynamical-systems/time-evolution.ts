@@ -22,8 +22,10 @@ class TimeEvolutionDemo extends P5DemoBase {
 
   // View parameters
   private tMin: number = 0;
-  private xMin: number = -10;
-  private xMax: number = 10;
+
+  // Search bounds (wider than view, view range computed dynamically)
+  private readonly searchMin: number = -20;
+  private readonly searchMax: number = 20;
 
   // Trajectories
   private trajectories: Trajectory[] = [];
@@ -34,7 +36,7 @@ class TimeEvolutionDemo extends P5DemoBase {
 
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
-    this.dynamics = new FlowDynamics(this.xMin, this.xMax);
+    this.dynamics = new FlowDynamics(this.searchMin, this.searchMax);
   }
 
   protected getStylePrefix(): string {
@@ -61,14 +63,16 @@ class TimeEvolutionDemo extends P5DemoBase {
   }
 
   private worldToScreen(p: p5, wt: number, wx: number): { x: number; y: number } {
+    const { xMin, xMax } = this.dynamics.viewRange;
     const sx = p.map(wt, this.tMin, this.dynamics.tMax, 0, p.width);
-    const sy = p.map(wx, this.xMin, this.xMax, p.height, 0);
+    const sy = p.map(wx, xMin, xMax, p.height, 0);
     return { x: sx, y: sy };
   }
 
   private screenToWorld(p: p5, sx: number, sy: number): { t: number; x: number } {
+    const { xMin, xMax } = this.dynamics.viewRange;
     const wt = p.map(sx, 0, p.width, this.tMin, this.dynamics.tMax);
-    const wx = p.map(sy, p.height, 0, this.xMin, this.xMax);
+    const wx = p.map(sy, p.height, 0, xMin, xMax);
     return { t: wt, x: wx };
   }
 
@@ -142,7 +146,8 @@ class TimeEvolutionDemo extends P5DemoBase {
 
       traj.points.push({ t, x });
 
-      if (t > this.dynamics.tMax || x < this.xMin - 1 || x > this.xMax + 1) {
+      const { xMin, xMax } = this.dynamics.viewRange;
+      if (t > this.dynamics.tMax || x < xMin - 1 || x > xMax + 1) {
         traj.active = false;
       }
     }
@@ -249,7 +254,8 @@ class TimeEvolutionDemo extends P5DemoBase {
     }
 
     p.textAlign(p.RIGHT, p.CENTER);
-    for (let x = Math.ceil(this.xMin); x <= Math.floor(this.xMax); x += 2) {
+    const { xMin, xMax } = this.dynamics.viewRange;
+    for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x += 2) {
       if (x === 0) continue;
       const sy = this.worldToScreen(p, 0, x).y;
       p.stroke(this.colors.stroke);
