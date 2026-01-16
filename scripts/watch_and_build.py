@@ -87,6 +87,8 @@ def build_site(output_dir: str, builder: SiteBuilder = None) -> SiteBuilder:
         logger.info("Reusing SiteBuilder, clearing caches...")
         # Clear navigation cache (will be rebuilt quickly)
         clear_navigation_cache()
+        # Rebuild block index (required - rendered HTML is stored here)
+        builder.block_index.build_index()
         # Clear page specs cache so specs are recomputed
         # (markdown rendering cache uses mtime, so only changed files re-render)
         for page in builder.page_registry.pages:

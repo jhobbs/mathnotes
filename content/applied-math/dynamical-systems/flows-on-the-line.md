@@ -89,3 +89,18 @@ This is called  the **linearization** about $x^*.$
 It also only works if $f'(x) \neq 0.$ If that's not the case, the best bet is to fall back to graphical analysis or to solve explicitly if possible.
 ::::
 :::
+
+:::definition "Half-stable"
+A @fixed-point $x^*$ where $f'(x) = 0$ and the stability depends on which side of $x^*$ $x_0$ lies on is called **half-stable.** It is denoted with a half-filled circle.
+:::
+
+## Existence and Uniqueness
+
+:::theorem {label: existence-and-uniqueness-of-ivp-solutions}
+Consider the @initial-value-problem
+
+$$ \dot{x} = f(x), \quad x(0) = x_0. $$
+
+Suppose that $f(x)$ and $f'(x)$ are @continuous on an @open @interval $R$ of the $x$-axis, and suppose that $x_0$ is a @point in $R.$ Then, the initial value problem has a solution $x(t)$ on some time interval $(- \tau, \tau)$ about $t = 0,$ and the solution is unique.
+
+:::

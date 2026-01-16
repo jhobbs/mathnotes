@@ -684,6 +684,12 @@ def process_structured_math_content(
             # Use pre-rendered HTML from the block index
             rendered_block = block.rendered_html
 
+            if rendered_block is None:
+                raise ValueError(
+                    f"Block '{block.label}' (type: {block.block_type.value}) has no rendered HTML. "
+                    f"File: {current_file}, marker: {marker_id}"
+                )
+
             # Replace the marker with the rendered block
             # Look for the marker in a paragraph tag or standalone
             html_content = html_content.replace(f"<p>{marker_id}</p>", rendered_block)
