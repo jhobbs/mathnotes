@@ -5,20 +5,7 @@ import { isDarkMode, getDemoColors, getResponsiveCanvasSize } from '@framework/d
 import type { DemoColors } from '@framework/demo-utils';
 import { addDemoStyles } from '@framework/ui-components';
 import { FlowDynamics, PRESETS, TRAJECTORY_COLORS } from './shared/flow-dynamics';
-
-interface TrajectoryPoint {
-  t: number;
-  x: number;
-}
-
-interface Particle {
-  x: number;
-  startX: number;
-  t: number;
-  color: string;
-  active: boolean;
-  trail: TrajectoryPoint[];
-}
+import { PhasePortraitRenderer, Particle } from './shared/phase-portrait-renderer';
 
 class PhaseAndTimeDemo {
   private container: HTMLElement;
@@ -30,13 +17,12 @@ class PhaseAndTimeDemo {
   private phaseP5: p5 | null = null;
   private timeP5: p5 | null = null;
 
-  // Shared dynamics
+  // Shared dynamics and renderer
   private dynamics: FlowDynamics;
+  private phaseRenderer: PhasePortraitRenderer;
   private exprString: string = 'sin(x)';
 
   // View parameters (xMin/xMax computed dynamically from dynamics.viewRange)
-  private yMin: number = -2;
-  private yMax: number = 2;
   private tMin: number = 0;
 
   // Shared particles
@@ -58,6 +44,10 @@ class PhaseAndTimeDemo {
     this.config = config;
     this._isDarkMode = isDarkMode(config);
     this.dynamics = new FlowDynamics();
+    this.phaseRenderer = new PhasePortraitRenderer({
+      axisLabelX: 'x',
+      axisLabelY: 'ẋ'
+    });
   }
 
   init(): DemoInstance {
@@ -279,21 +269,6 @@ class PhaseAndTimeDemo {
     }
   }
 
-  // Phase portrait coordinate transforms
-  private phaseWorldToScreen(p: p5, wx: number, wy: number): { x: number; y: number } {
-    const { xMin, xMax } = this.dynamics.viewRange;
-    const sx = p.map(wx, xMin, xMax, 0, p.width);
-    const sy = p.map(wy, this.yMin, this.yMax, p.height, 0);
-    return { x: sx, y: sy };
-  }
-
-  private phaseScreenToWorld(p: p5, sx: number, sy: number): { x: number; y: number } {
-    const { xMin, xMax } = this.dynamics.viewRange;
-    const wx = p.map(sx, 0, p.width, xMin, xMax);
-    const wy = p.map(sy, p.height, 0, this.yMin, this.yMax);
-    return { x: wx, y: wy };
-  }
-
   // Time evolution coordinate transforms
   private timeWorldToScreen(p: p5, wt: number, wx: number): { x: number; y: number } {
     const { xMin, xMax } = this.dynamics.viewRange;
@@ -321,20 +296,15 @@ class PhaseAndTimeDemo {
       p.draw = () => {
         p.background(this.colors.background);
         this.updateParticles();
-        this.drawPhaseAxes(p);
-        this.drawPhaseCriticalLines(p);
-        this.drawPhaseCurve(p);
-        this.drawPhaseFlowArrows(p);
-        this.drawPhaseFixedPoints(p);
-        this.drawPhaseParticles(p);
+        this.phaseRenderer.draw(p, this.dynamics, this.colors, this._isDarkMode, this.particles);
       };
 
       p.mousePressed = () => {
         if (p.mouseX < 0 || p.mouseX > p.width || p.mouseY < 0 || p.mouseY > p.height) {
           return;
         }
-        const world = this.phaseScreenToWorld(p, p.mouseX, p.mouseY);
-        const axisY = this.phaseWorldToScreen(p, 0, 0).y;
+        const world = this.phaseRenderer.screenToWorld(p, this.dynamics, p.mouseX, p.mouseY);
+        const axisY = this.phaseRenderer.worldToScreen(p, this.dynamics, 0, 0).y;
         if (Math.abs(p.mouseY - axisY) < 30) {
           this.spawnParticle(world.x);
         }
@@ -371,145 +341,6 @@ class PhaseAndTimeDemo {
     });
   }
 
-  // Phase portrait drawing methods
-  private drawPhaseAxes(p: p5): void {
-    p.stroke(this.colors.stroke);
-    p.strokeWeight(1);
-
-    const y0 = this.phaseWorldToScreen(p, 0, 0).y;
-    p.line(0, y0, p.width, y0);
-
-    const x0 = this.phaseWorldToScreen(p, 0, 0).x;
-    if (x0 >= 0 && x0 <= p.width) {
-      p.line(x0, 0, x0, p.height);
-    }
-
-    p.textAlign(p.CENTER, p.TOP);
-    p.textSize(10);
-    p.fill(this.colors.stroke);
-    p.noStroke();
-    const { xMin, xMax } = this.dynamics.viewRange;
-    for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x += 2) {
-      if (x === 0) continue;
-      const sx = this.phaseWorldToScreen(p, x, 0).x;
-      p.stroke(this.colors.stroke);
-      p.line(sx, y0 - 3, sx, y0 + 3);
-      p.noStroke();
-      p.text(x.toString(), sx, y0 + 5);
-    }
-  }
-
-  private drawPhaseCriticalLines(p: p5): void {
-    const criticalColor = this._isDarkMode ? '#888888' : '#999999';
-
-    p.stroke(criticalColor);
-    p.strokeWeight(1);
-    p.drawingContext.setLineDash([4, 4]);
-
-    for (const cp of this.dynamics.criticalPoints) {
-      const sx = this.phaseWorldToScreen(p, cp.x, 0).x;
-      p.line(sx, 0, sx, p.height);
-    }
-
-    p.drawingContext.setLineDash([]);
-  }
-
-  private drawPhaseCurve(p: p5): void {
-    if (this.dynamics.parseError) return;
-
-    const { xMin, xMax } = this.dynamics.viewRange;
-    p.stroke(this._isDarkMode ? '#6699ff' : '#3366cc');
-    p.strokeWeight(2);
-    p.noFill();
-
-    p.beginShape();
-    const numPoints = 400;
-    for (let i = 0; i <= numPoints; i++) {
-      const x = xMin + (i / numPoints) * (xMax - xMin);
-      const y = this.dynamics.f(x);
-      const yc = Math.max(this.yMin - 1, Math.min(this.yMax + 1, y));
-      const screen = this.phaseWorldToScreen(p, x, yc);
-      p.vertex(screen.x, screen.y);
-    }
-    p.endShape();
-  }
-
-  private drawPhaseFixedPoints(p: p5): void {
-    const y0 = this.phaseWorldToScreen(p, 0, 0).y;
-    const radius = 8;
-
-    const stableColor = this._isDarkMode ? '#66ff66' : '#228822';
-    const unstableColor = this._isDarkMode ? '#ff6666' : '#cc2222';
-
-    for (const fp of this.dynamics.fixedPoints) {
-      const sx = this.phaseWorldToScreen(p, fp.x, 0).x;
-
-      if (fp.stability === 'stable') {
-        p.fill(stableColor);
-        p.noStroke();
-        p.circle(sx, y0, radius * 2);
-      } else if (fp.stability === 'unstable') {
-        p.noFill();
-        p.stroke(unstableColor);
-        p.strokeWeight(2);
-        p.circle(sx, y0, radius * 2);
-      } else {
-        p.noFill();
-        p.stroke(unstableColor);
-        p.strokeWeight(2);
-        p.circle(sx, y0, radius * 2);
-        p.fill(stableColor);
-        p.noStroke();
-        if (fp.stability === 'half-stable-left') {
-          p.arc(sx, y0, radius * 2, radius * 2, p.HALF_PI, -p.HALF_PI);
-        } else {
-          p.arc(sx, y0, radius * 2, radius * 2, -p.HALF_PI, p.HALF_PI);
-        }
-      }
-    }
-  }
-
-  private drawPhaseFlowArrows(p: p5): void {
-    if (this.dynamics.parseError) return;
-
-    const { xMin, xMax } = this.dynamics.viewRange;
-    const y0 = this.phaseWorldToScreen(p, 0, 0).y;
-    const arrowSpacing = 0.5;
-    const arrowSize = 8;
-    const fixedPointClearance = 0.3;
-
-    p.stroke(this.colors.stroke);
-    p.strokeWeight(2);
-
-    for (let x = Math.ceil(xMin / arrowSpacing) * arrowSpacing; x <= xMax; x += arrowSpacing) {
-      const nearFixedPoint = this.dynamics.fixedPoints.some(fp => Math.abs(fp.x - x) < fixedPointClearance);
-      if (nearFixedPoint) continue;
-
-      const fx = this.dynamics.f(x);
-      if (Math.abs(fx) < 0.01) continue;
-
-      const sx = this.phaseWorldToScreen(p, x, 0).x;
-      const direction = fx > 0 ? 1 : -1;
-
-      const tipX = sx + direction * arrowSize;
-      p.line(sx - direction * arrowSize * 0.5, y0, tipX, y0);
-      p.line(tipX, y0, tipX - direction * 4, y0 - 4);
-      p.line(tipX, y0, tipX - direction * 4, y0 + 4);
-    }
-  }
-
-  private drawPhaseParticles(p: p5): void {
-    const y0 = this.phaseWorldToScreen(p, 0, 0).y;
-    const particleRadius = 6;
-
-    p.noStroke();
-    for (const particle of this.particles) {
-      const sx = this.phaseWorldToScreen(p, particle.x, 0).x;
-      p.fill(particle.color);
-      p.circle(sx, y0, particleRadius * 2);
-    }
-  }
-
   // Time evolution drawing methods
   private drawTimeAxes(p: p5): void {
     p.stroke(this.colors.stroke);
@@ -523,7 +354,7 @@ class PhaseAndTimeDemo {
     p.line(t0Screen, 0, t0Screen, p.height);
 
     p.textAlign(p.CENTER, p.TOP);
-    p.textSize(10);
+    p.textSize(13);
     p.fill(this.colors.stroke);
     const tRange = this.dynamics.tMax - this.tMin;
     const tTickStep = tRange <= 10 ? 2 : tRange <= 25 ? 5 : tRange <= 50 ? 10 : 20;
@@ -546,6 +377,8 @@ class PhaseAndTimeDemo {
       p.text(x.toString(), t0Screen - 5, sy);
     }
 
+    // Axis labels
+    p.textSize(18);
     p.textAlign(p.CENTER, p.TOP);
     p.text('t', p.width - 10, tAxisY + 5);
     p.textAlign(p.RIGHT, p.CENTER);

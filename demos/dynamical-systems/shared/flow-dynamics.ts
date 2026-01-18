@@ -26,12 +26,21 @@ export class FlowDynamics {
   private _criticalPoints: CriticalPoint[] = [];
   private _tMax: number = 20;
   private _viewRange: ViewRange;
+  private _r: number = 0;
 
   constructor(
     private xMin: number = -5,
     private xMax: number = 5
   ) {
     this._viewRange = { xMin, xMax };
+  }
+
+  get r(): number {
+    return this._r;
+  }
+
+  set r(value: number) {
+    this._r = value;
   }
 
   get parseError(): boolean {
@@ -57,7 +66,7 @@ export class FlowDynamics {
   f(x: number): number {
     if (!this.compiledF) return 0;
     try {
-      const result = this.compiledF.evaluate({ x });
+      const result = this.compiledF.evaluate({ x, r: this._r });
       return typeof result === 'number' ? result : 0;
     } catch {
       return 0;
@@ -67,7 +76,7 @@ export class FlowDynamics {
   df(x: number): number {
     if (!this.compiledDf) return 0;
     try {
-      const result = this.compiledDf.evaluate({ x });
+      const result = this.compiledDf.evaluate({ x, r: this._r });
       return typeof result === 'number' ? result : 0;
     } catch {
       return 0;
@@ -296,9 +305,17 @@ export class FlowDynamics {
     this.computeViewRange();
     return success;
   }
+
+  /** Update after r changes (no re-parsing needed) */
+  updateForParameter(): void {
+    this.findFixedPoints();
+    this.findCriticalPoints();
+    this.computeTimeScale();
+    this.computeViewRange();
+  }
 }
 
-// Preset functions for UI
+// Preset functions for UI (non-parametric)
 export const PRESETS = [
   { label: 'sin(x)', expr: 'sin(x)' },
   { label: 'x(1-x)', expr: 'x*(1-x)' },
@@ -306,6 +323,23 @@ export const PRESETS = [
   { label: 'x-x³', expr: 'x-x^3' },
   { label: 'x²', expr: 'x^2' },
   { label: '-x²', expr: '-x^2' }
+];
+
+// Parametric presets with r ranges for bifurcation demos
+export interface ParametricPreset {
+  label: string;
+  expr: string;
+  rMin: number;
+  rMax: number;
+  rDefault: number;
+  rStep: number;
+}
+
+export const PARAMETRIC_PRESETS: ParametricPreset[] = [
+  { label: 'Saddle-node', expr: 'r - x^2', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 },
+  { label: 'Transcritical', expr: 'r*x - x^2', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 },
+  { label: 'Supercritical', expr: 'r*x - x^3', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 },
+  { label: 'Subcritical', expr: 'r*x + x^3', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 }
 ];
 
 // Color palette for trajectories

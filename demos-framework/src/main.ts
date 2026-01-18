@@ -57,7 +57,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'complex-frequency': () => import('@demos/complex-analysis/complex-frequency'),
   'flows-on-the-line': () => import('@demos/dynamical-systems/flows-on-the-line'),
   'time-evolution': () => import('@demos/dynamical-systems/time-evolution'),
-  'phase-and-time': () => import('@demos/dynamical-systems/phase-and-time')
+  'phase-and-time': () => import('@demos/dynamical-systems/phase-and-time'),
+  'parametric-phase-portrait': () => import('@demos/dynamical-systems/parametric-phase-portrait')
 };
 
 // Store for loaded metadata
