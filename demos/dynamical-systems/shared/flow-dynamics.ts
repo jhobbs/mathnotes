@@ -30,8 +30,8 @@ export class FlowDynamics {
   private _r: number = 0;
 
   constructor(
-    private xMin: number = -20,
-    private xMax: number = 20
+    private xMin: number = -1000,
+    private xMax: number = 1000
   ) {
     this._viewRange = { xMin, xMax };
   }
@@ -70,6 +70,11 @@ export class FlowDynamics {
 
   setViewRangeOverride(range: ViewRange | null): void {
     this._viewRangeOverride = range;
+  }
+
+  setDomain(xMin: number, xMax: number): void {
+    this.xMin = xMin;
+    this.xMax = xMax;
   }
 
   f(x: number): number {
@@ -127,10 +132,10 @@ export class FlowDynamics {
     this._fixedPoints = [];
     if (this._parseError) return;
 
-    const numSamples = 200;
+    const numSamples = 10000;
     const step = (this.xMax - this.xMin) / numSamples;
     const candidates: number[] = [];
-    const zeroThreshold = 1e-10;
+    const zeroThreshold = 1e-6;
 
     let prevX = this.xMin;
     let prevY = this.f(this.xMin);
@@ -145,18 +150,26 @@ export class FlowDynamics {
       const y = this.f(x);
 
       if (Math.abs(y) < zeroThreshold) {
+        // Near zero - try to refine with Newton-Raphson
         const root = this.newtonRaphson(x);
         candidates.push(root !== null ? root : x);
       } else if (prevY * y < 0) {
+        // Sign change - find root by bisection then Newton-Raphson
         const midpoint = (prevX + x) / 2;
         const root = this.newtonRaphson(midpoint);
         if (root !== null && root >= this.xMin && root <= this.xMax) {
           candidates.push(root);
         }
+      } else if (Math.abs(prevY) < zeroThreshold && Math.abs(y) > zeroThreshold) {
+        // Previous was near zero, current is not - the root was at prevX
+        // (already handled in previous iteration, but ensure we don't miss sign info)
       }
 
-      prevX = x;
-      prevY = y;
+      // Only update prevY if current y is not near-zero, to preserve sign change detection
+      if (Math.abs(y) >= zeroThreshold) {
+        prevX = x;
+        prevY = y;
+      }
     }
 
     const tolerance = 1e-6;
@@ -198,7 +211,7 @@ export class FlowDynamics {
     this._criticalPoints = [];
     if (this._parseError) return;
 
-    const numSamples = 200;
+    const numSamples = 10000;
     const step = (this.xMax - this.xMin) / numSamples;
     const candidates: number[] = [];
     const zeroThreshold = 1e-8;
@@ -337,13 +350,16 @@ export interface ParametricPreset {
   rMax: number;
   rDefault: number;
   rStep: number;
+  xMin?: number;  // Optional domain constraint (default: -1000)
+  xMax?: number;  // Optional domain constraint (default: 1000)
 }
 
 export const PARAMETRIC_PRESETS: ParametricPreset[] = [
-  { label: 'Saddle-node', expr: 'r - x^2', rMin: -10, rMax: 10, rDefault: 0, rStep: 0.1 },
-  { label: 'Transcritical', expr: 'r*x - x^2', rMin: -10, rMax: 10, rDefault: 0, rStep: 0.1 },
-  { label: 'Supercritical', expr: 'r*x - x^3', rMin: -10, rMax: 10, rDefault: 0, rStep: 0.1 },
-  { label: 'Subcritical', expr: 'r*x + x^3', rMin: -10, rMax: 10, rDefault: 0, rStep: 0.1 }
+  { label: 'Saddle-node', expr: 'r - x^2', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 },
+  { label: 'Transcritical', expr: 'r*x - x^2', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 },
+  { label: 'Supercritical', expr: 'r*x - x^3', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 },
+  { label: 'Subcritical', expr: 'r*x + x^3', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 },
+  { label: 'Logarithmic', expr: 'r*log(x) + x - 1', rMin: -5, rMax: 5, rDefault: 1, rStep: 0.1, xMin: 0.001, xMax: 100 }
 ];
 
 // Color palette for trajectories

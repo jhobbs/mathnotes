@@ -20,8 +20,8 @@ class ParametricPhasePortraitDemo {
   private exprString: string = 'r - x^2';
 
   // Parameter state
-  private rMin: number = -10;
-  private rMax: number = 10;
+  private rMin: number = -5;
+  private rMax: number = 5;
   private rStep: number = 0.1;
 
   // Zoom state (1.0 = auto, >1 = zoomed out)
@@ -36,6 +36,10 @@ class ParametricPhasePortraitDemo {
   private inputEl!: HTMLInputElement;
   private sliderEl!: HTMLInputElement;
   private rInputEl!: HTMLInputElement;
+  private rMinInputEl!: HTMLInputElement;
+  private rMaxInputEl!: HTMLInputElement;
+  private xMinInputEl!: HTMLInputElement;
+  private xMaxInputEl!: HTMLInputElement;
   private containerEl!: HTMLElement;
   private canvasContainer!: HTMLElement;
 
@@ -143,6 +147,62 @@ class ParametricPhasePortraitDemo {
     inputRow.appendChild(label);
     inputRow.appendChild(this.inputEl);
 
+    // Domain inputs
+    const domainLabel = document.createElement('span');
+    domainLabel.textContent = 'x ∈';
+    domainLabel.style.fontFamily = 'var(--font-mono, monospace)';
+    domainLabel.style.marginLeft = 'var(--spacing-sm, 0.5rem)';
+
+    this.xMinInputEl = document.createElement('input');
+    this.xMinInputEl.type = 'number';
+    this.xMinInputEl.value = '-1000';
+    this.xMinInputEl.style.padding = '0.25rem 0.5rem';
+    this.xMinInputEl.style.borderRadius = '0.25rem';
+    this.xMinInputEl.style.border = '1px solid var(--color-border, #ccc)';
+    this.xMinInputEl.style.background = this._isDarkMode ? 'rgba(255,255,255,0.1)' : 'white';
+    this.xMinInputEl.style.color = 'var(--color-text, inherit)';
+    this.xMinInputEl.style.fontFamily = 'var(--font-mono, monospace)';
+    this.xMinInputEl.style.width = '70px';
+
+    const toLabel = document.createElement('span');
+    toLabel.textContent = 'to';
+    toLabel.style.fontFamily = 'var(--font-mono, monospace)';
+
+    this.xMaxInputEl = document.createElement('input');
+    this.xMaxInputEl.type = 'number';
+    this.xMaxInputEl.value = '1000';
+    this.xMaxInputEl.style.padding = '0.25rem 0.5rem';
+    this.xMaxInputEl.style.borderRadius = '0.25rem';
+    this.xMaxInputEl.style.border = '1px solid var(--color-border, #ccc)';
+    this.xMaxInputEl.style.background = this._isDarkMode ? 'rgba(255,255,255,0.1)' : 'white';
+    this.xMaxInputEl.style.color = 'var(--color-text, inherit)';
+    this.xMaxInputEl.style.fontFamily = 'var(--font-mono, monospace)';
+    this.xMaxInputEl.style.width = '70px';
+
+    const domainHandler = () => {
+      const xMin = parseFloat(this.xMinInputEl.value);
+      const xMax = parseFloat(this.xMaxInputEl.value);
+      if (!isNaN(xMin) && !isNaN(xMax) && xMin < xMax) {
+        this.dynamics.setDomain(xMin, xMax);
+        this.updateFunction();
+      }
+    };
+    this.xMinInputEl.addEventListener('change', domainHandler);
+    this.xMaxInputEl.addEventListener('change', domainHandler);
+    this.eventListeners.push({ target: this.xMinInputEl, type: 'change', listener: domainHandler });
+    this.eventListeners.push({ target: this.xMaxInputEl, type: 'change', listener: domainHandler });
+
+    const domainKeyHandler = (e: Event) => (e as KeyboardEvent).stopPropagation();
+    this.xMinInputEl.addEventListener('keydown', domainKeyHandler);
+    this.xMaxInputEl.addEventListener('keydown', domainKeyHandler);
+    this.eventListeners.push({ target: this.xMinInputEl, type: 'keydown', listener: domainKeyHandler });
+    this.eventListeners.push({ target: this.xMaxInputEl, type: 'keydown', listener: domainKeyHandler });
+
+    inputRow.appendChild(domainLabel);
+    inputRow.appendChild(this.xMinInputEl);
+    inputRow.appendChild(toLabel);
+    inputRow.appendChild(this.xMaxInputEl);
+
     // Clear button
     const clearBtn = document.createElement('button');
     clearBtn.textContent = 'Clear';
@@ -218,9 +278,74 @@ class ParametricPhasePortraitDemo {
     this.rInputEl.addEventListener('keydown', rKeyHandler);
     this.eventListeners.push({ target: this.rInputEl, type: 'keydown', listener: rKeyHandler });
 
+    // r range inputs
+    const rRangeLabel = document.createElement('span');
+    rRangeLabel.textContent = 'r ∈';
+    rRangeLabel.style.fontFamily = 'var(--font-mono, monospace)';
+    rRangeLabel.style.marginLeft = 'var(--spacing-sm, 0.5rem)';
+
+    this.rMinInputEl = document.createElement('input');
+    this.rMinInputEl.type = 'number';
+    this.rMinInputEl.value = this.rMin.toString();
+    this.rMinInputEl.style.padding = '0.25rem 0.5rem';
+    this.rMinInputEl.style.borderRadius = '0.25rem';
+    this.rMinInputEl.style.border = '1px solid var(--color-border, #ccc)';
+    this.rMinInputEl.style.background = this._isDarkMode ? 'rgba(255,255,255,0.1)' : 'white';
+    this.rMinInputEl.style.color = 'var(--color-text, inherit)';
+    this.rMinInputEl.style.fontFamily = 'var(--font-mono, monospace)';
+    this.rMinInputEl.style.width = '60px';
+
+    const rToLabel = document.createElement('span');
+    rToLabel.textContent = 'to';
+    rToLabel.style.fontFamily = 'var(--font-mono, monospace)';
+
+    this.rMaxInputEl = document.createElement('input');
+    this.rMaxInputEl.type = 'number';
+    this.rMaxInputEl.value = this.rMax.toString();
+    this.rMaxInputEl.style.padding = '0.25rem 0.5rem';
+    this.rMaxInputEl.style.borderRadius = '0.25rem';
+    this.rMaxInputEl.style.border = '1px solid var(--color-border, #ccc)';
+    this.rMaxInputEl.style.background = this._isDarkMode ? 'rgba(255,255,255,0.1)' : 'white';
+    this.rMaxInputEl.style.color = 'var(--color-text, inherit)';
+    this.rMaxInputEl.style.fontFamily = 'var(--font-mono, monospace)';
+    this.rMaxInputEl.style.width = '60px';
+
+    const rRangeHandler = () => {
+      const newMin = parseFloat(this.rMinInputEl.value);
+      const newMax = parseFloat(this.rMaxInputEl.value);
+      if (!isNaN(newMin) && !isNaN(newMax) && newMin < newMax) {
+        this.rMin = newMin;
+        this.rMax = newMax;
+        this.sliderEl.min = newMin.toString();
+        this.sliderEl.max = newMax.toString();
+        this.rInputEl.min = newMin.toString();
+        this.rInputEl.max = newMax.toString();
+        // Clamp current r value to new range
+        const currentR = parseFloat(this.sliderEl.value);
+        const clampedR = Math.max(newMin, Math.min(newMax, currentR));
+        this.sliderEl.value = clampedR.toString();
+        this.rInputEl.value = clampedR.toString();
+        this.updateParameter();
+      }
+    };
+    this.rMinInputEl.addEventListener('change', rRangeHandler);
+    this.rMaxInputEl.addEventListener('change', rRangeHandler);
+    this.eventListeners.push({ target: this.rMinInputEl, type: 'change', listener: rRangeHandler });
+    this.eventListeners.push({ target: this.rMaxInputEl, type: 'change', listener: rRangeHandler });
+
+    const rRangeKeyHandler = (e: Event) => (e as KeyboardEvent).stopPropagation();
+    this.rMinInputEl.addEventListener('keydown', rRangeKeyHandler);
+    this.rMaxInputEl.addEventListener('keydown', rRangeKeyHandler);
+    this.eventListeners.push({ target: this.rMinInputEl, type: 'keydown', listener: rRangeKeyHandler });
+    this.eventListeners.push({ target: this.rMaxInputEl, type: 'keydown', listener: rRangeKeyHandler });
+
     rRow.appendChild(rLabel);
     rRow.appendChild(this.sliderEl);
     rRow.appendChild(this.rInputEl);
+    rRow.appendChild(rRangeLabel);
+    rRow.appendChild(this.rMinInputEl);
+    rRow.appendChild(rToLabel);
+    rRow.appendChild(this.rMaxInputEl);
 
     panel.appendChild(rRow);
 
@@ -325,6 +450,17 @@ class ParametricPhasePortraitDemo {
     this.rInputEl.max = preset.rMax.toString();
     this.rInputEl.step = preset.rStep.toString();
     this.rInputEl.value = preset.rDefault.toString();
+
+    // Update r range inputs
+    this.rMinInputEl.value = preset.rMin.toString();
+    this.rMaxInputEl.value = preset.rMax.toString();
+
+    // Set domain constraint from preset (or defaults)
+    const xMin = preset.xMin ?? -1000;
+    const xMax = preset.xMax ?? 1000;
+    this.dynamics.setDomain(xMin, xMax);
+    this.xMinInputEl.value = xMin.toString();
+    this.xMaxInputEl.value = xMax.toString();
 
     // Reset zoom to auto
     this.zoomLevel = 1.0;
