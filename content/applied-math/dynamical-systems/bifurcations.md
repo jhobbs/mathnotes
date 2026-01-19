@@ -40,3 +40,11 @@ that is, $f(x^*, r^*)$ is a @tangential-intersection with the $x$-axis, and
 $$ \partial_{xx} f(x^*, r^*) \neq 0, \partial_r f(x^*, r^*) \neq 0. $$
 
 The first ensures this is only a double root, not a triple root or worse. The second ensures that as we vary $r$ near this point, the function value actually changes, which is required to create or destroy the @fixed-points.
+
+## Transcritical Bifurcation
+
+:::definition "Transcritical"
+A **transcritical** bifurcation occurs when a given $x^*$ is always a @fixed-point, but its stability changes when crossing the @bifurcation-point $r^*$. At all values of $r$ other than $r^*,$ there are two @fixed-points (and at $r^*$ one degenerate @fixed-point), but their stability is exchanged at the crossing.
+:::
+
+The normal form for a @transcritical-bifurcation is $\dot{x} = r x - x^2.$
