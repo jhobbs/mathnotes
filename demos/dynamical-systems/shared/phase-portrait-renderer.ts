@@ -192,8 +192,8 @@ export class PhasePortraitRenderer {
 
       const tipX = sx + direction * arrowSize;
       p.line(sx - direction * arrowSize * 0.5, y0, tipX, y0);
-      p.line(tipX, y0, tipX - direction * 4, y0 - 4);
-      p.line(tipX, y0, tipX - direction * 4, y0 + 4);
+      p.line(tipX, y0, tipX - direction * 7, y0 - 6);
+      p.line(tipX, y0, tipX - direction * 7, y0 + 6);
     }
   }
 

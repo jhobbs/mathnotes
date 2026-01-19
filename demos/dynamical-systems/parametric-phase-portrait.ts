@@ -20,9 +20,13 @@ class ParametricPhasePortraitDemo {
   private exprString: string = 'r - x^2';
 
   // Parameter state
-  private rMin: number = -5;
-  private rMax: number = 5;
+  private rMin: number = -10;
+  private rMax: number = 10;
   private rStep: number = 0.1;
+
+  // Zoom state (1.0 = auto, >1 = zoomed out)
+  private zoomLevel: number = 1.0;
+  private zoomSliderEl!: HTMLInputElement;
 
   // Particles
   private particles: Particle[] = [];
@@ -220,6 +224,62 @@ class ParametricPhasePortraitDemo {
 
     panel.appendChild(rRow);
 
+    // Zoom row
+    const zoomRow = document.createElement('div');
+    zoomRow.style.display = 'flex';
+    zoomRow.style.alignItems = 'center';
+    zoomRow.style.gap = 'var(--spacing-sm, 0.5rem)';
+    zoomRow.style.marginBottom = 'var(--spacing-sm, 0.5rem)';
+    zoomRow.style.justifyContent = 'center';
+
+    const zoomLabel = document.createElement('label');
+    zoomLabel.textContent = 'Zoom:';
+    zoomLabel.style.fontWeight = 'bold';
+
+    this.zoomSliderEl = document.createElement('input');
+    this.zoomSliderEl.type = 'range';
+    this.zoomSliderEl.min = '0.5';
+    this.zoomSliderEl.max = '4';
+    this.zoomSliderEl.step = '0.1';
+    this.zoomSliderEl.value = '1';
+    this.zoomSliderEl.style.width = '150px';
+
+    const zoomValueEl = document.createElement('span');
+    zoomValueEl.textContent = '1.0x';
+    zoomValueEl.style.fontFamily = 'var(--font-mono, monospace)';
+    zoomValueEl.style.minWidth = '40px';
+
+    const zoomHandler = () => {
+      this.zoomLevel = parseFloat(this.zoomSliderEl.value);
+      zoomValueEl.textContent = this.zoomLevel.toFixed(1) + 'x';
+      this.applyZoom();
+    };
+    this.zoomSliderEl.addEventListener('input', zoomHandler);
+    this.eventListeners.push({ target: this.zoomSliderEl, type: 'input', listener: zoomHandler });
+
+    const fitBtn = document.createElement('button');
+    fitBtn.textContent = 'Fit';
+    fitBtn.style.padding = '0.25rem 0.5rem';
+    fitBtn.style.borderRadius = '0.25rem';
+    fitBtn.style.border = '1px solid var(--color-border, #ccc)';
+    fitBtn.style.background = this._isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)';
+    fitBtn.style.cursor = 'pointer';
+    const fitHandler = () => {
+      this.zoomLevel = 1.0;
+      this.zoomSliderEl.value = '1';
+      zoomValueEl.textContent = '1.0x';
+      this.dynamics.setViewRangeOverride(null);
+    };
+    fitBtn.addEventListener('click', fitHandler);
+    this.eventListeners.push({ target: fitBtn, type: 'click', listener: fitHandler });
+
+    zoomRow.appendChild(zoomLabel);
+    zoomRow.appendChild(this.zoomSliderEl);
+    zoomRow.appendChild(zoomValueEl);
+    zoomRow.appendChild(fitBtn);
+
+    panel.appendChild(zoomRow);
+
     // Preset buttons row
     const presetRow = document.createElement('div');
     presetRow.style.display = 'flex';
@@ -266,6 +326,11 @@ class ParametricPhasePortraitDemo {
     this.rInputEl.step = preset.rStep.toString();
     this.rInputEl.value = preset.rDefault.toString();
 
+    // Reset zoom to auto
+    this.zoomLevel = 1.0;
+    this.zoomSliderEl.value = '1';
+    this.dynamics.setViewRangeOverride(null);
+
     this.dynamics.r = preset.rDefault;
     this.updateFunction();
   }
@@ -273,6 +338,7 @@ class ParametricPhasePortraitDemo {
   private updateFunction(): void {
     const success = this.dynamics.update(this.exprString);
     this.inputEl.style.borderColor = success ? '' : 'red';
+    this.applyZoom();
     this.particles = [];
     this.colorIndex = 0;
   }
@@ -280,8 +346,23 @@ class ParametricPhasePortraitDemo {
   private updateParameter(): void {
     this.dynamics.r = parseFloat(this.sliderEl.value);
     this.dynamics.updateForParameter();
+    this.applyZoom();
     this.particles = [];
     this.colorIndex = 0;
+  }
+
+  private applyZoom(): void {
+    if (this.zoomLevel === 1.0) {
+      this.dynamics.setViewRangeOverride(null);
+    } else {
+      const auto = this.dynamics.autoViewRange;
+      const center = (auto.xMin + auto.xMax) / 2;
+      const halfSpan = ((auto.xMax - auto.xMin) / 2) * this.zoomLevel;
+      this.dynamics.setViewRangeOverride({
+        xMin: center - halfSpan,
+        xMax: center + halfSpan
+      });
+    }
   }
 
   private spawnParticle(x0: number): void {

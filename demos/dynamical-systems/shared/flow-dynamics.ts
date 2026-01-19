@@ -26,11 +26,12 @@ export class FlowDynamics {
   private _criticalPoints: CriticalPoint[] = [];
   private _tMax: number = 20;
   private _viewRange: ViewRange;
+  private _viewRangeOverride: ViewRange | null = null;
   private _r: number = 0;
 
   constructor(
-    private xMin: number = -5,
-    private xMax: number = 5
+    private xMin: number = -20,
+    private xMax: number = 20
   ) {
     this._viewRange = { xMin, xMax };
   }
@@ -60,7 +61,15 @@ export class FlowDynamics {
   }
 
   get viewRange(): ViewRange {
+    return this._viewRangeOverride ?? this._viewRange;
+  }
+
+  get autoViewRange(): ViewRange {
     return this._viewRange;
+  }
+
+  setViewRangeOverride(range: ViewRange | null): void {
+    this._viewRangeOverride = range;
   }
 
   f(x: number): number {
@@ -271,8 +280,6 @@ export class FlowDynamics {
   }
 
   computeViewRange(): void {
-    const defaultRange = this.xMax - this.xMin;
-
     if (this._fixedPoints.length > 0) {
       const xs = this._fixedPoints.map(fp => fp.x);
       const minFp = Math.min(...xs);
@@ -283,13 +290,10 @@ export class FlowDynamics {
         // Single fixed point or cluster - center on it with reasonable range
         const center = (minFp + maxFp) / 2;
         this._viewRange = { xMin: center - 3, xMax: center + 3 };
-      } else if (span < defaultRange * 0.4) {
-        // Multiple fixed points in a reasonable range - auto-scale
+      } else {
+        // Auto-scale to fit all fixed points with padding
         const padding = Math.max(span * 0.5, 1);
         this._viewRange = { xMin: minFp - padding, xMax: maxFp + padding };
-      } else {
-        // Fixed points spread too wide - use default range
-        this._viewRange = { xMin: this.xMin, xMax: this.xMax };
       }
     } else {
       // No fixed points - use default range
@@ -336,10 +340,10 @@ export interface ParametricPreset {
 }
 
 export const PARAMETRIC_PRESETS: ParametricPreset[] = [
-  { label: 'Saddle-node', expr: 'r - x^2', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 },
-  { label: 'Transcritical', expr: 'r*x - x^2', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 },
-  { label: 'Supercritical', expr: 'r*x - x^3', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 },
-  { label: 'Subcritical', expr: 'r*x + x^3', rMin: -5, rMax: 5, rDefault: 0, rStep: 0.1 }
+  { label: 'Saddle-node', expr: 'r - x^2', rMin: -10, rMax: 10, rDefault: 0, rStep: 0.1 },
+  { label: 'Transcritical', expr: 'r*x - x^2', rMin: -10, rMax: 10, rDefault: 0, rStep: 0.1 },
+  { label: 'Supercritical', expr: 'r*x - x^3', rMin: -10, rMax: 10, rDefault: 0, rStep: 0.1 },
+  { label: 'Subcritical', expr: 'r*x + x^3', rMin: -10, rMax: 10, rDefault: 0, rStep: 0.1 }
 ];
 
 // Color palette for trajectories
