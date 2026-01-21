@@ -155,7 +155,7 @@ class ParametricPhasePortraitDemo {
 
     this.xMinInputEl = document.createElement('input');
     this.xMinInputEl.type = 'number';
-    this.xMinInputEl.value = '-1000';
+    this.xMinInputEl.value = '-10';
     this.xMinInputEl.style.padding = '0.25rem 0.5rem';
     this.xMinInputEl.style.borderRadius = '0.25rem';
     this.xMinInputEl.style.border = '1px solid var(--color-border, #ccc)';
@@ -170,7 +170,7 @@ class ParametricPhasePortraitDemo {
 
     this.xMaxInputEl = document.createElement('input');
     this.xMaxInputEl.type = 'number';
-    this.xMaxInputEl.value = '1000';
+    this.xMaxInputEl.value = '10';
     this.xMaxInputEl.style.padding = '0.25rem 0.5rem';
     this.xMaxInputEl.style.borderRadius = '0.25rem';
     this.xMaxInputEl.style.border = '1px solid var(--color-border, #ccc)';
@@ -363,9 +363,9 @@ class ParametricPhasePortraitDemo {
 
     this.zoomSliderEl = document.createElement('input');
     this.zoomSliderEl.type = 'range';
-    this.zoomSliderEl.min = '0.5';
+    this.zoomSliderEl.min = '0.05';
     this.zoomSliderEl.max = '4';
-    this.zoomSliderEl.step = '0.1';
+    this.zoomSliderEl.step = '0.05';
     this.zoomSliderEl.value = '1';
     this.zoomSliderEl.style.width = '150px';
 
@@ -456,8 +456,8 @@ class ParametricPhasePortraitDemo {
     this.rMaxInputEl.value = preset.rMax.toString();
 
     // Set domain constraint from preset (or defaults)
-    const xMin = preset.xMin ?? -1000;
-    const xMax = preset.xMax ?? 1000;
+    const xMin = preset.xMin ?? -10;
+    const xMax = preset.xMax ?? 10;
     this.dynamics.setDomain(xMin, xMax);
     this.xMinInputEl.value = xMin.toString();
     this.xMaxInputEl.value = xMax.toString();

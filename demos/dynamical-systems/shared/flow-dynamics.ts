@@ -30,8 +30,8 @@ export class FlowDynamics {
   private _r: number = 0;
 
   constructor(
-    private xMin: number = -1000,
-    private xMax: number = 1000
+    private xMin: number = -10,
+    private xMax: number = 10
   ) {
     this._viewRange = { xMin, xMax };
   }
@@ -350,8 +350,8 @@ export interface ParametricPreset {
   rMax: number;
   rDefault: number;
   rStep: number;
-  xMin?: number;  // Optional domain constraint (default: -1000)
-  xMax?: number;  // Optional domain constraint (default: 1000)
+  xMin?: number;  // Optional domain constraint (default: -10)
+  xMax?: number;  // Optional domain constraint (default: 10)
 }
 
 export const PARAMETRIC_PRESETS: ParametricPreset[] = [
