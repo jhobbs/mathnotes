@@ -50,6 +50,12 @@ class BlockIndex:
         """Build the global index by scanning all markdown files."""
         content_dir = "content"
 
+        # Clear existing data structures to allow rebuilding
+        self.index.clear()
+        self.all_blocks.clear()
+        self.rendered_blocks.clear()
+        self.reverse_index = ReverseIndex()
+
         # Phase 1: Scan and index all blocks
         self._scan_directory(content_dir)
 
