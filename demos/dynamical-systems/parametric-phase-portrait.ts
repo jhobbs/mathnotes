@@ -4,6 +4,7 @@ import type { DemoConfig, DemoInstance, DemoMetadata } from '@framework/types';
 import { isDarkMode, getDemoColors, getResponsiveCanvasSize } from '@framework/demo-utils';
 import type { DemoColors } from '@framework/demo-utils';
 import { addDemoStyles } from '@framework/ui-components';
+import { evaluate } from 'mathjs';
 import { FlowDynamics, PARAMETRIC_PRESETS, TRAJECTORY_COLORS } from './shared/flow-dynamics';
 import type { ParametricPreset } from './shared/flow-dynamics';
 import { PhasePortraitRenderer, Particle } from './shared/phase-portrait-renderer';
@@ -243,10 +244,7 @@ class ParametricPhasePortraitDemo {
     this.sliderEl.style.width = '200px';
 
     this.rInputEl = document.createElement('input');
-    this.rInputEl.type = 'number';
-    this.rInputEl.min = this.rMin.toString();
-    this.rInputEl.max = this.rMax.toString();
-    this.rInputEl.step = this.rStep.toString();
+    this.rInputEl.type = 'text';
     this.rInputEl.value = '0';
     this.rInputEl.style.padding = '0.25rem 0.5rem';
     this.rInputEl.style.borderRadius = '0.25rem';
@@ -254,7 +252,7 @@ class ParametricPhasePortraitDemo {
     this.rInputEl.style.background = this._isDarkMode ? 'rgba(255,255,255,0.1)' : 'white';
     this.rInputEl.style.color = 'var(--color-text, inherit)';
     this.rInputEl.style.fontFamily = 'var(--font-mono, monospace)';
-    this.rInputEl.style.width = '80px';
+    this.rInputEl.style.width = '120px';
 
     // Sync slider and input
     const sliderHandler = () => {
@@ -265,10 +263,21 @@ class ParametricPhasePortraitDemo {
     this.eventListeners.push({ target: this.sliderEl, type: 'input', listener: sliderHandler });
 
     const rInputHandler = () => {
-      const val = parseFloat(this.rInputEl.value);
-      if (!isNaN(val)) {
-        this.sliderEl.value = Math.max(this.rMin, Math.min(this.rMax, val)).toString();
-        this.updateParameter();
+      try {
+        const val = evaluate(this.rInputEl.value);
+        if (typeof val === 'number' && !isNaN(val)) {
+          // Set slider for visual feedback (may round due to step)
+          this.sliderEl.value = Math.max(this.rMin, Math.min(this.rMax, val)).toString();
+          this.rInputEl.style.borderColor = '';
+          // Set dynamics.r directly with full precision, bypassing slider
+          this.dynamics.r = val;
+          this.dynamics.updateForParameter();
+          this.applyZoom();
+          this.particles = [];
+          this.colorIndex = 0;
+        }
+      } catch {
+        this.rInputEl.style.borderColor = 'red';
       }
     };
     this.rInputEl.addEventListener('input', rInputHandler);
@@ -445,10 +454,7 @@ class ParametricPhasePortraitDemo {
     this.sliderEl.step = preset.rStep.toString();
     this.sliderEl.value = preset.rDefault.toString();
 
-    // Update number input bounds
-    this.rInputEl.min = preset.rMin.toString();
-    this.rInputEl.max = preset.rMax.toString();
-    this.rInputEl.step = preset.rStep.toString();
+    // Update r value input
     this.rInputEl.value = preset.rDefault.toString();
 
     // Update r range inputs

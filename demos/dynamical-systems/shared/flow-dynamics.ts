@@ -128,6 +128,21 @@ export class FlowDynamics {
     return null;
   }
 
+  /** Bisection search for a local extremum of f between lo and hi */
+  private findExtremum(lo: number, hi: number): number {
+    for (let i = 0; i < 50; i++) {
+      const mid = (lo + hi) / 2;
+      const dfMid = this.df(mid);
+      if (Math.abs(dfMid) < 1e-10) return mid;
+      if (this.df(lo) * dfMid < 0) {
+        hi = mid;
+      } else {
+        lo = mid;
+      }
+    }
+    return (lo + hi) / 2;
+  }
+
   findFixedPoints(): void {
     this._fixedPoints = [];
     if (this._parseError) return;
@@ -136,9 +151,11 @@ export class FlowDynamics {
     const step = (this.xMax - this.xMin) / numSamples;
     const candidates: number[] = [];
     const zeroThreshold = 1e-6;
+    const degenerateThreshold = 1e-4; // More lenient for degenerate fixed points
 
     let prevX = this.xMin;
     let prevY = this.f(this.xMin);
+    let prevDf = this.df(this.xMin);
 
     if (Math.abs(prevY) < zeroThreshold) {
       const root = this.newtonRaphson(prevX);
@@ -148,6 +165,7 @@ export class FlowDynamics {
     for (let i = 1; i <= numSamples; i++) {
       const x = this.xMin + i * step;
       const y = this.f(x);
+      const dfx = this.df(x);
 
       if (Math.abs(y) < zeroThreshold) {
         // Near zero - try to refine with Newton-Raphson
@@ -160,16 +178,22 @@ export class FlowDynamics {
         if (root !== null && root >= this.xMin && root <= this.xMax) {
           candidates.push(root);
         }
-      } else if (Math.abs(prevY) < zeroThreshold && Math.abs(y) > zeroThreshold) {
-        // Previous was near zero, current is not - the root was at prevX
-        // (already handled in previous iteration, but ensure we don't miss sign info)
       }
 
-      // Only update prevY if current y is not near-zero, to preserve sign change detection
-      if (Math.abs(y) >= zeroThreshold) {
-        prevX = x;
-        prevY = y;
+      // Check for degenerate fixed points: local extrema of f(x) near zero
+      // This catches tangent points where f touches but doesn't cross zero
+      if (prevDf * dfx < 0) {
+        // Sign change in derivative means local extremum
+        const extremum = this.findExtremum(prevX, x);
+        const fAtExtremum = this.f(extremum);
+        if (Math.abs(fAtExtremum) < degenerateThreshold) {
+          candidates.push(extremum);
+        }
       }
+
+      prevX = x;
+      prevY = y;
+      prevDf = dfx;
     }
 
     const tolerance = 1e-6;
