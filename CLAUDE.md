@@ -168,6 +168,11 @@ This prevents markdown from interfering with LaTeX syntax.
 - Automatic dark mode support
 - CSP-compliant (no inline scripts or event handlers)
 
+**Demo Viewer**: To test any demo in isolation, use the demo viewer:
+- Dev: `http://localhost:5000/demos/#demo-name`
+- Prod: `https://lacunary.org/demos/#demo-name`
+- Supports keyboard navigation (arrow keys) and URL hash for direct linking
+
 **Visualization Library Choices**:
 - **p5.js**: Best for 2D canvas graphics, particle systems, cellular automata, WebGL custom shaders
   - Extend `P5DemoBase` class for automatic canvas management and responsive sizing
