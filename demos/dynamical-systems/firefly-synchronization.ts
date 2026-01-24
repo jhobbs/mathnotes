@@ -235,7 +235,7 @@ export const metadata: DemoMetadata = {
   title: 'Firefly Synchronization',
   category: 'Dynamical Systems',
   description: 'Simulation of fireflies that blink and synchronize via distance-weighted coupling',
-  instructions: 'Watch the fireflies synchronize. Each firefly has a natural uncoupled frequency, randomly assigned between 0.9hz and 1.1hz, and a random starting phase. Then each fly updates its dynamic frequency to try to better match the frequency of the other flies. Nearby fireflies influence each other more strongly, and the overall strength of the matching force is controlled by the parameter K. When K is 0, the flies all act indepenently. When K is high, they synchronize phase and frequency quickly. When K is in the middle, phase may synchronize globally while frequency synchronizes locally. This demo uses the <a href="https://en.wikipedia.org/wiki/Kuramoto_model">Kuramoto model</a> for coupled oscillators. '
+  instructions: 'Adjust K to see how it affects synchronization. This demo uses the <a href="https://en.wikipedia.org/wiki/Kuramoto_model">Kuramoto model</a> for coupled oscillators.'
 };
 
 export default function initFireflySynchronization(
