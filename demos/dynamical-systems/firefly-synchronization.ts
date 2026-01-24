@@ -7,6 +7,8 @@ import { createResetButton, createControlRow } from '@framework/ui-components';
 interface Firefly {
   x: number;
   y: number;
+  vx: number;    // velocity
+  vy: number;
   phase: number;  // [0, 2π] - phase in the blink cycle
   omega: number;  // natural frequency (rad/s), roughly 2π for 1Hz
 }
@@ -16,7 +18,7 @@ class FireflySynchronizationDemo extends P5DemoBase {
   private numFireflies = 50;
 
   // Coupling parameters
-  private K = 5;           // Coupling strength
+  private K = 1.3;         // Coupling strength
   private lambda = 0.3;    // Length scale for exponential decay
   private r0 = 0.05;       // Softening parameter to avoid singularity
 
@@ -45,6 +47,8 @@ class FireflySynchronizationDemo extends P5DemoBase {
       this.fireflies.push({
         x: p.random(0.05, 0.95),  // Normalized [0,1] coordinates
         y: p.random(0.05, 0.95),
+        vx: 0,
+        vy: 0,
         phase: p.random(0, p.TWO_PI),
         omega: p.TWO_PI * p.random(0.9, 1.1)  // ~1Hz with some variation
       });
@@ -62,8 +66,9 @@ class FireflySynchronizationDemo extends P5DemoBase {
     const panel = this.createControlPanel();
 
     // K slider: 0 = no coupling, high values = strong sync
-    this.kSlider = this.createSlider(p, 'Coupling (K)', 0, 15, this.K, 0.1, () => {
+    this.kSlider = this.createSlider(p, 'Coupling (K)', 0, 3, this.K, 0.1, () => {
       this.K = this.kSlider.value() as number;
+      console.log('K =', this.K);
     });
 
     // Reset button
@@ -90,6 +95,9 @@ class FireflySynchronizationDemo extends P5DemoBase {
       }
 
       const dt = p.deltaTime / 1000;  // Convert to seconds
+
+      // Update positions (slow drifting movement)
+      this.updatePositions(p, dt);
 
       // Update phases using coupled dynamics
       this.updatePhases(p, dt);
@@ -126,6 +134,37 @@ class FireflySynchronizationDemo extends P5DemoBase {
         p.circle(x, y, 8 + brightness * 4);
       }
     };
+  }
+
+  private updatePositions(p: p5, dt: number): void {
+    const drag = 0.98;            // Velocity damping per frame
+    const drift = 0.0007;         // Random acceleration strength
+    const margin = 0.05;          // Soft boundary margin
+    const boundaryForce = 0.003;  // Force pushing back from edges
+
+    for (const f of this.fireflies) {
+      // Add small random acceleration
+      f.vx += p.random(-drift, drift);
+      f.vy += p.random(-drift, drift);
+
+      // Soft boundary - push back from edges
+      if (f.x < margin) f.vx += boundaryForce;
+      if (f.x > 1 - margin) f.vx -= boundaryForce;
+      if (f.y < margin) f.vy += boundaryForce;
+      if (f.y > 1 - margin) f.vy -= boundaryForce;
+
+      // Apply drag
+      f.vx *= drag;
+      f.vy *= drag;
+
+      // Update position
+      f.x += f.vx * dt * 10;
+      f.y += f.vy * dt * 10;
+
+      // Hard clamp to stay in bounds
+      f.x = p.constrain(f.x, 0.02, 0.98);
+      f.y = p.constrain(f.y, 0.02, 0.98);
+    }
   }
 
   private updatePhases(p: p5, dt: number): void {
@@ -194,7 +233,7 @@ export const metadata: DemoMetadata = {
   title: 'Firefly Synchronization',
   category: 'Dynamical Systems',
   description: 'Simulation of fireflies that blink and synchronize via distance-weighted coupling',
-  instructions: 'Watch the fireflies synchronize. Nearby fireflies influence each other more strongly.'
+  instructions: 'Watch the fireflies synchronize. Each firefly starts off with a random frequency near 1hz, and a random phase, and updates its frequency based on how much it differs from the frequencies of other fireflies. Nearby fireflies influence each other more strongly.'
 };
 
 export default function initFireflySynchronization(
