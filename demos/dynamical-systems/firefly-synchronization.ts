@@ -66,9 +66,11 @@ class FireflySynchronizationDemo extends P5DemoBase {
     const panel = this.createControlPanel();
 
     // K slider: 0 = no coupling, high values = strong sync
-    this.kSlider = this.createSlider(p, 'Coupling (K)', 0, 3, this.K, 0.1, () => {
+    this.kSlider = this.createSlider(p, `Coupling (K=${this.K.toFixed(1)})`, 0, 5, this.K, 0.1, () => {
       this.K = this.kSlider.value() as number;
-      console.log('K =', this.K);
+      const sliderParent = this.kSlider.elt.parentElement;
+      const label = sliderParent?.querySelector('.label');
+      if (label) label.textContent = `Coupling (K=${this.K.toFixed(1)})`;
     });
 
     // Reset button
@@ -233,7 +235,7 @@ export const metadata: DemoMetadata = {
   title: 'Firefly Synchronization',
   category: 'Dynamical Systems',
   description: 'Simulation of fireflies that blink and synchronize via distance-weighted coupling',
-  instructions: 'Watch the fireflies synchronize. Each firefly starts off with a random frequency near 1hz, and a random phase, and updates its frequency based on how much it differs from the frequencies of other fireflies. Nearby fireflies influence each other more strongly. This uses the <a href="https://en.wikipedia.org/wiki/Kuramoto_model">Kuramoto model</a> for coupled oscillators. '
+  instructions: 'Watch the fireflies synchronize. Each firefly has a natural uncoupled frequency, randomly assigned between 0.9hz and 1.1hz, and a random starting phase. Then each fly updates its dynamic frequency to try to better match the frequency of the other flies. Nearby fireflies influence each other more strongly, and the overall strength of the matching force is controlled by the parameter K. When K is 0, the flies all act indepenently. When K is high, they synchronize phase and frequency quickly. When K is in the middle, phase may synchronize globally while frequency synchronizes locally. This demo uses the <a href="https://en.wikipedia.org/wiki/Kuramoto_model">Kuramoto model</a> for coupled oscillators. '
 };
 
 export default function initFireflySynchronization(
