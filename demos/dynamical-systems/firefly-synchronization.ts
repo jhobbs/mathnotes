@@ -239,7 +239,7 @@ export const metadata: DemoMetadata = {
   title: 'Firefly Synchronization',
   category: 'Dynamical Systems',
   description: 'Simulation of fireflies that blink and synchronize via distance-weighted coupling',
-  instructions: "Each firefly has a natural frequency between 0.9hz and 1.1hz, and a random starting phase. Higher K means fireflies try to match frequency more. Nearby flies have more influence on each other."
+  instructions: "Each firefly has a natural frequency between 0.9hz and 1.1hz, and a random starting phase. Higher K means fireflies try to match frequency more. Nearby flies have more influence on each other. See <a href="https://en.wikipedia.org/wiki/Kuramoto_model">Kuramoto model</a>"
 };
 
 export default function initFireflySynchronization(
