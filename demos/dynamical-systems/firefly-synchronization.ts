@@ -38,7 +38,11 @@ class FireflySynchronizationDemo extends P5DemoBase {
   }
 
   protected getAspectRatio(): number {
-    return 0.6;  // Wider canvas for the field
+    return 0;  // Full width, height determined by maxHeightPercent
+  }
+
+  protected getMaxHeightPercent(): number {
+    return 0.7;
   }
 
   private initializeFireflies(p: p5): void {
