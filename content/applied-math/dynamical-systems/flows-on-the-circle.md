@@ -9,7 +9,6 @@ $$ \dot{\theta} = f(\theta). $$
 
 Here, $ \dot{\theta} = \frac{d\theta}{t}$ is the @angular-velocity.
 
-
 {% include_demo "firefly-synchronization" %}
 
 Each firefly has a natural uncoupled frequency, randomly assigned between 0.9hz and 1.1hz, and a random starting phase.
