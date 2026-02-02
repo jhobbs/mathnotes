@@ -30,7 +30,7 @@ COPY demos/ ./demos/
 RUN npm run type-check && npm run build
 
 # Stage 3: Python environment for generating HTML
-FROM python:3.12-slim AS builder
+FROM python:3.14-slim AS builder
 
 WORKDIR /app
 
@@ -54,17 +54,26 @@ COPY --from=esbuild-builder /app/static/dist ./static/dist
 # Run static site generator (with esbuild assets already in place)
 RUN python scripts/build_static_simple.py
 
-# Stage 4: Final nginx image with static files only
-FROM nginx:alpine
+# Stage 4: Final image with Flask/gunicorn serving static files + API
+FROM python:3.14-slim
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
+
+# Install production dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy Flask app and API
+COPY app.py .
+COPY api/ ./api/
 
 # Copy generated static site from builder (includes esbuild assets)
-COPY --from=builder /app/static-build /usr/share/nginx/html
+COPY --from=builder /app/static-build ./static-build
+
+ENV STATIC_BUILD_DIR=static-build
 
 # Expose port 80
 EXPOSE 80
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "app:app"]
