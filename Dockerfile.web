@@ -5,7 +5,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app.py .
-COPY api/ ./api/
+COPY server/ ./server/
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--reload", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--reload", "--access-logfile", "-", "--chdir", "/app/server", "app:app"]

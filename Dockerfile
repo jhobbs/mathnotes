@@ -64,16 +64,15 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy Flask app and API
-COPY app.py .
-COPY api/ ./api/
+COPY server/ ./server/
 
 # Copy generated static site from builder (includes esbuild assets)
 COPY --from=builder /app/static-build ./static-build
 
-ENV STATIC_BUILD_DIR=static-build
+ENV STATIC_BUILD_DIR=/app/static-build
 
 # Expose port 80
 EXPOSE 80
 
 # Start gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:80", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--chdir", "/app/server", "app:app"]

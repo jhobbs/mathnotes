@@ -22,10 +22,9 @@ services:
       - "5000:5000"
     volumes:
       - static-build:/app/static-build:ro
-      - ./app.py:/app/app.py:ro
-      - ./api:/app/api:ro
+      - ./server:/app/server
     environment:
-      - STATIC_BUILD_DIR=static-build/website
+      - STATIC_BUILD_DIR=/app/static-build/website
     container_name: web-dev
     restart: unless-stopped
     depends_on:

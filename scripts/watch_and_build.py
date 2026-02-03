@@ -87,6 +87,8 @@ def build_site(output_dir: str, builder: SiteBuilder = None) -> SiteBuilder:
         logger.info("Reusing SiteBuilder, clearing caches...")
         # Clear navigation cache (will be rebuilt quickly)
         clear_navigation_cache()
+        # Rebuild URL mappings (required for new/moved/deleted files)
+        builder.url_mapper.build_url_mappings()
         # Rebuild block index (required - rendered HTML is stored here)
         builder.block_index.build_index()
         # Clear page specs cache so specs are recomputed
