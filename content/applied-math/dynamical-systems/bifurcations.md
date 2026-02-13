@@ -148,3 +148,46 @@ Now we see that with our new coordinates $x$ and $\tau,$ our parameters collapse
 This is called nondimensionalization because we can view $U$ and $T$ as units, $x$ and $\tau$ as dimensionless coordinates, and $u$ and $t$ as coordinates using the units $U$ and $T$.
 
 This process lets us take apparently complex dynamical systems and simplify them into normal forms we can recognize and deal with.
+
+## Algorithm for analyzing bifurcations and drawing a diagram
+
+**Algorithm (1D bifurcation diagram for $\dot{x} = f(x,r)$)**
+
+Compute the derivative with respect to the state:
+
+$$ f_x(x,r) := \frac{\partial f}{\partial x}(x,r). $$
+
+Find equilibrium branches by solving the equilibrium condition:
+
+$$ f(x,r) = 0. $$
+
+Solve this equation for either $x$ as a function of $r,$
+
+$$ x = x_i(r), $$
+
+or for $r$ as a function of $x,$
+
+$$ r = r_i(x), $$
+
+whichever is algebraically simpler. Each solution defines one equilibrium branch.
+
+For each equilibrium branch, substitute the branch into $f_x$:
+
+- If the branch is given as $x = x_i(r),$ compute
+
+$$ f_x\bigl(x_i(r),\, r\bigr). $$
+
+- If the branch is given as $r = r_i(x),$ compute
+
+$$ f_x\bigl(x,\, r_i(x)\bigr). $$
+
+Determine stability along each branch:
+
+$$ \begin{cases} f_x < 0 & \Rightarrow \text{stable equilibrium}, \\ f_x > 0 & \Rightarrow \text{unstable equilibrium}, \\ f_x = 0 & \Rightarrow \text{non-hyperbolic equilibrium}. \end{cases} $$
+
+Identify candidate bifurcation points by solving
+
+$$ f(x,r) = 0 \quad \text{and} \quad f_x(x,r) = 0 $$
+
+simultaneously. These points are where stability can change and where a local bifurcation may occur.
+
