@@ -2,6 +2,7 @@
 layout: page
 title: Limit Cycles
 ---
+## Polar Coordinate Methods
 
 ## Conservative and Hamiltonian Systems
 
