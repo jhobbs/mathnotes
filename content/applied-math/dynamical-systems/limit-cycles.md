@@ -48,6 +48,8 @@ Suppose $\vec{x^*}$ were an attracting @fixed-point in a conservative system. Th
 ::::
 :::
 
+Now, while conservative systems can't have attracting fixed points, they can have other types, and generally have @saddles and @centers.
+
 <!-- TODO: Hamiltonian systems, energy conservation, potential functions, energy level sets, closed orbits -->
 
 ## Lyapunov Functions
