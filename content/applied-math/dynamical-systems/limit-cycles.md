@@ -8,7 +8,7 @@ Given a system $\dot{x} = f(x,y), \dot{y} = g(x,y),$ it's sometimes useful, espe
 
 $$ \dot{r} = \frac{x \dot{x} + y \dot{y}}{r}, \quad \dot{\theta} = \frac{x \dot{y} - y \dot{x}}{r^2}. $$
 
-## Conservative and Hamiltonian Systems
+## Conservative Systems
 
 :::definition "Conserved Quantity"
 Given a system $\dot{\vec{x}} = \vec{f(x)},$ a **conserved quantity** is a @real-valued @continuous @function $E(\vec{x})$ that is constant on trajectories, i.e. $dE/dt = 0.$ We also require that $E(\vec{x})$ is nonconstant on every @open set, to avoid trivial examples such as $E(\vec{x}) = 0.$ 
@@ -50,7 +50,44 @@ Suppose $\vec{x^*}$ were an attracting @fixed-point in a conservative system. Th
 
 Now, while conservative systems can't have attracting fixed points, they can have other types, and generally have @saddles and @centers.
 
+:::definition "Homoclinic orbit"
+A @trajectory that starts and ends at the same @fixed-point is called a **homoclinic orbit.**
+:::
+
+These @homoclinic-orbits are common in conservative systems but are rare otherwise. Note that @homoclinic-orbits are not periodic because they take forever trying to reach the fixed point.
+
+Note that nonlinear @centers are robust in conservative systems, because any trajectories sufficiently close to them are closed.
+
+### Hamiltonian Systems
+
+:::definition "Hamiltonian System"
+A **Hamiltonian system** is one where $H(p,q)$ is a smooth, real-valued function and we have that
+
+$$ \dot{q} = \frac{\partial H}{\partial p}, \quad \dot{p} = -\frac{\partial H}{\partial q}. $$
+
+The function $H$ is called the **Hamiltonian.**
+:::
+
+:::theorem
+For any @Hamiltonian-system, $H$ is a conserved quantity.
+:::
+
+## Reversible Systems
+
+:::definition "Reversible System"
+A **reversible system** is any second-order system that is invariant under $t \to -t$ and $y \to -y.$
+:::
+
+Centers are also robust in reversible systems.
+
+:::definition "Heteroclinic trajectories"
+Pairs of orbits connecting twin @saddle-points are called **heteroclinic trajectories.**
+:::
+
+These @heteroclinic-orbits are much more common in reversible or conservative systems than in other types of systems.
+
 <!-- TODO: Hamiltonian systems, energy conservation, potential functions, energy level sets, closed orbits -->
+
 
 ## Lyapunov Functions
 
