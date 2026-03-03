@@ -85,7 +85,3 @@ $$ f(x^*, y^*) = 0, \quad g(x^*, y^*) = 0. $$
 We can do linear stability analysis on this system to understand the local behavior near fixed points. We use the @Jacobian matrix of the system, then plug in $(x^*, y^*).$ For the nonlinear case, we have the same geometric interpretations as the linear case. Topologically, if the real part of any eigenvalue of a fixed point is positive, then the fixed point is unstable. If the real part of all eigenvalues of a fixed point is negative, then the fixed point is asymptotically stable. We call these cases (both eigenvalues have nonzero real parts) hyperbolic @fixed points
 
 However, if the real part of any eigenvalue is zero, this linearized approached does not tell us about the stability of the fixed point.
-
-
-<!-- TODO: converting planar systems to polar form, radial and angular dynamics, using polar coordinates for limit cycle analysis -->
-

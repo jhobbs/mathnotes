@@ -88,12 +88,71 @@ These @heteroclinic-orbits are much more common in reversible or conservative sy
 
 <!-- TODO: Hamiltonian systems, energy conservation, potential functions, energy level sets, closed orbits -->
 
-
-## Lyapunov Functions
-
-<!-- TODO: Lyapunov function construction, proving global/asymptotic stability, Lyapunov's theorems -->
-
 ## Limit Cycles
+
+
+:::definition "Limit cycle"
+A **limit cycle** is an isolated @closed @trajectory. Isolated means that @neighboring @trajectories are not @closed; they spiral toward or away from the limit cycle.
+:::
+
+:::definition "Stable limit cycle" {synonyms: "attracting limit cycle"}
+If all neighboring @trajectories approach the @limit-cycle, we say the @limit-cycle is **stable** or **attracting.**
+:::
+
+:::definition "Unstable limit cycle"
+If a @limit-cycle is not stable, we say it is an **unstable limit cycle**, or in exceptional cases, half-stable.
+:::
+
+
+### Non-Existence Criteria
+
+Sometimes we want to show that a @system does not have a @limit-cycle.
+
+#### Gradient Systems
+
+:::definition "Gradient System"
+If a @system can be written in the form $\dot{\vec{x}} = - \nabla V,$ for some @continuously-differentiable, single-values scalar function $V(\vec{x}},$ then it is said to be a **gradient system** with **potential function** $V.$
+:::
+
+:::theorem {label: closed-orbits-impossible-in-gradient-systems}
+Closed orbits are impossible in gradient systems.
+::::intuition
+If we're always moving "downhill" in some direction in a space, it's impossible to come back to where we started. This is another reason why oscillations aren't possible in one dimensional systems.
+::::
+:::
+
+#### Lyapunov Functions
+
+:::definition "Liapunov Function" {synonyms: "Lyapunov function"}
+Consider a system $\dot{\vec{x}} = \vec{f(x)}$ with a fixed point at $\vec{x^*}.$ If it has a function with the following properties:
+
+1. $V(\vec{x}) > 0$ for all $\vec{x} \neq \vec{x^*},$ and $V(\vec{x^*}) = 0.$ (i.e. $V$ is @positive-definite.)
+
+2. $\dot{V} < 0$ for all $\vec{x} \neq \vec{x^*}. (All trajectories flow "downhill" toward $\vec{x^*}.$
+
+Then such a function is called a **Liapunov function.**
+:::
+
+:::theorem
+If a system has a @liapunov-function, then its fixed point $\vec{x^*}$ is globally asymptotically stable: for all initial conditions, $\vec{x}(t) \to \vec{x^*}$ as $t \to \infty.$ Therefore, the system has no closed orbits.
+::::intuition
+Like gradient systems, we can't get in a loop if we're always moving downhill.
+::::
+:::
+
+There is no systematic way to construct @Lianpunov-functions. Strogatz says Divine Inspiration is required.
+
+#### Dulac's Criterion
+
+Dulac's Criterion is based on @greens-theorem.
+
+:::theorem
+Let $\dot{\vec{x}} = \vec{f(x)}$ be a @continuously-differentiable @vector-field defined on a @simply-connected @subset $R$ of the @plane. If there exists a @continuously-differentiable, @real-valued @function $g(\vec{x})$ such that $\nabla \cdot (g\dot{\vec{x}})$ has one sign throughout $R,$ then there are no @closed @orbits lying entirely in $R.$
+:::
+
+The special case where $g(\vec{x}) = 1$ is called **Bendixson's criterion.**
+
+As with @Liapunov-functions, there is no algorithm for finding $g(\vec{x}).$
 
 <!-- TODO: definition, isolated closed orbits, stable/unstable/half-stable limit cycles, amplitude and frequency -->
 

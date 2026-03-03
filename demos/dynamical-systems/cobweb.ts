@@ -3,6 +3,7 @@ import p5 from 'p5';
 import type { DemoConfig, DemoInstance } from '@framework/types';
 import { P5DemoBase } from '@framework';
 import type { DemoMetadata } from '@framework';
+import * as math from 'mathjs';
 import { parse, derivative, evaluate } from 'mathjs';
 import type { MathNode, EvalFunction } from 'mathjs';
 
@@ -19,7 +20,7 @@ interface CobwebPreset {
 }
 
 const COBWEB_PRESETS: CobwebPreset[] = [
-  { label: 'Cubic', expr: '3*x - x^3', rMin: 0, rMax: 1, rDefault: 1, rStep: 0.01, xMin: -2, xMax: 2, x0Default: 0.5 },
+  { label: 'Cubic', expr: 'r*x - x^3', rMin: 0, rMax: 5, rDefault: 3, rStep: 0.01, xMin: -2, xMax: 2, x0Default: 0.5 },
   { label: 'Logistic', expr: 'r*x*(1-x)', rMin: 0, rMax: 4, rDefault: 2.8, rStep: 0.01, xMin: 0, xMax: 1, x0Default: 0.1 },
   { label: 'Quadratic', expr: 'x^2 + r', rMin: -2, rMax: 0.25, rDefault: -0.5, rStep: 0.01, xMin: -2, xMax: 2, x0Default: 0.5 },
   { label: 'Sine', expr: 'r*sin(x)', rMin: 0, rMax: 3, rDefault: 1.5, rStep: 0.01, xMin: 0, xMax: 3.15, x0Default: 0.5 },
@@ -36,6 +37,7 @@ class CobwebDemo extends P5DemoBase {
   private compiledF: EvalFunction | null = null;
   private compiledDf: EvalFunction | null = null;
   private parseError: boolean = false;
+  private parseWarning: string = '';
   private exprString: string = 'r*x*(1-x)';
   private r: number = 2.8;
 
@@ -74,6 +76,7 @@ class CobwebDemo extends P5DemoBase {
   private startBtn!: HTMLButtonElement;
   private stepBtn!: HTMLButtonElement;
   private iterationDisplay!: HTMLSpanElement;
+  private warningEl!: HTMLSpanElement;
 
   constructor(container: HTMLElement, config?: DemoConfig) {
     super(container, config, metadata);
@@ -90,6 +93,22 @@ class CobwebDemo extends P5DemoBase {
     try {
       const node: MathNode = parse(exprString);
       this.compiledF = node.compile();
+      // Check for unknown function calls (e.g. "r(-x)" parsed as function call to "r")
+      const allowedVars = new Set(['x', 'r']);
+      const unknownFns: string[] = [];
+      node.traverse((n: MathNode) => {
+        if (n.type === 'FunctionNode' && typeof (n as any).name === 'string') {
+          const name = (n as any).name as string;
+          if (allowedVars.has(name) && typeof (math as any)[name] !== 'function') {
+            unknownFns.push(name);
+          }
+        }
+      });
+      if (unknownFns.length > 0) {
+        this.parseWarning = `"${unknownFns[0]}(...)" is being parsed as a function call — did you mean "${unknownFns[0]}*(...)"?`;
+      } else {
+        this.parseWarning = '';
+      }
       try {
         const dfNode = derivative(node, 'x');
         this.compiledDf = dfNode.compile();
@@ -101,6 +120,7 @@ class CobwebDemo extends P5DemoBase {
       return true;
     } catch {
       this.parseError = true;
+      this.parseWarning = '';
       this.compiledF = null;
       this.compiledDf = null;
       return false;
@@ -242,6 +262,10 @@ class CobwebDemo extends P5DemoBase {
   private updateFunction(): void {
     const success = this.parseExpression(this.exprString);
     this.inputEl.style.borderColor = success ? '' : 'red';
+    if (this.warningEl) {
+      this.warningEl.textContent = this.parseWarning;
+      this.warningEl.style.display = this.parseWarning ? 'block' : 'none';
+    }
     this.computeViewRange();
     this.applyZoom();
     this.findFixedPoints();
@@ -659,6 +683,13 @@ class CobwebDemo extends P5DemoBase {
 
     panel.appendChild(row1);
 
+    this.warningEl = document.createElement('span');
+    this.warningEl.style.color = '#cc6600';
+    this.warningEl.style.fontSize = 'var(--font-size-sm)';
+    this.warningEl.style.fontFamily = 'var(--font-mono, monospace)';
+    this.warningEl.style.display = 'none';
+    panel.appendChild(this.warningEl);
+
     // Row 2: Parameter r
     const row2 = this.makeRow();
     row2.appendChild(this.makeLabel('r ='));
@@ -685,7 +716,16 @@ class CobwebDemo extends P5DemoBase {
       try {
         const val = evaluate(this.rInputEl.value);
         if (typeof val === 'number' && !isNaN(val)) {
-          this.rSliderEl.value = Math.max(parseFloat(this.rSliderEl.min), Math.min(parseFloat(this.rSliderEl.max), val)).toString();
+          // Auto-expand slider range if value is outside current bounds
+          if (val > parseFloat(this.rSliderEl.max)) {
+            this.rSliderEl.max = val.toString();
+            this.rMaxInputEl.value = val.toString();
+          }
+          if (val < parseFloat(this.rSliderEl.min)) {
+            this.rSliderEl.min = val.toString();
+            this.rMinInputEl.value = val.toString();
+          }
+          this.rSliderEl.value = val.toString();
           this.rInputEl.style.borderColor = '';
           this.r = val;
           this.updateParameter();
