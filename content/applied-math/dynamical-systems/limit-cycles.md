@@ -150,12 +150,28 @@ Dulac's Criterion is based on @greens-theorem.
 Let $\dot{\vec{x}} = \vec{f(x)}$ be a @continuously-differentiable @vector-field defined on a @simply-connected @subset $R$ of the @plane. If there exists a @continuously-differentiable, @real-valued @function $g(\vec{x})$ such that $\nabla \cdot (g\dot{\vec{x}})$ has one sign throughout $R,$ then there are no @closed @orbits lying entirely in $R.$
 :::
 
-The special case where $g(\vec{x}) = 1$ is called **Bendixson's criterion.**
+The special case where $g(\vec{x}) = 1$ is called **Bendixson's theorem.**
 
 As with @Liapunov-functions, there is no algorithm for finding $g(\vec{x}).$
 
 <!-- TODO: definition, isolated closed orbits, stable/unstable/half-stable limit cycles, amplitude and frequency -->
 
-## Ruling Out and Proving Closed Orbits
+### Existence Criteria
 
-<!-- TODO: Bendixson's theorem (ruling out closed orbits via divergence), Poincaré-Bendixson theorem (proving existence via trapping regions) -->
+The Poincaré-Bendixson theorem can be used to show that a @limit-cycle must exist in a particular system.
+
+:::theorem {label: poincare-bendixson}
+Suppose that
+
+(1) $R$ is a closed, bounded subset of the plane;
+
+(2) $\dot{\vec{x}} = \vec{f(x)}$ is a @continuously-differentiable @vector-field on an @open-set containing $R;$
+
+(3) $R$ does not contain any @fixed-points;
+
+(4) There exists a @trajectory $C$ that is "confined" in $R,$ in the sense that it starts in $R$ and stays in $R$ for all future time.
+
+Then, either $C$ is a closed orbit, or it spirals toward a closed orbit as $t \to \infty.$ In either case, $R$ contains a closed orbit.
+:::
+
+To show that a confined @trajectory exists when applying @poincare-bendixson, we usually construct a trapping region using polar coordinates. We usually do this for a @stable-limit-cycle, but we can do it for an @unstable-limit-cycle too, by looking at the system using reversed time. We want to keep it as tight as possible, so we find the maximum $r$ for which $\dot{r} > 0$ for all all $\theta.$ Anything inside of that $r$ will therefore be pushed outward into the region beyond it. Call this inner boundary $r_1.$ Similarly, we find the minimum $r$ for which all $\dot{r} < 0;$ call it $r_2.$ Thus, any trajectories that start beyond $r_2$ will be pushed into the region inside of $r_2.$ Now, any trajectories anywhere (other than those that start on a fixed point) will be pushed into our trapping region and will never leave it.
