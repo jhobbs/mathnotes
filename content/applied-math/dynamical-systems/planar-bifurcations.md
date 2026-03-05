@@ -39,7 +39,7 @@ $$\begin{aligned}
 Here, we have a stable origin flanked by two unstable fixed points. As the parameter decreases towards zero, the unstable fixed points move in and collide with the stable fixed point, and all we're left with the now unstable origin. The typical form is
 
 $$\begin{aligned}
-\dot{x} & = \mu x -x^3, \\
+\dot{x} & = \mu x + x^3, \\
 \dot{y} & = -y
 \end{aligned}$$
 
