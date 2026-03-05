@@ -111,8 +111,8 @@ def build_nav_tree(section_path: Path, current_file: Path, file_to_canonical: Di
         )
 
         for subfolder in subfolders:
-            subfolder_pages = get_pages_in_folder(subfolder, file_to_canonical)
-            if subfolder_pages:
+            children = build_level(subfolder)
+            if children:
                 # Check if current file is inside this subfolder
                 try:
                     current_file.relative_to(subfolder)
@@ -124,7 +124,7 @@ def build_nav_tree(section_path: Path, current_file: Path, file_to_canonical: Di
                     "type": "folder",
                     "name": subfolder.name.replace("-", " ").title(),
                     "expanded": is_ancestor,
-                    "children": build_level(subfolder),  # Always include for expand/collapse
+                    "children": children,
                 })
 
         return items
