@@ -57,7 +57,7 @@ Suppose, for the sake of contradiction, that some segment $(\alpha, \beta)$ \sub
 :::
 
 :::theorem {label: cantor-set-is-perfect}
-The Cantor set is perfect.
+The Cantor set is a @perfect-set.
 
 ::::proof
 Let $x \in P.$ Let $r > 0,$ and pick $n \in \mathbb{N}$ to be large enough that $1/3^n < r.$ Then, $x$ lies in one of the $2^n$ intervals of length $1/3^n$ in $E_n;$ call it $I_n.$ The endpoints of $I_n$ are also in $P$ (see @cantor-set-is-not-empty,) and at least one of them is not $x.$ Since the endpoints are contained in a neighborhood of $x$ with radius $r > 0,$ all neighborhoods of $x$ are limit points of $P,$ and therefore $P$ is perfect.

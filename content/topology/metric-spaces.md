@@ -175,8 +175,8 @@ A set $E$ is open if every @point of $E$ is an @interior-point of $E.$
 The **complement** of $E$ (denoted by $E^c$) is the set of all points $p \in X$ such that $p \notin E.$
 :::
 
-:::definition "Perfect Set"
-$E$ is **perfect** if $E$ is closed and if every point of $E$ is a limit point of $E.$
+:::definition "Perfect Set" {synonyms: perfect}
+$E$ is **perfect** if $E$ is @closed and if every point of $E$ is a @limit-point of $E.$
 :::
 
 :::definition "Bounded"
