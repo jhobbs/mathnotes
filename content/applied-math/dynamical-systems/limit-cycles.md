@@ -111,8 +111,10 @@ Sometimes we want to show that a @system does not have a @limit-cycle.
 #### Gradient Systems
 
 :::definition "Gradient System"
-If a @system can be written in the form $\dot{\vec{x}} = - \nabla V,$ for some @continuously-differentiable, single-values scalar function $V(\vec{x}},$ then it is said to be a **gradient system** with **potential function** $V.$
+If a @system can be written in the form $\dot{\vec{x}} = - \nabla V,$ for some @continuously-differentiable, single-valued scalar function $V(\vec{x}),$ then it is said to be a **gradient system** with **potential function** $V.$
 :::
+
+We can check if a $2$d system is a gradient system by doing a comparison of the partial derivatives, just like we do for checking if an ODE an exact differential equation. If $\dot{x} = f(x,y), \dot{y} = g(x,y),$ then there is a potential function if $\frac{\partial f}{\partial y} = \frac{\partial g}{\partial x}.$ This means it's a gradient system. We can then find the potential function by doing the same process as we do for solving exact differential equations.
 
 :::theorem {label: closed-orbits-impossible-in-gradient-systems}
 Closed orbits are impossible in gradient systems.
@@ -128,7 +130,7 @@ Consider a system $\dot{\vec{x}} = \vec{f(x)}$ with a fixed point at $\vec{x^*}.
 
 1. $V(\vec{x}) > 0$ for all $\vec{x} \neq \vec{x^*},$ and $V(\vec{x^*}) = 0.$ (i.e. $V$ is @positive-definite.)
 
-2. $\dot{V} < 0$ for all $\vec{x} \neq \vec{x^*}. (All trajectories flow "downhill" toward $\vec{x^*}.$
+2. $\dot{V} < 0$ for all $\vec{x} \neq \vec{x^*}.$ (All trajectories flow "downhill" toward $\vec{x^*}.$
 
 Then such a function is called a **Liapunov function.**
 :::
