@@ -108,4 +108,40 @@ $$ v(t, \xi) = f(\xi)e^{-at}, $$
 
 and since $u(t,x) = v(t, \xi)$ we have $u(t,x) = f(x - ct)e^{-at}$ as our solution.
 
+## Non-Uniform Transport
 
+The non-uniform transport problem is another generalization (still linear) where the wave speed $c(x)$ is now allowed to depend on the spatial position
+
+$$ u_t + c(x) u_x = 0. $$
+
+To use characteristics, we will parameterize as $h(t) = u(t, x(t)).$ Now,
+
+$$ \frac{dh}{dt} = \frac{d}{dt} u(t, x(t)) = \frac{\partial}{\partial}u(t, x(t))  + \frac{\partial}{\partial x} u(t, x(t)) \frac{dx}{dt}. $$
+
+So, if $\frac{dx}{dt} = c(x),$ then
+
+$$ \frac{dh}{dt} = \frac{\partial}{\partial}u(t, x(t))  + c(x) \frac{\partial}{\partial x} u(t, x(t)) = 0. $$
+
+Solving $\frac{dx}{dt} = c(x)$ via separation of variables gives:
+
+$$ \begin{aligned}
+\int \frac{dx}{c(x)} & = \int dt \\
+\beta(x) & := \int \frac{dx}{c(x)} = t + k,
+\end{aligned} $$
+
+so $\beta(x) - t = k$ is constant and is our characteristic variable, i.e. $\xi(t,x) = \beta(x) - t,$ and hence
+
+$$ u(t,x) = v(\beta{x} -t) $$
+
+is our solution for any $v(\xi) \in C^1.$
+
+Let's say we're given initial condition $u(0, x) = f(x).$ Then $v(\xi) = f(x).$ For $t=0,$ $\xi = \beta(x) - 0,$ so $x(t) = \beta^{-1}(\xi),$ and $v(0, \xi) = f(\beta^{-1}(\xi)).$ Now, $v(t, \xi)$ is constant, so $v(t, \xi) =  f(\beta^{-1}(\xi)).$ Substituting $\xi = \beta{(x)} - t,$ we have $u(x,t) = v(t, \xi) =  f(\beta^{-1}(\beta(x) - t)).$
+
+For example, if we have $u_t + \frac{1}{x} u_x = 0,$ then $c(x) = 1/x.$ We solve $\frac{dx}{dt} = 1/x$ to get $\beta{x} = \frac{x^2}{2} = t + k,$ i.e. $\xi = \frac{x^2}{2} + t.$ Now, to find $\beta^{-1}, let t = \frac{x^2}{2}.$ Swapping $x$ and $y$ gives $x = \frac{y^2}{2},$ and solving for $y = x(t)$ gives $\beta^{-1} = x(t) = \sqrt{2t}.$ Now our solution is
+
+$$ \begin{aligned}
+u(t,x) & = f(\sqrt{2 ( \beta{x} - t)}) \\
+       & = f(\sqrt{2 ( \frac{x^2}{2} -t )} \\
+       & = f(\sqrt{x^2 -2t}). \\
+       
+\end{aligned} $$
