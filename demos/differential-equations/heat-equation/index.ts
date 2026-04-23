@@ -262,6 +262,23 @@ class HeatEquationDemo extends P5DemoBase {
     this.tempRightLabelEl = this.findLabelForSlider(this.tempRightSlider);
     this.updateTempRightLabel();
 
+    // Wrap all sliders in a single row so they lay out horizontally on wide screens,
+    // wrap to multiple rows when space is tight, and stack on mobile. createControlRow's
+    // appendChild calls move the existing slider containers out of the panel and into
+    // this new wrapper, so the final DOM order is: top row (IC/BC/Play/Reset), then
+    // this sliders row.
+    const sliderRow = createControlRow(
+      [
+        this.scrubberSlider!.elt.parentElement as HTMLElement,
+        this.alphaSlider!.elt.parentElement as HTMLElement,
+        this.modeRowEl!,
+        this.tempLeftRowEl!,
+        this.tempRightRowEl!,
+      ],
+      { gap: '24px', wrap: true, mobileStack: true }
+    );
+    panel.appendChild(sliderRow);
+
     this.updateDirichletRowsVisibility();
   }
 
