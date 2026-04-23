@@ -10,6 +10,7 @@ import {
   DEFAULT_N_MODES,
   type BC,
   type Coeffs,
+  type ICFn,
 } from './solver';
 import { IC_SPECS, normalize, type ICName } from './initial-conditions';
 import { temperatureToColor } from './colormap';
@@ -41,6 +42,8 @@ class HeatEquationDemo extends P5DemoBase {
   private mode: number = 1;
   private seed: number = (Math.random() * 0xFFFFFFFF) >>> 0;
   private alpha: number = DEFAULT_ALPHA;
+  private tempLeft: number = 0;
+  private tempRight: number = 0;
 
   private coeffs!: Coeffs;
   private xs!: Float64Array;
@@ -54,9 +57,15 @@ class HeatEquationDemo extends P5DemoBase {
   private scrubberSlider?: p5.Element;
   private alphaSlider?: p5.Element;
   private modeSlider?: p5.Element;
+  private tempLeftSlider?: p5.Element;
+  private tempRightSlider?: p5.Element;
   private scrubberLabelEl?: HTMLElement;
   private alphaLabelEl?: HTMLElement;
   private modeRowEl?: HTMLElement;
+  private tempLeftRowEl?: HTMLElement;
+  private tempRightRowEl?: HTMLElement;
+  private tempLeftLabelEl?: HTMLElement;
+  private tempRightLabelEl?: HTMLElement;
   private playPauseButton?: HTMLButtonElement;
   private scrubbing: boolean = false;
 
@@ -94,6 +103,10 @@ class HeatEquationDemo extends P5DemoBase {
 
       evaluate(this.coeffs, this.xs, this.tSim, this.alpha, this.uBuffer);
 
+      if (this.bc === 'dirichlet' && !this.endsAreZero()) {
+        for (let i = 0; i < N_X; i++) this.uBuffer[i] += this.steadyState(this.xs[i]);
+      }
+
       p.background(this.colors.background);
       this.renderEquation(p);
       this.renderStrip(p);
@@ -126,12 +139,28 @@ class HeatEquationDemo extends P5DemoBase {
     const spec = IC_SPECS.find((s) => s.name === this.icName)!;
     const rawIc = spec.build({ mode: this.mode, bc: this.bc, seed: this.seed });
     const ic = normalize(rawIc);
-    this.coeffs = computeCoefficients(ic, this.bc, L, DEFAULT_N_MODES);
+    // For non-zero Dirichlet, split u = u_∞ + v where u_∞ is the linear steady state
+    // satisfying the inhomogeneous BCs and v satisfies zero Dirichlet BCs. We feed
+    // v(x, 0) = f(x) - u_∞(x) into the zero-Dirichlet sine solver and add u_∞ back
+    // after evaluating.
+    const effectiveIc: ICFn =
+      this.bc === 'dirichlet' && !this.endsAreZero()
+        ? (x) => ic(x) - this.steadyState(x)
+        : ic;
+    this.coeffs = computeCoefficients(effectiveIc, this.bc, L, DEFAULT_N_MODES);
     this.tSim = 0;
     this.scrubberMax = this.getTMax();
     this.playing = true;
     this.lastFrameMs = 0;
     this.updatePlayPauseLabel();
+  }
+
+  private steadyState(x: number): number {
+    return this.tempLeft + (this.tempRight - this.tempLeft) * (x / L);
+  }
+
+  private endsAreZero(): boolean {
+    return this.tempLeft === 0 && this.tempRight === 0;
   }
 
   private setupControls(p: p5): void {
@@ -160,6 +189,7 @@ class HeatEquationDemo extends P5DemoBase {
       this.bc,
       (value) => {
         this.bc = value;
+        this.updateDirichletRowsVisibility();
         this.rebuildCoefficients();
       },
       this.getStylePrefix()
@@ -213,6 +243,26 @@ class HeatEquationDemo extends P5DemoBase {
     this.modeRowEl = this.modeSlider.elt.parentElement as HTMLElement;
     this.modeRowEl.classList.add('heat-equation-mode-row');
     this.updateModeRowVisibility();
+
+    this.tempLeftSlider = this.createSlider(p, 'Left end T_L', -1, 1, 0, 0.05, () => {
+      this.tempLeft = Number(this.tempLeftSlider!.value());
+      this.updateTempLeftLabel();
+      this.rebuildCoefficients();
+    });
+    this.tempLeftRowEl = this.tempLeftSlider.elt.parentElement as HTMLElement;
+    this.tempLeftLabelEl = this.findLabelForSlider(this.tempLeftSlider);
+    this.updateTempLeftLabel();
+
+    this.tempRightSlider = this.createSlider(p, 'Right end T_R', -1, 1, 0, 0.05, () => {
+      this.tempRight = Number(this.tempRightSlider!.value());
+      this.updateTempRightLabel();
+      this.rebuildCoefficients();
+    });
+    this.tempRightRowEl = this.tempRightSlider.elt.parentElement as HTMLElement;
+    this.tempRightLabelEl = this.findLabelForSlider(this.tempRightSlider);
+    this.updateTempRightLabel();
+
+    this.updateDirichletRowsVisibility();
   }
 
   private randomizeSeed(): void {
@@ -236,10 +286,28 @@ class HeatEquationDemo extends P5DemoBase {
     }
   }
 
+  private updateTempLeftLabel(): void {
+    if (this.tempLeftLabelEl) {
+      this.tempLeftLabelEl.textContent = `Left end T_L = ${this.tempLeft.toFixed(2)}`;
+    }
+  }
+
+  private updateTempRightLabel(): void {
+    if (this.tempRightLabelEl) {
+      this.tempRightLabelEl.textContent = `Right end T_R = ${this.tempRight.toFixed(2)}`;
+    }
+  }
+
   private updateModeRowVisibility(): void {
     if (!this.modeRowEl) return;
     const spec = IC_SPECS.find((s) => s.name === this.icName)!;
     this.modeRowEl.classList.toggle('heat-equation-hidden', !spec.usesMode);
+  }
+
+  private updateDirichletRowsVisibility(): void {
+    const hidden = this.bc !== 'dirichlet';
+    this.tempLeftRowEl?.classList.toggle('heat-equation-hidden', hidden);
+    this.tempRightRowEl?.classList.toggle('heat-equation-hidden', hidden);
   }
 
   private updatePlayPauseLabel(): void {
@@ -290,7 +358,9 @@ class HeatEquationDemo extends P5DemoBase {
 
   private getBCEquationText(): string {
     switch (this.bc) {
-      case 'dirichlet': return 'u(0, t) = u(1, t) = 0';
+      case 'dirichlet':
+        if (this.endsAreZero()) return 'u(0, t) = u(1, t) = 0';
+        return `u(0, t) = ${this.tempLeft.toFixed(2)},  u(1, t) = ${this.tempRight.toFixed(2)}`;
       case 'neumann':   return 'uₓ(0, t) = uₓ(1, t) = 0';
       case 'periodic':  return 'u(0, t) = u(1, t)';
     }
