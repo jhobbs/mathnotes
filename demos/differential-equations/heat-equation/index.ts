@@ -39,7 +39,7 @@ class HeatEquationDemo extends P5DemoBase {
   private bc: BC = 'dirichlet';
   private icName: ICName = 'gaussian';
   private mode: number = 1;
-  private seed: number = 0xC0FFEE;
+  private seed: number = (Math.random() * 0xFFFFFFFF) >>> 0;
   private alpha: number = DEFAULT_ALPHA;
 
   private coeffs!: Coeffs;
@@ -143,6 +143,7 @@ class HeatEquationDemo extends P5DemoBase {
       this.icName,
       (value) => {
         this.icName = value;
+        if (value === 'random') this.randomizeSeed();
         this.updateModeRowVisibility();
         this.rebuildCoefficients();
       },
@@ -170,10 +171,15 @@ class HeatEquationDemo extends P5DemoBase {
     });
 
     const resetBtn = this.createButton('Reset', () => {
-      this.tSim = 0;
-      this.scrubberMax = this.getTMax();
-      this.playing = true;
-      this.updatePlayPauseLabel();
+      if (this.icName === 'random') {
+        this.randomizeSeed();
+        this.rebuildCoefficients();
+      } else {
+        this.tSim = 0;
+        this.scrubberMax = this.getTMax();
+        this.playing = true;
+        this.updatePlayPauseLabel();
+      }
     });
 
     const topRow = createControlRow([icSelect, bcSelect, this.playPauseButton, resetBtn], { gap: '16px' });
@@ -207,6 +213,10 @@ class HeatEquationDemo extends P5DemoBase {
     this.modeRowEl = this.modeSlider.elt.parentElement as HTMLElement;
     this.modeRowEl.classList.add('heat-equation-mode-row');
     this.updateModeRowVisibility();
+  }
+
+  private randomizeSeed(): void {
+    this.seed = (Math.random() * 0xFFFFFFFF) >>> 0;
   }
 
   private findLabelForSlider(slider: p5.Element): HTMLElement | undefined {
