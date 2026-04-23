@@ -67,6 +67,9 @@ class HeatEquationDemo extends P5DemoBase {
   private qnBuffer!: Float64Array;
   private checkpoints: Array<{ t: number; bn: Float64Array }> = [];
   private lastCheckpointT: number = -Infinity;
+  // For the on-canvas solution display: the initial sine-basis coefficients of the
+  // Dirichlet residual IC (before evolution). Populated on every rebuild.
+  private dirichletInitialSines?: Float64Array;
 
   private xs!: Float64Array;
   private uBuffer!: Float64Array;
@@ -195,6 +198,7 @@ class HeatEquationDemo extends P5DemoBase {
       // profile (sin(ω·0) = 0), so v(x, 0) = f(x) − steadyLinear(x).
       const residual: ICFn = (x) => ic(x) - this.steadyStateLinear(x);
       const initialModes = projectOntoSineBasis(residual, L, DEFAULT_N_MODES);
+      this.dirichletInitialSines = initialModes;
       if (!this.stepper) this.stepper = new DirichletStepper(L, DEFAULT_N_MODES);
       this.stepper.reset(initialModes, 0);
       this.refreshSourceProjection();
@@ -608,9 +612,13 @@ class HeatEquationDemo extends P5DemoBase {
     p.fill(this.colors.text);
     p.noStroke();
     p.textAlign(p.LEFT, p.TOP);
-    p.textSize(20);
 
-    const pde = `uₜ = ${this.alpha.toFixed(2)} · uₓₓ`;
+    // Row 1: PDE | IC | BC (size 20)
+    p.textSize(20);
+    const hasSource = this.bc === 'dirichlet' && this.sourceAmp !== 0;
+    const pde = hasSource
+      ? `uₜ = ${this.alpha.toFixed(2)} · uₓₓ + P(x, t)`
+      : `uₜ = ${this.alpha.toFixed(2)} · uₓₓ`;
     const ic = this.getICEquationText();
     const bc = this.getBCEquationText();
     const y0 = 4;
@@ -622,7 +630,133 @@ class HeatEquationDemo extends P5DemoBase {
     x += p.textWidth(ic) + gap;
     p.text(bc, x, y0);
 
+    // Row 2: explicit solution (size 14)
+    p.textSize(14);
+    p.text(this.getSolutionText(), 8, y0 + 28);
+
+    // Row 3 (conditional): P(x, t) definition if source is active
+    if (hasSource) {
+      p.text(this.getSourceText(), 8, y0 + 46);
+    }
+
     p.pop();
+  }
+
+  private getSolutionText(): string {
+    const alpha = this.alpha.toFixed(2);
+    switch (this.bc) {
+      case 'dirichlet': {
+        if (this.isDriven()) {
+          return 'u(x, t) = U(x, t) + Σₙ bₙ(t)·sin(nπx),   bₙ(t) integrated (ETD)';
+        }
+        const series = this.formatSineSeries(this.dirichletInitialSines, alpha, false);
+        if (this.endsAreZero()) return `u(x, t) = ${series}`;
+        return `u(x, t) = u_∞(x) + ${series},   u_∞(x) = ${this.tempLeft.toFixed(2)} + ${(this.tempRight - this.tempLeft).toFixed(2)}·x`;
+      }
+      case 'neumann': {
+        const series = this.formatCosineSeries(this.coeffs, alpha, false);
+        const mean = this.coeffs.mean;
+        const meanStr = Math.abs(mean) < 0.005 ? '' : `${mean.toFixed(2)} + `;
+        return `u(x, t) = ${meanStr}${series}`;
+      }
+      case 'periodic': {
+        const series = this.formatPeriodicSeries(this.coeffs, alpha);
+        const mean = this.coeffs.mean;
+        const meanStr = Math.abs(mean) < 0.005 ? '' : `${mean.toFixed(2)} + `;
+        return `u(x, t) = ${meanStr}${series}`;
+      }
+    }
+  }
+
+  private getSourceText(): string {
+    const a = this.sourceAmp.toFixed(2);
+    const x0 = this.sourceX0.toFixed(2);
+    const sig = SOURCE_SIGMA.toFixed(2);
+    const timePart = this.sourceOmega === 0 ? '' : `·cos(${this.sourceOmega.toFixed(1)}t)`;
+    return `P(x, t) = ${a}${timePart}·exp(−((x − ${x0})/${sig})²)`;
+  }
+
+  // Pick the first `maxTerms` coefficients with |c| above threshold; returns the list
+  // plus the index of the next-biggest-n we didn't show (for the O(...) remainder hint).
+  private pickSignificantTerms(coeffs: Float64Array | undefined, maxTerms: number, threshold: number = 0.01):
+    { terms: Array<{ n: number; c: number }>; nextN: number } {
+    const terms: Array<{ n: number; c: number }> = [];
+    if (!coeffs) return { terms, nextN: 1 };
+    for (let n = 1; n <= coeffs.length; n++) {
+      if (Math.abs(coeffs[n - 1]) >= threshold) {
+        terms.push({ n, c: coeffs[n - 1] });
+        if (terms.length >= maxTerms) break;
+      }
+    }
+    const nextN = terms.length > 0 ? terms[terms.length - 1].n + 1 : 1;
+    return { terms, nextN };
+  }
+
+  // Dirichlet (sine) basis: φₙ(x) = sin(nπx), decay rate λₙ = n²π².
+  private formatSineSeries(coeffs: Float64Array | undefined, alpha: string, periodic: boolean): string {
+    const { terms, nextN } = this.pickSignificantTerms(coeffs, 3);
+    if (terms.length === 0) return '0';
+    const parts = terms.map(({ n, c }, i) => {
+      const abs = Math.abs(c).toFixed(2);
+      const sign = c < 0 ? '−' : '+';
+      const kx = periodic ? 2 * n : n;
+      const arg = kx === 1 ? 'πx' : `${kx}πx`;
+      const lambdaN = periodic ? 4 * n * n : n * n;
+      const exp = lambdaN === 1 ? `e^(−π²·${alpha}t)` : `e^(−${lambdaN}π²·${alpha}t)`;
+      const term = `${abs}·sin(${arg})·${exp}`;
+      if (i === 0) return c < 0 ? `−${term}` : term;
+      return `${sign} ${term}`;
+    });
+    const lambdaNext = periodic ? 4 * nextN * nextN : nextN * nextN;
+    const remainder = ` + O(e^(−${lambdaNext}π²·${alpha}t))`;
+    return parts.join(' ') + remainder;
+  }
+
+  // Neumann (cosine) basis: φₙ(x) = cos(nπx), decay rate λₙ = n²π².
+  private formatCosineSeries(coeffs: Coeffs | undefined, alpha: string, _periodic: boolean): string {
+    const { terms, nextN } = this.pickSignificantTerms(coeffs?.cosineCoeffs, 3);
+    if (terms.length === 0) return '0';
+    const parts = terms.map(({ n, c }, i) => {
+      const abs = Math.abs(c).toFixed(2);
+      const sign = c < 0 ? '−' : '+';
+      const arg = n === 1 ? 'πx' : `${n}πx`;
+      const lambdaN = n * n;
+      const exp = lambdaN === 1 ? `e^(−π²·${alpha}t)` : `e^(−${lambdaN}π²·${alpha}t)`;
+      const term = `${abs}·cos(${arg})·${exp}`;
+      if (i === 0) return c < 0 ? `−${term}` : term;
+      return `${sign} ${term}`;
+    });
+    const lambdaNext = nextN * nextN;
+    const remainder = ` + O(e^(−${lambdaNext}π²·${alpha}t))`;
+    return parts.join(' ') + remainder;
+  }
+
+  // Periodic: both sine and cosine terms at wavenumber 2πn, decay 4n²π².
+  private formatPeriodicSeries(coeffs: Coeffs | undefined, alpha: string): string {
+    if (!coeffs) return '0';
+    // Pick at most 2 significant pairs; for each n, show whichever of sin/cos is larger.
+    const pairs: Array<{ n: number; c: number; basis: 'sin' | 'cos' }> = [];
+    for (let n = 1; n <= coeffs.sineCoeffs.length && pairs.length < 2; n++) {
+      const s = coeffs.sineCoeffs[n - 1];
+      const c = coeffs.cosineCoeffs[n - 1];
+      if (Math.abs(s) < 0.01 && Math.abs(c) < 0.01) continue;
+      if (Math.abs(s) >= Math.abs(c)) pairs.push({ n, c: s, basis: 'sin' });
+      else pairs.push({ n, c, basis: 'cos' });
+    }
+    if (pairs.length === 0) return '0';
+    const parts = pairs.map(({ n, c, basis }, i) => {
+      const abs = Math.abs(c).toFixed(2);
+      const sign = c < 0 ? '−' : '+';
+      const arg = n === 1 ? '2πx' : `${2 * n}πx`;
+      const lambdaN = 4 * n * n;
+      const exp = `e^(−${lambdaN}π²·${alpha}t)`;
+      const term = `${abs}·${basis}(${arg})·${exp}`;
+      if (i === 0) return c < 0 ? `−${term}` : term;
+      return `${sign} ${term}`;
+    });
+    const nextN = (pairs[pairs.length - 1]?.n ?? 0) + 1;
+    const lambdaNext = 4 * nextN * nextN;
+    return parts.join(' ') + ` + O(e^(−${lambdaNext}π²·${alpha}t))`;
   }
 
   private getICEquationText(): string {
@@ -663,10 +797,17 @@ class HeatEquationDemo extends P5DemoBase {
     return this.tempLeft === 0 ? osc : `${constPart} + ${osc}`;
   }
 
+  private getStripTop(): number {
+    // Row 1 (PDE/IC/BC) always present; row 2 (solution) always present; row 3 (P def) only
+    // when a source term is active.
+    const sourceActive = this.bc === 'dirichlet' && this.sourceAmp !== 0;
+    return sourceActive ? 82 : 62;
+  }
+
   private renderStrip(p: p5): void {
     const w = p.width;
     const h = p.height;
-    const stripTop = 36;
+    const stripTop = this.getStripTop();
     const stripHeight = Math.floor((h - stripTop - 20) * 0.42);
 
     for (let px = 0; px < w; px++) {
@@ -686,7 +827,7 @@ class HeatEquationDemo extends P5DemoBase {
   private renderLinePlot(p: p5): void {
     const w = p.width;
     const h = p.height;
-    const stripTop = 36;
+    const stripTop = this.getStripTop();
     const stripHeight = Math.floor((h - stripTop - 20) * 0.42);
     const plotTop = stripTop + stripHeight + 16;
     const plotBottom = h - 10;
