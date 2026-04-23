@@ -81,14 +81,8 @@ class HeatEquationDemo extends P5DemoBase {
       const dtMs = this.lastFrameMs === 0 ? 0 : now - this.lastFrameMs;
       this.lastFrameMs = now;
 
-      const tMax = this.getTMax();
       if (this.playing && !this.scrubbing) {
         this.tSim += (dtMs / 1000) * SIM_PER_WALL_S;
-        if (this.tSim >= tMax) {
-          this.tSim = tMax;
-          this.playing = false;
-          this.updatePlayPauseLabel();
-        }
       }
 
       evaluate(this.coeffs, this.xs, this.tSim, this.alpha, this.uBuffer);
@@ -99,7 +93,8 @@ class HeatEquationDemo extends P5DemoBase {
       this.renderLinePlot(p);
 
       if (!this.scrubbing && this.scrubberSlider) {
-        this.scrubberSlider.value(this.tSim / tMax);
+        const tMax = this.getTMax();
+        this.scrubberSlider.value(Math.min(1, this.tSim / tMax));
       }
       this.updateTimeLabel();
     };
@@ -164,7 +159,6 @@ class HeatEquationDemo extends P5DemoBase {
 
     this.playPauseButton = this.createButton('Pause', () => {
       this.playing = !this.playing;
-      if (this.playing && this.tSim >= this.getTMax()) this.tSim = 0;
       this.updatePlayPauseLabel();
     });
 
