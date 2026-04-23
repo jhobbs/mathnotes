@@ -22,19 +22,25 @@ export const metadata: DemoMetadata = {
 };
 
 const L = 1;
-const ALPHA = 1;
 const N_X = 400;
 const LN_100 = Math.log(100);
 
-const DEFAULT_DURATION_S = 40;
-const MIN_DURATION_S = 5;
-const MAX_DURATION_S = 120;
+// Wall-clock pacing: at α=1 with Dirichlet BC, full visible decay (mode 1 shrinks to 1%)
+// occurs at t_sim = ln(100)/π². We want that to unfold in ~40 wall-clock seconds.
+const DEFAULT_DECAY_WALL_SECONDS = 40;
+const SIM_PER_WALL_S = (LN_100 / Math.PI ** 2) / DEFAULT_DECAY_WALL_SECONDS;
+
+const DEFAULT_ALPHA = 1.0;
+const MIN_ALPHA = 0.2;
+const MAX_ALPHA = 3.0;
+const ALPHA_STEP = 0.05;
 
 class HeatEquationDemo extends P5DemoBase {
   private bc: BC = 'dirichlet';
   private icName: ICName = 'gaussian';
   private mode: number = 1;
   private seed: number = 0xC0FFEE;
+  private alpha: number = DEFAULT_ALPHA;
 
   private coeffs!: Coeffs;
   private xs!: Float64Array;
@@ -43,11 +49,12 @@ class HeatEquationDemo extends P5DemoBase {
   private tSim: number = 0;
   private playing: boolean = true;
   private lastFrameMs: number = 0;
-  private durationS: number = DEFAULT_DURATION_S;
 
   private scrubberSlider?: p5.Element;
-  private speedSlider?: p5.Element;
+  private alphaSlider?: p5.Element;
   private modeSlider?: p5.Element;
+  private scrubberLabelEl?: HTMLElement;
+  private alphaLabelEl?: HTMLElement;
   private modeRowEl?: HTMLElement;
   private playPauseButton?: HTMLButtonElement;
   private scrubbing: boolean = false;
@@ -76,7 +83,7 @@ class HeatEquationDemo extends P5DemoBase {
 
       const tMax = this.getTMax();
       if (this.playing && !this.scrubbing) {
-        this.tSim += (dtMs / 1000) * (tMax / this.durationS);
+        this.tSim += (dtMs / 1000) * SIM_PER_WALL_S;
         if (this.tSim >= tMax) {
           this.tSim = tMax;
           this.playing = false;
@@ -84,26 +91,23 @@ class HeatEquationDemo extends P5DemoBase {
         }
       }
 
-      evaluate(this.coeffs, this.xs, this.tSim, ALPHA, this.uBuffer);
+      evaluate(this.coeffs, this.xs, this.tSim, this.alpha, this.uBuffer);
 
       p.background(this.colors.background);
+      this.renderEquation(p);
       this.renderStrip(p);
       this.renderLinePlot(p);
 
       if (!this.scrubbing && this.scrubberSlider) {
         this.scrubberSlider.value(this.tSim / tMax);
       }
+      this.updateTimeLabel();
     };
   }
 
-  protected onResize(_p: p5, _size: CanvasSize): void {
-    // Render resolution is tied to canvas width per-frame; nothing to rebuild.
-  }
+  protected onResize(_p: p5, _size: CanvasSize): void {}
 
-  protected onColorSchemeChange(_isDark: boolean): void {
-    // Colors are re-read per-frame via this.colors (refreshed by updateColors),
-    // and the colormap midpoint uses this.isDarkMode directly.
-  }
+  protected onColorSchemeChange(_isDark: boolean): void {}
 
   private setupGrid(): void {
     this.xs = new Float64Array(N_X);
@@ -111,8 +115,10 @@ class HeatEquationDemo extends P5DemoBase {
     this.uBuffer = new Float64Array(N_X);
   }
 
+  // Sim-time at which the slowest nonzero mode has decayed to 1% (independent of α;
+  // α affects how fast this sim-time is "spent" via the decay exponent inside evaluate()).
   private getTMax(): number {
-    return LN_100 / (ALPHA * slowestNonzeroEigenvalue(this.bc, L));
+    return LN_100 / slowestNonzeroEigenvalue(this.bc, L);
   }
 
   private rebuildCoefficients(): void {
@@ -178,13 +184,19 @@ class HeatEquationDemo extends P5DemoBase {
       this.playing = false;
       this.updatePlayPauseLabel();
     });
+    this.scrubberLabelEl = this.findLabelForSlider(this.scrubberSlider);
     this.addEventListener(window, 'mouseup', () => { this.scrubbing = false; });
     this.addEventListener(window, 'touchend', () => { this.scrubbing = false; });
 
-    this.speedSlider = this.createSlider(
-      p, 'Decay over (s)', MIN_DURATION_S, MAX_DURATION_S, DEFAULT_DURATION_S, 1,
-      () => { this.durationS = Number(this.speedSlider!.value()); }
+    this.alphaSlider = this.createSlider(
+      p, 'Decay rate α', MIN_ALPHA, MAX_ALPHA, DEFAULT_ALPHA, ALPHA_STEP,
+      () => {
+        this.alpha = Number(this.alphaSlider!.value());
+        this.updateAlphaLabel();
+      }
     );
+    this.alphaLabelEl = this.findLabelForSlider(this.alphaSlider);
+    this.updateAlphaLabel();
 
     this.modeSlider = this.createSlider(p, 'Sine mode n', 1, 8, this.mode, 1, () => {
       this.mode = Number(this.modeSlider!.value());
@@ -193,6 +205,23 @@ class HeatEquationDemo extends P5DemoBase {
     this.modeRowEl = this.modeSlider.elt.parentElement as HTMLElement;
     this.modeRowEl.classList.add('heat-equation-mode-row');
     this.updateModeRowVisibility();
+  }
+
+  private findLabelForSlider(slider: p5.Element): HTMLElement | undefined {
+    const row = slider.elt.parentElement;
+    return row?.querySelector('.label') as HTMLElement | undefined;
+  }
+
+  private updateTimeLabel(): void {
+    if (this.scrubberLabelEl) {
+      this.scrubberLabelEl.textContent = `Time t = ${this.tSim.toFixed(3)} s`;
+    }
+  }
+
+  private updateAlphaLabel(): void {
+    if (this.alphaLabelEl) {
+      this.alphaLabelEl.textContent = `Decay rate α = ${this.alpha.toFixed(2)}`;
+    }
   }
 
   private updateModeRowVisibility(): void {
@@ -207,11 +236,22 @@ class HeatEquationDemo extends P5DemoBase {
     }
   }
 
+  private renderEquation(p: p5): void {
+    p.push();
+    p.fill(this.colors.text);
+    p.noStroke();
+    p.textAlign(p.LEFT, p.TOP);
+    p.textSize(14);
+    // Unicode subscripts for u_t and u_xx render without MathJax.
+    p.text(`uₜ = ${this.alpha.toFixed(2)} · uₓₓ`, 8, 4);
+    p.pop();
+  }
+
   private renderStrip(p: p5): void {
     const w = p.width;
     const h = p.height;
-    const stripTop = 10;
-    const stripHeight = Math.floor(h * 0.35);
+    const stripTop = 28;
+    const stripHeight = Math.floor(h * 0.32);
 
     for (let px = 0; px < w; px++) {
       const x = (px / (w - 1)) * L;
@@ -230,7 +270,7 @@ class HeatEquationDemo extends P5DemoBase {
   private renderLinePlot(p: p5): void {
     const w = p.width;
     const h = p.height;
-    const plotTop = Math.floor(h * 0.45);
+    const plotTop = Math.floor(h * 0.48);
     const plotBottom = h - 10;
     const plotMid = (plotTop + plotBottom) / 2;
     const plotHalfHeight = (plotBottom - plotTop) / 2;
