@@ -241,13 +241,16 @@ class HeatEquationDemo extends P5DemoBase {
     p.fill(this.colors.text);
     p.noStroke();
     p.textAlign(p.LEFT, p.TOP);
+    p.textSize(20);
 
-    p.textSize(28);
-    p.text(`uₜ = ${this.alpha.toFixed(2)} · uₓₓ`, 8, 4);
+    const pde = `uₜ = ${this.alpha.toFixed(2)} · uₓₓ`;
+    const x0 = 8;
+    const y0 = 4;
+    p.text(pde, x0, y0);
 
-    p.textSize(13);
-    p.text(this.getICEquationText(), 8, 42);
-    p.text(this.getBCEquationText(), 8, 60);
+    const xRight = x0 + p.textWidth(pde) + 32;
+    p.text(this.getICEquationText(), xRight, y0);
+    p.text(this.getBCEquationText(), xRight, y0 + 22);
 
     p.pop();
   }
@@ -281,7 +284,7 @@ class HeatEquationDemo extends P5DemoBase {
   private renderStrip(p: p5): void {
     const w = p.width;
     const h = p.height;
-    const stripTop = 80;
+    const stripTop = 56;
     const stripHeight = Math.floor((h - stripTop - 20) * 0.42);
 
     for (let px = 0; px < w; px++) {
@@ -301,7 +304,7 @@ class HeatEquationDemo extends P5DemoBase {
   private renderLinePlot(p: p5): void {
     const w = p.width;
     const h = p.height;
-    const stripTop = 80;
+    const stripTop = 56;
     const stripHeight = Math.floor((h - stripTop - 20) * 0.42);
     const plotTop = stripTop + stripHeight + 16;
     const plotBottom = h - 10;
