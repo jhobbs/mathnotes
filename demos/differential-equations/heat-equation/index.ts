@@ -26,9 +26,9 @@ const ALPHA = 1;
 const N_X = 400;
 const LN_100 = Math.log(100);
 
-const DEFAULT_DURATION_S = 20;
+const DEFAULT_DURATION_S = 40;
 const MIN_DURATION_S = 5;
-const MAX_DURATION_S = 60;
+const MAX_DURATION_S = 120;
 
 class HeatEquationDemo extends P5DemoBase {
   private bc: BC = 'dirichlet';
