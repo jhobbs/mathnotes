@@ -45,6 +45,7 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'pendulum': () => import('@demos/differential-equations/pendulum'),
   'dilution-calculator': () => import('@demos/differential-equations/dilution-calculator'),
   'dilution-visual': () => import('@demos/differential-equations/dilution-visual'),
+  'heat-equation': () => import('@demos/differential-equations/heat-equation'),
   'game-of-life': () => import('@demos/cellular-automata/game-of-life'),
   'elementary-cellular-automata': () => import('@demos/cellular-automata/elementary-cellular-automata'),
   'cross-product': () => import('@demos/linear-algebra/cross-product'),
