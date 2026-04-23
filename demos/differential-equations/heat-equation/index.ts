@@ -47,6 +47,7 @@ class HeatEquationDemo extends P5DemoBase {
   private uBuffer!: Float64Array;
 
   private tSim: number = 0;
+  private scrubberMax: number = 0;
   private playing: boolean = true;
   private lastFrameMs: number = 0;
 
@@ -85,6 +86,12 @@ class HeatEquationDemo extends P5DemoBase {
         this.tSim += (dtMs / 1000) * SIM_PER_WALL_S;
       }
 
+      // Grow the scrubber's range when the playhead would fall off its right edge,
+      // so the slider always covers all visited time with some headroom.
+      if (this.tSim > this.scrubberMax) {
+        this.scrubberMax = this.tSim * 1.5;
+      }
+
       evaluate(this.coeffs, this.xs, this.tSim, this.alpha, this.uBuffer);
 
       p.background(this.colors.background);
@@ -93,8 +100,7 @@ class HeatEquationDemo extends P5DemoBase {
       this.renderLinePlot(p);
 
       if (!this.scrubbing && this.scrubberSlider) {
-        const tMax = this.getTMax();
-        this.scrubberSlider.value(Math.min(1, this.tSim / tMax));
+        this.scrubberSlider.value(this.tSim / this.scrubberMax);
       }
       this.updateTimeLabel();
     };
@@ -122,6 +128,7 @@ class HeatEquationDemo extends P5DemoBase {
     const ic = normalize(rawIc);
     this.coeffs = computeCoefficients(ic, this.bc, L, DEFAULT_N_MODES);
     this.tSim = 0;
+    this.scrubberMax = this.getTMax();
     this.playing = true;
     this.lastFrameMs = 0;
     this.updatePlayPauseLabel();
@@ -164,6 +171,7 @@ class HeatEquationDemo extends P5DemoBase {
 
     const resetBtn = this.createButton('Reset', () => {
       this.tSim = 0;
+      this.scrubberMax = this.getTMax();
       this.playing = true;
       this.updatePlayPauseLabel();
     });
@@ -174,7 +182,7 @@ class HeatEquationDemo extends P5DemoBase {
     this.scrubberSlider = this.createSlider(p, 'Time', 0, 1, 0, 0.001, () => {
       const v = Number(this.scrubberSlider!.value());
       this.scrubbing = true;
-      this.tSim = v * this.getTMax();
+      this.tSim = v * this.scrubberMax;
       this.playing = false;
       this.updatePlayPauseLabel();
     });
