@@ -247,7 +247,7 @@ class HeatEquationDemo extends P5DemoBase {
     const ic = this.getICEquationText();
     const bc = this.getBCEquationText();
     const y0 = 4;
-    const gap = 32;
+    const gap = Math.max(8, Math.min(24, p.width * 0.02));
     let x = 8;
     p.text(pde, x, y0);
     x += p.textWidth(pde) + gap;
