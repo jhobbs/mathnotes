@@ -97,6 +97,96 @@ export function computeCoefficients(
   return { bc, L, sineCoeffs, cosineCoeffs, mean, eigenvalues };
 }
 
+/** Project an arbitrary spatial profile onto the Dirichlet sine basis on [0, L]:
+ *  returns coefficients c_n such that fn(x) ≈ Σ c_n sin(nπx/L). */
+export function projectOntoSineBasis(
+  fn: (x: number) => number,
+  L: number = 1,
+  N: number = DEFAULT_N_MODES,
+  M: number = INTEGRATION_POINTS
+): Float64Array {
+  const dx = L / M;
+  const samples = new Float64Array(M + 1);
+  for (let i = 0; i <= M; i++) samples[i] = fn(i * dx);
+  const trap = (vals: Float64Array): number => {
+    let s = 0.5 * (vals[0] + vals[M]);
+    for (let i = 1; i < M; i++) s += vals[i];
+    return s * dx;
+  };
+  const out = new Float64Array(N);
+  const integrand = new Float64Array(M + 1);
+  for (let n = 1; n <= N; n++) {
+    const kn = Math.PI * n / L;
+    for (let i = 0; i <= M; i++) integrand[i] = samples[i] * Math.sin(kn * i * dx);
+    out[n - 1] = (2 / L) * trap(integrand);
+  }
+  return out;
+}
+
+/** Integrator for the time-dependent Dirichlet heat problem with inhomogeneous BCs
+ *  and a source term. Each mode b_n(t) satisfies b_n' + α λ_n b_n = Q_n(t); we advance
+ *  via exponential time differencing (ETD1), which is unconditionally stable and
+ *  exact for the homogeneous part. Caller supplies Q_n(t) at the stepper's current time.
+ */
+export class DirichletStepper {
+  readonly N: number;
+  readonly L: number;
+  readonly eigenvalues: Float64Array;
+  readonly bn: Float64Array;
+  t: number;
+
+  constructor(L: number, N: number) {
+    this.L = L;
+    this.N = N;
+    this.eigenvalues = new Float64Array(N);
+    this.bn = new Float64Array(N);
+    this.t = 0;
+    for (let n = 1; n <= N; n++) {
+      this.eigenvalues[n - 1] = (Math.PI * n / L) ** 2;
+    }
+  }
+
+  reset(bnInit: Float64Array, t0: number = 0): void {
+    this.bn.set(bnInit);
+    this.t = t0;
+  }
+
+  /** Advance by dt using first-order ETD, treating Q_n as constant over the interval. */
+  step(dt: number, alpha: number, Qn: Float64Array): void {
+    const N = this.N;
+    for (let n = 0; n < N; n++) {
+      const phi = alpha * this.eigenvalues[n] * dt;
+      if (phi < 1e-10) {
+        // α = 0 or vanishing decay; forcing integrates linearly in dt.
+        this.bn[n] += Qn[n] * dt;
+      } else {
+        const decay = Math.exp(-phi);
+        const factor = (1 - decay) / (alpha * this.eigenvalues[n]);
+        this.bn[n] = this.bn[n] * decay + Qn[n] * factor;
+      }
+    }
+    this.t += dt;
+  }
+
+  /** Reconstruct u from stored modes, adding the caller-supplied base U(x) (steady/linear part). */
+  evaluate(xs: Float64Array, out: Float64Array, base: (x: number) => number): void {
+    const nx = xs.length;
+    for (let i = 0; i < nx; i++) out[i] = base(xs[i]);
+    const N = this.N;
+    for (let n = 1; n <= N; n++) {
+      const b = this.bn[n - 1];
+      if (b === 0) continue;
+      const kn = Math.PI * n / this.L;
+      for (let i = 0; i < nx; i++) out[i] += b * Math.sin(kn * xs[i]);
+    }
+  }
+
+  /** Deep-copy the mode state (for the checkpoint cache). */
+  snapshot(): Float64Array {
+    return new Float64Array(this.bn);
+  }
+}
+
 export function evaluate(
   coeffs: Coeffs,
   xs: Float64Array | number[],
