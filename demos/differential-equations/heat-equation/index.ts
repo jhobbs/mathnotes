@@ -41,7 +41,10 @@ const ALPHA_STEP = 0.01;
 const SOURCE_SIGMA = 0.05;
 const CHECKPOINT_INTERVAL_S = 0.003;
 const MAX_INTEGRATION_DT = 0.002;
-const MAX_OMEGA = 80;
+const MAX_OMEGA = 500;
+// For piecewise-constant ETD to resolve the forcing, we want ω·dt ≲ ω_SAFE_PRODUCT,
+// so at high ω we sub-step more aggressively.
+const OMEGA_DT_SAFETY = 0.1;
 
 class HeatEquationDemo extends P5DemoBase {
   private bc: BC = 'dirichlet';
@@ -323,8 +326,11 @@ class HeatEquationDemo extends P5DemoBase {
       }
     }
     const driven = this.isDriven();
+    // Cap the integration dt so the forcing stays well-resolved at high ω.
+    const omegaMax = Math.max(this.leftOmega, this.sourceOmega, 1);
+    const safeDt = Math.min(MAX_INTEGRATION_DT, OMEGA_DT_SAFETY / omegaMax);
     while (s.t < targetT - 1e-12) {
-      const dt = Math.min(MAX_INTEGRATION_DT, targetT - s.t);
+      const dt = Math.min(safeDt, targetT - s.t);
       if (driven) this.computeQn(s.t); else this.qnBuffer.fill(0);
       s.step(dt, this.alpha, this.qnBuffer);
       if (driven && s.t - this.lastCheckpointT >= CHECKPOINT_INTERVAL_S) {
