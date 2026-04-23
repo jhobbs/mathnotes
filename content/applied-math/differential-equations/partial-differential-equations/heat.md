@@ -62,6 +62,8 @@ $$ u(x,0) = f(x), \quad 0 < x < L. \tag{9} $$
 
 This model is an example of an **initial-boundary value problem**. Finding a function $u(x,t)$ that satisfies all three of these conditions lets us know the temperature at any position and time.
 
+{% include_demo "heat-equation" %}
+
 One more thing to note. When the temperature reaches a steady state and $u$ does not depend on time, and there are no sources, then $\partial u / \partial t = 0$ and the temperature satisfies Laplace's equation
 
 $$ \nabla^2 u = 0. $$
