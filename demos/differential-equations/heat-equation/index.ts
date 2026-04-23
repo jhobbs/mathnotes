@@ -64,8 +64,8 @@ class HeatEquationDemo extends P5DemoBase {
   }
 
   protected getStylePrefix(): string { return 'heat-equation'; }
-  protected getAspectRatio(): number { return 0.5; }
-  protected getMaxHeightPercent(): number { return 0.55; }
+  protected getAspectRatio(): number { return 0.6; }
+  protected getMaxHeightPercent(): number { return 0.65; }
 
   protected createSketch(p: p5): void {
     p.setup = () => {
@@ -241,17 +241,48 @@ class HeatEquationDemo extends P5DemoBase {
     p.fill(this.colors.text);
     p.noStroke();
     p.textAlign(p.LEFT, p.TOP);
-    p.textSize(14);
-    // Unicode subscripts for u_t and u_xx render without MathJax.
+
+    p.textSize(28);
     p.text(`uₜ = ${this.alpha.toFixed(2)} · uₓₓ`, 8, 4);
+
+    p.textSize(13);
+    p.text(this.getICEquationText(), 8, 42);
+    p.text(this.getBCEquationText(), 8, 60);
+
     p.pop();
+  }
+
+  private getICEquationText(): string {
+    switch (this.icName) {
+      case 'gaussian':
+        return 'u(x, 0) = exp(−((x − 0.5)/0.1)²)';
+      case 'two-gaussians':
+        return 'u(x, 0) = exp(−((x − 0.3)/0.08)²) − exp(−((x − 0.7)/0.08)²)';
+      case 'square':
+        return 'u(x, 0) = 1 on [0.35, 0.65], 0 elsewhere';
+      case 'sine': {
+        const k = this.bc === 'periodic' ? 2 * this.mode : this.mode;
+        const coef = k === 1 ? '' : `${k}`;
+        return `u(x, 0) = sin(${coef}πx)`;
+      }
+      case 'random':
+        return 'u(x, 0) = random piecewise-constant noise';
+    }
+  }
+
+  private getBCEquationText(): string {
+    switch (this.bc) {
+      case 'dirichlet': return 'u(0, t) = u(1, t) = 0';
+      case 'neumann':   return 'uₓ(0, t) = uₓ(1, t) = 0';
+      case 'periodic':  return 'u(0, t) = u(1, t)';
+    }
   }
 
   private renderStrip(p: p5): void {
     const w = p.width;
     const h = p.height;
-    const stripTop = 28;
-    const stripHeight = Math.floor(h * 0.32);
+    const stripTop = 80;
+    const stripHeight = Math.floor((h - stripTop - 20) * 0.42);
 
     for (let px = 0; px < w; px++) {
       const x = (px / (w - 1)) * L;
@@ -270,7 +301,9 @@ class HeatEquationDemo extends P5DemoBase {
   private renderLinePlot(p: p5): void {
     const w = p.width;
     const h = p.height;
-    const plotTop = Math.floor(h * 0.48);
+    const stripTop = 80;
+    const stripHeight = Math.floor((h - stripTop - 20) * 0.42);
+    const plotTop = stripTop + stripHeight + 16;
     const plotBottom = h - 10;
     const plotMid = (plotTop + plotBottom) / 2;
     const plotHalfHeight = (plotBottom - plotTop) / 2;
