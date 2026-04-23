@@ -31,7 +31,7 @@ const DEFAULT_DECAY_WALL_SECONDS = 40;
 const SIM_PER_WALL_S = (LN_100 / Math.PI ** 2) / DEFAULT_DECAY_WALL_SECONDS;
 
 const DEFAULT_ALPHA = 1.0;
-const MIN_ALPHA = 0.2;
+const MIN_ALPHA = 0.05;
 const MAX_ALPHA = 3.0;
 const ALPHA_STEP = 0.05;
 
