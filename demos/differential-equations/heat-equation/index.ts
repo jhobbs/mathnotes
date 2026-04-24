@@ -469,7 +469,7 @@ class HeatEquationDemo extends P5DemoBase {
     this.leftOmegaLabelEl = this.findLabelForSlider(this.leftOmegaSlider);
     this.updateLeftOmegaLabel();
 
-    this.sourceAmpSlider = this.createSlider(p, 'Source A', -1, 1, 0, 0.05, () => {
+    this.sourceAmpSlider = this.createSlider(p, 'Source A', -5, 5, 0, 0.05, () => {
       this.sourceAmp = Number(this.sourceAmpSlider!.value());
       this.updateSourceAmpLabel();
       this.updateForcingVisibility();
