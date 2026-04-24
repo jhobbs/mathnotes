@@ -5,10 +5,9 @@ import { P5DemoBase, createSelect, createControlRow } from '@framework';
 import type { DemoConfig, DemoInstance, DemoMetadata, CanvasSize } from '@framework';
 import {
   computeCoefficients,
-  evaluate,
-  projectOntoSineBasis,
   slowestNonzeroEigenvalue,
-  DirichletStepper,
+  Stepper,
+  type StepperSnapshot,
   DEFAULT_N_MODES,
   type BC,
   type Coeffs,
@@ -62,13 +61,18 @@ class HeatEquationDemo extends P5DemoBase {
   private sourceOmega: number = 0;
   private sourceX0: number = 0.5;
 
-  // Solver state — Dirichlet always uses the stepper; Neumann/periodic use static coeffs.
+  // Solver state — all BCs now use the unified stepper (sine / cosine / mean modes).
   private coeffs!: Coeffs;
-  private stepper?: DirichletStepper;
-  private sourceProjection?: Float64Array;
+  private stepper?: Stepper;
+  // Source projection: coefficients of the spatial profile in the current BC's eigenbasis.
+  private sourceCoeffs?: Coeffs;
+  // Projection of (1 − x/L) onto the Dirichlet sine basis — 2/(nπ). Only used when BC is
+  // Dirichlet with left-end oscillation.
   private bcLeftProjection!: Float64Array;
-  private qnBuffer!: Float64Array;
-  private checkpoints: Array<{ t: number; bn: Float64Array }> = [];
+  private qSineBuffer!: Float64Array;
+  private qCosineBuffer!: Float64Array;
+  private qMeanValue: number = 0;
+  private checkpoints: Array<{ t: number; snap: StepperSnapshot }> = [];
   private lastCheckpointT: number = -Infinity;
   // For the on-canvas solution display: the initial sine-basis coefficients of the
   // Dirichlet residual IC (before evolution). Populated on every rebuild.
@@ -170,7 +174,8 @@ class HeatEquationDemo extends P5DemoBase {
     this.xs = new Float64Array(N_X);
     for (let i = 0; i < N_X; i++) this.xs[i] = (i / (N_X - 1)) * L;
     this.uBuffer = new Float64Array(N_X);
-    this.qnBuffer = new Float64Array(DEFAULT_N_MODES);
+    this.qSineBuffer = new Float64Array(DEFAULT_N_MODES);
+    this.qCosineBuffer = new Float64Array(DEFAULT_N_MODES);
   }
 
   private setupStepperInvariants(): void {
@@ -194,22 +199,30 @@ class HeatEquationDemo extends P5DemoBase {
     const rawIc = spec.build({ mode: this.mode, bc: this.bc, seed: this.seed });
     const ic = normalize(rawIc);
 
+    // For non-zero Dirichlet we split u = U(x, t) + v(x, t) where U is the time-varying
+    // linear interpolant satisfying the inhomogeneous BCs. The stepper tracks v, whose
+    // initial condition is the residual f(x) − steadyLinear(x). For other BCs, the
+    // stepper tracks u directly (no BC-interpolant).
+    const effectiveIc: ICFn =
+      this.bc === 'dirichlet'
+        ? (x) => ic(x) - this.steadyStateLinear(x)
+        : ic;
+    this.coeffs = computeCoefficients(effectiveIc, this.bc, L, DEFAULT_N_MODES);
+
     if (this.bc === 'dirichlet') {
-      // Split u = U(x, t) + v(x, t). U is the time-varying linear interpolant satisfying
-      // the inhomogeneous BCs; v satisfies zero Dirichlet and a forced heat equation,
-      // which the DirichletStepper integrates. At t=0, U reduces to the steady linear
-      // profile (sin(ω·0) = 0), so v(x, 0) = f(x) − steadyLinear(x).
-      const residual: ICFn = (x) => ic(x) - this.steadyStateLinear(x);
-      const initialModes = projectOntoSineBasis(residual, L, DEFAULT_N_MODES);
-      this.dirichletInitialSines = initialModes;
-      if (!this.stepper) this.stepper = new DirichletStepper(L, DEFAULT_N_MODES);
-      this.stepper.reset(initialModes, 0);
-      this.refreshSourceProjection();
-      this.clearCheckpoints();
-      this.addCheckpoint();
+      this.dirichletInitialSines = new Float64Array(this.coeffs.sineCoeffs);
     } else {
-      this.coeffs = computeCoefficients(ic, this.bc, L, DEFAULT_N_MODES);
+      this.dirichletInitialSines = undefined;
     }
+
+    if (!this.stepper || this.stepper.bc !== this.bc) {
+      this.stepper = new Stepper(this.bc, L, DEFAULT_N_MODES);
+    }
+    this.stepper.resetFromCoeffs(this.coeffs, 0);
+
+    this.refreshSourceProjection();
+    this.clearCheckpoints();
+    this.addCheckpoint();
 
     this.tSim = 0;
     this.scrubberMax = this.getTMax();
@@ -234,19 +247,18 @@ class HeatEquationDemo extends P5DemoBase {
 
   private refreshSourceProjection(): void {
     if (this.sourceAmp === 0) {
-      this.sourceProjection = undefined;
+      this.sourceCoeffs = undefined;
       return;
     }
     const x0 = this.sourceX0;
     const sigma = SOURCE_SIGMA;
-    // Rescale the spatial profile so sourceAmp reads as "peak steady-state temperature
-    // at a centered source with α=1". The raw integral of the Gaussian is σ√π; the peak
-    // of the 1-D Dirichlet Green's function at x₀ = 0.5 is 0.25. With gain = 4/(σ√π),
-    // a centered unit source gives u_ss(0.5) ≈ 1 — i.e., the slider is calibrated so
-    // the value you set is roughly what shows up on the strip at steady state.
+    // Rescale the spatial profile so sourceAmp reads roughly as "peak steady-state
+    // temperature at a centered source with α=1" — calibrated against the Dirichlet
+    // Green's function. Effect is similar-ish for Neumann/Periodic too.
     const gain = 4 / (sigma * Math.sqrt(Math.PI));
-    this.sourceProjection = projectOntoSineBasis(
+    this.sourceCoeffs = computeCoefficients(
       (x) => gain * Math.exp(-(((x - x0) / sigma) ** 2)),
+      this.bc,
       L,
       DEFAULT_N_MODES
     );
@@ -270,22 +282,36 @@ class HeatEquationDemo extends P5DemoBase {
     return this.leftAmp !== 0 || this.sourceAmp !== 0;
   }
 
-  // Fill qnBuffer with Q_n(t) — the sine-basis projection of (P(x, t) − ∂_t U(x, t)).
+  // Fill qSineBuffer / qCosineBuffer / qMeanValue with Q_*(t) — the projection of
+  // (P(x, t) − ∂_t U(x, t)) onto the current BC's eigenbasis. ∂_t U is only nontrivial
+  // for Dirichlet with non-zero left-end oscillation.
   private computeQn(t: number): void {
     const N = DEFAULT_N_MODES;
-    const bcForcing = -this.leftAmp * this.leftOmega * Math.cos(this.leftOmega * t);
+    const bcForcing =
+      this.bc === 'dirichlet' && this.leftAmp !== 0
+        ? -this.leftAmp * this.leftOmega * Math.cos(this.leftOmega * t)
+        : 0;
     const srcForcing = this.sourceAmp * Math.cos(this.sourceOmega * t);
-    const srcProj = this.sourceProjection;
+    const src = this.sourceCoeffs;
+
+    this.qMeanValue = src && srcForcing !== 0 ? srcForcing * src.mean : 0;
+
     for (let n = 0; n < N; n++) {
-      let q = bcForcing * this.bcLeftProjection[n];
-      if (srcProj && srcForcing !== 0) q += srcForcing * srcProj[n];
-      this.qnBuffer[n] = q;
+      let qs = 0;
+      let qc = 0;
+      if (bcForcing !== 0) qs += bcForcing * this.bcLeftProjection[n];
+      if (src && srcForcing !== 0) {
+        qs += srcForcing * src.sineCoeffs[n];
+        qc += srcForcing * src.cosineCoeffs[n];
+      }
+      this.qSineBuffer[n] = qs;
+      this.qCosineBuffer[n] = qc;
     }
   }
 
   private addCheckpoint(): void {
     if (!this.stepper) return;
-    this.checkpoints.push({ t: this.stepper.t, bn: this.stepper.snapshot() });
+    this.checkpoints.push({ t: this.stepper.t, snap: this.stepper.snapshot() });
     this.lastCheckpointT = this.stepper.t;
   }
 
@@ -294,7 +320,7 @@ class HeatEquationDemo extends P5DemoBase {
     this.lastCheckpointT = -Infinity;
   }
 
-  private findCheckpointAtOrBefore(t: number): { t: number; bn: Float64Array } | null {
+  private findCheckpointAtOrBefore(t: number): { t: number; snap: StepperSnapshot } | null {
     const ck = this.checkpoints;
     if (ck.length === 0 || ck[0].t > t) return null;
     let lo = 0, hi = ck.length - 1;
@@ -306,29 +332,26 @@ class HeatEquationDemo extends P5DemoBase {
     return ck[lo];
   }
 
-  // Dispatch: drive the simulation to match this.tSim, and fill uBuffer with u(x, tSim).
+  // Drive the simulation to match this.tSim, and fill uBuffer with u(x, tSim).
   private advanceSimulation(): void {
-    if (this.bc === 'dirichlet') {
-      this.driveStepperTo(this.tSim);
-      this.stepper!.evaluate(this.xs, this.uBuffer, (x) => this.interpolantU(x, this.tSim));
-    } else {
-      evaluate(this.coeffs, this.xs, this.tSim, this.alpha, this.uBuffer);
-    }
+    this.driveStepperTo(this.tSim);
+    const base = this.bc === 'dirichlet'
+      ? (x: number) => this.interpolantU(x, this.tSim)
+      : (_x: number) => 0;
+    this.stepper!.evaluate(this.xs, this.uBuffer, base);
   }
 
   private driveStepperTo(targetT: number): void {
     const s = this.stepper!;
     if (s.t > targetT + 1e-12) {
-      // Rewind via checkpoint, then step forward.
       const cp = this.findCheckpointAtOrBefore(targetT);
       if (cp) {
-        s.reset(cp.bn, cp.t);
+        s.restoreSnapshot(cp.snap, cp.t);
       } else {
-        // Shouldn't happen (we always add a t=0 checkpoint), but guard just in case.
-        const spec = IC_SPECS.find((x) => x.name === this.icName)!;
-        const rawIc = spec.build({ mode: this.mode, bc: this.bc, seed: this.seed });
-        const ic = normalize(rawIc);
-        s.reset(projectOntoSineBasis((x) => ic(x) - this.steadyStateLinear(x), L, DEFAULT_N_MODES), 0);
+        // Shouldn't happen (we always add a t=0 checkpoint after rebuild); fall through
+        // by re-projecting the IC.
+        this.rebuildCoefficients();
+        return;
       }
     }
     const driven = this.isDriven();
@@ -337,8 +360,14 @@ class HeatEquationDemo extends P5DemoBase {
     const safeDt = Math.min(MAX_INTEGRATION_DT, OMEGA_DT_SAFETY / omegaMax);
     while (s.t < targetT - 1e-12) {
       const dt = Math.min(safeDt, targetT - s.t);
-      if (driven) this.computeQn(s.t); else this.qnBuffer.fill(0);
-      s.step(dt, this.alpha, this.qnBuffer);
+      if (driven) {
+        this.computeQn(s.t);
+      } else {
+        this.qSineBuffer.fill(0);
+        this.qCosineBuffer.fill(0);
+        this.qMeanValue = 0;
+      }
+      s.step(dt, this.alpha, this.qSineBuffer, this.qCosineBuffer, this.qMeanValue);
       if (driven && s.t - this.lastCheckpointT >= CHECKPOINT_INTERVAL_S) {
         this.addCheckpoint();
       }
@@ -592,22 +621,19 @@ class HeatEquationDemo extends P5DemoBase {
   }
 
   private updateDirichletRowsVisibility(): void {
-    const hidden = this.bc !== 'dirichlet';
-    this.tempLeftRowEl?.classList.toggle('heat-equation-hidden', hidden);
-    this.tempRightRowEl?.classList.toggle('heat-equation-hidden', hidden);
-    this.leftAmpRowEl?.classList.toggle('heat-equation-hidden', hidden);
-    this.sourceAmpRowEl?.classList.toggle('heat-equation-hidden', hidden);
-    // ω_L and source x₀/ω are only meaningful when their amplitude is nonzero;
-    // updateForcingVisibility also handles them.
+    // T_L/T_R and left-end oscillation only make sense for Dirichlet BC.
+    const nonDirichlet = this.bc !== 'dirichlet';
+    this.tempLeftRowEl?.classList.toggle('heat-equation-hidden', nonDirichlet);
+    this.tempRightRowEl?.classList.toggle('heat-equation-hidden', nonDirichlet);
+    this.leftAmpRowEl?.classList.toggle('heat-equation-hidden', nonDirichlet);
     this.updateForcingVisibility();
   }
 
-  // Hide the ω_L row unless left amplitude is nonzero, and hide source x₀/ω unless
-  // source amplitude is nonzero. Always forces everything hidden for non-Dirichlet.
+  // Hide ω_L unless left amplitude is nonzero (and BC is Dirichlet). Source sliders
+  // are shown for all BCs; ω and x₀ only when amplitude is nonzero.
   private updateForcingVisibility(): void {
-    const nonDirichlet = this.bc !== 'dirichlet';
-    const leftOff = nonDirichlet || this.leftAmp === 0;
-    const srcOff = nonDirichlet || this.sourceAmp === 0;
+    const leftOff = this.bc !== 'dirichlet' || this.leftAmp === 0;
+    const srcOff = this.sourceAmp === 0;
     this.leftOmegaRowEl?.classList.toggle('heat-equation-hidden', leftOff);
     this.sourceX0RowEl?.classList.toggle('heat-equation-hidden', srcOff);
     this.sourceOmegaRowEl?.classList.toggle('heat-equation-hidden', srcOff);
@@ -627,7 +653,7 @@ class HeatEquationDemo extends P5DemoBase {
 
     // Row 1: PDE | IC | BC (size 20)
     p.textSize(20);
-    const hasSource = this.bc === 'dirichlet' && this.sourceAmp !== 0;
+    const hasSource = this.sourceAmp !== 0;
     const pde = hasSource
       ? `uₜ = ${this.alpha.toFixed(2)} · uₓₓ + P(x, t)`
       : `uₜ = ${this.alpha.toFixed(2)} · uₓₓ`;
@@ -666,12 +692,18 @@ class HeatEquationDemo extends P5DemoBase {
         return `u(x, t) = u_∞(x) + ${series},   u_∞(x) = ${this.tempLeft.toFixed(2)} + ${(this.tempRight - this.tempLeft).toFixed(2)}·x`;
       }
       case 'neumann': {
+        if (this.sourceAmp !== 0) {
+          return 'u(x, t) = m(t) + Σₙ aₙ(t)·cos(nπx),   aₙ(t), m(t) integrated (ETD)';
+        }
         const series = this.formatCosineSeries(this.coeffs, alpha, false);
         const mean = this.coeffs.mean;
         const meanStr = Math.abs(mean) < 0.005 ? '' : `${mean.toFixed(2)} + `;
         return `u(x, t) = ${meanStr}${series}`;
       }
       case 'periodic': {
+        if (this.sourceAmp !== 0) {
+          return 'u(x, t) = m(t) + Σₙ [sₙ(t)·sin(2πnx) + cₙ(t)·cos(2πnx)],   integrated (ETD)';
+        }
         const series = this.formatPeriodicSeries(this.coeffs, alpha);
         const mean = this.coeffs.mean;
         const meanStr = Math.abs(mean) < 0.005 ? '' : `${mean.toFixed(2)} + `;
@@ -814,8 +846,7 @@ class HeatEquationDemo extends P5DemoBase {
   private getStripTop(): number {
     // Row 1 (PDE/IC/BC) always present; row 2 (solution) always present; row 3 (P def) only
     // when a source term is active.
-    const sourceActive = this.bc === 'dirichlet' && this.sourceAmp !== 0;
-    return sourceActive ? 82 : 62;
+    return this.sourceAmp !== 0 ? 82 : 62;
   }
 
   private renderStrip(p: p5): void {
