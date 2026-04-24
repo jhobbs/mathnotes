@@ -879,11 +879,27 @@ class HeatEquationDemo extends P5DemoBase {
     const plotMid = (plotTop + plotBottom) / 2;
     const plotHalfHeight = (plotBottom - plotTop) / 2;
 
+    // Baseline at u=0.
     p.stroke(this.colors.axis);
     p.strokeWeight(1);
     p.line(0, plotMid, w, plotMid);
     p.noStroke();
 
+    // Mean temperature — dashed line and numeric readout. Clamp visually to the plot
+    // window but show the true numeric value in the label.
+    const mean = this.computeMean();
+    const meanClamped = Math.max(-1, Math.min(1, mean));
+    const meanY = plotMid - meanClamped * plotHalfHeight;
+    p.push();
+    const ctx = p.drawingContext as CanvasRenderingContext2D;
+    ctx.setLineDash([4, 4]);
+    p.stroke(this.colors.warning);
+    p.strokeWeight(1);
+    p.line(0, meanY, w, meanY);
+    ctx.setLineDash([]);
+    p.pop();
+
+    // Solution curve.
     p.stroke(this.colors.accent);
     p.strokeWeight(2);
     p.noFill();
@@ -896,6 +912,20 @@ class HeatEquationDemo extends P5DemoBase {
     }
     p.endShape();
     p.noStroke();
+
+    // Mean label at the right edge of the dashed line.
+    p.fill(this.colors.warning);
+    p.textAlign(p.RIGHT, p.BOTTOM);
+    p.textSize(12);
+    p.text(`⟨u⟩ = ${mean.toFixed(3)}`, w - 6, meanY - 2);
+  }
+
+  /** Spatial mean of the current u(x) buffer via trapezoidal rule on the render grid. */
+  private computeMean(): number {
+    const n = this.uBuffer.length;
+    let s = 0.5 * (this.uBuffer[0] + this.uBuffer[n - 1]);
+    for (let i = 1; i < n - 1; i++) s += this.uBuffer[i];
+    return s / (n - 1);
   }
 
   private sampleU(x: number): number {
