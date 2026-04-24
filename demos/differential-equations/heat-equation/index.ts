@@ -291,7 +291,11 @@ class HeatEquationDemo extends P5DemoBase {
       this.bc === 'dirichlet' && this.leftAmp !== 0
         ? -this.leftAmp * this.leftOmega * Math.cos(this.leftOmega * t)
         : 0;
-    const srcForcing = this.sourceAmp * Math.cos(this.sourceOmega * t);
+    // Raised-cosine source envelope — oscillates between 0 and A (not between −A and A),
+    // so an "oscillating heat source" behaves like a flame pulsing on and off rather than
+    // a heater that turns into a refrigerator on alternating half-cycles. At ω=0 this
+    // collapses to the constant A.
+    const srcForcing = this.sourceAmp * 0.5 * (1 + Math.cos(this.sourceOmega * t));
     const src = this.sourceCoeffs;
 
     this.qMeanValue = src && srcForcing !== 0 ? srcForcing * src.mean : 0;
@@ -716,7 +720,9 @@ class HeatEquationDemo extends P5DemoBase {
     const a = this.sourceAmp.toFixed(2);
     const x0 = this.sourceX0.toFixed(2);
     const sig = SOURCE_SIGMA.toFixed(2);
-    const timePart = this.sourceOmega === 0 ? '' : `·cos(${this.sourceOmega.toFixed(1)}t)`;
+    const timePart = this.sourceOmega === 0
+      ? ''
+      : `·½(1 + cos(${this.sourceOmega.toFixed(1)}t))`;
     // ψ(x) is the narrow Gaussian rescaled so A is read as the peak steady-state temperature
     // at a centered source with α=1 — see refreshSourceProjection for the gain.
     return `P(x, t) = ${a}${timePart}·ψ(x − ${x0}),   ψ(y) ∝ exp(−(y/${sig})²)`;
