@@ -239,8 +239,14 @@ class HeatEquationDemo extends P5DemoBase {
     }
     const x0 = this.sourceX0;
     const sigma = SOURCE_SIGMA;
+    // Rescale the spatial profile so sourceAmp reads as "peak steady-state temperature
+    // at a centered source with α=1". The raw integral of the Gaussian is σ√π; the peak
+    // of the 1-D Dirichlet Green's function at x₀ = 0.5 is 0.25. With gain = 4/(σ√π),
+    // a centered unit source gives u_ss(0.5) ≈ 1 — i.e., the slider is calibrated so
+    // the value you set is roughly what shows up on the strip at steady state.
+    const gain = 4 / (sigma * Math.sqrt(Math.PI));
     this.sourceProjection = projectOntoSineBasis(
-      (x) => Math.exp(-(((x - x0) / sigma) ** 2)),
+      (x) => gain * Math.exp(-(((x - x0) / sigma) ** 2)),
       L,
       DEFAULT_N_MODES
     );
@@ -679,7 +685,9 @@ class HeatEquationDemo extends P5DemoBase {
     const x0 = this.sourceX0.toFixed(2);
     const sig = SOURCE_SIGMA.toFixed(2);
     const timePart = this.sourceOmega === 0 ? '' : `·cos(${this.sourceOmega.toFixed(1)}t)`;
-    return `P(x, t) = ${a}${timePart}·exp(−((x − ${x0})/${sig})²)`;
+    // ψ(x) is the narrow Gaussian rescaled so A is read as the peak steady-state temperature
+    // at a centered source with α=1 — see refreshSourceProjection for the gain.
+    return `P(x, t) = ${a}${timePart}·ψ(x − ${x0}),   ψ(y) ∝ exp(−(y/${sig})²)`;
   }
 
   // Pick the first `maxTerms` coefficients with |c| above threshold; returns the list
