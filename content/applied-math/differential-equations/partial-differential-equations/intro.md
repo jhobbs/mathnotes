@@ -36,9 +36,9 @@ The basic transport equation is
 
 $$ u_t + c u_x = 0, \quad u(0, x) = f(x). \tag{a} $$
 
-We'll find its characteristic curves. First, let's parameterize $u(t,x)$ to get $v(t, x(t)) = u(t, x).$ Now,
+We'll find its characteristic curves. First, let's parameterize $u(t,x)$ to get $h(t, x(t)) = u(t, x).$ Now,
 
-$$ \frac{dv}{dt} = \frac{\partial u}{\partial t} \frac{dt}{dt} + \frac{\partial u}{\partial x} \frac{dx}{dt} = u_t + \frac{dx}{dt} u_x. \tag{b} $$
+$$ \frac{dh}{dt} = \frac{\partial u}{\partial t} \frac{dt}{dt} + \frac{\partial u}{\partial x} \frac{dx}{dt} = u_t + \frac{dx}{dt} u_x. \tag{b} $$
 
 Comparing (b) to (a), we see that if if $u_t + c u_x = 0,$ then $\frac{dx}{dt} = c.$ Now, we solve that ODE:
 
@@ -72,7 +72,7 @@ v_t - c v_{\xi} + c v_{\xi} & = 0 \\
 v_t = \frac{dv}{dt} = 0.
 \end{aligned} \tag{d} $$
 
-Note: we can go from $v_t to \frac{dv}{dt}$ because $v(t, x - ct)$ is only a function of $t,$ because $x - ct$ is constant.
+Note: we can go from $v_t$ to $\frac{dv}{dt}$ because $v(t, x - ct)$ is only a function of $t,$ because $x - ct$ is constant.
 
 Now we solve this ODE:
 
