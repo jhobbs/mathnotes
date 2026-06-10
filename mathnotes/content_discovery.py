@@ -13,6 +13,11 @@ class ContentDiscovery:
 
     def build_url_mappings(self):
         """Build URL mappings from all content files."""
+        # Clear in place (other components hold references to these dicts) so
+        # deleted/moved files don't linger across incremental rebuilds
+        self.url_mappings.clear()
+        self.file_to_canonical.clear()
+
         for section in CONTENT_DIRS:
             section_path = Path(section)
 

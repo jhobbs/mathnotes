@@ -50,6 +50,12 @@ class BlockIndex:
         """Build the global index by scanning all markdown files."""
         content_dir = "content"
 
+        # Snapshot label signatures before rebuilding so we can detect which
+        # blocks were added, removed, or changed and invalidate the cached
+        # renders of pages that reference them (their own mtime is unchanged,
+        # so the markdown cache would otherwise serve stale HTML).
+        previous_signatures = self._label_signatures() if self._is_built else None
+
         # Clear existing data structures to allow rebuilding
         self.index.clear()
         self.all_blocks.clear()
@@ -68,6 +74,11 @@ class BlockIndex:
         # Phase 4: Render all blocks with reference information now available
         self._render_all_blocks()
 
+        # On incremental rebuilds, invalidate cached renders of files that
+        # reference any block whose definition was added, removed, or changed.
+        if previous_signatures is not None:
+            self._invalidate_stale_renders(previous_signatures)
+
         self._is_built = True
 
         # Log index statistics
@@ -78,6 +89,59 @@ class BlockIndex:
         # Log reverse index statistics
         stats = self.reverse_index.get_summary_stats()
         print(f"Reverse index built: {stats['blocks_with_references']} blocks referenced, {stats['total_direct_references']} direct references")
+
+    def _label_signatures(self) -> Dict[str, tuple]:
+        """Map each label to a signature of the block it currently resolves to."""
+        return {
+            label: (ref.canonical_url, ref.block.block_type.value, ref.block.title, ref.block.content)
+            for label, ref in self.index.items()
+        }
+
+    def _invalidate_stale_renders(self, previous_signatures: Dict[str, tuple]):
+        """Invalidate cached page renders affected by added/removed/changed blocks.
+
+        Pages embed referenced blocks' content (tooltips and @embed), which in
+        turn contains links for the references inside those blocks. So a change
+        to one label can affect any page that reaches it through the reference
+        graph; treat the changed labels and every block that transitively
+        references them as dirty, then invalidate all files that reference a
+        dirty label directly.
+        """
+        current_signatures = self._label_signatures()
+        changed_labels = {
+            label
+            for label in previous_signatures.keys() | current_signatures.keys()
+            if previous_signatures.get(label) != current_signatures.get(label)
+        }
+        if not changed_labels:
+            return
+
+        dirty_labels = set(changed_labels)
+        for label in changed_labels:
+            entry = self.reverse_index.get_references_for_label(label)
+            for ref_info in entry.direct_references:
+                if ref_info.source_label:
+                    dirty_labels.add(ref_info.source_label)
+            for refs in entry.transitive_references.values():
+                for ref_info in refs:
+                    if ref_info.source_label:
+                        dirty_labels.add(ref_info.source_label)
+
+        affected_files = set()
+        for label in dirty_labels:
+            entry = self.reverse_index.get_references_for_label(label)
+            for ref_info in entry.direct_references:
+                affected_files.add(ref_info.source_file)
+
+        if affected_files:
+            from .markdown_processor import invalidate_markdown_file
+
+            for file_path in affected_files:
+                invalidate_markdown_file(file_path)
+            print(
+                f"Invalidated {len(affected_files)} cached page(s) referencing "
+                f"{len(changed_labels)} changed block label(s)"
+            )
 
     def _scan_directory(self, directory: str):
         """Recursively scan a directory for markdown files and index their blocks."""
