@@ -39,9 +39,17 @@ EXCLUDED_PATTERNS = {'.swp', '.swo', '.swn', '~', '#'}
 
 
 def should_ignore(path: str) -> bool:
-    """Check if a file should be ignored (swap files, temp files, etc.)"""
+    """Check if a file should be ignored (swap files, temp files, bytecode, etc.)"""
+    if '__pycache__' in path.split(os.sep) or path.endswith('.pyc'):
+        return True
     name = os.path.basename(path)
     return any(name.endswith(p) or name.startswith('.#') for p in EXCLUDED_PATTERNS)
+
+
+def requires_restart(changed: list) -> bool:
+    """Python source changes can't take effect in-process (modules are already
+    imported), so the watcher must re-exec itself to pick them up."""
+    return any(path.endswith('.py') for path in changed)
 
 
 def get_mtimes(dirs: list) -> dict:
@@ -168,6 +176,13 @@ def main():
                 logger.info(f"  {f}")
             if len(pending_changes) > 5:
                 logger.info(f"  ... and {len(pending_changes) - 5} more")
+
+            if requires_restart(pending_changes):
+                # Re-exec keeps the same PID, so smart-rebuild.sh's liveness
+                # check and exit trap keep working across the restart
+                logger.info(f"[ID:{PROCESS_ID}] Python source changed, restarting watcher to load new code...")
+                sys.stdout.flush()
+                os.execv(sys.executable, [sys.executable] + sys.argv)
 
             try:
                 build_start = time.time()
