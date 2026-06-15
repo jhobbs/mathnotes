@@ -62,7 +62,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'phase-and-time': () => import('@demos/dynamical-systems/phase-and-time'),
   'parametric-phase-portrait': () => import('@demos/dynamical-systems/parametric-phase-portrait'),
   'firefly-synchronization': () => import('@demos/dynamical-systems/firefly-synchronization'),
-  'cobweb': () => import('@demos/dynamical-systems/cobweb')
+  'cobweb': () => import('@demos/dynamical-systems/cobweb'),
+  'zipf-entropy': () => import('@demos/information-theory/zipf-entropy')
 };
 
 // Store for loaded metadata

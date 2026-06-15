@@ -36,6 +36,14 @@ The unit for entropy is information per symbol.
 The @entropy of a @random-variable quantifies the average level of uncertainty or information associated with the variable's potential states of possible outcomes. It measures the expected amount of information needed to describe the state of the variable, considering the distribution of probabilities across all potential states.
 :::
 
+The demo below makes these quantities concrete. It uses a discrete alphabet of $N$ symbols whose probabilities follow a *Zipfian* distribution,
+
+$$ p(n) = \frac{n^{-\alpha}}{\sum_{k=1}^{N} k^{-\alpha}}, \qquad n = 1, 2, \dots, N, $$
+
+where the skew $\alpha$ controls how unevenly probability mass is spread across symbols. At $\alpha = 0$ every symbol is equally likely (the uniform distribution), so @entropy is maximal at $\log N.$ As $\alpha$ grows the distribution concentrates on the first few symbols, the rare symbols carry ever more @self-information, and the @entropy falls toward $0.$ The bar chart shows the probability of each symbol alongside its @self-information; the second chart traces the @entropy as $\alpha$ sweeps from uniform to highly skewed.
+
+{% include_demo "zipf-entropy" %}
+
 :::definition "Capacity"
 Given an information source where all symbols are of the same time duration, and each symbol represents $s$ bits of information (because it is chosen freely among $2^s$ symbols), and the channel can transmit $n$ symbols per second ten the **capacity** $C$ of the channel is defined to be $ns$ bits per second.
 :::
@@ -57,5 +65,12 @@ The best transmitter is one which codes the message in such a way that maximizes
 :::
 
 Examples to cover: [https://claude.ai/chat/0702d3b2-a181-4b5b-a572-e5464d9d24d5]
+
+## Example: Coin Flip
+
+## Example: Dice
+
+
+
 
 TODO: Relative Entropy
