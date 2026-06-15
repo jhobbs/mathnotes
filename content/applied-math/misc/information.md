@@ -68,9 +68,43 @@ Examples to cover: [https://claude.ai/chat/0702d3b2-a181-4b5b-a572-e5464d9d24d5]
 
 ## Example: Coin Flip
 
-## Example: Dice
+For a fair coin flip, $X = \{h, t\}.$ $p(h) = p(t) = 0.5.$ Then, $I(h) = I(t) = - \log_{2}{(0.5)} = 1 \text{ bit},$ and
 
+$$ H(X) = p(h) \cdot I(h) + p(t) \cdot I(t) = 0.5 \cdot 1 + 0.5 \cdot 1 = 1 \text{ bit}. $$
 
+Let's say we have an unfair coin and $p(h) = 0.9, p(t) = 0.1.$ Then
 
+$$ I(h) = - \log_{2}{(0.9)} \approx 0.152 \text{ bits}, \quad I(t) = - \log_{2}{(0.1)} \approx 3.32 \text{ bits}, $$
+
+and for entropy of $X$ we get
+
+$$ H(X) = p(h) \cdot I(h) + p(t) \cdot I(t) \approx 0.9 \cdot 0.152 + 0.1 \cdot 3.32 \approx 0.469 \text{ bits}. $$
+
+## Example: Six-Sided Die
+
+For a fair six-sided die, $X = \{1,2,3,4,5,6\}.$ $p(x) = 1/6.$ Then, $I(x) - \log_{2}{(1/6)} = \log_{2}(6) \approx 2.58 \text{ bits},$ and
+
+$$ H(X) = 6 \cdot \frac{1}{6} \cdot I(x) = I(x) \approx 2.58 \text{ bits}. $$
+
+Let's say we have an unfair die and $p(1) = 0.5, p(x \in \{2,3,4,5,6\}) = 0.1.$ Then
+
+$$ I(1) = - \log_{2}{(0.5)} = 1 \text{ bit}, \quad I(x \in \{2,3,4,5,6\}) = - \log_{2}{(0.1)} \approx 3.32 \text{ bits}, $$
+
+and for entropy of $X$ we get
+
+$$ H(X) = p(1) \cdot I(1) + 5 \cdot p(x \in \{2,3,4,5,6\}) \cdot I(x \in \{2,3,4,5,6\}) \approx 0.5 \cdot 1 + 5 \cdot 0.1 \cdot 3.32 \approx 2.16 \text{ bits}. $$
+
+Some things to note from above:
+
+:::theorem
+When we have a uniform distribution, the @self-information of any given @element of a @random-variable with $N$ @elements equals the @entropy of the @random-variable and is $log{N}.$
+:::
+
+:::theorem
+A @random-variable has the most @entropy when its @elements are all equally likely to occur.
+:::
+:::note
+When we decrease the probability of an @element occurring, its @self-information increases only logarithmically, while its weight in the entropy sum decreases linearly. 
+:::
 
 TODO: Relative Entropy
