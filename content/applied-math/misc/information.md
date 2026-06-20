@@ -3,6 +3,112 @@ layout: page
 title: Information Theory
 ---
 
+# Capacity of a Discrete Channel
+
+:::definition "Discrete Channel"
+A system whereby a @sequence of choices from a @finite @set of elementary symbols $S_1 \cdots S_n$ and be transmitted from one point to another. Each of the symbols $S_i$ is assumed to have a certain duration in time $t_i$ seconds (not necessarily the same for different $S_i$).
+:::
+
+:::definition "Capacity" {synonyms: "channel-capacity"}
+The **capacity** $C$ of a @discrete-channel is given by
+
+$$ C = \lim_{t \to \infty} \frac{\log{N(t)}}{t}, $$
+
+where $N(t)$ is the number of allowed @signals of duration $T.$ 
+:::
+:::note
+Given an information source where all symbols are of the same time duration, and each symbol represents $s$ bits of information (because it is chosen freely among $2^s$ symbols), and the channel can transmit $n$ symbols per second ten the **capacity** $C$ of the channel is defined to be $ns$ bits per second.
+
+In the more general case we have to deal with symbols of various lengths that take different amounts of time to transmit, and so capacity measures not the number of symbols transmitted per second but the amount of information transmitted per second, retaining bits per second as its unit.
+
+If $N(t)$ represent the number of @sequences of duration $t,$ then
+
+$$ N(t) = N(t - t_1) + N(t - t_2) + \cdots + N(t - t_n). $$
+
+This number is equal to the sum of the numbers of sequences ending in $S_1, S_2, \dots, S_n.$ This is a recursive definition - if the last symbol is $S_i,$ and then we have $t - t_i$ time remaining for the previous symbols in the sequence, and we repeat the same question on that remainder.
+
+A "well-known result" in finite differences tells us that
+
+$$ \lim_{t \to \infty} N(t) = A X_0^t, $$
+
+where $A$ is constant and $X_0$ is the largest real solution of the @characteristic-equation:
+
+$$ X^{-t_1} + X^{-t_2} + \cdots + X^{-t_n} = 1, $$
+
+and therefore 
+
+$$ C = \lim_{t \to \infty} \frac{\log{A X_0^t}}{t} = \log{X_0}. $$
+:::
+
+:::example
+Consider Morse code as used in telegraph. We have the following rules:
+
+* A **dot** symbol consists of one time unit of line closure followed by one time unit of line open.
+
+* A **dash** symbol consists of three time units of line closure followed by one time unit of line open.
+
+* A **letter space** symbol consists of three time units of line open.
+
+* A **word space** symbol consists of six time units of line open.
+
+We're never allowed to send two space symbols in a row, because two sequential letter space symbols are indistinguishable from a word space symbol.
+
+Now, our possible terminating states are
+
+| Symbol | Composition | Duration (time units) |
+|:--------|:-------------|:-----------------------|
+| Dot | 1 unit closed + 1 unit open | 2 |
+| Dash | 3 units closed + 1 unit open | 4 |
+| Letter space preceded by dot | 1 unit closed + 4 units open | 5 |
+| Letter space preceded by dash | 3 units closed + 4 units open | 7 |
+| Word space preceded by dot | 1 unit closed + 7 units open | 8 |
+| Word space preceded by dash | 3 units closed + 7 units open | 10 |
+
+Note that we had to consider the last two symbols in the case of the last symbol being a space in order to deal with our "no sequential spaces" constraint.
+
+Now we have
+
+$$ N(t) = N(t - 2) + N(t - 4) + N(t - 5) + N(t - 7) + N(t - 8) + N(t - 10). $$
+
+So, our characteristic equation is
+
+$$ W^{-2} + W^{-4} + W^{-5} + W^{-7} + W^{-8} + W^{-10} = 1. \tag{a} $$
+
+With a substitution of $w = 1/W$ we get
+
+$$ w^{2} + w^{4} + w^{5} + w^{7} + w^{8} + w^{10} = 1, $$
+
+and $w_0,$ the largest positive root of this equation, found numerically, is about $1.4529,$ and so
+
+$$ C = -\log_{2}{(w_0)} \approx 0.539 \text{ bits per unit of time}. $$
+
+Note that in this Morse telegraphy system, we have two states that the channel can be in, based on what the previous symbol transmitted was.
+
+* If the previous symbol transmitted was a space, we're in state $1,$ and the next symbol can only be a dot or a dash, and the state will change.
+
+* If the previous symbol transmitted was not a space, we're in state $2,$ and the next symbol can be anything, and the state may or may not change depending on what the next symbol is.
+
+We can think of these states being the @nodes of a @directed-graph with the @edges being the @vertices. A generalization of this is given in the theorem below.
+:::
+
+:::theorem
+Let $b_{ij}^{(s)}$ be the duration of the $s$-th symbol which is allowable in state $i$ and leads to state $j.$ Then the @channel-capacity of $C$ is equal to $log{W}$ where $W$ is the largest real root of the @determinantal-equation
+
+$$ \left | \sum_{s} W^{-b_{ij}^{(s)}} - \delta_{ij}  \right | = 0, $$
+
+where $\delta_{ij}$ is the @Kronecker-delta.
+:::
+:::example
+For example, for our Morse telegraphy example, we have
+
+$$ \begin{vmatrix} -1 & W^{-2} + W^{-4} \\ W^{-3} + W^{-6} & W^{-2} + W^{-4} - 1 \end{vmatrix} = 0. $$
+
+Expanding the @determinant on the LHS gives the @characteristic-equation $(a)$ above.
+:::
+
+
+# Information and Entropy in a Discrete Channel
+
 :::definition "Self-Information" {synonyms: "surprisal", "Shannon information", "Information content"}
 Given a real number $b > 1$ and an event $x$ with probability $P,$ the **self-information** is defined as the negative @log-probability
 
@@ -44,12 +150,7 @@ where the skew $\alpha$ controls how unevenly probability mass is spread across 
 
 {% include_demo "zipf-entropy" %}
 
-:::definition "Capacity"
-Given an information source where all symbols are of the same time duration, and each symbol represents $s$ bits of information (because it is chosen freely among $2^s$ symbols), and the channel can transmit $n$ symbols per second ten the **capacity** $C$ of the channel is defined to be $ns$ bits per second.
-:::
-:::note
-In the more general case we have to deal with symbols of various lengths that take different amounts of time to transmit, and so capacity measures not the number of symbols transmitted per second but the amount of information transmitted per second, retaining bits per second as its unit.
-:::
+
 
 :::theorem "Noiseless channel transmitting discrete symbols"
 Given a communication channel which has a @capacity of $C$ bits per second, accepting signals from a source of @entropy (or information) of $H$ bits per symbols, it is possible, given a properly devised coding procedure, for the transmitter to transmit symbols over the channel at an average rate which is nearly $C/H$ but which, no matter how clever the coding, can never exceed $C/H.$
