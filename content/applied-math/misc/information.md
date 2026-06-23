@@ -228,8 +228,7 @@ H(p_1, \dots, p_n) & = K \log{\sum n_i} - K \sum p_i \log{n_i}  \\
 \end{aligned}
 $$
 
-TODO: If the $p_i$ are incommensurable... 
-
+If the $p_i$ are incommensurable, we can approximate them as closely as we'd like with @rationals, since @rationals-are-dense-in-reals. By the first property we assumed for $H,$ it is @continuous in the $p_i,$ and so its value at the incommensurable $p_i$ equals its @limit as we approach via the @rationals, and so our expression holds in general. $K$ is left to us to pick, picking it is equivalent to picking a base for the logarithm.
 ::::
 
 :::
