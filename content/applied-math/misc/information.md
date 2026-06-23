@@ -126,6 +126,17 @@ We can view @self-information as an alternative casting of @probability, like ho
 The function given above is the unique function of probability (up to a multiplicative scaling factor) that satisfies these three properties.
 :::
 
+:::remark
+In a related vein we can develop a function that asks how much choice is involved in the selection of an event, or equivalently, how much uncertainty there is in the outcome. If $p_1, p_2, \dots, p_n$ are the probabilities of events occurring, we want a measure $H(p_1, p_2, \dots, p_3)$ that has the following properties:
+
+1. $H$ should be @continuous in the $p_i.$ That is, a small change in a $p_i$ should result in a small change in $H.$
+
+2. If all the $p_i$ are equal, $p_i = \frac{1}{n},$ then $H$ should be a @monotonic @increasing @function of $n.$ With equally likely events there is more choice, or uncertainty, when there are more possible events.
+
+3. If a choice is broken down into two successive choices, the original $H$ should be the weighted sum of the individual values of $H.$ For example, we should have that
+
+$$ H(\frac{1}{2}, \frac{1}{3}, \frac{1}{6}) = H(\frac{1}{2}, \frac{1}{2}) + \frac{1}{2}H(\frac{2}{3}, \frac{1}{3}). $$
+:::
 
 :::definition "Entropy"
 Given a discrete @random-variable $X,$ which may be any @element $x$ within the set $\mathcal{X},$ and is distributed according to $p: \mathcal{X} \to [0,1],$ the **entropy** is
@@ -138,6 +149,92 @@ An alternative, equivalent definition is that **entropy** is the @expected-value
 
 The unit for entropy is information per symbol.
 :::
+
+:::definition "Commensurable" {synonyms: "commeasurable"}
+Real numbers $a_1, \dots, a_n$ are **commensurable** if there exists a common measure $m \in \mathbb{R}_{>0}$ such that each $a_i$ is an integer multiple of it:
+$$
+    a_i = k_i\, m, \qquad k_i \in \mathbb{Z}, \quad i = 1, \dots, n.
+$$
+Equivalently, all pairwise ratios are rational: $a_i / a_j \in \mathbb{Q}$ for all $i, j$ (with $a_j \neq 0$).
+:::
+
+:::theorem
+The only $H$ satisfying the three required properties above is the @entropy function defined above, up to multiplication by a constant.
+
+::::proof
+Assume we have a function $A(n)$ that satisfies the three properties listed above, such that
+
+$$ A(n) = H(\frac{1}{n}, \frac{1}{n}, \dots, \frac{1}{n}). $$
+
+Then, by property (3) above, we can decompose a choice from $s^m$ equally likely possibilities into a sequence of $m$ choices each from $s$ equally likely possibilities. For example, if we have $2^4$ equally likely possibilities, the probability of any given event is $1/16$. If we instead we have a series of $4$ choices each with $1/2$ probability, we end up with $1/16$ as the probability of any specific sequence of events. So, we have that $A(s^m) = m A(s).$
+
+Now, with arbitrarily large $n,$ we can also have $t^n$ such that $A(t^n) = nA(t),$ by the same logic, and we can pick $m$ such that
+
+$$ s^m \leq t^n < s^{m+1}. $$
+
+Now, we can take the logarithm of each term to get
+
+$$ m \log{s} \leq n \log{t} < (m+1)\log{s}, $$
+
+and dividing by $n \log{s}$ gives
+
+$$ \frac{m}{n} \leq \frac{\log{t}}{\log{s}} < \frac{m}{n} + \frac{1}{n}, $$
+
+and because $n$ is arbitrarily large, 
+
+$$ \left | \frac{m}{n} - \frac{\log{t}}{\log{s}} \right | < \epsilon, $$
+
+where $\epsilon$ is arbitrarily small.
+
+By property (2) of $A(n)$ (it is a @monotonically-increasing function of $n$,)  
+
+$$ \begin{aligned}
+A(s^m) & \leq A(t^n) \leq A(s^{m+1}) \\
+mA(s) & \leq nA(t) \leq (m+1)A(s).
+\end{aligned}
+$$
+
+Then, dividing by $nA(s)$ gives
+
+$$ \frac{m}{n} \leq \frac{A(t)}{A(s)} \leq \frac{m}{n} + \frac{1}{n} \text{ or } \left | \frac{m}{n} - \frac{A(t)}{A(s)} \right | < \epsilon, $$
+
+Now, by the @triangle-inequality, we have that
+
+$$ \begin{aligned}
+\left | \frac{A(t)}{A(s)} - \frac{\log{t}}{\log{s}} \right | & \leq 2 \epsilon \\
+\left | A(t) - \frac{A(s)}{\log{s}} \log{t} \right | & \leq 2 \epsilon.
+\end{aligned}
+$$
+
+Since $\epsilon$ can be arbitrarily small, we have that $A(t) = K \log(t),$ with $K > 0$ so that property (2) holds. Now we know what $A(n)$ is, and thus what $H$ is when we have equal probabilities for all events.
+
+Now let's say that we have a choice from $n$ possible events with @commensurable probabilities $p_i = \frac{n_i}{\sum n_i}.$ We can break down a choice from $\sum n_i$ possibilities into a choice from $n$ possibilities with probabilities $p_1, \dots, p_n$ and then, if the $i$th possibility was chosen, $n_i$ choices of equal probability $p_i.$ We do this because above, we found how to find $H$ when all events are equally likely, and property (3) of our desired function lets us break down our overall choice from $\sum n_i$ possibilities. This gives us
+
+$$ \begin{aligned}
+K \log{\sum n_i} & = H(p_1, \dots, p_n) + \sum p_i H(n_i) \\
+                 & = H(p_1, \dots, p_n) + \sum p_i K \log{n_i} \\
+                 & = H(p_1, \dots, p_n) + K \sum p_i \log{n_i}. \\
+\end{aligned}
+$$
+
+Then,
+$$ \begin{aligned}
+H(p_1, \dots, p_n) & = K \log{\sum n_i} - K \sum p_i \log{n_i}  \\
+                   & = K \left [ \log{\sum n_i} - \sum p_i \log{n_i}  \right ] \\
+                   & = K \left [ \sum p_i \left ( \log{\sum n_i} \right ) - \sum p_i \left ( \log{n_i} \right )  \right ] \quad \text{ because } \sum p_i = 1  \\
+                   & = K \left [ \sum p_i \left ( \log{\sum n_i} -  \log{n_i} \right )  \right ]  \\
+                   & = K \left [ \sum p_i \left ( - \log{\frac{n_i}{\sum n_i}} \right )  \right ]  \\
+                   & = - K  \sum p_i \log{p_i }.  \\
+\end{aligned}
+$$
+
+TODO: If the $p_i$ are incommensurable... 
+
+::::
+
+:::
+
+
 :::remark
 The @entropy of a @random-variable quantifies the average level of uncertainty or information associated with the variable's potential states of possible outcomes. It measures the expected amount of information needed to describe the state of the variable, considering the distribution of probabilities across all potential states.
 :::
