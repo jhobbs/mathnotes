@@ -230,7 +230,6 @@ $$
 
 If the $p_i$ are incommensurable, we can approximate them as closely as we'd like with @rationals, since @rationals-are-dense-in-reals. By the first property we assumed for $H,$ it is @continuous in the $p_i,$ and so its value at the incommensurable $p_i$ equals its @limit as we approach via the @rationals, and so our expression holds in general. $K$ is left to us to pick, picking it is equivalent to picking a base for the logarithm.
 ::::
-
 :::
 
 
@@ -246,20 +245,6 @@ where the skew $\alpha$ controls how unevenly probability mass is spread across 
 
 {% include_demo "zipf-entropy" %}
 
-
-
-:::theorem "Noiseless channel transmitting discrete symbols"
-Given a communication channel which has a @capacity of $C$ bits per second, accepting signals from a source of @entropy (or information) of $H$ bits per symbols, it is possible, given a properly devised coding procedure, for the transmitter to transmit symbols over the channel at an average rate which is nearly $C/H$ but which, no matter how clever the coding, can never exceed $C/H.$
-:::
-:::note
-The unit of $C$ is bits (information) per second, and the unit of $H$ is bits (information) per symbol, so we have
-
-$$ \frac{bits}{second} \times \frac{symbols}{bit} = \frac{symbols}{second}, $$
-
-so the unit of $C/H$ is symbols per second.
-
-The best transmitter is one which codes the message in such a way that maximizes the signal entropy and makes it equal to the capacity of the channel, which allows reaching the maximum rate $C/H$ for the transmission of symbols.
-:::
 
 Examples to cover: [https://claude.ai/chat/0702d3b2-a181-4b5b-a572-e5464d9d24d5]
 
@@ -291,17 +276,58 @@ and for entropy of $X$ we get
 
 $$ H(X) = p(1) \cdot I(1) + 5 \cdot p(x \in \{2,3,4,5,6\}) \cdot I(x \in \{2,3,4,5,6\}) \approx 0.5 \cdot 1 + 5 \cdot 0.1 \cdot 3.32 \approx 2.16 \text{ bits}. $$
 
-Some things to note from above:
+## Some Theorems on Entropy
 
 :::theorem
 When we have a uniform distribution, the @self-information of any given @element of a @random-variable with $N$ @elements equals the @entropy of the @random-variable and is $log{N}.$
 :::
 
 :::theorem
-A @random-variable has the most @entropy when its @elements are all equally likely to occur.
+$H = 0$ iff all the $p_i$ but one are zero, this one having the value of one.
+::::proof
+Suppose $H(p_1, \dots, p_n) = 0.$ Then, $0 = - \sum_{i=1}^n p_i \log{p_i}.$ Note that because $0 \leq p_i \leq 1,$ we have $\log{p_i} \leq 0,$ and $-p_i \log{p_i} \geq 0.$  Assume for contradiction that more than one $p_i$ is non-zero. Then, because $\sum p_i = 1,$ each non-zero $p_i$ is in $(0, 1)$ and therefore its $- p_i \log{p_i} > 0,$ and the sum of these terms is therefore non-zero, a contradiction. Now, since all probabilities are required to sum to 1, it can't be the case that all probabilities are zero, which means that exactly one probability must be non-zero and that probability must be $1.$
+::::
 :::
+
+:::theorem
+A @random-variable has the most @entropy when its @elements are all equally likely to occur.
+
+::::proof
+We will use a @Lagrangian function of @entropy to show this. Let
+
+$$ \mathcal{L}(\vec{p}, \lambda) = - \sum_i \left [ p_i \ln{p_i} \right ] - \lambda \left [ \sum_i \left ( p_i - 1 \right ) \right ]. $$
+
+Then, for any $p_i$ we want
+
+$$ \begin{aligned} 
+\frac{\partial \mathcal{L}}{\partial p_i} & = -\ln{p_i} - 1 - \lambda = 0 \\
+                                          & \implies p_i = e^{-1 - \lambda}.
+\end{aligned} $$
+
+But, this means $p_i$ doesn't depend on $i,$ and so is the same for each $i$ and therefore $p_i = \frac{1}{n}.$
+
+It remains to show that this extreme of $H$ is a maximum. This follows from the facts that the domain is a @convex, @compact set and that the entropy function is strictly @concave. TODO: more details on these.
+::::
+
+:::
+
+
 :::note
 When we decrease the probability of an @element occurring, its @self-information increases only logarithmically, while its weight in the entropy sum decreases linearly. 
 :::
 
 TODO: Relative Entropy
+
+:::theorem "Noiseless channel transmitting discrete symbols"
+Given a communication channel which has a @capacity of $C$ bits per second, accepting signals from a source of @entropy (or information) of $H$ bits per symbols, it is possible, given a properly devised coding procedure, for the transmitter to transmit symbols over the channel at an average rate which is nearly $C/H$ but which, no matter how clever the coding, can never exceed $C/H.$
+:::
+:::note
+The unit of $C$ is bits (information) per second, and the unit of $H$ is bits (information) per symbol, so we have
+
+$$ \frac{bits}{second} \times \frac{symbols}{bit} = \frac{symbols}{second}, $$
+
+so the unit of $C/H$ is symbols per second.
+
+The best transmitter is one which codes the message in such a way that maximizes the signal entropy and makes it equal to the capacity of the channel, which allows reaching the maximum rate $C/H$ for the transmission of symbols.
+:::
+
