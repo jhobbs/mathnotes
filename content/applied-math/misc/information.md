@@ -308,9 +308,32 @@ But, this means $p_i$ doesn't depend on $i,$ and so is the same for each $i$ and
 
 It remains to show that this extreme of $H$ is a maximum. This follows from the facts that the domain is a @convex, @compact set and that the entropy function is strictly @concave. TODO: more details on these.
 ::::
-
 :::
 
+:::theorem
+The @entropy of a joint event is less than or equal to the sum of the individual entropies.
+
+::::proof
+Suppose there are two events, $x$ and $y,$ with $m$ possibilities for $x$ and $n$ for $y.$ Let $p(i,j)$ be the probability of the joint occurrence of $i$ for the first and $j$ for the second. The @entropy of the joint event is then
+
+$$ H(x,y) = - \sum_{i,j} p(i,j) \log{p(i,j)}. $$
+
+This is just treating each possible pair of individual possibilities for each event as their own event, i.e. we have $m \times n$ possible events. Now,
+
+$$ H(x) = - \sum_{i,j} p(i,j) \log{\sum_{j}{p(i,j)}}, \quad H(y) = - \sum_{i,j} p(i,j) \log{\sum_{i}{p(i,j)}}. $$
+
+So,
+
+$$ \begin{aligned}
+H(x) + H(y) - H(x,y) & = - \sum_{i,j} p(i,j) \log{\sum_{j}{p(i,j)}} - \sum_{i,j} p(i,j) \log{\sum_{i}{p(i,j)}} + \sum_{i,j} p(i,j) \log{p(i,j)} \\
+                    & = \sum_{i,j} p(i, j) \left ( \log{p(i,j)} - \log{\sum_{j}{p(i,j)}} - \log{\sum_{i}{p(i,j)}}  \right ) \\
+                    & = \sum_{i,j} p(i, j) \left ( \log{p(i,j)} - \log{p(i)} - \log{p(j)}  \right ) \\
+                    & = \sum_{i,j} p(i, j) \left ( \log{\frac{p(i,j)}{p(i)p(j)}}  \right ) 
+\end{aligned} $$
+
+::::
+
+:::
 
 :::note
 When we decrease the probability of an @element occurring, its @self-information increases only logarithmically, while its weight in the entropy sum decreases linearly. 
