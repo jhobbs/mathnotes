@@ -284,21 +284,31 @@ class JensensDemo extends P5DemoBase {
 
     // ● E[φ(X)]
     p.noStroke();
-    p.fill(this.isDarkMode ? '#ff7777' : '#cc2222');
+    p.fill(this.markerRed);
     p.circle(inHull.x, inHull.y, 11);
     // ○ φ(E[X])
     p.fill(this.colors.background);
-    p.stroke(this.isDarkMode ? '#66ff99' : '#118844');
+    p.stroke(this.markerGreen);
     p.strokeWeight(2.5);
     p.circle(onCurve.x, onCurve.y, 11);
 
-    // E[X] tick label on axis
+    // Label each curve point in place, nudged apart so they don't collide.
+    const phiAbove = this.phiEX >= this.EphiX;
     p.noStroke();
-    p.fill(this.colors.text);
     p.textSize(11);
-    p.textAlign(p.CENTER, p.TOP);
+    p.textAlign(p.RIGHT, p.CENTER);
+    p.fill(this.markerGreen);
+    p.text('φ(E[X])', onCurve.x - 9, onCurve.y + (phiAbove ? -9 : 9));
+    p.fill(this.markerRed);
+    p.text('E[φ(X)]', inHull.x - 9, inHull.y + (phiAbove ? 9 : -9));
+
+    // E[X] is a point on the x-axis — mark and label it there (distinct from φ(E[X])).
     const axisY = this.worldToScreen(p, this.EX, 0).y;
-    p.text('E[X]', guideX, Math.min(axisY + 4, p.height - 14));
+    const exY = Math.max(8, Math.min(axisY, p.height - 16));
+    p.fill(this.colors.text);
+    p.circle(guideX, exY, 5);
+    p.textAlign(p.CENTER, p.TOP);
+    p.text('E[X]', guideX, exY + 5);
 
     // Label the Jensen gap beside the segment, when there's room
     if (Math.abs(onCurve.y - inHull.y) > 16) {
