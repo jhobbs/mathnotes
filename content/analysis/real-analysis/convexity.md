@@ -21,3 +21,19 @@ Starting with @convex-function, $\varphi$ is **strictly convex** if the inequali
 :::definition "Concave Function"
 A function $\varphi$ is said to be **concave** if $-\varphi$ is a @convex-function.
 :::
+
+:::theorem "Second Derivative Test for Convexity"
+Let $\varphi$ be twice @differentiable on an @open @interval $(a,b).$ Then
+$\varphi$ is @convex on $(a,b)$ if and only if $\varphi''(x) \geq 0$ for all
+$x \in (a,b),$ and @concave if and only if $\varphi''(x) \leq 0$ for all
+$x \in (a,b).$
+:::
+
+:::theorem "Log is concave"
+The $\log$ @function is @concave, i.e. $-\log$ is @convex.
+
+::::proof
+The second derivative of natural $\log$ is $\frac{-1}{x^2},$ which is always non-positive. By @second-derivative-test-for-convexity, $\log$ is therefore @concave.
+::::
+
+:::

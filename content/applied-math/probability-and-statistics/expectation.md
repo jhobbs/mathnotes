@@ -45,7 +45,7 @@ The positive square root of the @variance, $\sigma,$ is called the **standard de
 
 Variance and standard deviation tell us about how spread out the values of $X$ are around its mean.
 
-:::theorem "Jensen's Inequality"
+:::theorem "Jensen's Inequality" {label: jensens-inequality}
 Let $X$ be a random variable with finite @expectation $E[X]$, and let $\varphi : \mathbb{R} \to \mathbb{R}$ be
 a @convex-function. Then
 

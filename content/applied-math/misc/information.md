@@ -311,7 +311,9 @@ It remains to show that this extreme of $H$ is a maximum. This follows from the 
 :::
 
 :::theorem
-The @entropy of a joint event is less than or equal to the sum of the individual entropies.
+The @entropy of a joint event is less than or equal to the sum of the individual entropies, i.e.
+
+$$ H(x,y) \leq H(x) + H(y). $$
 
 ::::proof
 Suppose there are two events, $x$ and $y,$ with $m$ possibilities for $x$ and $n$ for $y.$ Let $p(i,j)$ be the probability of the joint occurrence of $i$ for the first and $j$ for the second. The @entropy of the joint event is then
@@ -328,11 +330,35 @@ $$ \begin{aligned}
 H(x) + H(y) - H(x,y) & = - \sum_{i,j} p(i,j) \log{\sum_{j}{p(i,j)}} - \sum_{i,j} p(i,j) \log{\sum_{i}{p(i,j)}} + \sum_{i,j} p(i,j) \log{p(i,j)} \\
                     & = \sum_{i,j} p(i, j) \left ( \log{p(i,j)} - \log{\sum_{j}{p(i,j)}} - \log{\sum_{i}{p(i,j)}}  \right ) \\
                     & = \sum_{i,j} p(i, j) \left ( \log{p(i,j)} - \log{p(i)} - \log{p(j)}  \right ) \\
-                    & = \sum_{i,j} p(i, j) \left ( \log{\frac{p(i,j)}{p(i)p(j)}}  \right ) 
+                    & = \sum_{i,j} p(i, j) \left ( \log{\frac{p(i,j)}{p(i)p(j)}}  \right ) \\
+                    & = - \sum_{i,j} p(i, j) \left ( \log{\frac{p(i)p(j)}{p(i,j)}}  \right ) 
 \end{aligned} $$
 
-::::
+Now, let's define a new random variable for convenience, $Z(i,j) = \frac{p(i)p(j)}{p(i,j)}.$ We now have that
 
+$$ \begin{aligned}
+H(x) + H(y) - H(x,y) & = - \sum_{i,j} p(i, j) \left ( \log{\frac{p(i)p(j)}{p(i,j)}}  \right ) \\
+                     & = - \sum_{i,j} p(i, j) \left ( \log{Z}  \right ) \\
+                     & = -E[\log{Z}]. \\
+\end{aligned}$$
+
+Now, by @jensens-inequality, because @log-is-concave, we have that $E[\log{Z}] \leq \log{E[Z]}.$ Now,
+
+$$ \begin{aligned}
+E[Z] & = \sum_{i,j} p(i,j) \cdot \frac{p(i)p(j)}{p(i,j)} \\
+     & = \sum_{i,j}p(i)p(j) \\
+     & = \big ( \sum_{i}p(i) \big ) \big ( \sum_{j}p(j) \big )  \\
+     & = 1 \cdot 1 \\
+     & = 1. \\
+\end{aligned} $$
+Therefore $\log{E[Z]} = \log{1} = 0,$ and we have that $E[\log{Z}] \leq 0 \implies -E[\log{Z}] \geq 0,$ and
+
+$$ \begin{aligned}
+H(x) + H(y) - H(x,y) & \geq 0 \\
+- H(x,y) & \geq -H(x) -H(y) \\
+H(x,y) & \leq H(x) + H(y). \\
+\end{aligned} $$
+::::
 :::
 
 :::note

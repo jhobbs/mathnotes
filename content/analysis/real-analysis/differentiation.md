@@ -95,11 +95,13 @@ The real valued function on the real line $f$ is said to have a **local minimum*
 
 Simply put, if a differentiable function over an open interval $(a,b)$ has the same value at its boundary points, then at some point in the interval, the function is flat (has a zero derivative).
 
-*Mean Value Theorem:* Suppose $f$ is continuous on $[a,b]$ and differentiable on $(a,b).$ Then there exists a point $c$ in $(a,b)$ such that:
+:::theorem "Mean Value Theorem"
+Suppose $f$ is continuous on $[a,b]$ and differentiable on $(a,b).$ Then there exists a point $c$ in $(a,b)$ such that:
 
 $$ f'(c) = \frac{f(b) - f(a)}{b-a}.$$
 
 This means that for a function continuous on an interval, and differentiable on that interval except maybe at its endpoints, there is a point on the interval where the derivative of the function at that point equals the slope of the function between its endpoints.
+:::
 
 *L'Hospital Rule (Theorem)*: Suppose there is a $\delta > 0$ such that $f$ and $g$ are differentiable on $(c  - \delta, c + \delta)$ with $g'(x) \neq 0$ on this interval. Suppose also that
 
