@@ -96,6 +96,10 @@ class JensensDemo extends P5DemoBase {
   protected getAspectRatio(): number { return 0.8; }
   protected getMaxHeightPercent(): number { return 0.75; }
 
+  protected onColorSchemeChange(_isDark: boolean): void {
+    this.updateBadge();
+  }
+
   // --- Function handling ---
 
   private parseExpression(s: string): boolean {
@@ -500,12 +504,6 @@ class JensensDemo extends P5DemoBase {
     input.style.fontFamily = 'var(--font-mono, monospace)';
     input.style.width = width;
     this.addEventListener(input, 'keydown', (e) => (e as KeyboardEvent).stopPropagation());
-    return input;
-  }
-
-  private makeNumberInput(value: number, width: string): HTMLInputElement {
-    const input = this.makeInput(value.toString(), width);
-    input.type = 'number';
     return input;
   }
 
