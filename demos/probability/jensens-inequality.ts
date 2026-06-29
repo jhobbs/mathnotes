@@ -163,6 +163,7 @@ class JensensDemo extends P5DemoBase {
       this.recompute();
       this.updateReadout();
       this.updateBadge();
+      this.rebuildWeights();
     }
   }
 
@@ -324,6 +325,14 @@ class JensensDemo extends P5DemoBase {
     this.weightsContainer = document.createElement('div');
     panel.appendChild(this.weightsContainer);
 
+    const ptRow = this.makeRow();
+    ptRow.appendChild(this.makeLabel('points:'));
+    this.removeBtn = this.makeBtn('−', () => this.removePoint());
+    this.addBtn = this.makeBtn('+', () => this.addPoint());
+    ptRow.appendChild(this.removeBtn);
+    ptRow.appendChild(this.addBtn);
+    panel.appendChild(ptRow);
+
     this.readoutEl = document.createElement('div');
     this.readoutEl.style.fontFamily = 'var(--font-mono, monospace)';
     this.readoutEl.style.marginTop = 'var(--spacing-sm, 0.5rem)';
@@ -338,6 +347,68 @@ class JensensDemo extends P5DemoBase {
     this.xMin = preset.xMin;
     this.xMax = preset.xMax;
     this.updateFunction();
+  }
+
+  private static readonly MIN_POINTS = 2;
+  private static readonly MAX_POINTS = 5;
+
+  private addPoint(): void {
+    if (this.points.length >= JensensDemo.MAX_POINTS) return;
+    const mid = (this.xMin + this.xMax) / 2;
+    this.points.push({ x: mid, weight: 1 });
+    this.rebuildWeights();
+    this.recompute();
+    this.updateReadout();
+  }
+
+  private removePoint(): void {
+    if (this.points.length <= JensensDemo.MIN_POINTS) return;
+    this.points.pop();
+    this.rebuildWeights();
+    this.recompute();
+    this.updateReadout();
+  }
+
+  /** Rebuild one weight slider per point. Called on init and add/remove. */
+  private rebuildWeights(): void {
+    this.weightsContainer.innerHTML = '';
+    this.points.forEach((pt, i) => {
+      const row = this.makeRow();
+      row.appendChild(this.makeLabel(`p${i + 1}`));
+      const slider = document.createElement('input');
+      slider.type = 'range';
+      slider.min = '0';
+      slider.max = '1';
+      slider.step = '0.01';
+      slider.value = pt.weight.toString();
+      slider.style.width = '140px';
+      const valSpan = document.createElement('span');
+      valSpan.style.fontFamily = 'var(--font-mono, monospace)';
+      valSpan.style.minWidth = '3.5em';
+      this.addEventListener(slider, 'input', () => {
+        pt.weight = parseFloat(slider.value);
+        this.recompute();
+        this.refreshWeightReadouts();
+        this.updateReadout();
+      });
+      row.appendChild(slider);
+      row.appendChild(valSpan);
+      (row as any)._valSpan = valSpan; // for refreshWeightReadouts
+      this.weightsContainer.appendChild(row);
+    });
+    // Disable +/- at bounds
+    this.removeBtn.disabled = this.points.length <= JensensDemo.MIN_POINTS;
+    this.addBtn.disabled = this.points.length >= JensensDemo.MAX_POINTS;
+    this.refreshWeightReadouts();
+  }
+
+  /** Update the normalized pᵢ readouts next to each slider. */
+  private refreshWeightReadouts(): void {
+    const rows = Array.from(this.weightsContainer.children);
+    rows.forEach((row, i) => {
+      const span = (row as any)._valSpan as HTMLElement | undefined;
+      if (span) span.textContent = `= ${this.normWeights[i].toFixed(2)}`;
+    });
   }
 
   private updateReadout(): void { /* filled in Task 6 */ }
