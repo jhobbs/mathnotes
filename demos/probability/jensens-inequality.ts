@@ -46,7 +46,7 @@ export const metadata: DemoMetadata = {
     "Place weighted points on a convex or concave function and compare φ(E[X]) with E[φ(X)].",
   instructions:
     'Pick a function, drag the points along the x-axis, and adjust the weight sliders. ' +
-    'The shaded region is every (E[X], E[φ(X)]) the weights can reach; ○ is φ(E[X]) on the curve, ● is E[φ(X)].',
+    'The shaded region is every (E[X], E[φ(X)]) the weights can reach.',
 };
 
 class JensensDemo extends P5DemoBase {
@@ -86,6 +86,8 @@ class JensensDemo extends P5DemoBase {
   private weightsContainer!: HTMLElement;
   private weightSumEl!: HTMLElement;
   private readoutEl!: HTMLElement;
+  private legendOEl!: HTMLElement;
+  private legendDotEl!: HTMLElement;
   private removeBtn!: HTMLButtonElement;
   private addBtn!: HTMLButtonElement;
 
@@ -100,7 +102,13 @@ class JensensDemo extends P5DemoBase {
 
   protected onColorSchemeChange(_isDark: boolean): void {
     this.updateBadge();
+    this.updateReadout();
+    this.refreshLegendColors();
   }
+
+  // Marker colors, shared by the canvas dots, the readout, and the legend.
+  private get markerGreen(): string { return this.isDarkMode ? '#66ff99' : '#118844'; }
+  private get markerRed(): string { return this.isDarkMode ? '#ff7777' : '#cc2222'; }
 
   // --- Function handling ---
 
@@ -412,6 +420,21 @@ class JensensDemo extends P5DemoBase {
     ptRow.appendChild(this.addBtn);
     panel.appendChild(ptRow);
 
+    // Colored legend matching the on-canvas markers
+    const legend = document.createElement('div');
+    legend.style.fontFamily = 'var(--font-mono, monospace)';
+    legend.style.fontSize = 'var(--font-size-sm)';
+    legend.style.marginTop = 'var(--spacing-sm, 0.5rem)';
+    this.legendOEl = document.createElement('span');
+    this.legendOEl.textContent = '○ φ(E[X]) on the curve';
+    const legendSep = document.createElement('span');
+    legendSep.textContent = '   ';
+    this.legendDotEl = document.createElement('span');
+    this.legendDotEl.textContent = '● E[φ(X)]';
+    legend.append(this.legendOEl, legendSep, this.legendDotEl);
+    panel.appendChild(legend);
+    this.refreshLegendColors();
+
     this.readoutEl = document.createElement('div');
     this.readoutEl.style.fontFamily = 'var(--font-mono, monospace)';
     this.readoutEl.style.marginTop = 'var(--spacing-sm, 0.5rem)';
@@ -506,19 +529,43 @@ class JensensDemo extends P5DemoBase {
     this.badgeEl.style.color = b.color;
   }
 
+  /** Re-apply marker colors to the legend spans (also on theme change). */
+  private refreshLegendColors(): void {
+    if (this.legendOEl) this.legendOEl.style.color = this.markerGreen;
+    if (this.legendDotEl) this.legendDotEl.style.color = this.markerRed;
+  }
+
   private updateReadout(): void {
     if (this.parseError) { this.readoutEl.textContent = ''; return; }
     const rel = this.convexity === 'convex' ? '≤' : this.convexity === 'concave' ? '≥' : '?';
-    const lhs = this.phiEX;
-    const rhs = this.EphiX;
+    const lhs = this.phiEX; // φ(E[X]) — green ○
+    const rhs = this.EphiX; // E[φ(X)] — red ●
     const gap = Math.abs(rhs - lhs);
     const fmt = (v: number) => (Number.isFinite(v) ? v.toFixed(3) : '—');
-    // Emphasize whichever side is larger (bold); if equal, neither is bold.
-    const lhsStr = lhs > rhs ? `<b>${fmt(lhs)}</b>` : fmt(lhs);
-    const rhsStr = rhs > lhs ? `<b>${fmt(rhs)}</b>` : fmt(rhs);
-    this.readoutEl.innerHTML =
-      `φ(E[X]) = ${lhsStr} &nbsp; ${rel} &nbsp; E[φ(X)] = ${rhsStr}` +
-      `<br>Jensen gap = ${fmt(gap)}`;
+
+    // φ(E[X]) in green (matches the ○), E[φ(X)] in red (matches the ●);
+    // bold whichever side is larger.
+    const phiPart = document.createElement('span');
+    phiPart.style.color = this.markerGreen;
+    if (lhs > rhs) phiPart.style.fontWeight = 'bold';
+    phiPart.textContent = `φ(E[X]) = ${fmt(lhs)}`;
+
+    const relPart = document.createElement('span');
+    relPart.textContent = rel;
+    relPart.style.margin = '0 0.5rem';
+
+    const ePart = document.createElement('span');
+    ePart.style.color = this.markerRed;
+    if (rhs > lhs) ePart.style.fontWeight = 'bold';
+    ePart.textContent = `E[φ(X)] = ${fmt(rhs)}`;
+
+    const line1 = document.createElement('div');
+    line1.append(phiPart, relPart, ePart);
+
+    const line2 = document.createElement('div');
+    line2.textContent = `Jensen gap = ${fmt(gap)}`;
+
+    this.readoutEl.replaceChildren(line1, line2);
     this.refreshWeightReadouts();
   }
 
