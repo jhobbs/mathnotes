@@ -211,6 +211,31 @@ class JensensDemo extends P5DemoBase {
     p.endShape();
   }
 
+  private readonly POINT_RADIUS = 7;
+
+  private drawPoints(p: p5): void {
+    if (this.parseError) return;
+    p.textSize(12);
+    p.textAlign(p.CENTER, p.BOTTOM);
+    for (let i = 0; i < this.points.length; i++) {
+      const x = this.points[i].x;
+      const s = this.worldToScreen(p, x, this.f(x));
+      const active = this.draggingIndex === i;
+      p.fill(this.isDarkMode ? '#ffcc44' : '#dd8800');
+      p.stroke(this.colors.background);
+      p.strokeWeight(2);
+      p.circle(s.x, s.y, this.POINT_RADIUS * 2 * (active ? 1.3 : 1));
+      // x_i tick on the axis
+      const axis = this.worldToScreen(p, x, 0);
+      p.stroke(this.isDarkMode ? 'rgba(255,204,68,0.5)' : 'rgba(221,136,0,0.5)');
+      p.strokeWeight(1);
+      p.line(s.x, s.y, axis.x, axis.y);
+      p.noStroke();
+      p.fill(this.colors.text);
+      p.text(`x${i + 1}`, s.x, s.y - this.POINT_RADIUS - 2);
+    }
+  }
+
   // --- p5 lifecycle ---
 
   protected createSketch(p: p5): void {
@@ -222,7 +247,32 @@ class JensensDemo extends P5DemoBase {
       p.background(this.colors.background);
       this.drawAxes(p);
       this.drawCurve(p);
+      this.drawPoints(p);
     };
+
+    p.mousePressed = () => {
+      if (p.mouseX < 0 || p.mouseX > p.width || p.mouseY < 0 || p.mouseY > p.height) return;
+      let best = -1;
+      let bestDist = 18; // px hit radius
+      for (let i = 0; i < this.points.length; i++) {
+        const x = this.points[i].x;
+        const s = this.worldToScreen(p, x, this.f(x));
+        const d = p.dist(p.mouseX, p.mouseY, s.x, s.y);
+        if (d < bestDist) { bestDist = d; best = i; }
+      }
+      if (best >= 0) this.draggingIndex = best;
+    };
+
+    p.mouseDragged = () => {
+      if (this.draggingIndex === null) return;
+      const world = this.screenToWorld(p, p.mouseX, p.mouseY);
+      const x = Math.min(this.xMax, Math.max(this.xMin, world.x));
+      this.points[this.draggingIndex].x = x;
+      this.recompute();
+      this.updateReadout();
+    };
+
+    p.mouseReleased = () => { this.draggingIndex = null; };
   }
 
   // --- UI (placeholder; filled out in later tasks) ---
