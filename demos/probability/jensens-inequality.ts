@@ -109,7 +109,7 @@ class JensensDemo extends P5DemoBase {
       const compiled = parse(s).compile();
       // Probe once so a bad body (e.g. unknown symbol) is caught now.
       const probe = compiled.evaluate({ x: 1 });
-      if (typeof probe !== 'number' && typeof probe !== 'object') throw new Error('non-numeric');
+      if (typeof probe !== 'number') throw new Error('non-numeric');
       this.compiledF = compiled;
       this.parseError = false;
       return true;
@@ -390,8 +390,18 @@ class JensensDemo extends P5DemoBase {
     this.warningEl.style.display = 'none';
     panel.appendChild(this.warningEl);
 
-    // Containers filled in later tasks
+    // Weight sliders live here; one delegated listener survives rebuilds (no leak).
     this.weightsContainer = document.createElement('div');
+    this.addEventListener(this.weightsContainer, 'input', (e) => {
+      const t = e.target as HTMLInputElement;
+      if (!t || t.type !== 'range') return;
+      const idx = Number(t.dataset.index);
+      if (!Number.isInteger(idx) || idx < 0 || idx >= this.points.length) return;
+      this.points[idx].weight = parseFloat(t.value);
+      this.recompute();
+      this.refreshWeightReadouts();
+      this.updateReadout();
+    });
     panel.appendChild(this.weightsContainer);
 
     const ptRow = this.makeRow();
@@ -425,16 +435,16 @@ class JensensDemo extends P5DemoBase {
     if (this.points.length >= JensensDemo.MAX_POINTS) return;
     const mid = (this.xMin + this.xMax) / 2;
     this.points.push({ x: mid, weight: 1 });
-    this.rebuildWeights();
     this.recompute();
+    this.rebuildWeights();
     this.updateReadout();
   }
 
   private removePoint(): void {
     if (this.points.length <= JensensDemo.MIN_POINTS) return;
     this.points.pop();
-    this.rebuildWeights();
     this.recompute();
+    this.rebuildWeights();
     this.updateReadout();
   }
 
@@ -451,16 +461,11 @@ class JensensDemo extends P5DemoBase {
       slider.max = '1';
       slider.step = '0.01';
       slider.value = pt.weight.toString();
+      slider.dataset.index = i.toString();
       slider.style.width = '140px';
       const valSpan = document.createElement('span');
       valSpan.style.fontFamily = 'var(--font-mono, monospace)';
       valSpan.style.minWidth = '3.5em';
-      this.addEventListener(slider, 'input', () => {
-        pt.weight = parseFloat(slider.value);
-        this.recompute();
-        this.refreshWeightReadouts();
-        this.updateReadout();
-      });
       row.appendChild(slider);
       row.appendChild(valSpan);
       this.weightValSpans.push(valSpan);
@@ -482,7 +487,7 @@ class JensensDemo extends P5DemoBase {
   /** Update the normalized pᵢ readouts next to each slider, plus the Σ line. */
   private refreshWeightReadouts(): void {
     this.weightValSpans.forEach((span, i) => {
-      span.textContent = `= ${this.normWeights[i].toFixed(2)}`;
+      span.textContent = `= ${(this.normWeights[i] ?? 0).toFixed(2)}`;
     });
     if (this.weightSumEl) {
       const sum = this.normWeights.reduce((s, w) => s + w, 0);

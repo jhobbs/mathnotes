@@ -74,8 +74,8 @@ export function expectation(vs: number[], ps: number[]): number {
 
 /**
  * Convex hull via monotone chain. Returns hull vertices in counter-clockwise
- * order. For 0/1/2 unique points (or all-collinear), returns the sorted unique
- * points (a degenerate hull the caller can still draw as a polyline).
+ * order. For 0/1/2 unique points returns those points; collinear inputs collapse
+ * to the two extreme endpoints — a degenerate hull the caller can still draw.
  */
 export function convexHull(points: Point[]): Point[] {
   const pts = points
