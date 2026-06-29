@@ -76,6 +76,7 @@ class JensensDemo extends P5DemoBase {
   private EphiX = 0;
   private phiEX = 0;
   private hull: Point[] = [];
+  private weightValSpans: HTMLElement[] = [];
 
   // UI elements
   private selectEl!: HTMLSelectElement;
@@ -83,6 +84,7 @@ class JensensDemo extends P5DemoBase {
   private warningEl!: HTMLElement;
   private badgeEl!: HTMLElement;
   private weightsContainer!: HTMLElement;
+  private weightSumEl!: HTMLElement;
   private readoutEl!: HTMLElement;
   private removeBtn!: HTMLButtonElement;
   private addBtn!: HTMLButtonElement;
@@ -104,10 +106,11 @@ class JensensDemo extends P5DemoBase {
 
   private parseExpression(s: string): boolean {
     try {
-      this.compiledF = parse(s).compile();
+      const compiled = parse(s).compile();
       // Probe once so a bad body (e.g. unknown symbol) is caught now.
-      const probe = this.compiledF.evaluate({ x: 1 });
+      const probe = compiled.evaluate({ x: 1 });
       if (typeof probe !== 'number' && typeof probe !== 'object') throw new Error('non-numeric');
+      this.compiledF = compiled;
       this.parseError = false;
       return true;
     } catch {
@@ -199,7 +202,7 @@ class JensensDemo extends P5DemoBase {
   }
 
   private drawCurve(p: p5): void {
-    if (this.parseError) return;
+    if (!this.compiledF) return;
     p.stroke(this.isDarkMode ? '#6699ff' : '#3366cc');
     p.strokeWeight(2);
     p.noFill();
@@ -219,7 +222,7 @@ class JensensDemo extends P5DemoBase {
   private readonly POINT_RADIUS = 7;
 
   private drawPoints(p: p5): void {
-    if (this.parseError) return;
+    if (!this.compiledF) return;
     p.textSize(12);
     p.textAlign(p.CENTER, p.BOTTOM);
     for (let i = 0; i < this.points.length; i++) {
@@ -242,7 +245,7 @@ class JensensDemo extends P5DemoBase {
   }
 
   private drawHull(p: p5): void {
-    if (this.parseError || this.hull.length < 2) return;
+    if (!this.compiledF || this.hull.length < 2) return;
     p.noStroke();
     p.fill(this.isDarkMode ? 'rgba(120,180,255,0.18)' : 'rgba(80,130,220,0.15)');
     p.beginShape();
@@ -254,7 +257,7 @@ class JensensDemo extends P5DemoBase {
   }
 
   private drawInequality(p: p5): void {
-    if (this.parseError) return;
+    if (!this.compiledF) return;
     // Vertical guide at x = E[X]
     const guideX = this.worldToScreen(p, this.EX, 0).x;
     p.stroke(this.isDarkMode ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.3)');
@@ -288,6 +291,17 @@ class JensensDemo extends P5DemoBase {
     p.textAlign(p.CENTER, p.TOP);
     const axisY = this.worldToScreen(p, this.EX, 0).y;
     p.text('E[X]', guideX, Math.min(axisY + 4, p.height - 14));
+
+    // Label the Jensen gap beside the segment, when there's room
+    if (Math.abs(onCurve.y - inHull.y) > 16) {
+      const gapVal = Math.abs(this.EphiX - this.phiEX);
+      const midY = (onCurve.y + inHull.y) / 2;
+      p.noStroke();
+      p.fill(this.isDarkMode ? '#ff9999' : '#cc2222');
+      p.textSize(11);
+      p.textAlign(p.LEFT, p.CENTER);
+      p.text(`gap ${gapVal.toFixed(2)}`, inHull.x + 9, midY);
+    }
   }
 
   // --- p5 lifecycle ---
@@ -427,6 +441,7 @@ class JensensDemo extends P5DemoBase {
   /** Rebuild one weight slider per point. Called on init and add/remove. */
   private rebuildWeights(): void {
     this.weightsContainer.innerHTML = '';
+    this.weightValSpans = [];
     this.points.forEach((pt, i) => {
       const row = this.makeRow();
       row.appendChild(this.makeLabel(`p${i + 1}`));
@@ -448,22 +463,31 @@ class JensensDemo extends P5DemoBase {
       });
       row.appendChild(slider);
       row.appendChild(valSpan);
-      (row as any)._valSpan = valSpan; // for refreshWeightReadouts
+      this.weightValSpans.push(valSpan);
       this.weightsContainer.appendChild(row);
     });
+    // Sum line (always 1.00 after normalization — reinforces Σ pᵢ = 1)
+    const sumRow = this.makeRow();
+    this.weightSumEl = document.createElement('span');
+    this.weightSumEl.style.fontFamily = 'var(--font-mono, monospace)';
+    this.weightSumEl.style.fontWeight = 'bold';
+    sumRow.appendChild(this.weightSumEl);
+    this.weightsContainer.appendChild(sumRow);
     // Disable +/- at bounds
     this.removeBtn.disabled = this.points.length <= JensensDemo.MIN_POINTS;
     this.addBtn.disabled = this.points.length >= JensensDemo.MAX_POINTS;
     this.refreshWeightReadouts();
   }
 
-  /** Update the normalized pᵢ readouts next to each slider. */
+  /** Update the normalized pᵢ readouts next to each slider, plus the Σ line. */
   private refreshWeightReadouts(): void {
-    const rows = Array.from(this.weightsContainer.children);
-    rows.forEach((row, i) => {
-      const span = (row as any)._valSpan as HTMLElement | undefined;
-      if (span) span.textContent = `= ${this.normWeights[i].toFixed(2)}`;
+    this.weightValSpans.forEach((span, i) => {
+      span.textContent = `= ${this.normWeights[i].toFixed(2)}`;
     });
+    if (this.weightSumEl) {
+      const sum = this.normWeights.reduce((s, w) => s + w, 0);
+      this.weightSumEl.textContent = `Σ = ${sum.toFixed(2)}`;
+    }
   }
 
   private updateBadge(): void {
@@ -484,8 +508,11 @@ class JensensDemo extends P5DemoBase {
     const rhs = this.EphiX;
     const gap = Math.abs(rhs - lhs);
     const fmt = (v: number) => (Number.isFinite(v) ? v.toFixed(3) : '—');
+    // Emphasize whichever side is larger (bold); if equal, neither is bold.
+    const lhsStr = lhs > rhs ? `<b>${fmt(lhs)}</b>` : fmt(lhs);
+    const rhsStr = rhs > lhs ? `<b>${fmt(rhs)}</b>` : fmt(rhs);
     this.readoutEl.innerHTML =
-      `φ(E[X]) = <b>${fmt(lhs)}</b> &nbsp; ${rel} &nbsp; E[φ(X)] = <b>${fmt(rhs)}</b>` +
+      `φ(E[X]) = ${lhsStr} &nbsp; ${rel} &nbsp; E[φ(X)] = ${rhsStr}` +
       `<br>Jensen gap = ${fmt(gap)}`;
     this.refreshWeightReadouts();
   }
