@@ -237,6 +237,55 @@ class JensensDemo extends P5DemoBase {
     }
   }
 
+  private drawHull(p: p5): void {
+    if (this.parseError || this.hull.length < 2) return;
+    p.noStroke();
+    p.fill(this.isDarkMode ? 'rgba(120,180,255,0.18)' : 'rgba(80,130,220,0.15)');
+    p.beginShape();
+    for (const v of this.hull) {
+      const s = this.worldToScreen(p, v.x, v.y);
+      p.vertex(s.x, s.y);
+    }
+    p.endShape(p.CLOSE);
+  }
+
+  private drawInequality(p: p5): void {
+    if (this.parseError) return;
+    // Vertical guide at x = E[X]
+    const guideX = this.worldToScreen(p, this.EX, 0).x;
+    p.stroke(this.isDarkMode ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.3)');
+    p.strokeWeight(1);
+    (p.drawingContext as CanvasRenderingContext2D).setLineDash([4, 4]);
+    p.line(guideX, 0, guideX, p.height);
+    (p.drawingContext as CanvasRenderingContext2D).setLineDash([]);
+
+    const onCurve = this.worldToScreen(p, this.EX, this.phiEX); // ○ φ(E[X])
+    const inHull = this.worldToScreen(p, this.EX, this.EphiX);   // ● E[φ(X)]
+
+    // Jensen gap segment
+    p.stroke(this.isDarkMode ? '#ff7777' : '#cc2222');
+    p.strokeWeight(2);
+    p.line(onCurve.x, onCurve.y, inHull.x, inHull.y);
+
+    // ● E[φ(X)]
+    p.noStroke();
+    p.fill(this.isDarkMode ? '#ff7777' : '#cc2222');
+    p.circle(inHull.x, inHull.y, 11);
+    // ○ φ(E[X])
+    p.fill(this.colors.background);
+    p.stroke(this.isDarkMode ? '#66ff99' : '#118844');
+    p.strokeWeight(2.5);
+    p.circle(onCurve.x, onCurve.y, 11);
+
+    // E[X] tick label on axis
+    p.noStroke();
+    p.fill(this.colors.text);
+    p.textSize(11);
+    p.textAlign(p.CENTER, p.TOP);
+    const axisY = this.worldToScreen(p, this.EX, 0).y;
+    p.text('E[X]', guideX, Math.min(axisY + 4, p.height - 14));
+  }
+
   // --- p5 lifecycle ---
 
   protected createSketch(p: p5): void {
@@ -247,8 +296,10 @@ class JensensDemo extends P5DemoBase {
     p.draw = () => {
       p.background(this.colors.background);
       this.drawAxes(p);
+      this.drawHull(p);
       this.drawCurve(p);
       this.drawPoints(p);
+      this.drawInequality(p);
     };
 
     p.mousePressed = () => {
