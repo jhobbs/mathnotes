@@ -462,8 +462,29 @@ class JensensDemo extends P5DemoBase {
     });
   }
 
-  private updateReadout(): void { /* filled in Task 6 */ }
-  private updateBadge(): void { /* filled in Task 6 */ }
+  private updateBadge(): void {
+    const map: Record<Convexity, { text: string; color: string }> = {
+      convex: { text: 'convex', color: this.isDarkMode ? '#6699ff' : '#3366cc' },
+      concave: { text: 'concave', color: this.isDarkMode ? '#ff9944' : '#dd5500' },
+      neither: { text: 'neither (Jensen may not hold)', color: '#cc6600' },
+    };
+    const b = map[this.convexity];
+    this.badgeEl.textContent = `[${b.text}]`;
+    this.badgeEl.style.color = b.color;
+  }
+
+  private updateReadout(): void {
+    if (this.parseError) { this.readoutEl.textContent = ''; return; }
+    const rel = this.convexity === 'convex' ? '≤' : this.convexity === 'concave' ? '≥' : '?';
+    const lhs = this.phiEX;
+    const rhs = this.EphiX;
+    const gap = Math.abs(rhs - lhs);
+    const fmt = (v: number) => (Number.isFinite(v) ? v.toFixed(3) : '—');
+    this.readoutEl.innerHTML =
+      `φ(E[X]) = <b>${fmt(lhs)}</b> &nbsp; ${rel} &nbsp; E[φ(X)] = <b>${fmt(rhs)}</b>` +
+      `<br>Jensen gap = ${fmt(gap)}`;
+    this.refreshWeightReadouts();
+  }
 
   // --- DOM helpers (copied verbatim from demos/dynamical-systems/cobweb.ts) ---
 
