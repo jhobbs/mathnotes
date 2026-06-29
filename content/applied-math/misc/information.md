@@ -311,9 +311,13 @@ It remains to show that this extreme of $H$ is a maximum. This follows from the 
 :::
 
 :::theorem
-The @entropy of a joint event is less than or equal to the sum of the individual entropies, i.e.
+Suppose there are two events, $x$ and $y,$ with $m$ possibilities for $x$ and $n$ for $y.$ Let $p(i,j)$ be the probability of the joint occurrence of $i$ for the first and $j$ for the second.
 
-$$ H(x,y) \leq H(x) + H(y). $$
+The @entropy of a joint event, $H(x,y),$ is less than or equal to the sum of the individual entropies, i.e.
+
+$$ H(x,y) \leq H(x) + H(y), $$
+
+with equality iff the events are independent, that is, iff $p(i,j) = p(i)p(j).$
 
 ::::proof
 Suppose there are two events, $x$ and $y,$ with $m$ possibilities for $x$ and $n$ for $y.$ Let $p(i,j)$ be the probability of the joint occurrence of $i$ for the first and $j$ for the second. The @entropy of the joint event is then
@@ -358,6 +362,17 @@ H(x) + H(y) - H(x,y) & \geq 0 \\
 - H(x,y) & \geq -H(x) -H(y) \\
 H(x,y) & \leq H(x) + H(y). \\
 \end{aligned} $$
+
+Now, for the equality part. Suppose $H(x) + H(y) = H(x,y).$ Then, $E[\log{Z}] = 0,$ and recalling that $E[Z] = 1,$ $E[\log{Z}] = \log{E[Z]} = 0.$ In @jensens-inequality, equality holds only if our function is @affine or if $Z$ is constant; since $\log$ is @affine on no interval, $Z$ must be constant, and since $E[Z] = 1,$ $Z = \frac{p(i)p(j)}{p(i,j)} = 1 \implies p(i)p(j) = p(i,j).$ 
+
+Now, suppose $p(i)p(j) = p(i,j).$ Then $Z = 1$ and
+
+$$ H(x) + H(y) - H(x,y) = - \sum_{i,j} p(i, j) \left ( \log{1}  \right ) = 0, $$
+
+so $H(x) + H(y) = H(x,y).$
+
+note that @jensens-inequality gives us equality iff $Z$ is (almost surely) constant. Since $Z = \frac{p(i)p(j)}{p(i,j)},$ it's constant iff $p(i,j) = p(i)p(j).$
+
 ::::
 :::
 
