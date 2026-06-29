@@ -63,7 +63,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'parametric-phase-portrait': () => import('@demos/dynamical-systems/parametric-phase-portrait'),
   'firefly-synchronization': () => import('@demos/dynamical-systems/firefly-synchronization'),
   'cobweb': () => import('@demos/dynamical-systems/cobweb'),
-  'zipf-entropy': () => import('@demos/information-theory/zipf-entropy')
+  'zipf-entropy': () => import('@demos/information-theory/zipf-entropy'),
+  'jensens-inequality': () => import('@demos/probability/jensens-inequality')
 };
 
 // Store for loaded metadata

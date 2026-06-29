@@ -104,3 +104,5 @@ TOOD: show the equality case only holds when the support is affine.
 ::::
 
 :::
+
+{% include_demo "jensens-inequality" %}
