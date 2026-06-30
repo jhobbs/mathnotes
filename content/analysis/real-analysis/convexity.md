@@ -29,6 +29,13 @@ $x \in (a,b),$ and @concave if and only if $\varphi''(x) \leq 0$ for all
 $x \in (a,b).$
 :::
 
+:::definition "Convex Combination"
+A **convex combination** is a @linear-combination of @points where all @coefficients are non-negative and sum to 1.
+:::
+:::note
+Every @convex-combination of two @points lies on the @line-segment between the @points.
+:::
+
 :::theorem "Log is concave"
 The $\log$ @function is @concave, i.e. $-\log$ is @convex.
 
