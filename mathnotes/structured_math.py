@@ -153,7 +153,10 @@ class MathBlock:
         # Common irregular plurals
         irregular_plurals = {
             'matrix': 'matrices',
-            'vertex': 'vertices', 
+            'vertex': 'vertices',
+            'simplex': 'simplices',
+            'vortex': 'vortices',
+            'helix': 'helices',
             'index': 'indices',
             'axis': 'axes',
             'analysis': 'analyses',
@@ -166,6 +169,8 @@ class MathBlock:
             'datum': 'data',
             'criterion': 'criteria',
             'phenomenon': 'phenomena',
+            'polyhedron': 'polyhedra',
+            'automaton': 'automata',
             'radius': 'radii',
             'locus': 'loci',
             'focus': 'foci',
