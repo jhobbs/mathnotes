@@ -380,6 +380,11 @@ note that @jensens-inequality gives us equality iff $Z$ is (almost surely) const
 When we decrease the probability of an @element occurring, its @self-information increases only logarithmically, while its weight in the entropy sum decreases linearly. 
 :::
 
+:::theorem
+For any @doubly-stochastic @matrix $A$ and @probability-vector $\vec{p},$ $H(A \vec{p}) \geq H(\vec{p}),$ with equality iff $A\vec{p}$ is a @rearrangement of $\vec{p}$.
+
+:::
+
 TODO: Relative Entropy
 
 :::theorem "Noiseless channel transmitting discrete symbols"
