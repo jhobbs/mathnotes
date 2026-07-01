@@ -65,7 +65,8 @@ const demoRegistry: Record<string, () => Promise<DemoModule>> = {
   'cobweb': () => import('@demos/dynamical-systems/cobweb'),
   'zipf-entropy': () => import('@demos/information-theory/zipf-entropy'),
   'jensens-inequality': () => import('@demos/probability/jensens-inequality'),
-  'stochastic-matrix': () => import('@demos/probability/stochastic-matrix')
+  'stochastic-matrix': () => import('@demos/probability/stochastic-matrix'),
+  'relative-entropy': () => import('@demos/information-theory/relative-entropy')
 };
 
 // Store for loaded metadata
