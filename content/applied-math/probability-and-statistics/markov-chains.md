@@ -90,3 +90,7 @@ If a @matrix is both a @row-stochastic-matrix and a @column-stochastic-matrix, i
 :::note
 A @doubly-stochastic-matrix is a @convex-combination of @permutation-matrices.
 :::
+
+A @stochastic-matrix maps a probability vector to another probability vector — but only for the matching multiplication convention. A @row-stochastic-matrix preserves the sum acting on the right, $\vec{x}^\top A$; a @column-stochastic-matrix preserves it acting on the left, $A\vec{x}$; and a @doubly-stochastic-matrix preserves it either way. The demo below lets you apply each type to a probability vector, build doubly-stochastic matrices as convex combinations of permutation matrices, and iterate the map toward its stationary distribution.
+
+{% include_demo "stochastic-matrix" %}
