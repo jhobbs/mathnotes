@@ -393,7 +393,7 @@ $$ H(p,q) = - \sum_{x \in X} p(x) \log{q(x)}. $$
 
 We can write it in @expectation form as
 
-$$ H(p,q) = \mathbb{E}_p \left [ \log{q}  \right ], $$
+$$ H(p,q) = \mathbb{E}_p \left [- \log{q}  \right ], $$
 
 where $\mathbb{E}_p$ is expectation under $p.$
 :::
@@ -410,9 +410,16 @@ which is just @cross-entropy minus @entropy:
 $$ D(p || q) = H(p,q) - H(p). $$
 
 Note that we don't always use the $KL$ subscript where it's obvious from the context.
+
+We can also write it as
+
+$$ D(p || q) = \mathbb{E}_p \left [ - \log{q} \right ] - \mathbb{E}_p \left [ - \log{p} \right ]  =  \mathbb{E}_p \left [ \log{\frac{p(x)}{q(x)}}  \right ], $$
+
+which makes it clear that it's the expected inefficiency in an encoding optimized for $q$ rather than $p.$
+
 :::
 :::remark
-@kl-divergence tells us how different an approximating distribution $q$ is from a true probability distribution $p.$ It's not a true distance metric - it's asymmetric, but it does behave like distance in that it gets smaller as $q$ gets more like $p$ and is zero when $q = p.$
+@kl-divergence tells us how different an approximating distribution $q$ is from a true probability distribution $p.$ It's not a true distance metric - it's asymmetric, but it does behave like distance in that it gets smaller as $q$ gets more like $p$ and is zero when $q = p.$ It is a sort of directed distance.
 
 Another way to think about it is as a measure of how inefficient a coding scheme optimized for $q$ is when the actual distribution is $p.$ If $q$ says some event is rare, and so we use a longer symbol for it (more bits), but the event actually occurs frequently, we'll waste bits representing the event when we could have used a shorter symbol for it.
 :::
