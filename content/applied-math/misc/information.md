@@ -145,7 +145,9 @@ $$ H(X) := - \sum_{x \in \mathcal{X}} p(x) \log{p(x)}. $$
 
 We can choose different bases for the logarithm; base 2 gives the unit of @bits and is a common choice.
 
-An alternative, equivalent definition is that **entropy** is the @expected-value of the @self-information of a @random-variable.
+An alternative, equivalent definition is that **entropy** is the @expected-value of the @self-information of a @random-variable:
+
+$$ H(X) = \mathbb{E}\left[I(X) \right ] =  \mathbb{E} \left [ -\log p(X) \right ]. $$
 
 The unit for entropy is information per symbol.
 :::
@@ -382,10 +384,39 @@ When we decrease the probability of an @element occurring, its @self-information
 
 :::theorem
 For any @doubly-stochastic @matrix $A$ and @probability-vector $\vec{p},$ $H(A \vec{p}) \geq H(\vec{p}),$ with equality iff $A\vec{p}$ is a @rearrangement of $\vec{p}$.
-
 :::
 
-TODO: Relative Entropy
+:::definition "Cross-Entropy"
+Given two discrete probability distributions, $p$ and $q,$ that share a support $X,$ **cross-entropy** measures the average number of bits needed to represent an event drawn from $X$ when the coding scheme is optimized for an estimated distribution $q$ rather than the true distribution $p.$ Its formula is very similar to that of @entropy, except @surprisal is calculated using $q$ while @expectation uses $p$:
+
+$$ H(p,q) = - \sum_{x \in X} p(x) \log{q(x)}. $$
+
+We can write it in @expectation form as
+
+$$ H(p,q) = \mathbb{E}_p \left [ \log{q}  \right ], $$
+
+where $\mathbb{E}_p$ is expectation under $p.$
+:::
+
+Note that when $p = q,$ @cross-entropy equals @entropy.
+
+:::definition "KL Divergence" {synonyms: relative-entropy, "Kullback-Leibler divergence"}
+For discrete probability distributions, $p$ and $q,$ that share a support $X,$ the **relative entropy** from $q$ to $p$ is defined to be
+
+$$ D_{KL}(p || q) = \sum_{x \in X} p(x) \log{\frac{p(x)}{q(x)}}, $$
+
+which is just @cross-entropy minus @entropy:
+
+$$ D(p || q) = H(p,q) - H(p). $$
+
+Note that we don't always use the $KL$ subscript where it's obvious from the context.
+:::
+:::remark
+@kl-divergence tells us how different an approximating distribution $q$ is from a true probability distribution $p.$ It's not a true distance metric - it's asymmetric, but it does behave like distance in that it gets smaller as $q$ gets more like $p$ and is zero when $q = p.$
+
+Another way to think about it is as a measure of how inefficient a coding scheme optimized for $q$ is when the actual distribution is $p.$ If $q$ says some event is rare, and so we use a longer symbol for it (more bits), but the event actually occurs frequently, we'll waste bits representing the event when we could have used a shorter symbol for it.
+:::
+
 
 {% include_demo "relative-entropy" %}
 
