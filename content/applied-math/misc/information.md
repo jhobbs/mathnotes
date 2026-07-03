@@ -138,7 +138,7 @@ In a related vein we can develop a function that asks how much choice is involve
 $$ H(\frac{1}{2}, \frac{1}{3}, \frac{1}{6}) = H(\frac{1}{2}, \frac{1}{2}) + \frac{1}{2}H(\frac{2}{3}, \frac{1}{3}). $$
 :::
 
-:::definition "Entropy"
+:::definition "Entropy" {synonyms: "uncertainty"}
 Given a discrete @random-variable $X,$ which may be any @element $x$ within the set $\mathcal{X},$ and is distributed according to $p: \mathcal{X} \to [0,1],$ the **entropy** is
 
 $$ H(X) := - \sum_{x \in \mathcal{X}} p(x) \log{p(x)}. $$
@@ -312,7 +312,7 @@ It remains to show that this extreme of $H$ is a maximum. This follows from the 
 ::::
 :::
 
-:::theorem
+:::theorem {label: joint-entropy-is-less-than-or-equal-to-entropy-of-parts}
 Suppose there are two events, $x$ and $y,$ with $m$ possibilities for $x$ and $n$ for $y.$ Let $p(i,j)$ be the probability of the joint occurrence of $i$ for the first and $j$ for the second.
 
 The @entropy of a joint event, $H(x,y),$ is less than or equal to the sum of the individual entropies, i.e.
@@ -469,9 +469,72 @@ Averaging (well, replacing each probability with a @convex-combination of all th
 :::
 
 
+:::definition "Conditional Entropy"
+Let $X$ and $Y$ be @random-variables, not necessarily @independent. The probability that $Y$ takes the value $y$ when $X$ takes the value $x$ (for any specific $x \in X, y \in Y)$ is called the @conditional-probability $p(y|x)$ and is given by:
 
+$$ p(y|x) = \frac{p(x, y)}{p(x)}, \quad p(x) = \sum_{y} p(x,y). $$
 
-{% include_demo "relative-entropy" %}
+(Note that $p(x,y)$ is the @joint-probability of $X = x, Y = y.$
+
+We define the **conditional entropy** of $Y$ $H(Y|X)$ as the average of the entropy of $Y$ for each value $x$ of $X$ weighted according to the probability of getting that particular $x.$ That is,
+
+$$ H(Y|X) = -\sum_{x \in \mathcal{X}, y \in \mathcal{Y}} p(x,y) \log{p(y|x)}. $$
+:::
+:::note
+We can obtain the above formula for @conditional-entropy as follows. First, if $X = x,$ then our @entropy for $Y$ is
+
+$$ H(Y | X = x) = -\sum_{y} p(y|x) \log{p(y|x)}. $$
+
+Now, summing across $X$ gives:
+
+$$ \begin{aligned}
+H(Y|X) & = \sum_{x} p(x) H(Y | X = x) \\
+       & = \sum_{x} p(x) \left [  -\sum_{y} p(y|x) \log{p(y|x)}  \right ]  \\
+       & = - \sum_{x} \sum_{y}\left [ p(x)  p(y|x) \log{p(y|x)}  \right ]  \\
+       & = - \sum_{x, y} p(x,y) \log{p(y|x)}. \\
+\end{aligned} $$
+:::
+
+:::theorem {label: joint-entropy-is-base-plus-conditional}
+The @entropy of the joint event $X,Y$ is the @entropy of $X$ plus the @entropy of $Y$ when $X$ is known.
+
+::::proof
+Note that
+
+$$ \begin{aligned}
+H(Y | X) & = - \sum_{x, y} p(x,y) \log{\frac{p(x,y)}{p(x)}} \\
+         & = - \sum_{x, y} p(x,y) \log{p(x,y)} + \sum_{x, y} p(x,y) \log{p(x)}.\\
+\end{aligned} $$
+
+The first term on the RHS is just $- \sum_{x, y} p(x,y) \log{p(x,y)} = H(X,Y).$ The second is
+
+$$ \begin{aligned}
+\sum_{x, y} p(x,y) \log{p(x)} & = \sum_{x} \left [ \sum_{y} p(x,y) \right ] \log{p(x)}  \\
+                              & = \sum_{x} p(x) \log{p(x)}  \\
+                              & = -H(X).
+\end{aligned} $$
+
+Altogether, we have that $H(Y | X) = H(X,Y) - H(X),$ or
+
+$$ H(X,Y) = H(X) + H(Y | X). $$
+::::
+:::
+
+:::theorem
+The @uncertainty of $Y$ is never increased by knowledge of $X.$ It will be decreased unless $X$ and $Y$ are independent events, in which case it is not changed.
+
+::::proof
+From @joint-entropy-is-less-than-or-equal-to-entropy-of-parts and @joint-entropy-is-base-plus-conditional, we have
+
+$$ \begin{aligned}
+H(X) + H(Y) & \geq H(X,Y) \\
+            & = H(X) + H(Y|X), \\ 
+\end{aligned} $$
+
+hence $H(Y) \geq H(Y|X).$
+::::
+
+:::
 
 :::theorem "Noiseless channel transmitting discrete symbols"
 Given a communication channel which has a @capacity of $C$ bits per second, accepting signals from a source of @entropy (or information) of $H$ bits per symbols, it is possible, given a properly devised coding procedure, for the transmitter to transmit symbols over the channel at an average rate which is nearly $C/H$ but which, no matter how clever the coding, can never exceed $C/H.$
