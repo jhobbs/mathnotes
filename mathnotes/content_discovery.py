@@ -28,14 +28,17 @@ class ContentDiscovery:
                 # Build canonical URL
                 relative_path = md_file.relative_to(Path("."))
 
-                # Check if there's a custom slug that should override the path
+                # Check if there's a custom slug that should override the filename
                 custom_slug = post.metadata.get("slug")
                 if custom_slug:
-                    # Custom slug provided - use it with section prefix
-                    section_name = (
-                        relative_path.parts[1] if relative_path.parts[0] == "content" else relative_path.parts[0]
-                    )
-                    canonical_url = f"{section_name}/{custom_slug}"
+                    # Custom slug replaces the filename but preserves the directory
+                    # path, so nested sections keep their full URL (e.g.
+                    # content/applied-math/information-theory/01-discrete-entropy.md
+                    # -> applied-math/information-theory/<slug>).
+                    parts = relative_path.parts
+                    start = 1 if parts[0] == "content" else 0
+                    dir_parts = parts[start:-1]  # directories between content/ and the file
+                    canonical_url = "/".join([*dir_parts, custom_slug])
                 else:
                     # No custom slug - use full directory structure
                     # Remove content/ prefix and .md extension
