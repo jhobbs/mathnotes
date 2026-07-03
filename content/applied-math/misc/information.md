@@ -382,9 +382,6 @@ note that @jensens-inequality gives us equality iff $Z$ is (almost surely) const
 When we decrease the probability of an @element occurring, its @self-information increases only logarithmically, while its weight in the entropy sum decreases linearly. 
 :::
 
-:::theorem
-For any @doubly-stochastic @matrix $A$ and @probability-vector $\vec{p},$ $H(A \vec{p}) \geq H(\vec{p}),$ with equality iff $A\vec{p}$ is a @rearrangement of $\vec{p}$.
-:::
 
 :::definition "Cross-Entropy"
 Given two discrete probability distributions, $p$ and $q,$ that share a support $X,$ **cross-entropy** measures the average number of bits needed to represent an event drawn from $X$ when the coding scheme is optimized for an estimated distribution $q$ rather than the true distribution $p.$ Its formula is very similar to that of @entropy, except @surprisal is calculated using $q$ while @expectation uses $p$:
@@ -423,6 +420,55 @@ which makes it clear that it's the expected inefficiency in an encoding optimize
 
 Another way to think about it is as a measure of how inefficient a coding scheme optimized for $q$ is when the actual distribution is $p.$ If $q$ says some event is rare, and so we use a longer symbol for it (more bits), but the event actually occurs frequently, we'll waste bits representing the event when we could have used a shorter symbol for it.
 :::
+
+:::theorem "Doubly stochastic maps increase entropy"
+Take a @doubly-stochastic @matrix $A$ and @probability-vector $p,$ let $q = A p.$ Then $H(q) \geq H(p),$ with equality iff $q$ is a @rearrangement of $p$.
+
+::::proof
+Note that $q_i = \sum_{j} A_{ij} p_j,$ by the definition of vector matrix multiplication. Now we'll define a couple of joint distributions:
+
+$$ r_{ij} = A_{ij} p_j, \quad s_{ij} = A_{ij} q_i. $$
+
+Now we find the @relative-entropy from $s$ to $r$:
+
+$$ \begin{aligned}
+
+D(r || s) & = \sum_{i,j} r_{ij} \log{\frac{r_{ij}}{s_{ij}}} \\
+          & = \sum_{i,j} A_{ij} p_j \log{\frac{A_{ij} p_j}{A_{ij} q_i }} \\
+          & = \sum_{i,j} A_{ij} p_j \log{\frac{p_j}{q_i}} \\
+          & = \sum_{i,j} A_{ij} p_j \left ( \log{p_j} - \log{q_i} \right ) \\
+          & = \sum_{i,j} A_{ij} p_j \log{p_j} - \sum_{i,j} A_{ij} p_j \log{q_i} \\
+          & = \sum_{i,j} A_{ij} p_j \log{p_j} - \sum_{i,j} A_{ij} p_j \log{q_i} \\
+\end{aligned} $$
+
+Now, addressing the first term on the RHS of the last line:
+
+$$ \begin{aligned}
+
+\sum_{i,j} A_{ij} p_j \log{p_j} & = \sum_j \left [ p_j \log{p_j} \sum_{i} A_{ij} \right ] \\
+                                & = \sum_j \left [ p_j \log{p_j} \cdot 1 \right ] \\
+                                & = \sum_j  p_j \log{p_j} \\
+                                & = -H(p). \\
+\end{aligned} $$
+
+And the second term on the RHS of the last line:
+
+$$ \begin{aligned}
+\sum_{i,j} A_{ij} p_j \log{q_i} & = \sum_{i} \left [ \log{q_i} \sum_{j} A_{ij} p_j \right ] \\
+                                & = \sum_{i} \left [ \log{q_i} q_i \right ] \\
+                                & = -H(q).
+\end{aligned} $$
+
+So, we end up with $D(r || s) = H(q) - H(p).$ Since $D(r || s) \geq 0,$ we have $H(q) - H(p) \geq 0,$ which implies that $H(q) \geq H(p),$ which is what we wanted to show.
+
+Now, the equivalence case. If $q$ is just a rearrangement of $p,$ then obviously it has the same entropy as we can just re-index to recover $p.$ Now assume $H(p) = H(q).$ Then, $H(q) - H(p) = 0 \implies D(r || s) = 0 \implies r = s \implies A_{ij} p_j = A_{ij} q_i \implies p_j = q_i,$ so $q$ is a rearrangement of $p.$
+::::
+::::intuition
+Averaging (well, replacing each probability with a @convex-combination of all the probabilities in a way that retains their summing to 1) the probabilities in $p$ can only bring them closer to each other (if it doesn't just rearrange them), which increases entropy.
+::::
+:::
+
+
 
 
 {% include_demo "relative-entropy" %}
