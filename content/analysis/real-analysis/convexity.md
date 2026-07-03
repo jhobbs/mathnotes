@@ -36,7 +36,7 @@ A **convex combination** is a @linear-combination of @points where all @coeffici
 Every @convex-combination of two @points lies on the @line-segment between the @points.
 :::
 
-:::theorem "Log is concave"
+:::theorem {label: log-is-concave}
 The $\log$ @function is @concave, i.e. $-\log$ is @convex.
 
 ::::proof

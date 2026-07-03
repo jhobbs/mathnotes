@@ -7,7 +7,7 @@ slug: discrete-entropy
 # Capacity of a Discrete Channel
 
 :::definition "Discrete Channel"
-A system whereby a @sequence of choices from a @finite @set of elementary symbols $S_1 \cdots S_n$ and be transmitted from one point to another. Each of the symbols $S_i$ is assumed to have a certain duration in time $t_i$ seconds (not necessarily the same for different $S_i$).
+A system whereby a @sequence of choices from a @finite @set of elementary symbols $S_1, \dots, S_n$ can be transmitted from one point to another. Each of the symbols $S_i$ is assumed to have a certain duration in time $t_i$ seconds (not necessarily the same for different $S_i$).
 :::
 
 :::definition "Capacity" {synonyms: "channel-capacity"}
@@ -15,14 +15,14 @@ The **capacity** $C$ of a @discrete-channel is given by
 
 $$ C = \lim_{t \to \infty} \frac{\log{N(t)}}{t}, $$
 
-where $N(t)$ is the number of allowed @signals of duration $T.$ 
+where $N(t)$ is the number of allowed @signals of duration $t.$ 
 :::
 :::note
-Given an information source where all symbols are of the same time duration, and each symbol represents $s$ bits of information (because it is chosen freely among $2^s$ symbols), and the channel can transmit $n$ symbols per second ten the **capacity** $C$ of the channel is defined to be $ns$ bits per second.
+Given an information source where all symbols are of the same time duration, and each symbol represents $s$ bits of information (because it is chosen freely among $2^s$ symbols), and the channel can transmit $n$ symbols per second then the **capacity** $C$ of the channel is defined to be $ns$ bits per second.
 
 In the more general case we have to deal with symbols of various lengths that take different amounts of time to transmit, and so capacity measures not the number of symbols transmitted per second but the amount of information transmitted per second, retaining bits per second as its unit.
 
-If $N(t)$ represent the number of @sequences of duration $t,$ then
+If $N(t)$ represents the number of @sequences of duration $t,$ then
 
 $$ N(t) = N(t - t_1) + N(t - t_2) + \cdots + N(t - t_n). $$
 
@@ -30,15 +30,15 @@ This number is equal to the sum of the numbers of sequences ending in $S_1, S_2,
 
 A "well-known result" in finite differences tells us that
 
-$$ \lim_{t \to \infty} N(t) = A X_0^t, $$
+$$ \lim_{t \to \infty} N(t) = A W_0^t, $$
 
-where $A$ is constant and $X_0$ is the largest real solution of the @characteristic-equation:
+where $A$ is constant and $W_0$ is the largest real solution of the @characteristic-equation:
 
-$$ X^{-t_1} + X^{-t_2} + \cdots + X^{-t_n} = 1, $$
+$$ W^{-t_1} + W^{-t_2} + \cdots + W^{-t_n} = 1, $$
 
 and therefore 
 
-$$ C = \lim_{t \to \infty} \frac{\log{A X_0^t}}{t} = \log{X_0}. $$
+$$ C = \lim_{t \to \infty} \frac{\log{A W_0^t}}{t} = \log{W_0}. $$
 :::
 
 :::example
@@ -89,11 +89,11 @@ Note that in this Morse telegraphy system, we have two states that the channel c
 
 * If the previous symbol transmitted was not a space, we're in state $2,$ and the next symbol can be anything, and the state may or may not change depending on what the next symbol is.
 
-We can think of these states being the @nodes of a @directed-graph with the @edges being the @vertices. A generalization of this is given in the theorem below.
+We can think of these states being the @nodes of a @directed-graph with the transitions between them being the @edges. A generalization of this is given in the theorem below.
 :::
 
 :::theorem
-Let $b_{ij}^{(s)}$ be the duration of the $s$-th symbol which is allowable in state $i$ and leads to state $j.$ Then the @channel-capacity of $C$ is equal to $log{W}$ where $W$ is the largest real root of the @determinantal-equation
+Let $b_{ij}^{(s)}$ be the duration of the $s$-th symbol which is allowable in state $i$ and leads to state $j.$ Then the @channel-capacity $C$ is equal to $\log{W}$ where $W$ is the largest real root of the @determinantal-equation
 
 $$ \left | \sum_{s} W^{-b_{ij}^{(s)}} - \delta_{ij}  \right | = 0, $$
 
@@ -111,9 +111,9 @@ Expanding the @determinant on the LHS gives the @characteristic-equation $(a)$ a
 # Information and Entropy in a Discrete Channel
 
 :::definition "Self-Information" {synonyms: "surprisal", "Shannon information", "Information content"}
-Given a real number $b > 1$ and an event $x$ with probability $P,$ the **self-information** is defined as the negative @log-probability
+Given a real number $b > 1$ and an outcome $x$ of a discrete @random-variable $X$ with probability mass function $p,$ the **self-information** of $x$ is defined as the negative @log-probability
 
-$$ I(x) := - \log_{b}(P). $$
+$$ I(x) := - \log_{b}{p(x)}. $$
 :::
 :::remark
 We can view @self-information as an alternative casting of @probability, like how @odds are, with some desirable properties:
@@ -128,7 +128,7 @@ The function given above is the unique function of probability (up to a multipli
 :::
 
 :::remark
-In a related vein we can develop a function that asks how much choice is involved in the selection of an event, or equivalently, how much uncertainty there is in the outcome. If $p_1, p_2, \dots, p_n$ are the probabilities of events occurring, we want a measure $H(p_1, p_2, \dots, p_3)$ that has the following properties:
+In a related vein we can develop a function that asks how much choice is involved in the selection of an event, or equivalently, how much uncertainty there is in the outcome. If $p_1, p_2, \dots, p_n$ are the probabilities of events occurring, we want a measure $H(p_1, p_2, \dots, p_n)$ that has the following properties:
 
 1. $H$ should be @continuous in the $p_i.$ That is, a small change in a $p_i$ should result in a small change in $H.$
 
@@ -144,7 +144,7 @@ Given a discrete @random-variable $X,$ which may be any @element $x$ within the 
 
 $$ H(X) := - \sum_{x \in \mathcal{X}} p(x) \log{p(x)}. $$
 
-We can choose different bases for the logarithm; base 2 gives the unit of @bits and is a common choice.
+We can choose different bases for the logarithm; throughout these notes a bare $\log$ means $\log_2,$ giving the unit of @bits.
 
 An alternative, equivalent definition is that **entropy** is the @expected-value of the @self-information of a @random-variable:
 
@@ -214,7 +214,7 @@ Since $\epsilon$ can be arbitrarily small, we have that $A(t) = K \log(t),$ with
 Now let's say that we have a choice from $n$ possible events with @commensurable probabilities $p_i = \frac{n_i}{\sum n_i}.$ We can break down a choice from $\sum n_i$ possibilities into a choice from $n$ possibilities with probabilities $p_1, \dots, p_n$ and then, if the $i$th possibility was chosen, $n_i$ choices of equal probability $p_i.$ We do this because above, we found how to find $H$ when all events are equally likely, and property (3) of our desired function lets us break down our overall choice from $\sum n_i$ possibilities. This gives us
 
 $$ \begin{aligned}
-K \log{\sum n_i} & = H(p_1, \dots, p_n) + \sum p_i H(n_i) \\
+K \log{\sum n_i} & = H(p_1, \dots, p_n) + \sum p_i A(n_i) \\
                  & = H(p_1, \dots, p_n) + \sum p_i K \log{n_i} \\
                  & = H(p_1, \dots, p_n) + K \sum p_i \log{n_i}. \\
 \end{aligned}
@@ -237,7 +237,7 @@ If the $p_i$ are incommensurable, we can approximate them as closely as we'd lik
 
 
 :::remark
-The @entropy of a @random-variable quantifies the average level of uncertainty or information associated with the variable's potential states of possible outcomes. It measures the expected amount of information needed to describe the state of the variable, considering the distribution of probabilities across all potential states.
+The @entropy of a @random-variable quantifies the average level of uncertainty or information associated with the variable's possible outcomes. It measures the expected amount of information needed to describe the state of the variable, considering the distribution of probabilities across all potential states.
 :::
 
 The demo below makes these quantities concrete. It uses a discrete alphabet of $N$ symbols whose probabilities follow a *Zipfian* distribution,
@@ -253,13 +253,13 @@ Examples to cover: [https://claude.ai/chat/0702d3b2-a181-4b5b-a572-e5464d9d24d5]
 
 ## Example: Coin Flip
 
-For a fair coin flip, $X = \{h, t\}.$ $p(h) = p(t) = 0.5.$ Then, $I(h) = I(t) = - \log_{2}{(0.5)} = 1 \text{ bit},$ and
+For a fair coin flip, $\mathcal{X} = \{h, t\}$ and $p(h) = p(t) = 0.5.$ Then, $I(h) = I(t) = - \log{(0.5)} = 1 \text{ bit},$ and
 
 $$ H(X) = p(h) \cdot I(h) + p(t) \cdot I(t) = 0.5 \cdot 1 + 0.5 \cdot 1 = 1 \text{ bit}. $$
 
 Let's say we have an unfair coin and $p(h) = 0.9, p(t) = 0.1.$ Then
 
-$$ I(h) = - \log_{2}{(0.9)} \approx 0.152 \text{ bits}, \quad I(t) = - \log_{2}{(0.1)} \approx 3.32 \text{ bits}, $$
+$$ I(h) = - \log{(0.9)} \approx 0.152 \text{ bits}, \quad I(t) = - \log{(0.1)} \approx 3.32 \text{ bits}, $$
 
 and for entropy of $X$ we get
 
@@ -267,22 +267,22 @@ $$ H(X) = p(h) \cdot I(h) + p(t) \cdot I(t) \approx 0.9 \cdot 0.152 + 0.1 \cdot 
 
 ## Example: Six-Sided Die
 
-For a fair six-sided die, $X = \{1,2,3,4,5,6\}.$ $p(x) = 1/6.$ Then, $I(x) - \log_{2}{(1/6)} = \log_{2}(6) \approx 2.58 \text{ bits},$ and
+For a fair six-sided die, $\mathcal{X} = \{1,2,3,4,5,6\}$ and $p(x) = 1/6$ for all $x.$ Then, $I(x) = - \log{(1/6)} = \log(6) \approx 2.58 \text{ bits},$ and
 
 $$ H(X) = 6 \cdot \frac{1}{6} \cdot I(x) = I(x) \approx 2.58 \text{ bits}. $$
 
-Let's say we have an unfair die and $p(1) = 0.5, p(x \in \{2,3,4,5,6\}) = 0.1.$ Then
+Let's say we have an unfair die and $p(1) = 0.5$ and $p(x) = 0.1$ for $x \in \{2,3,4,5,6\}.$ Then
 
-$$ I(1) = - \log_{2}{(0.5)} = 1 \text{ bit}, \quad I(x \in \{2,3,4,5,6\}) = - \log_{2}{(0.1)} \approx 3.32 \text{ bits}, $$
+$$ I(1) = - \log{(0.5)} = 1 \text{ bit}, \quad I(x) = - \log{(0.1)} \approx 3.32 \text{ bits for } x \neq 1, $$
 
 and for entropy of $X$ we get
 
-$$ H(X) = p(1) \cdot I(1) + 5 \cdot p(x \in \{2,3,4,5,6\}) \cdot I(x \in \{2,3,4,5,6\}) \approx 0.5 \cdot 1 + 5 \cdot 0.1 \cdot 3.32 \approx 2.16 \text{ bits}. $$
+$$ H(X) = p(1) \cdot I(1) + \sum_{x=2}^{6} p(x) \cdot I(x) \approx 0.5 \cdot 1 + 5 \cdot 0.1 \cdot 3.32 \approx 2.16 \text{ bits}. $$
 
 ## Some Theorems on Entropy
 
 :::theorem
-When we have a uniform distribution, the @self-information of any given @element of a @random-variable with $N$ @elements equals the @entropy of the @random-variable and is $log{N}.$
+When a @random-variable is uniformly distributed over an alphabet of $n$ @elements, the @self-information of any given @element equals the @entropy of the @random-variable and is $\log{n}.$
 :::
 
 :::theorem
@@ -293,12 +293,12 @@ Suppose $H(p_1, \dots, p_n) = 0.$ Then, $0 = - \sum_{i=1}^n p_i \log{p_i}.$ Note
 :::
 
 :::theorem
-A @random-variable has the most @entropy when its @elements are all equally likely to occur.
+A @random-variable has the most @entropy when the @elements of its alphabet are all equally likely to occur.
 
 ::::proof
 We will use a @Lagrangian function of @entropy to show this. Let
 
-$$ \mathcal{L}(\vec{p}, \lambda) = - \sum_i \left [ p_i \ln{p_i} \right ] - \lambda \left [ \sum_i \left ( p_i - 1 \right ) \right ]. $$
+$$ \mathcal{L}(\vec{p}, \lambda) = - \sum_i \left [ p_i \ln{p_i} \right ] - \lambda \left [ \left ( \sum_i p_i \right ) - 1 \right ]. $$
 
 Then, for any $p_i$ we want
 
@@ -314,67 +314,67 @@ It remains to show that this extreme of $H$ is a maximum. This follows from the 
 :::
 
 :::theorem {label: joint-entropy-is-less-than-or-equal-to-entropy-of-parts}
-Suppose there are two events, $x$ and $y,$ with $m$ possibilities for $x$ and $n$ for $y.$ Let $p(i,j)$ be the probability of the joint occurrence of $i$ for the first and $j$ for the second.
+Let $X$ and $Y$ be discrete @random-variables with alphabets $\mathcal{X}$ and $\mathcal{Y},$ and let $p(x,y)$ be the probability of the joint occurrence of $X = x$ and $Y = y.$
 
-The @entropy of a joint event, $H(x,y),$ is less than or equal to the sum of the individual entropies, i.e.
+The @entropy of the joint event, $H(X,Y),$ is less than or equal to the sum of the individual entropies, i.e.
 
-$$ H(x,y) \leq H(x) + H(y), $$
+$$ H(X,Y) \leq H(X) + H(Y), $$
 
-with equality iff the events are independent, that is, iff $p(i,j) = p(i)p(j).$
+with equality iff $X$ and $Y$ are independent, that is, iff $p(x,y) = p(x)p(y).$
 
 ::::proof
-Suppose there are two events, $x$ and $y,$ with $m$ possibilities for $x$ and $n$ for $y.$ Let $p(i,j)$ be the probability of the joint occurrence of $i$ for the first and $j$ for the second. The @entropy of the joint event is then
+The @entropy of the joint event is
 
-$$ H(x,y) = - \sum_{i,j} p(i,j) \log{p(i,j)}. $$
+$$ H(X,Y) = - \sum_{x,y} p(x,y) \log{p(x,y)}. $$
 
-This is just treating each possible pair of individual possibilities for each event as their own event, i.e. we have $m \times n$ possible events. Now,
+This is just treating each possible pair of individual outcomes as its own outcome, i.e. we have $|\mathcal{X}| \times |\mathcal{Y}|$ possible outcomes. Writing $p(x) = \sum_{y'} p(x,y')$ and $p(y) = \sum_{x'} p(x',y)$ for the marginals (the argument names the distribution), we have
 
-$$ H(x) = - \sum_{i,j} p(i,j) \log{\sum_{j}{p(i,j)}}, \quad H(y) = - \sum_{i,j} p(i,j) \log{\sum_{i}{p(i,j)}}. $$
+$$ H(X) = - \sum_{x,y} p(x,y) \log{\sum_{y'}{p(x,y')}}, \quad H(Y) = - \sum_{x,y} p(x,y) \log{\sum_{x'}{p(x',y)}}. $$
 
 So,
 
 $$ \begin{aligned}
-H(x) + H(y) - H(x,y) & = - \sum_{i,j} p(i,j) \log{\sum_{j}{p(i,j)}} - \sum_{i,j} p(i,j) \log{\sum_{i}{p(i,j)}} + \sum_{i,j} p(i,j) \log{p(i,j)} \\
-                    & = \sum_{i,j} p(i, j) \left ( \log{p(i,j)} - \log{\sum_{j}{p(i,j)}} - \log{\sum_{i}{p(i,j)}}  \right ) \\
-                    & = \sum_{i,j} p(i, j) \left ( \log{p(i,j)} - \log{p(i)} - \log{p(j)}  \right ) \\
-                    & = \sum_{i,j} p(i, j) \left ( \log{\frac{p(i,j)}{p(i)p(j)}}  \right ) \\
-                    & = - \sum_{i,j} p(i, j) \left ( \log{\frac{p(i)p(j)}{p(i,j)}}  \right ) 
+H(X) + H(Y) - H(X,Y) & = - \sum_{x,y} p(x,y) \log{\sum_{y'}{p(x,y')}} - \sum_{x,y} p(x,y) \log{\sum_{x'}{p(x',y)}} + \sum_{x,y} p(x,y) \log{p(x,y)} \\
+                    & = \sum_{x,y} p(x, y) \left ( \log{p(x,y)} - \log{\sum_{y'}{p(x,y')}} - \log{\sum_{x'}{p(x',y)}}  \right ) \\
+                    & = \sum_{x,y} p(x, y) \left ( \log{p(x,y)} - \log{p(x)} - \log{p(y)}  \right ) \\
+                    & = \sum_{x,y} p(x, y) \left ( \log{\frac{p(x,y)}{p(x)p(y)}}  \right ) \\
+                    & = - \sum_{x,y} p(x, y) \left ( \log{\frac{p(x)p(y)}{p(x,y)}}  \right ) 
 \end{aligned} $$
 
-Now, let's define a new random variable for convenience, $Z(i,j) = \frac{p(i)p(j)}{p(i,j)}.$ We now have that
+Now, let's define a new random variable for convenience, $Z = \frac{p(X)p(Y)}{p(X,Y)}.$ We now have that
 
 $$ \begin{aligned}
-H(x) + H(y) - H(x,y) & = - \sum_{i,j} p(i, j) \left ( \log{\frac{p(i)p(j)}{p(i,j)}}  \right ) \\
-                     & = - \sum_{i,j} p(i, j) \left ( \log{Z}  \right ) \\
-                     & = -E[\log{Z}]. \\
+H(X) + H(Y) - H(X,Y) & = - \sum_{x,y} p(x, y) \left ( \log{\frac{p(x)p(y)}{p(x,y)}}  \right ) \\
+                     & = - \sum_{x,y} p(x, y) \left ( \log{Z}  \right ) \\
+                     & = -\mathbb{E}[\log{Z}]. \\
 \end{aligned}$$
 
-Now, by @jensens-inequality, because @log-is-concave, we have that $E[\log{Z}] \leq \log{E[Z]}.$ Now,
+Now, by @jensens-inequality, because @log-is-concave, we have that $\mathbb{E}[\log{Z}] \leq \log{\mathbb{E}[Z]}.$ Now,
 
 $$ \begin{aligned}
-E[Z] & = \sum_{i,j} p(i,j) \cdot \frac{p(i)p(j)}{p(i,j)} \\
-     & = \sum_{i,j}p(i)p(j) \\
-     & = \big ( \sum_{i}p(i) \big ) \big ( \sum_{j}p(j) \big )  \\
+\mathbb{E}[Z] & = \sum_{x,y} p(x,y) \cdot \frac{p(x)p(y)}{p(x,y)} \\
+     & = \sum_{x,y}p(x)p(y) \\
+     & = \big ( \sum_{x}p(x) \big ) \big ( \sum_{y}p(y) \big )  \\
      & = 1 \cdot 1 \\
      & = 1. \\
 \end{aligned} $$
-Therefore $\log{E[Z]} = \log{1} = 0,$ and we have that $E[\log{Z}] \leq 0 \implies -E[\log{Z}] \geq 0,$ and
+Therefore $\log{\mathbb{E}[Z]} = \log{1} = 0,$ and we have that $\mathbb{E}[\log{Z}] \leq 0 \implies -\mathbb{E}[\log{Z}] \geq 0,$ and
 
 $$ \begin{aligned}
-H(x) + H(y) - H(x,y) & \geq 0 \\
-- H(x,y) & \geq -H(x) -H(y) \\
-H(x,y) & \leq H(x) + H(y). \\
+H(X) + H(Y) - H(X,Y) & \geq 0 \\
+- H(X,Y) & \geq -H(X) -H(Y) \\
+H(X,Y) & \leq H(X) + H(Y). \\
 \end{aligned} $$
 
-Now, for the equality part. Suppose $H(x) + H(y) = H(x,y).$ Then, $E[\log{Z}] = 0,$ and recalling that $E[Z] = 1,$ $E[\log{Z}] = \log{E[Z]} = 0.$ In @jensens-inequality, equality holds only if our function is @affine or if $Z$ is constant; since $\log$ is @affine on no interval, $Z$ must be constant, and since $E[Z] = 1,$ $Z = \frac{p(i)p(j)}{p(i,j)} = 1 \implies p(i)p(j) = p(i,j).$ 
+Now, for the equality part. Suppose $H(X) + H(Y) = H(X,Y).$ Then, $\mathbb{E}[\log{Z}] = 0,$ and recalling that $\mathbb{E}[Z] = 1,$ $\mathbb{E}[\log{Z}] = \log{\mathbb{E}[Z]} = 0.$ In @jensens-inequality, equality holds only if our function is @affine or if $Z$ is constant; since $\log$ is @affine on no interval, $Z$ must be constant, and since $\mathbb{E}[Z] = 1,$ $Z = \frac{p(x)p(y)}{p(x,y)} = 1 \implies p(x)p(y) = p(x,y).$ 
 
-Now, suppose $p(i)p(j) = p(i,j).$ Then $Z = 1$ and
+Now, suppose $p(x)p(y) = p(x,y).$ Then $Z = 1$ and
 
-$$ H(x) + H(y) - H(x,y) = - \sum_{i,j} p(i, j) \left ( \log{1}  \right ) = 0, $$
+$$ H(X) + H(Y) - H(X,Y) = - \sum_{x,y} p(x, y) \left ( \log{1}  \right ) = 0, $$
 
-so $H(x) + H(y) = H(x,y).$
+so $H(X) + H(Y) = H(X,Y).$
 
-note that @jensens-inequality gives us equality iff $Z$ is (almost surely) constant. Since $Z = \frac{p(i)p(j)}{p(i,j)},$ it's constant iff $p(i,j) = p(i)p(j).$
+note that @jensens-inequality gives us equality iff $Z$ is (almost surely) constant. Since $Z = \frac{p(x)p(y)}{p(x,y)},$ it's constant iff $p(x,y) = p(x)p(y).$
 
 ::::
 :::
@@ -385,9 +385,9 @@ When we decrease the probability of an @element occurring, its @self-information
 
 
 :::definition "Cross-Entropy"
-Given two discrete probability distributions, $p$ and $q,$ that share a support $X,$ **cross-entropy** measures the average number of bits needed to represent an event drawn from $X$ when the coding scheme is optimized for an estimated distribution $q$ rather than the true distribution $p.$ Its formula is very similar to that of @entropy, except @surprisal is calculated using $q$ while @expectation uses $p$:
+Given two discrete probability distributions, $p$ and $q,$ that share a support $\mathcal{X},$ **cross-entropy** measures the average number of bits needed to represent an event drawn from $\mathcal{X}$ when the coding scheme is optimized for an estimated distribution $q$ rather than the true distribution $p.$ Its formula is very similar to that of @entropy, except @surprisal is calculated using $q$ while @expectation uses $p$:
 
-$$ H(p,q) = - \sum_{x \in X} p(x) \log{q(x)}. $$
+$$ H(p,q) = - \sum_{x \in \mathcal{X}} p(x) \log{q(x)}. $$
 
 We can write it in @expectation form as
 
@@ -396,12 +396,12 @@ $$ H(p,q) = \mathbb{E}_p \left [- \log{q}  \right ], $$
 where $\mathbb{E}_p$ is expectation under $p.$
 :::
 
-Note that when $p = q,$ @cross-entropy equals @entropy.
+Note that when $p = q,$ @cross-entropy equals @entropy. The symbol $H$ is overloaded: $H(p,q)$ with distributions as arguments means @cross-entropy, while $H(X,Y)$ with @random-variables as arguments means joint entropy.
 
 :::definition "KL Divergence" {synonyms: relative-entropy, "Kullback-Leibler divergence"}
-For discrete probability distributions, $p$ and $q,$ that share a support $X,$ the **relative entropy** from $q$ to $p$ is defined to be
+For discrete probability distributions, $p$ and $q,$ that share a support $\mathcal{X},$ the **relative entropy** from $q$ to $p$ is defined to be
 
-$$ D_{KL}(p || q) = \sum_{x \in X} p(x) \log{\frac{p(x)}{q(x)}}, $$
+$$ D_{KL}(p || q) = \sum_{x \in \mathcal{X}} p(x) \log{\frac{p(x)}{q(x)}}, $$
 
 which is just @cross-entropy minus @entropy:
 
@@ -411,7 +411,7 @@ Note that we don't always use the $KL$ subscript where it's obvious from the con
 
 We can also write it as
 
-$$ D(p || q) = \mathbb{E}_p \left [ - \log{q} \right ] - \mathbb{E}_p \left [ - \log{p} \right ]  =  \mathbb{E}_p \left [ \log{\frac{p(x)}{q(x)}}  \right ], $$
+$$ D(p || q) = \mathbb{E}_p \left [ - \log{q} \right ] - \mathbb{E}_p \left [ - \log{p} \right ]  =  \mathbb{E}_p \left [ \log{\frac{p}{q}}  \right ], $$
 
 which makes it clear that it's the expected inefficiency in an encoding optimized for $q$ rather than $p.$
 
@@ -438,7 +438,6 @@ D(r || s) & = \sum_{i,j} r_{ij} \log{\frac{r_{ij}}{s_{ij}}} \\
           & = \sum_{i,j} A_{ij} p_j \log{\frac{A_{ij} p_j}{A_{ij} q_i }} \\
           & = \sum_{i,j} A_{ij} p_j \log{\frac{p_j}{q_i}} \\
           & = \sum_{i,j} A_{ij} p_j \left ( \log{p_j} - \log{q_i} \right ) \\
-          & = \sum_{i,j} A_{ij} p_j \log{p_j} - \sum_{i,j} A_{ij} p_j \log{q_i} \\
           & = \sum_{i,j} A_{ij} p_j \log{p_j} - \sum_{i,j} A_{ij} p_j \log{q_i} \\
 \end{aligned} $$
 
@@ -471,13 +470,13 @@ Averaging (well, replacing each probability with a @convex-combination of all th
 
 
 :::definition "Conditional Entropy"
-Let $X$ and $Y$ be @random-variables, not necessarily @independent. The probability that $Y$ takes the value $y$ when $X$ takes the value $x$ (for any specific $x \in X, y \in Y)$ is called the @conditional-probability $p(y|x)$ and is given by:
+Let $X$ and $Y$ be @random-variables, not necessarily @independent. The probability that $Y$ takes the value $y$ when $X$ takes the value $x$ (for any specific $x \in \mathcal{X}, y \in \mathcal{Y}$) is called the @conditional-probability $p(y|x)$ and is given by:
 
 $$ p(y|x) = \frac{p(x, y)}{p(x)}, \quad p(x) = \sum_{y} p(x,y). $$
 
-(Note that $p(x,y)$ is the @joint-probability of $X = x, Y = y.$
+(Note that $p(x,y)$ is the @joint-probability of $X = x, Y = y.$)
 
-We define the **conditional entropy** of $Y$ $H(Y|X)$ as the average of the entropy of $Y$ for each value $x$ of $X$ weighted according to the probability of getting that particular $x.$ That is,
+We define the **conditional entropy** of $Y$ given $X,$ $H(Y|X),$ as the average of the entropy of $Y$ for each value $x$ of $X$ weighted according to the probability of getting that particular $x.$ That is,
 
 $$ H(Y|X) = -\sum_{x \in \mathcal{X}, y \in \mathcal{Y}} p(x,y) \log{p(y|x)}. $$
 :::
