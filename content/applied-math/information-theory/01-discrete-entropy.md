@@ -30,7 +30,7 @@ This number is equal to the sum of the numbers of sequences ending in $S_1, S_2,
 
 A "well-known result" in finite differences tells us that
 
-$$ \lim_{t \to \infty} N(t) = A W_0^t, $$
+$$ N(t) \sim A W_0^t \quad \text{as } t \to \infty, $$
 
 where $A$ is constant and $W_0$ is the largest real solution of the @characteristic-equation:
 
@@ -79,9 +79,9 @@ With a substitution of $w = 1/W$ we get
 
 $$ w^{2} + w^{4} + w^{5} + w^{7} + w^{8} + w^{10} = 1, $$
 
-and $w_0,$ the largest positive root of this equation, found numerically, is about $1.4529,$ and so
+and $w_0,$ the largest positive root of this equation, found numerically, is about $0.6882,$ and so
 
-$$ C = -\log_{2}{(w_0)} \approx 0.539 \text{ bits per unit of time}. $$
+$$ C = -\log{(w_0)} \approx 0.539 \text{ bits per unit of time}. $$
 
 Note that in this Morse telegraphy system, we have two states that the channel can be in, based on what the previous symbol transmitted was.
 
@@ -205,7 +205,7 @@ Now, by the @triangle-inequality, we have that
 
 $$ \begin{aligned}
 \left | \frac{A(t)}{A(s)} - \frac{\log{t}}{\log{s}} \right | & \leq 2 \epsilon \\
-\left | A(t) - \frac{A(s)}{\log{s}} \log{t} \right | & \leq 2 \epsilon.
+\left | A(t) - \frac{A(s)}{\log{s}} \log{t} \right | & \leq 2 \epsilon A(s).
 \end{aligned}
 $$
 
@@ -374,8 +374,6 @@ $$ H(X) + H(Y) - H(X,Y) = - \sum_{x,y} p(x, y) \left ( \log{1}  \right ) = 0, $$
 
 so $H(X) + H(Y) = H(X,Y).$
 
-note that @jensens-inequality gives us equality iff $Z$ is (almost surely) constant. Since $Z = \frac{p(x)p(y)}{p(x,y)},$ it's constant iff $p(x,y) = p(x)p(y).$
-
 ::::
 :::
 
@@ -420,6 +418,31 @@ which makes it clear that it's the expected inefficiency in an encoding optimize
 @kl-divergence tells us how different an approximating distribution $q$ is from a true probability distribution $p.$ It's not a true distance metric - it's asymmetric, but it does behave like distance in that it gets smaller as $q$ gets more like $p$ and is zero when $q = p.$ It is a sort of directed distance.
 
 Another way to think about it is as a measure of how inefficient a coding scheme optimized for $q$ is when the actual distribution is $p.$ If $q$ says some event is rare, and so we use a longer symbol for it (more bits), but the event actually occurs frequently, we'll waste bits representing the event when we could have used a shorter symbol for it.
+:::
+
+:::theorem "Gibbs' Inequality" {label: gibbs-inequality}
+For discrete probability distributions $p$ and $q$ that share a support $\mathcal{X},$
+
+$$ D(p || q) \geq 0, $$
+
+with equality iff $p = q.$ Equivalently, @cross-entropy is never less than @entropy: $H(p,q) \geq H(p),$ with equality iff $q = p.$
+
+::::proof
+Because @log-is-concave, by @jensens-inequality we have that
+
+$$ \begin{aligned}
+\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] & \leq \log{ \left ( \mathbb{E}_p \left [ \frac{q_i}{p_i} \right ] \right ) }  \\
+                                                     & = \log{ \left ( \sum_i \left [ p_i \frac{q_i}{p_i} \right ] \right ) }  \\
+                                                     & = \log{ \left ( \sum_i q_i \right ) }  \\
+                                                     & = \log{ 1 }  \\
+                                                     & = 0.  \\
+\end{aligned} $$
+
+Then, since $\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] = -D(p || q),$ we have that $D(p ||q ) \geq 0.$
+
+Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p || q) = 0.$ Conversely, suppose $D(p || q) = 0.$ Since $\log$ is strictly @concave, it is not @affine, and @jensens-inequality condition for equality gives us that $\frac{q_i}{p_i} = c.$ Now, $\sum_i q_i = \sum_i c p_i = 1,$ and since $p_i$ is a probability distribution, $c = 1,$ and therefore $p_i = q_i$ and $p = q.$  
+::::
+
 :::
 
 :::theorem "Doubly stochastic maps increase entropy"
