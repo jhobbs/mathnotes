@@ -438,9 +438,9 @@ $$ \begin{aligned}
                                                      & = 0.  \\
 \end{aligned} $$
 
-Then, since $\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] = -D(p || q),$ we have that $D(p ||q ) \geq 0.$
+Then, since $\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] = -D(p || q),$ we have that $D(p || q) \geq 0.$
 
-Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p || q) = 0.$ Conversely, suppose $D(p || q) = 0.$ Since $\log$ is strictly @concave, it is not @affine, and @jensens-inequality condition for equality gives us that $\frac{q_i}{p_i} = c.$ Now, $\sum_i q_i = \sum_i c p_i = 1,$ and since $p_i$ is a probability distribution, $c = 1,$ and therefore $p_i = q_i$ and $p = q.$  
+Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p || q) = 0.$ Conversely, suppose $D(p || q) = 0.$ Since $\log$ is strictly @concave, it is not @affine, and @jensens-inequality condition for equality gives us that $\frac{q_i}{p_i} = c.$ Now, $\sum_i q_i = \sum_i c p_i = 1,$ and since $p$ is a probability distribution, $c = 1,$ and therefore $p_i = q_i$ and $p = q.$  
 ::::
 
 :::
@@ -482,9 +482,29 @@ $$ \begin{aligned}
                                 & = -H(q).
 \end{aligned} $$
 
-So, we end up with $D(r || s) = H(q) - H(p).$ Since $D(r || s) \geq 0,$ we have $H(q) - H(p) \geq 0,$ which implies that $H(q) \geq H(p),$ which is what we wanted to show.
+So, we end up with $D(r || s) = H(q) - H(p).$ Since $D(r || s) \geq 0$ by @gibbs-inequality, we have $H(q) - H(p) \geq 0,$ which implies that $H(q) \geq H(p),$ which is what we wanted to show.
 
-Now, the equivalence case. If $q$ is just a rearrangement of $p,$ then obviously it has the same entropy as we can just re-index to recover $p.$ Now assume $H(p) = H(q).$ Then, $H(q) - H(p) = 0 \implies D(r || s) = 0 \implies r = s \implies A_{ij} p_j = A_{ij} q_i \implies p_j = q_i,$ so $q$ is a rearrangement of $p.$
+Now, the equivalence case. If $q$ is just a rearrangement of $p,$ then obviously it has the same entropy as we can just re-index to recover $p.$ Now assume $H(p) = H(q).$ Then, $H(q) - H(p) = 0 \implies D(r || s) = 0 \implies r = s \implies A_{ij} p_j = A_{ij} q_i \implies p_j = q_i,$ for $A_{ij} >0.$ Now, for each value $c \in p,$ let
+
+$$ J_c = {j : p_j = c}, \quad I_c = {i : q_i = c}, $$
+
+that is $J_c$ is the set of indices of $p$ where $p_j = c,$ and similarly with $I_c$ and $q.$ Now, consider row $i \in I_c.$ for any $A_{ij} > 0,$ we have $p_j = q_i,$ so $j \in J_c,$ so $J_c$ has an entry for each $I_c,$ i.e. the columns $j \in J_c$ have the entire mass of row $i.$ Similarly, for column $j \in J_c,$ for nonzero $A_ij,$ $q_i = p_j = c,$ so $i \in I_c,$ and the rows $I_c$ contain all of column $j$'s mass. Taking $\vec{1}s$ as the @indicator-vector of a set $S,$ we have that
+
+$$ A \vec{1}_{J_c} = \vec{1}_{I_c}, $$
+
+that is, for any row $i$ in $I_c,$ $\sum_{j \in j_C} A_{ij} = 1,$ i.e. we get a sum of $1$ with just the rows in $I_c,$ which is not necessarily all the rows. Now we count the mass:
+
+$$ \begin{aligned}
+|I_c| & = \vec{1}^\top \vec{1}_{I_c}  \qquad \text{count entries via dot product} \\
+      & = \vec{1}^\top (A \vec{1}_{J_c}) \qquad \text {identity from above} \\
+      & = (\vec{1}^\top A) \vec{1}_{J_c} \qquad \text{associativity}  \\
+      & = \vec{1}^\top \vec{1}_{J_c} \qquad \text{column-stochasticity}  \\
+      & = |J_c| \qquad \text{count entries via dot product}.
+\end{aligned} $$
+
+Therefore, $|I_c| = |J_c|$ for all $c,$ so each $c$ appears equally often in $p$ and in $q,$ and $q$ is therefore a rearrangement of $p.$
+
+
 ::::
 ::::intuition
 Averaging (well, replacing each probability with a @convex-combination of all the probabilities in a way that retains their summing to 1) the probabilities in $p$ can only bring them closer to each other (if it doesn't just rearrange them), which increases entropy.
