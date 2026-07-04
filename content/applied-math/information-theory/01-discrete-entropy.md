@@ -150,7 +150,7 @@ An alternative, equivalent definition is that **entropy** is the @expected-value
 
 $$ H(X) = \mathbb{E}\left[I(X) \right ] =  \mathbb{E} \left [ -\log p(X) \right ]. $$
 
-The unit for entropy is information per symbol.
+The unit for entropy is bits per symbol.
 :::
 
 :::definition "Commensurable" {synonyms: "commeasurable"}
@@ -288,7 +288,7 @@ When a @random-variable is uniformly distributed over an alphabet of $n$ @elemen
 :::theorem
 $H = 0$ iff all the $p_i$ but one are zero, this one having the value of one.
 ::::proof
-Suppose $H(p_1, \dots, p_n) = 0.$ Then, $0 = - \sum_{i=1}^n p_i \log{p_i}.$ Note that because $0 \leq p_i \leq 1,$ we have $\log{p_i} \leq 0,$ and $-p_i \log{p_i} \geq 0.$  Assume for contradiction that more than one $p_i$ is non-zero. Then, because $\sum p_i = 1,$ each non-zero $p_i$ is in $(0, 1)$ and therefore its $- p_i \log{p_i} > 0,$ and the sum of these terms is therefore non-zero, a contradiction. Now, since all probabilities are required to sum to 1, it can't be the case that all probabilities are zero, which means that exactly one probability must be non-zero and that probability must be $1.$
+Suppose $H(p_1, \dots, p_n) = 0.$ Then, $0 = - \sum_{i=1}^n p_i \log{p_i}.$ Note that because $0 \leq p_i \leq 1,$ we have $\log{p_i} \leq 0,$ and $-p_i \log{p_i} \geq 0$ (with the convention $0 \log 0 = 0,$ since $\lim_{p \to 0^+} p \log p = 0$).  Assume for contradiction that more than one $p_i$ is non-zero. Then, because $\sum p_i = 1,$ each non-zero $p_i$ is in $(0, 1)$ and therefore its $- p_i \log{p_i} > 0,$ and the sum of these terms is therefore non-zero, a contradiction. Now, since all probabilities are required to sum to 1, it can't be the case that all probabilities are zero, which means that exactly one probability must be non-zero and that probability must be $1.$
 ::::
 :::
 
@@ -484,15 +484,15 @@ $$ \begin{aligned}
 
 So, we end up with $D(r || s) = H(q) - H(p).$ Since $D(r || s) \geq 0$ by @gibbs-inequality, we have $H(q) - H(p) \geq 0,$ which implies that $H(q) \geq H(p),$ which is what we wanted to show.
 
-Now, the equivalence case. If $q$ is just a rearrangement of $p,$ then obviously it has the same entropy as we can just re-index to recover $p.$ Now assume $H(p) = H(q).$ Then, $H(q) - H(p) = 0 \implies D(r || s) = 0 \implies r = s \implies A_{ij} p_j = A_{ij} q_i \implies p_j = q_i,$ for $A_{ij} >0.$ Now, for each value $c \in p,$ let
+Now, the equivalence case. If $q$ is just a rearrangement of $p,$ then obviously it has the same entropy as we can just re-index to recover $p.$ Now assume $H(p) = H(q).$ Then, $H(q) - H(p) = 0 \implies D(r || s) = 0 \implies r = s \implies A_{ij} p_j = A_{ij} q_i \implies p_j = q_i$ whenever $A_{ij} > 0.$ Now, for each value $c$ appearing in $p$ or $q,$ let
 
-$$ J_c = {j : p_j = c}, \quad I_c = {i : q_i = c}, $$
+$$ J_c = \{j : p_j = c\}, \quad I_c = \{i : q_i = c\}, $$
 
-that is $J_c$ is the set of indices of $p$ where $p_j = c,$ and similarly with $I_c$ and $q.$ Now, consider row $i \in I_c.$ for any $A_{ij} > 0,$ we have $p_j = q_i,$ so $j \in J_c,$ so $J_c$ has an entry for each $I_c,$ i.e. the columns $j \in J_c$ have the entire mass of row $i.$ Similarly, for column $j \in J_c,$ for nonzero $A_ij,$ $q_i = p_j = c,$ so $i \in I_c,$ and the rows $I_c$ contain all of column $j$'s mass. Taking $\vec{1}s$ as the @indicator-vector of a set $S,$ we have that
+that is $J_c$ is the set of indices of $p$ where $p_j = c,$ and similarly with $I_c$ and $q.$ Now, consider row $i \in I_c.$ For any $A_{ij} > 0,$ we have $p_j = q_i,$ so $j \in J_c,$ i.e. every nonzero entry of row $i$ lies in a column of $J_c,$ so the columns $j \in J_c$ have the entire mass of row $i.$ Similarly, for column $j \in J_c,$ for nonzero $A_{ij},$ $q_i = p_j = c,$ so $i \in I_c,$ and the rows $I_c$ contain all of column $j$'s mass. Taking $\vec{1}_S$ as the @indicator-vector of a set $S,$ we have that
 
 $$ A \vec{1}_{J_c} = \vec{1}_{I_c}, $$
 
-that is, for any row $i$ in $I_c,$ $\sum_{j \in j_C} A_{ij} = 1,$ i.e. we get a sum of $1$ with just the rows in $I_c,$ which is not necessarily all the rows. Now we count the mass:
+that is, rows in $I_c$ sum to $1$ over the columns $J_c,$ while rows outside $I_c$ have no mass in the columns $J_c$ at all. Now we count the mass:
 
 $$ \begin{aligned}
 |I_c| & = \vec{1}^\top \vec{1}_{I_c}  \qquad \text{count entries via dot product} \\
