@@ -89,6 +89,20 @@ class MathBlock:
         # Keep inline math ($...$) as-is for rendering
         # No need to replace - let MathJax handle it
 
+        # Flatten cross-references to plain text: the snippet is used as link
+        # text, so nested references can never render as links themselves
+        text = re.sub(r"@embed\{[^}]+\}", "", text)
+        text = re.sub(r"@\{([^|]+)\|[^}]+\}", r"\1", text)
+
+        def flatten_reference(match):
+            ref = match.group(1)
+            label = ref.split(":", 1)[1] if ":" in ref else ref
+            return label.replace("-", " ")
+
+        text = re.sub(
+            r"(?<![a-zA-Z0-9])@([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)", flatten_reference, text
+        )
+
         # Remove markdown emphasis markers
         text = re.sub(r"\*\*([^*]+)\*\*", r"\1", text)  # Bold
         text = re.sub(r"\*([^*]+)\*", r"\1", text)  # Italic
