@@ -1,0 +1,35 @@
+/* Bibliography page - site-wide source list (reuses source-item classes from components/sources.css) */
+
+.bibliography-container .bibliography-description {
+  color: var(--color-text-secondary);
+}
+
+.bibliography-count {
+  margin-bottom: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.bibliography-list .source-item {
+  padding: var(--space-md) 0;
+}
+
+.cited-by {
+  margin-top: var(--space-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.cited-by-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-xs) 0 0 var(--space-md);
+}
+
+.cited-by-list li {
+  margin-bottom: var(--space-xs);
+}
+
+.cited-by-section {
+  color: var(--color-text-muted);
+}

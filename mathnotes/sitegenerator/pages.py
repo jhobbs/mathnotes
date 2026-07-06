@@ -324,6 +324,29 @@ class TheoremIndexPage(BlockIndexPage):
         return context
 
 
+class BibliographyPage(Page):
+    """Site-wide bibliography listing all sources and the pages that cite them."""
+
+    endpoint_name = "bibliography"
+
+    def _compute_specs(self) -> List[PageSpec]:
+        from mathnotes.sources import build_bibliography
+
+        entries = build_bibliography(self.url_mapper)
+        logger.info(f"Generated bibliography with {len(entries)} sources")
+
+        return [
+            PageSpec(
+                output_path="mathnotes/bibliography/index.html",
+                template="bibliography.html",
+                title="Bibliography - Mathnotes",
+                description="All books and sources referenced across the site",
+                priority=0.6,
+                context={"entries": entries},
+            )
+        ]
+
+
 class ErrorPage(Page):
     """404 error page."""
 
@@ -401,6 +424,7 @@ class PageRegistry:
         self.register(DemoViewerPage)
         self.register(DefinitionIndexPage)
         self.register(TheoremIndexPage)
+        self.register(BibliographyPage)
         self.register(ErrorPage)
 
         # Sitemap needs special handling as it needs all other pages

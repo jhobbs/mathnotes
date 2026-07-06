@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Bibliography - Mathnotes{% endblock %}
+
+{% block header_title %}lacunary - Bibliography{% endblock %}
+{% block header_link %}{{ url_for('mathnotes_index') }}{% endblock %}
+
+{% block body_class %}bibliography-page{% endblock %}
+
+{% block description %}All books and sources referenced across the site{% endblock %}
+
+{% block content %}
+<div class="bibliography-container">
+    <h2>Bibliography</h2>
+    <p class="bibliography-description">
+        Sources referenced across the site, with the pages that cite them.
+    </p>
+
+    {% if entries %}
+        <div class="bibliography-count">
+            {{ entries|length }} source{{ 's' if entries|length != 1 else '' }}
+        </div>
+
+        <ul class="sources-list bibliography-list">
+            {% for entry in entries %}
+            <li class="source-item">
+                <div class="source-main">
+                    {% if entry.url %}
+                    <a href="{{ entry.url }}" class="source-title" target="_blank" rel="noopener">{{ entry.title }}</a>
+                    {% else %}
+                    <span class="source-title">{{ entry.title }}</span>
+                    {% endif %}
+                    {% if entry.author %}
+                    <span class="source-author">{{ entry.author }}</span>
+                    {% endif %}
+                    {% if entry.type %}
+                    <span class="source-type">{{ entry.type }}</span>
+                    {% endif %}
+                </div>
+                {% if entry.section or entry.published or entry.isbn or entry.notes %}
+                <div class="source-meta">
+                    {% if entry.section %}<span class="source-section">{{ entry.section }}</span>{% endif %}
+                    {% if entry.published %}<span class="source-published">{{ entry.published }}</span>{% endif %}
+                    {% if entry.isbn %}<span class="source-isbn">ISBN: {{ entry.isbn }}</span>{% endif %}
+                    {% if entry.notes %}<span class="source-notes">{{ entry.notes }}</span>{% endif %}
+                </div>
+                {% endif %}
+                <div class="cited-by">
+                    <span class="cited-by-label">Cited by:</span>
+                    <ul class="cited-by-list">
+                        {% for page in entry.cited_by %}
+                        <li><a href="{{ page.url }}">{{ page.title }}</a>{% if page.section %} <span class="cited-by-section">({{ page.section }})</span>{% endif %}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-items">No sources found.</p>
+    {% endif %}
+</div>
+{% endblock %}

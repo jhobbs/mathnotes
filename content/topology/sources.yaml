@@ -1,0 +1,13 @@
+sources:
+  - title: "Principles of Mathematical Analysis"
+    author: "Walter Rudin"
+    type: book
+    isbn: "978-0-07-054235-8"
+    section: "Chapter 2, 3rd Edition"
+    published: "1976"
+  - title: "Real Mathematical Analysis"
+    author: "Charles C. Pugh"
+    type: book
+    isbn: "978-3-319-17770-0"
+    section: "2nd Edition, hardcover"
+    published: "2015"

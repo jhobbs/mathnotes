@@ -4,6 +4,12 @@ description: Comprehensive collection of integration techniques including trigon
   detailed examples and applications.
 layout: page
 title: Integration Strategies
+sources:
+  - title: "Ordinary Differential Equations"
+    author: "Morris Tenenbaum and Harry Pollard"
+    type: book
+    isbn: "978-0-486-64940-5"
+    published: "1985"
 ---
 
 # Integration Strategies

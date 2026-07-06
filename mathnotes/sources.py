@@ -83,3 +83,57 @@ def get_sources_for_page(
     """
     directory_sources = collect_directory_sources(content_path)
     return merge_sources(directory_sources, frontmatter_sources)
+
+
+def build_bibliography(url_mapper) -> list[dict[str, Any]]:
+    """Aggregate sources from every content page into a site-wide bibliography.
+
+    Sources are deduplicated by (title, author). Each entry is the source dict
+    plus a ``cited_by`` list of ``{title, url, section?}`` for every page the
+    source applies to; ``section`` is included only when a citation's section
+    differs from the entry's own.
+
+    Args:
+        url_mapper: URLMapper with url_mappings and get_file_path()
+
+    Returns:
+        Bibliography entries sorted by title.
+    """
+    import frontmatter
+
+    entries: dict[tuple[str, str], dict[str, Any]] = {}
+
+    for canonical_url in url_mapper.url_mappings.keys():
+        md_path = url_mapper.get_file_path(canonical_url)
+        try:
+            post = frontmatter.load(md_path)
+        except (OSError, yaml.YAMLError) as e:
+            logger.warning(f"Could not read frontmatter from {md_path}: {e}")
+            continue
+
+        page_title = post.get("title") or canonical_url
+        page_url = f"/mathnotes/{canonical_url}/"
+        sources = get_sources_for_page(md_path, post.get("sources"))
+
+        seen_keys = set()
+        for source in sources:
+            key = (
+                str(source.get("title", "")).strip().lower(),
+                str(source.get("author", "")).strip().lower(),
+            )
+            if key in seen_keys:
+                continue
+            seen_keys.add(key)
+
+            entry = entries.setdefault(key, {**source, "cited_by": []})
+            # Fill in fields a sparser citation of the same source omitted
+            for field_name, value in source.items():
+                entry.setdefault(field_name, value)
+
+            citation = {"title": page_title, "url": page_url}
+            section = source.get("section")
+            if section and section != entry.get("section"):
+                citation["section"] = section
+            entry["cited_by"].append(citation)
+
+    return sorted(entries.values(), key=lambda e: str(e.get("title", "")).lower())

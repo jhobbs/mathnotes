@@ -2,6 +2,13 @@
 layout: page
 title: Partial Fraction Decomposition
 description: Complete guide to decomposing rational expressions into simpler fractions, covering linear and quadratic factors, Heaviside cover-up method, and differentiation techniques with worked examples.
+sources:
+  - title: "Ordinary Differential Equations"
+    author: "Morris Tenenbaum and Harry Pollard"
+    type: book
+    isbn: "978-0-486-64940-5"
+    section: "Lesson 26A"
+    published: "1985"
 ---
 # Partial Fraction Decomposition
 The goal of partial fraction composition is to be able to rewrite a rational expression as a sum of simpler fractions.
