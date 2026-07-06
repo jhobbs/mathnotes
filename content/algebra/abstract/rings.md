@@ -14,12 +14,14 @@ A **ring** is a set together with two binary operations $+$ and $\cdot$, which w
 
 2. Multiplication is associative.
 
-3. For all $a,b,c \in R$, the left distributive law and the right distribute law hold, i.e.
+3. For all $a,b,c \in R$, the left distributive law and the right distributive law hold, i.e.
 
 $$ a \cdot (b + c) = (a \cdot b) + (a \cdot c), \quad (a + b) \cdot c = (a \cdot c) + (b \cdot c). $$
 :::
 
-For example, the integers, rationals, reals and complex numbers are all rings with the usual addition and multiplication.
+:::example "Examples of Rings"
+The integers, rationals, reals and complex numbers are all @rings with the usual addition and multiplication.
+:::
 
 :::definition "Ring Homomorphism"
 A **ring homomorphism** $\phi : R \to R'$ must satisfy the following two properties:
@@ -29,7 +31,9 @@ A **ring homomorphism** $\phi : R \to R'$ must satisfy the following two propert
 2. $\phi{(ab)} = \phi{(a)}\phi{(b)}.$
 :::
 
-A ring doesn't have to have a multiplicative identity element, but it can. If it has one, it's denoted $1$ and for all $a$ in $R$ satisfies $a1 = 1a = a$.
+:::remark {label: ring-multiplicative-identity}
+A ring doesn't have to have a @{multiplicative identity element|unity}, but it can. If it has one, it's denoted $1$ and for all $a$ in $R$ satisfies $a1 = 1a = a$.
+:::
 
 :::definition "unity"
 The element $1$ is also called **unity**.
@@ -61,4 +65,6 @@ Let $R$ be a ring with unity. If every nonzero element of $R$ is a unit (has a m
 A commutative division ring is called a **field**.
 :::
 
-For example, the integers are not a field, but the rationals, the reals, and the complex numbers are all fields.
+:::example "Examples of Fields"
+The integers are not a @field, but the rationals, the reals, and the complex numbers are all fields.
+:::

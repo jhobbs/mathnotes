@@ -22,13 +22,13 @@
 - [x] line 306: **theorem** `{label: homomorphism-injective-iff-trivial-kernel}` — excerpt: "One useful fact you may recall from linear algebra... $\phi$ is injective iff..." (refs: @kernel)
 
 ### content/algebra/abstract/rings.md
-- [ ] line 22: **example** `{label: examples-of-rings}` — excerpt: "For example, the integers, rationals, reals and complex numbers are all rings..." (refs: @Ring)
-- [ ] line 32: **remark** `{label: ring-multiplicative-identity}` — excerpt: "A ring doesn't have to have a multiplicative identity element, but it can..." (refs: @unity)
-- [ ] line 64: **example** `{label: examples-of-fields}` — excerpt: "For example, the integers are not a field, but the rationals..." (refs: @Field)
+- [x] line 22: **example** `{label: examples-of-rings}` — excerpt: "For example, the integers, rationals, reals and complex numbers are all rings..." (refs: @Ring; label autogen from title, @rings plural ref)
+- [x] line 32: **remark** `{label: ring-multiplicative-identity}` — excerpt: "A ring doesn't have to have a multiplicative identity element, but it can..." (refs: @unity)
+- [x] line 64: **example** `{label: examples-of-fields}` — excerpt: "For example, the integers are not a field, but the rationals..." (refs: @Field)
 
 ### content/algebra/factoring.md
-- [ ] lines 13–19: **theorem** `{label: sum-and-difference-of-cubes}` "Sum and Difference of Cubes" — excerpt: "Sum of cubes: $a^3 + b^3 = (a+b)(a^2 - ab + b^2)$..."
-- [ ] lines 21–24: **note** `{label: cubes-factoring-mnemonic}` — excerpt: "Note that in both cases the first operation on the right side..."
+- [x] lines 13–19: **theorem** `{label: sum-and-difference-of-cubes}` "Sum and Difference of Cubes" — excerpt: "Sum of cubes: $a^3 + b^3 = (a+b)(a^2 - ab + b^2)$..." (label autogen from title; also tidied "$a^2 +ab$" spacing)
+- [x] lines 21–24: **note** `{label: cubes-factoring-mnemonic}` — excerpt: "Note that in both cases the first operation on the right side..."
 
 ### content/algebra/linear/determinants.md
 - [ ] line 10: **theorem/proposition** `{label: determinant-of-triangular-matrix}` — excerpt: "The determinant of an upper triangular matrix is the product of its diagonal..."
@@ -88,11 +88,11 @@ content/algebra/binomial.md, content/algebra/linear/properties_of_vectors.md, co
 - [x] content/algebra/abstract/groups.md:159 — "$a \~ b$" → "$a \sim b$" (`\~` is not valid; should be `\sim`)
 - [x] content/algebra/abstract/groups.md:161 — "is an equivalent relation" → "is an equivalence relation"
 - [x] content/algebra/abstract/groups.md:185 — "containing more than one elements" → "containing more than one element"
-- [ ] content/algebra/abstract/groups.md:191 — "Two or more than two cycles are **disjoint**" → "Two or more cycles are **disjoint**"
+- [x] content/algebra/abstract/groups.md:191 — "Two or more than two cycles are **disjoint**" → "Two or more cycles are **disjoint**"
 - [x] content/algebra/abstract/groups.md:265 — "a disjoint coset of of $H$" → "a disjoint coset of $H$" (duplicate "of")
 - [x] content/algebra/abstract/groups.md:269 — "$H = \bigcup_{q \in Q} q$" uses $Q$ but the set is named $\mathcal{Q}$ (inconsistent symbol)
 - [x] content/algebra/abstract/groups.md:271–275 — in matrix $\mathcal{R}$ the row order is $a_1, a_2, \cdots, a_3, a_n$; the $a_3$ row is placed after the "\cdots" row (should be $a_1, a_2, a_3, \cdots, a_n$)
-- [ ] content/algebra/abstract/rings.md:17 — "the right distribute law" → "the right distributive law"
+- [x] content/algebra/abstract/rings.md:17 — "the right distribute law" → "the right distributive law"
 - [ ] content/algebra/binomial.md:8 — "$n, k \in mathbb{N}$" → "$n, k \in \mathbb{N}$" (missing backslash on `\mathbb`)
 - [ ] content/algebra/linear/dotproduct.md:18 — "$(x_1, x_2, \cdots, x_n) \cdots (y_1, \dots)$" → the middle operator should be `\cdot` (dot product), not `\cdots`
 - [ ] content/algebra/linear/dotproduct.md:20 — "Thus, one $\vec{u}$ and $\vec{v}$ are pointing" → "Thus, when $\vec{u}$ and $\vec{v}$ are pointing"

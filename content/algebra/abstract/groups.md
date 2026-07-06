@@ -209,7 +209,7 @@ A @cycle in $S_n$ may be written as $(a_1, a_2, \cdots, a_k)$ - this is called *
 :::
 
 :::definition "disjoint (cycle)"
-Two or more than two cycles are **disjoint** if no element appears in more than one cycle.
+Two or more cycles are **disjoint** if no element appears in more than one cycle.
 :::
 
 :::theorem {label: permutation-as-product-of-disjoint-cycles}
