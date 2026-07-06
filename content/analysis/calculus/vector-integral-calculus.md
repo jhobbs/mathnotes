@@ -2,6 +2,13 @@
 description: The integration side of vector calculus.
 layout: page
 title: Vector Integral Calculus
+sources:
+  - title: "Advanced Engineering Mathematics"
+    author: "Erwin Kreyszig"
+    type: book
+    isbn: "978-0-470-45836-5"
+    section: "10th Edition"
+    published: "2011"
 ---
 
 # Vector Integral Calculus

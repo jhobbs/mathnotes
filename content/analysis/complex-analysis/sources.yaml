@@ -1,0 +1,13 @@
+sources:
+  - title: "Introduction to Complex Analysis and Its Applications"
+    author: "Donald W. Trim"
+    type: book
+    isbn: "978-0-9969962-8-0"
+    section: "2nd Edition"
+    published: "2017"
+  - title: "Advanced Engineering Mathematics"
+    author: "Erwin Kreyszig"
+    type: book
+    isbn: "978-0-470-45836-5"
+    section: "10th Edition"
+    published: "2011"

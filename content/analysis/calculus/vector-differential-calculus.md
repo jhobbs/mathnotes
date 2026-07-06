@@ -4,6 +4,13 @@ description: Vector calculus operators including gradient, curl, divergence, and
   and engineering.
 layout: page
 title: Vector Differential Calculus
+sources:
+  - title: "Advanced Engineering Mathematics"
+    author: "Erwin Kreyszig"
+    type: book
+    isbn: "978-0-470-45836-5"
+    section: "10th Edition"
+    published: "2011"
 ---
 
 # Multivariable Differential Operators
