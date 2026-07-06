@@ -44,15 +44,44 @@ H & \approx \frac{\log{1/p}}{N}.
 so @entropy is approximately the log of the reciprocal probability of a long sequence divided by the number of symbols in the sequence. The theorem below states this more formally.
 
 :::theorem
-Let $\epsilon, \delta > 0.$ Then, we can find an $N_0$ such that the sequences of any length $N \geq N_0$ fall into two classes:
+Start with a source alphabet with $n$ symbols $a_1, \dots, a_n,$ emitted @i.i.d with probabilities $p_1, \dots, p_n$ (so $p_i = \Pr(a_i)).$ Its @entropy is, by definition,
 
-1. A set whose total probability is less than $\epsilon.$
+$$ H = - \sum_{i=1}^{n} p_i \log{p_i}. $$
 
-2. The remainder, all of whose members have probabilities satisfying the inequality
+A message is a sequence $S = (x_1, \dots, x_N)$ of length $N,$ each $x_j \in \{a_1, \dots, a_n\}.$ By independence,
 
-$$ \left | \frac{\log{p^{-1}}}{N} - H \right | \leq \delta. $$
+$$ p_S = \prod_{j=1}^N \Pr(x_j) $$
 
-In other words, we are almost certain to have $\frac{\log{p^{-1}}}{N} very close to $H$ when $N$ is large.
+is the probability of the sequence $S$ being emitted.
+
+::::note
+We have two indices to keep straight here:
+
+* $n$ - our alphabet size; we use $i \in \{1, \dots, n\}$ to index distinct symbols $a_i,$ each with its own probability $p_i.$
+
+* $N$ - sequence length; we use $j \in \{1, \dots, N\}$ to index positions in a sequence, each holding some symbol $x_j.$
+::::
+
+If we let $c_i = \#\{j : x_j = a_i\}$ be the count of symbol $a_i$ in $S,$ so $\sum_{i=1}^n c_i = N,$ then we can restate $p_S$ as
+
+$$ p_S = \prod_{i = 1}^n p_i^{c_i}. $$
+
+::::note
+$c_i$ is the only random thing in $p_S$ - it doesn't consider position of symbols, just the total count of each symbol (random) and the probability of that symbol being emitted on any given turn (fixed).
+::::
+
+Let $\epsilon, \delta > 0.$ Then, there exists $N_0$ such that for all $N \geq N_0,$ the length-$N$ sequences split into two classes:
+
+1. The typical set, $A_\delta^{(N)} = \left \{ S : \left | \frac{1}{N} \log{\frac{1}{p_S}} - H \right | \leq \delta \right \}.$
+
+2. The atypical set, $\overline{A_\delta^{(N)}},$ with total probability $\Pr \left (\overline{A_\delta^{(N)}} \right ) < \epsilon.$
+
+Equivalently, $\Pr \left ( A_\delta^{(N)} \right ) \to 1$ as $N \to \infty,$ i.e. $\frac{1}{N} \log{\frac{1}{p_S}} \to H$ in probability. 
+
+::::proof
+TODO
+::::
+
 :::
 
 
