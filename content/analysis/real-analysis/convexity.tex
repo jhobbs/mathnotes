@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage{mathnotes}
+
+\title{Convexity}
+
+\begin{document}
+
+\section{Convexity}
+\begin{definition}[Convex Function]
+Let $E \subseteq \mathbb{R}^k$ be a \dref{convex-set}. A function $\varphi : E \to \mathbb{R}$ is \textbf{convex} if
+
+\[ \varphi\big(\lambda \vec{x} + (1 - \lambda) \vec{y}\big) \leq \lambda \varphi(\vec{x}) + (1 - \lambda)\varphi(\vec{y}) \]
+
+whenever $\vec{x}, \vec{y} \in E$ and $0 < \lambda < 1.$
+
+In geometric terms, this means a \dref{chord} joining any two points on the graph of $\varphi$ lies on or above the graph between them.
+\end{definition}
+
+\begin{definition}[Strictly Convex Function]
+Starting with \dref{convex-function}, $\varphi$ is \textbf{strictly convex} if the inequality is strict whenever $\vec{x} \neq \vec{y}.$
+\end{definition}
+
+\begin{definition}[Concave Function]
+A function $\varphi$ is said to be \textbf{concave} if $-\varphi$ is a \dref{convex-function}.
+\end{definition}
+
+\begin{theorem}[Second Derivative Test for Convexity]
+Let $\varphi$ be twice \dref{differentiable} on an \dref{open} \dref{interval} $(a,b).$ Then
+$\varphi$ is \dref{convex} on $(a,b)$ if and only if $\varphi''(x) \geq 0$ for all
+$x \in (a,b),$ and \dref{concave} if and only if $\varphi''(x) \leq 0$ for all
+$x \in (a,b).$
+\end{theorem}
+
+\begin{definition}[Convex Combination]
+A \textbf{convex combination} is a \dref{linear-combination} of \dref{points} where all \dref{coefficients} are non-negative and sum to 1.
+\end{definition}
+
+\begin{note}
+Every \dref{convex-combination} of two \dref{points} lies on the \dref{line-segment} between the \dref{points}.
+\end{note}
+
+\begin{theorem}[Log is Concave]\label{log-is-concave}
+The $\log$ \dref{function} is \dref{concave}, i.e. $-\log$ is \dref{convex}.
+\end{theorem}
+
+\begin{proof}
+The second derivative of natural $\log$ is $\frac{-1}{x^2},$ which is always non-positive. By \dref{second-derivative-test-for-convexity}, $\log$ is therefore \dref{concave}.
+\end{proof}
+
+\end{document}

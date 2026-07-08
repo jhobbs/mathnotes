@@ -391,6 +391,44 @@ def test_verbatim_inside_proof():
     assert "```\na & b $ c\n```" in out
 
 
+# --- dialect: href + deep headings ---
+
+def test_href():
+    out = body(r"See \href{https://example.com/a_b}{the docs} here.")
+    assert out.strip() == "See [the docs](https://example.com/a_b) here."
+
+
+def test_href_text_may_contain_math():
+    out = body(r"\href{/mathnotes/foo}{about $x^2$}")
+    assert out.strip() == "[about $x^2$](/mathnotes/foo)"
+
+
+def test_paragraph_headings():
+    out = body("\\paragraph{Deep}\n\\subparagraph{Deeper}")
+    assert "#### Deep" in out and "##### Deeper" in out
+
+
+# --- dialect: images ---
+
+def test_includegraphics():
+    out = body(r"\includegraphics[alt={Octagon Diagonals}]{octagon-diagonals.png}")
+    assert out.strip() == "![Octagon Diagonals](octagon-diagonals.png)"
+
+
+def test_includegraphics_no_alt():
+    assert body(r"\includegraphics{fig.png}").strip() == "![](fig.png)"
+
+
+def test_includegraphics_unknown_option_errors():
+    expect_error(r"\includegraphics[width=5cm]{fig.png}", "alt")
+
+
+def test_emphasis_edge_spaces_move_outside():
+    # markdown-style intra-word emphasis breaks (`*the *n*th*`) round-trip
+    # as edge spaces relocated outside the delimiters — rendering-identical
+    assert body(r"x \emph{the }n\emph{th} y").strip() == "x *the* n*th* y"
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     failures = 0

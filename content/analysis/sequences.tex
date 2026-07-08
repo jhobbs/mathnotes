@@ -1,0 +1,402 @@
+\documentclass{article}
+\usepackage{mathnotes}
+
+\title{Sequences in Euclidean and Metric Spaces}
+\description{Sequences in Euclidean and Metric Spaces}
+
+\begin{document}
+
+\section{Sequences}
+
+Review the definition of a sequence:
+
+\dref{embed}\{sequence\}
+
+\begin{definition}[Converge]
+A sequence $\{p_n\}$ in a \dref{metric-space} $X$ is said to \textbf{converge} if there is a point $p \in X$ with the following property: For every $\epsilon > 0,$ there is an integer $N$ such that $n \geq N$ implies that $d(p_n, p) < \epsilon.$
+\end{definition}
+
+\begin{definition}[Convergent]
+If a \dref{sequence} \dref{converges}, it is said to be a \textbf{convergent} \dref{sequence}.
+\end{definition}
+
+\begin{definition}[Limit (Sequence)]\label{limit-sequence}
+If a \dref{sequence} $\{p_n\}$ converges to $p,$ we say that $p$ is the \textbf{limit} of $\{p_n\},$ denoted as:
+
+\[ \lim_{n \to \infty} p_n = p. \]
+\end{definition}
+
+\begin{definition}[Diverge]
+If a \dref{sequence} $\{p_n\}$ does not \dref{converge}, it is said to \textbf{diverge.}
+\end{definition}
+
+\begin{definition}[Range (sequence)]
+The set of all points $p_n$ of a sequence $\{p_n\} (n = 1, 2, 3, \dots)$ is the \textbf{\dref{range}} of $\{p_n\}.$
+\end{definition}
+
+\begin{note}\label{sequence-range-cardinality}
+The \dref{range-sequence} of a \dref{sequence} may be \dref{finite} or it may be \dref{infinite}.
+\end{note}
+
+\begin{definition}[Bounded (sequence)]
+The \dref{sequence} $\{p_n\}$ is said to be \textbf{bounded} if its \dref{range-sequence} is \dref{bounded}.
+\end{definition}
+
+\begin{note}\label{sequence-theorems-context}
+In the following theorems, let $\{p_n\}$ be a \dref{sequence} in a \dref{metric-space} $X.$
+\end{note}
+
+\begin{theorem}\label{sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}
+$\{p_n\}$ converges to $p \in X$ if and only if every neighborhood of $p$ contains $p_n$ for all but finitely many $n.$
+\end{theorem}
+
+\begin{proof}
+Suppose $\{p_n\}$ \dref{converges} to $p \in X.$ Let $\epsilon > 0.$ For some integer $N,$ $d(p, p_n) < \epsilon$ when $n > N.$ Therefore, $p_n \in B_\epsilon(p)$ for all but the finitely many $p_n$ where $n \leq N.$ 
+
+Conversely, suppose every \dref{neighborhood} of $p$ contains all but finitely many $p_n,$ i.e., for all but $N$ elements of $\{p_n\}.$ Let $\epsilon > 0.$ Then, $p_n \in B_\epsilon(p)$ whenever $n \geq N,$ therefore, $d(p, p_n) < \epsilon.$
+\end{proof}
+
+\begin{theorem}\label{limits-of-sequences-are-unique}
+If $p \in X, p' \in X$ and $\{p_n\}$ converges to $p$ and $p',$ then $p = p'.$
+\end{theorem}
+
+\begin{proof}
+Suppose, for contradiction, that $p \neq p'.$ Then, $\epsilon = d(p, p') > 0.$ Let $\delta = \epsilon/2$ and $B_\delta(p), B_\delta(p')$ be \dref{balls} around $p$ and $p',$ respectively. This means that \dref[only finitely many points from $\{p_n\}$ are not in $B_\delta(p)$]{sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. However, since $B_\delta(p)$ and $B_\delta(p')$ are disjoint by construction, this means only finitely many points of $\{p_n\}$ are in $B_\delta(p'),$ a contradiction. Therefore, our assumption that $p \neq p'$ is incorrect, so $p = p'.$
+\end{proof}
+
+\begin{theorem}\label{convergent-sequences-are-bounded}
+If $\{p_n\}$ \dref{converges}, then $\{p_n\}$ is \dref{bounded-sequence}.
+\end{theorem}
+
+\begin{proof}
+Let $\epsilon > 0.$ \dref[Only finitely many points in $\{p_n\}$ lie outside of $B_\epsilon(p)$]{sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. That is, for some integer $N,$ only the points $p_n$ where $n \leq N$ lie outside of $B_\epsilon(p).$ Let $\delta = \max\{\epsilon, d(p, p_1), d(p, p_2), \dots, d(p, p_n)\}, n = 1, 2, \dots, N.$ Then, $d(p, p_n) < \delta$ for all $n = 1, 2, 3, \dots.$
+\end{proof}
+
+\begin{theorem}\label{limit-point-implies-convergent-sequence}
+If $E \subset X$ and if $p$ is a \dref{limit-point} of $E,$ then there is a \dref{sequence} $\{p_n\}$ in $E$ such that $p = \lim_{n \to \infty} p_n.$
+\end{theorem}
+
+\begin{proof}
+For each $n = 1,2,3 \dots,$ \dref[there is a point $p_n \in E$ such that $d(p, p_n) < 1/n$]{limit-point}. Let $\epsilon > 0,$ and pick $N$ so that $N \epsilon > 1.$ Then, if $n > N,$ $d(p, p_n) < \epsilon,$ so $\lim_{n \to \infty} p_n = p$.
+\end{proof}
+
+\begin{theorem}\label{sums-and-products-of-sequences}
+Suppose $\{s_n\}$ and $\{t_n\}$ are complex \dref{sequences}, and $\lim_{n \to \infty} s_n = s, \lim_{n \to \infty} t_n = t.$ Then
+
+(a) $\lim_{n \to \infty} (s_n + t_n) = s + t;$
+
+(b) $\lim_{n \to \infty} c s_n = cs,$ for any number $c;$
+
+(c) $\lim_{n \to \infty} (c + s_n) = c + s,$ for any number $c;$
+
+(d) $\lim_{n \to \infty} s_n t_n = st;$
+
+(e) $\lim_{n \to \infty} \frac{1}{s_n} = \frac{1}{s}, s_n \neq 0, s \neq 0.$
+\end{theorem}
+
+\begin{proof}
+For (a), let $\epsilon > 0,$ pick $N_s$ such that $|s_n - s| < \epsilon/2$ when $n \geq N_s,$ and pick $N_t$ such that $|t_n - s| < \epsilon/2$ when $n \geq N_t.$ Then, let $N = \max\{N_s, N_t\}.$ Then, when $n \geq N,$
+
+\[ \begin{aligned}
+
+ |(s_n + t_n) - (s + t) | & = | (s_n - s) + (t_n - t)| \\
+                          & \leq |s_n - s| + |t_n - t| \\
+                          & < \epsilon.
+\end{aligned} \]
+
+For (b), If $c = 0,$ let $\epsilon > 0,$ and then $|c s_n - c s| = 0 < \epsilon.$ Otherwise,
+
+Let $\epsilon / |c| > 0.$ For some $N,$ when $n \geq N,$ we have
+
+\[ \begin{aligned}
+
+|s_n - s| < \epsilon / |c| & \iff |c| |s_n - s| < \epsilon  \\
+                     & \iff |cs_n - cs | < \epsilon.
+\end{aligned} \]
+
+For (c), let $\epsilon > 0.$ For some $N,$ when $n \geq N,$ we have
+
+\[ |(s_n + c) - (s + c)| = |s_n - s| < \epsilon. \]
+
+For (d), first note the identity
+
+\[ s_n t_n - st = (s_n - s)(t_n - t) + s(t_n - t) + t(s_n - s). \tag{1} \]
+
+Now, let $\epsilon > 0.$ Pick $N_s$ such that $|s_n - s| < \sqrt{\epsilon}$ when $n \geq N_s,$ and pick $N_t$ such that $|t_n - s| < \sqrt{\epsilon}$ when $n \geq N_t.$ Then, let $N = \max\{N_s, N_t\}.$ Then, when $n \geq N,$
+
+\[ |(s_n - s)(t_n - t)| < \epsilon, \]
+
+which means
+
+\[ \lim_{n \to \infty}(s_n - s)(t_n - t) = 0. \]
+
+Applying this, along with the results of (a) and (b) to (1) gives:
+
+\[ \begin{aligned}
+
+\lim_{n \to \infty} (s_n t_n - st) & = \lim_{n \to \infty} ((s_n - s)(t_n - t) + s(t_n - t) + t(s_n - s)) \\
+                                   & = \lim_{n \to \infty} (s(t_n - t) + t(s_n - s)) \\
+                                   & = \lim_{n \to \infty} (s(t_n - t)) + \lim_{n \to \infty} (t(s_n - s)) \\
+                                   & = s * 0 + t * 0 \\
+                                   & = 0.
+        
+
+\end{aligned} \]
+
+For (e), pick $m$ such that when $n \geq m, |s_n - s| < \frac{1}{2}|s|,$ so we have that
+
+\[ \begin{aligned}
+
+|s_n - s| < \frac{1}{2}|s| & \iff |s_n| + |s| < \frac{1}{2}|s| \\
+                           & \iff |s_n| < -\frac{1}{2}|s| \\
+                           & \iff |s_n| > \frac{1}{2}|s| \\
+                           & \iff \frac{1}{2 |s_n|}|s| < 1.
+
+\end{aligned} \]
+
+Now, let $\epsilon > 0.$ For some integer $N > m,$ when $n \geq M,$ we have that
+
+\[ |s_n - s | < \frac{1}{2}|s|^2 \epsilon. \]
+
+Thus, when $n \geq N,$
+
+\[ \begin{aligned}
+
+\left | \frac{1}{s_n} - \frac{1}{s} \right | & = \left | \frac{s_n - s}{s_n s} \right | \\
+                                             & = \frac{|s_n - s|}{|s_n s|} \\
+                                             & < \frac{1}{2 |s_n||s|}|s|^2 \epsilon \\
+                                             & = \frac{1}{2 |s_n|}|s| \epsilon \\
+                                             & < \epsilon.
+\end{aligned} \]
+\end{proof}
+
+\begin{theorem}[A sequence in $R^k$ converges iff its components converge]\label{sequence-in-rk-converges-iff-its-components-converge}
+(a) Suppose $\vec{x}_n \in R^k, (n = 1, 2, 3, \dots)$ and $\vec{x}_n = (\alpha_{1,n}, \dots, \alpha_{k,n}).$
+
+Then, $\{\vec{x}_n\}$ \dref{converges} to $\vec{x} = (\alpha_1, \dots, \alpha_k)$ if and only if
+
+\[ \lim_{n \to \infty} \alpha_{j,n} = \alpha_j, \quad (1 \leq j \leq k). \]
+
+(b) Suppose $\{\vec{x}_n\}, \{\vec{y}_n\}$ are \dref{sequences} in $R^k,$ $\{\beta_n\}$ is a sequence of real numbers, and $\vec{x}_n \to \vec{x}, \vec{y}_n \to \vec{y}, \beta_n \to \beta.$ Then
+
+\[ \lim_{n \to \infty} (\vec{x}_n + \vec{y}_n) = \vec{x} + \vec{y}, \quad \lim_{n \to \infty} \vec{x}_n \cdot \vec{y}_n = \vec{x} \cdot \vec{y}, \quad \lim_{n \to \infty} \beta_n \vec{x}_n = \beta \vec{x}. \]
+\end{theorem}
+
+\begin{proof}
+For (a), assume $\vec x_{n} \to \vec x.$ Then, from the definition of the \dref{norm},
+
+\[ |\alpha_{j,n} - \alpha_j | \leq |\vec{x}_n - \vec{x} |, \]
+
+that is, the distance from $\alpha_{k,n}$ to $\alpha_{n}$ is always less than or equal to the distance from $\vec{x}_n$ to $\vec{x}.$ Therefore, for $\epsilon > 0,$ $|\vec{x}_n - \vec{x}| < \epsilon \implies |\alpha_{j,n} - \alpha_j| < \epsilon,$ and we can pick $n$ to make this true for as small of $\epsilon$ as we'd like. Therefore, $\lim_{n \to \infty} \alpha_{j, n} = \alpha_j.$
+
+Conversely, assume $\lim_{n \to \infty} \alpha_{j, n} = \alpha_j.$ Let $\epsilon > 0.$ For some integer $N,$ when $n \geq N$ we have
+
+\[ |\alpha_{j,n} - \alpha_{j}| \leq \frac{\epsilon}{\sqrt{k}}, \quad (1 \leq j \leq k). \]
+
+Therefore, $n \geq N$ implies that
+
+\[ |\vec{x_n} - \vec{x}| = \sqrt{\sum_{j=1}^k |\alpha_{j,n} - \alpha_j|^2} < \epsilon, \]
+
+so $\vec{x}_n \to \vec{x}. $
+
+Part (b) follows from part (a) and \dref{sequence-in-rk-converges-iff-its-components-converge}.
+\end{proof}
+
+\section{Subsequences}
+
+\begin{definition}[Subsequence]
+Given a \dref{sequence} $\{p_n\},$ consider a \dref{sequence} $\{n_k\}$ of positive integers, such that $n_1 < n_2 < n_3 < \cdots.$ Then the \dref{sequence} $\{p_{n_i}\}$ is called a \textbf{subsequence} of $\{p_n\}.$
+\end{definition}
+
+\begin{definition}[Subsequential limit]
+If a subsequence $\{p_{n_i}\}$ of $\{p_n\}$ \dref{converges}, its \dref{limit-sequence} is called a \textbf{subsequential limit} of $\{p_n\}.$
+\end{definition}
+
+\begin{theorem}
+A sequence $\{p_n\}$ converges to $p$ if and only if every subsequence of $\{p_n\}$ converges to $p.$
+\end{theorem}
+
+\begin{proof}
+Suppose that $\{p_n\}$ \dref{converges} to $p.$ Suppose some \dref{subsequence} $\{p_{n_i}\}$ converges to $q,$ and suppose, for contradiction, that $q \neq p.$ Now, following an argument similar to the \dref[proof that limits of sequences are unique]{limits-of-sequences-are-unique}, we can see that if $p \neq q,$ arbitrary neighborhoods around both can't contain all but finitely many points, so we have a contradiction, and $p = q.$ 
+
+Conversely, suppose every \dref{subsequence} of $\{p_n\}$ \dref{converges} to $p.$ Then, $\{p_n\}$ is a \dref{subsequence} of itself, so it \dref{converges} to $p.$
+\end{proof}
+
+\begin{theorem}\label{sequence-in-compact-metric-space-has-a-convergent-subsequence}
+If $\{p_n\}$ is a \dref{sequence} in a \dref{compact} \dref{metric-space} $X,$ then some \dref{subsequence} of $\{p_n\}$ \dref{converges} to a point in $X.$
+\end{theorem}
+
+\begin{proof}
+Let $E$ be the range of $\{p_n\}.$ If $E$ is \dref{finite}, then at least one \dref{point} $p$ in $E$ must be repeated infinitely many times in $\{p_n\}.$ If we let $\{n_i\}$ be the indices of the occurrences of $p$ in $\{p_n\}:$
+
+\[ p_{n_1} = p_{n_2} = \cdots = p, \]
+
+then the \dref{subsequence} $\{p_{n_i}\}$ \dref{converges} to $p.$
+
+On the other hand, if $E$ is \dref{infinite}, then \dref[$E$ has a limit point $p \in X$]{infinite-subset-of-compact-set-has-limit-point}. Pick $n_1$ so that $d(p, p_{n_1} < 1.$ Now, after picking $n_1, \dots, n_{i -1},$ \dref[we can pick $n_i > n_{i-1}$ such that $d(p, p_{n_i}) < 1/i$]{neighborhood-of-limit-point-contains-infinitely-many-points}, so $\{p_{n_i}\}$ \dref{converges} to $p.$
+\end{proof}
+
+\begin{theorem}[Bolzano-Weierstrass]
+Every \dref{bounded} \dref{sequence} in $R^k$ contains a convergent \dref{subsequence}.
+\end{theorem}
+
+\begin{proof}
+Note that any \dref{bounded} \dref{sequence} $\{p_n\} \subset R^k$ is a \dref{subset} of some \dref{closed} \dref{set}, \dref{bounded} and \dref[thus compact]{heine-borel} \dref{k-cell} in $R^k.$ Therefore, $\{p_n\}$ is a \dref{sequence} in a \dref{compact} \dref{metric-space}, and \dref[has a convergent subsequence]{sequence-in-compact-metric-space-has-a-convergent-subsequence}.
+\end{proof}
+
+\begin{theorem}\label{subsequential-limits-of-a-metric-space-form-a-closed-set}
+The \dref{subsequential-limits} of a \dref{sequence} $\{p_n\}$ in a \dref{metric-space} $X$ form a \dref{closed} \dref{set} \dref{subset} of $X.$
+\end{theorem}
+
+\begin{proof}
+Let $E^*$ be the \dref{set} of all \dref{subsequential-limits} of $\{p_n\}$ and let $q$ be a \dref{limit-point} of $E^*.$ We want to show that $q \in E^*.$
+
+First, note that if the range of $\{p_n\}$ is just $\{q\},$ then $q$ is the only \dref{subsequential-limit} of $\{p_n\}.$ In this case, $E* = \{q\}$ is a singleton and is \dref{closed} \dref{set}, as it vacuously contains all of its \dref{limit-points}. So, assume this is not the case.
+
+Choose $n_1$ so that $p_{n_1} \neq q,$ and let $\delta = d(q, p_{n_1}).$ Suppose $n_1, \dots, n_{i-1}$ are chosen. Since $q$ is a limit point of $E^*,$ there is an $x \in E^*$ with $d(q, x) < \frac{\delta}{2^i}.$ Since $x \in E^*$ and is thus the \dref{limit-sequence} of some \dref{subsequence} of $\{p_n\},$ there is an $n_i > n_{i-1}$ such that $d(x, p_{n_i}) < \frac{\delta}{2^i}.$ Now, via the triangle inequality,
+
+\[ \begin{aligned} d(q, p_{n_i}) & \leq d(q, x) + d(x, p_{n_i}) \\
+                                 & < \frac{\delta}{2^i} + \frac{\delta}{2^i} \\
+                                 & = \frac{2\delta}{2^i} = \frac{\delta}{2^{i-1}}, \quad i = 1, 2, 3, \dots.
+\end{aligned} \]
+
+This means that $\{p_{n_i}\}$ \dref{converges} to $q,$ because we can find a $p_{n_i}$ as close as desired to $q.$ Therefore $q$ is a \dref{subsequential-limit} of $\{p_n\}$ and so $q \in E^*,$ and $E^*$ is \dref{closed}.
+\end{proof}
+
+\detach
+
+\begin{note}
+The \dref[theorem above]{subsequential-limits-of-a-metric-space-form-a-closed-set} tells us about the long term behavior of a \dref{sequence}, even if it doesn't \dref{converge}. The \dref{set} of all \dref{subsequential-limits} of $\{p_n\}$ gives us the set of all points that are approached arbitrarily closely infinitely often in $\{p_n\}.$ It's basically the set of points that $\{p_n\}$ likes to hang out around! $E^*$ being \dref{closed} means that if there is a point in $X$ that the points of $E^*$ get arbitrarily close to, then it is also a point $\{p_n\}$ likes to hang out around.
+\end{note}
+
+\section{Cauchy Sequences}
+
+\begin{definition}[Cauchy Sequence]\synonyms{Cauchy}
+A \dref{sequence} $\{p_n\}$ in a \dref{metric-space} $X$ is said to be a \textbf{Cauchy sequence} if for every $\epsilon > 0$ there is an integer $N$ such that $d(p_n, p_m) < \epsilon$ is $n \geq N$ and $m \geq N.$
+\end{definition}
+
+\begin{definition}[Diameter]
+Let $E$ be a nonempty \dref{subset} of a \dref{metric-space} $X,$ and let $S$ be the \dref{set} of all \dref{real-numbers} of the form $d(p,q),$ with $p, q \in E.$ The \dref{supremum} of $S$ is called the \textbf{diameter} of $E.$
+\end{definition}
+
+\begin{theorem}\label{limit-of-diameter-of-remaining-points-in-cauchy-sequence-is-zero}
+if $\{p_n\}$ is a \dref{sequence} in $X$ and if $E_N$ consists of the \dref{points} $p_N, p_{N+1}, p_{N+2}, \dots,$ then $\{p_n\}$ is a \dref{Cauchy-sequence} if and only if
+
+\[ \lim_{N \to \infty} \diam{E_N} = 0. \]
+\end{theorem}
+
+\begin{proof}
+Suppose $\{p_n\}$ is a \dref{Cauchy-sequence}. Then, let $\epsilon > 0.$ For some integer $N,$ $d(p_n, p_m) < \epsilon$ when $n, m \geq N.$ Therefore, $\diam{E_N} < \epsilon.$ Since $\epsilon$ was arbitrary, we can see that the sequence $\{\diam{E_N}\}$ converges to $0.$
+
+Conversely, suppose $lim_{N \to \infty} \diam{E_N} = 0.$ Then, \dref[every neighborhood of $0$ contains $\{\diam{E_N}\}$ for all but finitely many N]{sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. Let $\epsilon > 0.$ Then, pick $N$ such that $\diam{E_n} < \epsilon.$ Letting $m, n \geq N,$ we have that $d(p_m, p_n) \leq \diam{E_n} < \epsilon.$
+\end{proof}
+
+\begin{theorem}\label{diameter-of-set-equals-diameter-of-closure}
+If $\closure{E}$ is the \dref{closure} of a \dref{set} $E$ in a \dref{metric-space} $X,$ then
+
+\[ \diam{\closure{E}} = \diam{E}. \]
+\end{theorem}
+
+\begin{proof}
+Because $E \subset \closure{E},$ $\diam{E} \leq \diam{\closure{E}}.$
+
+Conversely, Let $p, q \in \closure{E},$ and $p', q' \in E,$ such that $d(p, p') < \epsilon, d(q, q') < \epsilon.$ Therefore, by the triangle inequality,
+
+\[ \begin{aligned}
+
+d(p,q) & \leq d(p, p') + d(p', q') + d(q', q) \\
+       & < 2 \epsilon + d(p', q') \\
+       & \leq 2 \epsilon + \diam{E}.
+
+\end{aligned} \]
+
+Therefore, $\diam{\closure{E}} \leq 2 \epsilon + \diam{E},$ and since $\epsilon$ was arbitrary, $\diam{\closure{E}} = \diam{E}.$
+\end{proof}
+
+\begin{theorem}\label{nested-sequence-of-compact-sets-with-lim-diam-zero-has-singleton-intersection}
+If $K_n$ is a \dref{sequence} of nonempty \dref{compact} \dref{sets} in $X$ such that $K_{n+1} \subset K_n, (n = 1, 2, 3, \dots)$ and if
+
+\[ \lim_{n \to \infty} \diam K_n = 0, \]
+
+then $\bigcap_{1}^\infty K_n$ consists of exactly one \dref{point}.
+\end{theorem}
+
+\begin{proof}
+Let $K = \bigcap_{1}^\infty K_n.$ Then $K$ \dref[is not empty]{intersection-of-nonempty-nested-compact-sets-is-nonempty}. Assume for the sake of contradiction that $K$ contains more than one point. Then, $\diam{K} > 0.$ But, for each $n, K \subset K_n,$ so that $\diam{K_n} \geq \diam{K}.$ But, this contradicts our given that $\lim+{n \to \infty} \diam K_n = 0,$ so our assumption that $K$ contains more than one \dref{point} must be invalid, and thus $K$ contains exactly one point.
+\end{proof}
+
+\begin{theorem}\label{every-convergent-sequence-in-a-metric-space-is-a-cauchy-sequence}
+Every convergent \dref{sequence} in a \dref{metric-space} $X$ is a \dref{Cauchy-sequence}.
+\end{theorem}
+
+\begin{proof}
+Suppose $\{p_n\}$ is a convergent \dref{sequence} in a \dref{metric-space} $X.$ Let $\epsilon > 0.$ Then for some $N, d(p, p_n) < \epsilon$ when $n \geq N.$ Thus,
+
+\[ d(p_n, p_m) \leq d(p, p_n) + d(p, p_m) <  2 \epsilon \]
+
+whenever $n, m \geq N,$ and so $\{p_n\}$ is \dref{Cauchy}.
+\end{proof}
+
+\begin{definition}[Complete]
+A \dref{metric-space} in which every \dref{cauchy-sequence} \dref{converges} is said to be \textbf{complete}.
+\end{definition}
+
+\begin{theorem}\label{compact-metric-spaces-are-complete}
+\dref{Compact} \dref{metric-spaces} are \dref{complete}.
+
+That is, if $X$ is a \dref{compact} \dref{metric-space} and if $\{p_n\}$ is a \dref{cauchy-sequence} in $X,$ then $\{p_n\}$ \dref{converges} to some point of $X.$
+\end{theorem}
+
+\begin{proof}
+Let $\{p_n\}$ be a \dref{cauchy-sequence} in the \dref{compact} \dref{metric-space} $X.$ For $N = 1, 2, 3, \dots,$ let $E_n$  bet the set consisting of $p_{N}, p_{N+1}, p_{N+2}, \dots.$ Then
+
+\[ \lim_{N \to \infty}{\diam{\closure{E_N}}}= 0, \]
+
+by \dref[two]{limit-of-diameter-of-remaining-points-in-cauchy-sequence-is-zero} \dref[theorems]{diameter-of-set-equals-diameter-of-closure} above. Each $\closure{E_n}$ is a \dref{closed} \dref{subset} of the \dref{compact} space $X,$ and \dref[is thus @compact]{closed-subsets-of-compact-sets-are-compact}. Also, $E_{N+1} \subset E_{N},$ which \dref[implies that $\closure{E_{N+1}} \subset \closure{E_{N}}$]{set-is-its-closure-iff-it-is-closed}. Now, we have that \dref[there is a unique $p \in X$ which lies in every $\closure{E_n}.$]{nested-sequence-of-compact-sets-with-lim-diam-zero-has-singleton-intersection}
+
+Let $\epsilon > 0.$ Since $\lim_{N \to \infty}{\diam{\closure{E_N}}}= 0,$ there is an integer $N_0$ such that $\diam{\closure{E_n}} < \epsilon$ if $N \geq N_0.$ Since $p \in \closure{E_n},$ we have that $d(p, q) < \epsilon$ for every $q \in \closure{E_N}$ and thus for every $q \in E_n.$ That is, $d(p, p_n) < \epsilon$ if $n \geq N_0,$ so $\{p_n\}$ converges to $p.$
+\end{proof}
+
+\begin{theorem}\label{euclidean-spaces-are-complete}
+All Euclidean spaces are complete
+
+That is, in $R^k,$ every \dref{cauchy-sequence} \dref{converges}.
+\end{theorem}
+
+\begin{proof}
+Let $\{\vec{x}_n\}$ be a \dref{cauchy-sequence} in $R^k.$ Define $E_N$ as in \dref[the proof above]{proof-of-compact-metric-spaces-are-complete}, but with $\vec{x}_i$ in place of $p_i.$ For some $N, \diam{E_n} < 1.$ The \dref{range-sequence} of $\{\vec{x}_n\}$ is the union of $E_n$ and the \dref{finite} \dref{set} $\{\vec{x}_1, \dots, \vec{x}_{N-1}\}.$ Hence, $\{\vec{x}_n\}$ is \dref{bounded-sequence} (since the finite set of points can be contained in some bounding box, and the remaining points can be contained in some \dref{ball} with \dref{diameter} 1.) Since $\closure{\{\vec{x}_n\}}$ is \dref{bounded}, it is \dref{compact}, and thus $\{\vec{x}_n\}$ is a subset of a \dref{compact} \dref{metric-space} (its closure), and so \dref[converges]{compact-metric-spaces-are-complete}.
+\end{proof}
+
+\begin{theorem}[Cauchy criterion for convergence]\label{cauchy-criterion-for-convergence}
+A sequence \dref{converges} in $R^k$ if and only if it is a \dref{cauchy-sequence}.
+\end{theorem}
+
+\begin{proof}
+Suppose $\{p_n\} \subset R^k$ \dref{converges}. Then, because $R^k$ is a \dref{metric-space}, \dref[$\{p_n\}$ is @cauchy]{every-convergent-sequence-in-a-metric-space-is-a-cauchy-sequence}.
+
+Conversely, suppose $\{p_n\} \subset R^k$ is \dref{cauchy}. Then, \dref[$\{p_n\}$ converges]{euclidean-spaces-are-complete}.
+\end{proof}
+
+\detach
+
+\begin{note}
+An important difference between the definition of a \dref{convergent} \dref{sequence} and a \dref{cauchy-sequence} is that the \dref{limit-sequence} is explicitly involved in the former, but not the latter. Thus, \dref[we may be able to decide]{compact-metric-spaces-are-complete} whether or not a given \dref{sequence} \dref{converges} without knowledge of the \dref{limit-sequence} to which it may \dref{converge}.
+\end{note}
+
+\begin{theorem}
+Every \dref{closed} \dref{subset} $E$ of a \dref{complete} \dref{metric-space} $X$ is \dref{complete}.
+\end{theorem}
+
+\begin{proof}
+Let $\{p_n\} \subset E$ be a \dref{cauchy-sequence}. Then, it converges to some point $p \in X,$ and actually $p \in E,$ because $E$ is \dref{closed}. Therefore, $E$ is \dref{complete}.
+\end{proof}
+
+\detach
+
+\begin{example}
+Not all \dref{metric-spaces} are \dref{complete}. For example, the space of all rationals with $d(x, y) = |x - y|$ is not \dref{complete}.
+\end{example}
+
+For more content specifically on real sequences, see \pagelink{real-sequences}.
+
+\end{document}

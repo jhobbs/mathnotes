@@ -122,7 +122,7 @@ It's easy to see that these basis vectors are @orthogonal (and therefore @linear
 
 Now, we can equip this vector space with an @inner-product
 
-:::theorem "\mathbb{C}^N is an inner product space" {label: complex-inner-product-space}
+:::theorem "$\mathbb{C}^N$ is an inner product space" {label: complex-inner-product-space}
 
 The @function
 

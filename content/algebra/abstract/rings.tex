@@ -1,0 +1,83 @@
+\documentclass{article}
+\usepackage{mathnotes}
+
+\title{Rings and Fields}
+\description{Algebraic structures with two operations - rings and fields including their axioms and fundamental properties.}
+
+\begin{document}
+
+\section{Rings}
+
+\begin{definition}[Ring]
+A \textbf{ring} is a set together with two binary operations $+$ and $\cdot$, which we will call addition and multiplication, such that the following axioms are satisfied:
+
+\begin{enumerate}
+\item $\langle R, + \rangle$ is an \dref{Abelian} \dref{group}.
+\end{enumerate}
+
+\begin{enumerate}
+\item Multiplication is associative.
+\end{enumerate}
+
+\begin{enumerate}
+\item For all $a,b,c \in R$, the left distributive law and the right distributive law hold, i.e.
+\end{enumerate}
+
+\[ a \cdot (b + c) = (a \cdot b) + (a \cdot c), \quad (a + b) \cdot c = (a \cdot c) + (b \cdot c). \]
+\end{definition}
+
+\begin{example}[Examples of Rings]
+The integers, rationals, reals and complex numbers are all \dref{rings} with the usual addition and multiplication.
+\end{example}
+
+\begin{definition}[Ring Homomorphism]
+A \textbf{ring homomorphism} $\phi : R \to R'$ must satisfy the following two properties:
+
+\begin{enumerate}
+\item $\phi{(a+b)} = \phi{(a)} + \phi{(b)}.$ 
+\end{enumerate}
+
+\begin{enumerate}
+\item $\phi{(ab)} = \phi{(a)}\phi{(b)}.$
+\end{enumerate}
+\end{definition}
+
+\begin{remark}\label{ring-multiplicative-identity}
+A ring doesn't have to have a \dref[multiplicative identity element]{unity}, but it can. If it has one, it's denoted $1$ and for all $a$ in $R$ satisfies $a1 = 1a = a$.
+\end{remark}
+
+\begin{definition}[unity]
+The element $1$ is also called \textbf{unity}.
+\end{definition}
+
+\begin{definition}[Commutative Ring]
+A ring in which multiplication is commutative is called a \textbf{commutative ring}.
+\end{definition}
+
+\begin{definition}[Ring with Unity]
+A ring that has a multiplicative identity element is called a \textbf{ring with unity.}
+\end{definition}
+
+\begin{definition}[Multiplicative Inverse]
+For some element $a$ in a ring with unity $R$ where $1 \neq 0$, if $a^{-1} \in R$ such that $aa^{-1} = a^{-1}a = 1$, $a^{-1}$ is said to be the \textbf{multiplicative inverse} of $a.$
+\end{definition}
+
+\begin{definition}[Unit]
+If $a$ has a multiplicative inverse in $R,$ $a$ is said to be a \textbf{unit} in $R$.
+\end{definition}
+
+\subsubsection{Fields}
+
+\begin{definition}[Division Ring]
+Let $R$ be a ring with unity. If every nonzero element of $R$ is a unit (has a multiplicative inverse), then $R$ is called a \textbf{division ring.}
+\end{definition}
+
+\begin{definition}[Field]
+A commutative division ring is called a \textbf{field}.
+\end{definition}
+
+\begin{example}[Examples of Fields]
+The integers are not a \dref{field}, but the rationals, the reals, and the complex numbers are all fields.
+\end{example}
+
+\end{document}

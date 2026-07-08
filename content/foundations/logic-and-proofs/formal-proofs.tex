@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{mathnotes}
+
+\title{Formality and Proofs}
+
+\begin{document}
+
+\begin{definition}[Formal System]
+A  \textbf{formal system} $\mathcal{F}$ is an ordered quadruple
+
+\[ \mathcal{F} = (\Sigma, W, A, R) \]
+
+where:
+
+\begin{enumerate}
+\item $\Sigma$ is a finite, nonempty \textbf{alphabet} (a set of symbols);
+\item $W \subseteq \Sigma^{*}$ is the set of \textbf{well-formed-formulas} (wffs), defined inductively by formation rules specifying which finite strings over $\Sigma$ belong to $W$
+\item $A \subseteq W$ is a distinguished subset of $W$, whose members are called \textbf{axioms.}
+\item $R$ is a finite set of \textbf{rules of inference}, each of which is a relation on $W$ determining from which formulas other formulas may be derived.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Derivation]\synonyms{proof}
+A \textbf{derivation} (or \textbf{proof}) in $\mathcal{F}$ is a finite sequence of formulas
+
+\[ \varphi_1, \varphi_2, \dots, \varphi_n \]
+
+such that for each $i \le n$,
+
+\begin{enumerate}
+\item Either $\varphi_i \in A$, or
+\item $\varphi_i$ follows from earlier formulas in the sequence by an inference rule in $R$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[theorem]
+A formula $\psi \in W$ is a \textbf{theorem} (or \textbf{provable formula}) of $\mathcal{F}$ if there exists such a derivation ending with $\psi$. We then write
+
+\[ \vdash_{\mathcal{F}} \psi. \]
+\end{definition}
+
+\begin{definition}[recursive]
+The system $\mathcal{F}$ is said to be \textbf{recursive} (or \textbf{effectively generated}) if $W$, $A$, and $R$ are all \dref{recursively-enumerable} sets, so that derivations can be verified by a finite mechanical procedure.
+\end{definition}
+
+\begin{remark}
+No \dref{semantics} are assumed in this definition; a \dref{formal-system} is purely \dref{syntactic}.
+
+A \dref{formal-system} operates purely on \dref{form}, not content.
+
+Its symbols are inert marks; its rules manipulate these marks according to syntactic shape alone.
+
+No step depends on what any symbol "means."
+
+A proof in such a system is therefore a finite, mechanical transformation of strings; a sequence of moves in a symbol game governed entirely by explicit rules.
+
+Semantics enter only afterward, when we interpret the symbols externally (e.g. as numbers, sets, or truth values).
+
+Until then, the system is a syntax engine; a rule-bound procedure that generates certain strings (theorems) from others (axioms), without regard to interpretation or truth.
+\end{remark}
+
+\begin{note}
+When an interpretation (model) $\mathcal{M}$ and a satisfaction relation $\models_{\mathcal{M}}$ are supplied, one obtains a \textbf{formal theory.}
+\end{note}
+
+\end{document}

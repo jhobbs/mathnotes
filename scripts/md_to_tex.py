@@ -59,11 +59,16 @@ class ProseConverter:
 
     def convert(self, text: str) -> str:
         self._commands = []
+        # 0. HTML comments (invisible on the site) become LaTeX comments
+        text = re.sub(r"<!--(.*?)-->", self._html_comment, text, flags=re.DOTALL)
         # 1. Code fences out first (their content is exempt from everything)
         text = re.sub(r"```([A-Za-z0-9+#-]*)\n(.*?)```", self._fence, text, flags=re.DOTALL)
         # 2. Math out (verbatim passthrough; display math re-delimited)
         protector = MathProtector(prefix="XCNV")
         text = protector.protect_math(text)
+        # 2b. Literal dollars written as HTML entities (markdown's only way
+        # to keep a $ away from MathProtector) become the tidier \$
+        text = re.sub(r"&#36;", lambda m: self._stash("\\$"), text)
         # 3. Demo includes
         text = re.sub(r'{%\s*include_demo\s+"([^"]+)"\s*%}',
                       lambda m: self._stash(f"\\includedemo{{{m.group(1)}}}"), text)
@@ -74,15 +79,39 @@ class ProseConverter:
                       lambda m: self._stash(f"\\pagelink[{m.group(1).strip()}]{{{m.group(2).strip()}}}"), text)
         text = re.sub(r"\[\[([^\]]+)\]\]",
                       lambda m: self._stash(f"\\pagelink{{{m.group(1).strip()}}}"), text)
+        # 5a2. Images. Titled images (tooltips) have no LaTeX equivalent —
+        # error rather than silently dropping the tooltip.
+        if re.search(r'!\[[^\]]*\]\([^)]*"', text):
+            self.err("image with a title (tooltip) has no dialect equivalent; convert manually")
+        text = re.sub(r"!\[([^\]]*)\]\(([^)\s]+)\)",
+                      lambda m: self._stash(
+                          f"\\includegraphics[alt={{{m.group(1)}}}]{{{m.group(2)}}}"
+                          if m.group(1) else f"\\includegraphics{{{m.group(2)}}}"), text)
+        # 5b. Markdown links (not images: no preceding !)
+        text = re.sub(r"(?<!!)\[([^\]]+)\]\(([^)\s]+)\)",
+                      lambda m: self._stash(f"\\href{{{m.group(2)}}}{{{m.group(1)}}}"), text)
         # 6. Block references (custom text first, then plain)
         text = re.sub(r"@\{([^|{}]+)\|([a-zA-Z0-9_:-]+)\}",
                       lambda m: self._stash(f"\\dref[{m.group(1)}]{{{m.group(2)}}}"), text)
         text = re.sub(r"(?<![a-zA-Z0-9])@([a-zA-Z0-9_-]+(?::[a-zA-Z0-9_-]+)?)",
                       lambda m: self._stash(f"\\dref{{{m.group(1)}}}"), text)
-        # 7. Inline code, bold, emphasis
+        # 7. Inline code, bold, emphasis. Markdown pairs asterisks left to
+        # right; emphasis may span line breaks within a paragraph, and edge
+        # whitespace moves outside the LaTeX command (rendering-identical).
         text = re.sub(r"`([^`\n]+)`", lambda m: self._stash(f"\\texttt{{{m.group(1)}}}"), text)
-        text = re.sub(r"\*\*([^*\n]+)\*\*", lambda m: self._stash(f"\\textbf{{{m.group(1)}}}"), text)
-        text = re.sub(r"\*([^*\s][^*\n]*?)\*", lambda m: self._stash(f"\\emph{{{m.group(1)}}}"), text)
+
+        def styled(macro):
+            def sub(m):
+                inner = m.group(1)
+                if not inner.strip():
+                    return m.group(0)
+                lead = inner[: len(inner) - len(inner.lstrip())]
+                trail = inner[len(inner.rstrip()):]
+                return lead + self._stash(f"\\{macro}{{{inner.strip()}}}") + trail
+            return sub
+
+        text = re.sub(r"\*\*(?!\s)((?:(?!\n\n)[^*])+?)\*\*", styled("textbf"), text)
+        text = re.sub(r"\*(?!\s)((?:(?!\n\n)[^*])+?)\*", styled("emph"), text)
         text = re.sub(r"(?<![a-zA-Z0-9\\])_([^_\n]+)_(?![a-zA-Z0-9])",
                       lambda m: self._stash(f"\\emph{{{m.group(1)}}}"), text)
         # 8. Lists
@@ -101,6 +130,10 @@ class ProseConverter:
         self._commands.append(command)
         return _PLACEHOLDER.format(len(self._commands) - 1)
 
+    def _html_comment(self, m) -> str:
+        lines = m.group(1).strip("\n").split("\n")
+        return self._stash("\n".join("% " + line if line.strip() else "%" for line in lines))
+
     def _fence(self, m) -> str:
         lang, code = m.group(1), m.group(2).rstrip("\n")
         if lang:
@@ -111,9 +144,10 @@ class ProseConverter:
 
     def _header(self, m) -> str:
         depth = len(m.group(1))
-        if depth > 3:
-            self.err(f"heading level {depth} not supported (h1-h3 only): {m.group(0)!r}")
-        name = {1: "section", 2: "subsection", 3: "subsubsection"}[depth]
+        if depth > 5:
+            self.err(f"heading level {depth} not supported (h1-h5 only): {m.group(0)!r}")
+        name = {1: "section", 2: "subsection", 3: "subsubsection",
+                4: "paragraph", 5: "subparagraph"}[depth]
         return self._stash(f"\\{name}{{{m.group(2).strip()}}}")
 
     def _convert_lists(self, text: str) -> str:
@@ -128,11 +162,19 @@ class ProseConverter:
                 out.append(self._stash(f"\\begin{{{run_kind}}}\n{body}\n\\end{{{run_kind}}}"))
                 run, run_kind = [], None
 
+        previous_blank = True
         for line in text.split("\n"):
-            if re.match(r"^\s+[*-]\s|^\s+\d+[.)]\s", line):
+            if re.match(r"^\s+[*-]\s|^\s+\d+\.\s", line):
                 self.err(f"nested/indented list item not supported: {line!r}")
             bullet = re.match(r"^[*-]\s+(.*)$", line)
-            number = re.match(r"^\d+[.)]\s+(.*)$", line)
+            number = re.match(r"^\d+\.\s+(.*)$", line)
+            if (bullet or number) and not run and not previous_blank:
+                self.err(
+                    f"list item directly follows text with no blank line — markdown "
+                    f"renders this as paragraph text, not a list; add a blank line "
+                    f"in the source if a list was intended: {line!r}"
+                )
+            previous_blank = not line.strip()
             if bullet or number:
                 kind = "itemize" if bullet else "enumerate"
                 if run_kind not in (None, kind):
@@ -152,11 +194,13 @@ class ProseConverter:
         return "\n".join(out)
 
     def _escape_specials(self, text: str) -> str:
-        for ch in ("\\", "~", "^"):
-            if ch in text:
-                snippet = text[max(0, text.find(ch) - 30): text.find(ch) + 30]
-                self.err(f"character {ch!r} in prose is not representable in the dialect: ...{snippet!r}...")
-        return re.sub(r"[%&#$_{}]", lambda m: "\\" + m.group(0), text)
+        if "\\" in text:
+            snippet = text[max(0, text.find("\\") - 30): text.find("\\") + 30]
+            self.err(f"character '\\' in prose is not representable in the dialect: ...{snippet!r}...")
+        text = re.sub(r"[%&#$_{}]", lambda m: "\\" + m.group(0), text)
+        text = text.replace("~", "\\textasciitilde{}")
+        text = text.replace("^", "\\textasciicircum{}")
+        return text
 
     def _audit(self, text: str):
         for pattern, what in [
@@ -166,7 +210,9 @@ class ProseConverter:
             (r"\[\[", "wiki link"),
             (r"```", "code fence"),
             (r"(?<![a-zA-Z0-9])@[a-zA-Z]", "block reference"),
-            (r"\*", "asterisk"),
+            # a lone space-surrounded * (multiplication) renders literally in
+            # both dialects; only flag asterisks markdown could treat as emphasis
+            (r"(?<! )\*|\*(?! )", "asterisk"),
             (r"`", "backtick"),
             (r"!\[", "image"),
         ]:
@@ -300,7 +346,10 @@ class Converter:
         env = block.block_type.value
         head = f"\\begin{{{env}}}"
         if block.title:
-            if any(c in block.title for c in "[]\\{}"):
+            # math ($, {}) is fine in titles; brackets would break the
+            # optional-arg parse, and raw backslash commands outside math
+            # won't round-trip (verify catches those)
+            if any(c in block.title for c in "[]\""):
                 self.err(f"title contains characters needing manual handling: {block.title!r}")
             head += f"[{block.title}]"
         for key, macro in (("label", "label"), ("synonyms", "synonyms"), ("tags", "tags")):
@@ -316,7 +365,13 @@ class Converter:
         out = self._emit_env(root)
         root_type = root.block_type.value
         seen_corollary = False
-        for child in self._children_in_order(root):
+        children = self._children_in_order(root)
+        if children and root_type not in ANCHOR_TYPES and root_type != "exercise":
+            self.err(
+                f"'{root.label}' is a {root_type} with nested blocks; the amsthm "
+                f"sibling convention only re-attaches to theorem-like blocks"
+            )
+        for child in children:
             ctype = child.block_type.value
             if ctype not in CHILD_TYPES_ON_ROOT:
                 self.err(f"nested {ctype} inside '{root.label}' cannot be represented as a sibling")
@@ -340,18 +395,43 @@ class Converter:
 
 # --- verification -----------------------------------------------------------
 
-def _canonicalize(content: str) -> str:
-    """Normalize internal-markdown content for round-trip comparison."""
+def _canonicalize(content: str, semantic: bool = True) -> str:
+    """Normalize internal-markdown content for round-trip comparison.
+
+    With semantic=False only rendering-neutral structural normalizations are
+    applied; the result is still real markdown, suitable for rendering both
+    sides through the markdown library and comparing HTML (which judges
+    emphasis/list semantics exactly).
+    """
+    content = content.replace("\xa0", " ")  # nbsp renders as a space
+    # HTML comments are invisible; they become % comments in .tex (dropped
+    # from the transpiled output)
+    content = re.sub(r"<!--(.*?)-->", "", content, flags=re.DOTALL)
     protector = MathProtector(prefix="XNRM")
     content = re.sub(r"```([A-Za-z0-9+#-]*)\n(.*?)```",
-                     lambda m: "```" + m.group(1).lower() + "\n" + m.group(2) + "```",
+                     lambda m: "```" + m.group(1).lower() + "\n"
+                     + m.group(2).rstrip("\n") + "\n```",
                      content, flags=re.DOTALL)
     content = protector.protect_math(content)
     content = content.replace("&#36;", "$")
-    # unify bullets and emphasis forms
-    content = re.sub(r"^\*\s+", "- ", content, flags=re.MULTILINE)
-    content = re.sub(r"^(\d+)[.)]\s+", "1. ", content, flags=re.MULTILINE)
-    content = re.sub(r"(?<![a-zA-Z0-9\\])_([^_\n]+)_(?![a-zA-Z0-9])", r"*\1*", content)
+    if semantic:
+        # unify bullets and emphasis forms (rendering-equivalent rewrites the
+        # HTML comparison below would otherwise judge; kept out of the
+        # semantic=False stage)
+        content = re.sub(r"^\*\s+", "- ", content, flags=re.MULTILINE)
+        content = re.sub(r"^(\d+)\.\s+", "1. ", content, flags=re.MULTILINE)
+        content = re.sub(r"(?<![a-zA-Z0-9\\])_([^_\n]+)_(?![a-zA-Z0-9])", r"*\1*", content)
+
+        def _edges(m, d):
+            inner = m.group(1)
+            if not inner.strip():
+                return m.group(0)
+            lead = inner[: len(inner) - len(inner.lstrip())]
+            trail = inner[len(inner.rstrip()):]
+            return f"{lead}{d}{inner.strip()}{d}{trail}"
+
+        content = re.sub(r"\*\*(?!\s)((?:(?!\n\n)[^*])+?)\*\*", lambda m: _edges(m, "**"), content)
+        content = re.sub(r"\*(?!\s)((?:(?!\n\n)[^*])+?)\*", lambda m: _edges(m, "*"), content)
     # canonicalize ::: block headers (metadata order/spacing)
     def header(m):
         colons, btype, title, meta = m.group(1), m.group(2), m.group(3), m.group(4)
@@ -373,7 +453,11 @@ def _canonicalize(content: str) -> str:
         inner = re.sub(r"\s+", " ", math[2:-2].strip())
         content = content.replace(placeholder, f"$$ {inner} $$")
     for placeholder, math in protector.inline_math.items():
-        content = content.replace(placeholder, math)
+        inner = re.sub(r"\s+", " ", math[1:-1]).strip()
+        content = content.replace(placeholder, f"${inner}$")
+    # a heading with no blank line after (or before) it renders identically
+    content = re.sub(r"^(#{1,5} [^\n]*)\n(?!\n)", r"\1\n\n", content, flags=re.MULTILINE)
+    content = re.sub(r"([^\n])\n(#{1,5} )", r"\1\n\n\2", content)
     # blank lines around ::: fence lines are presentation-insignificant:
     # give every fence line exactly one blank line on each side, then
     # collapse blank runs globally
@@ -417,6 +501,27 @@ def verify(converter: Converter, tex: str) -> list:
         diff = "\n".join(difflib.unified_diff(
             a.split("\n"), b.split("\n"), "original.md", "roundtrip", lineterm="", n=1))
         problems.append("content drift after round-trip:\n" + diff)
+    else:
+        # canonical text matches — additionally render both sides (with only
+        # rendering-neutral normalizations applied) through the markdown
+        # library and compare HTML, which judges emphasis/list/paragraph
+        # semantics exactly rather than via the regex approximations above
+        import markdown as md_lib
+        safe_a = _canonicalize(converter.original_content, semantic=False)
+        safe_b = _canonicalize(content2, semantic=False)
+        html_a = md_lib.Markdown(extensions=["extra"]).convert(safe_a)
+        html_b = md_lib.Markdown(extensions=["extra"]).convert(safe_b)
+        def norm(h):
+            # whitespace just inside an emphasis boundary renders the same
+            # as whitespace just outside it
+            h = re.sub(r"\s+(</(?:em|strong)>)", r"\1 ", h)
+            h = re.sub(r"(<(?:em|strong)>)\s+", r" \1", h)
+            return re.sub(r"\s+", " ", h).strip()
+        if norm(html_a) != norm(html_b):
+            diff = "\n".join(difflib.unified_diff(
+                html_a.split("\n"), html_b.split("\n"),
+                "original.md rendered", "roundtrip rendered", lineterm="", n=1))
+            problems.append("rendered HTML drift after round-trip:\n" + diff)
     return problems
 
 

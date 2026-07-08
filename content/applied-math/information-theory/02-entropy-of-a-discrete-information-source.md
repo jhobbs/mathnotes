@@ -10,7 +10,7 @@ Consider a discrete source with $i$ finite number of states, where in state $i$ 
 $$ \begin{aligned}
 H & = \sum_{i} P_i H_i \\
   & = - \sum_{i,j} P_i p_i(j) \log{p_i(j)}.
-\end{aligned}
+\end{aligned} $$
 
 In other words, $H = \mathbb{E}[H_i]$ - the @expected-value of the per state entropy.
 

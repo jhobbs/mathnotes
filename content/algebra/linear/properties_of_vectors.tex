@@ -1,0 +1,185 @@
+\documentclass{article}
+\usepackage{mathnotes}
+
+\title{Properties of Vectors}
+\description{Fundamental vector operations in Rⁿ including magnitude, addition, scalar multiplication, and linear combinations with definitions of span and vector spaces.}
+
+\begin{document}
+
+\section{Vector Space}
+
+\begin{definition}[Vector Space]
+A \textbf{vector space} over a \dref{field} $F$ is a \dref{set} $V$ together with two operations:
+
+\begin{itemize}
+\item Vector addition: $V \times V \to V$
+\item Scalar multiplication: $F \times V \to V$
+\end{itemize}
+
+satisfying the following axioms:
+
+\begin{enumerate}
+\item $(V, +)$ is an \dref{abelian} \dref{group}
+\end{enumerate}
+
+\begin{enumerate}
+\item Scalar multiplication is associative: $a(bv) = (ab)v$
+\end{enumerate}
+
+\begin{enumerate}
+\item Distributive laws hold
+\end{enumerate}
+
+\begin{enumerate}
+\item Identity: $1v = v$ for all $v \in V$
+\end{enumerate}
+\end{definition}
+
+\section{Scalars}
+\begin{definition}[Scalar]
+A \textbf{scalar} is an \dref{element} of a \dref{field} used to define a \dref{vector-space}.
+\end{definition}
+
+\begin{note}
+Typically, especially in physics, a \dref{scalar} is simply a number, especially a \dref[real number]{real-numbers}.
+\end{note}
+
+\section{Vectors}
+\begin{definition}[Vector]
+A \textbf{vector} is an \dref{element} in a \dref{vector-space}.
+\end{definition}
+
+\begin{note}
+Typically, in physics and many other applications, when we say \dref{vector} we mean a \dref{vector} in $\mathbb{R}^n,$ which is an ordered tuple of real numbers, $\vec{x} = (x_1, x_2, \cdots, x_n).$ This is the algebraic representation of vector $\vec{x}$.
+
+The geometric representation of vector $\vec{x}$ is, in an $n$ dimensional space, an arrow or directed line segment. When starting from the origin, it would be a line segment from $\vec{0}$ to the point $(x_1, x_2, \cdots, x_n)$.
+
+Physically, a vector has a magnitude and a direction.
+\end{note}
+
+\begin{definition}[Free vector]
+A \dref{vector} whose endpoints are not fixed at particular \dref{points} is called a \textbf{free vector.}
+\end{definition}
+
+\begin{definition}[Bound vector]
+A \dref{vector} with a fixed endpoint is called a \textbf{bound vector.}
+\end{definition}
+
+\section{Properties of Vectors}
+
+\begin{definition}[Magnitude]\synonyms{norm, length}
+Let $\vec{x} = (x_1, x_2, \cdots, x_n) \in \mathbb{R}^n$.  The \textbf{magnitude}, or length, $\vec{x}$ is denoted as $|| \vec{x} ||$ and is defined as:
+
+\[ ||\vec{x}|| = \sqrt{ {x_1}^2 + {x_2}^2 + \cdots + {x_n}^2 } = \sqrt{\vec{x} \cdot \vec{x}} = \sqrt{\sum_{i=1}^n x_i^2} \]
+\end{definition}
+
+\begin{note}
+This is essentially the Pythagorean theorem in $n$ dimensions; in $\mathbb{R}^2$ the magnitude of a vector corresponds to the length of the hypotenuse of a right triangle whose other sides are of length $x_1$ and $x_2.$
+
+While we define \textbf{norm} to be equivalent to magnitude here, this is actually a special case of the more general concept of a norm - there are other norms we could define on $\mathbb{R}^n,$ but I don't have need to explore that yet.
+\end{note}
+
+\begin{definition}[Direction]
+The \textbf{direction} of a \dref{vector} can be specified by the angle between it and some fixed reference, such as the $x$-axis.
+\end{definition}
+
+\begin{definition}[Zero Vector]
+The \textbf{zero vector} $(0, 0, \cdots, 0)$ is denoted as $\vec{0}$ and has no \dref{direction}.
+\end{definition}
+
+\begin{definition}[Vector Equality]
+Two vectors are equal if they have the same coordinates (or equivalently, the same \dref{length} and \dref{direction}).
+\end{definition}
+
+\begin{definition}[Unit Vector]
+If a \dref{vector} has a \dref{length} of 1, i.e. if $||x|| = 1$, we say the \dref{vector} is a \textbf{unit vector}.
+\end{definition}
+
+\begin{definition}[Vector Addition]
+We perform \textbf{vector addition} by adding two \dref{vectors} $\vec{x} = (x_1, x_2, \cdots, x_n)$ and $\vec{y} = (y_1, y_2, \cdots, y_n)$ according to the following rule:
+
+\[ \vec{x} + \vec{y} = (x_1 + y_1, x_2 + y_2, \cdots, x_n + y_n) \]
+
+that is, by making a new vector where the coordinates are the sums of the respective coordinates in the vectors being summed.
+\end{definition}
+
+\begin{note}
+Geometrically, \dref{vector-addition} connects \dref{vectors} head to tail.
+\end{note}
+
+\begin{definition}[Vector Subtraction]
+Similarly, \textbf{vector subtraction} can be performed as:
+
+\[ \vec{x} - \vec{y} = (x_1 - y_1, x_2 - y_2, \cdots, x_n - y_n) \]
+\end{definition}
+
+\subsection{Multiplication}
+\begin{definition}[Vector Multiplication by a Scalar]
+We can multiply \dref{vectors} by a \dref{scalar}. Given the \dref{scalar} $c$:
+
+\[ c \vec{x} = (c x_1, c x_2, \cdots, c x_n) \]
+\end{definition}
+
+\begin{definition}[Inner product]\synonyms{"Dot Product", "Scalar product of two vectors"}
+If $\vec{x}$ and $\vec{y}$ are vectors in $\mathbb{R}^n,$ then their \textbf{inner product} is defined as
+
+\[ \vec{X} \cdot \vec{y} = \sum_{i = 1}^n x_i y_i. \]
+\end{definition}
+
+\begin{theorem}\label{cos-characterization-of-dot-product}
+The \dref{dot-product} of $\vec{u}$ and $\vec{v}$ is
+
+\[ \vec{u} \cdot \vec{v} = |\vec{u}||\vec{v}|\cos{\theta} \]
+
+where $\theta$ is the angle between $\vec{u}$ and $\vec{v}.$
+\end{theorem}
+
+\begin{definition}[Perpendicular]\synonyms{orthogonal}
+Two vectors $\vec{u}$ and $\vec{v}$ are said to be \textbf{perpendicular} or \textbf{orthogonal} if the angle between them is $\pi/2$ radians, or, equivalently, if the inner product $\vec{u} \cdot \vec{v} = 0.$
+\end{definition}
+
+\begin{definition}[Parallel]
+Two vectors $\vec{x}$ and $\vec{y}$ are said to be \textbf{parallel} if $\vec{x}$ is a scalar multiple of $\vec{y}$, i.e., if there exists some scalar $c$ where $\vec{x} = c \vec{y}.$
+\end{definition}
+
+\begin{definition}[Cross Product]\synonyms{"Vector Product", "Outer Product"}
+The \textbf{cross product} $\vec{a} \times \vec{b}$ (read "a cross b") of two \dref{vectors} $\vec{a}$ and $\vec{b}$ is the \dref{vector} $\vec{v}$ denoted by
+
+\[ \vec{v} = \vec{a} \times \vec{b}. \]
+
+I. If $\vec{a} = \vec{0}$ or $\vec{b} = \vec{0},$ then we define $\vec{v} = \vec{a} \times \vec{b} = \vec{0}.$
+
+II. If both \dref{vectors} are nonzero \dref{vectors}, then \dref{vector} $\vec{v}$ has the \dref{length}
+
+\[ \tag{1} |\vec{v}| = |\vec{a} \times \vec{b}| = |\vec{a}||\vec{b}|\sin{\theta}, \]
+
+where $\theta$ is the angle between $\vec{a}$ and $\vec{b}.$ Furthermore, $\vec{a}$ and $\vec{b}$ form the sides of a parallelogram on a plane in space. The area of this parallelogram is precisely given by (1), such that the length $|\vec{v}|$ of the \dref{vector} $\vec{v}$ is equal to the area of the parallelogram.
+
+III. If $\vec{a}$ and $\vec{b}$ lie in the same straight line, i.e. $\vec{a}$ and $\vec{b}$ have the same or opposite \dref{directions}, then $\theta$ is $0 \degree$ or $180 \degree$ so that $\sin \theta = 0.$ In that case $|\vec{v}| = 0,$  so that $\vec{v} = \vec{a} \times \vec{b} = \vec{0}.$
+
+IV. If cases I and III do not occur, then $\vec{v}$ is a nonzero vector. The \dref{direction} of $\vec{v} = \vec{a} \times \vec{b}$ is \dref{perpendicular} to both $\vec{a}$ and $\vec{b}$ such that $\vec{a}, \vec{b}, \vec{v},$ precisely in this order, form a right-handed triple
+\end{definition}
+
+\begin{remark}
+If $\vec{a} = (a_1, a_2, a_3)$ and $\vec{b} = (b_1, b_2, b_3),$ then we use the symbolic determinant to find the \dref{cross-product}, in this fashion:
+
+\[ \vec{v} = \vec{a} \times \vec{b} =  \begin{vmatrix}\vec{i} & \vec{j} & \vec{k}\\a_1 & a_2 & a_3\\b_1 & b_2 & b_3\end{vmatrix} = \begin{vmatrix} a_2 & a_3 \\ b_2 & b_3 \end{vmatrix} \vec{i} - \begin{vmatrix} a_1 & a_3 \\ b_1 & b_3 \end{vmatrix} \vec{j} + \begin{vmatrix} a_1 & a_2 \\ b_1 & b_2 \end{vmatrix} \vec{k}. \]
+\end{remark}
+
+\includedemo{cross-product}
+
+\begin{definition}[Linear Combination]
+Let $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n} \in \mathbb{R}^n$ and $c_1, c_2, \cdots, c_3 \in \mathbb{R}.$ Then, the vector
+
+\[ \vec{v} = c_1 \vec{v_1} +  c_2 \vec{v_2} + \cdots + c_n \vec{v_n} \]
+
+is called a \textbf{linear combination} of $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}.$
+
+Let $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n} \in \mathbb{R}^n.$ The set of all linear combinations of $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}$ is called their \textbf{span}, denoted $\Span{\left(\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}\right)}.$ 
+
+That is:
+
+\[ \Span{\left(\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}\right)} = \left\{ \vec{v} \in \mathbb{R}^n : \vec{v} = c_1 \vec{v_1} + c_2 \vec{v_2} + \cdots + c_n \vec{v_n} ~ \text{for some scalars} ~ c_1, c_2, \cdots, c_n \right\} \]
+\end{definition}
+
+\end{document}

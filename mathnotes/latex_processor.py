@@ -32,7 +32,7 @@ _BLOCK_ENV_NAMES = {t.value for t in MathBlockType}
 _METADATA_MACROS = ("title", "description", "slug")
 _IGNORED_MACROS = {"documentclass", "usepackage", "maketitle"}
 _STYLE_MACROS = {"emph": "*", "textit": "*", "textbf": "**", "texttt": "`"}
-_SECTION_LEVELS = {"section": 1, "subsection": 2, "subsubsection": 3}
+_SECTION_LEVELS = {"section": 1, "subsection": 2, "subsubsection": 3, "paragraph": 4, "subparagraph": 5}
 _ESCAPED_CHAR_MACROS = {"%", "&", "#", "_", "{", "}", " "}
 
 _THEOREM_LIKE = {"theorem", "lemma", "proposition"}
@@ -105,6 +105,10 @@ def _latex_context():
             macrospec.MacroSpec("source", "{"),
             macrospec.MacroSpec("synonyms", "{"),
             macrospec.MacroSpec("tags", "{"),
+            macrospec.MacroSpec("href", "{{"),
+            macrospec.MacroSpec("paragraph", "*[{"),
+            macrospec.MacroSpec("subparagraph", "*[{"),
+            macrospec.MacroSpec("includegraphics", "[{"),
         ],
         environments=[
             macrospec.EnvironmentSpec(name, "[") for name in sorted(_BLOCK_ENV_NAMES)
@@ -369,18 +373,64 @@ class _Transpiler:
             if group is None:
                 self._err(n, f"\\{name} requires an argument")
             d = _STYLE_MACROS[name]
-            return f"{d}{self._prose(group.nodelist).strip()}{d}"
+            inner = self._prose(group.nodelist)
+            stripped = inner.strip()
+            if not stripped:
+                self._err(n, f"\\{name} argument is empty")
+            # edge whitespace moves outside the markdown delimiters (markdown
+            # would not recognize `* text*` as emphasis); renders identically
+            lead = inner[: len(inner) - len(inner.lstrip())]
+            trail = inner[len(inner.rstrip()):]
+            return f"{lead}{d}{stripped}{d}{trail}"
         if name in _SECTION_LEVELS:
             title = self._prose(n.nodeargd.argnlist[-1].nodelist).strip()
             return f"\n\n{'#' * _SECTION_LEVELS[name]} {title}\n\n"
         if name in ("dots", "ldots"):
             return "..."
+        if name == "textasciitilde":
+            return "~"
+        if name == "textasciicircum":
+            return "^"
         if name == "$":
             # A bare $ would be mis-paired into inline math by MathProtector
             # downstream; emit the HTML entity instead
             return "&#36;"
         if name in _ESCAPED_CHAR_MACROS:
             return name
+        if name == "href":
+            url_group, text_group = n.nodeargd.argnlist[-2], n.nodeargd.argnlist[-1]
+            url = "".join(
+                c.chars if isinstance(c, LatexCharsNode)
+                else c.specials_chars if isinstance(c, LatexSpecialsNode)
+                else ""
+                for c in url_group.nodelist
+            ).strip()
+            if not url:
+                self._err(n, "\\href requires a plain-text URL")
+            text = self._prose(text_group.nodelist).strip()
+            return f"[{text}]({url})"
+        if name == "includegraphics":
+            opt, mand = n.nodeargd.argnlist
+            path = "".join(
+                c.chars for c in mand.nodelist if isinstance(c, LatexCharsNode)
+            ).strip()
+            if not path:
+                self._err(n, "\\includegraphics requires a path")
+            alt = ""
+            if opt is not None:
+                groups = [c for c in opt.nodelist if isinstance(c, LatexGroupNode)]
+                flat = "".join(
+                    c.chars if isinstance(c, LatexCharsNode) else "\x00"
+                    for c in opt.nodelist
+                )
+                m = re.fullmatch(r"\s*alt=(\x00|[^\x00=]*?)\s*", flat)
+                if not m:
+                    self._err(n, "\\includegraphics supports only the alt={...} option on the site")
+                if m.group(1) == "\x00":
+                    alt = self._prose(groups[0].nodelist).strip()
+                else:
+                    alt = m.group(1).strip()
+            return f"![{alt}]({path})"
         if name == "dref":
             return self._dref(n)
         if name == "pagelink":

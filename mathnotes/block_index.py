@@ -151,10 +151,12 @@ class BlockIndex:
     def _scan_directory(self, directory: str):
         """Recursively scan a directory for markdown files and index their blocks."""
         for root, dirs, files in os.walk(directory):
-            # Skip hidden directories
-            dirs[:] = [d for d in dirs if not d.startswith(".")]
+            # Skip hidden directories; sort for a deterministic scan order so
+            # colliding auto-generated labels (e.g. two files both containing
+            # an unlabeled 'remark-5') resolve the same way in every build
+            dirs[:] = sorted(d for d in dirs if not d.startswith("."))
 
-            for file in files:
+            for file in sorted(files):
                 if file.endswith((".md", ".tex")):
                     file_path = os.path.join(root, file)
                     self._index_file(file_path)

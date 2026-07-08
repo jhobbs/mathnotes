@@ -1,0 +1,143 @@
+\documentclass{article}
+\usepackage{mathnotes}
+
+\title{Conway's Game of Life}
+\description{Conway's famous cellular automaton demonstrating emergence and complexity from simple rules, featuring still lifes, oscillators, spaceships, and computational universality with interactive simulation.}
+
+\begin{document}
+
+\section{Conway's Game of Life}
+
+Conway's Game of Life is a cellular automaton devised by mathematician John Horton Conway in 1970. Despite its simple rules, it exhibits remarkably complex behavior and has become one of the most well-known examples of emergence in computational systems.
+
+\subsection{Rules}
+
+The Game of Life is played on a two-dimensional grid where each cell can be either alive (1) or dead (0). The state of each cell evolves according to four simple rules:
+
+\begin{enumerate}
+\item \textbf{Underpopulation}: Any live cell with fewer than two live neighbors dies
+\item \textbf{Survival}: Any live cell with two or three live neighbors survives
+\item \textbf{Overpopulation}: Any live cell with more than three live neighbors dies
+\item \textbf{Reproduction}: Any dead cell with exactly three live neighbors becomes alive
+\end{enumerate}
+
+These rules are applied simultaneously to all cells in each generation.
+
+\subsection{Interactive Simulation}
+
+Explore the Game of Life with this interactive demonstration. You can:
+
+\begin{itemize}
+\item Click cells to toggle them alive/dead
+\item Use the controls to start, stop, and step through generations
+\item Adjust the simulation speed and initial population
+\item Watch population statistics in real-time
+\end{itemize}
+
+\includedemo{game-of-life}
+
+\subsection{Common Patterns}
+
+\subsubsection{Still Lifes}
+Patterns that don't change:
+
+\begin{itemize}
+\item \textbf{Block}: 2×2 square
+\item \textbf{Beehive}: 6 cells in a hexagonal shape
+\item \textbf{Loaf}: 7 cells in a distinctive shape
+\item \textbf{Boat}: 5 cells resembling a boat
+\end{itemize}
+
+\subsubsection{Oscillators}
+Patterns that cycle through a fixed sequence:
+
+\begin{itemize}
+\item \textbf{Blinker}: Period 2, alternates between 3 horizontal and 3 vertical cells
+\item \textbf{Toad}: Period 2, 6 cells that shift shape
+\item \textbf{Beacon}: Period 2, two blocks connected diagonally
+\item \textbf{Pulsar}: Period 3, a spectacular 48-cell pattern
+\end{itemize}
+
+\subsubsection{Spaceships}
+Patterns that translate across the grid:
+
+\begin{itemize}
+\item \textbf{Glider}: 5 cells that move diagonally
+\item \textbf{Lightweight Spaceship (LWSS)}: Moves horizontally
+\item \textbf{Middleweight Spaceship (MWSS)}: Larger horizontal mover
+\item \textbf{Heavyweight Spaceship (HWSS)}: Even larger horizontal mover
+\end{itemize}
+
+\subsection{Mathematical Properties}
+
+\subsubsection{Computational Universality}
+The Game of Life is Turing complete, meaning it can simulate any computation that can be described algorithmically. This was proven by constructing:
+
+\begin{itemize}
+\item Logic gates (AND, OR, NOT)
+\item Memory storage
+\item Signal transmission
+\end{itemize}
+
+\subsubsection{Growth Patterns}
+Starting from finite patterns, populations can:
+
+\begin{enumerate}
+\item Die out completely
+\item Stabilize at a constant population
+\item Oscillate between fixed states
+\item Grow indefinitely (rare but possible)
+\end{enumerate}
+
+\subsubsection{Density Classification}
+The critical density for random initial configurations is approximately 0.37. Above this, patterns tend to die out; below it, they tend to stabilize at lower densities.
+
+\subsection{Notable Discoveries}
+
+\subsubsection{Gosper Glider Gun}
+Discovered by Bill Gosper in 1970, this was the first pattern found that grows indefinitely, emitting a stream of gliders.
+
+\subsubsection{Garden of Eden}
+Patterns that cannot arise from any previous configuration through the rules of the game.
+
+\subsubsection{Methuselahs}
+Small patterns that take a long time to stabilize:
+
+\begin{itemize}
+\item \textbf{R-pentomino}: 5 cells that evolve for 1103 generations
+\item \textbf{Acorn}: 7 cells that stabilize after 5206 generations
+\item \textbf{Diehard}: 7 cells that vanish after 130 generations
+\end{itemize}
+
+\subsection{Applications and Influence}
+
+The Game of Life has influenced many fields:
+
+\begin{enumerate}
+\item \textbf{Computer Science}: Demonstrating emergence and self-organization
+\item \textbf{Biology}: Modeling population dynamics and pattern formation
+\item \textbf{Physics}: Studying phase transitions and critical phenomena
+\item \textbf{Philosophy}: Exploring questions about determinism and complexity
+\item \textbf{Art}: Creating generative and algorithmic art
+\end{enumerate}
+
+\subsection{Implementation Notes}
+
+Efficient implementations often use:
+
+\begin{itemize}
+\item Sparse data structures for large, mostly empty grids
+\item Bit manipulation for parallel cell updates
+\item HashLife algorithm for computing far-future states
+\item GPU acceleration for real-time visualization
+\end{itemize}
+
+\subsection{Further Exploration}
+
+\begin{itemize}
+\item \href{http://www.conwaylife.com/wiki/}{LifeWiki}: Comprehensive database of Life patterns
+\item Gardner, M. (1970). "The fantastic combinations of John Conway's new solitaire game 'life'"
+\item Berlekamp, E., Conway, J., Guy, R. (2001). \emph{Winning Ways for Your Mathematical Plays}
+\end{itemize}
+
+\end{document}
