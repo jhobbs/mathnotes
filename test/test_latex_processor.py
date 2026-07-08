@@ -366,6 +366,31 @@ def test_synonyms_outside_block_errors():
     expect_error(r"\synonyms{foo}", "block environment")
 
 
+# --- dialect: code blocks ---
+
+def test_verbatim_environment():
+    src = "\\begin{verbatim}\nfor i in x:\n    y = i % 2\n\\end{verbatim}\n"
+    out = body(src)
+    assert "```\nfor i in x:\n    y = i % 2\n```" in out
+
+
+def test_lstlisting_with_language():
+    src = ("Before.\n\\begin{lstlisting}[language=Python]\n"
+           "sequence.append(f\"E_{n},{m}\")\n"
+           "\\end{lstlisting}\nAfter.\n")
+    out = body(src)
+    assert "```python\nsequence.append(f\"E_{n},{m}\")\n```" in out
+    assert "Before." in out and "After." in out
+
+
+def test_verbatim_inside_proof():
+    src = ("\\begin{theorem}\\label{vt}\nX.\n\\end{theorem}\n"
+           "\\begin{proof}\nCode:\n\\begin{verbatim}\na & b $ c\n\\end{verbatim}\nDone.\n\\end{proof}\n")
+    out = body(src)
+    assert "::::proof" in out
+    assert "```\na & b $ c\n```" in out
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     failures = 0

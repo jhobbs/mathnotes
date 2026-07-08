@@ -59,6 +59,37 @@ class _BlockNode:
         self.children: List["_BlockNode"] = []
 
 
+class _LstlistingArgsParser(macrospec.VerbatimArgsParser):
+    """Verbatim-content parser for \\begin{lstlisting}...\\end{lstlisting}.
+
+    pylatexenc's VerbatimArgsParser hardcodes \\end{verbatim}; this variant
+    scans for \\end{lstlisting} instead. Any leading [options] remain part of
+    the verbatim text and are handled by the transpiler.
+    """
+
+    def __init__(self):
+        super().__init__(verbatim_arg_type="verbatim-environment")
+
+    def parse_args(self, w, pos, parsing_state=None):
+        end_marker = r"\end{lstlisting}"
+        endpos = w.s.find(end_marker, pos)
+        if endpos == -1:
+            raise latexwalker.LatexWalkerParseError(
+                s=w.s, pos=pos, msg=r"Cannot find matching \end{lstlisting}"
+            )
+        len_ = endpos - pos
+        argd = macrospec.ParsedVerbatimArgs(
+            verbatim_chars_node=w.make_node(
+                latexwalker.LatexCharsNode,
+                parsing_state=parsing_state,
+                chars=w.s[pos:pos + len_],
+                pos=pos,
+                len=len_,
+            )
+        )
+        return (argd, pos, len_)
+
+
 def _latex_context():
     ctx = latexwalker.get_default_latex_context_db()
     ctx.add_context_category(
@@ -77,6 +108,8 @@ def _latex_context():
         ],
         environments=[
             macrospec.EnvironmentSpec(name, "[") for name in sorted(_BLOCK_ENV_NAMES)
+        ] + [
+            macrospec.EnvironmentSpec("lstlisting", args_parser=_LstlistingArgsParser()),
         ],
     )
     return ctx
@@ -376,6 +409,8 @@ class _Transpiler:
         name = n.environmentname
         if name in ("itemize", "enumerate"):
             return self._list(n, ordered=(name == "enumerate"))
+        if name in ("verbatim", "lstlisting"):
+            return self._code_block(n)
         if name in _BLOCK_ENV_NAMES:
             self._err(
                 n,
@@ -383,6 +418,19 @@ class _Transpiler:
                 f"convention (close the outer environment first)",
             )
         self._err(n, f"unsupported environment '{name}'")
+
+    def _code_block(self, n) -> str:
+        """verbatim / lstlisting environments become fenced code blocks."""
+        text = n.nodeargd.verbatim_text
+        lang = ""
+        if n.environmentname == "lstlisting":
+            options = re.match(r"^\[([^\]]*)\]", text)
+            if options:
+                text = text[options.end():]
+                lang_opt = re.search(r"language\s*=\s*([A-Za-z0-9+#-]+)", options.group(1))
+                if lang_opt:
+                    lang = lang_opt.group(1).lower()
+        return f"\n\n```{lang}\n{text.strip(chr(10))}\n```\n\n"
 
     def _list(self, n, ordered: bool) -> str:
         items: List[list] = []
