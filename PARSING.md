@@ -2,6 +2,14 @@
 
 This document explains how Mathnotes processes markdown content with structured mathematical blocks, avoiding double processing while enabling cross-file references and tooltips.
 
+> **Note (2026-07):** Content is authored in a LaTeX dialect (`content/**/*.tex`),
+> not markdown. `mathnotes/latex_processor.py` transpiles each `.tex` file into
+> the internal markdown dialect described below (`:::type` blocks, `@label`
+> references), and `mathnotes/content_loader.py` is the shared entry point that
+> returns `(metadata, content)` for either format. Everything in this document
+> still applies — it now describes the pipeline downstream of transpilation.
+> The dialect itself is documented in [latex/README.md](./latex/README.md).
+
 ## Overview
 
 The parsing pipeline uses a two-phase approach:

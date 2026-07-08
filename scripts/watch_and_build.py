@@ -116,9 +116,20 @@ def main():
 
     logger.info(f"Starting persistent build watcher, output={output_dir}")
 
-    # Initial build
+    # Initial build. A content error present at startup (e.g. a LaTeX
+    # dialect error) must not kill the watcher — wait for the file to be
+    # fixed and retry instead
     logger.info("Performing initial build...")
-    builder = build_site(output_dir)
+    builder = None
+    while builder is None:
+        try:
+            builder = build_site(output_dir)
+        except Exception as e:
+            logger.exception(f"Initial build failed: {e}")
+            logger.error("Watcher still alive — fix the file above to trigger a retry")
+            failed_mtimes = get_mtimes(CONTENT_DIRS)
+            while get_mtimes(CONTENT_DIRS) == failed_mtimes:
+                time.sleep(1)
 
     # Write timestamp for browser refresh (outside website dir so it survives clean)
     timestamp_file = Path(TIMESTAMP_FILE)

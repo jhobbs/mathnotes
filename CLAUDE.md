@@ -5,12 +5,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Repository Overview
 
 Mathnotes is a static site generator that renders mathematics notes with interactive demonstrations into static HTML files served by nginx. The application features:
+- Content authored in a LaTeX dialect (`content/**/*.tex`) — structured blocks are amsthm-style environments (`\begin{theorem}`, `\begin{proof}`, ...); see [latex/README.md](./latex/README.md) for the dialect and how to compile a page to PDF locally
 - Structured mathematical content with semantic markup (theorems, proofs, definitions)
 - TypeScript interactive demos using p5.js for 2D/WebGL graphics and Plotly.js for 3D scientific visualizations
-- Wiki-style cross-references using `[[slug]]` syntax
+- Cross-references via `\dref{label}` (blocks) and `\pagelink{slug}` (pages)
 - Dark mode support with automatic detection
 - Comprehensive security headers with Content Security Policy
 - Modern CSS system with PostCSS, CSS custom properties, and hot module replacement
+
+**Content pipeline**: `.tex` files are transpiled by `mathnotes/latex_processor.py` into an internal markdown dialect (`:::theorem` blocks, `@label` refs) consumed by the existing parsing pipeline. The internal dialect is an intermediate representation, not an authoring format. Unsupported LaTeX constructs are loud build errors with file:line — extend the dialect deliberately in `latex_processor.py`, never silently. `scripts/md_to_tex.py` converts any stray markdown file to the dialect with round-trip verification.
 
 ## Security and Best Practices
 
@@ -30,9 +33,11 @@ Mathnotes is a static site generator that renders mathematics notes with interac
 ### Common Commands
 
 ### Running Tests
+Python tests are standalone assert scripts (no pytest in the container); run them via stdin into the dev builder container:
 ```bash
-# Run all tests
-./run_tests.sh
+docker exec -i mathnotes-static-builder python3 - < test/test_latex_processor.py
+docker exec -i mathnotes-static-builder python3 - < test/test_latex_integration.py
+docker exec -i -w /app mathnotes-static-builder python3 - < test/test_cache_invalidation.py
 ```
 
 ### Development Server
@@ -95,10 +100,7 @@ You have to use the venv to run ./scripts/crawl-demos.py
 For advanced demo testing commands (AI analysis, standards checking, scaling verification, etc.), see [DEBUGGING.md](./DEBUGGING.md#demo-testing-workflow).
 
 ### Content Management
-```bash
-# Move files
-./scripts/move_file.sh old/path.md new/path.md
-```
+When moving/renaming a content file: `git mv` it, then update any `\pagelink{...}` or hard links that referenced the old slug (URLs derive from the path unless frontmatter/`\slug{}` overrides). Block labels travel with the file, so `\dref` references keep working.
 
 ## Architecture Overview
 
@@ -112,17 +114,20 @@ For advanced demo testing commands (AI analysis, standards checking, scaling ver
 
 #### Processing Components
 1. **URL Resolution** (`url_mapper.py`): Maps slugs to file paths
-2. **Markdown Processing** (`markdown_processor.py`): 
+2. **LaTeX Transpilation** (`latex_processor.py`): parses the `.tex` dialect
+   with pylatexenc and emits the internal markdown dialect; `content_loader.py`
+   is the single `(metadata, content)` entry point for both formats
+3. **Markdown Processing** (`markdown_processor.py`): 
    - Protects math expressions from markdown parsing
    - Processes wiki-style links `[[slug]]`
    - Handles `{% include_demo %}` tags
-3. **Structured Math** (`structured_math.py`): 
+4. **Structured Math** (`structured_math.py`): 
    - Parses `:::type` blocks (definition, theorem, proof, etc.)
    - Builds global index for cross-references
    - Handles `@label` references and `@@label` embeds
-4. **Security** (`security.py`): Embeds CSP and security headers in HTML
-5. **Rendering**: Jinja2 templates generate static HTML with MathJax for LaTeX
-6. **Output**: Complete static site ready for nginx serving
+5. **Security** (`security.py`): Embeds CSP and security headers in HTML
+6. **Rendering**: Jinja2 templates generate static HTML with MathJax for LaTeX
+7. **Output**: Complete static site ready for nginx serving
 
 ### Key Architectural Decisions
 

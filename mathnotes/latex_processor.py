@@ -166,6 +166,13 @@ class _Transpiler:
         group = args[-1] if args else None
         if group is None:
             self._err(macro_node, f"\\{macro_node.macroname} requires an argument")
+        for n in group.nodelist:
+            if not isinstance(n, (LatexCharsNode, LatexCommentNode)):
+                self._err(
+                    macro_node,
+                    f"\\{macro_node.macroname} argument must be plain text "
+                    f"(no math or commands)",
+                )
         text = "".join(
             n.chars for n in group.nodelist if isinstance(n, LatexCharsNode)
         ).strip()
@@ -592,6 +599,8 @@ class _Transpiler:
         if opt is None:
             return f"@{label}"
         text = self._prose(opt.nodelist).strip()
+        if "|" in text:
+            self._err(n, "\\dref text may not contain a pipe (it delimits the reference)")
         return f"@{{{text}|{label}}}"
 
     def _pagelink(self, n) -> str:
@@ -604,6 +613,8 @@ class _Transpiler:
         if opt is None:
             return f"[[{slug}]]"
         text = self._prose(opt.nodelist).strip()
+        if "|" in text:
+            self._err(n, "\\pagelink text may not contain a pipe (it delimits the slug)")
         return f"[[{text}|{slug}]]"
 
     def _includedemo(self, n) -> str:

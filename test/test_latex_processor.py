@@ -507,6 +507,24 @@ def test_includegraphics_title():
     assert out.strip() == '![Arc](ds.png "arc length differential")'
 
 
+# --- hygiene: loud errors instead of silent drops ---
+
+def test_math_in_title_metadata_errors():
+    expect_error("\\title{Compact $K$ Sets}\nx\n", "plain text")
+
+
+def test_math_in_label_errors():
+    expect_error("\\begin{theorem}\\label{a $b$ c}\nX.\n\\end{theorem}\n", "plain text")
+
+
+def test_pipe_in_dref_text_errors():
+    expect_error(r"\dref[text with | pipe]{some-label}", "pipe")
+
+
+def test_pipe_in_pagelink_text_errors():
+    expect_error(r"\pagelink[text | here]{slug}", "pipe")
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     failures = 0

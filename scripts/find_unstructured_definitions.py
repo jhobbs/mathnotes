@@ -1,20 +1,31 @@
 #!/usr/bin/env python3
 """
-Find potential definitions in markdown files that aren't using definition blocks.
+Find potential definitions in content files that aren't using definition blocks.
+
+Handles both .md and .tex content: .tex files are transpiled to the internal
+markdown dialect first, so the patterns below apply uniformly. Line numbers
+for .tex findings refer to the transpiled form — use the context snippet to
+locate the passage in the source.
 
 This script searches for patterns that commonly indicate definitions:
 - Bold text followed by "is" or "are"
 - Sentences containing "defined as" or "is defined"
 - Other definition-like patterns
 
-Outputs a report file with all findings for later review.
+Outputs a report file with all findings for later review. Run inside the
+builder container:
+
+    docker exec -w /app mathnotes-static-builder python3 scripts/find_unstructured_definitions.py
 """
 
 import os
 import re
+import sys
 from pathlib import Path
 from typing import List, Tuple, Dict
 from datetime import datetime
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 # Pattern for structured definition blocks
 STRUCTURED_DEF_PATTERN = re.compile(r':::+\s*definition', re.IGNORECASE)
@@ -52,15 +63,22 @@ class DefinitionFinder:
         self.findings: List[Dict] = []
         
     def find_unstructured_definitions(self):
-        """Search all markdown files for potential unstructured definitions."""
-        for md_file in self.content_dir.rglob('*.md'):
-            self._analyze_file(md_file)
-    
+        """Search all content files for potential unstructured definitions."""
+        for content_file in sorted(
+            list(self.content_dir.rglob('*.md')) + list(self.content_dir.rglob('*.tex'))
+        ):
+            self._analyze_file(content_file)
+
     def _analyze_file(self, file_path: Path):
-        """Analyze a single markdown file for potential definitions."""
+        """Analyze a single content file for potential definitions."""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
+            if file_path.suffix == '.tex':
+                from mathnotes.latex_processor import parse_latex_file
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    _, content = parse_latex_file(f.read(), filepath=str(file_path))
+            else:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
             
             # Skip if file uses structured definitions
             if STRUCTURED_DEF_PATTERN.search(content):
@@ -173,8 +191,8 @@ class DefinitionFinder:
                 print(f"  - {finding['file']}:{finding['line']} - {finding['matched_text'][:50]}...")
 
 def main():
-    content_dir = "/home/jason/mathnotes/content"
-    output_file = "/home/jason/mathnotes/unstructured_definitions_report.md"
+    content_dir = "content"
+    output_file = "/tmp/unstructured_definitions_report.md"
     
     print("Searching for unstructured definitions...")
     finder = DefinitionFinder(content_dir)
