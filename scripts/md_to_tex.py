@@ -166,7 +166,9 @@ class ProseConverter:
             self.err(f"heading level {depth} not supported (h1-h5 only): {m.group(0)!r}")
         name = {1: "section", 2: "subsection", 3: "subsubsection",
                 4: "paragraph", 5: "subparagraph"}[depth]
-        return self._stash(f"\\{name}{{{m.group(2).strip()}}}")
+        # markdown allows (and strips) closing hashes; # is illegal in LaTeX text
+        title = m.group(2).strip().rstrip(" #")
+        return self._stash(f"\\{name}{{{title}}}")
 
     def _convert_lists(self, text: str) -> str:
         out = []
@@ -262,6 +264,10 @@ class ProseConverter:
     def _restore_math(self, text: str, protector: MathProtector) -> str:
         for placeholder, math in protector.display_math.items():
             inner = math[2:-2].strip()
+            # blank/whitespace-only lines inside \[ \] are TeX errors, and
+            # align cannot nest in a display — MathJax tolerates both
+            inner = re.sub(r"\n[ \t]*(?:\n[ \t]*)+", "\n", inner)
+            inner = re.sub(r"\\(begin|end)\{align\}", r"\\\1{aligned}", inner)
             text = text.replace(placeholder, f"\\[ {inner} \\]")
         for placeholder, math in protector.inline_math.items():
             text = text.replace(placeholder, math)

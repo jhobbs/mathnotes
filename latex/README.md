@@ -9,6 +9,27 @@ directory exists so the same files also compile to PDF locally.
     cd <repo-root>
     TEXINPUTS=./latex: pdflatex -output-directory=/tmp content/topology/compact-sets.tex
 
+## Editing in TeXstudio / Overleaf
+
+Content files are self-contained documents; the only non-stock dependency is
+`mathnotes.sty` (which itself uses only standard packages: amsmath, amssymb,
+amsthm, hyperref, listings, graphicx, xstring, cancel).
+
+- **Overleaf**: upload `mathnotes.sty` alongside the `.tex` file (plus any
+  images from the same content directory).
+- **TeXstudio/local**: either set `TEXINPUTS` to include `<repo>/latex`, or
+  add the repo's `latex/` dir to your distro search path
+  (`tlmgr conf texmf TEXMFHOME ...` or just copy the .sty next to the file).
+
+Expected limitations outside the site: `\dref` to blocks defined on *other*
+pages are dead links in the PDF (they compile, with warnings); web images
+render as a placeholder box; `\includedemo` renders a note.
+
+The math macros section of `mathnotes.sty` (between the `MATH MACROS`
+markers) is the single source of truth for both pdflatex and the site's
+MathJax — `mathjax-init.ts` parses it at bundle time. Add new math macros
+there and both renderers pick them up.
+
 ## The dialect
 
 See `docs/superpowers/specs/2026-07-07-latex-content-format-design.md`.

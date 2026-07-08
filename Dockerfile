@@ -25,6 +25,7 @@ RUN npm ci
 COPY demos-framework/ ./demos-framework/
 COPY styles/ ./styles/
 COPY demos/ ./demos/
+COPY latex/ ./latex/
 
 # Run type check first, then build assets with esbuild
 RUN npm run type-check && npm run build

@@ -16,9 +16,19 @@
 \RequirePackage{graphicx}
 \define@key{Gin}{alt}{}
 \define@key{Gin}{title}{}
+% pdflatex cannot fetch remote images; render a placeholder box instead of
+% erroring so pages with web images still compile
+\RequirePackage{xstring}
+\let\mathnotes@includegraphics\includegraphics
+\renewcommand{\includegraphics}[2][]{%
+  \IfBeginWith{#2}{http}{\fbox{\texttt{[web image]}}}{%
+    \mathnotes@includegraphics[#1]{#2}}%
+}
 
-% Site metadata commands (\title is standard LaTeX; these are no-ops in PDF)
-\newcommand{\description}[1]{}
+% Site metadata commands (\title is standard LaTeX; these are no-ops in PDF).
+% \renewcommand for \description: the kernel defines it as part of the
+% description list environment, which the dialect does not use
+\renewcommand{\description}[1]{}
 \newcommand{\slug}[1]{}
 % Page-level source citation: \source{title={...}, author={...}, type=book, ...}
 % Rendered by the site's sources footer and bibliography; no-op in PDF
@@ -41,6 +51,44 @@
 }
 % Interactive demo placeholder
 \newcommand{\includedemo}[1]{\begin{quote}\emph{[Interactive demo: #1]}\end{quote}}
+
+% Math macros shared with the site: mathjax-init.ts parses the section
+% between the BEGIN/END MATH MACROS markers at build time, so this file is
+% the single source of truth. Only simple one-line
+% \newcommand/\renewcommand{\name}[n]{expansion} definitions belong inside
+% the markers.
+% BEGIN MATH MACROS
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\renewcommand{\div}{\operatorname{div}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\curl}{\operatorname{curl}}
+\newcommand{\grad}{\operatorname{grad}}
+\newcommand{\Arg}{\operatorname{Arg}}
+\newcommand{\Log}{\operatorname{Log}}
+\newcommand{\Span}{\operatorname{Span}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\proj}{\operatorname{proj}}
+\newcommand{\comp}{\operatorname{comp}}
+\newcommand{\orth}{\operatorname{orth}}
+\newcommand{\norm}{\operatorname{norm}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\sech}{\operatorname{sech}}
+\newcommand{\csch}{\operatorname{csch}}
+\newcommand{\Arctan}{\operatorname{Arctan}}
+\newcommand{\tr}[1]{\operatorname{tr}{#1}}
+\newcommand{\Res}{\operatorname*{Res}}
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\degree}{^\circ}
+% END MATH MACROS
+
+% MathJax-isms: \require{ext} loads a MathJax extension client-side (no-op
+% here); cancel provides the \cancel MathJax offers via \require{cancel}
+\newcommand{\require}[1]{}
+\RequirePackage{cancel}
+% Unicode characters MathJax renders natively but pdflatex needs mappings for
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
 
 % Theorem environments matching the site's block types (amsthm's proof
 % environment covers proofs)

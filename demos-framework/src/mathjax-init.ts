@@ -1,8 +1,46 @@
 // MathJax initialization module
+import mathnotesSty from '../../latex/mathnotes.sty';
+
 declare global {
   interface Window {
     MathJax: any;
   }
+}
+
+type MathJaxMacro = string | [string, number];
+
+// Math macros live in latex/mathnotes.sty (single source of truth, shared
+// with pdflatex). Parse the marked section: simple one-line
+// \newcommand/\renewcommand{\name}[n]{expansion} definitions only.
+export function parseStyMacros(sty: string): Record<string, MathJaxMacro> {
+  const macros: Record<string, MathJaxMacro> = {};
+  const begin = sty.indexOf('% BEGIN MATH MACROS');
+  const end = sty.indexOf('% END MATH MACROS');
+  if (begin === -1 || end === -1 || end <= begin) {
+    throw new Error('mathnotes.sty: MATH MACROS markers not found');
+  }
+  const section = sty.slice(begin, end);
+  const definition = /\\(?:re)?newcommand\{\\([A-Za-z]+)\}(?:\[(\d)\])?\{/g;
+  let match;
+  while ((match = definition.exec(section)) !== null) {
+    // brace-count to the matching close of the expansion body
+    let depth = 1;
+    let i = definition.lastIndex;
+    while (i < section.length && depth > 0) {
+      if (section[i] === '\\') i += 1; // skip escaped char
+      else if (section[i] === '{') depth += 1;
+      else if (section[i] === '}') depth -= 1;
+      i += 1;
+    }
+    const body = section.slice(definition.lastIndex, i - 1);
+    const [name, nargs] = [match[1], match[2]];
+    macros[name] = nargs ? [body, parseInt(nargs, 10)] : body;
+    definition.lastIndex = i;
+  }
+  if (Object.keys(macros).length === 0) {
+    throw new Error('mathnotes.sty: no macros parsed from MATH MACROS section');
+  }
+  return macros;
 }
 
 export async function initMathJax() {
@@ -13,30 +51,7 @@ export async function initMathJax() {
       displayMath: [['$$', '$$'], ['\\[', '\\]']],
       processEscapes: true,
       packages: {'[+]': ['enclose']},
-      macros: {
-        vec: ['\\mathbf{#1}', 1],
-        diam: '\\operatorname{diam}',
-        curl: '\\operatorname{curl}',
-        div: '\\operatorname{div}',
-        grad: '\\operatorname{grad}',
-        Arg: '\\operatorname{Arg}',
-        Log: '\\operatorname{Log}',
-        Span: '\\operatorname{Span}',
-        Cov: '\\operatorname{Cov}',
-        proj: '\\operatorname{proj}',
-        comp: '\\operatorname{comp}',
-        orth: '\\operatorname{orth}',
-        norm: '\\operatorname{norm}',
-        ord: '\\operatorname{ord}',
-        sech: '\\operatorname{sech}',
-        csch: '\\operatorname{csch}',
-        Arctan: '\\operatorname{Arctan}',
-        Re: '\\operatorname{Re}',
-        Im: '\\operatorname{Im}',
-        tr: ['\\operatorname{tr}{#1}', 1],
-        Res: '\\operatorname*{Res}',
-        closure: ['\\overline{#1}', 1]
-      }
+      macros: parseStyMacros(mathnotesSty)
     },
     startup: {
       ready: () => {

@@ -98,7 +98,6 @@ Suppose $\{s_n\}$ and $\{t_n\}$ are complex \dref{sequences}, and $\lim_{n \to \
 For (a), let $\epsilon > 0,$ pick $N_s$ such that $|s_n - s| < \epsilon/2$ when $n \geq N_s,$ and pick $N_t$ such that $|t_n - s| < \epsilon/2$ when $n \geq N_t.$ Then, let $N = \max\{N_s, N_t\}.$ Then, when $n \geq N,$
 
 \[ \begin{aligned}
-
  |(s_n + t_n) - (s + t) | & = | (s_n - s) + (t_n - t)| \\
                           & \leq |s_n - s| + |t_n - t| \\
                           & < \epsilon.
@@ -109,7 +108,6 @@ For (b), If $c = 0,$ let $\epsilon > 0,$ and then $|c s_n - c s| = 0 < \epsilon.
 Let $\epsilon / |c| > 0.$ For some $N,$ when $n \geq N,$ we have
 
 \[ \begin{aligned}
-
 |s_n - s| < \epsilon / |c| & \iff |c| |s_n - s| < \epsilon  \\
                      & \iff |cs_n - cs | < \epsilon.
 \end{aligned} \]
@@ -133,25 +131,20 @@ which means
 Applying this, along with the results of (a) and (b) to (1) gives:
 
 \[ \begin{aligned}
-
 \lim_{n \to \infty} (s_n t_n - st) & = \lim_{n \to \infty} ((s_n - s)(t_n - t) + s(t_n - t) + t(s_n - s)) \\
                                    & = \lim_{n \to \infty} (s(t_n - t) + t(s_n - s)) \\
                                    & = \lim_{n \to \infty} (s(t_n - t)) + \lim_{n \to \infty} (t(s_n - s)) \\
                                    & = s * 0 + t * 0 \\
                                    & = 0.
-        
-
 \end{aligned} \]
 
 For (e), pick $m$ such that when $n \geq m, |s_n - s| < \frac{1}{2}|s|,$ so we have that
 
 \[ \begin{aligned}
-
 |s_n - s| < \frac{1}{2}|s| & \iff |s_n| + |s| < \frac{1}{2}|s| \\
                            & \iff |s_n| < -\frac{1}{2}|s| \\
                            & \iff |s_n| > \frac{1}{2}|s| \\
                            & \iff \frac{1}{2 |s_n|}|s| < 1.
-
 \end{aligned} \]
 
 Now, let $\epsilon > 0.$ For some integer $N > m,$ when $n \geq M,$ we have that
@@ -161,7 +154,6 @@ Now, let $\epsilon > 0.$ For some integer $N > m,$ when $n \geq M,$ we have that
 Thus, when $n \geq N,$
 
 \[ \begin{aligned}
-
 \left | \frac{1}{s_n} - \frac{1}{s} \right | & = \left | \frac{s_n - s}{s_n s} \right | \\
                                              & = \frac{|s_n - s|}{|s_n s|} \\
                                              & < \frac{1}{2 |s_n||s|}|s|^2 \epsilon \\
@@ -303,11 +295,9 @@ Because $E \subset \closure{E},$ $\diam{E} \leq \diam{\closure{E}}.$
 Conversely, Let $p, q \in \closure{E},$ and $p', q' \in E,$ such that $d(p, p') < \epsilon, d(q, q') < \epsilon.$ Therefore, by the triangle inequality,
 
 \[ \begin{aligned}
-
 d(p,q) & \leq d(p, p') + d(p', q') + d(q', q) \\
        & < 2 \epsilon + d(p', q') \\
        & \leq 2 \epsilon + \diam{E}.
-
 \end{aligned} \]
 
 Therefore, $\diam{\closure{E}} \leq 2 \epsilon + \diam{E},$ and since $\epsilon$ was arbitrary, $\diam{\closure{E}} = \diam{E}.$

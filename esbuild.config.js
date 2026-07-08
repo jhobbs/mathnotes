@@ -87,6 +87,7 @@ const buildOptions = {
   entryNames: '[name]-[hash]',
   publicPath: '/static/dist/',
   loader: {
+    '.sty': 'text',
     '.woff': 'file',
     '.woff2': 'file',
     '.ttf': 'file',

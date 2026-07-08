@@ -481,7 +481,6 @@ Note that $q_i = \sum_{j} A_{ij} p_j,$ by the definition of vector matrix multip
 Now we find the \dref{relative-entropy} from $s$ to $r$:
 
 \[ \begin{aligned}
-
 D(r || s) & = \sum_{i,j} r_{ij} \log{\frac{r_{ij}}{s_{ij}}} \\
           & = \sum_{i,j} A_{ij} p_j \log{\frac{A_{ij} p_j}{A_{ij} q_i }} \\
           & = \sum_{i,j} A_{ij} p_j \log{\frac{p_j}{q_i}} \\
@@ -492,7 +491,6 @@ D(r || s) & = \sum_{i,j} r_{ij} \log{\frac{r_{ij}}{s_{ij}}} \\
 Now, addressing the first term on the RHS of the last line:
 
 \[ \begin{aligned}
-
 \sum_{i,j} A_{ij} p_j \log{p_j} & = \sum_j \left [ p_j \log{p_j} \sum_{i} A_{ij} \right ] \\
                                 & = \sum_j \left [ p_j \log{p_j} \cdot 1 \right ] \\
                                 & = \sum_j  p_j \log{p_j} \\

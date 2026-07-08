@@ -80,11 +80,9 @@ Let $X$ be a metric space in which every infinite subset has a limit point. Then
 Let $\delta > 0,$ and pick $x_1 \in X.$ Now, continue picking $x_{j+1}$ such that $d(x_i, x_{j+1}) \geq \delta$ i.e. so that each new point is at least $\delta$ away from each existing point. Suppose this process continues infinitely; then the points $\{x_i\}$ are an infinite subset of $X,$ and thus must have a limit point $p.$ Now, because \dref[every neighborhood of $p$ must contain infinitely many points in ${x_i}$]{neighborhood-of-limit-point-contains-infinitely-many-points}, we can let $r = \delta / 2,$ $N_r{p}$ be a neighborhood of $p,$ and pick $x, y \in \{x_i\}, N_r{p}.$ But, by the triangle inequality
 
 \[ \begin{aligned}
-
 d(x, y) & \leq d(x, p) + d(p, y) \\
         & < \delta / 2 + \delta / 2 \\
         & = \delta
-
 \end{aligned} \]
 
 so $d(x,y) < \epsilon,$ which contradicts our assumption that $\{x_i\}$ could be an infinite set where all points were at least $\delta$ apart. Therefore, $\{x_i\}$ has only finitely many points, and $X$ can be covered with finitely many open balls of radius $\delta$ (for if it couldn't be, we could always fit another point into $\{x_i\}.$)

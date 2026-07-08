@@ -145,7 +145,7 @@ If we rearrange the ordered set $A = \{1,2,3,4,5\}$ to another order, say $\{3,2
 
 This rearrangement is a bijection from $A$ to $A$ that performs
 
-\[ \begin{align} 1 \to 3 \\ 2 \to 2 \\ 3 \to 5 \\ 4 \to 1 \\ 5 \to 4 \end{align} \]
+\[ \begin{aligned} 1 \to 3 \\ 2 \to 2 \\ 3 \to 5 \\ 4 \to 1 \\ 5 \to 4 \end{aligned} \]
 
 We can represent this permutation compactly using a matrix
 
@@ -263,7 +263,7 @@ Let $H$ be a subgroup of $G$. Given $a \in G$, the subset $aH = \{ah | h \in H\}
 \begin{example}[Left Cosets of $3\mathbb{Z}$]
 Left \dref{cosets} of \dref{subgroup} $3\mathbb{Z}$ of $\mathbb{Z}$:
 
-\[ \begin{align} 0 + 3\mathbb{Z} = \{\dots, -9, -6, 0, 3, 6, 9, \dots\} \\ 1 + 3\mathbb{Z} = \{\dots, -8, -5, 1, 4, 7, 10, \dots\} \\  2 + 3\mathbb{Z} = \{\dots, -7, -4, 2, 5, 8, 11, \dots\} \\  \end{align} \]
+\[ \begin{aligned} 0 + 3\mathbb{Z} = \{\dots, -9, -6, 0, 3, 6, 9, \dots\} \\ 1 + 3\mathbb{Z} = \{\dots, -8, -5, 1, 4, 7, 10, \dots\} \\  2 + 3\mathbb{Z} = \{\dots, -7, -4, 2, 5, 8, 11, \dots\} \\  \end{aligned} \]
 \end{example}
 
 \begin{proposition}[Properties of Cosets]\label{coset-properties}
@@ -303,7 +303,7 @@ In more detail, say $G$ can be partitioned into $n = (G:H)$ cosets of $H$, where
 
 Then, $\mathcal{P}$ is 
 
-\[ \begin{align} \mathcal{P} = \{ & a_1 H,  \\ & a_2 H, \\ & a_3 H, \\ & \cdots, \\ & a_n H\} \end{align}, \tag{a} \]
+\[ \begin{aligned} \mathcal{P} = \{ & a_1 H,  \\ & a_2 H, \\ & a_3 H, \\ & \cdots, \\ & a_n H\} \end{aligned}, \tag{a} \]
 
 and each $a_i H$ is a disjoint coset of $H$ in $G$.
 
@@ -311,11 +311,11 @@ Now, $H$ can be partitioned into $m = (H:K)$ cosets of $K$, where $m$ is a natur
   
 Then, $\mathcal{Q} = \{ b_1 K, b_2 K, b_3 K, \cdots,  b_m K\}$. Now, we can recover $H$ by taking the union of the elements of $\mathcal{Q}$, that is, $H = \bigcup_{q \in \mathcal{Q}} q$, so the elements of $\mathcal{Q}$, after a round of flattening, are the same as those of $H.$ If we replace $H$ in (a) with $\mathcal{Q}$, distribute each $a_n$ group action over the elements of $\mathcal{Q}$, and then take the union across each resulting set we end up with
 
-\[ \begin{align} \mathcal{R} = \{ & a_1 b_1 K, a_1 b_2 K, a_1 b_3 K, \cdots, a_1 b_m K,  \\ 
+\[ \begin{aligned} \mathcal{R} = \{ & a_1 b_1 K, a_1 b_2 K, a_1 b_3 K, \cdots, a_1 b_m K,  \\ 
                                   & a_2 b_1 K, a_2 b_2 K, a_2 b_3 K, \cdots, a_2 b_m K,  \\
                                   & a_3 b_1 K, a_3 b_2 K, a_3 b_3 K, \cdots, a_3 b_m K,  \\
                                   & \cdots, \\
-                                  & a_n b_1 K, a_n b_2 K, a_n b_3 K, \cdots, a_n b_m K\}, \end{align} \]
+                                  & a_n b_1 K, a_n b_2 K, a_n b_3 K, \cdots, a_n b_m K\}, \end{aligned} \]
 
 which is $G$ partitioned into the left cosets of $K$. Because we constructed each element in $\mathcal{R}$ by partitioning the elements of a partition of $G$ into cosets of $K$ (then taking their union), we know they are disjoint and cover all of $G$. There are $nm = (G:H)(H:K) = (G:K)$ elements in $\mathcal{R}$, and since $n$ and $m$ are finite, so is $(G:K)$.
 \end{proof}
