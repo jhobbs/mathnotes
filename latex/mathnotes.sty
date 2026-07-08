@@ -12,8 +12,16 @@
 % Site metadata commands (\title is standard LaTeX; these are no-ops in PDF)
 \newcommand{\description}[1]{}
 \newcommand{\slug}[1]{}
+% Page-level source citation: \source{title={...}, author={...}, type=book, ...}
+% Rendered by the site's sources footer and bibliography; no-op in PDF
+\newcommand{\source}[1]{}
 % Clears the site's block-attachment anchor; does nothing in PDF
 \newcommand{\detach}{}
+
+% Definition synonyms (site: index aliases + "(also: ...)" in the header)
+\newcommand{\synonyms}[1]{\emph{(also: #1)} }
+% Block tags (site: header chips; no-op in PDF)
+\newcommand{\tags}[1]{}
 
 % Block reference: \dref{label} or \dref[custom text]{label}
 \NewDocumentCommand{\dref}{o m}{%

@@ -283,6 +283,89 @@ def test_multiline_block_title_collapses():
     assert ':::definition "Open Cover"' in out
 
 
+# --- dialect: sources, synonyms, tags ---
+
+def test_source_macros_collect_metadata():
+    src = r"""\title{X}
+\source{title={Principles of Mathematical Analysis}, author={Walter Rudin}, type=book, published=1976}
+\source{title={Real Mathematical Analysis, 2nd}, author={Charles C. Pugh}}
+
+Prose.
+"""
+    meta, content = parse_latex_file(src, "test.tex")
+    assert meta["sources"] == [
+        {"title": "Principles of Mathematical Analysis", "author": "Walter Rudin",
+         "type": "book", "published": "1976"},
+        {"title": "Real Mathematical Analysis, 2nd", "author": "Charles C. Pugh"},
+    ]
+    assert content.strip() == "Prose."
+
+
+def test_source_in_document_body():
+    src = ("\\documentclass{article}\n\\begin{document}\n"
+           "\\source{title={T}, author={A}}\nBody.\n\\end{document}\n")
+    meta, content = parse_latex_file(src, "test.tex")
+    assert meta["sources"] == [{"title": "T", "author": "A"}]
+    assert content.strip() == "Body."
+
+
+def test_source_between_theorem_and_proof_keeps_attachment():
+    src = ("\\begin{theorem}\\label{t9}\nX.\n\\end{theorem}\n"
+           "\\source{title={T}}\n"
+           "\\begin{proof}\nY.\n\\end{proof}\n")
+    out = body(src)
+    assert "::::proof" in out
+
+
+def test_source_bad_pair_errors():
+    expect_error(r"\source{just a title}", "key=value")
+
+
+def test_source_inside_block_errors():
+    expect_error(
+        "\\begin{theorem}\\label{t}\nX. \\source{title={T}}\n\\end{theorem}\n",
+        "page level",
+    )
+
+
+def test_synonyms_and_tags_transpile_and_roundtrip():
+    from mathnotes.structured_math import StructuredMathParser
+
+    src = ("\\begin{definition}[Open Cover]\\label{open-cover}"
+           "\\synonyms{open covers, covering}\\tags{topology}\n"
+           "Stuff.\n\\end{definition}\n")
+    _, content = parse_latex_file(src, "test.tex")
+    assert (':::definition "Open Cover" '
+            "{label: open-cover, synonyms: open covers, covering, tags: topology}") in content
+    _, markers = StructuredMathParser().parse(content)
+    block = next(iter(markers.values()))
+    assert [s[0] for s in block.synonyms] == ["open covers", "covering"]
+    assert block.tags == ["topology"]
+
+
+def test_tags_allowed_on_theorem():
+    src = "\\begin{theorem}\\label{t}\\tags{algebra}\nX.\n\\end{theorem}\n"
+    assert ":::theorem {label: t, tags: algebra}" in body(src)
+
+
+def test_synonyms_on_theorem_errors():
+    expect_error(
+        "\\begin{theorem}\\label{t}\\synonyms{thing}\nX.\n\\end{theorem}\n",
+        "definition",
+    )
+
+
+def test_duplicate_synonyms_errors():
+    expect_error(
+        "\\begin{definition}[A]\\synonyms{x}\\synonyms{y}\nX.\n\\end{definition}\n",
+        "multiple \\synonyms",
+    )
+
+
+def test_synonyms_outside_block_errors():
+    expect_error(r"\synonyms{foo}", "block environment")
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     failures = 0

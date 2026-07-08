@@ -18,6 +18,12 @@ Highlights:
   + `\begin{document}`) or bare fragments both work on the site; only
   standalone files compile with pdflatex.
 - `\title{...}` / `\description{...}` / `\slug{...}` = page metadata.
+- `\source{title={...}, author={...}, type=book, ...}` = a page source
+  (repeatable; same keys as `sources.yaml`; equivalent of frontmatter
+  `sources:`). Braced values may contain commas; bare values may not.
+- `\synonyms{open covers, coverings}` on a definition (next to `\label`)
+  = index aliases, like the markdown `{synonyms: ...}` metadata.
+  `\tags{topology}` works on any block.
 - Theorem-like environments follow the amsthm sibling convention
   (`\begin{proof}` *after* `\end{theorem}`); the site re-nests them.
   `\detach` stops a following note/remark from attaching to the previous

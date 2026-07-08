@@ -167,19 +167,20 @@ class ContentPages(Page):
             # Build navigation data for sidebar and prev/next
             navigation = get_page_navigation(md_path, self.url_mapper.file_to_canonical)
 
-            # Collect sources from directory hierarchy and frontmatter
-            frontmatter = result.get("frontmatter", {})
-            frontmatter_sources = frontmatter.get("sources")
-            sources = get_sources_for_page(md_path, frontmatter_sources)
+            # Collect sources from directory hierarchy and page metadata
+            # (markdown frontmatter or LaTeX \source commands)
+            metadata = result.get("metadata", {})
+            sources = get_sources_for_page(md_path, metadata.get("sources"))
 
             # Build context
             context = {
                 "content": result.get("content", ""),
                 "path": md_path,
-                "frontmatter": result.get("frontmatter", {}),
+                "frontmatter": metadata,
                 "canonical_url": result.get("canonical_url", ""),
                 "navigation": navigation,
                 "sources": sources,
+                "page_description": result.get("page_description", ""),
             }
 
             specs.append(
@@ -187,7 +188,7 @@ class ContentPages(Page):
                     output_path=output_path,
                     template="page.html",
                     title=result.get("title", ""),
-                    description=result.get("description", ""),
+                    description=result.get("page_description", ""),
                     priority=0.8,
                     context=context,
                 )

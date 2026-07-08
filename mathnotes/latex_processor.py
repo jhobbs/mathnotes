@@ -41,11 +41,21 @@ _LABEL_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_:-]*$")
 
 
 class _BlockNode:
-    def __init__(self, env_name: str, title: Optional[str], label: Optional[str], content: str):
+    def __init__(
+        self,
+        env_name: str,
+        title: Optional[str],
+        label: Optional[str],
+        content: str,
+        synonyms: Optional[str] = None,
+        tags: Optional[str] = None,
+    ):
         self.env_name = env_name
         self.title = title
         self.label = label
         self.content = content
+        self.synonyms = synonyms
+        self.tags = tags
         self.children: List["_BlockNode"] = []
 
 
@@ -61,6 +71,9 @@ def _latex_context():
             macrospec.MacroSpec("description", "{"),
             macrospec.MacroSpec("slug", "{"),
             macrospec.MacroSpec("detach", ""),
+            macrospec.MacroSpec("source", "{"),
+            macrospec.MacroSpec("synonyms", "{"),
+            macrospec.MacroSpec("tags", "{"),
         ],
         environments=[
             macrospec.EnvironmentSpec(name, "[") for name in sorted(_BLOCK_ENV_NAMES)
@@ -126,6 +139,49 @@ class _Transpiler:
         for n in nodes:
             if isinstance(n, LatexMacroNode) and n.macroname in _METADATA_MACROS:
                 metadata[n.macroname] = self._chars_arg(n)
+            elif isinstance(n, LatexMacroNode) and n.macroname == "source":
+                metadata.setdefault("sources", []).append(self._parse_source(n))
+
+    def _parse_source(self, n) -> Dict[str, str]:
+        """Parse \\source{key=value, key={braced value}, ...} into a dict.
+
+        Mirrors the sources.yaml entry schema; braced values may contain
+        commas, bare values may not.
+        """
+        args = n.nodeargd.argnlist if n.nodeargd else []
+        group = args[-1] if args else None
+        if group is None:
+            self._err(n, "\\source requires an argument")
+        parts: List[str] = []
+        groups: List[Any] = []
+        for c in group.nodelist:
+            if isinstance(c, LatexCharsNode):
+                parts.append(c.chars)
+            elif isinstance(c, LatexGroupNode):
+                parts.append(f"\x00{len(groups)}\x00")
+                groups.append(c)
+            elif isinstance(c, LatexCommentNode):
+                parts.append(c.comment_post_space)
+            else:
+                self._err(c, "\\source values must be plain text or {braced text}")
+        entry: Dict[str, str] = {}
+        for piece in "".join(parts).split(","):
+            piece = piece.strip()
+            if not piece:
+                continue
+            if "=" not in piece:
+                self._err(n, f"\\source expects key=value pairs, got '{piece}'")
+            key, value = piece.split("=", 1)
+            key, value = key.strip(), value.strip()
+            placeholder = re.fullmatch(r"\x00(\d+)\x00", value)
+            if placeholder:
+                value = self._prose(groups[int(placeholder.group(1))].nodelist).strip()
+            if not key or not value:
+                self._err(n, "\\source keys and values must be non-empty")
+            entry[key] = value
+        if not entry:
+            self._err(n, "\\source requires at least one key=value pair")
+        return entry
 
     # --- transpilation (extended in later tasks) ---
 
@@ -173,6 +229,10 @@ class _Transpiler:
                         out.append(self._emit_block(blk, 0))
             elif isinstance(n, LatexMacroNode) and n.macroname == "detach":
                 flush()
+            elif isinstance(n, LatexMacroNode) and n.macroname == "source":
+                # Page metadata, already collected by _scan_metadata; does not
+                # break theorem/proof attachment
+                continue
             elif isinstance(n, LatexMacroNode) and n.macroname in _SECTION_LEVELS:
                 flush()
                 out.append(self._macro(n))
@@ -196,27 +256,49 @@ class _Transpiler:
             if '"' in title:
                 self._err(n, "block title may not contain a double quote")
         body = list(n.nodelist)
-        label = None
-        for i, child in enumerate(body):
-            if isinstance(child, LatexMacroNode) and child.macroname == "label":
-                label = self._chars_arg(child)
-                if not _LABEL_RE.match(label):
-                    self._err(child, f"invalid block label '{label}'")
+        extracted: Dict[str, str] = {}
+        i = 0
+        while i < len(body):
+            child = body[i]
+            if isinstance(child, LatexMacroNode) and child.macroname in ("label", "synonyms", "tags"):
+                name = child.macroname
+                if name in extracted:
+                    self._err(child, f"multiple \\{name} commands in one environment")
+                if name == "synonyms" and n.environmentname != "definition":
+                    self._err(child, "\\synonyms is only supported on definition environments")
+                value = self._chars_arg(child)
+                if name == "label" and not _LABEL_RE.match(value):
+                    self._err(child, f"invalid block label '{value}'")
+                extracted[name] = value
                 del body[i]
-                break
-        for child in body:
-            if isinstance(child, LatexMacroNode) and child.macroname == "label":
-                self._err(child, "multiple \\label commands in one environment")
+                continue
+            i += 1
         content = self._prose(body).strip()
-        return _BlockNode(n.environmentname, title, label, content)
+        return _BlockNode(
+            n.environmentname,
+            title,
+            extracted.get("label"),
+            content,
+            synonyms=extracted.get("synonyms"),
+            tags=extracted.get("tags"),
+        )
 
     def _emit_block(self, blk: _BlockNode, depth: int) -> str:
         fence = ":" * (3 + depth)
         header = f"{fence}{blk.env_name}"
         if blk.title:
             header += f' "{blk.title}"'
+        meta_parts = []
         if blk.label:
-            header += f" {{label: {blk.label}}}"
+            meta_parts.append(f"label: {blk.label}")
+        if blk.synonyms:
+            meta_parts.append(f"synonyms: {blk.synonyms}")
+        if blk.tags:
+            meta_parts.append(f"tags: {blk.tags}")
+        if meta_parts:
+            # Order matters: _parse_metadata's synonyms regex terminates on
+            # ", tags:" so tags must come last
+            header += " {" + ", ".join(meta_parts) + "}"
         parts = [header]
         if blk.content:
             parts += ["", blk.content]
@@ -276,6 +358,10 @@ class _Transpiler:
             return ""
         if name == "label":
             self._err(n, "\\label is only supported at the top of a block environment")
+        if name in ("synonyms", "tags"):
+            self._err(n, f"\\{name} is only supported at the top of a block environment")
+        if name == "source":
+            self._err(n, "\\source is only supported at page level, outside block environments")
         self._err(n, f"unsupported command \\{name} — extend the dialect in latex_processor.py if needed")
 
     def _math(self, n) -> str:

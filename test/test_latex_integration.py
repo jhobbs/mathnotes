@@ -25,13 +25,18 @@ description: Markdown fixture.
 A **widget** is a thing.
 :::
 
-See @tex-thm for more.
+See @tex-thm for more. Several @gizmos exist.
 """
 
 TEX_PAGE = r"""\title{Tex Page}
 \description{LaTeX fixture.}
+\source{title={Test Book}, author={A. Author}, type=book}
 
 \section{Tex Page}
+
+\begin{definition}[Gizmo]\label{gizmo}\synonyms{gizmos}\tags{testing}
+A gizmo.
+\end{definition}
 
 \begin{theorem}\label{tex-thm}
 Every \dref{widget} is fine.
@@ -90,9 +95,16 @@ def test_cross_format_references():
         # .tex page links to a block defined in .md
         assert "/mathnotes/test/md-page/#widget" in tex["content"]
 
+        # \source commands surface like frontmatter sources
+        assert tex["metadata"]["sources"] == [
+            {"title": "Test Book", "author": "A. Author", "type": "book"}
+        ]
+
         md = proc.render_markdown_file("content/test/md-page.md")
         # .md page links to a block defined in .tex
         assert "/mathnotes/test/tex-page/#tex-thm" in md["content"]
+        # .md page resolves a synonym declared in .tex (\synonyms{gizmos})
+        assert "/mathnotes/test/tex-page/#gizmo" in md["content"]
         assert "block-reference-error" not in md["content"]
         assert "block-reference-error" not in tex["content"]
 
