@@ -53,10 +53,11 @@ class _BlockNode:
         self.env_name = env_name
         self.title = title
         self.label = label
-        self.content = content
+        self.content = content  # may contain \x02<i>\x02 markers for inline children
         self.synonyms = synonyms
         self.tags = tags
-        self.children: List["_BlockNode"] = []
+        self.children: List["_BlockNode"] = []         # attached amsthm siblings
+        self.inline_children: List["_BlockNode"] = []  # literally nested environments
 
 
 class _LstlistingArgsParser(macrospec.VerbatimArgsParser):
@@ -171,6 +172,25 @@ class _Transpiler:
         if not text:
             self._err(macro_node, f"\\{macro_node.macroname} argument must be plain text")
         return text
+
+    def _url_text(self, group, n) -> str:
+        """URL/path text from a braced group: chars, specials (~), and
+        escaped characters (\\% \\# etc., hyperref's documented URL form)."""
+        parts = []
+        for c in group.nodelist:
+            if isinstance(c, LatexCharsNode):
+                parts.append(c.chars)
+            elif isinstance(c, LatexSpecialsNode):
+                parts.append(c.specials_chars)
+            elif isinstance(c, LatexMacroNode) and c.macroname in _ESCAPED_CHAR_MACROS | {"$"}:
+                parts.append(c.macroname)
+            elif isinstance(c, LatexGroupNode):
+                parts.append(self._url_text(c, n))
+            elif isinstance(c, LatexCommentNode):
+                self._err(n, "escape % as \\% inside URLs/paths")
+            else:
+                self._err(n, "URLs/paths must be plain text (escape specials with \\)")
+        return "".join(parts).strip()
 
     def _scan_metadata(self, nodes, metadata: Dict[str, Any]):
         for n in nodes:
@@ -310,8 +330,27 @@ class _Transpiler:
                 del body[i]
                 continue
             i += 1
-        content = self._prose(body).strip()
-        return _BlockNode(
+        # Literally nested block environments become inline children at
+        # marker positions, preserving surrounding prose exactly
+        inline_children: List[_BlockNode] = []
+        pieces: List[str] = []
+        buffer: List[Any] = []
+
+        def flush_buffer():
+            if buffer:
+                pieces.append(self._prose(buffer))
+                buffer.clear()
+
+        for child in body:
+            if isinstance(child, LatexEnvironmentNode) and child.environmentname in _BLOCK_ENV_NAMES:
+                flush_buffer()
+                pieces.append(f"\x02{len(inline_children)}\x02")
+                inline_children.append(self._parse_block_env(child))
+            else:
+                buffer.append(child)
+        flush_buffer()
+        content = "".join(pieces).strip()
+        blk = _BlockNode(
             n.environmentname,
             title,
             extracted.get("label"),
@@ -319,6 +358,8 @@ class _Transpiler:
             synonyms=extracted.get("synonyms"),
             tags=extracted.get("tags"),
         )
+        blk.inline_children = inline_children
+        return blk
 
     def _emit_block(self, blk: _BlockNode, depth: int) -> str:
         fence = ":" * (3 + depth)
@@ -336,9 +377,18 @@ class _Transpiler:
             # Order matters: _parse_metadata's synonyms regex terminates on
             # ", tags:" so tags must come last
             header += " {" + ", ".join(meta_parts) + "}"
+        content = blk.content
+        if blk.inline_children:
+            content = re.sub(
+                "\x02(\\d+)\x02",
+                lambda m: "\n" + self._emit_block(
+                    blk.inline_children[int(m.group(1))], depth + 1
+                ).strip("\n") + "\n",
+                content,
+            )
         parts = [header]
-        if blk.content:
-            parts += ["", blk.content]
+        if content:
+            parts += ["", content]
         for child in blk.children:
             parts += ["", self._emit_block(child, depth + 1).strip("\n")]
         parts += [fence]
@@ -399,37 +449,56 @@ class _Transpiler:
             return name
         if name == "href":
             url_group, text_group = n.nodeargd.argnlist[-2], n.nodeargd.argnlist[-1]
-            url = "".join(
-                c.chars if isinstance(c, LatexCharsNode)
-                else c.specials_chars if isinstance(c, LatexSpecialsNode)
-                else ""
-                for c in url_group.nodelist
-            ).strip()
+            url = self._url_text(url_group, n)
             if not url:
                 self._err(n, "\\href requires a plain-text URL")
             text = self._prose(text_group.nodelist).strip()
             return f"[{text}]({url})"
         if name == "includegraphics":
             opt, mand = n.nodeargd.argnlist
-            path = "".join(
-                c.chars for c in mand.nodelist if isinstance(c, LatexCharsNode)
-            ).strip()
+            path = self._url_text(mand, n)
             if not path:
                 self._err(n, "\\includegraphics requires a path")
-            alt = ""
+            options: Dict[str, str] = {}
             if opt is not None:
                 groups = [c for c in opt.nodelist if isinstance(c, LatexGroupNode)]
                 flat = "".join(
                     c.chars if isinstance(c, LatexCharsNode) else "\x00"
                     for c in opt.nodelist
                 )
-                m = re.fullmatch(r"\s*alt=(\x00|[^\x00=]*?)\s*", flat)
-                if not m:
-                    self._err(n, "\\includegraphics supports only the alt={...} option on the site")
-                if m.group(1) == "\x00":
-                    alt = self._prose(groups[0].nodelist).strip()
-                else:
-                    alt = m.group(1).strip()
+                group_index = 0
+                for piece in flat.split(","):
+                    piece = piece.strip()
+                    if not piece:
+                        continue
+                    if "=" not in piece:
+                        self._err(n, "\\includegraphics options must be key=value pairs")
+                    key, value = piece.split("=", 1)
+                    key, value = key.strip(), value.strip()
+                    if value == "\x00":
+                        value = self._prose(groups[group_index].nodelist).strip()
+                        group_index += 1
+                    if key not in ("alt", "title", "width", "height"):
+                        self._err(n, f"\\includegraphics option '{key}' has no meaning on the site (alt, title, width, height)")
+                    options[key] = value
+            if "width" in options or "height" in options:
+                # sizing has no markdown syntax; emit a raw img tag, which is
+                # exactly how the markdown dialect expresses sized images
+                if "title" in options:
+                    self._err(n, "\\includegraphics: title cannot be combined with width/height")
+                attrs = [f'src="{path}"']
+                if options.get("alt"):
+                    attrs.append(f'alt="{options["alt"]}"')
+                for key in ("width", "height"):
+                    if key in options:
+                        value = options[key]
+                        if value.endswith("px"):
+                            value = value[:-2]
+                        attrs.append(f'{key}="{value}"')
+                return f'<img {" ".join(attrs)}>'
+            alt = options.get("alt", "")
+            if "title" in options:
+                return f'![{alt}]({path} "{options["title"]}")'
             return f"![{alt}]({path})"
         if name == "dref":
             return self._dref(n)
@@ -464,8 +533,8 @@ class _Transpiler:
         if name in _BLOCK_ENV_NAMES:
             self._err(
                 n,
-                f"nested {name} environment — mathnotes uses the amsthm sibling "
-                f"convention (close the outer environment first)",
+                f"{name} environment nested inside a non-block construct — block "
+                f"environments may nest only directly inside other block environments",
             )
         self._err(n, f"unsupported environment '{name}'")
 
@@ -483,6 +552,9 @@ class _Transpiler:
         return f"\n\n```{lang}\n{text.strip(chr(10))}\n```\n\n"
 
     def _list(self, n, ordered: bool) -> str:
+        return "\n\n" + "\n".join(self._list_lines(n, ordered, indent=0)) + "\n\n"
+
+    def _list_lines(self, n, ordered: bool, indent: int) -> List[str]:
         items: List[list] = []
         for child in n.nodelist:
             if isinstance(child, LatexMacroNode) and child.macroname == "item":
@@ -494,12 +566,21 @@ class _Transpiler:
                     continue
                 self._err(child, "list content before the first \\item")
             else:
-                if isinstance(child, LatexEnvironmentNode) and child.environmentname in ("itemize", "enumerate"):
-                    self._err(child, "nested lists are not supported in the dialect")
                 items[-1].append(child)
         marker = "1." if ordered else "-"
-        lines = [f"{marker} {' '.join(self._prose(item).split())}" for item in items]
-        return "\n\n" + "\n".join(lines) + "\n\n"
+        pad = " " * indent
+        lines: List[str] = []
+        for item in items:
+            sublists = [
+                c for c in item
+                if isinstance(c, LatexEnvironmentNode) and c.environmentname in ("itemize", "enumerate")
+            ]
+            sublist_ids = {id(s) for s in sublists}
+            text_nodes = [c for c in item if id(c) not in sublist_ids]
+            lines.append(f"{pad}{marker} {' '.join(self._prose(text_nodes).split())}")
+            for sub in sublists:
+                lines.extend(self._list_lines(sub, sub.environmentname == "enumerate", indent + 4))
+        return lines
 
     def _dref(self, n) -> str:
         opt, mand = n.nodeargd.argnlist

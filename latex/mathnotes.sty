@@ -10,6 +10,12 @@
 \RequirePackage[hidelinks]{hyperref}
 % Code listings: \begin{lstlisting}[language=Python] (site: fenced code block)
 \RequirePackage{listings}
+% Images: \includegraphics[alt={...}, title={...}]{path}. The site renders
+% alt text and title tooltips; for PDF both are metadata-only, so accept and
+% ignore them regardless of the graphicx version's native key support.
+\RequirePackage{graphicx}
+\define@key{Gin}{alt}{}
+\define@key{Gin}{title}{}
 
 % Site metadata commands (\title is standard LaTeX; these are no-ops in PDF)
 \newcommand{\description}[1]{}

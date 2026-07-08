@@ -79,17 +79,35 @@ class ProseConverter:
                       lambda m: self._stash(f"\\pagelink[{m.group(1).strip()}]{{{m.group(2).strip()}}}"), text)
         text = re.sub(r"\[\[([^\]]+)\]\]",
                       lambda m: self._stash(f"\\pagelink{{{m.group(1).strip()}}}"), text)
-        # 5a2. Images. Titled images (tooltips) have no LaTeX equivalent —
-        # error rather than silently dropping the tooltip.
-        if re.search(r'!\[[^\]]*\]\([^)]*"', text):
-            self.err("image with a title (tooltip) has no dialect equivalent; convert manually")
-        text = re.sub(r"!\[([^\]]*)\]\(([^)\s]+)\)",
-                      lambda m: self._stash(
-                          f"\\includegraphics[alt={{{m.group(1)}}}]{{{m.group(2)}}}"
-                          if m.group(1) else f"\\includegraphics{{{m.group(2)}}}"), text)
-        # 5b. Markdown links (not images: no preceding !)
-        text = re.sub(r"(?<!!)\[([^\]]+)\]\(([^)\s]+)\)",
-                      lambda m: self._stash(f"\\href{{{m.group(2)}}}{{{m.group(1)}}}"), text)
+        # 5a2. Images, optionally with a title (tooltip)
+        def image(m):
+            alt, path, title = m.group(1), m.group(2), m.group(3)
+            opts = []
+            if alt:
+                opts.append(f"alt={{{alt}}}")
+            if title:
+                opts.append(f"title={{{title}}}")
+            optstr = f"[{', '.join(opts)}]" if opts else ""
+            return self._stash(f"\\includegraphics{optstr}{{{path}}}")
+        text = re.sub(r"!\[([^\]]*)\]\(([^)\s]+)(?:\s+\"([^\"]*)\")?\s*\)", image, text)
+        # 5a3. Raw img tags (markdown's only way to size an image)
+        def raw_img(m):
+            attrs = dict(re.findall(r'([a-z]+)\s*=\s*"([^"]*)"', m.group(0)))
+            unknown = set(attrs) - {"src", "alt", "width", "height"}
+            if unknown or "src" not in attrs:
+                self.err(f"img tag with unsupported attributes {sorted(unknown)}: {m.group(0)[:80]!r}")
+            opts = [f"{k}={{{attrs[k]}}}" if k == "alt" else f"{k}={attrs[k]}px"
+                    for k in ("alt", "width", "height") if k in attrs]
+            optstr = f"[{', '.join(opts)}]" if opts else ""
+            return self._stash(f"\\includegraphics{optstr}{{{attrs['src']}}}")
+        text = re.sub(r"<img\b[^>]*>", raw_img, text)
+        # 5b. Markdown links (not images: no preceding !). URLs may contain
+        # one level of balanced parens; % and # are escaped for LaTeX
+        # (hyperref's documented URL form)
+        def link(m):
+            url = m.group(2).replace("%", "\\%").replace("#", "\\#")
+            return self._stash(f"\\href{{{url}}}{{{m.group(1)}}}")
+        text = re.sub(r"(?<!!)\[([^\]]+)\]\(((?:[^()\s]|\([^()\s]*\))+)\)", link, text)
         # 6. Block references (custom text first, then plain)
         text = re.sub(r"@\{([^|{}]+)\|([a-zA-Z0-9_:-]+)\}",
                       lambda m: self._stash(f"\\dref[{m.group(1)}]{{{m.group(2)}}}"), text)
@@ -152,39 +170,59 @@ class ProseConverter:
 
     def _convert_lists(self, text: str) -> str:
         out = []
-        run = []          # accumulated \item lines
+        run = []          # accumulated \item / nested-list lines
         run_kind = None   # "itemize" | "enumerate"
+        sub = []          # accumulated nested \item lines
+        sub_kind = None
+
+        def close_sub():
+            nonlocal sub, sub_kind
+            if sub:
+                body = "\n".join(sub)
+                run.append(f"\\begin{{{sub_kind}}}\n{body}\n\\end{{{sub_kind}}}")
+                sub, sub_kind = [], None
 
         def close():
             nonlocal run, run_kind
+            close_sub()
             if run:
                 body = "\n".join(run)
                 out.append(self._stash(f"\\begin{{{run_kind}}}\n{body}\n\\end{{{run_kind}}}"))
                 run, run_kind = [], None
 
+        def item_text(raw):
+            # items are stashed whole, so escape/audit here — the global
+            # pass never sees inside placeholders
+            item = self._escape_specials(raw)
+            self._audit(item)
+            return item
+
         previous_blank = True
         for line in text.split("\n"):
-            if re.match(r"^\s+[*-]\s|^\s+\d+\.\s", line):
-                self.err(f"nested/indented list item not supported: {line!r}")
-            bullet = re.match(r"^[*-]\s+(.*)$", line)
-            number = re.match(r"^\d+\.\s+(.*)$", line)
-            if (bullet or number) and not run and not previous_blank:
+            nested = re.match(r"^(?: {4,}|\t)([*-]|\d+\.)\s+(.*)$", line)
+            top = re.match(r"^ {0,3}([*-]|\d+\.)\s+(.*)$", line)
+            if top and not run and not previous_blank:
                 self.err(
                     f"list item directly follows text with no blank line — markdown "
                     f"renders this as paragraph text, not a list; add a blank line "
                     f"in the source if a list was intended: {line!r}"
                 )
             previous_blank = not line.strip()
-            if bullet or number:
-                kind = "itemize" if bullet else "enumerate"
+            if nested:
+                if not run:
+                    self.err(f"indented list item with no enclosing list: {line!r}")
+                kind = "enumerate" if nested.group(1)[0].isdigit() else "itemize"
+                if sub_kind not in (None, kind):
+                    close_sub()
+                sub_kind = kind
+                sub.append(f"\\item {item_text(nested.group(2))}")
+            elif top:
+                close_sub()
+                kind = "enumerate" if top.group(1)[0].isdigit() else "itemize"
                 if run_kind not in (None, kind):
                     close()
                 run_kind = kind
-                # items are stashed whole, so escape/audit them here — the
-                # global pass never sees inside placeholders
-                item = self._escape_specials((bullet or number).group(1))
-                self._audit(item)
-                run.append(f"\\item {item}")
+                run.append(f"\\item {item_text(top.group(2))}")
             else:
                 if run and line.strip():
                     self.err(f"list continuation lines not supported: {line!r}")
@@ -342,9 +380,8 @@ class Converter:
             )
         return statement.strip()
 
-    def _emit_env(self, block) -> list:
-        env = block.block_type.value
-        head = f"\\begin{{{env}}}"
+    def _env_head(self, block) -> str:
+        head = f"\\begin{{{block.block_type.value}}}"
         if block.title:
             # math ($, {}) is fine in titles; brackets would break the
             # optional-arg parse, and raw backslash commands outside math
@@ -356,12 +393,49 @@ class Converter:
             value = block.metadata.get(key)
             if value:
                 head += f"\\{macro}{{{value}}}"
+        return head
+
+    def _emit_env(self, block) -> list:
         statement = self._statement_text(block)
         converter = ProseConverter(f"{self.md_path} [{block.label}]")
         body = converter.convert(statement)
-        return [head, body, f"\\end{{{env}}}", ""]
+        return [self._env_head(block), body, f"\\end{{{block.block_type.value}}}", ""]
+
+    def _emit_nested(self, block) -> list:
+        """Emit a block with its children literally nested at their original
+        positions — used when the amsthm sibling convention cannot represent
+        the structure (prose between children, non-theorem parents, deep
+        nesting)."""
+        env = block.block_type.value
+        child_markers = {
+            marker: child for marker, child in self.block_markers.items()
+            if child.parent is block
+        }
+        if child_markers:
+            pattern = "(" + "|".join(re.escape(m) for m in child_markers) + ")"
+            parts = re.split(pattern, block.content)
+        else:
+            parts = [block.content]
+        lines = [self._env_head(block)]
+        for part in parts:
+            if part in child_markers:
+                lines.extend(self._emit_nested(child_markers[part]))
+            elif part.strip():
+                converter = ProseConverter(f"{self.md_path} [{block.label}]")
+                lines.extend([converter.convert(part.strip("\n")).strip("\n"), ""])
+        lines.extend([f"\\end{{{env}}}", ""])
+        return lines
 
     def _emit_block_group(self, root) -> list:
+        # Prefer the amsthm sibling convention; where it cannot represent the
+        # structure, fall back to literally nested environments (which the
+        # dialect also supports)
+        try:
+            return self._emit_sibling_group(root)
+        except ConversionError:
+            return self._emit_nested(root)
+
+    def _emit_sibling_group(self, root) -> list:
         out = self._emit_env(root)
         root_type = root.block_type.value
         seen_corollary = False
@@ -418,8 +492,8 @@ def _canonicalize(content: str, semantic: bool = True) -> str:
         # unify bullets and emphasis forms (rendering-equivalent rewrites the
         # HTML comparison below would otherwise judge; kept out of the
         # semantic=False stage)
-        content = re.sub(r"^\*\s+", "- ", content, flags=re.MULTILINE)
-        content = re.sub(r"^(\d+)\.\s+", "1. ", content, flags=re.MULTILINE)
+        content = re.sub(r"^(\s*)\*(\s+)", r"\1-\2", content, flags=re.MULTILINE)
+        content = re.sub(r"^(\s*)(\d+)\.(\s+)", r"\g<1>1.\3", content, flags=re.MULTILINE)
         content = re.sub(r"(?<![a-zA-Z0-9\\])_([^_\n]+)_(?![a-zA-Z0-9])", r"*\1*", content)
 
         def _edges(m, d):
@@ -455,6 +529,12 @@ def _canonicalize(content: str, semantic: bool = True) -> str:
     for placeholder, math in protector.inline_math.items():
         inner = re.sub(r"\s+", " ", math[1:-1]).strip()
         content = content.replace(placeholder, f"${inner}$")
+    # canonicalize raw img tags (attribute order/spacing)
+    def img_tag(m):
+        attrs = dict(re.findall(r'([a-z]+)\s*=\s*"([^"]*)"', m.group(0)))
+        parts = [f'{k}="{attrs[k]}"' for k in ("src", "alt", "width", "height") if k in attrs]
+        return "<img " + " ".join(parts) + ">"
+    content = re.sub(r"<img\b[^>]*>", img_tag, content)
     # a heading with no blank line after (or before) it renders identically
     content = re.sub(r"^(#{1,5} [^\n]*)\n(?!\n)", r"\1\n\n", content, flags=re.MULTILINE)
     content = re.sub(r"([^\n])\n(#{1,5} )", r"\1\n\n\2", content)

@@ -128,10 +128,10 @@ def test_unknown_environment_errors():
     expect_error("\\begin{tabular}{cc}\na & b\n\\end{tabular}\n", "tabular")
 
 
-def test_nested_list_errors():
+def test_list_content_before_item_errors():
     expect_error(
-        "\\begin{itemize}\n\\item outer\n\\begin{itemize}\n\\item inner\n\\end{itemize}\n\\end{itemize}\n",
-        "nested lists",
+        "\\begin{itemize}\nstray text\n\\item one\n\\end{itemize}\n",
+        "before the first",
     )
 
 
@@ -252,10 +252,10 @@ def test_exercise_solution():
     assert ":::exercise {label: e1}" in out and "::::solution" in out
 
 
-def test_nested_block_env_errors():
+def test_block_env_inside_list_errors():
     expect_error(
-        "\\begin{theorem}\\label{t3}\nX.\n\\begin{proof}\nY.\n\\end{proof}\n\\end{theorem}\n",
-        "sibling convention",
+        "\\begin{itemize}\n\\item has a \\begin{note}\nnope\n\\end{note}\n\\end{itemize}\n",
+        "non-block construct",
     )
 
 
@@ -420,13 +420,91 @@ def test_includegraphics_no_alt():
 
 
 def test_includegraphics_unknown_option_errors():
-    expect_error(r"\includegraphics[width=5cm]{fig.png}", "alt")
+    expect_error(r"\includegraphics[scale=0.5]{fig.png}", "alt, title, width, height")
+
+
+def test_href_url_with_escapes_and_parens():
+    out = body(r"\href{https://ex.com/a(b)/c\%3A_d\#e}{txt}")
+    assert out.strip() == "[txt](https://ex.com/a(b)/c%3A_d#e)"
 
 
 def test_emphasis_edge_spaces_move_outside():
     # markdown-style intra-word emphasis breaks (`*the *n*th*`) round-trip
     # as edge spaces relocated outside the delimiters — rendering-identical
     assert body(r"x \emph{the }n\emph{th} y").strip() == "x *the* n*th* y"
+
+
+# --- dialect: literal nesting, nested lists, image titles ---
+
+def test_literal_nesting_note_in_remark():
+    from mathnotes.structured_math import StructuredMathParser
+    src = ("\\begin{remark}\\label{r1}\nBefore.\n"
+           "\\begin{note}\nInner note.\n\\end{note}\n"
+           "After.\n\\end{remark}\n")
+    _, content = parse_latex_file(src, "test.tex")
+    assert ":::remark {label: r1}" in content
+    assert "::::note" in content
+    _, markers = StructuredMathParser().parse(content)
+    blocks = {b.label: b for b in markers.values()}
+    assert blocks["r1-note"].parent is blocks["r1"]
+    # prose position preserved around the nested block
+    assert content.index("Before.") < content.index("::::note") < content.index("After.")
+
+
+def test_literal_nesting_prose_between_children():
+    from mathnotes.structured_math import StructuredMathParser
+    src = ("\\begin{theorem}\\label{t1}\nStatement.\n"
+           "\\begin{proof}\nP.\n\\end{proof}\n"
+           "Interleaved prose.\n"
+           "\\begin{note}\nN.\n\\end{note}\n"
+           "\\end{theorem}\n")
+    _, content = parse_latex_file(src, "test.tex")
+    _, markers = StructuredMathParser().parse(content)
+    blocks = {b.label: b for b in markers.values()}
+    assert blocks["proof-of-t1"].parent is blocks["t1"]
+    assert blocks["t1-note"].parent is blocks["t1"]
+    assert "Interleaved prose." in blocks["t1"].content
+
+
+def test_literal_nesting_two_deep():
+    from mathnotes.structured_math import StructuredMathParser
+    src = ("\\begin{theorem}\\label{t2}\nS.\n"
+           "\\begin{corollary}\\label{c2}\nC.\n"
+           "\\begin{proof}\nQ.\n\\end{proof}\n"
+           "\\end{corollary}\n"
+           "\\end{theorem}\n")
+    _, content = parse_latex_file(src, "test.tex")
+    _, markers = StructuredMathParser().parse(content)
+    blocks = {b.label: b for b in markers.values()}
+    assert blocks["c2"].parent is blocks["t2"]
+    assert blocks["proof-of-c2"].parent is blocks["c2"]
+
+
+def test_sibling_convention_still_works_after_nesting_change():
+    from mathnotes.structured_math import StructuredMathParser
+    src = ("\\begin{theorem}\\label{t3}\nS.\n\\end{theorem}\n"
+           "\\begin{proof}\nP.\n\\end{proof}\n")
+    _, markers = StructuredMathParser().parse(parse_latex_file(src, "test.tex")[1])
+    blocks = {b.label: b for b in markers.values()}
+    assert blocks["proof-of-t3"].parent is blocks["t3"]
+
+
+def test_nested_itemize():
+    src = ("\\begin{itemize}\n\\item outer one\n"
+           "\\begin{itemize}\n\\item inner a\n\\item inner b\n\\end{itemize}\n"
+           "\\item outer two\n\\end{itemize}\n")
+    out = body(src)
+    assert "- outer one\n    - inner a\n    - inner b\n- outer two" in out
+
+
+def test_includegraphics_sized_emits_raw_img():
+    out = body(r"\includegraphics[width=344px, height=336px]{https://example.com/p.png}")
+    assert out.strip() == '<img src="https://example.com/p.png" width="344" height="336">'
+
+
+def test_includegraphics_title():
+    out = body(r"\includegraphics[alt={Arc}, title={arc length differential}]{ds.png}")
+    assert out.strip() == '![Arc](ds.png "arc length differential")'
 
 
 def main():
