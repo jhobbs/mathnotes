@@ -6,11 +6,11 @@ import os
 import re
 from pathlib import Path
 from typing import Dict, Optional
-import frontmatter
 import markdown
 from .structured_math import StructuredMathParser, process_structured_math_content
 from .math_utils import MathProtector
 from .tooltip_collector import TooltipCollectingBlockReferenceProcessor, collect_tooltip_data_from_html
+from .content_loader import load_content_file
 
 # Module-level cache for rendered markdown
 _render_cache: Dict[str, tuple] = {}  # filepath -> (mtime, result)
@@ -63,123 +63,119 @@ class MarkdownProcessor:
         # Track demos for this render
         integrated_demos = []
 
-        with open(filepath, "r", encoding="utf-8") as f:
-            post = frontmatter.load(f)
+        metadata, content = load_content_file(filepath)
 
-            # Process Jekyll-style includes
-            content = post.content
+        # Handle new demo module includes
+        demo_pattern = r'{%\s*include_demo\s+"([^"]+)"\s*%}'
 
-            # Handle new demo module includes
-            demo_pattern = r'{%\s*include_demo\s+"([^"]+)"\s*%}'
+        def replace_demo_include(match):
+            demo_name = match.group(1)
+            # Generate unique ID for this demo instance
+            demo_id = f"demo-{demo_name}-{hash(f'{filepath}-{match.start()}') & 0x7FFFFFFF}"
 
-            def replace_demo_include(match):
-                demo_name = match.group(1)
-                # Generate unique ID for this demo instance
-                demo_id = f"demo-{demo_name}-{hash(f'{filepath}-{match.start()}') & 0x7FFFFFFF}"
+            # Don't add main.js here - it's already loaded in base.html
+            # based on development/production environment
 
-                # Don't add main.js here - it's already loaded in base.html
-                # based on development/production environment
+            # Track that we need to initialize this demo
+            integrated_demos.append(f"{demo_name}:{demo_id}")
 
-                # Track that we need to initialize this demo
-                integrated_demos.append(f"{demo_name}:{demo_id}")
+            return f'<div class="demo-component" data-demo="{demo_name}" id="{demo_id}"></div>'
 
-                return f'<div class="demo-component" data-demo="{demo_name}" id="{demo_id}"></div>'
+        content = re.sub(demo_pattern, replace_demo_include, content)
 
-            content = re.sub(demo_pattern, replace_demo_include, content)
+        # Process wiki-style internal links [[slug]] or [[text|slug]]
+        content = re.sub(r"\[\[([^\]]+)\]\]", self._replace_wiki_link, content)
 
-            # Process wiki-style internal links [[slug]] or [[text|slug]]
-            content = re.sub(r"\[\[([^\]]+)\]\]", self._replace_wiki_link, content)
+        # Process structured mathematical content - first pass
+        math_parser = StructuredMathParser()
+        content, block_markers = math_parser.parse(content)
 
-            # Process structured mathematical content - first pass
-            math_parser = StructuredMathParser()
-            content, block_markers = math_parser.parse(content)
+        # Get pre-rendered HTML from block index for all blocks
+        for marker_id, block in block_markers.items():
+            block.rendered_html = self.block_index.get_rendered_html(filepath, marker_id)
 
-            # Get pre-rendered HTML from block index for all blocks
-            for marker_id, block in block_markers.items():
-                block.rendered_html = self.block_index.get_rendered_html(filepath, marker_id)
+        # Process cross-references to structured blocks (@label or @type:label)
+        # Store the processor to use it later for embedded blocks
+        # Use tooltip-collecting version
+        self.block_ref_processor = TooltipCollectingBlockReferenceProcessor(
+            block_markers=block_markers, current_file=filepath, block_index=self.block_index
+        )
+        content = self.block_ref_processor.process_references(content)
 
-            # Process cross-references to structured blocks (@label or @type:label)
-            # Store the processor to use it later for embedded blocks
-            # Use tooltip-collecting version
-            self.block_ref_processor = TooltipCollectingBlockReferenceProcessor(
-                block_markers=block_markers, current_file=filepath, block_index=self.block_index
+        # Start collecting tooltip data
+        tooltip_data = self.block_ref_processor.get_tooltip_data()
+
+        # Protect math delimiters from markdown processing
+        math_protector = MathProtector()
+        content = math_protector.protect_math(content)
+
+        # Convert markdown to HTML
+        html_content = self.md.convert(content)
+
+        # Restore math blocks with their original content
+        html_content = math_protector.restore_math(html_content)
+        html_content = math_protector.fix_math_backslashes(html_content)
+
+        # Process embedded blocks after markdown conversion
+        if hasattr(self, "block_ref_processor") and self.block_ref_processor.embedded_blocks:
+            html_content = self.block_ref_processor.process_embedded_blocks(html_content)
+
+        # Fix relative image paths to include content/ prefix
+        html_content = self._fix_relative_image_paths(html_content, filepath)
+
+        # Process structured mathematical content - second pass
+        if block_markers:
+            html_content = process_structured_math_content(
+                html_content,
+                block_markers,
+                self.md,
+                current_file=filepath,
+                block_index=self.block_index,
             )
-            content = self.block_ref_processor.process_references(content)
 
-            # Start collecting tooltip data
-            tooltip_data = self.block_ref_processor.get_tooltip_data()
-
-            # Protect math delimiters from markdown processing
-            math_protector = MathProtector()
-            content = math_protector.protect_math(content)
-
-            # Convert markdown to HTML
-            html_content = self.md.convert(content)
-
-            # Restore math blocks with their original content
-            html_content = math_protector.restore_math(html_content)
-            html_content = math_protector.fix_math_backslashes(html_content)
-
-            # Process embedded blocks after markdown conversion
-            if hasattr(self, "block_ref_processor") and self.block_ref_processor.embedded_blocks:
-                html_content = self.block_ref_processor.process_embedded_blocks(html_content)
-
-            # Fix relative image paths to include content/ prefix
-            html_content = self._fix_relative_image_paths(html_content, filepath)
-
-            # Process structured mathematical content - second pass
-            if block_markers:
-                html_content = process_structured_math_content(
-                    html_content,
-                    block_markers,
-                    self.md,
-                    current_file=filepath,
-                    block_index=self.block_index,
+            # Collect any additional references from structured math content
+            additional_labels = collect_tooltip_data_from_html(html_content, tooltip_data)
+            if additional_labels:
+                # Create a temporary processor to get data for these labels
+                temp_processor = TooltipCollectingBlockReferenceProcessor(
+                    block_markers={}, current_file=filepath, block_index=self.block_index
                 )
+                temp_processor.referenced_labels = additional_labels
+                additional_data = temp_processor.get_tooltip_data()
+                tooltip_data.update(additional_data)
 
-                # Collect any additional references from structured math content
-                additional_labels = collect_tooltip_data_from_html(html_content, tooltip_data)
-                if additional_labels:
-                    # Create a temporary processor to get data for these labels
-                    temp_processor = TooltipCollectingBlockReferenceProcessor(
-                        block_markers={}, current_file=filepath, block_index=self.block_index
-                    )
-                    temp_processor.referenced_labels = additional_labels
-                    additional_data = temp_processor.get_tooltip_data()
-                    tooltip_data.update(additional_data)
+        # Fix escaped asterisks and tildes that should be rendered normally
+        # Note: This must happen AFTER structured math processing to preserve LaTeX escapes
+        html_content = html_content.replace(r"\*", "*")
+        html_content = html_content.replace(r"\~", "~")
 
-            # Fix escaped asterisks and tildes that should be rendered normally
-            # Note: This must happen AFTER structured math processing to preserve LaTeX escapes
-            html_content = html_content.replace(r"\*", "*")
-            html_content = html_content.replace(r"\~", "~")
+        # Get canonical URL for this file
+        file_path_normalized = filepath.replace("\\", "/")
+        canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
+        # canonical_url now always has trailing slash from content_discovery
+        canonical_path = f"/mathnotes/{canonical_url}"
 
-            # Get canonical URL for this file
-            file_path_normalized = filepath.replace("\\", "/")
-            canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
-            # canonical_url now always has trailing slash from content_discovery
-            canonical_path = f"/mathnotes/{canonical_url}"
+        # Generate description from frontmatter or content
+        description = self._generate_description(metadata, html_content)
 
-            # Generate description from frontmatter or content
-            description = self._generate_description(post.metadata, html_content)
+        result = {
+            "content": html_content,
+            "metadata": metadata,
+            "title": metadata.get("title", Path(filepath).stem.replace("-", " ").title()),
+            "page_description": description,
+            "source_path": filepath,
+            "canonical_url": canonical_path,
+            "has_integrated_demos": len(integrated_demos) > 0,
+            "tooltip_data": tooltip_data,
+        }
 
-            result = {
-                "content": html_content,
-                "metadata": post.metadata,
-                "title": post.metadata.get("title", Path(filepath).stem.replace("-", " ").title()),
-                "page_description": description,
-                "source_path": filepath,
-                "canonical_url": canonical_path,
-                "has_integrated_demos": len(integrated_demos) > 0,
-                "tooltip_data": tooltip_data,
-            }
+        # Cache the result
+        try:
+            _render_cache[filepath] = (os.path.getmtime(filepath), result)
+        except OSError:
+            pass
 
-            # Cache the result
-            try:
-                _render_cache[filepath] = (os.path.getmtime(filepath), result)
-            except OSError:
-                pass
-
-            return result
+        return result
 
     def _replace_wiki_link(self, match):
         """Replace wiki-style links with proper markdown links."""

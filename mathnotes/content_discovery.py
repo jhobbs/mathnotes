@@ -1,7 +1,7 @@
 from pathlib import Path
-import frontmatter
 from typing import Dict
 from .config import CONTENT_DIRS
+from .content_loader import load_content_file
 
 
 class ContentDiscovery:
@@ -21,15 +21,15 @@ class ContentDiscovery:
         for section in CONTENT_DIRS:
             section_path = Path(section)
 
-            for md_file in section_path.rglob("*.md"):
-                with open(md_file, "r", encoding="utf-8") as f:
-                    post = frontmatter.load(f)
+            content_files = sorted([*section_path.rglob("*.md"), *section_path.rglob("*.tex")])
+            for md_file in content_files:
+                metadata, _ = load_content_file(md_file)
 
                 # Build canonical URL
                 relative_path = md_file.relative_to(Path("."))
 
                 # Check if there's a custom slug that should override the filename
-                custom_slug = post.metadata.get("slug")
+                custom_slug = metadata.get("slug")
                 if custom_slug:
                     # Custom slug replaces the filename but preserves the directory
                     # path, so nested sections keep their full URL (e.g.
@@ -41,10 +41,9 @@ class ContentDiscovery:
                     canonical_url = "/".join([*dir_parts, custom_slug])
                 else:
                     # No custom slug - use full directory structure
-                    # Remove content/ prefix and .md extension
+                    # Remove content/ prefix and extension
                     url_path = "/".join(relative_path.parts[1:])
-                    # Remove .md extension
-                    url_path = url_path[:-3]
+                    url_path = url_path[: -len(md_file.suffix)]
                     canonical_url = url_path
 
                 # Ensure canonical URL has trailing slash
@@ -52,6 +51,11 @@ class ContentDiscovery:
 
                 # Store mappings
                 file_path = str(relative_path).replace("\\", "/")
+                if canonical_url in self.url_mappings:
+                    raise ValueError(
+                        f"URL collision: {file_path} and "
+                        f"{self.url_mappings[canonical_url]} both map to /{canonical_url}"
+                    )
                 self.url_mappings[canonical_url] = file_path
                 self.file_to_canonical[file_path] = canonical_url
 

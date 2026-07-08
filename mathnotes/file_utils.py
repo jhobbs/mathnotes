@@ -4,7 +4,7 @@ File system utilities for the Mathnotes application.
 
 from pathlib import Path
 from typing import List, Dict
-import frontmatter
+from .content_loader import load_content_file
 
 
 def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, str]) -> List[Dict]:
@@ -26,7 +26,7 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
 
         # First, separate files and directories
         for item in dir_path.iterdir():
-            if item.is_file() and item.suffix == ".md":
+            if item.is_file() and item.suffix in (".md", ".tex"):
                 file_path_raw = str(item.relative_to(Path(".")))
                 file_path = file_path_raw.replace("\\", "/")
                 canonical_url = file_to_canonical.get(file_path)
@@ -35,12 +35,11 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
 
                 # Try to get title from frontmatter, fall back to filename
                 try:
-                    with open(item, "r", encoding="utf-8") as f:
-                        post = frontmatter.load(f)
-                        title = post.metadata.get("title", "").strip()
-                        if not title:
-                            # Fall back to filename-based title
-                            title = item.stem.replace("-", " ").title()
+                    metadata, _ = load_content_file(item)
+                    title = (metadata.get("title") or "").strip()
+                    if not title:
+                        # Fall back to filename-based title
+                        title = item.stem.replace("-", " ").title()
                 except Exception:
                     # If anything goes wrong reading the file, use filename
                     title = item.stem.replace("-", " ").title()

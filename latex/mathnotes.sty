@@ -1,0 +1,45 @@
+% mathnotes.sty — LaTeX support for mathnotes content files.
+% Any content/*.tex file written as a standalone document compiles with:
+%   TEXINPUTS=<repo>/latex: pdflatex <file>.tex
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mathnotes}[2026/07/07 Mathnotes content dialect]
+
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{amsthm}
+\RequirePackage[hidelinks]{hyperref}
+
+% Site metadata commands (\title is standard LaTeX; these are no-ops in PDF)
+\newcommand{\description}[1]{}
+\newcommand{\slug}[1]{}
+% Clears the site's block-attachment anchor; does nothing in PDF
+\newcommand{\detach}{}
+
+% Block reference: \dref{label} or \dref[custom text]{label}
+\NewDocumentCommand{\dref}{o m}{%
+  \IfNoValueTF{#1}{\hyperref[#2]{#2}}{\hyperref[#2]{#1}}%
+}
+% Page link: \pagelink{slug} or \pagelink[text]{slug}
+\NewDocumentCommand{\pagelink}{o m}{%
+  \IfNoValueTF{#1}{\texttt{#2}}{#1}%
+}
+% Interactive demo placeholder
+\newcommand{\includedemo}[1]{\begin{quote}\emph{[Interactive demo: #1]}\end{quote}}
+
+% Theorem environments matching the site's block types (amsthm's proof
+% environment covers proofs)
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{axiom}{Axiom}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{exercise}{Exercise}
+\newtheorem{solution}{Solution}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{note}{Note}
+\newtheorem{intuition}{Intuition}

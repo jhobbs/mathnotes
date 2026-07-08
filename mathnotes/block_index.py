@@ -6,13 +6,13 @@ files, enabling cross-file references using the @label syntax.
 """
 
 import os
-import frontmatter
 from typing import Dict, Optional, List
 from dataclasses import dataclass
 from markdown import Markdown
 from .structured_math import StructuredMathParser, MathBlock
 from .math_utils import MathProtector
 from .reverse_index import ReverseIndex
+from .content_loader import load_content_file
 
 
 @dataclass
@@ -48,6 +48,11 @@ class BlockIndex:
 
     def build_index(self):
         """Build the global index by scanning all markdown files."""
+        # Reset any residue from a build that failed partway (e.g. a content
+        # dialect error during an incremental rebuild) so blocks aren't
+        # double-registered on the next attempt
+        self._pending_files = []
+
         content_dir = "content"
 
         # Snapshot label signatures before rebuilding so we can detect which
@@ -150,108 +155,106 @@ class BlockIndex:
             dirs[:] = [d for d in dirs if not d.startswith(".")]
 
             for file in files:
-                if file.endswith(".md"):
+                if file.endswith((".md", ".tex")):
                     file_path = os.path.join(root, file)
                     self._index_file(file_path)
 
     def _index_file(self, file_path: str):
         """Index all labeled blocks in a single markdown file."""
-        with open(file_path, "r", encoding="utf-8") as f:
-            post = frontmatter.load(f)
-            content = post.content
+        metadata, content = load_content_file(file_path)
 
-            # Get page title from frontmatter
-            page_title = post.metadata.get("title", None)
+        # Get page title from metadata
+        page_title = metadata.get("title", None)
 
-            # Parse structured math content
-            # Don't pass block_index yet - it's not complete in phase 1
-            parser = StructuredMathParser()
-            _, block_markers = parser.parse(content)
+        # Parse structured math content
+        # Don't pass block_index yet - it's not complete in phase 1
+        parser = StructuredMathParser()
+        _, block_markers = parser.parse(content)
 
-            # Get canonical URL for this file
-            file_path_normalized = file_path.replace("\\", "/")
-            canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
+        # Get canonical URL for this file
+        file_path_normalized = file_path.replace("\\", "/")
+        canonical_url = self.url_mapper.get_canonical_url(file_path_normalized)
 
-            # Store the blocks and metadata for phase 2 rendering
-            if not hasattr(self, "_pending_files"):
-                self._pending_files = []
-            self._pending_files.append(
-                {
-                    "file_path": file_path,
-                    "canonical_url": canonical_url,
-                    "page_title": page_title,
-                    "block_markers": block_markers,
-                }
+        # Store the blocks and metadata for phase 2 rendering
+        if not hasattr(self, "_pending_files"):
+            self._pending_files = []
+        self._pending_files.append(
+            {
+                "file_path": file_path,
+                "canonical_url": canonical_url,
+                "page_title": page_title,
+                "block_markers": block_markers,
+            }
+        )
+
+        # Index blocks for reference and display
+        for block in block_markers.values():
+            ref = BlockReference(
+                block=block,
+                file_path=file_path,
+                canonical_url=f"/mathnotes/{canonical_url}",
+                page_title=page_title,
             )
 
-            # Index blocks for reference and display
-            for block in block_markers.values():
-                ref = BlockReference(
-                    block=block,
-                    file_path=file_path,
-                    canonical_url=f"/mathnotes/{canonical_url}",
-                    page_title=page_title,
-                )
-                
-                # Only add top-level blocks to all_blocks (for index pages)
-                # Nested blocks will appear inside their parents
-                if block.parent is None:
-                    self.all_blocks.append(ref)
-                
-                # Add to the label index for cross-references (all blocks now have labels)
-                # Normalize label for storage (case-insensitive lookup)
-                from .structured_math import MathBlock
+            # Only add top-level blocks to all_blocks (for index pages)
+            # Nested blocks will appear inside their parents
+            if block.parent is None:
+                self.all_blocks.append(ref)
 
-                normalized_label = MathBlock.normalize_label_from_title(block.label)
+            # Add to the label index for cross-references (all blocks now have labels)
+            # Normalize label for storage (case-insensitive lookup)
+            from .structured_math import MathBlock
 
-                if normalized_label in self.index:
-                    existing = self.index[normalized_label]
-                    print(
-                        f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
-                    )
-                self.index[normalized_label] = ref
-                
-                # Register with reverse index
-                self.reverse_index.add_block_definition(
-                    label=block.label,
-                    file_path=file_path,
-                    title=block.title or block.label,
-                    url=f"/mathnotes/{canonical_url}#{block.label}"
+            normalized_label = MathBlock.normalize_label_from_title(block.label)
+
+            if normalized_label in self.index:
+                existing = self.index[normalized_label]
+                print(
+                    f"Warning: Duplicate label '{block.label}' found in {file_path} (previously in {existing.file_path})"
                 )
-                
-                # Also register synonyms as aliases pointing to the same block
-                # Include both manual synonyms and auto-generated synonyms
-                all_synonyms = list(block.synonyms) + list(getattr(block, 'auto_generated_synonyms', []))
-                
-                if all_synonyms:
-                    for synonym_title, synonym_label in all_synonyms:
-                        normalized_synonym_label = MathBlock.normalize_label_from_title(synonym_label)
-                        
-                        if normalized_synonym_label in self.index:
-                            existing = self.index[normalized_synonym_label]
-                            print(
-                                f"Warning: Synonym label '{synonym_label}' conflicts with existing label in {existing.file_path}"
-                            )
-                        else:
-                            # Create a synonym reference that points to the same block
-                            synonym_ref = BlockReference(
-                                block=block,
-                                file_path=file_path,
-                                canonical_url=f"/mathnotes/{canonical_url}",
-                                page_title=page_title,
-                            )
-                            # Store the synonym title for later use
-                            synonym_ref.synonym_title = synonym_title
-                            synonym_ref.is_synonym = True
-                            self.index[normalized_synonym_label] = synonym_ref
-                            
-                            # Register synonym with reverse index
-                            self.reverse_index.add_block_definition(
-                                label=synonym_label,
-                                file_path=file_path,
-                                title=synonym_title,
-                                url=f"/mathnotes/{canonical_url}#{block.label}"
-                            )
+            self.index[normalized_label] = ref
+
+            # Register with reverse index
+            self.reverse_index.add_block_definition(
+                label=block.label,
+                file_path=file_path,
+                title=block.title or block.label,
+                url=f"/mathnotes/{canonical_url}#{block.label}"
+            )
+
+            # Also register synonyms as aliases pointing to the same block
+            # Include both manual synonyms and auto-generated synonyms
+            all_synonyms = list(block.synonyms) + list(getattr(block, 'auto_generated_synonyms', []))
+
+            if all_synonyms:
+                for synonym_title, synonym_label in all_synonyms:
+                    normalized_synonym_label = MathBlock.normalize_label_from_title(synonym_label)
+
+                    if normalized_synonym_label in self.index:
+                        existing = self.index[normalized_synonym_label]
+                        print(
+                            f"Warning: Synonym label '{synonym_label}' conflicts with existing label in {existing.file_path}"
+                        )
+                    else:
+                        # Create a synonym reference that points to the same block
+                        synonym_ref = BlockReference(
+                            block=block,
+                            file_path=file_path,
+                            canonical_url=f"/mathnotes/{canonical_url}",
+                            page_title=page_title,
+                        )
+                        # Store the synonym title for later use
+                        synonym_ref.synonym_title = synonym_title
+                        synonym_ref.is_synonym = True
+                        self.index[normalized_synonym_label] = synonym_ref
+
+                        # Register synonym with reverse index
+                        self.reverse_index.add_block_definition(
+                            label=synonym_label,
+                            file_path=file_path,
+                            title=synonym_title,
+                            url=f"/mathnotes/{canonical_url}#{block.label}"
+                        )
 
     def _render_all_blocks(self):
         """Phase 4: Render all blocks now that the index and references are complete."""
@@ -304,57 +307,55 @@ class BlockIndex:
             page_title = file_info.get("page_title", "")
             
             # Process page-level references (outside of blocks)
-            with open(file_path, "r", encoding="utf-8") as f:
-                post = frontmatter.load(f)
-                original_content = post.content
-                
-                # Parse again to get content with markers
-                from .structured_math import StructuredMathParser as SMParser
-                temp_parser = SMParser()
-                content_with_markers, _ = temp_parser.parse(original_content)
-                
-                # Now remove all block markers to get only non-block content
-                remaining_content = content_with_markers
-                for marker_id in block_markers.keys():
-                    lines = remaining_content.split('\n')
-                    filtered_lines = [line for line in lines if marker_id not in line]
-                    remaining_content = '\n'.join(filtered_lines)
-                
-                # Only process if there's actual content left
-                if remaining_content.strip():
-                    from .tooltip_collector import TooltipCollectingBlockReferenceProcessor
-                    page_ref_processor = TooltipCollectingBlockReferenceProcessor(
-                        block_markers={}, current_file=file_path, block_index=self
-                    )
-                    page_ref_processor.process_references(remaining_content)
-                    
-                    if page_ref_processor.referenced_labels or page_ref_processor.embedded_labels:
-                        base_url = f"/mathnotes/{canonical_url}"
-                        
-                        for referenced_label in page_ref_processor.referenced_labels:
-                            self.reverse_index.add_reference(
-                                referenced_label=referenced_label,
-                                source_file=file_path,
-                                source_label=None,
-                                source_title=page_title,
-                                source_url=base_url,
-                                context="",
-                                is_embed=False,
-                                is_from_block=False
-                            )
-                        
-                        for embedded_label in page_ref_processor.embedded_labels:
-                            self.reverse_index.add_reference(
-                                referenced_label=embedded_label,
-                                source_file=file_path,
-                                source_label=None,
-                                source_title=page_title,
-                                source_url=base_url,
-                                context="",
-                                is_embed=True,
-                                is_from_block=False
-                            )
-            
+            metadata, original_content = load_content_file(file_path)
+
+            # Parse again to get content with markers
+            from .structured_math import StructuredMathParser as SMParser
+            temp_parser = SMParser()
+            content_with_markers, _ = temp_parser.parse(original_content)
+
+            # Now remove all block markers to get only non-block content
+            remaining_content = content_with_markers
+            for marker_id in block_markers.keys():
+                lines = remaining_content.split('\n')
+                filtered_lines = [line for line in lines if marker_id not in line]
+                remaining_content = '\n'.join(filtered_lines)
+
+            # Only process if there's actual content left
+            if remaining_content.strip():
+                from .tooltip_collector import TooltipCollectingBlockReferenceProcessor
+                page_ref_processor = TooltipCollectingBlockReferenceProcessor(
+                    block_markers={}, current_file=file_path, block_index=self
+                )
+                page_ref_processor.process_references(remaining_content)
+
+                if page_ref_processor.referenced_labels or page_ref_processor.embedded_labels:
+                    base_url = f"/mathnotes/{canonical_url}"
+
+                    for referenced_label in page_ref_processor.referenced_labels:
+                        self.reverse_index.add_reference(
+                            referenced_label=referenced_label,
+                            source_file=file_path,
+                            source_label=None,
+                            source_title=page_title,
+                            source_url=base_url,
+                            context="",
+                            is_embed=False,
+                            is_from_block=False
+                        )
+
+                    for embedded_label in page_ref_processor.embedded_labels:
+                        self.reverse_index.add_reference(
+                            referenced_label=embedded_label,
+                            source_file=file_path,
+                            source_label=None,
+                            source_title=page_title,
+                            source_url=base_url,
+                            context="",
+                            is_embed=True,
+                            is_from_block=False
+                        )
+
             # Collect references from all blocks
             def collect_block_references(block, marker_id):
                 """Recursively collect references from a block and its children."""

@@ -28,3 +28,4 @@ yarn-error.log*
 static/dist/
 
 static-build
+.superpowers/

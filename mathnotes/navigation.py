@@ -6,7 +6,7 @@ Provides a tree-style navigation structure like Windows Explorer.
 
 from pathlib import Path
 from typing import Dict, List, Any
-import frontmatter
+from .content_loader import load_content_file
 
 # Module-level caches
 _title_cache: Dict[str, str] = {}
@@ -29,11 +29,10 @@ def get_page_title(file_path: Path) -> str:
 
     title = file_path.stem.replace("-", " ").title()
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            post = frontmatter.load(f)
-            fm_title = post.metadata.get("title", "").strip()
-            if fm_title:
-                title = fm_title
+        metadata, _ = load_content_file(file_path)
+        fm_title = (metadata.get("title") or "").strip()
+        if fm_title:
+            title = fm_title
     except Exception:
         pass
 
@@ -58,7 +57,7 @@ def get_pages_in_folder(folder_path: Path, file_to_canonical: Dict[str, str]) ->
         return pages
 
     for item in folder_path.iterdir():
-        if item.is_file() and item.suffix == ".md":
+        if item.is_file() and item.suffix in (".md", ".tex"):
             file_path_str = str(item.relative_to(Path("."))).replace("\\", "/")
             canonical_url = file_to_canonical.get(file_path_str)
 

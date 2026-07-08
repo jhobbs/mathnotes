@@ -1,6 +1,7 @@
 Jinja2==3.1.6
 Markdown==3.8.2
 MarkupSafe==3.0.2
+pylatexenc==2.10
 python-frontmatter==1.1.0
 python-markdown-math==0.9
 PyYAML==6.0.2

@@ -99,21 +99,21 @@ def build_bibliography(url_mapper) -> list[dict[str, Any]]:
     Returns:
         Bibliography entries sorted by title.
     """
-    import frontmatter
+    from .content_loader import load_content_file
 
     entries: dict[tuple[str, str], dict[str, Any]] = {}
 
     for canonical_url in url_mapper.url_mappings.keys():
         md_path = url_mapper.get_file_path(canonical_url)
         try:
-            post = frontmatter.load(md_path)
+            metadata, _ = load_content_file(md_path)
         except (OSError, yaml.YAMLError) as e:
-            logger.warning(f"Could not read frontmatter from {md_path}: {e}")
+            logger.warning(f"Could not read metadata from {md_path}: {e}")
             continue
 
-        page_title = post.get("title") or canonical_url
+        page_title = metadata.get("title") or canonical_url
         page_url = f"/mathnotes/{canonical_url}/"
-        sources = get_sources_for_page(md_path, post.get("sources"))
+        sources = get_sources_for_page(md_path, metadata.get("sources"))
 
         seen_keys = set()
         for source in sources:
