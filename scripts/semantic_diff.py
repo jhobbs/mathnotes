@@ -34,9 +34,24 @@ class Extractor(HTMLParser):
         self._stack = []        # open heading/title tracking
         self._block_depth = 0
         self._skip = 0          # inside <script>/<style>
+        self.math_alt = []
+        self._in_math = 0
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        if tag == "math":
+            self.math_alt.append(a.get("alttext", ""))
+            self._in_math += 1
+            # Leave a single-space placeholder where the math used to be,
+            # mirroring how MATH_RE.sub(" ", ...) elides $...$ on the
+            # baseline side below -- otherwise adjacent text collapses
+            # together ("( )" on baseline vs "()" on the new tree).
+            if self._stack:
+                self._stack[-1][2].append(" ")
+            self.text_parts.append(" ")
+            return
+        if self._in_math:
+            return  # tags inside <math> are rendering detail
         if tag in ("script", "style"):
             self._skip += 1
         if tag in ("h1", "h2", "h3", "h4", "h5", "h6"):
@@ -60,11 +75,19 @@ class Extractor(HTMLParser):
             self.refs.append(("EMBED:" + a["data-embed-label"], ""))
 
     def handle_endtag(self, tag):
+        if tag == "math" and self._in_math:
+            self._in_math -= 1
+            return
         if tag in ("script", "style") and self._skip:
             self._skip -= 1
         if self._stack and self._stack[-1][1] == tag:
             kind, _, parts = self._stack.pop()
-            text = " ".join("".join(parts).split())
+            # Strip $...$ math the same way the prose "text" field does, so
+            # headings/title compare equal: on the baseline side $z_0$ is
+            # still literal text here (headings aren't run through the
+            # module-level MATH_RE.sub in summarize()), while on the new
+            # side it was already elided to a placeholder space above.
+            text = " ".join(MATH_RE.sub(" ", "".join(parts)).split())
             if kind == "h":
                 self.headings.append((tag, text))
             else:
@@ -74,7 +97,7 @@ class Extractor(HTMLParser):
             pass
 
     def handle_data(self, data):
-        if self._skip:
+        if self._skip or self._in_math:
             return
         if self._stack:
             self._stack[-1][2].append(data)
@@ -86,7 +109,11 @@ def summarize(path: Path) -> dict:
     ex = Extractor()
     ex.feed(src)
     text = " ".join("".join(ex.text_parts).split())
-    math = sorted(" ".join(m.split()) for m in MATH_RE.findall(text))
+
+    def norm_math(s):
+        return " ".join(s.replace("$", " ").split())
+
+    math = sorted(norm_math(m) for m in MATH_RE.findall(text) + ex.math_alt)
     prose = " ".join(MATH_RE.sub(" ", text).split())
     return {
         "title": ex.title,
