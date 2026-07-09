@@ -46,6 +46,12 @@ def test_worker_inline_and_display():
     assert 'alttext="\\int_0^1 f"' in r2["mathml"]
 
 
+def test_worker_escapes_gt_in_alttext():
+    r1, = worker_roundtrip([{"id": 1, "latex": "x > 0", "display": False}])
+    assert 'alttext="x &gt; 0"' in r1["mathml"]
+    assert 'alttext="x > 0"' not in r1["mathml"]
+
+
 def test_worker_sty_macros_and_ams_symbols():
     r1, r2, r3, r4 = worker_roundtrip([
         {"id": 1, "latex": "\\vec{F}", "display": False},   # mathnotes.sty macro

@@ -61,7 +61,7 @@ const MathJax = await mathjax.init({
 });
 
 function escapeAttr(s) {
-  return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 const rl = createInterface({ input: process.stdin, terminal: false });

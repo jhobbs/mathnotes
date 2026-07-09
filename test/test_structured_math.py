@@ -132,6 +132,12 @@ def test_body_text_restores_math_from_alttext():
     assert body_text(h) == "Every $\\epsilon$ ball is open"
 
 
+def test_math_to_dollar_text_alttext_with_gt():
+    h = '<p>Let <math alttext="\\epsilon &gt; 0" display="inline"><mi>e</mi></math> hold.</p>'
+    assert body_text(h) == "Let $\\epsilon > 0$ hold."
+    assert math_to_dollar_text('<math alttext="a &gt; b" display="block"><mi>a</mi></math>') == "$$a > b$$"
+
+
 def test_description_strips_math_elements():
     from mathnotes.page_renderer import PageRenderer
     pr = PageRenderer(None, None)
