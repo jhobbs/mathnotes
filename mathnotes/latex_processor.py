@@ -28,6 +28,7 @@ from .structured_math import (
     body_text,
     finalize_blocks,
     CHILD_MARKER_RE,
+    math_to_dollar_text,
 )
 
 import html as html_lib
@@ -99,7 +100,8 @@ def _collapse_islands(stream: str) -> str:
 
 
 def _heading_id(title_html: str) -> str:
-    return MathBlock.normalize_label_from_title(re.sub(r"<[^>]+>", "", title_html))
+    return MathBlock.normalize_label_from_title(
+        re.sub(r"<[^>]+>", "", math_to_dollar_text(title_html)))
 
 
 class _LstlistingArgsParser(macrospec.VerbatimArgsParser):

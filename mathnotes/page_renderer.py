@@ -86,7 +86,8 @@ class PageRenderer:
         # page doesn't set one explicitly.
         description = metadata.get("description", "")
         if not description:
-            clean = re.sub(r"<[^>]+>", "", html_content)
+            clean = re.sub(r"<math\b.*?</math>", " ", html_content, flags=re.DOTALL)
+            clean = re.sub(r"<[^>]+>", "", clean)
             clean = re.sub(r"\$\$[^$]+\$\$", "", clean)
             clean = re.sub(r"\$[^$]+\$", "", clean)
             clean = re.sub(r"\s+", " ", clean).strip()

@@ -10,7 +10,7 @@ except NameError:
 
 from mathnotes.structured_math import (
     MathBlock, MathBlockType, PageDoc, CHILD_MARKER_RE,
-    body_text, finalize_blocks, render_block_html,
+    body_text, finalize_blocks, render_block_html, math_to_dollar_text,
 )
 
 
@@ -112,6 +112,32 @@ def test_walk_and_pagedoc():
     doc = PageDoc(items=["<p>hi</p>", t])
     assert doc.top_blocks() == [t]
     assert [b.label for b in t.walk()] == ["a", "proof-of-a"]
+
+
+def test_math_to_dollar_text():
+    h = ('<p>Let <math xmlns="http://www.w3.org/1998/Math/MathML" '
+         'alttext="x &lt; y"><mi>x</mi><mo>&lt;</mo><mi>y</mi></math> and '
+         '<math alttext="\\int f" display="block"><mo>∫</mo></math> end.</p>')
+    out = math_to_dollar_text(h)
+    assert "$x < y$" in out
+    assert "$$\\int f$$" in out
+    assert "<math" not in out
+    # no-op on HTML without math elements
+    assert math_to_dollar_text("<p>plain $a+b$ text</p>") == "<p>plain $a+b$ text</p>"
+
+
+def test_body_text_restores_math_from_alttext():
+    h = '<p>Every <math alttext="\\epsilon"><mi>ε</mi></math> ball is open</p>'
+    assert body_text(h) == "Every $\\epsilon$ ball is open"
+
+
+def test_description_strips_math_elements():
+    from mathnotes.page_renderer import PageRenderer
+    pr = PageRenderer(None, None)
+    desc = pr._generate_description(
+        {}, '<p>Intro <math alttext="x^2"><mi>x</mi></math> continues here.</p>')
+    assert desc == "Intro continues here."
+    assert "<math" not in desc and "x" not in desc.replace("Intro", "")
 
 
 if __name__ == "__main__":

@@ -15,6 +15,21 @@ from enum import Enum
 CHILD_MARKER_RE = re.compile("\x02(\\d+)\x02")
 _DREF_TEXT_RE = re.compile(r'<a data-dref="([^"]+)">(.*?)</a>', re.DOTALL)
 _TAG_RE = re.compile(r"<[^>]+>")
+_MATH_EL_RE = re.compile(r"<math\b[^>]*>.*?</math>", re.DOTALL)
+_ALTTEXT_RE = re.compile(r'\balttext="([^"]*)"')
+
+
+def math_to_dollar_text(html_str: str) -> str:
+    """Replace <math> elements with their $-delimited alttext TeX (display
+    math gets $$), so snippet and heading-id derivation see the same text
+    the $-delimiter era produced. No-op on HTML without <math> elements."""
+    def repl(m):
+        el = m.group(0)
+        open_tag = el[: el.index(">") + 1]
+        alt = _ALTTEXT_RE.search(open_tag)
+        tex = html_lib.unescape(alt.group(1)) if alt else ""
+        return f"$${tex}$$" if 'display="block"' in open_tag else f"${tex}$"
+    return _MATH_EL_RE.sub(repl, html_str)
 
 
 def body_text(html_str: str) -> str:
@@ -31,6 +46,7 @@ def body_text(html_str: str) -> str:
         return label.replace("-", " ")
 
     text = _DREF_TEXT_RE.sub(flatten, html_str)
+    text = math_to_dollar_text(text)
     text = CHILD_MARKER_RE.sub(" ", text)
     text = _TAG_RE.sub("", text)
     text = html_lib.unescape(text)
