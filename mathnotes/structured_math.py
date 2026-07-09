@@ -17,6 +17,7 @@ _DREF_TEXT_RE = re.compile(r'<a data-dref="([^"]+)">(.*?)</a>', re.DOTALL)
 _TAG_RE = re.compile(r"<[^>]+>")
 _MATH_EL_RE = re.compile(r"<math\b[^>]*>.*?</math>", re.DOTALL)
 _ALTTEXT_RE = re.compile(r'\balttext="([^"]*)"')
+_INLINE_MATH_RE = re.compile(r"\$([^$]+)\$")
 
 
 def math_to_dollar_text(html_str: str) -> str:
@@ -51,6 +52,22 @@ def body_text(html_str: str) -> str:
     text = _TAG_RE.sub("", text)
     text = html_lib.unescape(text)
     return " ".join(text.split())
+
+
+def text_with_math_to_html(text: str) -> str:
+    """HTML for plain text that may contain $...$ math: prose is escaped,
+    complete math spans render through the math seam. Used for reference
+    link text, block header titles, and tooltip title/type strings."""
+    from .latex_processor import render_math  # local: latex_processor imports this module
+
+    out = []
+    pos = 0
+    for m in _INLINE_MATH_RE.finditer(text):
+        out.append(html_lib.escape(text[pos:m.start()], quote=False))
+        out.append(render_math(m.group(1).strip(), display=False))
+        pos = m.end()
+    out.append(html_lib.escape(text[pos:], quote=False))
+    return "".join(out)
 
 
 class MathBlockType(Enum):
@@ -313,7 +330,7 @@ def render_block_html(block: MathBlock, content_html: str, url: str) -> str:
             parts.append(f'<span class="math-block-type">{block.display_name}:</span>')
             parts.append(
                 f'<span class="math-block-title"><a href="{url}">'
-                f"{html_lib.escape(block.title)}</a></span>"
+                f"{text_with_math_to_html(block.title)}</a></span>"
             )
         else:
             parts.append(f'<span class="math-block-type">{block.display_name}</span>')

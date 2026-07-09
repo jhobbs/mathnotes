@@ -11,6 +11,7 @@ except NameError:
 from mathnotes.structured_math import (
     MathBlock, MathBlockType, PageDoc, CHILD_MARKER_RE,
     body_text, finalize_blocks, render_block_html, math_to_dollar_text,
+    text_with_math_to_html,
 )
 
 
@@ -138,6 +139,29 @@ def test_description_strips_math_elements():
         {}, '<p>Intro <math alttext="x^2"><mi>x</mi></math> continues here.</p>')
     assert desc == "Intro continues here."
     assert "<math" not in desc and "x" not in desc.replace("Intro", "")
+
+
+def test_text_with_math_to_html():
+    import mathnotes.latex_processor as lp
+    orig = lp.render_math
+    lp.render_math = lambda latex, display: f'<MML:{latex}:{display}>'
+    try:
+        out = text_with_math_to_html("Norm $\\|x\\|$ & more")
+        assert out == 'Norm <MML:\\|x\\|:False> &amp; more'
+        # prose-only: plain escaping, no double-escaping
+        assert text_with_math_to_html("a < b") == "a &lt; b"
+        # unpaired $ is inert prose
+        assert text_with_math_to_html("costs $5") == "costs $5"
+    finally:
+        lp.render_math = orig
+
+
+def test_render_block_html_title_goes_through_math_seam():
+    b = MathBlock(block_type=MathBlockType.THEOREM, content="c",
+                  title="Bound on $\\|x\\|$", label="t1")
+    out = render_block_html(b, "<p>c</p>", "/u#t1")
+    # with the Part-1 seam this renders as escaped $-text, same as before
+    assert "Bound on $\\|x\\|$" in out
 
 
 if __name__ == "__main__":

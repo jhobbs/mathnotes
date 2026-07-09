@@ -12,7 +12,7 @@ import html as html_lib
 import re
 from typing import Any, Dict, Optional, Set, Tuple
 
-from .structured_math import MathBlockType
+from .structured_math import MathBlockType, text_with_math_to_html
 
 _DEMBED_RE = re.compile(r'<div data-dembed="([^"]+)"></div>')
 _DREF_RE = re.compile(r'<a data-dref="([^"]+)">(.*?)</a>', re.DOTALL)
@@ -60,12 +60,13 @@ class RefResolver:
             is_synonym = getattr(bref, "is_synonym", False)
             synonym_title = getattr(bref, "synonym_title", label)
             if is_synonym and synonym_title:
-                display_type = (f"{block.block_type.value} ({synonym_title}), "
-                                f"synonym of {block.title or label}")
+                display_type = (
+                    f"{block.block_type.value} ({text_with_math_to_html(synonym_title)}), "
+                    f"synonym of {text_with_math_to_html(block.title or label)}")
                 display_title = ""
             else:
                 display_type = block.block_type.value
-                display_title = block.title or ""
+                display_title = text_with_math_to_html(block.title) if block.title else ""
             url = bref.full_url
             tooltip_data[label] = {
                 "type": display_type,
@@ -93,14 +94,14 @@ class RefResolver:
                 text = bref.synonym_title
                 if block.block_type == MathBlockType.DEFINITION:
                     text = text.lower()
-                text = html_lib.escape(text)
+                text = text_with_math_to_html(text)
             elif block.title:
                 text = block.title
                 if block.block_type == MathBlockType.DEFINITION and ref_type is None:
                     text = text.lower()
-                text = html_lib.escape(text)
+                text = text_with_math_to_html(text)
             else:
-                text = html_lib.escape(block.content_snippet)
+                text = text_with_math_to_html(block.content_snippet)
             return (f'<a href="{bref.full_url}" class="{css}" '
                     f'data-ref-type="{block.block_type.value}" '
                     f'data-ref-label="{html_lib.escape(label, quote=True)}">{text}</a>')

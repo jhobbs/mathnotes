@@ -99,18 +99,21 @@ class SiteBuilder:
 
     def setup_global_context(self):
         """Set up global context for all templates."""
+        from mathnotes.structured_math import text_with_math_to_html
+
         # Convert block index to tooltip data format
         tooltip_data = {}
         for label, ref in self.block_index.index.items():
             # Use the processed HTML content (with references converted to links)
             tooltip_data[label] = {
                 "type": ref.block.block_type.value,
-                "title": ref.block.title or "",
+                "title": text_with_math_to_html(ref.block.title) if ref.block.title else "",
                 "content": ref.block.content_html,
                 "url": ref.full_url,
                 # Add synonym metadata if applicable
                 "is_synonym": getattr(ref, 'is_synonym', False),
-                "synonym_of": ref.block.title if getattr(ref, 'is_synonym', False) else None,
+                "synonym_of": (text_with_math_to_html(ref.block.title)
+                               if getattr(ref, 'is_synonym', False) and ref.block.title else None),
                 "synonym_title": getattr(ref, 'synonym_title', None),
             }
 
