@@ -28,16 +28,13 @@ def get_asset_urls() -> Dict[str, str]:
     # Default filenames (what the manifest keys are)
     css_key = "main.css"
     main_js_key = "main.js"
-    mathjax_js_key = "mathjax.js"
 
     css_file = manifest.get(css_key, css_key)
     main_js = manifest.get(main_js_key, main_js_key)
-    mathjax_js = manifest.get(mathjax_js_key, mathjax_js_key)
 
     return {
         "css_url": f"/static/dist/{css_file}",
         "main_js_url": f"/static/dist/{main_js}",
-        "mathjax_js_url": f"/static/dist/{mathjax_js}",
     }
 
 

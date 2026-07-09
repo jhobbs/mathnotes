@@ -1,9 +1,3 @@
-declare global {
-  interface Window {
-    MathJax: any;
-  }
-}
-
 interface TooltipData {
   label: string;
   type: string;
@@ -279,13 +273,7 @@ class TooltipSystem {
     this.tooltipElement.innerHTML = content;
     this.tooltipElement.style.display = 'block';
     this.tooltipElement.classList.add('visible');
-    
-    if (window.MathJax && window.MathJax.typesetPromise) {
-      window.MathJax.typesetPromise([this.tooltipElement]).catch((e: any) => {
-        console.error('MathJax typesetting failed:', e);
-      });
-    }
-    
+
     this.updatePosition();
   }
 

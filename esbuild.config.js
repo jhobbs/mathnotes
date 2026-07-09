@@ -41,37 +41,10 @@ const postcssPlugin = {
   }
 };
 
-// Plugin to copy MathJax fonts
-const copyPlugin = {
-  name: 'copy-files',
-  setup(build) {
-    build.onEnd(async () => {
-      const srcDir = 'node_modules/mathjax/es5/output/chtml/fonts/woff-v2';
-      const destDir = 'static/dist/fonts/mathjax/woff-v2';
-      
-      try {
-        await fs.mkdir(destDir, { recursive: true });
-        const files = await fs.readdir(srcDir);
-        
-        for (const file of files) {
-          await fs.copyFile(
-            path.join(srcDir, file),
-            path.join(destDir, file)
-          );
-        }
-        console.log('✓ Copied MathJax fonts');
-      } catch (err) {
-        console.error('Failed to copy MathJax fonts:', err);
-      }
-    });
-  }
-};
-
 // Build configuration
 const buildOptions = {
   entryPoints: [
     path.resolve(process.cwd(), 'demos-framework/src/main.ts'),
-    path.resolve(process.cwd(), 'demos-framework/src/mathjax-entry.ts'),
     path.resolve(process.cwd(), 'styles/main.css')
   ],
   bundle: true,
@@ -103,7 +76,7 @@ const buildOptions = {
     '@demos': path.resolve(process.cwd(), 'demos'),
     '@framework': path.resolve(process.cwd(), 'demos-framework/src')
   },
-  plugins: [postcssPlugin, copyPlugin],
+  plugins: [postcssPlugin],
   external: [],
   // Handle node module resolution issues
   mainFields: ['module', 'main'],
@@ -133,12 +106,7 @@ async function build() {
           const ext = path.extname(key);
           
           if (ext === '.js') {
-            // Special case for mathjax-entry.js
-            if (value.entryPoint.includes('mathjax-entry')) {
-              manifest['mathjax.js'] = relativePath;
-            } else {
-              manifest[`${entryName}.js`] = relativePath;
-            }
+            manifest[`${entryName}.js`] = relativePath;
           } else if (ext === '.css') {
             // The styles/main.css entry should map to main.css in manifest
             if (value.entryPoint.includes('styles/main.css')) {
