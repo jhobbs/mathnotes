@@ -35,6 +35,13 @@ FROM python:3.14-slim AS builder
 
 WORKDIR /app
 
+# Node runs the build-time MathML worker (scripts/tex2mml-worker.mjs)
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
 # Copy version from first stage
 COPY --from=version /version.txt /version/version.txt
 
@@ -46,7 +53,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY mathnotes/ ./mathnotes/
 COPY content/ ./content/
 COPY templates/ ./templates/
-COPY scripts/build_static_simple.py ./scripts/
+COPY scripts/build_static_simple.py scripts/tex2mml-worker.mjs ./scripts/
+COPY latex/ ./latex/
+# The MathML worker needs only the mathjax package (it has no runtime deps)
+COPY --from=esbuild-builder /app/node_modules/mathjax ./node_modules/mathjax
 COPY favicon.ico robots.txt ./
 
 # Copy esbuild output from the esbuild-builder stage
