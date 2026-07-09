@@ -68,9 +68,13 @@ funnel through it. Because pylatexenc hands the parser real `LatexMathNode`
 objects (not text containing `$`), there's no risk of a general text
 processor misinterpreting `$`, `_`, `\`, or any other math character; math is
 never "protected" or "restored" the way the old markdown pipeline had to
-guard `$...$` spans from a third-party markdown parser. Today `render_math()`
-emits MathJax delimiter text (`$...$` / `$$...$$`) for client-side rendering;
-swapping to build-time MathML is a change confined to this one function.
+guard `$...$` spans from a third-party markdown parser. `render_math()`
+delegates to `mathnotes/mathml.py`, which drives a persistent Node worker
+(`scripts/tex2mml-worker.mjs`, MathJax's TeX-to-MathML conversion) over a
+JSON-lines protocol and returns serializer output — well-formed MathML,
+inserted raw at build time, no client-side typesetting. Unconvertible TeX
+raises `MathConversionError`, which becomes a `LatexDialectError` with
+`file:line`.
 
 ### Placeholder grammar
 

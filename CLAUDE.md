@@ -136,7 +136,7 @@ When moving/renaming a content file: `git mv` it, then update any `\pagelink{...
    pre-rendered blocks, resolves remaining reference placeholders, and produces
    the final page HTML
 7. **Security** (`security.py`): Embeds CSP and security headers in HTML
-8. **Rendering**: Jinja2 templates generate static HTML with MathJax for LaTeX
+8. **Rendering**: Jinja2 templates generate static HTML with native MathML
 9. **Output**: Complete static site ready for nginx serving
 
 ### Key Architectural Decisions
@@ -149,7 +149,7 @@ When moving/renaming a content file: `git mv` it, then update any `\pagelink{...
      single math seam
    - Structured blocks are parsed and indexed globally
    - Cross-references resolved using the global index
-   - MathJax handles final LaTeX rendering client-side
+   - The build-time MathML worker (`scripts/tex2mml-worker.mjs` via `mathnotes/mathml.py`) renders final MathML at build time
    - For detailed explanation of the parsing pipeline, see [PARSING.md](./PARSING.md)
 
 3. **Demo System**: TypeScript demos are registered in `demos-framework/src/main.ts` and loaded dynamically with code splitting. Demos can use:
@@ -169,8 +169,12 @@ When moving/renaming a content file: `git mv` it, then update any `\pagelink{...
 node (inline `$...$` and display `\[...\]`) renders through. Because
 pylatexenc parses math nodes directly out of the LaTeX AST, there is no
 markdown to protect math from — no protection/restoration phases exist.
-Swapping the renderer (e.g. MathJax delimiters for build-time MathML) only
-requires changing this one function.
+`render_math()` delegates to `mathnotes/mathml.py`, which speaks a JSON-lines
+protocol to a persistent Node worker (`scripts/tex2mml-worker.mjs`, MathJax's
+TeX-to-MathML conversion) and returns serializer output — well-formed MathML,
+inserted raw, no client-side typesetting. Unconvertible TeX raises
+`MathConversionError`, which the emitter turns into a `LatexDialectError`
+with `file:line`, failing the build loudly rather than rendering broken math.
 
 ### Cross-Reference System
 - `\dref{label}` - Links to a block with auto-generated text
