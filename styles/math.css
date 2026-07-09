@@ -1,0 +1,19 @@
+/* Native MathML rendering (build-time MathJax -> MathML Core). */
+
+@font-face {
+  font-family: 'STIX Two Math';
+  src: url('./fonts/STIXTwoMath-Regular.woff2') format('woff2');
+  /* brief invisibility beats math reflowing from fallback glyphs */
+  font-display: block;
+}
+
+math {
+  font-family: 'STIX Two Math', math;
+}
+
+/* MathJax's scroll containers are gone; wide display equations scroll
+   inside the element instead of overflowing the page */
+math[display='block'] {
+  overflow-x: auto;
+  max-width: 100%;
+}
