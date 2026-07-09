@@ -47,14 +47,16 @@ def test_worker_inline_and_display():
 
 
 def test_worker_sty_macros_and_ams_symbols():
-    r1, r2, r3 = worker_roundtrip([
+    r1, r2, r3, r4 = worker_roundtrip([
         {"id": 1, "latex": "\\vec{F}", "display": False},   # mathnotes.sty macro
         {"id": 2, "latex": "\\square", "display": False},   # ams symbol (proof QED)
         {"id": 3, "latex": "\\Res_{z=i} f(z)", "display": False},  # \operatorname* macro
+        {"id": 4, "latex": "\\cancel{(x-r_1)}", "display": False},  # cancel package (eagerly loaded)
     ])
     assert "error" not in r1 and 'mathvariant="bold"' in r1["mathml"]
     assert "error" not in r2 and r2["mathml"].startswith("<math")
     assert "error" not in r3 and ">Res<" in r3["mathml"]
+    assert "error" not in r4 and r4["mathml"].startswith("<math")
 
 
 def test_worker_amsmath_environments():

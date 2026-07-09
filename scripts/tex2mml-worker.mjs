@@ -47,12 +47,14 @@ const styPath = path.join(
   path.dirname(fileURLToPath(import.meta.url)), '..', 'latex', 'mathnotes.sty');
 
 const MathJax = await mathjax.init({
-  loader: { load: ['input/tex'] },
+  loader: { load: ['input/tex', '[tex]/cancel'] },
   tex: {
     // input/tex bundles base+ams+newcommand+autoload. noundefined would
     // render undefined macros as red text instead of erroring; drop it so
-    // every bad expression is a loud build failure.
-    packages: { '[-]': ['noundefined'] },
+    // every bad expression is a loud build failure. cancel is eagerly loaded
+    // here because the synchronous tex2mml API cannot service autoload's async
+    // retry mechanism.
+    packages: { '[-]': ['noundefined'], '[+]': ['cancel'] },
     macros: parseStyMacros(readFileSync(styPath, 'utf8')),
     formatError: (_jax, err) => { throw err; },
   },
