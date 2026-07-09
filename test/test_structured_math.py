@@ -94,7 +94,7 @@ def test_render_block_html_shape():
     assert '<span class="block-label-ref">@ftc</span>' in html
     # unmarked child (amsthm-attached) appended inside the parent
     assert 'math-block-nested' in html and "<p>Because.</p>" in html
-    assert "$\\square$" in html  # proof QED
+    assert 'alttext="\\square"' in html  # proof QED
 
 
 def test_render_block_html_inline_child_marker():
@@ -160,8 +160,7 @@ def test_render_block_html_title_goes_through_math_seam():
     b = MathBlock(block_type=MathBlockType.THEOREM, content="c",
                   title="Bound on $\\|x\\|$", label="t1")
     out = render_block_html(b, "<p>c</p>", "/u#t1")
-    # with the Part-1 seam this renders as escaped $-text, same as before
-    assert "Bound on $\\|x\\|$" in out
+    assert "Bound on <math" in out and 'alttext="\\|x\\|"' in out
 
 
 if __name__ == "__main__":

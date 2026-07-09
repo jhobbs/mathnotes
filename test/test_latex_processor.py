@@ -78,16 +78,19 @@ def test_html_escaping_in_prose():
 
 
 def test_math_seam():
-    assert render_math("x<y", False) == "$x&lt;y$"
-    assert render_math("\\int f", True) == "$$ \\int f $$"
+    m = render_math("x<y", False)
+    assert m.startswith("<math") and 'alttext="x&lt;y"' in m
+    d = render_math("\\int f", True)
+    assert 'display="block"' in d and 'alttext="\\int f"' in d
     h = prose("Inline $a<b$ and display $$c \\to d$$ done.")
-    assert "$a&lt;b$" in h and "$$ c \\to d $$" in h
+    assert 'alttext="a&lt;b"' in h and 'alttext="c \\to d"' in h
+    assert 'display="block"' in h
 
 
 def test_sections():
     h = prose("\\section{Big Idea}\nText.\n\\subsection{Small $x$ Idea}")
     assert '<h1 id="big-idea">Big Idea</h1>' in h
-    assert '<h2 id="small-x-idea">Small $x$ Idea</h2>' in h
+    assert '<h2 id="small-x-idea">' in h and 'alttext="x"' in h
     assert "<p>Text.</p>" in h
 
 
@@ -212,10 +215,13 @@ def test_tabular_basic():
 def test_tabular_math_ampersand_not_split():
     # & inside $...$ is part of the opaque math node at the AST level (the
     # walker consumes the whole $...$ span before the tabular-row splitter
-    # ever sees it), so a cell like $a & b$ must stay one cell, not two.
-    h = prose("\\begin{tabular}{lc}\nSym & Val \\\\\n$H(X|Y)$ & $a & b$ \\\\\n\\end{tabular}")
-    assert '<td style="text-align: left;">$H(X|Y)$</td>' in h
-    assert '<td style="text-align: center;">$a &amp; b$</td>' in h
+    # ever sees it), so a matrix cell must stay one cell, not two.
+    h = prose("\\begin{tabular}{lc}\nSym & Val \\\\\n$H(X|Y)$ & "
+              "$\\begin{pmatrix} a & b \\end{pmatrix}$ \\\\\n"
+              "$I(X;Y)$ & $\\begin{pmatrix} c & d \\end{pmatrix}$ \\\\\n\\end{tabular}")
+    assert 'alttext="H(X|Y)"' in h
+    # header row renders as <th>, not <td>; two data rows x two columns = 4
+    assert h.count("<td") == 4  # 2x2 table: the math & did not split a cell
 
 
 def test_tabular_hline_ignored():
@@ -245,8 +251,9 @@ def test_block_basic():
     t = blocks[0]
     assert t.block_type == MathBlockType.THEOREM
     assert t.label == "t1" and t.title == "Named"
-    assert t.body_html == "<p>Body $x$.</p>"
-    assert t.content == "Body $x$."
+    assert t.body_html.startswith("<p>Body <math")
+    assert 'alttext="x"' in t.body_html and t.body_html.endswith(".</p>")
+    assert t.content == "Body $x$."   # alttext round-trip via body_text
     p = t.children[0]
     assert p.block_type == MathBlockType.PROOF and p.label == "proof-of-t1"
     assert p.parent is t
@@ -309,6 +316,20 @@ def test_block_errors():
     expect_error("\\begin{proof}\nOrphan.\n\\end{proof}", "no preceding theorem")
     expect_error("\\begin{itemize}\\item \\begin{theorem}x\\end{theorem}\\end{itemize}",
                  "nested inside a non-block construct")
+
+
+def test_unconvertible_math_is_dialect_error_with_line():
+    import tempfile
+    src = "\\title{T}\n\nGood text.\n\n$\\notarealmacro$\n"
+    with tempfile.NamedTemporaryFile("w", suffix=".tex", delete=False) as f:
+        f.write(src)
+    try:
+        parse_latex_file(src, filepath=f.name)
+        assert False, "expected LatexDialectError"
+    except LatexDialectError as e:
+        assert f.name in str(e) and ":5:" in str(e)
+    finally:
+        os.remove(f.name)
 
 
 def main():

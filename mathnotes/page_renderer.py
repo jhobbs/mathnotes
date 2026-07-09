@@ -88,8 +88,6 @@ class PageRenderer:
         if not description:
             clean = re.sub(r"<math\b.*?</math>", " ", html_content, flags=re.DOTALL)
             clean = re.sub(r"<[^>]+>", "", clean)
-            clean = re.sub(r"\$\$[^$]+\$\$", "", clean)
-            clean = re.sub(r"\$[^$]+\$", "", clean)
             clean = re.sub(r"\s+", " ", clean).strip()
             sentences = clean.split(". ")
             description = sentences[0]

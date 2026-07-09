@@ -85,7 +85,7 @@ def test_tex_pages_end_to_end():
         b_html = b["content"]
         assert 'id="b-thm"' in b_html
         assert 'id="proof-of-b-thm"' in b_html
-        assert "$\\square$" in b_html
+        assert 'alttext="\\square"' in b_html
         assert ('<a href="/mathnotes/test/page-a/#gizmo" class="block-reference" '
                 'data-ref-type="definition" data-ref-label="gizmo">') in b_html
         assert 'class="block-reference synonym-reference"' in b_html

@@ -30,6 +30,7 @@ from .structured_math import (
     CHILD_MARKER_RE,
     math_to_dollar_text,
 )
+from .mathml import MathConversionError, get_converter
 
 import html as html_lib
 
@@ -37,11 +38,12 @@ import html as html_lib
 def render_math(latex: str, display: bool) -> str:
     """THE math seam: every math node renders through this one function.
 
-    Part 1: emit MathJax delimiter text (client-side rendering, as before).
-    Part 2 will swap this body for build-time MathML.
+    Build-time MathML: delegate to the persistent MathJax node worker. The
+    return value is serializer output — well-formed markup, inserted raw.
+    Raises MathConversionError on unconvertible TeX; the emitter turns that
+    into a LatexDialectError with file:line.
     """
-    inner = html_lib.escape(latex.strip(), quote=False)
-    return f"$$ {inner} $$" if display else f"${inner}$"
+    return get_converter().convert(latex.strip(), display)
 
 
 class LatexDialectError(ValueError):
@@ -597,7 +599,10 @@ class _Parser:
         verbatim = n.latex_verbatim()
         open_d, close_d = n.delimiters
         inner = verbatim[len(open_d): len(verbatim) - len(close_d)].strip()
-        return render_math(inner, n.displaytype == "display")
+        try:
+            return render_math(inner, n.displaytype == "display")
+        except MathConversionError as e:
+            self._err(n, f"math does not convert to MathML: {e}")
 
     def _environment(self, n) -> str:
         name = n.environmentname
