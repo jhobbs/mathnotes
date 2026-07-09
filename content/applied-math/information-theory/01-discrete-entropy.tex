@@ -67,14 +67,16 @@ We're never allowed to send two space symbols in a row, because two sequential l
 
 Now, our possible terminating states are
 
-| Symbol | Composition | Duration (time units) |
-|:--------|:-------------|:-----------------------|
-| Dot | 1 unit closed + 1 unit open | 2 |
-| Dash | 3 units closed + 1 unit open | 4 |
-| Letter space preceded by dot | 1 unit closed + 4 units open | 5 |
-| Letter space preceded by dash | 3 units closed + 4 units open | 7 |
-| Word space preceded by dot | 1 unit closed + 7 units open | 8 |
-| Word space preceded by dash | 3 units closed + 7 units open | 10 |
+\begin{tabular}{lll}
+Symbol & Composition & Duration (time units) \\
+\hline
+Dot & 1 unit closed + 1 unit open & 2 \\
+Dash & 3 units closed + 1 unit open & 4 \\
+Letter space preceded by dot & 1 unit closed + 4 units open & 5 \\
+Letter space preceded by dash & 3 units closed + 4 units open & 7 \\
+Word space preceded by dot & 1 unit closed + 7 units open & 8 \\
+Word space preceded by dash & 3 units closed + 7 units open & 10 \\
+\end{tabular}
 
 Note that we had to consider the last two symbols in the case of the last symbol being a space in order to deal with our "no sequential spaces" constraint.
 

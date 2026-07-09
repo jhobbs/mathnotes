@@ -16,7 +16,6 @@ tox
 black
 flake8
 mypy
-types-Markdown
 
 # Pre-commit hooks
 pre-commit

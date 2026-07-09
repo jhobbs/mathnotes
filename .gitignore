@@ -29,3 +29,5 @@ static/dist/
 
 static-build
 .superpowers/
+site-baseline/
+site-new/

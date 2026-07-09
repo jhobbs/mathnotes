@@ -1,4 +1,4 @@
-"""End-to-end test: a .tex page is a full citizen of the pipeline.
+"""End-to-end test: two .tex pages exercise the full pipeline together.
 
 Run:
     docker exec -i mathnotes-static-builder python3 - < test/test_latex_integration.py
@@ -14,32 +14,24 @@ try:
 except NameError:
     sys.path.insert(0, "/app")
 
-MD_PAGE = """---
-title: MD Page
-description: Markdown fixture.
----
-
-# MD Page
-
-:::definition "Widget" {label: widget}
-A **widget** is a thing.
-:::
-
-See @tex-thm for more. Several @gizmos exist.
-"""
-
-TEX_PAGE = r"""\title{Tex Page}
-\description{LaTeX fixture.}
-\source{title={Test Book}, author={A. Author}, type=book}
-
-\section{Tex Page}
-
-\begin{definition}[Gizmo]\label{gizmo}\synonyms{gizmos}\tags{testing}
-A gizmo.
+PAGE_A = r"""\title{Page A}
+\begin{definition}[Gizmo]\label{gizmo}\synonyms{gadget}
+A gizmo is a thing.
 \end{definition}
 
-\begin{theorem}\label{tex-thm}
-Every \dref{widget} is fine.
+Review: \dembed{b-thm}
+
+See \pagelink{page-b} and a demo: \includedemo{pendulum}
+"""
+
+PAGE_B = r"""\title{Page B}
+\description{Fixture.}
+\source{title={Test Book}, author={A. Author}, type=book}
+
+\section{Main}
+
+\begin{theorem}\label{b-thm}
+Every \dref{gizmo} and every \dref{gadgets} is fine.
 \end{theorem}
 \begin{proof}
 Trivial.
@@ -64,63 +56,75 @@ def in_temp_site(fn):
 def fresh_pipeline():
     from mathnotes.content_discovery import ContentDiscovery
     from mathnotes.block_index import BlockIndex
-    from mathnotes.markdown_processor import MarkdownProcessor, clear_markdown_cache
+    from mathnotes.page_renderer import PageRenderer, clear_page_cache
     from mathnotes.content_loader import clear_content_cache
     from mathnotes.navigation import clear_navigation_cache
 
-    clear_markdown_cache()
+    clear_page_cache()
     clear_content_cache()
     clear_navigation_cache()
     discovery = ContentDiscovery()
     discovery.build_url_mappings()
     index = BlockIndex(discovery)
     index.build_index()
-    return discovery, index, MarkdownProcessor(discovery, index)
+    return discovery, index, PageRenderer(discovery, index)
 
 
-def test_cross_format_references():
+def test_tex_pages_end_to_end():
     def check(td):
-        with open("content/test/md-page.md", "w") as f:
-            f.write(MD_PAGE)
-        with open("content/test/tex-page.tex", "w") as f:
-            f.write(TEX_PAGE)
+        with open("content/test/page-a.tex", "w") as f:
+            f.write(PAGE_A)
+        with open("content/test/page-b.tex", "w") as f:
+            f.write(PAGE_B)
 
-        discovery, index, proc = fresh_pipeline()
-        assert "test/tex-page/" in discovery.url_mappings
+        discovery, index, renderer = fresh_pipeline()
+        assert "test/page-a/" in discovery.url_mappings
+        assert "test/page-b/" in discovery.url_mappings
 
-        tex = proc.render_markdown_file("content/test/tex-page.tex")
-        assert tex["title"] == "Tex Page"
-        assert 'id="tex-thm"' in tex["content"]
-        assert 'id="proof-of-tex-thm"' in tex["content"]
-        # .tex page links to a block defined in .md
-        assert "/mathnotes/test/md-page/#widget" in tex["content"]
-
-        # \source commands surface like frontmatter sources
-        assert tex["metadata"]["sources"] == [
+        b = renderer.render_page("content/test/page-b.tex")
+        b_html = b["content"]
+        assert 'id="b-thm"' in b_html
+        assert 'id="proof-of-b-thm"' in b_html
+        assert "$\\square$" in b_html
+        assert ('<a href="/mathnotes/test/page-a/#gizmo" class="block-reference" '
+                'data-ref-type="definition" data-ref-label="gizmo">') in b_html
+        assert 'class="block-reference synonym-reference"' in b_html
+        assert 'data-ref-label="gadgets"' in b_html
+        assert '<h1 id="main">Main</h1>' in b_html
+        assert "block-reference-error" not in b_html
+        assert b["metadata"]["sources"] == [
             {"title": "Test Book", "author": "A. Author", "type": "book"}
         ]
 
-        md = proc.render_markdown_file("content/test/md-page.md")
-        # .md page links to a block defined in .tex
-        assert "/mathnotes/test/tex-page/#tex-thm" in md["content"]
-        # .md page resolves a synonym declared in .tex (\synonyms{gizmos})
-        assert "/mathnotes/test/tex-page/#gizmo" in md["content"]
-        assert "block-reference-error" not in md["content"]
-        assert "block-reference-error" not in tex["content"]
+        a = renderer.render_page("content/test/page-a.tex")
+        a_html = a["content"]
+        assert '<div class="embedded-block" data-embed-label="b-thm">' in a_html
+        assert 'id="b-thm"' in a_html
+        assert 'class="embedded-source"' in a_html
+        assert "/mathnotes/test/page-b/" in a_html
+        assert '<a href="/mathnotes/test/page-b/">Page B</a>' in a_html
+        assert a["has_integrated_demos"] is True
+        assert 'data-demo="pendulum"' in a_html
+        # b-thm is dembed'd (fully inlined), so it never becomes a hoverable
+        # @dref link and gets no tooltip entry of its own. But the embedded
+        # content still contains b-thm's own @dref links to gizmo/gadgets,
+        # and those nested references *do* need tooltip data (see the
+        # labels_from_rendered_html pass in page_renderer.render_page).
+        assert "gizmo" in a["tooltip_data"]
 
         from pathlib import Path
         from mathnotes.navigation import get_page_title
-        assert get_page_title(Path("content/test/tex-page.tex")) == "Tex Page"
+        assert get_page_title(Path("content/test/page-b.tex")) == "Page B"
 
     in_temp_site(check)
 
 
 def test_url_collision_errors():
     def check(td):
-        with open("content/test/dup.md", "w") as f:
-            f.write("---\ntitle: Dup\n---\nx\n")
-        with open("content/test/dup.tex", "w") as f:
-            f.write("\\title{Dup}\nx\n")
+        with open("content/test/dup-a.tex", "w") as f:
+            f.write("\\title{Dup One}\n\\slug{dup}\nx\n")
+        with open("content/test/dup-b.tex", "w") as f:
+            f.write("\\title{Dup Two}\n\\slug{dup}\nx\n")
         from mathnotes.content_discovery import ContentDiscovery
         from mathnotes.content_loader import clear_content_cache
         clear_content_cache()
@@ -134,8 +138,20 @@ def test_url_collision_errors():
     in_temp_site(check)
 
 
+def test_markdown_content_rejected():
+    def check(td):
+        with open("content/test/legacy.md", "w") as f:
+            f.write("# Old\n")
+        try:
+            fresh_pipeline()
+            assert False, "expected a build error for stray .md content"
+        except ValueError as e:
+            assert "no longer supported" in str(e) and "legacy.md" in str(e)
+    in_temp_site(check)
+
+
 def main():
-    tests = [test_cross_format_references, test_url_collision_errors]
+    tests = [test_tex_pages_end_to_end, test_url_collision_errors, test_markdown_content_rejected]
     failures = 0
     for t in tests:
         try:

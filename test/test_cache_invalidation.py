@@ -22,29 +22,23 @@ except NameError:
 
 from mathnotes.content_discovery import ContentDiscovery
 from mathnotes.block_index import BlockIndex
-from mathnotes.markdown_processor import MarkdownProcessor, clear_markdown_cache
+from mathnotes.page_renderer import PageRenderer, clear_page_cache
 
-REFERENCING = """---
-title: Referencing Page
----
+REFERENCING = r"""\title{Referencing Page}
 
-The @my-test-def is referenced here.
+The \dref{my-test-def} is referenced here.
 """
 
-DEFINING_BEFORE = """---
-title: Defining Page
----
+DEFINING_BEFORE = r"""\title{Defining Page}
 
 Nothing here yet.
 """
 
-DEFINING_AFTER = """---
-title: Defining Page
----
+DEFINING_AFTER = r"""\title{Defining Page}
 
-:::definition "My Test Def"
+\begin{definition}[My Test Def]\label{my-test-def}
 The definition body.
-:::
+\end{definition}
 """
 
 
@@ -60,40 +54,40 @@ def test_new_definition_invalidates_referencing_page():
         os.chdir(tmp)
         try:
             os.makedirs("content/test")
-            with open("content/test/referencing.md", "w") as f:
+            with open("content/test/referencing.tex", "w") as f:
                 f.write(REFERENCING)
-            with open("content/test/defining.md", "w") as f:
+            with open("content/test/defining.tex", "w") as f:
                 f.write(DEFINING_BEFORE)
 
-            clear_markdown_cache()
+            clear_page_cache()
             url_mapper = ContentDiscovery()
             url_mapper.build_url_mappings()
             block_index = BlockIndex(url_mapper)
             block_index.build_index()
-            processor = MarkdownProcessor(url_mapper, block_index)
+            processor = PageRenderer(url_mapper, block_index)
 
-            result = processor.render_markdown_file("content/test/referencing.md")
+            result = processor.render_page("content/test/referencing.tex")
             assert "block-reference-error" in result["content"], (
                 "sanity check failed: reference should be broken before the definition exists"
             )
 
-            # Add the definition; referencing.md is left untouched so its
+            # Add the definition; referencing.tex is left untouched so its
             # mtime-keyed cache entry would be reused without invalidation.
-            with open("content/test/defining.md", "w") as f:
+            with open("content/test/defining.tex", "w") as f:
                 f.write(DEFINING_AFTER)
             future = time.time() + 1
-            os.utime("content/test/defining.md", (future, future))
+            os.utime("content/test/defining.tex", (future, future))
 
             incremental_rebuild(url_mapper, block_index)
 
-            result = processor.render_markdown_file("content/test/referencing.md")
+            result = processor.render_page("content/test/referencing.tex")
             assert "block-reference-error" not in result["content"], (
                 "stale cache: referencing page still shows a broken reference "
                 "after the definition was added in another file"
             )
         finally:
             os.chdir(old_cwd)
-            clear_markdown_cache()
+            clear_page_cache()
 
 
 def test_removed_definition_invalidates_referencing_page():
@@ -102,38 +96,38 @@ def test_removed_definition_invalidates_referencing_page():
         os.chdir(tmp)
         try:
             os.makedirs("content/test")
-            with open("content/test/referencing.md", "w") as f:
+            with open("content/test/referencing.tex", "w") as f:
                 f.write(REFERENCING)
-            with open("content/test/defining.md", "w") as f:
+            with open("content/test/defining.tex", "w") as f:
                 f.write(DEFINING_AFTER)
 
-            clear_markdown_cache()
+            clear_page_cache()
             url_mapper = ContentDiscovery()
             url_mapper.build_url_mappings()
             block_index = BlockIndex(url_mapper)
             block_index.build_index()
-            processor = MarkdownProcessor(url_mapper, block_index)
+            processor = PageRenderer(url_mapper, block_index)
 
-            result = processor.render_markdown_file("content/test/referencing.md")
+            result = processor.render_page("content/test/referencing.tex")
             assert "block-reference-error" not in result["content"], (
                 "sanity check failed: reference should resolve while the definition exists"
             )
 
-            with open("content/test/defining.md", "w") as f:
+            with open("content/test/defining.tex", "w") as f:
                 f.write(DEFINING_BEFORE)
             future = time.time() + 1
-            os.utime("content/test/defining.md", (future, future))
+            os.utime("content/test/defining.tex", (future, future))
 
             incremental_rebuild(url_mapper, block_index)
 
-            result = processor.render_markdown_file("content/test/referencing.md")
+            result = processor.render_page("content/test/referencing.tex")
             assert "block-reference-error" in result["content"], (
                 "stale cache: referencing page still shows a working reference "
                 "after the definition was removed"
             )
         finally:
             os.chdir(old_cwd)
-            clear_markdown_cache()
+            clear_page_cache()
 
 
 def test_url_mappings_drop_deleted_files():
@@ -144,22 +138,22 @@ def test_url_mappings_drop_deleted_files():
         os.chdir(tmp)
         try:
             os.makedirs("content/test")
-            with open("content/test/keep.md", "w") as f:
+            with open("content/test/keep.tex", "w") as f:
                 f.write(DEFINING_BEFORE)
-            with open("content/test/doomed.md", "w") as f:
+            with open("content/test/doomed.tex", "w") as f:
                 f.write(DEFINING_BEFORE)
 
             url_mapper = ContentDiscovery()
             url_mapper.build_url_mappings()
-            assert url_mapper.get_canonical_url("content/test/doomed.md") is not None
+            assert url_mapper.get_canonical_url("content/test/doomed.tex") is not None
 
-            os.remove("content/test/doomed.md")
+            os.remove("content/test/doomed.tex")
             url_mapper.build_url_mappings()
 
-            assert url_mapper.get_canonical_url("content/test/doomed.md") is None, (
+            assert url_mapper.get_canonical_url("content/test/doomed.tex") is None, (
                 "stale URL mapping: deleted file still present after rebuild"
             )
-            assert url_mapper.get_canonical_url("content/test/keep.md") is not None
+            assert url_mapper.get_canonical_url("content/test/keep.tex") is not None
         finally:
             os.chdir(old_cwd)
 

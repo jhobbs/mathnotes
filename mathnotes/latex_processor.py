@@ -1,11 +1,11 @@
-"""LaTeX content dialect for mathnotes.
-
-Transpiles .tex content files (a disciplined LaTeX subset defined in
-docs/superpowers/specs/2026-07-07-latex-content-format-design.md) into the
-internal markdown dialect consumed by the existing parsing pipeline
-(:::type blocks, @label refs, [[slug]] links, {% include_demo %} tags).
+"""Parses .tex content files (the mathnotes LaTeX dialect) directly into a
+typed PageDoc: prose HTML segments plus MathBlock trees. References are
+emitted as placeholder elements resolved later against the block index
+(ref_resolver.py). render_math() is the single seam through which math
+becomes output markup.
 """
 
+import os
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -21,7 +21,26 @@ from pylatexenc.latexwalker import (
     LatexWalker,
 )
 
-from .structured_math import MathBlockType
+from .structured_math import (
+    MathBlockType,
+    MathBlock,
+    PageDoc,
+    body_text,
+    finalize_blocks,
+    CHILD_MARKER_RE,
+)
+
+import html as html_lib
+
+
+def render_math(latex: str, display: bool) -> str:
+    """THE math seam: every math node renders through this one function.
+
+    Part 1: emit MathJax delimiter text (client-side rendering, as before).
+    Part 2 will swap this body for build-time MathML.
+    """
+    inner = html_lib.escape(latex.strip(), quote=False)
+    return f"$$ {inner} $$" if display else f"${inner}$"
 
 
 class LatexDialectError(ValueError):
@@ -31,33 +50,56 @@ class LatexDialectError(ValueError):
 _BLOCK_ENV_NAMES = {t.value for t in MathBlockType}
 _METADATA_MACROS = ("title", "description", "slug")
 _IGNORED_MACROS = {"documentclass", "usepackage", "maketitle"}
-_STYLE_MACROS = {"emph": "*", "textit": "*", "textbf": "**", "texttt": "`"}
+_STYLE_MACROS = {"emph": "em", "textit": "em", "textbf": "strong", "texttt": "code"}
+_ISLAND = "\x01"  # wraps block-level HTML islands inside a prose stream
 _SECTION_LEVELS = {"section": 1, "subsection": 2, "subsubsection": 3, "paragraph": 4, "subparagraph": 5}
 _ESCAPED_CHAR_MACROS = {"%", "&", "#", "_", "{", "}", " "}
+_TABULAR_ALIGN = {"l": "left", "c": "center", "r": "right"}
 
 _THEOREM_LIKE = {"theorem", "lemma", "proposition"}
 _ATTACHABLE_NOTES = {"note", "remark", "example", "intuition"}
 _LABEL_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_:-]*$")
 
 
-class _BlockNode:
-    def __init__(
-        self,
-        env_name: str,
-        title: Optional[str],
-        label: Optional[str],
-        content: str,
-        synonyms: Optional[str] = None,
-        tags: Optional[str] = None,
-    ):
-        self.env_name = env_name
-        self.title = title
-        self.label = label
-        self.content = content  # may contain \x02<i>\x02 markers for inline children
-        self.synonyms = synonyms
-        self.tags = tags
-        self.children: List["_BlockNode"] = []         # attached amsthm siblings
-        self.inline_children: List["_BlockNode"] = []  # literally nested environments
+def _esc(text: str) -> str:
+    return html_lib.escape(text, quote=False)
+
+
+def _island(html_str: str) -> str:
+    return f"{_ISLAND}{html_str}{_ISLAND}"
+
+
+def _paragraphize(stream: str) -> str:
+    """Convert an inline-HTML stream with \\x01-wrapped block islands and
+    blank-line paragraph breaks into final HTML."""
+    out = []
+    for i, part in enumerate(stream.split(_ISLAND)):
+        if i % 2 == 1:
+            out.append(part)
+        else:
+            for para in re.split(r"\n\s*\n", part):
+                para = para.strip()
+                if not para:
+                    continue
+                out.append(f"<p>{para}</p>")
+    return "\n".join(out)
+
+
+def _collapse_islands(stream: str) -> str:
+    """Whitespace-collapse a prose stream (like ' '.join(s.split())) while
+    leaving \\x01-wrapped islands — already-final HTML such as verbatim
+    blocks or nested lists — untouched. Used for list-item text, where
+    naive whitespace collapsing would destroy newlines inside embedded
+    <pre><code> blocks."""
+    parts = stream.split(_ISLAND)
+    out = []
+    for i, part in enumerate(parts):
+        out.append(part if i % 2 == 1 else " ".join(part.split()))
+    return "".join(out)
+
+
+def _heading_id(title_html: str) -> str:
+    return MathBlock.normalize_label_from_title(re.sub(r"<[^>]+>", "", title_html))
 
 
 class _LstlistingArgsParser(macrospec.VerbatimArgsParser):
@@ -100,6 +142,7 @@ def _latex_context():
             macrospec.MacroSpec("dref", "[{"),
             macrospec.MacroSpec("pagelink", "[{"),
             macrospec.MacroSpec("includedemo", "{"),
+            macrospec.MacroSpec("dembed", "{"),
             macrospec.MacroSpec("description", "{"),
             macrospec.MacroSpec("slug", "{"),
             macrospec.MacroSpec("detach", ""),
@@ -115,6 +158,7 @@ def _latex_context():
             macrospec.EnvironmentSpec(name, "[") for name in sorted(_BLOCK_ENV_NAMES)
         ] + [
             macrospec.EnvironmentSpec("lstlisting", args_parser=_LstlistingArgsParser()),
+            macrospec.EnvironmentSpec("tabular", "{"),
         ],
     )
     return ctx
@@ -123,17 +167,18 @@ def _latex_context():
 _CONTEXT = _latex_context()
 
 
-def parse_latex_file(source: str, filepath: str = "<latex>") -> Tuple[Dict[str, Any], str]:
-    """Parse a .tex content file into (metadata, internal_markdown)."""
-    return _Transpiler(source, filepath).run()
+def parse_latex_file(source: str, filepath: str = "<latex>") -> Tuple[Dict[str, Any], PageDoc]:
+    """Parse a .tex content file into (metadata, PageDoc)."""
+    return _Parser(source, filepath).run()
 
 
-class _Transpiler:
+class _Parser:
     def __init__(self, source: str, filepath: str):
         self.source = source
         self.filepath = filepath
+        self._demo_counter = 0
 
-    def run(self) -> Tuple[Dict[str, Any], str]:
+    def run(self) -> Tuple[Dict[str, Any], PageDoc]:
         try:
             walker = LatexWalker(self.source, latex_context=_CONTEXT, tolerant_parsing=False)
             nodes, _, _ = walker.get_latex_nodes()
@@ -150,9 +195,13 @@ class _Transpiler:
         if body is not nodes:
             self._scan_metadata(body, metadata)
 
-        content = self._transpile_body(body)
-        content = re.sub(r"\n{3,}", "\n\n", content).strip() + "\n"
-        return metadata, content
+        items = self._build_items(body)
+        top_blocks = [it for it in items if isinstance(it, MathBlock)]
+        try:
+            finalize_blocks(top_blocks)
+        except ValueError as e:
+            raise LatexDialectError(f"{self.filepath}: {e}") from e
+        return metadata, PageDoc(items=items)
 
     # --- helpers ---
 
@@ -247,33 +296,43 @@ class _Transpiler:
             self._err(n, "\\source requires at least one key=value pair")
         return entry
 
-    # --- transpilation (extended in later tasks) ---
+    # --- item assembly (block environments extended in Task 3) ---
 
-    def _transpile_body(self, nodes) -> str:
-        out: List[str] = []
-        anchor: Optional[_BlockNode] = None      # open root block accepting attachments
-        proof_target: Optional[_BlockNode] = None  # where the next proof attaches
+    def _build_items(self, nodes) -> list:
+        items: list = []
+        prose_buf: List[str] = []
+        anchor: Optional[MathBlock] = None
+        proof_target: Optional[MathBlock] = None
 
-        def flush():
+        def flush_prose():
+            if prose_buf:
+                html_str = _paragraphize("".join(prose_buf))
+                prose_buf.clear()
+                if html_str:
+                    items.append(html_str)
+
+        def flush_anchor():
             nonlocal anchor, proof_target
             if anchor is not None:
-                out.append(self._emit_block(anchor, 0))
+                items.append(anchor)
             anchor = None
             proof_target = None
 
         for n in nodes:
             if isinstance(n, LatexEnvironmentNode) and n.environmentname in _BLOCK_ENV_NAMES:
+                flush_prose()
                 blk = self._parse_block_env(n)
-                name = blk.env_name
+                name = n.environmentname
                 if name in _THEOREM_LIKE or name == "exercise":
-                    flush()
+                    flush_anchor()
                     anchor = blk
                     proof_target = blk
                 elif name in ("definition", "axiom"):
-                    flush()
-                    out.append(self._emit_block(blk, 0))
+                    flush_anchor()
+                    items.append(blk)
                 elif name == "corollary":
                     if anchor is not None:
+                        blk.parent = anchor
                         anchor.children.append(blk)
                     else:
                         anchor = blk
@@ -281,44 +340,43 @@ class _Transpiler:
                 elif name == "proof":
                     if proof_target is None:
                         self._err(n, "proof has no preceding theorem-like statement")
+                    blk.parent = proof_target
                     proof_target.children.append(blk)
                 elif name == "solution":
-                    if anchor is None or anchor.env_name != "exercise":
+                    if anchor is None or anchor.block_type != MathBlockType.EXERCISE:
                         self._err(n, "solution has no preceding exercise")
+                    blk.parent = anchor
                     anchor.children.append(blk)
                 else:  # _ATTACHABLE_NOTES
                     if anchor is not None:
+                        blk.parent = anchor
                         anchor.children.append(blk)
                     else:
-                        out.append(self._emit_block(blk, 0))
+                        items.append(blk)
             elif isinstance(n, LatexMacroNode) and n.macroname == "detach":
-                flush()
+                flush_anchor()
             elif isinstance(n, LatexMacroNode) and n.macroname == "source":
-                # Page metadata, already collected by _scan_metadata; does not
-                # break theorem/proof attachment
                 continue
             elif isinstance(n, LatexMacroNode) and n.macroname in _SECTION_LEVELS:
-                flush()
-                out.append(self._macro(n))
+                flush_anchor()
+                prose_buf.append(self._macro(n))
             elif isinstance(n, LatexCharsNode) and not n.chars.strip():
                 if anchor is None:
-                    out.append(re.sub(r"\n[ \t]+", "\n", n.chars))
+                    prose_buf.append(re.sub(r"\n[ \t]+", "\n", n.chars))
             elif isinstance(n, LatexCommentNode):
                 continue
             else:
-                flush()
-                out.append(self._prose([n]))
-        flush()
-        return "".join(out)
+                flush_anchor()
+                prose_buf.append(self._prose([n]))
+        flush_anchor()
+        flush_prose()
+        return items
 
-    def _parse_block_env(self, n) -> _BlockNode:
+    def _parse_block_env(self, n) -> MathBlock:
         title = None
         args = n.nodeargd.argnlist if n.nodeargd else []
         if args and args[0] is not None:
-            title = self._prose(args[0].nodelist).strip()
-            title = " ".join(title.split())
-            if '"' in title:
-                self._err(n, "block title may not contain a double quote")
+            title = body_text(self._prose(args[0].nodelist))
         body = list(n.nodelist)
         extracted: Dict[str, str] = {}
         i = 0
@@ -337,9 +395,8 @@ class _Transpiler:
                 del body[i]
                 continue
             i += 1
-        # Literally nested block environments become inline children at
-        # marker positions, preserving surrounding prose exactly
-        inline_children: List[_BlockNode] = []
+
+        children: List[MathBlock] = []
         pieces: List[str] = []
         buffer: List[Any] = []
 
@@ -351,61 +408,32 @@ class _Transpiler:
         for child in body:
             if isinstance(child, LatexEnvironmentNode) and child.environmentname in _BLOCK_ENV_NAMES:
                 flush_buffer()
-                pieces.append(f"\x02{len(inline_children)}\x02")
-                inline_children.append(self._parse_block_env(child))
+                pieces.append(_island(f"\x02{len(children)}\x02"))
+                children.append(self._parse_block_env(child))
             else:
                 buffer.append(child)
         flush_buffer()
-        content = "".join(pieces).strip()
-        blk = _BlockNode(
-            n.environmentname,
-            title,
-            extracted.get("label"),
-            content,
-            synonyms=extracted.get("synonyms"),
-            tags=extracted.get("tags"),
-        )
-        blk.inline_children = inline_children
-        return blk
 
-    def _emit_block(self, blk: _BlockNode, depth: int) -> str:
-        fence = ":" * (3 + depth)
-        header = f"{fence}{blk.env_name}"
-        if blk.title:
-            header += f' "{blk.title}"'
-        meta_parts = []
-        if blk.label:
-            meta_parts.append(f"label: {blk.label}")
-        if blk.synonyms:
-            meta_parts.append(f"synonyms: {blk.synonyms}")
-        if blk.tags:
-            meta_parts.append(f"tags: {blk.tags}")
-        if meta_parts:
-            # Order matters: _parse_metadata's synonyms regex terminates on
-            # ", tags:" so tags must come last
-            header += " {" + ", ".join(meta_parts) + "}"
-        content = blk.content
-        if blk.inline_children:
-            content = re.sub(
-                "\x02(\\d+)\x02",
-                lambda m: "\n" + self._emit_block(
-                    blk.inline_children[int(m.group(1))], depth + 1
-                ).strip("\n") + "\n",
-                content,
-            )
-        parts = [header]
-        if content:
-            parts += ["", content]
-        for child in blk.children:
-            parts += ["", self._emit_block(child, depth + 1).strip("\n")]
-        parts += [fence]
-        return "\n\n" + "\n".join(parts) + "\n\n"
+        body_html = _paragraphize("".join(pieces))
+        metadata = {k: v for k, v in extracted.items()}
+        blk = MathBlock(
+            block_type=MathBlockType(n.environmentname),
+            content=body_text(CHILD_MARKER_RE.sub(" ", body_html)),
+            title=title,
+            label=extracted.get("label"),
+            metadata=metadata,
+        )
+        blk.body_html = body_html
+        blk.children = children
+        for c in children:
+            c.parent = blk
+        return blk
 
     def _prose(self, nodes) -> str:
         out = []
         for n in nodes:
             if isinstance(n, LatexCharsNode):
-                out.append(re.sub(r"\n[ \t]+", "\n", n.chars))
+                out.append(_esc(re.sub(r"\n[ \t]+", "\n", n.chars)))
             elif isinstance(n, LatexCommentNode):
                 out.append(re.sub(r"\n[ \t]+", "\n", n.comment_post_space))
             elif isinstance(n, LatexGroupNode):
@@ -429,19 +457,20 @@ class _Transpiler:
             group = args[-1] if args else None
             if group is None:
                 self._err(n, f"\\{name} requires an argument")
-            d = _STYLE_MACROS[name]
+            tag = _STYLE_MACROS[name]
             inner = self._prose(group.nodelist)
             stripped = inner.strip()
             if not stripped:
                 self._err(n, f"\\{name} argument is empty")
-            # edge whitespace moves outside the markdown delimiters (markdown
-            # would not recognize `* text*` as emphasis); renders identically
+            # edge whitespace moves outside the tag (mirrors markdown's
+            # intra-word emphasis rule); renders identically
             lead = inner[: len(inner) - len(inner.lstrip())]
             trail = inner[len(inner.rstrip()):]
-            return f"{lead}{d}{stripped}{d}{trail}"
+            return f"{lead}<{tag}>{stripped}</{tag}>{trail}"
         if name in _SECTION_LEVELS:
+            lvl = _SECTION_LEVELS[name]
             title = self._prose(n.nodeargd.argnlist[-1].nodelist).strip()
-            return f"\n\n{'#' * _SECTION_LEVELS[name]} {title}\n\n"
+            return _island(f'<h{lvl} id="{_heading_id(title)}">{title}</h{lvl}>')
         if name in ("dots", "ldots"):
             return "..."
         if name == "textasciitilde":
@@ -449,18 +478,17 @@ class _Transpiler:
         if name == "textasciicircum":
             return "^"
         if name == "$":
-            # A bare $ would be mis-paired into inline math by MathProtector
-            # downstream; emit the HTML entity instead
+            # A bare $ in DOM text would pair with another under MathJax's
+            # delimiter scan; emit the HTML entity instead
             return "&#36;"
         if name in _ESCAPED_CHAR_MACROS:
-            return name
+            return _esc(name)
         if name == "href":
             url_group, text_group = n.nodeargd.argnlist[-2], n.nodeargd.argnlist[-1]
             url = self._url_text(url_group, n)
             if not url:
                 self._err(n, "\\href requires a plain-text URL")
-            text = self._prose(text_group.nodelist).strip()
-            return f"[{text}]({url})"
+            return f'<a href="{html_lib.escape(url, quote=True)}">{self._prose(text_group.nodelist).strip()}</a>'
         if name == "includegraphics":
             opt, mand = n.nodeargd.argnlist
             path = self._url_text(mand, n)
@@ -488,29 +516,24 @@ class _Transpiler:
                     if key not in ("alt", "title", "width", "height"):
                         self._err(n, f"\\includegraphics option '{key}' has no meaning on the site (alt, title, width, height)")
                     options[key] = value
-            if "width" in options or "height" in options:
-                # sizing has no markdown syntax; emit a raw img tag, which is
-                # exactly how the markdown dialect expresses sized images
-                if "title" in options:
-                    self._err(n, "\\includegraphics: title cannot be combined with width/height")
-                attrs = [f'src="{path}"']
-                if options.get("alt"):
-                    attrs.append(f'alt="{options["alt"]}"')
-                for key in ("width", "height"):
-                    if key in options:
-                        value = options[key]
-                        if value.endswith("px"):
-                            value = value[:-2]
-                        attrs.append(f'{key}="{value}"')
-                return f'<img {" ".join(attrs)}>'
-            alt = options.get("alt", "")
+            src = self._fix_image_path(path)
+            attrs = [f'src="{html_lib.escape(src, quote=True)}"',
+                     f'alt="{html_lib.escape(options.get("alt", ""), quote=True)}"']
             if "title" in options:
-                return f'![{alt}]({path} "{options["title"]}")'
-            return f"![{alt}]({path})"
+                attrs.append(f'title="{html_lib.escape(options["title"], quote=True)}"')
+            for key in ("width", "height"):
+                if key in options:
+                    value = options[key]
+                    if value.endswith("px"):
+                        value = value[:-2]
+                    attrs.append(f'{key}="{html_lib.escape(value, quote=True)}"')
+            return f'<img {" ".join(attrs)}>'
         if name == "dref":
             return self._dref(n)
         if name == "pagelink":
             return self._pagelink(n)
+        if name == "dembed":
+            return self._dembed(n)
         if name == "includedemo":
             return self._includedemo(n)
         if name in _METADATA_MACROS or name in _IGNORED_MACROS or name == "detach":
@@ -523,20 +546,65 @@ class _Transpiler:
             self._err(n, "\\source is only supported at page level, outside block environments")
         self._err(n, f"unsupported command \\{name} — extend the dialect in latex_processor.py if needed")
 
+    def _fix_image_path(self, path: str) -> str:
+        if re.match(r"^(https?:|data:|/)", path):
+            return path
+        directory = os.path.dirname(self.filepath).replace("content/", "", 1).replace("content", "")
+        return f"/mathnotes/{directory}/{path}".replace("//", "/")
+
+    def _check_ref_text(self, n, text: str) -> None:
+        """Optional-text arguments to \\dref/\\pagelink render through _prose,
+        which can emit <a ...> (nested \\href/\\dref/\\pagelink) or an
+        \\x01-wrapped block-level island. Both silently corrupt the
+        resolver's non-greedy regex pairing over the emitted placeholders,
+        so reject them here instead."""
+        if "<a " in text or _ISLAND in text:
+            self._err(n, f"\\{n.macroname} text may not contain links or block-level content")
+
+    def _dref(self, n) -> str:
+        opt, mand = n.nodeargd.argnlist
+        label = "".join(c.chars for c in mand.nodelist if isinstance(c, LatexCharsNode)).strip()
+        if not label:
+            self._err(n, "\\dref requires a non-empty label")
+        text = self._prose(opt.nodelist).strip() if opt is not None else ""
+        self._check_ref_text(n, text)
+        return f'<a data-dref="{html_lib.escape(label, quote=True)}">{text}</a>'
+
+    def _pagelink(self, n) -> str:
+        opt, mand = n.nodeargd.argnlist
+        slug = "".join(c.chars for c in mand.nodelist if isinstance(c, LatexCharsNode)).strip()
+        if not slug:
+            self._err(n, "\\pagelink requires a non-empty slug")
+        text = self._prose(opt.nodelist).strip() if opt is not None else ""
+        self._check_ref_text(n, text)
+        return f'<a data-pagelink="{html_lib.escape(slug, quote=True)}">{text}</a>'
+
+    def _dembed(self, n) -> str:
+        label = self._chars_arg(n)
+        return _island(f'<div data-dembed="{html_lib.escape(label, quote=True)}"></div>')
+
+    def _includedemo(self, n) -> str:
+        demo = self._chars_arg(n)
+        demo_id = f"demo-{demo}-{self._demo_counter}"
+        self._demo_counter += 1
+        return _island(
+            f'<div class="demo-component" data-demo="{demo}" id="{demo_id}"></div>'
+        )
+
     def _math(self, n) -> str:
         verbatim = n.latex_verbatim()
         open_d, close_d = n.delimiters
         inner = verbatim[len(open_d): len(verbatim) - len(close_d)].strip()
-        if n.displaytype == "display":
-            return f"$$ {inner} $$"
-        return f"${inner}$"
+        return render_math(inner, n.displaytype == "display")
 
     def _environment(self, n) -> str:
         name = n.environmentname
         if name in ("itemize", "enumerate"):
-            return self._list(n, ordered=(name == "enumerate"))
+            return _island(self._list_html(n, ordered=(name == "enumerate")))
         if name in ("verbatim", "lstlisting"):
-            return self._code_block(n)
+            return self._code_html(n)
+        if name == "tabular":
+            return _island(self._tabular_html(n))
         if name in _BLOCK_ENV_NAMES:
             self._err(
                 n,
@@ -545,8 +613,8 @@ class _Transpiler:
             )
         self._err(n, f"unsupported environment '{name}'")
 
-    def _code_block(self, n) -> str:
-        """verbatim / lstlisting environments become fenced code blocks."""
+    def _code_html(self, n) -> str:
+        """verbatim / lstlisting environments become <pre><code> blocks."""
         text = n.nodeargd.verbatim_text
         lang = ""
         if n.environmentname == "lstlisting":
@@ -556,12 +624,98 @@ class _Transpiler:
                 lang_opt = re.search(r"language\s*=\s*([A-Za-z0-9+#-]+)", options.group(1))
                 if lang_opt:
                     lang = lang_opt.group(1).lower()
-        return f"\n\n```{lang}\n{text.strip(chr(10))}\n```\n\n"
+        lang_attr = f' class="language-{lang}"' if lang else ""
+        code = _esc(text.strip("\n"))
+        return _island(f"<pre><code{lang_attr}>{code}</code></pre>")
 
-    def _list(self, n, ordered: bool) -> str:
-        return "\n\n" + "\n".join(self._list_lines(n, ordered, indent=0)) + "\n\n"
+    def _tabular_colspec(self, n, group) -> List[str]:
+        """Column alignments from a tabular's mandatory {colspec} argument.
+        Only l/c/r are supported (| and whitespace ignored); anything else
+        (e.g. p{2cm}) is a loud error naming the offending character."""
+        text = group.latex_verbatim()
+        if text.startswith("{") and text.endswith("}"):
+            text = text[1:-1]
+        aligns = []
+        for ch in text:
+            if ch in _TABULAR_ALIGN:
+                aligns.append(_TABULAR_ALIGN[ch])
+            elif ch == "|" or ch.isspace():
+                continue
+            else:
+                self._err(n, f"unsupported tabular column spec character '{ch}' "
+                              f"(only l, c, r, and | are supported)")
+        if not aligns:
+            self._err(n, "tabular column spec has no l/c/r columns")
+        return aligns
 
-    def _list_lines(self, n, ordered: bool, indent: int) -> List[str]:
+    def _tabular_html(self, n) -> str:
+        """tabular environment -> <table>. Rows split on the `\\\\` row
+        terminator (a LatexMacroNode named '\\\\'); cells split on top-level
+        `&` (a LatexSpecialsNode) — math nodes like $a & b$ are opaque at
+        this level, so `&` inside math never splits a cell. `\\hline` nodes
+        are dropped (PDF-only decoration). First row is the header."""
+        args = n.nodeargd.argnlist if n.nodeargd else []
+        group = args[-1] if args else None
+        if group is None:
+            self._err(n, "\\begin{tabular} requires a column-spec argument")
+        aligns = self._tabular_colspec(n, group)
+
+        rows: List[List[Any]] = [[]]
+        for child in n.nodelist:
+            if isinstance(child, LatexMacroNode) and child.macroname == "hline":
+                continue
+            if isinstance(child, LatexMacroNode) and child.macroname == "\\":
+                rows.append([])
+            else:
+                rows[-1].append(child)
+
+        def is_blank_row(nodes) -> bool:
+            return all(isinstance(c, LatexCharsNode) and not c.chars.strip()
+                       for c in nodes)
+
+        while rows and is_blank_row(rows[-1]):
+            rows.pop()
+
+        def render_row(nodes, tag: str) -> str:
+            cells: List[List[Any]] = [[]]
+            for c in nodes:
+                if isinstance(c, LatexSpecialsNode) and c.specials_chars == "&":
+                    cells.append([])
+                else:
+                    cells[-1].append(c)
+            if len(cells) > len(aligns):
+                self._err(n, f"tabular row has {len(cells)} cells, more than "
+                              f"the {len(aligns)}-column spec")
+            tds = []
+            for i, align in enumerate(aligns):
+                text = _collapse_islands(self._prose(cells[i])) if i < len(cells) else ""
+                tds.append(f'<{tag} style="text-align: {align};">{text}</{tag}>')
+            return "<tr>\n" + "\n".join(tds) + "\n</tr>"
+
+        out = ["<table>"]
+        if rows:
+            out.append("<thead>")
+            out.append(render_row(rows[0], "th"))
+            out.append("</thead>")
+        out.append("<tbody>")
+        for row in rows[1:]:
+            out.append(render_row(row, "td"))
+        out.append("</tbody>")
+        out.append("</table>")
+        return "\n".join(out)
+
+    def _list_html(self, n, ordered: bool) -> str:
+        """Raw (un-islanded) <ul>/<ol> HTML. Callers own island-wrapping: the
+        top-level call in _environment wraps once; recursive sublist calls
+        here embed the raw result directly in the parent <li> so a nested
+        list never contributes extra \\x01 sentinels to the prose stream.
+
+        <li> elements are newline-joined (matching the old markdown
+        renderer's list output) rather than packed edge-to-edge: with no
+        separating whitespace between adjacent tags, a word ending one item
+        and a word starting the next collapse into a single glued token in
+        any plain-text extraction of the page (screen readers, textContent,
+        this site's own semantic-diff harness)."""
         items: List[list] = []
         for child in n.nodelist:
             if isinstance(child, LatexMacroNode) and child.macroname == "item":
@@ -574,49 +728,15 @@ class _Transpiler:
                 self._err(child, "list content before the first \\item")
             else:
                 items[-1].append(child)
-        marker = "1." if ordered else "-"
-        pad = " " * indent
-        lines: List[str] = []
+        tag = "ol" if ordered else "ul"
+        lis = []
         for item in items:
-            sublists = [
-                c for c in item
-                if isinstance(c, LatexEnvironmentNode) and c.environmentname in ("itemize", "enumerate")
-            ]
-            sublist_ids = {id(s) for s in sublists}
-            text_nodes = [c for c in item if id(c) not in sublist_ids]
-            lines.append(f"{pad}{marker} {' '.join(self._prose(text_nodes).split())}")
+            sublists = [c for c in item if isinstance(c, LatexEnvironmentNode)
+                        and c.environmentname in ("itemize", "enumerate")]
+            sub_ids = {id(s) for s in sublists}
+            text_nodes = [c for c in item if id(c) not in sub_ids]
+            inner = _collapse_islands(self._prose(text_nodes))
             for sub in sublists:
-                lines.extend(self._list_lines(sub, sub.environmentname == "enumerate", indent + 4))
-        return lines
-
-    def _dref(self, n) -> str:
-        opt, mand = n.nodeargd.argnlist
-        label = "".join(
-            c.chars for c in mand.nodelist if isinstance(c, LatexCharsNode)
-        ).strip()
-        if not label:
-            self._err(n, "\\dref requires a non-empty label")
-        if opt is None:
-            return f"@{label}"
-        text = self._prose(opt.nodelist).strip()
-        if "|" in text:
-            self._err(n, "\\dref text may not contain a pipe (it delimits the reference)")
-        return f"@{{{text}|{label}}}"
-
-    def _pagelink(self, n) -> str:
-        opt, mand = n.nodeargd.argnlist
-        slug = "".join(
-            c.chars for c in mand.nodelist if isinstance(c, LatexCharsNode)
-        ).strip()
-        if not slug:
-            self._err(n, "\\pagelink requires a non-empty slug")
-        if opt is None:
-            return f"[[{slug}]]"
-        text = self._prose(opt.nodelist).strip()
-        if "|" in text:
-            self._err(n, "\\pagelink text may not contain a pipe (it delimits the slug)")
-        return f"[[{text}|{slug}]]"
-
-    def _includedemo(self, n) -> str:
-        demo = self._chars_arg(n)
-        return f'\n\n{{% include_demo "{demo}" %}}\n\n'
+                inner += "\n" + self._list_html(sub, sub.environmentname == "enumerate")
+            lis.append(f"<li>{inner}</li>")
+        return f'<{tag}>\n' + "\n".join(lis) + f'\n</{tag}>'

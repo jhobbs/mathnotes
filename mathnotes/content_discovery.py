@@ -21,19 +21,24 @@ class ContentDiscovery:
         for section in CONTENT_DIRS:
             section_path = Path(section)
 
-            content_files = sorted([*section_path.rglob("*.md"), *section_path.rglob("*.tex")])
-            for md_file in content_files:
-                metadata, _ = load_content_file(md_file)
+            stray_md = sorted(section_path.rglob("*.md"))
+            if stray_md:
+                raise ValueError(
+                    f"Markdown content is no longer supported: {stray_md[0]} — convert to .tex"
+                )
+            content_files = sorted(section_path.rglob("*.tex"))
+            for content_file in content_files:
+                metadata, _ = load_content_file(content_file)
 
                 # Build canonical URL
-                relative_path = md_file.relative_to(Path("."))
+                relative_path = content_file.relative_to(Path("."))
 
                 # Check if there's a custom slug that should override the filename
                 custom_slug = metadata.get("slug")
                 if custom_slug:
                     # Custom slug replaces the filename but preserves the directory
                     # path, so nested sections keep their full URL (e.g.
-                    # content/applied-math/information-theory/01-discrete-entropy.md
+                    # content/applied-math/information-theory/01-discrete-entropy.tex
                     # -> applied-math/information-theory/<slug>).
                     parts = relative_path.parts
                     start = 1 if parts[0] == "content" else 0
@@ -43,7 +48,7 @@ class ContentDiscovery:
                     # No custom slug - use full directory structure
                     # Remove content/ prefix and extension
                     url_path = "/".join(relative_path.parts[1:])
-                    url_path = url_path[: -len(md_file.suffix)]
+                    url_path = url_path[: -len(content_file.suffix)]
                     canonical_url = url_path
 
                 # Ensure canonical URL has trailing slash

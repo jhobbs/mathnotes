@@ -8,7 +8,6 @@ supporting transitive reference queries with configurable depth.
 from typing import Dict, Set, List, Optional, Tuple
 from dataclasses import dataclass, field
 from collections import defaultdict, deque
-import re
 
 
 @dataclass
@@ -104,102 +103,6 @@ class ReverseIndex:
             normalized_source = self._normalize_label(source_label)
             self.reference_graph[normalized_source].add(referenced_label)
     
-    def collect_references_from_content(self, 
-                                       content: str, 
-                                       source_file: str,
-                                       source_label: Optional[str] = None,
-                                       source_title: Optional[str] = None,
-                                       source_url: str = ""):
-        """
-        Extract and record all references from markdown content.
-        
-        Patterns to find:
-        - @label or @type:label - Simple references
-        - @{text|label} or @{text|type:label} - Custom text references
-        - @@label or @@type:label - Embedded blocks
-        """
-        
-        # Pattern for simple references: @label or @type:label
-        simple_pattern = r'(?<!@)@([a-zA-Z_-]+(?::[a-zA-Z_-]+)?)'
-        
-        # Pattern for custom text references: @{text|label}
-        custom_pattern = r'@\{([^|]+)\|([^}]+)\}'
-        
-        # Pattern for embedded blocks: @@label
-        embed_pattern = r'@@([a-zA-Z_-]+(?::[a-zA-Z_-]+)?)'
-        
-        # Find all simple references
-        for match in re.finditer(simple_pattern, content):
-            ref_text = match.group(1)
-            # Extract label (remove type prefix if present)
-            if ':' in ref_text:
-                _, label = ref_text.split(':', 1)
-            else:
-                label = ref_text
-            
-            # Get context (50 chars before and after)
-            start = max(0, match.start() - 50)
-            end = min(len(content), match.end() + 50)
-            context = content[start:end]
-            
-            self.add_reference(
-                referenced_label=label,
-                source_file=source_file,
-                source_label=source_label,
-                source_title=source_title,
-                source_url=source_url,
-                context=context,
-                is_embed=False
-            )
-        
-        # Find all custom text references
-        for match in re.finditer(custom_pattern, content):
-            ref_text = match.group(2)
-            # Extract label (remove type prefix if present)
-            if ':' in ref_text:
-                _, label = ref_text.split(':', 1)
-            else:
-                label = ref_text
-            
-            # Get context
-            start = max(0, match.start() - 50)
-            end = min(len(content), match.end() + 50)
-            context = content[start:end]
-            
-            self.add_reference(
-                referenced_label=label,
-                source_file=source_file,
-                source_label=source_label,
-                source_title=source_title,
-                source_url=source_url,
-                context=context,
-                is_embed=False
-            )
-        
-        # Find all embedded blocks
-        for match in re.finditer(embed_pattern, content):
-            ref_text = match.group(1)
-            # Extract label (remove type prefix if present)
-            if ':' in ref_text:
-                _, label = ref_text.split(':', 1)
-            else:
-                label = ref_text
-            
-            # Get context
-            start = max(0, match.start() - 50)
-            end = min(len(content), match.end() + 50)
-            context = content[start:end]
-            
-            self.add_reference(
-                referenced_label=label,
-                source_file=source_file,
-                source_label=source_label,
-                source_title=source_title,
-                source_url=source_url,
-                context=context,
-                is_embed=True
-            )
-    
     def compute_transitive_references(self):
         """
         Compute all transitive references to completion.
@@ -230,15 +133,21 @@ class ReverseIndex:
             direct_referencers = reverse_graph.get(label, set())
             visited.update(direct_referencers)
             current_level = direct_referencers
-            
+
             # Now find all transitive references until exhausted
             depth = 1
             while current_level:
                 next_level = set()
-                
-                for current_label in current_level:
+
+                # Sorted rather than raw set iteration: sets hash strings with
+                # a per-process random seed, so iterating them directly makes
+                # the "Referenced by" panel's within-depth ordering different
+                # on every build (verified: rebuilding from identical input
+                # reordered these entries). The reference *set* found is the
+                # same either way; sorting just makes the build reproducible.
+                for current_label in sorted(current_level):
                     # Find all labels that reference the current label
-                    for referencing_label in reverse_graph.get(current_label, set()):
+                    for referencing_label in sorted(reverse_graph.get(current_label, set())):
                         if referencing_label not in visited:
                             next_level.add(referencing_label)
                             visited.add(referencing_label)

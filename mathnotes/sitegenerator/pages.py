@@ -34,12 +34,12 @@ class Page(ABC):
         """Initialize the page with site-wide context.
 
         Args:
-            site_context: Contains url_mapper, block_index, markdown_processor, etc.
+            site_context: Contains url_mapper, block_index, page_renderer, etc.
         """
         self.site_context = site_context
         self.url_mapper = site_context.get("url_mapper")
         self.block_index = site_context.get("block_index")
-        self.markdown_processor = site_context.get("markdown_processor")
+        self.page_renderer = site_context.get("page_renderer")
         self.base_url = site_context.get("base_url", "")
         self._specs_cache: List[PageSpec] | None = None
 
@@ -149,33 +149,33 @@ class MathnotesIndexPage(Page):
 
 
 class ContentPages(Page):
-    """All markdown content pages."""
+    """All content pages."""
 
     def _compute_specs(self) -> List[PageSpec]:
         specs = []
 
         # Generate a spec for each content page
         for canonical_url in self.url_mapper.url_mappings.keys():
-            md_path = self.url_mapper.get_file_path(canonical_url)
+            content_path = self.url_mapper.get_file_path(canonical_url)
 
-            # Process the markdown to get metadata
-            result = self.markdown_processor.render_markdown_file(md_path)
+            # Render the page content
+            result = self.page_renderer.render_page(content_path)
 
             # Build output path
             output_path = f"mathnotes/{canonical_url}/index.html"
 
             # Build navigation data for sidebar and prev/next
-            navigation = get_page_navigation(md_path, self.url_mapper.file_to_canonical)
+            navigation = get_page_navigation(content_path, self.url_mapper.file_to_canonical)
 
             # Collect sources from directory hierarchy and page metadata
-            # (markdown frontmatter or LaTeX \source commands)
+            # (LaTeX frontmatter or \source commands)
             metadata = result.get("metadata", {})
-            sources = get_sources_for_page(md_path, metadata.get("sources"))
+            sources = get_sources_for_page(content_path, metadata.get("sources"))
 
             # Build context
             context = {
                 "content": result.get("content", ""),
-                "path": md_path,
+                "path": content_path,
                 "frontmatter": metadata,
                 "canonical_url": result.get("canonical_url", ""),
                 "navigation": navigation,
@@ -370,7 +370,7 @@ class SitemapPage(Page):
         """Initialize with access to all other pages for URL generation.
 
         Args:
-            site_context: Site-wide context
+            site_context: Contains url_mapper, block_index, page_renderer, etc.
             all_pages: List of all Page instances (for getting their URLs)
         """
         super().__init__(site_context)
@@ -411,7 +411,7 @@ class PageRegistry:
         """Initialize the registry with site context.
 
         Args:
-            site_context: Contains url_mapper, block_index, markdown_processor, etc.
+            site_context: Contains url_mapper, block_index, page_renderer, etc.
         """
         self.site_context = site_context
         self.pages: List[Page] = []
@@ -492,7 +492,7 @@ class PageRegistry:
         for page in self.pages:
             for spec in page.get_specs():
                 # Ensure canonical_url is in context if not already set
-                # (ContentPages already have it from markdown processor)
+                # (ContentPages already have it from the page renderer)
                 if "canonical_url" not in spec.context:
                     spec.context["canonical_url"] = page.get_canonical_path(spec)
                 all_specs.append((page, spec))

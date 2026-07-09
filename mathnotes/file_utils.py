@@ -26,14 +26,14 @@ def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, 
 
         # First, separate files and directories
         for item in dir_path.iterdir():
-            if item.is_file() and item.suffix in (".md", ".tex"):
+            if item.is_file() and item.suffix == ".tex":
                 file_path_raw = str(item.relative_to(Path(".")))
                 file_path = file_path_raw.replace("\\", "/")
                 canonical_url = file_to_canonical.get(file_path)
                 # canonical_url already has trailing slash from content_discovery
                 url = canonical_url
 
-                # Try to get title from frontmatter, fall back to filename
+                # Try to get title from content metadata, fall back to filename
                 try:
                     metadata, _ = load_content_file(item)
                     title = (metadata.get("title") or "").strip()

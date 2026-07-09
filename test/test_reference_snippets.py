@@ -1,9 +1,10 @@
-"""Regression test: auto-generated reference link text must not leak @refs.
+"""Regression test: auto-generated reference link text must not leak refs.
 
-When a title-less block is referenced with @label, the link text falls back
-to the target block's content_snippet. If the target's content itself starts
-with cross-references (e.g. "The $\\log$ @function is @concave, ..."), those
-@tokens must be flattened to plain text, not left literally in the link.
+When a title-less block is referenced with \\dref{label}, the link text
+falls back to the target block's content_snippet. If the target's content
+itself starts with cross-references (e.g. "The $\\log$ [function] is
+[concave], ..."), those nested @dref placeholders must be flattened to
+plain text, not left literally in the link.
 
 Run standalone (no pytest needed):
     python3 test/test_reference_snippets.py
@@ -20,39 +21,42 @@ try:
 except NameError:
     pass  # running via stdin; cwd must be the repo/app root
 
-from mathnotes.structured_math import MathBlock, MathBlockType
+from mathnotes.structured_math import MathBlock, MathBlockType, body_text
 
-DEFINING = """---
-title: Defining Page
----
+DEFINING = r"""\title{Defining Page}
 
-:::definition "Function"
+\begin{definition}[Function]
 A rule assigning outputs to inputs.
-:::
+\end{definition}
 
-:::definition "Concave Function" {label: concave}
+\begin{definition}[Concave Function]\label{concave}
 A function is concave if its negative is convex.
-:::
+\end{definition}
 
-:::theorem {label: log-is-concave}
-The $\\log$ @function is @concave, i.e. $-\\log$ is convex.
-:::
+\begin{theorem}\label{log-is-concave}
+The $\log$ \dref{function} is \dref{concave}, i.e. $-\log$ is convex.
+\end{theorem}
 """
 
-REFERENCING = """---
-title: Referencing Page
----
+REFERENCING = r"""\title{Referencing Page}
 
-Because @log-is-concave, we are happy.
+Because \dref{log-is-concave}, we are happy.
 """
+
+
+def blk(t, title=None, label=None, body_html="", metadata=None):
+    """Construct a MathBlock the way latex_processor does: content is derived
+    from body_html via body_text(), not authored separately."""
+    b = MathBlock(block_type=MathBlockType(t), content=body_text(body_html),
+                  title=title, label=label, metadata=metadata or {})
+    b.body_html = body_html
+    return b
 
 
 def test_content_snippet_flattens_references():
-    block = MathBlock(
-        block_type=MathBlockType.THEOREM,
-        content="The $\\log$ @function is @concave, i.e. $-\\log$ is convex.",
-        label="log-is-concave",
-    )
+    block = blk("theorem", label="log-is-concave",
+                body_html='<p>The $\\log$ <a data-dref="function"></a> is '
+                          '<a data-dref="concave"></a>, i.e. $-\\log$ is convex.</p>')
     snippet = block.content_snippet
     assert "@" not in snippet, f"snippet leaks raw @refs: {snippet!r}"
     assert "function" in snippet and "concave" in snippet, (
@@ -61,11 +65,9 @@ def test_content_snippet_flattens_references():
 
 
 def test_content_snippet_flattens_custom_and_typed_references():
-    block = MathBlock(
-        block_type=MathBlockType.THEOREM,
-        content="By @{the chain rule|chain-rule} and @theorem:mvt we win.",
-        label="typed-refs",
-    )
+    block = blk("theorem", label="typed-refs",
+                body_html='<p>By <a data-dref="chain-rule">the chain rule</a> and '
+                          '<a data-dref="theorem:mvt"></a> we win.</p>')
     snippet = block.content_snippet
     assert "@" not in snippet, f"snippet leaks raw @refs: {snippet!r}"
     assert "the chain rule" in snippet, f"custom link text lost: {snippet!r}"
@@ -75,26 +77,28 @@ def test_content_snippet_flattens_custom_and_typed_references():
 def test_rendered_link_text_has_no_raw_references():
     from mathnotes.content_discovery import ContentDiscovery
     from mathnotes.block_index import BlockIndex
-    from mathnotes.markdown_processor import MarkdownProcessor, clear_markdown_cache
+    from mathnotes.page_renderer import PageRenderer, clear_page_cache
+    from mathnotes.content_loader import clear_content_cache
 
     old_cwd = os.getcwd()
     with tempfile.TemporaryDirectory() as tmp:
         os.chdir(tmp)
         try:
             os.makedirs("content/test")
-            with open("content/test/defining.md", "w") as f:
+            with open("content/test/defining.tex", "w") as f:
                 f.write(DEFINING)
-            with open("content/test/referencing.md", "w") as f:
+            with open("content/test/referencing.tex", "w") as f:
                 f.write(REFERENCING)
 
-            clear_markdown_cache()
+            clear_page_cache()
+            clear_content_cache()
             url_mapper = ContentDiscovery()
             url_mapper.build_url_mappings()
             block_index = BlockIndex(url_mapper)
             block_index.build_index()
-            processor = MarkdownProcessor(url_mapper, block_index)
+            processor = PageRenderer(url_mapper, block_index)
 
-            result = processor.render_markdown_file("content/test/referencing.md")
+            result = processor.render_page("content/test/referencing.tex")
             html = result["content"]
             assert 'data-ref-label="log-is-concave"' in html, (
                 "sanity check failed: reference did not resolve"
@@ -104,7 +108,8 @@ def test_rendered_link_text_has_no_raw_references():
             )
         finally:
             os.chdir(old_cwd)
-            clear_markdown_cache()
+            clear_page_cache()
+            clear_content_cache()
 
 
 if __name__ == "__main__":

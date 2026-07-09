@@ -22,7 +22,7 @@ def clear_navigation_cache():
 
 
 def get_page_title(file_path: Path) -> str:
-    """Get the title from a markdown file's frontmatter, or derive from filename."""
+    """Get the title from a content file's metadata, or derive from filename."""
     cache_key = str(file_path)
     if cache_key in _title_cache:
         return _title_cache[cache_key]
@@ -42,7 +42,7 @@ def get_page_title(file_path: Path) -> str:
 
 def get_pages_in_folder(folder_path: Path, file_to_canonical: Dict[str, str]) -> List[Dict[str, Any]]:
     """
-    Get all markdown pages in a folder, sorted alphabetically by filename.
+    Get all content pages in a folder, sorted alphabetically by filename.
 
     Returns list of dicts with: url, title, filename, file_path
     """
@@ -57,7 +57,7 @@ def get_pages_in_folder(folder_path: Path, file_to_canonical: Dict[str, str]) ->
         return pages
 
     for item in folder_path.iterdir():
-        if item.is_file() and item.suffix in (".md", ".tex"):
+        if item.is_file() and item.suffix == ".tex":
             file_path_str = str(item.relative_to(Path("."))).replace("\\", "/")
             canonical_url = file_to_canonical.get(file_path_str)
 
@@ -139,7 +139,7 @@ def get_page_navigation(file_path: str, file_to_canonical: Dict[str, str]) -> Di
     Build navigation context for a content page.
 
     Args:
-        file_path: Path to the markdown file (e.g., "content/algebra/linear/dotproduct.md")
+        file_path: Path to the content file (e.g., "content/algebra/linear/dotproduct.tex")
         file_to_canonical: Mapping of file paths to canonical URLs
 
     Returns:

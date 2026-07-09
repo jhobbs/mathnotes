@@ -3,8 +3,5 @@
 # Use pip-compile to generate requirements.txt with pinned versions
 
 Jinja2
-Markdown
-python-markdown-math
 PyYAML
-python-frontmatter
 pylatexenc

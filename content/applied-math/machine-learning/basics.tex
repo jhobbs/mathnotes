@@ -67,12 +67,14 @@ When a trained model $f_\theta$ is applied to each $x^{(i)}$ it produces a predi
 
 \[ \hat{y}^{(1)} = f_\theta(x^{(1)}), \hat{y}^{(2)} = f_\theta(x^{(2)}), \dots, \hat{y}^{(n)} = f_\theta(x^{(n)}). \]
 
-| Symbol | Meaning | Common names |
-|:--------|:----------|:--------------|
-| $y^{(i)}$ | True value for object $i$ | label, target, ground truth |
-| $\hat{y}^{(i)}$ | Model's output | prediction, estimated label, classification |
-| $\{y^{(i)}\}_{i=1}^m$ | All true values | label vector, target vector |
-| $\{\hat{y}^{(i)}\}_{i=1}^m$ | All predicted values | predicted label vector, sequence of classifications |
+\begin{tabular}{lll}
+Symbol & Meaning & Common names \\
+\hline
+$y^{(i)}$ & True value for object $i$ & label, target, ground truth \\
+$\hat{y}^{(i)}$ & Model's output & prediction, estimated label, classification \\
+$\{y^{(i)}\}_{i=1}^m$ & All true values & label vector, target vector \\
+$\{\hat{y}^{(i)}\}_{i=1}^m$ & All predicted values & predicted label vector, sequence of classifications \\
+\end{tabular}
 
 \begin{definition}[Model pipeline]\synonyms{"classifier pipeline"}
 This overall process of preparing features, training $f_\theta ,$ and evaluating results is called a \textbf{classifier pipeline} or \textbf{model pipeline.}
@@ -81,12 +83,14 @@ This overall process of preparing features, training $f_\theta ,$ and evaluating
 \subsubsection{Summary of Stages}
 The stages of the \dref{model-pipeline} can be summarized as follows:
 
-| Stage | Description | Common term |
-|:-------|:-------------|:-------------|
-| Choose features | Represent each object as a vector $\vec{x} = (x_1, x_2, \dots, x_n)$ | Feature engineering |
-| Choose function form | Select the model family (e.g., linear model, decision tree, neural network) | Model selection |
-| Adjust parameters to fit data | Find parameters $\theta$ that minimize the loss $L(f_\theta(\vec{x}), y)$ | Training / fitting |
-| Use $f_\theta(x)$ on new data | Generate predictions $\hat{y}$ for unseen inputs | Inference / prediction |
+\begin{tabular}{lll}
+Stage & Description & Common term \\
+\hline
+Choose features & Represent each object as a vector $\vec{x} = (x_1, x_2, \dots, x_n)$ & Feature engineering \\
+Choose function form & Select the model family (e.g., linear model, decision tree, neural network) & Model selection \\
+Adjust parameters to fit data & Find parameters $\theta$ that minimize the loss $L(f_\theta(\vec{x}), y)$ & Training / fitting \\
+Use $f_\theta(x)$ on new data & Generate predictions $\hat{y}$ for unseen inputs & Inference / prediction \\
+\end{tabular}
 
 \subsubsection{Evaluating Loss}
 

@@ -4,14 +4,15 @@ A static site for my math notes. Live at [lacunary.org](https://lacunary.org).
 
 ## What's here
 
-I write notes in a customized markdown that supports structured mathematical content—definitions, theorems, proofs, lemmas, and so on. These get labeled and can be cross-referenced throughout the site:
+I write notes in a LaTeX dialect that supports structured mathematical content—definitions, theorems, proofs, lemmas, and so on. These get labeled and can be cross-referenced throughout the site:
 
-```markdown
-:::definition @integers "The Integers"
-The integers $\mathbb{Z}$ are the set $\{..., -2, -1, 0, 1, 2, ...\}$.
-:::
+```latex
+\begin{definition}[The Integers]
+\label{integers}
+The integers $\mathbb{Z}$ are the set $\{\ldots, -2, -1, 0, 1, 2, \ldots\}$.
+\end{definition}
 
-Later, we can reference @integers or even embed the whole block with @@integers.
+Later, we can reference \dref{integers} or even embed the whole block with \dembed{integers}.
 ```
 
 There are also interactive demos (p5.js and Plotly) that help visualize how things work—phase portraits, vector fields, that sort of thing.

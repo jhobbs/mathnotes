@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from mathnotes.sitegenerator.builder import SiteBuilder
 from mathnotes.navigation import clear_navigation_cache
-from mathnotes.markdown_processor import clear_markdown_cache
+from mathnotes.page_renderer import clear_page_cache
 
 # Configure logging with microsecond precision to debug duplicate output
 handler = logging.StreamHandler(sys.stdout)
@@ -100,10 +100,10 @@ def build_site(output_dir: str, builder: SiteBuilder = None) -> SiteBuilder:
         # Rebuild block index (required - rendered HTML is stored here)
         builder.block_index.build_index()
         # Clear page specs cache so specs are recomputed
-        # (markdown rendering cache uses mtime, so only changed files re-render)
+        # (page rendering cache uses mtime, so only changed files re-render)
         for page in builder.page_registry.pages:
             page._specs_cache = None
-        # DON'T clear markdown cache - mtime-based invalidation handles it
+        # DON'T clear page cache - mtime-based invalidation handles it
 
     builder.build()
     return builder

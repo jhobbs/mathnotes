@@ -51,6 +51,9 @@
 }
 % Interactive demo placeholder
 \newcommand{\includedemo}[1]{\begin{quote}\emph{[Interactive demo: #1]}\end{quote}}
+% Transclude a block: the site embeds the target block's full content here.
+% In PDF output it degrades to a pointer.
+\NewDocumentCommand{\dembed}{m}{\begin{quote}\emph{[Embedded: \hyperref[#1]{#1}]}\end{quote}}
 
 % Math macros shared with the site: mathjax-init.ts parses the section
 % between the BEGIN/END MATH MACROS markers at build time, so this file is

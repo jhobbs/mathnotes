@@ -10,7 +10,7 @@ from .context import build_global_context
 from .pages import PageRegistry
 
 from mathnotes.content_discovery import ContentDiscovery
-from mathnotes.markdown_processor import MarkdownProcessor
+from mathnotes.page_renderer import PageRenderer
 from mathnotes.block_index import BlockIndex
 from mathnotes.config import BASE_URL
 
@@ -41,13 +41,13 @@ class SiteBuilder:
         self.block_index = BlockIndex(self.url_mapper)
         self.block_index.build_index()
 
-        self.markdown_processor = MarkdownProcessor(self.url_mapper, self.block_index)
+        self.page_renderer = PageRenderer(self.url_mapper, self.block_index)
 
         # Build site context for pages
         site_context = {
             "url_mapper": self.url_mapper,
             "block_index": self.block_index,
-            "markdown_processor": self.markdown_processor,
+            "page_renderer": self.page_renderer,
             "base_url": self.base_url,
             "generator": self.generator,
         }
