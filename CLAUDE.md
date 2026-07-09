@@ -37,6 +37,7 @@ Python tests are standalone assert scripts (no pytest in the container); run the
 ```bash
 docker exec -i mathnotes-static-builder python3 - < test/test_structured_math.py
 docker exec -i mathnotes-static-builder python3 - < test/test_latex_processor.py
+docker exec -i mathnotes-static-builder python3 - < test/test_mathml.py
 docker exec -i mathnotes-static-builder python3 - < test/test_ref_resolver.py
 docker exec -i mathnotes-static-builder python3 - < test/test_latex_integration.py
 docker exec -i mathnotes-static-builder python3 - < test/test_reference_snippets.py
