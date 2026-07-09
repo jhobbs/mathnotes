@@ -84,6 +84,61 @@ def test_worker_malformed_protocol_exits_nonzero():
     assert proc.returncode != 0
 
 
+from mathnotes.mathml import MathConverter, MathConversionError, get_converter
+
+
+def test_converter_roundtrip():
+    c = MathConverter()
+    try:
+        mml = c.convert("x^2", display=False)
+        assert mml.startswith("<math") and 'alttext="x^2"' in mml
+        dm = c.convert("\\sum_{n=1}^\\infty a_n", display=True)
+        assert 'display="block"' in dm
+    finally:
+        c.close()
+
+
+def test_converter_tex_error_raises():
+    c = MathConverter()
+    try:
+        try:
+            c.convert("\\notarealmacro", display=False)
+            assert False, "expected MathConversionError"
+        except MathConversionError as e:
+            assert "notarealmacro" in str(e) or "Undefined" in str(e)
+        # converter still usable after an error response
+        assert c.convert("x", display=False).startswith("<math")
+    finally:
+        c.close()
+
+
+def test_converter_restarts_dead_worker():
+    c = MathConverter()
+    try:
+        assert c.convert("x", display=False).startswith("<math")
+        c._proc.kill()
+        c._proc.wait()
+        # one restart + retry of the in-flight request
+        assert c.convert("y", display=False).startswith("<math")
+    finally:
+        c.close()
+
+
+def test_converter_startup_failure_names_command():
+    c = MathConverter(worker_path="/nonexistent/worker.mjs")
+    try:
+        c.convert("x", display=False)
+        assert False, "expected RuntimeError"
+    except RuntimeError as e:
+        assert "worker" in str(e).lower()
+    finally:
+        c.close()
+
+
+def test_get_converter_is_singleton():
+    assert get_converter() is get_converter()
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     failed = 0
