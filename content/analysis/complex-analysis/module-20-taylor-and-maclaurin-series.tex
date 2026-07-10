@@ -17,11 +17,11 @@ where $z$ is a complex variable, $a_0, a_1, \dots,$ are complex constants, calle
 \end{definition}
 
 \begin{theorem}[Taylor Expansion Theorem]\label{taylor-expansion-theorem}
-Let $f$ be \dref{analytic} in a \dref{domain} $D$ and $z_0$ be a \dref{point} in $D$. Then $f$ can be expanded in a \dref{power-series}
+Let $f$ be \@{analytic} in a \@{domain} $D$ and $z_0$ be a \@{point} in $D$. Then $f$ can be expanded in a \@{power-series}
 
 \[ f(z) = f(z_0) + f'(z_0)(z - z_0) + \frac{f''(z_0)}{2!}(z - z_0)^2 + \cdots, \]
 
-valid in all circles $\|z - z_0\| < r$ containing only \dref{points} of $D$.
+valid in all circles $\|z - z_0\| < r$ containing only \@{points} of $D$.
 \end{theorem}
 
 \begin{definition}[Taylor series]
@@ -33,7 +33,7 @@ is called the \textbf{Taylor series} of $f$ about $z_0$.
 \end{definition}
 
 \begin{definition}[Maclaurin series]
-The special case of the \dref{Taylor-series} in which $z_0$ = 0
+The special case of the \@{Taylor-series} in which $z_0$ = 0
 
 \[ f(z) = \sum_{n=0}^{\infty} \frac{f^{(n)}(0)}{n!} z^n \]
 
@@ -41,23 +41,23 @@ is called the \textbf{Maclaurin series} of f.
 \end{definition}
 
 \begin{definition}[Circle of Convergence]
-The circle $\|z - z_0\| < $ in which the \dref{Taylor-series} \dref{converges} to the \dref{function} is called the \textbf{circle of convergence} for the \dref{Taylor-series}.
+The circle $\|z - z_0\| < $ in which the \@{Taylor-series} \@{converges} to the \@{function} is called the \textbf{circle of convergence} for the \@{Taylor-series}.
 \end{definition}
 
 \begin{definition}[Radius of Convergence]
-The radius of the \dref{circle-of-convergence} is called the \textbf{radius of convergence.}
+The radius of the \@{circle-of-convergence} is called the \textbf{radius of convergence.}
 \end{definition}
 
 \begin{theorem}
-Every \dref{power-series} representation of (or, Taylor series for) an \dref{entire-function} has an infinite \dref{radius-of-convergence}.
+Every \@{power-series} representation of (or, Taylor series for) an \@{entire-function} has an infinite \@{radius-of-convergence}.
 \end{theorem}
 
 \begin{theorem}[A theorem about the uniqueness of Taylor series as @power-series expansions]
-If $f$ has a \dref{power-series} expansion about a point $z_0$ with nonzero \dref{radius-of-convergence}, it must be the \dref{Taylor-series} about $z_0$.
+If $f$ has a \@{power-series} expansion about a point $z_0$ with nonzero \@{radius-of-convergence}, it must be the \@{Taylor-series} about $z_0$.
 \end{theorem}
 
 \begin{theorem}[A theorem about radius of convergence]
-The \dref{radius-of-convergence} of the Taylor series for a function $f(z)$ about a point $z_0$ is the distance from $z_0$ to the nearest singularity of $f(z)$.
+The \@{radius-of-convergence} of the Taylor series for a function $f(z)$ about a point $z_0$ is the distance from $z_0$ to the nearest singularity of $f(z)$.
 \end{theorem}
 
 Here are some important and useful Maclaurin series that we can often use to find those of other functions:
@@ -72,13 +72,13 @@ Here are some important and useful Maclaurin series that we can often use to fin
 
 \subsection{Finding the Center and Radius of Convergence}
 
-Given a \dref{power-series}, we often want to know the center and radius of its \dref{circle-of-convergence}. Finding its center is easy, from the form
+Given a \@{power-series}, we often want to know the center and radius of its \@{circle-of-convergence}. Finding its center is easy, from the form
 
 \[ \sum_{n=0}^{\infty} a_n (z - z_0)^n, \]
 
-the center is simply $z_0.$ When $z = z_0,$ all terms in the series become $0$ and so the \dref{power-series} always \dref{converges} there.
+the center is simply $z_0.$ When $z = z_0,$ all terms in the series become $0$ and so the \@{power-series} always \@{converges} there.
 
-To find the \dref{radius-of-convergence}, we can shift the power series to be centered at $0,$ which makes it easier to manipulate.
+To find the \@{radius-of-convergence}, we can shift the power series to be centered at $0,$ which makes it easier to manipulate.
 
 To do this, let $w = z - z_0$ (or, if we have something like $\sum_{n=0}^{\infty} a_n (z - z_0)^{2n},$ then let $w = (z-z_0)^2.$
 
@@ -117,7 +117,7 @@ Other convergence conditions are \href{https://en.wikipedia.org/wiki/Binomial_se
 \detach
 
 \begin{remark}
-This can be viewed as an extension of the \dref{binomial-theorem}.
+This can be viewed as an extension of the \@{binomial-theorem}.
 \end{remark}
 
 \end{document}

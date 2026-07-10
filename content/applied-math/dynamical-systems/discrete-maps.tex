@@ -7,7 +7,7 @@
 
 \section{Discrete Time Dynamical Systems}
 
-We'll go over systems in which time is discrete rather than continuous. These systems are called \dref{difference-equations}, \dref{recursion-relations}, iterated maps, or simply maps. These can be interesting; even in one dimension they can exhibit oscillations and chaos.
+We'll go over systems in which time is discrete rather than continuous. These systems are called \@{difference-equations}, \@{recursion-relations}, iterated maps, or simply maps. These can be interesting; even in one dimension they can exhibit oscillations and chaos.
 
 \begin{definition}[Difference equation]
 A difference equation has the general form
@@ -17,7 +17,7 @@ A difference equation has the general form
 where $n$ is a time-like variable, $\vec{f}$ and $\vec{x_n}$ may be vectors, $n = 0, 1, 2, \dots = \mathbb{N}_0.$
 \end{definition}
 
-Solutions to \dref{difference-equations} are \dref{sequences} $(x_0, x_1, ..., x_n).$ If $x_0$ is the initial condition, then
+Solutions to \@{difference-equations} are \@{sequences} $(x_0, x_1, ..., x_n).$ If $x_0$ is the initial condition, then
 
 \[ \begin{aligned}
 x_1 & = f(x_0, 0) \\
@@ -26,9 +26,9 @@ x_2 & = f(x_1, 0) \\
 x_n & = f(x_{n-1}, 0) \\
 \end{aligned} \]
 
-So the solution is $(x_1, x_2, \dots, x_n).$ Long term dynamics are given by moving along this \dref{sequence} as $n \to \infty.$
+So the solution is $(x_1, x_2, \dots, x_n).$ Long term dynamics are given by moving along this \@{sequence} as $n \to \infty.$
 
-We will consider ourselves, for now, with \dref{autonomous-systems} where there is no explicit dependence on $n,$ i.e.
+We will consider ourselves, for now, with \@{autonomous-systems} where there is no explicit dependence on $n,$ i.e.
 
 \[ x_{n+1} = f(x_n). \]
 
@@ -41,7 +41,7 @@ Example: $x_{n+1} =  - x_n.$ If we start with $x_0,$ then $x_1 = -x_0, x_2 = -x_
 \subsection{Orbits and Fixed Points}
 
 \begin{definition}[orbit]\synonyms{solution}
-A \dref{sequence} $(x_0, x_1, x_2, \dots)$ is called the \textbf{orbit} (or solution) starting from $x_0.$ This is analogous to a \dref{trajectory} in a continuous time dynamical system.
+A \@{sequence} $(x_0, x_1, x_2, \dots)$ is called the \textbf{orbit} (or solution) starting from $x_0.$ This is analogous to a \@{trajectory} in a continuous time dynamical system.
 \end{definition}
 
 A fixed point in a DTDS is a point whose further iteration does not change, i.e. $x_{n+1} = x_n.$ Fixed points satisfy

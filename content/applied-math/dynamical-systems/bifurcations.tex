@@ -6,50 +6,50 @@
 \begin{document}
 
 \begin{definition}[bifurcation]
-In a \dref{dynamical-system} with a smoothly varying \dref{parameter} $r,$ a sudden change in qualitative or topological behavior of the system, especially the creation, annihilation, or change of stability in its \dref{fixed-points}, is called a \textbf{bifurcation.}
+In a \@{dynamical-system} with a smoothly varying \@{parameter} $r,$ a sudden change in qualitative or topological behavior of the system, especially the creation, annihilation, or change of stability in its \@{fixed-points}, is called a \textbf{bifurcation.}
 \end{definition}
 
 \begin{definition}[bifurcation point]
-The parameter values at which \dref{bifurcations} occur are called \textbf{bifurcation points.}
+The parameter values at which \@{bifurcations} occur are called \textbf{bifurcation points.}
 \end{definition}
 
-You can see some \dref{bifurcations} in action with the demo below.
+You can see some \@{bifurcations} in action with the demo below.
 
 \includedemo{parametric-phase-portrait}
 
 \subsection{Saddle-Node Bifurcation}
 
 \begin{definition}[Saddle-Node]
-The defining feature of a \textbf{saddle-node} \dref{bifurcation} is that as $r$ crosses the \dref{bifurcation-point}, two \dref{fixed-points} are created or destroyed (depending on the direction of approach.) If approaching from the direction in which the \dref{fixed-points} exist, they will grow closer to each other, until they reach other at the \dref{bifurcation-point}, forming a \dref{half-stable} point, and then they will be destroyed as $r$ continues on the other side of the \dref{bifurcation-point}.
+The defining feature of a \textbf{saddle-node} \@{bifurcation} is that as $r$ crosses the \@{bifurcation-point}, two \@{fixed-points} are created or destroyed (depending on the direction of approach.) If approaching from the direction in which the \@{fixed-points} exist, they will grow closer to each other, until they reach other at the \@{bifurcation-point}, forming a \@{half-stable} point, and then they will be destroyed as $r$ continues on the other side of the \@{bifurcation-point}.
 \end{definition}
 
 \begin{definition}[Tangential Intersection]
-Two \dref{functions} $f$ and $g$ are said to have a \textbf{tangential intersection} at a \dref{point} $p$ if both their \dref{values} and the \dref{values} of their first \dref{derivatives} are equal at $p.$ That is, if
+Two \@{functions} $f$ and $g$ are said to have a \textbf{tangential intersection} at a \@{point} $p$ if both their \@{values} and the \@{values} of their first \@{derivatives} are equal at $p.$ That is, if
 
 \[ f(p) = g(p) \quad \text{AND} \quad f'(p) = g'(p). \]
 \end{definition}
 
-I don't have a full definition for \textbf{normal form} yet, but the prototypical forms for \dref{saddle-node} \dref{bifurcations} are
+I don't have a full definition for \textbf{normal form} yet, but the prototypical forms for \@{saddle-node} \@{bifurcations} are
 
 \[ \dot{x} = r - x^2, \quad \dot{x} = r + x^2. \]
 
-For any $f(x, r),$ if we have the following conditions at the \dref{bifurcation} point $r^*,$ the \dref{dynamical-system} can be reduced to one of the \dref{saddle-node} normal forms above:
+For any $f(x, r),$ if we have the following conditions at the \@{bifurcation} point $r^*,$ the \@{dynamical-system} can be reduced to one of the \@{saddle-node} normal forms above:
 
 \[ f(x^*, r^*) = 0, \quad \partial_x f(x^*, r^*) = 0, \]
 
-that is, $f(x^*, r^*)$ is a \dref{tangential-intersection} with the $x$-axis, and
+that is, $f(x^*, r^*)$ is a \@{tangential-intersection} with the $x$-axis, and
 
 \[ \partial_{xx} f(x^*, r^*) \neq 0, \partial_r f(x^*, r^*) \neq 0. \]
 
-The first ensures this is only a double root, not a triple root or worse. The second ensures that as we vary $r$ near this point, the function value actually changes, which is required to create or destroy the \dref{fixed-points}.
+The first ensures this is only a double root, not a triple root or worse. The second ensures that as we vary $r$ near this point, the function value actually changes, which is required to create or destroy the \@{fixed-points}.
 
 \subsection{Transcritical Bifurcation}
 
 \begin{definition}[Transcritical]
-A \textbf{transcritical} bifurcation occurs when a given $x^*$ is always a \dref{fixed-point}, but its stability changes when crossing the \dref{bifurcation-point} $r^*$. At all values of $r$ other than $r^*,$ there are two \dref{fixed-points} (and at $r^*$ one degenerate \dref{fixed-point}), but their stability is exchanged at the crossing.
+A \textbf{transcritical} bifurcation occurs when a given $x^*$ is always a \@{fixed-point}, but its stability changes when crossing the \@{bifurcation-point} $r^*$. At all values of $r$ other than $r^*,$ there are two \@{fixed-points} (and at $r^*$ one degenerate \@{fixed-point}), but their stability is exchanged at the crossing.
 \end{definition}
 
-The normal form for a \dref{transcritical-bifurcation} is $\dot{x} = r x - x^2.$
+The normal form for a \@{transcritical-bifurcation} is $\dot{x} = r x - x^2.$
 
 \subsection{Pitchfork}
 
@@ -64,7 +64,7 @@ At a candidate bifurcation point where $f(x,r) = 0$ and $f_x(x,r) = 0,$ evaluate
 \[ f_{xx} \neq 0. \]
 
 \begin{intuition}
-The \dref{fixed-point} doesn't persist as $r$ varies $(f_r \neq 0)$ and the nullcline has quadratic tangency $(f_{xx} \neq 0)$, so two \dref{fixed-points} collide and annihilate.
+The \@{fixed-point} doesn't persist as $r$ varies $(f_r \neq 0)$ and the nullcline has quadratic tangency $(f_{xx} \neq 0)$, so two \@{fixed-points} collide and annihilate.
 \end{intuition}
 
 Normal form: $\dot{x} = r \pm x^2. $
@@ -78,7 +78,7 @@ Normal form: $\dot{x} = r \pm x^2. $
 \[ f_{xr} \neq 0. \]
 
 \begin{intuition}
-The \dref{fixed-point} exists for all $r  ~ (f_r = 0),$ but two branches cross and exchange stability. The $f_{xr} \neq 0$ ensures the stability actually changes (the \dref{eigenvalue} $f_x$ crosses zero with nonzero speed as $r$ varies).
+The \@{fixed-point} exists for all $r  ~ (f_r = 0),$ but two branches cross and exchange stability. The $f_{xr} \neq 0$ ensures the stability actually changes (the \@{eigenvalue} $f_x$ crosses zero with nonzero speed as $r$ varies).
 \end{intuition}
 
 Normal form: $\dot{x} = r x - x^2.$
@@ -103,7 +103,7 @@ For subcritical:
 
 We have the condition $f_{xxx} > 0,$ and the normal form is $\dot{x} = r x + x^3.$
 
-The \dref{fixed-point} exists for all $r ~ (f_r = 0),$ and there's odd symmetry in $x ~ (f_{xx} = 0),$ so instead of two branches crossing, one branch splits into three. The cubic term dominates.
+The \@{fixed-point} exists for all $r ~ (f_r = 0),$ and there's odd symmetry in $x ~ (f_{xx} = 0),$ so instead of two branches crossing, one branch splits into three. The cubic term dominates.
 
 Normal form: $\dot{x} = r * x \pm x^3.$
 

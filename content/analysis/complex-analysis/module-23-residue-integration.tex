@@ -8,15 +8,15 @@
 
 \section{Residue Integration}
 
-Suppose $f(z)$ has a \dref{singularity} at $z = z_0$ inside a simple closed curve $C$ but is otherwise analytic on $C$ and inside $C.$
+Suppose $f(z)$ has a \@{singularity} at $z = z_0$ inside a simple closed curve $C$ but is otherwise analytic on $C$ and inside $C.$
 
-Then, $f(z)$ has a \dref{laurent-series} 
+Then, $f(z)$ has a \@{laurent-series} 
 
 \[ f(z) = \sum_{n=0}^{\infty} a_n (z - z_0)^n + \frac{b_1}{z - z_0} + \frac{b_2}{(z - z_0)^2} + \cdots \]
 
-that \dref{converges} for all \dref{points} near $z = z_0$ (except at $z = z_0$ itself,) in some domain of the form $0 < |z - z_0| < R.$ 
+that \@{converges} for all \@{points} near $z = z_0$ (except at $z = z_0$ itself,) in some domain of the form $0 < |z - z_0| < R.$ 
 
-The coefficient $b_1$ of the first negative power $1/(z - z_0)$ of this \dref{laurent-series} is given by the \dref{Cauchy-integral-formula} as
+The coefficient $b_1$ of the first negative power $1/(z - z_0)$ of this \@{laurent-series} is given by the \@{Cauchy-integral-formula} as
 
 \[ b_1 = \frac{1}{2 * pi * i} \oint_C f(z) dz. \]
 
@@ -27,7 +27,7 @@ Now, we can use this to find the value of the integral without using any of the 
 This is a CCW integral around a simple closed path $C$ that contains $z = z_0$ in its interior (but no other singularities of $f(z)$ on or inside C.)
 
 \begin{definition}[Residue]
-Given a convergent \dref{laurent-series}
+Given a convergent \@{laurent-series}
 
 \[ f(z) = \sum_{n=0}^{\infty} a_n (z - z_0)^n + \frac{b_1}{z - z_0} + \frac{b_2}{(z - z_0)^2} + \cdots, \]
 
@@ -38,7 +38,7 @@ the coefficient $b_1$ of the first negative power of $1/(z - z_0)$ is called the
 
 \subsection{Residue Formulas}
 
-Instead of finding the \dref{laurent-series}, we can use these handy formulas.
+Instead of finding the \@{laurent-series}, we can use these handy formulas.
 
 \subsubsection{Simple pole at $z_0$}
 
@@ -67,7 +67,7 @@ For second order poles $(m = 2)$, this gives
 \subsubsection{Several Singularities Inside the Contour}
 
 \begin{theorem}[Residue Theorem]\label{residue-theorem}
-Let $f(z)$ be \dref{analytic} inside a simple closed path $C$ and on $C,$ except for finitely many \dref{singular-points} $z_1, z_2, \dots, z_k$ inside $C.$ Then,
+Let $f(z)$ be \@{analytic} inside a simple closed path $C$ and on $C,$ except for finitely many \@{singular-points} $z_1, z_2, \dots, z_k$ inside $C.$ Then,
 
 \[ \oint_C f(z) dz = 2 \pi i \sum_{j=1}^{k} \Res_{z = z_j} f(z). \]
 \end{theorem}

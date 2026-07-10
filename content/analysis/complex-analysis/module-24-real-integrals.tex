@@ -32,7 +32,7 @@ and because our integral ranges from $0$ to $2 \pi,$ the variable $z = e^{i \the
 
 \[ J = \oint_{|z|} f(z) \frac{dz}{iz}. \]
 
-We then can proceed with a normal contour integral, using \dref{residue} methods to deal with any singularities enclosed by the contour.
+We then can proceed with a normal contour integral, using \@{residue} methods to deal with any singularities enclosed by the contour.
 
 We can use this technique to prove the following theorem
 
@@ -50,11 +50,11 @@ This method applies for integrals of the form
 
 \[ \int_{-\infty}^{\infty} f(x) dx, \]
 
-where $f(x)$ is a \dref{rational-function}. It can also be used with integrals of the form
+where $f(x)$ is a \@{rational-function}. It can also be used with integrals of the form
 
 \[ \int_0^{\infty} f(x) dx \]
 
-where $f(x)$ is both \dref{rational} and \dref{even}.
+where $f(x)$ is both \@{rational} and \@{even}.
 
 As an example, let's look at
 
@@ -74,13 +74,13 @@ The key concept is that if we rewrite (a) as
 
 \[ I = \lim_{R \to \infty} \frac{1}{2} \int_{-R}^{R} \frac{1}{1 + x^4} dx, \]
 
-then the semi-circle grows to enclose the entire upper half-plane. If the value of the complex contour integral along $S$ goes to $0$ as $R$ goes to infinity, then the contour integral is equivalent to the integral along the real axis, and we can use \dref{residue} methods to compute it, accounting for any singularities in the upper half-plane.
+then the semi-circle grows to enclose the entire upper half-plane. If the value of the complex contour integral along $S$ goes to $0$ as $R$ goes to infinity, then the contour integral is equivalent to the integral along the real axis, and we can use \@{residue} methods to compute it, accounting for any singularities in the upper half-plane.
 
 In order for $\oint_S f(z) dz$ to approach $0$ as $R \to \infty,$ a sufficient condition is that the denominator of $f(x)$ has a power of $x$ at least two degrees higher than the numerator, which applies in our case.
 
 Now, $z^4 + 1$ has 4 zeros, but only two of them, $z_1 = e^{i \pi / 4}$ and $z_2 = e^{i 3 \pi / 4}$ occur in our semi-circle (i.e. they are in the upper half plane).
 
-Using the \dref{residue-theorem}, we have then that
+Using the \@{residue-theorem}, we have then that
 
 \[ I = \frac{1}{2} * 2 \pi i * (\Res{z \to z_1}f(z) + \Res{z \to z_2}f(z)) = \frac{\sqrt{2}}{4} \pi. \]
 
@@ -107,15 +107,15 @@ However, it may be the case that neither limit exists when both $\epsilon$ and $
 
 does exist.
 
-This \dref{limit} is called the \textbf{Cauchy principal value} of the integral and is written as
+This \@{limit} is called the \textbf{Cauchy principal value} of the integral and is written as
 
 \[ \text{pr. v. } \int_A^{B} f(x) dx. \]
 \end{definition}
 
-This principal value can exist, although the integral itself is undefined. We can use this for the following theorem in the case there are \dref{simple} \dref{poles} on the real axis and we have an integral from $-\infty$ to $\infty.$
+This principal value can exist, although the integral itself is undefined. We can use this for the following theorem in the case there are \@{simple} \@{poles} on the real axis and we have an integral from $-\infty$ to $\infty.$
 
 \begin{theorem}[Simple Poles on the Real Axis]
-If $f(z)$ has a \dref{simple} \dref{pole} at $z = a$ on the real axis, then
+If $f(z)$ has a \@{simple} \@{pole} at $z = a$ on the real axis, then
 
 \[ \lim_{r \to 0} \int_{C_2} f(z) dz = \pi i \Res{z=a} f(z), \]
 

@@ -71,7 +71,7 @@ The demo below shows how each individual Fourier Coefficient calculation works b
 
 \subsection{Math on the Unit Circle}
 
-The $n$th roots of \dref{unity}. There are $n$ $nth$ roots of 1. So, $z^{1} = 1$ has 1 solution, $1$ itself. $z^{2} = 1$ has 2 solutions, $1$ and $-1.$ Note that $-1$ is on the opposite side of the unit circle from $1.$ $z^3$ has 3 solutions: $1, e^{2 \pi / 3}$ and $e^{4 \pi / 3}.$  The general pattern is that the $n$th roots of unity are given by
+The $n$th roots of \@{unity}. There are $n$ $nth$ roots of 1. So, $z^{1} = 1$ has 1 solution, $1$ itself. $z^{2} = 1$ has 2 solutions, $1$ and $-1.$ Note that $-1$ is on the opposite side of the unit circle from $1.$ $z^3$ has 3 solutions: $1, e^{2 \pi / 3}$ and $e^{4 \pi / 3}.$  The general pattern is that the $n$th roots of unity are given by
 
 \[ e^{i(2 k \pi)/n}, \quad k = 0, \dots, n-1. \]
 
@@ -79,7 +79,7 @@ Now, multiplying these roots by each other can be accomplished by adding their e
 
 \[ 1 * -1 = e^{0(i 2 \pi /2)} * e^{1(i 2 \pi /2)} = e^{(0 + 1)(i 2 \pi / 2)} = e^{i \pi} = -1. \]
 
-Note that the resultant product is a root of unity as well, and in general the $nth$ roots of unit form a \dref{cyclic} \dref{abelian} \dref{group} under multiplication.
+Note that the resultant product is a root of unity as well, and in general the $nth$ roots of unit form a \@{cyclic} \@{abelian} \@{group} under multiplication.
 
 It also turns out that this group is isomorphic to $\mathbb{Z}_n$ under addition modulo $n.$ The multiplication we gave above is equivalent to $0 + 1 = 1$ on $\mathbb{Z}_2,$ and just like $-1 * -1 = 1,$ $1 + 1 = 0$ on $\mathbb{Z}_2.$
 
@@ -110,9 +110,9 @@ Now, suppose $a, b < n-1.$ Then
 
 \[ \phi(a + b) = e^{2 \pi i (a + b) / n} = e^{2 \pi i a / n} * e^{2 \pi i b / n} = \phi(a) * \phi(b), \]
 
-so $\phi$ is a \dref{group-homomorphism}.
+so $\phi$ is a \@{group-homomorphism}.
 
-Now,  $e_{\mu_n}$ is 1, that is, $e^{2 \pi i (0) / n},$ so $\ker{\phi} = {0}.$ But, $0$ is $e_{\mathbb{Z}_n},$ and so $\phi$ is \dref{injective}, and an \dref{isomorphism}, and $\mu_n$ and $\mathbb{Z}_n$ are isomorphic.
+Now,  $e_{\mu_n}$ is 1, that is, $e^{2 \pi i (0) / n},$ so $\ker{\phi} = {0}.$ But, $0$ is $e_{\mathbb{Z}_n},$ and so $\phi$ is \@{injective}, and an \@{isomorphism}, and $\mu_n$ and $\mathbb{Z}_n$ are isomorphic.
 \end{proof}
 
 One more fact worth noting, now that we've established this isomorphism. On the unit circle, a negative rotation (clockwise) by $\phi$ is equal to a positive rotation (counterclockwise) by $2 \pi - \phi.$ This is easy to see:
@@ -125,7 +125,7 @@ Coming soon... roots of unity as the elements of basis vectors for $\mathbb{C}^n
 
 \subsection{Sample Points as Vectors in $\mathbb{C}^n.$}
 
-Let's say we have a contour on the complex plane, and we take $n$ sample points on it, in order, so $z_0, z_1, \dots, z_n.$ We can view these sample points (which form a \dref{sequence}) as forming a vector in $\mathbb{C}^n:$
+Let's say we have a contour on the complex plane, and we take $n$ sample points on it, in order, so $z_0, z_1, \dots, z_n.$ We can view these sample points (which form a \@{sequence}) as forming a vector in $\mathbb{C}^n:$
 
 \[ ( z_0, z_1, \dots, z_n ). \]
 
@@ -133,26 +133,26 @@ Now, the standard basis for $\mathbb{C}^n$ is the same as that of $\mathbb{R}^n,
 
 \[ e_1 = ( 1, 0, \dots, 0 ), \quad e_2 = ( 0, 1, \dots, 0 ), \dots \]
 
-It's easy to see that these basis vectors are \dref{orthogonal} (and therefore \dref{linearly-independent}); to see that they span $\mathbb{C}^n$, suppose $w = ( w_1, w_2, \dots, w_n. ).$ Then, $w_1 * e_1 + w_2 * e_2 + \cdots + w_n * e_n = w,$ that is, the components of $w$ (which are complex numbers) are exactly the scalar coefficients we need to multiply by our basis vectors to form $w,$ so this basis spans $\mathbb{C}^n.$
+It's easy to see that these basis vectors are \@{orthogonal} (and therefore \@{linearly-independent}); to see that they span $\mathbb{C}^n$, suppose $w = ( w_1, w_2, \dots, w_n. ).$ Then, $w_1 * e_1 + w_2 * e_2 + \cdots + w_n * e_n = w,$ that is, the components of $w$ (which are complex numbers) are exactly the scalar coefficients we need to multiply by our basis vectors to form $w,$ so this basis spans $\mathbb{C}^n.$
 
 \subsubsection{$\mathbb{C}^n$ is an Inner Product Space}
 
-Now, we can equip this vector space with an \dref{inner-product}
+Now, we can equip this vector space with an \@{inner-product}
 
 \begin{theorem}[$\mathbb{C}^N$ is an inner product space]\label{complex-inner-product-space}
-The \dref{function}
+The \@{function}
 
 \[ \langle z, w \rangle = \sum_{k=0}^{N-1} z_k \overline{w_k} \]
 
-defined on $z, w \in \mathbb{C}^N$ is an \dref{inner-product}, and so $\mathbb{C}^N$ ($N$ a positive integer) forms an \dref{inner-product-space}.
+defined on $z, w \in \mathbb{C}^N$ is an \@{inner-product}, and so $\mathbb{C}^N$ ($N$ a positive integer) forms an \@{inner-product-space}.
 \end{theorem}
 
 \begin{proof}
-Since $\mathbb{C}$ is a \dref{field}, $\mathbb{C}^N$ is obviously a \dref{vector-space}.
+Since $\mathbb{C}$ is a \@{field}, $\mathbb{C}^N$ is obviously a \@{vector-space}.
 
 To see that this is indeed an inner product, we'll show the required properties hold.
 
-For \dref{conjugate-symmetry}, let $z_k = a + bi$ and let $w_k = c + di.$ Then,
+For \@{conjugate-symmetry}, let $z_k = a + bi$ and let $w_k = c + di.$ Then,
 
 \[ z_k \overline{w_k} = (a + bi)(c - di) = ac - adi + cbi + bd = (ac + bd) + (cb - ad)i, \]
 
@@ -162,11 +162,11 @@ and
 
 and since $k$ is arbitrary, it holds for any respective pair of components in $z$ and $w,$ and so $\langle z, w \rangle = \overline{\langle w, z \rangle}.$
 
-For \dref{linearity} in the first argument, let $w, v, z \in \mathbb{C}^n, a, b \in \mathbb{C}.$ Then
+For \@{linearity} in the first argument, let $w, v, z \in \mathbb{C}^n, a, b \in \mathbb{C}.$ Then
 
 \[ \langle ax + by, z \rangle = (a x_1 + b y_1) * z_1 + (a x_2 + b y_2) * z_2 + \cdots = a(x_1 * z_1) + a(x_2 * z_2) + \cdots + b(y_1 * z_1) + b(y_2 * z_2) + \cdots = a \langle x, z \rangle + b \langle x, z \rangle. \]
 
-Now, to show \dref{positive-definiteness} let $z = a + bi.$ Then,
+Now, to show \@{positive-definiteness} let $z = a + bi.$ Then,
 
 \[ \langle z, z \rangle = z \overline{z} = 1 > 0. \]
 \end{proof}
@@ -242,7 +242,7 @@ Now we need to show that this sum is $0.$ Note that if we let $w = e^{\frac{2 \p
 
 \[ \langle \phi_m, \phi_n \rangle = \sum_{k=0}^{N-1} w^k. \]
 
-From \dref{finite-geometric-series}, we have that
+From \@{finite-geometric-series}, we have that
 
 \[ \sum_{k=0}^{N-1} w^k = \frac{1 - w^N}{1 - w}. \]
 
@@ -254,7 +254,7 @@ Substituting back in $e^{\frac{2 \pi i}{N} r}$ for $w$ we get
                                            & = 0.
 \end{aligned} \]
 
-Thus, $\langle \phi_m, \phi_n \rangle = 0,$ and so when $m \neq n,$ $\phi_m$ an $\phi_n$ are \dref{orthogonal} and therefore \dref{linearly-independent}.
+Thus, $\langle \phi_m, \phi_n \rangle = 0,$ and so when $m \neq n,$ $\phi_m$ an $\phi_n$ are \@{orthogonal} and therefore \@{linearly-independent}.
 
 Now we need to show that $\phi_0 \dots \phi_{N-1}$ span $\mathbb{C}^N.$
 
@@ -270,7 +270,7 @@ To find some specific $c_m,$ we can take the inner product of both sides with re
 
 \[ \langle \vec{u}, \phi_m \rangle = \left \langle \sum_{n=0}^{N-1} c_n \phi_n, \phi_m \right \rangle. \]
 
-\dref{Linearity} in the first argument of the \dref{inner-product} allows us to rewrite the right side to get
+\@{Linearity} in the first argument of the \@{inner-product} allows us to rewrite the right side to get
 
 \[ \langle \vec{u}, \phi_m \rangle = \sum_{n=0}^{N-1} c_n  \left \langle \phi_n, \phi_m \right \rangle. \]
 
@@ -300,7 +300,7 @@ The Fourier Coefficient $c_m,$ given as
 
 \[ c_m = \frac{\langle \vec{u}, \phi_m \rangle}{N}. \]
 
-Is just the \dref{scalar-projection} of $\vec{u}$ onto $\phi_m.$ It is a complex number, and $|c_m|$ is proportional to the amplitude of the frequency $m$ present in $\vec{u},$ while $\Arg{c_m}$ gives the phase of frequency $m$ in $\vec{u}.$
+Is just the \@{scalar-projection} of $\vec{u}$ onto $\phi_m.$ It is a complex number, and $|c_m|$ is proportional to the amplitude of the frequency $m$ present in $\vec{u},$ while $\Arg{c_m}$ gives the phase of frequency $m$ in $\vec{u}.$
 
 \begin{note}
 We've given this $c_m$ as the inner product divided by $N.$ This is allowed but not typical. In order to make

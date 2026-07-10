@@ -144,6 +144,7 @@ def _latex_context():
         prepend=True,
         macros=[
             macrospec.MacroSpec("dref", "[{"),
+            macrospec.MacroSpec("@", "[{"),  # \@{label}: shorthand for \dref
             macrospec.MacroSpec("pagelink", "[{"),
             macrospec.MacroSpec("includedemo", "{"),
             macrospec.MacroSpec("dembed", "{"),
@@ -532,7 +533,7 @@ class _Parser:
                         value = value[:-2]
                     attrs.append(f'{key}="{html_lib.escape(value, quote=True)}"')
             return f'<img {" ".join(attrs)}>'
-        if name == "dref":
+        if name in ("dref", "@"):
             return self._dref(n)
         if name == "pagelink":
             return self._pagelink(n)
@@ -569,7 +570,7 @@ class _Parser:
         opt, mand = n.nodeargd.argnlist
         label = "".join(c.chars for c in mand.nodelist if isinstance(c, LatexCharsNode)).strip()
         if not label:
-            self._err(n, "\\dref requires a non-empty label")
+            self._err(n, f"\\{n.macroname} requires a non-empty label")
         text = self._prose(opt.nodelist).strip() if opt is not None else ""
         self._check_ref_text(n, text)
         return f'<a data-dref="{html_lib.escape(label, quote=True)}">{text}</a>'

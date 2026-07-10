@@ -12,10 +12,10 @@ A \textbf{first-order} system is a system of the form
 
 \[ \dot{x} = f(x), \]
 
-where $x = x(t)$ is a \dref{real-valued} \dref{function} of time $t,$ and $f(x)$ is a \dref{smooth} real-valued function of $x.$
+where $x = x(t)$ is a \@{real-valued} \@{function} of time $t,$ and $f(x)$ is a \@{smooth} real-valued function of $x.$
 \end{definition}
 
-We can interpret a \dref{differential-equation} of this form as a as a \dref{vector-field}. $f(x)$ tells us in which direction and at what magnitude we move at any point on the real line (where $f(x)$ is defined.) We can do this by plotting $\dot{x}$ vs $x.$
+We can interpret a \@{differential-equation} of this form as a as a \@{vector-field}. $f(x)$ tells us in which direction and at what magnitude we move at any point on the real line (where $f(x)$ is defined.) We can do this by plotting $\dot{x}$ vs $x.$
 
 \includedemo{flows-on-the-line}
 
@@ -28,15 +28,15 @@ A point at which the change in position of a system is $0$ is called a \textbf{f
 \end{definition}
 
 \begin{definition}[Stable]
-A \dref{fixed-point} where nearby points flow towards it is said to be \textbf{stable.}
+A \@{fixed-point} where nearby points flow towards it is said to be \textbf{stable.}
 \end{definition}
 
 \begin{definition}[Unstable]
-A \dref{fixed-point} where nearby points flow away from it is said to be \textbf{unstable.}
+A \@{fixed-point} where nearby points flow away from it is said to be \textbf{unstable.}
 \end{definition}
 
 \begin{remark}
-The convention, when drawing a dynamical system as a vector field is to draw filled in circles for \dref{stable} \dref{fixed-points} and empty circles for \dref{unstable} \dref{fixed-points}.
+The convention, when drawing a dynamical system as a vector field is to draw filled in circles for \@{stable} \@{fixed-points} and empty circles for \@{unstable} \@{fixed-points}.
 \end{remark}
 
 \begin{definition}[Phase point]
@@ -44,11 +44,11 @@ The starting point, $x_0,$ where we place a particle is called a \textbf{phase p
 \end{definition}
 
 \begin{definition}[Trajectory]
-The function describing the path taken by a particle starting at a \dref{phase-point} is called a \textbf{trajectory} and represents a solution to a \dref{differential-equation} with \dref{initial-conditions} $x = x_0.$
+The function describing the path taken by a particle starting at a \@{phase-point} is called a \textbf{trajectory} and represents a solution to a \@{differential-equation} with \@{initial-conditions} $x = x_0.$
 \end{definition}
 
 \begin{definition}[Phase Portrait]
-A drawing that shows the different \dref{trajectories} taken from different \dref{phase-points} in a system is called a \textbf{phase portrait.}
+A drawing that shows the different \@{trajectories} taken from different \@{phase-points} in a system is called a \textbf{phase portrait.}
 \end{definition}
 
 We can also visualize trajectories by plotting $x(t)$ vs $t.$
@@ -60,7 +60,7 @@ Here's both views together.
 \includedemo{phase-and-time}
 
 \begin{definition}[Globally stable]
-A \dref{fixed-point} $x^*$ that is approached from any starting position on the real line (other than that at $x^*$ itself) is said to be \textbf{globally stable.}
+A \@{fixed-point} $x^*$ that is approached from any starting position on the real line (other than that at $x^*$ itself) is said to be \textbf{globally stable.}
 \end{definition}
 
 \subsection{Application: Population Growth}
@@ -75,15 +75,15 @@ where $r > 0.$ You can see by modeling this on the demo's above that population 
 
 \subsection{Linear Stability Analysis}
 
-While it's nice to have a visual intuition for whether a \dref{fixed-point} is stable or not, sometimes it's also nice to know analytically.
+While it's nice to have a visual intuition for whether a \@{fixed-point} is stable or not, sometimes it's also nice to know analytically.
 
 \begin{theorem}\label{linear-stability-analysis}
-Let $x^*$ be a fixed point of $\dot{x} = f(x).$ Then, if $f'(x) \neq 0,$ if $f'(x^*)$ is negative, then $x^*$ is a \dref{stable} \dref{fixed-point}
-. If $f'(x^*)$ is positive, then $x^*$ is an \dref{unstable} \dref{fixed-point}.
+Let $x^*$ be a fixed point of $\dot{x} = f(x).$ Then, if $f'(x) \neq 0,$ if $f'(x^*)$ is negative, then $x^*$ is a \@{stable} \@{fixed-point}
+. If $f'(x^*)$ is positive, then $x^*$ is an \@{unstable} \@{fixed-point}.
 \end{theorem}
 
 \begin{remark}
-This comes from letting $u(t) = x(t) - x^*$ be a small perturbation away from $x^*,$ differentiating it, writing its \dref{taylor-series}, then noticing that $f(x^*) = 0$ and terms greater than the linear term matter less than the linear term and writing
+This comes from letting $u(t) = x(t) - x^*$ be a small perturbation away from $x^*,$ differentiating it, writing its \@{taylor-series}, then noticing that $f(x^*) = 0$ and terms greater than the linear term matter less than the linear term and writing
 
 \[ \dot{u} = f'(x^*)u. \]
 
@@ -93,17 +93,17 @@ It also only works if $f'(x) \neq 0.$ If that's not the case, the best bet is to
 \end{remark}
 
 \begin{definition}[Half-stable]
-A \dref{fixed-point} $x^*$ where $f'(x) = 0$ and the stability depends on which side of $x^*$ $x_0$ lies on is called \textbf{half-stable.} It is denoted with a half-filled circle.
+A \@{fixed-point} $x^*$ where $f'(x) = 0$ and the stability depends on which side of $x^*$ $x_0$ lies on is called \textbf{half-stable.} It is denoted with a half-filled circle.
 \end{definition}
 
 \subsection{Existence and Uniqueness}
 
 \begin{theorem}\label{existence-and-uniqueness-of-ivp-solutions}
-Consider the \dref{initial-value-problem}
+Consider the \@{initial-value-problem}
 
 \[ \dot{x} = f(x), \quad x(0) = x_0. \]
 
-Suppose that $f(x)$ and $f'(x)$ are \dref{continuous} on an \dref{open} \dref{interval} $R$ of the $x$-axis, and suppose that $x_0$ is a \dref{point} in $R.$ Then, the initial value problem has a solution $x(t)$ on some time interval $(- \tau, \tau)$ about $t = 0,$ and the solution is unique.
+Suppose that $f(x)$ and $f'(x)$ are \@{continuous} on an \@{open} \@{interval} $R$ of the $x$-axis, and suppose that $x_0$ is a \@{point} in $R.$ Then, the initial value problem has a solution $x(t)$ on some time interval $(- \tau, \tau)$ about $t = 0,$ and the solution is unique.
 \end{theorem}
 
 \end{document}

@@ -55,6 +55,8 @@ Highlights:
 - `\dref{label}` = link to a block with auto-generated text;
   `\dref[custom text]{label}` = link with custom text;
   `\dref{type:label}` = link with type validation (e.g. `\dref{theorem:ftc}`).
+- `\@{label}` / `\@[custom text]{label}` = shorthand for `\dref` (the
+  kernel's `\@` only adjusts sentence spacing, which this prose never uses).
 - `\pagelink{slug}` / `\pagelink[custom text]{slug}` = page link (rendered as
   plain text in PDF).
 - `\includedemo{name}` = interactive demo placeholder.

@@ -21,15 +21,15 @@ Let $P$ be a nonempty perfect set in $R^k.$ Then $P$ is uncountable.
 \end{theorem}
 
 \begin{proof}
-We know that $P$ is infinite, because by definition, \dref[all points in perfect sets are limit points]{perfect-set}, and \dref[only infinite sets have limit points]{only-infinite-sets-have-limit-points}.
+We know that $P$ is infinite, because by definition, \@[all points in perfect sets are limit points]{perfect-set}, and \@[only infinite sets have limit points]{only-infinite-sets-have-limit-points}.
 
 Suppose, for the sake of contradiction, that $P$ is countable. Label the points of $P$ as $x_1, x_2, \dots.$ We will construct a sequence of ${V_n}$ of neighborhoods.
 
-As a base step, let $V_1$ be any neighborhood of $x_1;$ let $V_1 = \{ y \in R^k | ~ |y - x_1| < r \}$ (note: subsequent $V_{n+1}$ aren't required to be neighborhoods of $x_{n+1}.$) Then the \dref{closure} $\closure{V_1}$ of $V_1$ is $\closure{V_1} =  \{ y \in R^k | ~ |y - x_1| \leq r \}.$
+As a base step, let $V_1$ be any neighborhood of $x_1;$ let $V_1 = \{ y \in R^k | ~ |y - x_1| < r \}$ (note: subsequent $V_{n+1}$ aren't required to be neighborhoods of $x_{n+1}.$) Then the \@{closure} $\closure{V_1}$ of $V_1$ is $\closure{V_1} =  \{ y \in R^k | ~ |y - x_1| \leq r \}.$
 
 For the inductive step, suppose as an induction hypothesis that we have some $V_n$ that's been constructed such that $V_n \cap P$ is not empty. Since every point of $P$ is a limit point of $P,$ we can make a neighborhood $V_{n+1}$ such that (i) $\closure{V_{n+1}} \subset V_n,$ (ii) $x_n \notin \closure{V_{n+1}},$ (iii) $V_{n+1} \cap P$ is not empty. Now, $V_{n+1}$ satisfies our induction hypothesis, and since $V_1$ does too, we have ${V_n}$ defined for all $n = 1, 2, 3, \dots.$
 
-For each $n$, let $K_n = \closure{V_n} \cap P.$ Since $\closure{V_n}$ is closed and bounded, $\closure{V_n}$ \dref[is compact]{heine-borel}. Since $x_n \notin \closure{V_{n+1}},$ no point of $P$ lies in $\bigcap_{n=1}^\infty K_n.$ Since $K_n \subset P,$ this implies that $\bigcap_{n=1}^\infty K_n$ is empty. But, each $K_n$ is nonempty, by (iii), and $K_{n+1} \subset K$, by (i). But the \dref[intersection of nonempty compact nested sets is nonempty]{intersection-of-nonempty-nested-compact-sets-is-nonempty}, so we have a contradiction, so our provisional assumption that $P$ is countable must be incorrect. Therefore, $P$ is uncountable.
+For each $n$, let $K_n = \closure{V_n} \cap P.$ Since $\closure{V_n}$ is closed and bounded, $\closure{V_n}$ \@[is compact]{heine-borel}. Since $x_n \notin \closure{V_{n+1}},$ no point of $P$ lies in $\bigcap_{n=1}^\infty K_n.$ Since $K_n \subset P,$ this implies that $\bigcap_{n=1}^\infty K_n$ is empty. But, each $K_n$ is nonempty, by (iii), and $K_{n+1} \subset K$, by (i). But the \@[intersection of nonempty compact nested sets is nonempty]{intersection-of-nonempty-nested-compact-sets-is-nonempty}, so we have a contradiction, so our provisional assumption that $P$ is countable must be incorrect. Therefore, $P$ is uncountable.
 \end{proof}
 
 \begin{corollary}\label{every-interval-is-uncountable}
@@ -49,9 +49,9 @@ $R^k$ is separable.
 \begin{proof}
 The points of $R^k$ that have only rational coordinates are a subset of $R^k,$ we'll call it $Q^k,$ countable and dense.
 
-We know that \dref[the rationals are countable]{rationals-are-countable}, and because \dref[$n$-tuples of countable elements are countable]{n-tuples-of-countable-elements-are-countable}, $Q^k$ is countable.
+We know that \@[the rationals are countable]{rationals-are-countable}, and because \@[$n$-tuples of countable elements are countable]{n-tuples-of-countable-elements-are-countable}, $Q^k$ is countable.
 
-To show $Q^k$ is dense, consider an arbitrary point $p$ in $R^k.$ Now, let $\epsilon > 0.$ Since the \dref[the rationals are dense in the reals]{rationals-are-dense-in-reals}, we can pick a $q \in Q^k$ with $d(p, q) < \epsilon,$ by picking rational approximations of the coordinates of $p$ and forming $q$ such that $q$ is within $\epsilon$ of $p,$ i.e.
+To show $Q^k$ is dense, consider an arbitrary point $p$ in $R^k.$ Now, let $\epsilon > 0.$ Since the \@[the rationals are dense in the reals]{rationals-are-dense-in-reals}, we can pick a $q \in Q^k$ with $d(p, q) < \epsilon,$ by picking rational approximations of the coordinates of $p$ and forming $q$ such that $q$ is within $\epsilon$ of $p,$ i.e.
 
 \[ |p_i - q_i| < \frac{\epsilon}{\sqrt{k}} \implies |p - q| < \sqrt{\sum_{i=1}^k (p_i - q_i)^2 } < \sqrt{k} \cdot \frac{\epsilon}{\sqrt{k}} = \epsilon. \]
 \end{proof}
@@ -67,17 +67,17 @@ Every separable metric space has a countable base.
 \end{theorem}
 
 \begin{proof}
-Let $X$ be a \dref{separable} \dref{metric-space}, and let $x \in G \subset X,$ with $G$ \dref{open-set}. Now, because $X$ is separable, it by definition has a \dref{countable} \dref{dense} subset $E.$ If $x \in E,$ we can pick a rational $\delta > 0$ and let $N_{\delta}(x)$ be a \dref{neighborhood} such that $N_{\delta}(x) \subset G$ ($\delta$ must also be small enough such that this neighborhood is within $G,$ which is possible because $x$ is an \dref{interior-point} of $G$ and we can \dref[pick a rational as close to any real as we'd like]{rationals-are-dense-in-reals}.) Now we have that $x \in N_{\delta}(x) \subset G,$ and since there are countably many $x \in E$ and countably many neighborhoods with rational radius around each $x \in E,$ there are countably many such neighborhoods in $G.$ On the other hand, if $x \notin E,$ then $x$ is a \dref{limit-point} of $E,$ and thus there is $p \in E$ as close as we'd like to $x.$ Pick $p \in E$ such that $d(p,x) < \delta$ for some rational $\delta$ such that $x \subset N_{\delta}(p) \subset G.$ Again, since there are countably many such $p \in E,$ with countably many neighborhoods of rational radius each, there are countably many such neighborhoods in $G.$
+Let $X$ be a \@{separable} \@{metric-space}, and let $x \in G \subset X,$ with $G$ \@{open-set}. Now, because $X$ is separable, it by definition has a \@{countable} \@{dense} subset $E.$ If $x \in E,$ we can pick a rational $\delta > 0$ and let $N_{\delta}(x)$ be a \@{neighborhood} such that $N_{\delta}(x) \subset G$ ($\delta$ must also be small enough such that this neighborhood is within $G,$ which is possible because $x$ is an \@{interior-point} of $G$ and we can \@[pick a rational as close to any real as we'd like]{rationals-are-dense-in-reals}.) Now we have that $x \in N_{\delta}(x) \subset G,$ and since there are countably many $x \in E$ and countably many neighborhoods with rational radius around each $x \in E,$ there are countably many such neighborhoods in $G.$ On the other hand, if $x \notin E,$ then $x$ is a \@{limit-point} of $E,$ and thus there is $p \in E$ as close as we'd like to $x.$ Pick $p \in E$ such that $d(p,x) < \delta$ for some rational $\delta$ such that $x \subset N_{\delta}(p) \subset G.$ Again, since there are countably many such $p \in E,$ with countably many neighborhoods of rational radius each, there are countably many such neighborhoods in $G.$
 
-Now, if we let $G$ be the union of all open sets $G_\beta \subset X,$ then $G$ \dref[is open]{union-and-intersection-of-open-and-closed-sets}, and let ${V_\alpha}$ be the union of all the $N_r(q), q \in G \cap E,$ with $r \in Q,$ then every $x \in G$ is in some ${V_\alpha},$ and there are countably many ${V_\alpha},$ so ${V_\alpha}$ is a countable \dref{base} for $X.$
+Now, if we let $G$ be the union of all open sets $G_\beta \subset X,$ then $G$ \@[is open]{union-and-intersection-of-open-and-closed-sets}, and let ${V_\alpha}$ be the union of all the $N_r(q), q \in G \cap E,$ with $r \in Q,$ then every $x \in G$ is in some ${V_\alpha},$ and there are countably many ${V_\alpha},$ so ${V_\alpha}$ is a countable \@{base} for $X.$
 \end{proof}
 
 \begin{theorem}\label{every-metric-space-where-every-infinite-subset-has-a-limit-point-is-separable}
-Let $X$ be a metric space in which every infinite subset has a limit point. Then $X$ is \dref{separable}.
+Let $X$ be a metric space in which every infinite subset has a limit point. Then $X$ is \@{separable}.
 \end{theorem}
 
 \begin{proof}
-Let $\delta > 0,$ and pick $x_1 \in X.$ Now, continue picking $x_{j+1}$ such that $d(x_i, x_{j+1}) \geq \delta$ i.e. so that each new point is at least $\delta$ away from each existing point. Suppose this process continues infinitely; then the points $\{x_i\}$ are an infinite subset of $X,$ and thus must have a limit point $p.$ Now, because \dref[every neighborhood of $p$ must contain infinitely many points in ${x_i}$]{neighborhood-of-limit-point-contains-infinitely-many-points}, we can let $r = \delta / 2,$ $N_r{p}$ be a neighborhood of $p,$ and pick $x, y \in \{x_i\}, N_r{p}.$ But, by the triangle inequality
+Let $\delta > 0,$ and pick $x_1 \in X.$ Now, continue picking $x_{j+1}$ such that $d(x_i, x_{j+1}) \geq \delta$ i.e. so that each new point is at least $\delta$ away from each existing point. Suppose this process continues infinitely; then the points $\{x_i\}$ are an infinite subset of $X,$ and thus must have a limit point $p.$ Now, because \@[every neighborhood of $p$ must contain infinitely many points in ${x_i}$]{neighborhood-of-limit-point-contains-infinitely-many-points}, we can let $r = \delta / 2,$ $N_r{p}$ be a neighborhood of $p,$ and pick $x, y \in \{x_i\}, N_r{p}.$ But, by the triangle inequality
 
 \[ \begin{aligned}
 d(x, y) & \leq d(x, p) + d(p, y) \\
@@ -103,7 +103,7 @@ Now, consider the set of all balls for all $n,$
 
 \[ C = \bigcup_{n=1}^{\infty} \{V_\alpha\}_n \]
 
-Because \dref[the union of a sequence of countable sets is countable]{union-of-a-sequence-of-countable-sets-is-countable}, $C$ is countable. To show $C$ is a base for $K,$ let $G$ be an open subset of $K,$ and let $x \in G.$ Let $\epsilon > 0$ such that $B_{\epsilon}(x) \subset G.$ Pick natural $n$ such that $1/n < \epsilon/2.$ Then, $x \in \{V_\alpha\}_n$ for some $\alpha,$ (because no point in $K$ is more than $1/n$ away from the center of some $\{V_\alpha\}_n$ and therefore $C$ is a countable base of $K.$ Since we can make $\epsilon$ as close to $0$ as we like, the centers of $\{V_\alpha\}_n$ are dense as well as countable, and are therefore a countable dense subset of $K,$ so $K$ is separable.
+Because \@[the union of a sequence of countable sets is countable]{union-of-a-sequence-of-countable-sets-is-countable}, $C$ is countable. To show $C$ is a base for $K,$ let $G$ be an open subset of $K,$ and let $x \in G.$ Let $\epsilon > 0$ such that $B_{\epsilon}(x) \subset G.$ Pick natural $n$ such that $1/n < \epsilon/2.$ Then, $x \in \{V_\alpha\}_n$ for some $\alpha,$ (because no point in $K$ is more than $1/n$ away from the center of some $\{V_\alpha\}_n$ and therefore $C$ is a countable base of $K.$ Since we can make $\epsilon$ as close to $0$ as we like, the centers of $\{V_\alpha\}_n$ are dense as well as countable, and are therefore a countable dense subset of $K,$ so $K$ is separable.
 \end{proof}
 
 \begin{theorem}\label{infinite-subset-has-limit-point-implies-compact}
@@ -111,7 +111,7 @@ Let $X$ be a metric space in which every infinite subset has a limit point. Then
 \end{theorem}
 
 \begin{proof}
-By \dref{every-metric-space-where-every-infinite-subset-has-a-limit-point-is-separable}, we know that $X$ is separable and by \dref{every-separable-metric-space-has-a-countable-base}, we know that $X$ has a countable base. By the definition of \dref{base}, we have that every open cover of $X$ has a countable subcover $\{G_n\}, n = 1, 2, 3, \dots.$
+By \@{every-metric-space-where-every-infinite-subset-has-a-limit-point-is-separable}, we know that $X$ is separable and by \@{every-separable-metric-space-has-a-countable-base}, we know that $X$ has a countable base. By the definition of \@{base}, we have that every open cover of $X$ has a countable subcover $\{G_n\}, n = 1, 2, 3, \dots.$
 
 Suppose, for the sake of contradiction, that $\{G_n\}$ has no finite subcollection that covers $X.$ Let
 
@@ -131,7 +131,7 @@ A point $p$ in a metric space $X$ is said to be a \textbf{condensation point} of
 \end{definition}
 
 \begin{example}\label{condensation-point-example}
-Let $p \in \mathbb{R}, \epsilon > 0$ and let $E = (p, p+\epsilon).$ Then, for any $0 < \delta < \epsilon$ let $N_{\delta}(p)$ be an open ball around $p.$ Then, $N_{\delta}(p) \cap E = (p, p + \delta)$ is an open interval in $E,$ and \dref[is therefore uncountable]{every-interval-is-uncountable}.
+Let $p \in \mathbb{R}, \epsilon > 0$ and let $E = (p, p+\epsilon).$ Then, for any $0 < \delta < \epsilon$ let $N_{\delta}(p)$ be an open ball around $p.$ Then, $N_{\delta}(p) \cap E = (p, p + \delta)$ is an open interval in $E,$ and \@[is therefore uncountable]{every-interval-is-uncountable}.
 \end{example}
 
 \begin{theorem}\label{condensation-points-of-an-uncountable-subset-of-rk-are-perfect}
@@ -139,11 +139,11 @@ Suppose $E \subset R^k,$ with $E$ uncountable, and let $P$ be the set of all con
 \end{theorem}
 
 \begin{proof}
-Let $\{V_n\}$ be a countable base of $R^k$ (see \dref{euclidean-space-is-separable} and \dref{every-separable-metric-space-has-a-countable-base},) and let $W$ be the union of those $V_n$ for which $E \cap V_n$ is at most countable. We will show that $P = W^c.$
+Let $\{V_n\}$ be a countable base of $R^k$ (see \@{euclidean-space-is-separable} and \@{every-separable-metric-space-has-a-countable-base},) and let $W$ be the union of those $V_n$ for which $E \cap V_n$ is at most countable. We will show that $P = W^c.$
 
 Suppose $p \in W^c.$ Then $p$ is in no $V_n$ for which $V_n \cap E$ is at most countable, that is, every neighborhood of $p$ has uncountably many points in $E,$ and thus $p \in P.$
 
-Conversely, suppose $p \in P.$ Suppose, for the sake of contradiction, that $p \in W.$ Then $p \in V_n$ for some $V_n$ where $V_n \cap E$ is at most countable. But, since $p$ is an interior point of this $V_n,$ there is a neighborhood $N(p) \subset V_n,$ and since every neighborhood of $p$ has uncountably many points in $E,$ we have a contradiction, and thus our assumption that $p \in W$ must be incorrect, and therefore $p \in W^c,$ and $P = W^c.$ Furthermore, since $W$ is a \dref[union of open sets]{union-and-intersection-of-open-and-closed-sets}, $W$ is open, and $W^c = P$ \dref[is closed]{open-iff-complement-closed}.
+Conversely, suppose $p \in P.$ Suppose, for the sake of contradiction, that $p \in W.$ Then $p \in V_n$ for some $V_n$ where $V_n \cap E$ is at most countable. But, since $p$ is an interior point of this $V_n,$ there is a neighborhood $N(p) \subset V_n,$ and since every neighborhood of $p$ has uncountably many points in $E,$ we have a contradiction, and thus our assumption that $p \in W$ must be incorrect, and therefore $p \in W^c,$ and $P = W^c.$ Furthermore, since $W$ is a \@[union of open sets]{union-and-intersection-of-open-and-closed-sets}, $W$ is open, and $W^c = P$ \@[is closed]{open-iff-complement-closed}.
 
 Since $W$ is open, only countably many $V_n$ are required to cover it. Each of these $V_n$ has at most countably many points in $E,$ so $W = P^c$ has at most countably many points in $E,$ that is, there are at most countably many points of $E$ that are not in $P.$
 
@@ -157,25 +157,25 @@ Every closed set in a separable metric space is the union of a (possibly empty) 
 \begin{proof}
 Let $X$ be a separable metric space and $E \subset X$ be closed. If $E$ is at most countable, then we are done.
 
-Suppose that $E$ is uncountable. Note that the proof of \dref{condensation-points-of-an-uncountable-subset-of-rk-are-perfect} only uses the property that $R^k$ is a separable metric space, and it therefore generalizes to any separable metric space. Thus $E$ is the union of a perfect set - its condensation points, $P$, and a set that is at most countable, $E \setminus P.$
+Suppose that $E$ is uncountable. Note that the proof of \@{condensation-points-of-an-uncountable-subset-of-rk-are-perfect} only uses the property that $R^k$ is a separable metric space, and it therefore generalizes to any separable metric space. Thus $E$ is the union of a perfect set - its condensation points, $P$, and a set that is at most countable, $E \setminus P.$
 \end{proof}
 
 \begin{corollary}\label{countable-closed-set-has-isolated-points}
-Every \dref{countable} \dref{closed} \dref{set} set in $R^k$ has \dref{isolated-points}.
+Every \@{countable} \@{closed} \@{set} set in $R^k$ has \@{isolated-points}.
 \end{corollary}
 
 \begin{proof}
-Let $E$ be a countable closed set in $R^k.$ Suppose for contradiction that $E$ has no isolated points. Then every point of $E$ is a limit point of $E,$ and thus $E$ is \dref{perfect-set}. But, \dref[every nonempty perfect set in $R^k$ is uncountable]{non-empty-perfect-sets-in-rk-are-uncountable}, a contradiction. Thus, our assumption that $E$ has no isolated points is incorrect, and $E$ must contain isolated points.
+Let $E$ be a countable closed set in $R^k.$ Suppose for contradiction that $E$ has no isolated points. Then every point of $E$ is a limit point of $E,$ and thus $E$ is \@{perfect-set}. But, \@[every nonempty perfect set in $R^k$ is uncountable]{non-empty-perfect-sets-in-rk-are-uncountable}, a contradiction. Thus, our assumption that $E$ has no isolated points is incorrect, and $E$ must contain isolated points.
 \end{proof}
 
 \begin{theorem}\label{open-set-in-r1-is-countable-union-of-disjoint-segments}
-Every open set in $R^1$ is the union of an at most \dref{countable} union of disjoint segments.
+Every open set in $R^1$ is the union of an at most \@{countable} union of disjoint segments.
 \end{theorem}
 
 \begin{proof}
-Let $E$ be an open set in $R^1.$ Let $x \in E.$ Let $a = \inf \{ y : (y, x] \subset E \}$ and $b = \sup \{ y : [x, y) \subset E \}.$ Then, $a < x < b,$ because $E$ is open and thus $x$ is an \dref{interior-point} of $E$ and there is some \dref{neighborhood} around $x$ that is entirely within $E.$ Let $I(x) = (a, b).$ By construction, $I(x)$ is \dref{connected}. For all $u \in I(x),$ $I(u)$ must have the same end points as $I(x),$ since if it extended beyond, our construction of $I(x)$ would be contradicted. Also note that for all $v \in E \setminus I(x),$ $I(v) \cap I(x) = \emptyset,$ for if they intersected, they would form an \dref[open interval]{union-and-intersection-of-open-and-closed-sets}. Thus, each $I(x), x \in E$ is either disjoint from all others or identical to some other $I(y), y \in E,$ and $E$ is the union of all such unique $I.$
+Let $E$ be an open set in $R^1.$ Let $x \in E.$ Let $a = \inf \{ y : (y, x] \subset E \}$ and $b = \sup \{ y : [x, y) \subset E \}.$ Then, $a < x < b,$ because $E$ is open and thus $x$ is an \@{interior-point} of $E$ and there is some \@{neighborhood} around $x$ that is entirely within $E.$ Let $I(x) = (a, b).$ By construction, $I(x)$ is \@{connected}. For all $u \in I(x),$ $I(u)$ must have the same end points as $I(x),$ since if it extended beyond, our construction of $I(x)$ would be contradicted. Also note that for all $v \in E \setminus I(x),$ $I(v) \cap I(x) = \emptyset,$ for if they intersected, they would form an \@[open interval]{union-and-intersection-of-open-and-closed-sets}. Thus, each $I(x), x \in E$ is either disjoint from all others or identical to some other $I(y), y \in E,$ and $E$ is the union of all such unique $I.$
 
-Now, in each $I,$ we can \dref[pick a rational number]{rationals-are-dense-in-reals}. Because \dref[the rationals are countable]{rationals-are-countable}, we have at most countably many unique $I,$ and $E$ is their union.
+Now, in each $I,$ we can \@[pick a rational number]{rationals-are-dense-in-reals}. Because \@[the rationals are countable]{rationals-are-countable}, we have at most countably many unique $I,$ and $E$ is their union.
 \end{proof}
 
 \begin{theorem}[Special case of Blaire's theorem]\label{baire-category-theorem-special-case}
@@ -183,15 +183,15 @@ If $R^k = \bigcup_{n=1}^{\infty}F_n,$ where each $F_n$ is a closed subset of $R^
 \end{theorem}
 
 \begin{proof}
-First, note that since $R^k = \bigcup_{n=1}^{\infty}F_n,$ every point in $R^k$ is in some $F_n,$ and so $\bigcap_{n=1}^\infty F_n^c$ \dref[must be empty]{complement-of-union-is-intersection-of-complements}.
+First, note that since $R^k = \bigcup_{n=1}^{\infty}F_n,$ every point in $R^k$ is in some $F_n,$ and so $\bigcap_{n=1}^\infty F_n^c$ \@[must be empty]{complement-of-union-is-intersection-of-complements}.
 
 Suppose, for the sake of contradiction, that no $F_n$ has a non-empty interior, that is, every $F_n$ is closed with an empty interior. Then, each $F_n^c$ is open. Moreover, since $F_n$ has an empty interior, it has no points for which there exists a neighborhood that contains only points in $F_n,$ that is, every neighborhood of each point of $F_n$ contains a point in $F_n^c,$ so every point in $F_n$ is a limit point of $F_n^c,$ and every point in $R^k$ is either in $F_n^c$ or is a limit point of $F_n^c,$ so each $F_n^c$ is non-empty and dense in $R^k.$
 
-As a base step, let $x_1$ be some point in $R^k,$ and let $B_1$ be an open ball around $x_1.$ Since the interior of $F_1$ is empty, $B_1 \cap F_1^c$ is not empty, and \dref[is open]{union-and-intersection-of-open-and-closed-sets}.
+As a base step, let $x_1$ be some point in $R^k,$ and let $B_1$ be an open ball around $x_1.$ Since the interior of $F_1$ is empty, $B_1 \cap F_1^c$ is not empty, and \@[is open]{union-and-intersection-of-open-and-closed-sets}.
 
 For the inductive step, suppose we have some $B_n$ that's constructed such that $B_n \cap F_n^c$ is non-empty and open. Then, we can pick a point $x_{n+1} \in B_n \cap F_n^c, x_{n+1} \neq x_n,$ and make a ball $B_{n+1}$ around it such that $B_{n+1} \subset B_n \cap F_{n}^c,$ $x_n \notin B_{n+1},$ and $B_{n+1} \cap F_{n+1}^c$ is open and not empty. Now, since $B_{n+1}$ satisfies our induction hypothesis, and since $B_1$ does as well, we have $B_n$ defined for all $n = 1, 2, 3, \dots.$
 
-Since the set of points $\{x_n\}$ is infinite (by induction) and bounded (all points are within $B_1$,) \dref[it has a limit point $p$ in $R^k.$]{weierstrass}. Now, suppose, for contradiction, that $p$ is not in every $F_n^c.$ Then, for some $N,$ $p$ is not in $F_N^c.$ Since $p \notin F_N^c$ and $B_{N+1} \subseteq F_N^c$, we have $p \notin B_{N+1}$. Since $B_{N+1}$ is open and $p$ is outside it, $p$ is at some positive distance $\varepsilon$ from any point $q \in B_{N+1}$. But $x_n \in B_n \subseteq B_{N+1}$ for all $n > N$, so all these infinitely many points are at distance at least $\varepsilon$ from $p$. Thus any neighborhood of $p$ with radius less than $\varepsilon$ contains at most finitely many points of $\{x_n\}$, contradicting that $p$ is a limit point.
+Since the set of points $\{x_n\}$ is infinite (by induction) and bounded (all points are within $B_1$,) \@[it has a limit point $p$ in $R^k.$]{weierstrass}. Now, suppose, for contradiction, that $p$ is not in every $F_n^c.$ Then, for some $N,$ $p$ is not in $F_N^c.$ Since $p \notin F_N^c$ and $B_{N+1} \subseteq F_N^c$, we have $p \notin B_{N+1}$. Since $B_{N+1}$ is open and $p$ is outside it, $p$ is at some positive distance $\varepsilon$ from any point $q \in B_{N+1}$. But $x_n \in B_n \subseteq B_{N+1}$ for all $n > N$, so all these infinitely many points are at distance at least $\varepsilon$ from $p$. Thus any neighborhood of $p$ with radius less than $\varepsilon$ contains at most finitely many points of $\{x_n\}$, contradicting that $p$ is a limit point.
 
 Now, this means that $p \in \bigcap_{n=1}^\infty F_n^c,$ meaning $\bigcap_{n=1}^\infty F_n^c \neq \emptyset,$ a contradiction! Therefore, our supposition that every $F_n$ has an empty interior must be incorrect, and some $F_n$ must have a non-empty interior.
 \end{proof}

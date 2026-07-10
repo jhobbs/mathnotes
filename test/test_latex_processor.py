@@ -192,6 +192,16 @@ def test_dref_text_plain_styling_still_fine():
     assert '<a data-dref="prop">a <em>nice</em></a>' in h
 
 
+def test_at_shorthand_is_dref():
+    h = prose("See \\@{metric-space} and \\@[the spaces]{compact-set}.")
+    assert '<a data-dref="metric-space"></a>' in h
+    assert '<a data-dref="compact-set">the spaces</a>' in h
+
+
+def test_at_shorthand_requires_label():
+    expect_error("\\@{}", "requires a non-empty label")
+
+
 def test_tabular_basic():
     h = prose("\\begin{tabular}{lr}\nA & B \\\\\nx & y \\\\\n\\end{tabular}")
     assert h == (

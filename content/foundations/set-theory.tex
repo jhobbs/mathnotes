@@ -12,27 +12,27 @@ A \textbf{set} is a collection of objects, considered as a whole.
 \end{definition}
 
 \begin{definition}[Element]\synonyms{member, point}
-The objects that make up a \dref{set} are called its \textbf{elements} or its \textbf{members.}
+The objects that make up a \@{set} are called its \textbf{elements} or its \textbf{members.}
 \end{definition}
 
 \begin{definition}[Membership criterion]
-The \textbf{membership criterion} for a \dref{set} $X$ is a statement of the form $x \in X \iff P(x),$ where $P(x)$ is a proposition that is true for precisely for those objects $x$ that are \dref{elements} of $X,$ and no others.
+The \textbf{membership criterion} for a \@{set} $X$ is a statement of the form $x \in X \iff P(x),$ where $P(x)$ is a proposition that is true for precisely for those objects $x$ that are \@{elements} of $X,$ and no others.
 \end{definition}
 
 \begin{axiom}[Axiom of Extensionality]\label{axiom-of-extensionality}
-Two \dref{sets} are equal if and only if they have the same \dref{elements}. Formally, for any sets $A$ and $B$:
+Two \@{sets} are equal if and only if they have the same \@{elements}. Formally, for any sets $A$ and $B$:
 
 \[ A = B \iff (\forall x)(x \in A \iff x \in B) \]
 \end{axiom}
 
 \begin{definition}[subset]
-If $X$ and $Y$ are \dref{sets} such that every element of $X$ is also an element of $Y,$ then we say $X$ is a \textbf{subset} of $Y,$ denoted as $X \subset Y.$ Formally,
+If $X$ and $Y$ are \@{sets} such that every element of $X$ is also an element of $Y,$ then we say $X$ is a \textbf{subset} of $Y,$ denoted as $X \subset Y.$ Formally,
 
 \[ X \subset Y \iff (\forall x)(x \in X \implies x \in Y) \]
 \end{definition}
 
 \begin{definition}[superset]
-If $X$ and $Y$ are \dref{sets} such that every element of $Y$ is also an element of $X,$ then we say $X$ is a \textbf{superset} of $Y,$ denoted as $X \supset Y.$ This is the same as $Y \subset X.$
+If $X$ and $Y$ are \@{sets} such that every element of $Y$ is also an element of $X,$ then we say $X$ is a \textbf{superset} of $Y,$ denoted as $X \supset Y.$ This is the same as $Y \subset X.$
 \end{definition}
 
 \begin{theorem}\label{set-equality-via-subset-inclusion}
@@ -40,43 +40,43 @@ Two sets $X$ and $Y$ are equal if and only if $X$ is a subset of $Y$ and $Y$ is 
 \end{theorem}
 
 \begin{proof}
-Suppose $X$ and $Y$ are sets with $X \subset Y$ and $Y \subset X.$ Now, suppose $x \in X.$ Then, $x \in Y.$ Conversely, suppose $y \in Y.$ Then $y \in X.$ Thus, $(\forall x)(x \in X \iff x \in Y),$ and \dref[$X = Y$]{axiom-of-extensionality}.
+Suppose $X$ and $Y$ are sets with $X \subset Y$ and $Y \subset X.$ Now, suppose $x \in X.$ Then, $x \in Y.$ Conversely, suppose $y \in Y.$ Then $y \in X.$ Thus, $(\forall x)(x \in X \iff x \in Y),$ and \@[$X = Y$]{axiom-of-extensionality}.
 \end{proof}
 
 \begin{definition}[Function]\synonyms{mapping}
-Consider two \dref{sets}, $A$ and $B,$ whose \dref{elements} may be any objects whatsoever, and suppose that with each \dref{element} $x$ of $A$ there is associated, in some manner, any \dref{element} of $B,$ which we denote by $f(x).$ Then $f$ is said to be a \textbf{function} from $A$ to $B.$
+Consider two \@{sets}, $A$ and $B,$ whose \@{elements} may be any objects whatsoever, and suppose that with each \@{element} $x$ of $A$ there is associated, in some manner, any \@{element} of $B,$ which we denote by $f(x).$ Then $f$ is said to be a \textbf{function} from $A$ to $B.$
 \end{definition}
 
 \begin{definition}[Domain of Definition]
-If $f$ is a \dref{function} from the \dref{set} $A$ to the \dref{set} $B,$ the \dref{set} $A$ is called the \textbf{domain} of $f.$
+If $f$ is a \@{function} from the \@{set} $A$ to the \@{set} $B,$ the \@{set} $A$ is called the \textbf{domain} of $f.$
 \end{definition}
 
 \begin{definition}[Value]
-If $f$ is a \dref{function} from the \dref{set} $A$ to the \dref{set} $B,$ the \dref{elements} $f(x) \in B$ are called the \textbf{values} of $f.$
+If $f$ is a \@{function} from the \@{set} $A$ to the \@{set} $B,$ the \@{elements} $f(x) \in B$ are called the \textbf{values} of $f.$
 \end{definition}
 
 \begin{definition}[Range]
-The \dref{set} of all \dref{values} of a \dref{function} $f$ is called the \textbf{range} of $f.$
+The \@{set} of all \@{values} of a \@{function} $f$ is called the \textbf{range} of $f.$
 \end{definition}
 
 \begin{definition}[Sequence]
-A \textbf{sequence} is a \dref{function} $f$ defined on the \dref{set} $J$ of all positive integers.
+A \textbf{sequence} is a \@{function} $f$ defined on the \@{set} $J$ of all positive integers.
 \end{definition}
 
 \begin{note}\label{sequence-notation}
-If $f(n) = x_n,$ for $n \in J,$ it is customary to denote the \dref{sequence} $f$ by the symbol $\{x_n\},$ or sometimes by $x_1, x_2, x_3, \dots.$
+If $f(n) = x_n,$ for $n \in J,$ it is customary to denote the \@{sequence} $f$ by the symbol $\{x_n\},$ or sometimes by $x_1, x_2, x_3, \dots.$
 \end{note}
 
 \begin{definition}[Term]
-If $f$ is a \dref{sequence} denoted as $\{x_n\},$ the \dref{values} of $f,$ that is, the \dref{elements} $x_n,$ are called the \textbf{terms} of the \dref{sequence}.
+If $f$ is a \@{sequence} denoted as $\{x_n\},$ the \@{values} of $f,$ that is, the \@{elements} $x_n,$ are called the \textbf{terms} of the \@{sequence}.
 \end{definition}
 
 \begin{note}\label{sequence-terms-not-distinct}
-The \dref{terms} of a \dref{sequence} need not be distinct.
+The \@{terms} of a \@{sequence} need not be distinct.
 \end{note}
 
 \begin{definition}[Inverse Image]
-If $f: A \to B$ and $E \subset(B),$ then $f^{-1}(E)$ denotes the \dref{set} of all $x \in A$ such that $f(x) \in E.$ We call $f^{-1}(E)$ the \textbf{inverse image} of $E$ under $f.$
+If $f: A \to B$ and $E \subset(B),$ then $f^{-1}(E)$ denotes the \@{set} of all $x \in A$ such that $f(x) \in E.$ We call $f^{-1}(E)$ the \textbf{inverse image} of $E$ under $f.$
 \end{definition}
 
 \subsection{De Morgan's Laws}

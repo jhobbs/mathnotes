@@ -9,15 +9,15 @@
 \section{Capacity of a Discrete Channel}
 
 \begin{definition}[Discrete Channel]
-A system whereby a \dref{sequence} of choices from a \dref{finite} \dref{set} of elementary symbols $S_1, \dots, S_n$ can be transmitted from one point to another. Each of the symbols $S_i$ is assumed to have a certain duration in time $t_i$ seconds (not necessarily the same for different $S_i$).
+A system whereby a \@{sequence} of choices from a \@{finite} \@{set} of elementary symbols $S_1, \dots, S_n$ can be transmitted from one point to another. Each of the symbols $S_i$ is assumed to have a certain duration in time $t_i$ seconds (not necessarily the same for different $S_i$).
 \end{definition}
 
 \begin{definition}[Capacity]\synonyms{"channel-capacity"}
-The \textbf{capacity} $C$ of a \dref{discrete-channel} is given by
+The \textbf{capacity} $C$ of a \@{discrete-channel} is given by
 
 \[ C = \lim_{t \to \infty} \frac{\log{N(t)}}{t}, \]
 
-where $N(t)$ is the number of allowed \dref{signals} of duration $t.$
+where $N(t)$ is the number of allowed \@{signals} of duration $t.$
 \end{definition}
 
 \begin{note}
@@ -25,7 +25,7 @@ Given an information source where all symbols are of the same time duration, and
 
 In the more general case we have to deal with symbols of various lengths that take different amounts of time to transmit, and so capacity measures not the number of symbols transmitted per second but the amount of information transmitted per second, retaining bits per second as its unit.
 
-If $N(t)$ represents the number of \dref{sequences} of duration $t,$ then
+If $N(t)$ represents the number of \@{sequences} of duration $t,$ then
 
 \[ N(t) = N(t - t_1) + N(t - t_2) + \cdots + N(t - t_n). \]
 
@@ -35,7 +35,7 @@ A "well-known result" in finite differences tells us that
 
 \[ N(t) \sim A W_0^t \quad \text{as } t \to \infty, \]
 
-where $A$ is constant and $W_0$ is the largest real solution of the \dref{characteristic-equation}:
+where $A$ is constant and $W_0$ is the largest real solution of the \@{characteristic-equation}:
 
 \[ W^{-t_1} + W^{-t_2} + \cdots + W^{-t_n} = 1, \]
 
@@ -106,15 +106,15 @@ Note that in this Morse telegraphy system, we have two states that the channel c
 \item If the previous symbol transmitted was not a space, we're in state $2,$ and the next symbol can be anything, and the state may or may not change depending on what the next symbol is.
 \end{itemize}
 
-We can think of these states being the \dref{nodes} of a \dref{directed-graph} with the transitions between them being the \dref{edges}. A generalization of this is given in the theorem below.
+We can think of these states being the \@{nodes} of a \@{directed-graph} with the transitions between them being the \@{edges}. A generalization of this is given in the theorem below.
 \end{example}
 
 \begin{theorem}
-Let $b_{ij}^{(s)}$ be the duration of the $s$-th symbol which is allowable in state $i$ and leads to state $j.$ Then the \dref{channel-capacity} $C$ is equal to $\log{W}$ where $W$ is the largest real root of the \dref{determinantal-equation}
+Let $b_{ij}^{(s)}$ be the duration of the $s$-th symbol which is allowable in state $i$ and leads to state $j.$ Then the \@{channel-capacity} $C$ is equal to $\log{W}$ where $W$ is the largest real root of the \@{determinantal-equation}
 
 \[ \left | \sum_{s} W^{-b_{ij}^{(s)}} - \delta_{ij}  \right | = 0, \]
 
-where $\delta_{ij}$ is the \dref{Kronecker-delta}.
+where $\delta_{ij}$ is the \@{Kronecker-delta}.
 \end{theorem}
 
 \detach
@@ -124,30 +124,30 @@ For example, for our Morse telegraphy example, we have
 
 \[ \begin{vmatrix} -1 & W^{-2} + W^{-4} \\ W^{-3} + W^{-6} & W^{-2} + W^{-4} - 1 \end{vmatrix} = 0. \]
 
-Expanding the \dref{determinant} on the LHS gives the \dref{characteristic-equation} $(a)$ above.
+Expanding the \@{determinant} on the LHS gives the \@{characteristic-equation} $(a)$ above.
 \end{example}
 
 \section{Information and Entropy in a Discrete Channel}
 
 \begin{definition}[Self-Information]\synonyms{"surprisal", "Shannon information", "Information content"}
-Given a real number $b > 1$ and an outcome $x$ of a discrete \dref{random-variable} $X$ with probability mass function $p,$ the \textbf{self-information} of $x$ is defined as the negative \dref{log-probability}
+Given a real number $b > 1$ and an outcome $x$ of a discrete \@{random-variable} $X$ with probability mass function $p,$ the \textbf{self-information} of $x$ is defined as the negative \@{log-probability}
 
 \[ I(x) := - \log_{b}{p(x)}. \]
 \end{definition}
 
 \begin{remark}
-We can view \dref{self-information} as an alternative casting of \dref{probability}, like how \dref{odds} are, with some desirable properties:
+We can view \@{self-information} as an alternative casting of \@{probability}, like how \@{odds} are, with some desirable properties:
 
 \begin{itemize}
 \item An event with probability $1$ provides no information - we knew it was going to happen so it happening tells us nothing new.
 \end{itemize}
 
 \begin{itemize}
-\item The less probable an event is, the more \dref{surprisal} it yields.
+\item The less probable an event is, the more \@{surprisal} it yields.
 \end{itemize}
 
 \begin{itemize}
-\item \dref{self-information} is \dref{additive} - if two individual events are measured separately, the total amount of information is the sum of the \dref{self-informations} of the individual events.
+\item \@{self-information} is \@{additive} - if two individual events are measured separately, the total amount of information is the sum of the \@{self-informations} of the individual events.
 \end{itemize}
 
 The function given above is the unique function of probability (up to a multiplicative scaling factor) that satisfies these three properties.
@@ -157,11 +157,11 @@ The function given above is the unique function of probability (up to a multipli
 In a related vein we can develop a function that asks how much choice is involved in the selection of an event, or equivalently, how much uncertainty there is in the outcome. If $p_1, p_2, \dots, p_n$ are the probabilities of events occurring, we want a measure $H(p_1, p_2, \dots, p_n)$ that has the following properties:
 
 \begin{enumerate}
-\item $H$ should be \dref{continuous} in the $p_i.$ That is, a small change in a $p_i$ should result in a small change in $H.$
+\item $H$ should be \@{continuous} in the $p_i.$ That is, a small change in a $p_i$ should result in a small change in $H.$
 \end{enumerate}
 
 \begin{enumerate}
-\item If all the $p_i$ are equal, $p_i = \frac{1}{n},$ then $H$ should be a \dref{monotonic} \dref{increasing} \dref{function} of $n.$ With equally likely events there is more choice, or uncertainty, when there are more possible events.
+\item If all the $p_i$ are equal, $p_i = \frac{1}{n},$ then $H$ should be a \@{monotonic} \@{increasing} \@{function} of $n.$ With equally likely events there is more choice, or uncertainty, when there are more possible events.
 \end{enumerate}
 
 \begin{enumerate}
@@ -172,13 +172,13 @@ In a related vein we can develop a function that asks how much choice is involve
 \end{remark}
 
 \begin{definition}[Entropy]\synonyms{"uncertainty"}
-Given a discrete \dref{random-variable} $X,$ which may be any \dref{element} $x$ within the set $\mathcal{X},$ and is distributed according to $p: \mathcal{X} \to [0,1],$ the \textbf{entropy} is
+Given a discrete \@{random-variable} $X,$ which may be any \@{element} $x$ within the set $\mathcal{X},$ and is distributed according to $p: \mathcal{X} \to [0,1],$ the \textbf{entropy} is
 
 \[ H(X) := - \sum_{x \in \mathcal{X}} p(x) \log{p(x)}. \]
 
-We can choose different bases for the logarithm; throughout these notes a bare $\log$ means $\log_2,$ giving the unit of \dref{bits}.
+We can choose different bases for the logarithm; throughout these notes a bare $\log$ means $\log_2,$ giving the unit of \@{bits}.
 
-An alternative, equivalent definition is that \textbf{entropy} is the \dref{expected-value} of the \dref{self-information} of a \dref{random-variable}:
+An alternative, equivalent definition is that \textbf{entropy} is the \@{expected-value} of the \@{self-information} of a \@{random-variable}:
 
 \[ H(X) = \mathbb{E}\left[I(X) \right ] =  \mathbb{E} \left [ -\log p(X) \right ]. \]
 
@@ -192,7 +192,7 @@ Equivalently, all pairwise ratios are rational: $a_i / a_j \in \mathbb{Q}$ for a
 \end{definition}
 
 \begin{theorem}
-The only $H$ satisfying the three required properties above is the \dref{entropy} function defined above, up to multiplication by a constant.
+The only $H$ satisfying the three required properties above is the \@{entropy} function defined above, up to multiplication by a constant.
 \end{theorem}
 
 \begin{proof}
@@ -220,7 +220,7 @@ and because $n$ is arbitrarily large,
 
 where $\epsilon$ is arbitrarily small.
 
-By property (2) of $A(n)$ (it is a \dref{monotonically-increasing} function of $n$,)  
+By property (2) of $A(n)$ (it is a \@{monotonically-increasing} function of $n$,)  
 
 \[ \begin{aligned}
 A(s^m) & \leq A(t^n) \leq A(s^{m+1}) \\
@@ -231,7 +231,7 @@ Then, dividing by $nA(s)$ gives
 
 \[ \frac{m}{n} \leq \frac{A(t)}{A(s)} \leq \frac{m}{n} + \frac{1}{n} \text{ or } \left | \frac{m}{n} - \frac{A(t)}{A(s)} \right | < \epsilon, \]
 
-Now, by the \dref{triangle-inequality}, we have that
+Now, by the \@{triangle-inequality}, we have that
 
 \[ \begin{aligned}
 \left | \frac{A(t)}{A(s)} - \frac{\log{t}}{\log{s}} \right | & \leq 2 \epsilon \\
@@ -240,7 +240,7 @@ Now, by the \dref{triangle-inequality}, we have that
 
 Since $\epsilon$ can be arbitrarily small, we have that $A(t) = K \log(t),$ with $K > 0$ so that property (2) holds. Now we know what $A(n)$ is, and thus what $H$ is when we have equal probabilities for all events.
 
-Now let's say that we have a choice from $n$ possible events with \dref{commensurable} probabilities $p_i = \frac{n_i}{\sum n_i}.$ We can break down a choice from $\sum n_i$ possibilities into a choice from $n$ possibilities with probabilities $p_1, \dots, p_n$ and then, if the $i$th possibility was chosen, $n_i$ choices of equal probability $p_i.$ We do this because above, we found how to find $H$ when all events are equally likely, and property (3) of our desired function lets us break down our overall choice from $\sum n_i$ possibilities. This gives us
+Now let's say that we have a choice from $n$ possible events with \@{commensurable} probabilities $p_i = \frac{n_i}{\sum n_i}.$ We can break down a choice from $\sum n_i$ possibilities into a choice from $n$ possibilities with probabilities $p_1, \dots, p_n$ and then, if the $i$th possibility was chosen, $n_i$ choices of equal probability $p_i.$ We do this because above, we found how to find $H$ when all events are equally likely, and property (3) of our desired function lets us break down our overall choice from $\sum n_i$ possibilities. This gives us
 
 \[ \begin{aligned}
 K \log{\sum n_i} & = H(p_1, \dots, p_n) + \sum p_i A(n_i) \\
@@ -258,20 +258,20 @@ H(p_1, \dots, p_n) & = K \log{\sum n_i} - K \sum p_i \log{n_i}  \\
                    & = - K  \sum p_i \log{p_i }.  \\
 \end{aligned} \]
 
-If the $p_i$ are incommensurable, we can approximate them as closely as we'd like with \dref{rationals}, since \dref{rationals-are-dense-in-reals}. By the first property we assumed for $H,$ it is \dref{continuous} in the $p_i,$ and so its value at the incommensurable $p_i$ equals its \dref{limit} as we approach via the \dref{rationals}, and so our expression holds in general. $K$ is left to us to pick, picking it is equivalent to picking a base for the logarithm.
+If the $p_i$ are incommensurable, we can approximate them as closely as we'd like with \@{rationals}, since \@{rationals-are-dense-in-reals}. By the first property we assumed for $H,$ it is \@{continuous} in the $p_i,$ and so its value at the incommensurable $p_i$ equals its \@{limit} as we approach via the \@{rationals}, and so our expression holds in general. $K$ is left to us to pick, picking it is equivalent to picking a base for the logarithm.
 \end{proof}
 
 \detach
 
 \begin{remark}
-The \dref{entropy} of a \dref{random-variable} quantifies the average level of uncertainty or information associated with the variable's possible outcomes. It measures the expected amount of information needed to describe the state of the variable, considering the distribution of probabilities across all potential states.
+The \@{entropy} of a \@{random-variable} quantifies the average level of uncertainty or information associated with the variable's possible outcomes. It measures the expected amount of information needed to describe the state of the variable, considering the distribution of probabilities across all potential states.
 \end{remark}
 
 The demo below makes these quantities concrete. It uses a discrete alphabet of $N$ symbols whose probabilities follow a \emph{Zipfian} distribution,
 
 \[ p(n) = \frac{n^{-\alpha}}{\sum_{k=1}^{N} k^{-\alpha}}, \qquad n = 1, 2, \dots, N, \]
 
-where the skew $\alpha$ controls how unevenly probability mass is spread across symbols. At $\alpha = 0$ every symbol is equally likely (the uniform distribution), so \dref{entropy} is maximal at $\log N.$ As $\alpha$ grows the distribution concentrates on the first few symbols, the rare symbols carry ever more \dref{self-information}, and the \dref{entropy} falls toward $0.$ The bar chart shows the probability of each symbol alongside its \dref{self-information}; the second chart traces the \dref{entropy} as $\alpha$ sweeps from uniform to highly skewed.
+where the skew $\alpha$ controls how unevenly probability mass is spread across symbols. At $\alpha = 0$ every symbol is equally likely (the uniform distribution), so \@{entropy} is maximal at $\log N.$ As $\alpha$ grows the distribution concentrates on the first few symbols, the rare symbols carry ever more \@{self-information}, and the \@{entropy} falls toward $0.$ The bar chart shows the probability of each symbol alongside its \@{self-information}; the second chart traces the \@{entropy} as $\alpha$ sweeps from uniform to highly skewed.
 
 \includedemo{zipf-entropy}
 
@@ -308,7 +308,7 @@ and for entropy of $X$ we get
 \subsection{Some Theorems on Entropy}
 
 \begin{theorem}
-When a \dref{random-variable} is uniformly distributed over an alphabet of $n$ \dref{elements}, the \dref{self-information} of any given \dref{element} equals the \dref{entropy} of the \dref{random-variable} and is $\log{n}.$
+When a \@{random-variable} is uniformly distributed over an alphabet of $n$ \@{elements}, the \@{self-information} of any given \@{element} equals the \@{entropy} of the \@{random-variable} and is $\log{n}.$
 \end{theorem}
 
 \begin{theorem}
@@ -320,11 +320,11 @@ Suppose $H(p_1, \dots, p_n) = 0.$ Then, $0 = - \sum_{i=1}^n p_i \log{p_i}.$ Note
 \end{proof}
 
 \begin{theorem}
-A \dref{random-variable} has the most \dref{entropy} when the \dref{elements} of its alphabet are all equally likely to occur.
+A \@{random-variable} has the most \@{entropy} when the \@{elements} of its alphabet are all equally likely to occur.
 \end{theorem}
 
 \begin{proof}
-We will use a \dref{Lagrangian} function of \dref{entropy} to show this. Let
+We will use a \@{Lagrangian} function of \@{entropy} to show this. Let
 
 \[ \mathcal{L}(\vec{p}, \lambda) = - \sum_i \left [ p_i \ln{p_i} \right ] - \lambda \left [ \left ( \sum_i p_i \right ) - 1 \right ]. \]
 
@@ -337,13 +337,13 @@ Then, for any $p_i$ we want
 
 But, this means $p_i$ doesn't depend on $i,$ and so is the same for each $i$ and therefore $p_i = \frac{1}{n}.$
 
-It remains to show that this extreme of $H$ is a maximum. This follows from the facts that the domain is a \dref{convex}, \dref{compact} set and that the entropy function is strictly \dref{concave}. TODO: more details on these.
+It remains to show that this extreme of $H$ is a maximum. This follows from the facts that the domain is a \@{convex}, \@{compact} set and that the entropy function is strictly \@{concave}. TODO: more details on these.
 \end{proof}
 
 \begin{theorem}\label{joint-entropy-is-less-than-or-equal-to-entropy-of-parts}
-Let $X$ and $Y$ be discrete \dref{random-variables} with alphabets $\mathcal{X}$ and $\mathcal{Y},$ and let $p(x,y)$ be the probability of the joint occurrence of $X = x$ and $Y = y.$
+Let $X$ and $Y$ be discrete \@{random-variables} with alphabets $\mathcal{X}$ and $\mathcal{Y},$ and let $p(x,y)$ be the probability of the joint occurrence of $X = x$ and $Y = y.$
 
-The \dref{entropy} of the joint event, $H(X,Y),$ is less than or equal to the sum of the individual entropies, i.e.
+The \@{entropy} of the joint event, $H(X,Y),$ is less than or equal to the sum of the individual entropies, i.e.
 
 \[ H(X,Y) \leq H(X) + H(Y), \]
 
@@ -351,7 +351,7 @@ with equality iff $X$ and $Y$ are independent, that is, iff $p(x,y) = p(x)p(y).$
 \end{theorem}
 
 \begin{proof}
-The \dref{entropy} of the joint event is
+The \@{entropy} of the joint event is
 
 \[ H(X,Y) = - \sum_{x,y} p(x,y) \log{p(x,y)}. \]
 
@@ -377,7 +377,7 @@ H(X) + H(Y) - H(X,Y) & = - \sum_{x,y} p(x, y) \left ( \log{\frac{p(x)p(y)}{p(x,y
                      & = -\mathbb{E}[\log{Z}]. \\
 \end{aligned} \]
 
-Now, by \dref{jensens-inequality}, because \dref{log-is-concave}, we have that $\mathbb{E}[\log{Z}] \leq \log{\mathbb{E}[Z]}.$ Now,
+Now, by \@{jensens-inequality}, because \@{log-is-concave}, we have that $\mathbb{E}[\log{Z}] \leq \log{\mathbb{E}[Z]}.$ Now,
 
 \[ \begin{aligned}
 \mathbb{E}[Z] & = \sum_{x,y} p(x,y) \cdot \frac{p(x)p(y)}{p(x,y)} \\
@@ -394,7 +394,7 @@ H(X) + H(Y) - H(X,Y) & \geq 0 \\
 H(X,Y) & \leq H(X) + H(Y). \\
 \end{aligned} \]
 
-Now, for the equality part. Suppose $H(X) + H(Y) = H(X,Y).$ Then, $\mathbb{E}[\log{Z}] = 0,$ and recalling that $\mathbb{E}[Z] = 1,$ $\mathbb{E}[\log{Z}] = \log{\mathbb{E}[Z]} = 0.$ In \dref{jensens-inequality}, equality holds only if our function is \dref{affine} or if $Z$ is constant; since $\log$ is \dref{affine} on no interval, $Z$ must be constant, and since $\mathbb{E}[Z] = 1,$ $Z = \frac{p(x)p(y)}{p(x,y)} = 1 \implies p(x)p(y) = p(x,y).$ 
+Now, for the equality part. Suppose $H(X) + H(Y) = H(X,Y).$ Then, $\mathbb{E}[\log{Z}] = 0,$ and recalling that $\mathbb{E}[Z] = 1,$ $\mathbb{E}[\log{Z}] = \log{\mathbb{E}[Z]} = 0.$ In \@{jensens-inequality}, equality holds only if our function is \@{affine} or if $Z$ is constant; since $\log$ is \@{affine} on no interval, $Z$ must be constant, and since $\mathbb{E}[Z] = 1,$ $Z = \frac{p(x)p(y)}{p(x,y)} = 1 \implies p(x)p(y) = p(x,y).$ 
 
 Now, suppose $p(x)p(y) = p(x,y).$ Then $Z = 1$ and
 
@@ -406,29 +406,29 @@ so $H(X) + H(Y) = H(X,Y).$
 \detach
 
 \begin{note}
-When we decrease the probability of an \dref{element} occurring, its \dref{self-information} increases only logarithmically, while its weight in the entropy sum decreases linearly.
+When we decrease the probability of an \@{element} occurring, its \@{self-information} increases only logarithmically, while its weight in the entropy sum decreases linearly.
 \end{note}
 
 \begin{definition}[Cross-Entropy]
-Given two discrete probability distributions, $p$ and $q,$ that share a support $\mathcal{X},$ \textbf{cross-entropy} measures the average number of bits needed to represent an event drawn from $\mathcal{X}$ when the coding scheme is optimized for an estimated distribution $q$ rather than the true distribution $p.$ Its formula is very similar to that of \dref{entropy}, except \dref{surprisal} is calculated using $q$ while \dref{expectation} uses $p$:
+Given two discrete probability distributions, $p$ and $q,$ that share a support $\mathcal{X},$ \textbf{cross-entropy} measures the average number of bits needed to represent an event drawn from $\mathcal{X}$ when the coding scheme is optimized for an estimated distribution $q$ rather than the true distribution $p.$ Its formula is very similar to that of \@{entropy}, except \@{surprisal} is calculated using $q$ while \@{expectation} uses $p$:
 
 \[ H(p,q) = - \sum_{x \in \mathcal{X}} p(x) \log{q(x)}. \]
 
-We can write it in \dref{expectation} form as
+We can write it in \@{expectation} form as
 
 \[ H(p,q) = \mathbb{E}_p \left [- \log{q}  \right ], \]
 
 where $\mathbb{E}_p$ is expectation under $p.$
 \end{definition}
 
-Note that when $p = q,$ \dref{cross-entropy} equals \dref{entropy}. The symbol $H$ is overloaded: $H(p,q)$ with distributions as arguments means \dref{cross-entropy}, while $H(X,Y)$ with \dref{random-variables} as arguments means joint entropy.
+Note that when $p = q,$ \@{cross-entropy} equals \@{entropy}. The symbol $H$ is overloaded: $H(p,q)$ with distributions as arguments means \@{cross-entropy}, while $H(X,Y)$ with \@{random-variables} as arguments means joint entropy.
 
 \begin{definition}[KL Divergence]\synonyms{relative-entropy, "Kullback-Leibler divergence"}
 For discrete probability distributions, $p$ and $q,$ that share a support $\mathcal{X},$ the \textbf{relative entropy} from $q$ to $p$ is defined to be
 
 \[ D_{KL}(p || q) = \sum_{x \in \mathcal{X}} p(x) \log{\frac{p(x)}{q(x)}}, \]
 
-which is just \dref{cross-entropy} minus \dref{entropy}:
+which is just \@{cross-entropy} minus \@{entropy}:
 
 \[ D(p || q) = H(p,q) - H(p). \]
 
@@ -442,7 +442,7 @@ which makes it clear that it's the expected inefficiency in an encoding optimize
 \end{definition}
 
 \begin{remark}
-\dref{kl-divergence} tells us how different an approximating distribution $q$ is from a true probability distribution $p.$ It's not a true distance metric - it's asymmetric, but it does behave like distance in that it gets smaller as $q$ gets more like $p$ and is zero when $q = p.$ It is a sort of directed distance.
+\@{kl-divergence} tells us how different an approximating distribution $q$ is from a true probability distribution $p.$ It's not a true distance metric - it's asymmetric, but it does behave like distance in that it gets smaller as $q$ gets more like $p$ and is zero when $q = p.$ It is a sort of directed distance.
 
 Another way to think about it is as a measure of how inefficient a coding scheme optimized for $q$ is when the actual distribution is $p.$ If $q$ says some event is rare, and so we use a longer symbol for it (more bits), but the event actually occurs frequently, we'll waste bits representing the event when we could have used a shorter symbol for it.
 \end{remark}
@@ -452,11 +452,11 @@ For discrete probability distributions $p$ and $q$ that share a support $\mathca
 
 \[ D(p || q) \geq 0, \]
 
-with equality iff $p = q.$ Equivalently, \dref{cross-entropy} is never less than \dref{entropy}: $H(p,q) \geq H(p),$ with equality iff $q = p.$
+with equality iff $p = q.$ Equivalently, \@{cross-entropy} is never less than \@{entropy}: $H(p,q) \geq H(p),$ with equality iff $q = p.$
 \end{theorem}
 
 \begin{proof}
-Because \dref{log-is-concave}, by \dref{jensens-inequality} we have that
+Because \@{log-is-concave}, by \@{jensens-inequality} we have that
 
 \[ \begin{aligned}
 \mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] & \leq \log{ \left ( \mathbb{E}_p \left [ \frac{q_i}{p_i} \right ] \right ) }  \\
@@ -468,11 +468,11 @@ Because \dref{log-is-concave}, by \dref{jensens-inequality} we have that
 
 Then, since $\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] = -D(p || q),$ we have that $D(p || q) \geq 0.$
 
-Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p || q) = 0.$ Conversely, suppose $D(p || q) = 0.$ Since $\log$ is strictly \dref{concave}, it is not \dref{affine}, and \dref{jensens-inequality} condition for equality gives us that $\frac{q_i}{p_i} = c.$ Now, $\sum_i q_i = \sum_i c p_i = 1,$ and since $p$ is a probability distribution, $c = 1,$ and therefore $p_i = q_i$ and $p = q.$
+Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p || q) = 0.$ Conversely, suppose $D(p || q) = 0.$ Since $\log$ is strictly \@{concave}, it is not \@{affine}, and \@{jensens-inequality} condition for equality gives us that $\frac{q_i}{p_i} = c.$ Now, $\sum_i q_i = \sum_i c p_i = 1,$ and since $p$ is a probability distribution, $c = 1,$ and therefore $p_i = q_i$ and $p = q.$
 \end{proof}
 
 \begin{theorem}[Doubly stochastic maps increase entropy]
-Take a \dref{doubly-stochastic} \dref{matrix} $A$ and \dref{probability-vector} $p,$ let $q = A p.$ Then $H(q) \geq H(p),$ with equality iff $q$ is a \dref{rearrangement} of $p$.
+Take a \@{doubly-stochastic} \@{matrix} $A$ and \@{probability-vector} $p,$ let $q = A p.$ Then $H(q) \geq H(p),$ with equality iff $q$ is a \@{rearrangement} of $p$.
 \end{theorem}
 
 \begin{proof}
@@ -480,7 +480,7 @@ Note that $q_i = \sum_{j} A_{ij} p_j,$ by the definition of vector matrix multip
 
 \[ r_{ij} = A_{ij} p_j, \quad s_{ij} = A_{ij} q_i. \]
 
-Now we find the \dref{relative-entropy} from $s$ to $r$:
+Now we find the \@{relative-entropy} from $s$ to $r$:
 
 \[ \begin{aligned}
 D(r || s) & = \sum_{i,j} r_{ij} \log{\frac{r_{ij}}{s_{ij}}} \\
@@ -507,13 +507,13 @@ And the second term on the RHS of the last line:
                                 & = -H(q).
 \end{aligned} \]
 
-So, we end up with $D(r || s) = H(q) - H(p).$ Since $D(r || s) \geq 0$ by \dref{gibbs-inequality}, we have $H(q) - H(p) \geq 0,$ which implies that $H(q) \geq H(p),$ which is what we wanted to show.
+So, we end up with $D(r || s) = H(q) - H(p).$ Since $D(r || s) \geq 0$ by \@{gibbs-inequality}, we have $H(q) - H(p) \geq 0,$ which implies that $H(q) \geq H(p),$ which is what we wanted to show.
 
 Now, the equivalence case. If $q$ is just a rearrangement of $p,$ then obviously it has the same entropy as we can just re-index to recover $p.$ Now assume $H(p) = H(q).$ Then, $H(q) - H(p) = 0 \implies D(r || s) = 0 \implies r = s \implies A_{ij} p_j = A_{ij} q_i \implies p_j = q_i$ whenever $A_{ij} > 0.$ Now, for each value $c$ appearing in $p$ or $q,$ let
 
 \[ J_c = \{j : p_j = c\}, \quad I_c = \{i : q_i = c\}, \]
 
-that is $J_c$ is the set of indices of $p$ where $p_j = c,$ and similarly with $I_c$ and $q.$ Now, consider row $i \in I_c.$ For any $A_{ij} > 0,$ we have $p_j = q_i,$ so $j \in J_c,$ i.e. every nonzero entry of row $i$ lies in a column of $J_c,$ so the columns $j \in J_c$ have the entire mass of row $i.$ Similarly, for column $j \in J_c,$ for nonzero $A_{ij},$ $q_i = p_j = c,$ so $i \in I_c,$ and the rows $I_c$ contain all of column $j$'s mass. Taking $\vec{1}_S$ as the \dref{indicator-vector} of a set $S,$ we have that
+that is $J_c$ is the set of indices of $p$ where $p_j = c,$ and similarly with $I_c$ and $q.$ Now, consider row $i \in I_c.$ For any $A_{ij} > 0,$ we have $p_j = q_i,$ so $j \in J_c,$ i.e. every nonzero entry of row $i$ lies in a column of $J_c,$ so the columns $j \in J_c$ have the entire mass of row $i.$ Similarly, for column $j \in J_c,$ for nonzero $A_{ij},$ $q_i = p_j = c,$ so $i \in I_c,$ and the rows $I_c$ contain all of column $j$'s mass. Taking $\vec{1}_S$ as the \@{indicator-vector} of a set $S,$ we have that
 
 \[ A \vec{1}_{J_c} = \vec{1}_{I_c}, \]
 
@@ -531,15 +531,15 @@ Therefore, $|I_c| = |J_c|$ for all $c,$ so each $c$ appears equally often in $p$
 \end{proof}
 
 \begin{intuition}
-Averaging (well, replacing each probability with a \dref{convex-combination} of all the probabilities in a way that retains their summing to 1) the probabilities in $p$ can only bring them closer to each other (if it doesn't just rearrange them), which increases entropy.
+Averaging (well, replacing each probability with a \@{convex-combination} of all the probabilities in a way that retains their summing to 1) the probabilities in $p$ can only bring them closer to each other (if it doesn't just rearrange them), which increases entropy.
 \end{intuition}
 
 \begin{definition}[Conditional Entropy]
-Let $X$ and $Y$ be \dref{random-variables}, not necessarily \dref{independent}. The probability that $Y$ takes the value $y$ when $X$ takes the value $x$ (for any specific $x \in \mathcal{X}, y \in \mathcal{Y}$) is called the \dref{conditional-probability} $p(y|x)$ and is given by:
+Let $X$ and $Y$ be \@{random-variables}, not necessarily \@{independent}. The probability that $Y$ takes the value $y$ when $X$ takes the value $x$ (for any specific $x \in \mathcal{X}, y \in \mathcal{Y}$) is called the \@{conditional-probability} $p(y|x)$ and is given by:
 
 \[ p(y|x) = \frac{p(x, y)}{p(x)}, \quad p(x) = \sum_{y} p(x,y). \]
 
-(Note that $p(x,y)$ is the \dref{joint-probability} of $X = x, Y = y.$)
+(Note that $p(x,y)$ is the \@{joint-probability} of $X = x, Y = y.$)
 
 We define the \textbf{conditional entropy} of $Y$ given $X,$ $H(Y|X),$ as the average of the entropy of $Y$ for each value $x$ of $X$ weighted according to the probability of getting that particular $x.$ That is,
 
@@ -547,7 +547,7 @@ We define the \textbf{conditional entropy} of $Y$ given $X,$ $H(Y|X),$ as the av
 \end{definition}
 
 \begin{note}
-We can obtain the above formula for \dref{conditional-entropy} as follows. First, if $X = x,$ then our \dref{entropy} for $Y$ is
+We can obtain the above formula for \@{conditional-entropy} as follows. First, if $X = x,$ then our \@{entropy} for $Y$ is
 
 \[ H(Y | X = x) = -\sum_{y} p(y|x) \log{p(y|x)}. \]
 
@@ -562,7 +562,7 @@ H(Y|X) & = \sum_{x} p(x) H(Y | X = x) \\
 \end{note}
 
 \begin{theorem}\label{joint-entropy-is-base-plus-conditional}
-The \dref{entropy} of the joint event $X,Y$ is the \dref{entropy} of $X$ plus the \dref{entropy} of $Y$ when $X$ is known.
+The \@{entropy} of the joint event $X,Y$ is the \@{entropy} of $X$ plus the \@{entropy} of $Y$ when $X$ is known.
 \end{theorem}
 
 \begin{proof}
@@ -587,11 +587,11 @@ Altogether, we have that $H(Y | X) = H(X,Y) - H(X),$ or
 \end{proof}
 
 \begin{theorem}
-The \dref{uncertainty} of $Y$ is never increased by knowledge of $X.$ It will be decreased unless $X$ and $Y$ are independent events, in which case it is not changed.
+The \@{uncertainty} of $Y$ is never increased by knowledge of $X.$ It will be decreased unless $X$ and $Y$ are independent events, in which case it is not changed.
 \end{theorem}
 
 \begin{proof}
-From \dref{joint-entropy-is-less-than-or-equal-to-entropy-of-parts} and \dref{joint-entropy-is-base-plus-conditional}, we have
+From \@{joint-entropy-is-less-than-or-equal-to-entropy-of-parts} and \@{joint-entropy-is-base-plus-conditional}, we have
 
 \[ \begin{aligned}
 H(X) + H(Y) & \geq H(X,Y) \\

@@ -176,7 +176,7 @@ A point $p$ is an \textbf{interior point} of $E$ if there is a neighborhood $N$ 
 \end{definition}
 
 \begin{definition}[Open]
-A set $E$ is open if every \dref{point} of $E$ is an \dref{interior-point} of $E.$
+A set $E$ is open if every \@{point} of $E$ is an \@{interior-point} of $E.$
 \end{definition}
 
 \begin{definition}[Complement (of a Set)]
@@ -184,7 +184,7 @@ The \textbf{complement} of $E$ (denoted by $E^c$) is the set of all points $p \i
 \end{definition}
 
 \begin{definition}[Perfect Set]\synonyms{perfect}
-$E$ is \textbf{perfect} if $E$ is \dref{closed} and if every point of $E$ is a \dref{limit-point} of $E.$
+$E$ is \textbf{perfect} if $E$ is \@{closed} and if every point of $E$ is a \@{limit-point} of $E.$
 \end{definition}
 
 \begin{definition}[Bounded]
@@ -235,7 +235,7 @@ Suppose $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$ Then, $x \notin \b
 \end{proof}
 
 \begin{note}
-This is just \dref[De Morgan's law]{complement-of-union-is-intersection-of-complements} extended to arbitrary indexed collections.
+This is just \@[De Morgan's law]{complement-of-union-is-intersection-of-complements} extended to arbitrary indexed collections.
 \end{note}
 
 \begin{theorem}\label{open-iff-complement-closed}
@@ -323,11 +323,11 @@ If $E$ is a set in a metric space, then $E$ and $\closure{E}$ have the same limi
 \end{theorem}
 
 \begin{proof}
-If $E$ is closed, then we are done, because \dref[a set equals its closure if it is closed]{set-is-its-closure-iff-it-is-closed}. 
+If $E$ is closed, then we are done, because \@[a set equals its closure if it is closed]{set-is-its-closure-iff-it-is-closed}. 
 
 Suppose $p$ is a limit point of $E.$ Then every neighborhood of $p$ contains some $q \in E, q \neq p.$ Since $q \in E, ~ q \in \closure{E}$, so $p$ is a limit point of $\closure{E}.$
 
-Conversely, suppose $p$ is a limit point of $\closure{E}.$ Then, every neighborhood $N$ of $p$ contains a point of $q \in \closure{E}, q \neq p.$ If $q \in E,$ then $N$ clearly contains a point in $E.$ Otherwise, $q \in E', q \not in E.$ Now, since $q \in N$ and \dref[every neighborhood is an open set]{every-neighborhood-is-an-open-set}, $q$ has some neighborhood $M \subset N.$ Since $q \in E',$ $M$ contains some point $s \in E.$ Since $M \subset N,$ $s \in N,$ and therefore $N$ contains a point in $E.$ Thus, all neighborhoods of $p$ contain some point in $E,$ and $p$ is a limit point of $E.$
+Conversely, suppose $p$ is a limit point of $\closure{E}.$ Then, every neighborhood $N$ of $p$ contains a point of $q \in \closure{E}, q \neq p.$ If $q \in E,$ then $N$ clearly contains a point in $E.$ Otherwise, $q \in E', q \not in E.$ Now, since $q \in N$ and \@[every neighborhood is an open set]{every-neighborhood-is-an-open-set}, $q$ has some neighborhood $M \subset N.$ Since $q \in E',$ $M$ contains some point $s \in E.$ Since $M \subset N,$ $s \in N,$ and therefore $N$ contains a point in $E.$ Thus, all neighborhoods of $p$ contain some point in $E,$ and $p$ is a limit point of $E.$
 \end{proof}
 
 \begin{theorem}\label{set-and-its-limit-points-may-have-different-limit-points}
@@ -335,7 +335,7 @@ A set $E$ and its limit points $E'$ do not necessarily have the same limit point
 \end{theorem}
 
 \begin{proof}
-Consider $P = \{\frac{1}{n} | n \in \mathbb{N}\}.$ Then $P$ has one limit point, $0,$ but $P' = \{0\}$ has no limit points, since the only number that contains $0$ in all its neighborhoods is $0$ itself (see \dref{only-infinite-sets-have-limit-points}.)
+Consider $P = \{\frac{1}{n} | n \in \mathbb{N}\}.$ Then $P$ has one limit point, $0,$ but $P' = \{0\}$ has no limit points, since the only number that contains $0$ in all its neighborhoods is $0$ itself (see \@{only-infinite-sets-have-limit-points}.)
 \end{proof}
 
 \begin{theorem}\label{closure-distributes-over-finite-unions}
@@ -347,7 +347,7 @@ If $B_n = \bigcup_{i=i}^n A_i,$ then $\closure{B_n} = \bigcup_{i=1}^n \closure{A
 \begin{proof}
 Let $p \in \bigcup_{i=1}^n \closure{A_i}.$ Then, $p \in \closure{A_i}$ for some $i.$ If $p \in A_i,$ then $p \in \bigcup_{i=i}^n A_i = B_n,$ so $p \in \closure{B_n}.$ If $p$ is in some $A_{i}',$ then every neighborhood of $p$ contains some point $q \in A_i, q \neq p,$ and since $A_i \subset B_n,$ $q \in B_n,$ so $p \in \closure{B_n}.$
 
-Conversely, let $p \in \closure{B_n}.$ If $p \in B_n,$ $p \in A_i$ for some $i,$ and thus $p \in \closure{A_i} \subset \bigcup_{i=1}^n \closure{A_i}.$ If $p$ is only in $B_{n}',$ suppose for contradiction that $p \notin \bigcup_{i=1}^n \closure{A_i}.$ For each $i,$ let $N_i$ be a neighborhood centered at $p$ with $N_i \cap A_i = \emptyset.$ Then, $N = \bigcap_{i=1}^n N_i$ is a neighborhood of $p$ (see \dref{union-and-intersection-of-open-and-closed-sets},) but $N \cap N_i = \emptyset$ for all $i,$ so $N \cap B_n = \emptyset.$ But, this contradicts our hypothesis that $p \in \closure{B_n},$ so our contradictory assumption must be invalid, and $p \in \bigcup_{i=1}^n \closure{A_i}.$
+Conversely, let $p \in \closure{B_n}.$ If $p \in B_n,$ $p \in A_i$ for some $i,$ and thus $p \in \closure{A_i} \subset \bigcup_{i=1}^n \closure{A_i}.$ If $p$ is only in $B_{n}',$ suppose for contradiction that $p \notin \bigcup_{i=1}^n \closure{A_i}.$ For each $i,$ let $N_i$ be a neighborhood centered at $p$ with $N_i \cap A_i = \emptyset.$ Then, $N = \bigcap_{i=1}^n N_i$ is a neighborhood of $p$ (see \@{union-and-intersection-of-open-and-closed-sets},) but $N \cap N_i = \emptyset$ for all $i,$ so $N \cap B_n = \emptyset.$ But, this contradicts our hypothesis that $p \in \closure{B_n},$ so our contradictory assumption must be invalid, and $p \in \bigcup_{i=1}^n \closure{A_i}.$
 \end{proof}
 
 \begin{theorem}\label{sup-is-in-closure-of-bounded-nonempty-set-of-reals}

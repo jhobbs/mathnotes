@@ -45,6 +45,11 @@
 \NewDocumentCommand{\dref}{o m}{%
   \IfNoValueTF{#1}{\hyperref[#2]{#2}}{\hyperref[#2]{#1}}%
 }
+% Shorthand: \@{label} or \@[custom text]{label}, same as \dref.
+% (The kernel's \@ only adjusts sentence spacing, unused in this prose.)
+\RenewDocumentCommand{\@}{o m}{%
+  \IfNoValueTF{#1}{\dref{#2}}{\dref[#1]{#2}}%
+}
 % Page link: \pagelink{slug} or \pagelink[text]{slug}
 \NewDocumentCommand{\pagelink}{o m}{%
   \IfNoValueTF{#1}{\texttt{#2}}{#1}%

@@ -18,11 +18,11 @@ This is distinct from establishing the classes themselves, for example, through 
 \end{remark}
 
 \begin{definition}[Binary Classification]
-\textbf{Binary Classification} is the task of putting things into one of two categories (each called a \dref{class}.)
+\textbf{Binary Classification} is the task of putting things into one of two categories (each called a \@{class}.)
 \end{definition}
 
 \begin{definition}[Target Class]
-In \dref{binary-classification}, the task is to determine whether or not an object belongs to a \dref{class}, which we call the \textbf{target class}.
+In \@{binary-classification}, the task is to determine whether or not an object belongs to a \@{class}, which we call the \textbf{target class}.
 \end{definition}
 
 \begin{definition}[Multiclass Classification]\synonyms{"multinomial classification"}
@@ -30,22 +30,22 @@ In \dref{binary-classification}, the task is to determine whether or not an obje
 \end{definition}
 
 \begin{remark}
-Deciding whether a piece of fruit is a banana, a peach, or an apple is \dref{multiclass-classification}. Deciding if a piece of fruit is an apple or not is \dref{binary-classification}.
+Deciding whether a piece of fruit is a banana, a peach, or an apple is \@{multiclass-classification}. Deciding if a piece of fruit is an apple or not is \@{binary-classification}.
 \end{remark}
 
 \subsection{Binary Classification}
 
-We can think of the task of \dref{binary-classification} as the operation of a \dref{function}
+We can think of the task of \@{binary-classification} as the operation of a \@{function}
 
 \[ f : \mathbb{R}^n \to {0,1}, \]
 
-where the domain is a \dref{vector} $\vec{x} = \{x_1, x_2, \dots, x_n\}$ of real numbers representing \dref{features} of an object, and ${0,1}$ represents whether or not that object belongs to the target class. This assume we've turned \dref{categorical} data into numerical features, while we can use numerical features as is, or that we've produced new features from our data.
+where the domain is a \@{vector} $\vec{x} = \{x_1, x_2, \dots, x_n\}$ of real numbers representing \@{features} of an object, and ${0,1}$ represents whether or not that object belongs to the target class. This assume we've turned \@{categorical} data into numerical features, while we can use numerical features as is, or that we've produced new features from our data.
 
-Now, each object in our training dataset can be thought of as being composed of an $\vec{x}$ component and a $y$ component. In \dref{binary-classification}, the $y$ component is just a boolean value - $0$ or $1$. The training set then looks like a \dref{sequence} of \dref{feature} vectors and \dref{labels}
+Now, each object in our training dataset can be thought of as being composed of an $\vec{x}$ component and a $y$ component. In \@{binary-classification}, the $y$ component is just a boolean value - $0$ or $1$. The training set then looks like a \@{sequence} of \@{feature} vectors and \@{labels}
 
 \[ {(\vec{x}^{(0)}, y^{(0)}), (\vec{x}^{(1)}, \vec{y}^{(1)}), \dots, (\vec{x}^{(n)}, y^{(n)})}. \]
 
-We can think of a perfect function $f$ as always making the correct \dref{label} assignment (based on some \dref{ground-truths} or in all future cases,) but we're generally stuck with $f$ being an approximation.
+We can think of a perfect function $f$ as always making the correct \@{label} assignment (based on some \@{ground-truths} or in all future cases,) but we're generally stuck with $f$ being an approximation.
 
 If we think of $f_\theta(x)$ as a parameterized function, $\theta$ represents the parameters (weights, coefficients, etc) that determine the shape of the function. In a regression model or neural network, these might be weights and biases, for example.
 
@@ -54,13 +54,13 @@ Then, the job of machine learning in binary classification is to produce a good 
 
 \[ \sum_{i=1}^m L \left ( f_\theta(x^{(i)}), y^{(i)} \right ) \]
 
-where $L$ is a loss function, for example, \dref{cross-entropy} loss.
+where $L$ is a loss function, for example, \@{cross-entropy} loss.
 \end{definition}
 
 Once $f_\theta$ has been trained (i.e., we've selected values for our parameters $\theta$), we can use $f_\theta$ to predict the classification of unseen $\vec{x}$ values.
 
 \begin{definition}[Inference]\synonyms{prediction}
-Applying a trained model $f_\theta$ to an unseen $\vec{x}$ to produce a predicted \dref{label} is called \textbf{inference} or \textbf{prediction}.
+Applying a trained model $f_\theta$ to an unseen $\vec{x}$ to produce a predicted \@{label} is called \textbf{inference} or \textbf{prediction}.
 \end{definition}
 
 When a trained model $f_\theta$ is applied to each $x^{(i)}$ it produces a prediction
@@ -81,7 +81,7 @@ This overall process of preparing features, training $f_\theta ,$ and evaluating
 \end{definition}
 
 \subsubsection{Summary of Stages}
-The stages of the \dref{model-pipeline} can be summarized as follows:
+The stages of the \@{model-pipeline} can be summarized as follows:
 
 \begin{tabular}{lll}
 Stage & Description & Common term \\
@@ -103,14 +103,14 @@ Given a string of $m$ symbols, the Hamming Loss is the number of positions for w
 \end{definition}
 
 \begin{definition}[Hamming Loss]
-The \textbf{Hamming Loss} is the \dref{Hamming-Distance} divided by the length of the strings being compared. For strings of length $m,$ it is
+The \textbf{Hamming Loss} is the \@{Hamming-Distance} divided by the length of the strings being compared. For strings of length $m,$ it is
 
 \[ L_{\text{Hamming}} = \frac{1}{m} d_h{(\hat{y}, y)}. \]
 \end{definition}
 
-Hamming Loss is great way to evaluate the performance of a binary classifier once it's trained, but it doesn't make a good way to evaluate during training, because it's not \dref{differentiable}. It's not \dref{differentiable} because there is not a \dref{continuous} transition from $0$ to $1$ in the model's output - there is just a step function there. In reality, we're likely to have some stage of our model that outputs a value in $[0,1]$ - the probability of our object being in our \dref{target-class}, and then apply a threshold to that to get our final binary value, i.e. if the probability is over $p = 0.5,$ set $\hat{y}$ to $1.$ This is a \dref{smooth} \dref{function} from $\mathbb{R}^n$ to $[0,1]$ and is thus likely to be \dref{differentiable}. We want a \dref{differentiable} \dref{function} because it allows us to perform gradient loss and similar operations.
+Hamming Loss is great way to evaluate the performance of a binary classifier once it's trained, but it doesn't make a good way to evaluate during training, because it's not \@{differentiable}. It's not \@{differentiable} because there is not a \@{continuous} transition from $0$ to $1$ in the model's output - there is just a step function there. In reality, we're likely to have some stage of our model that outputs a value in $[0,1]$ - the probability of our object being in our \@{target-class}, and then apply a threshold to that to get our final binary value, i.e. if the probability is over $p = 0.5,$ set $\hat{y}$ to $1.$ This is a \@{smooth} \@{function} from $\mathbb{R}^n$ to $[0,1]$ and is thus likely to be \@{differentiable}. We want a \@{differentiable} \@{function} because it allows us to perform gradient loss and similar operations.
 
-However, after a model is trained, \dref{hamming-loss} really is the perfect way to evaluate its performance.
+However, after a model is trained, \@{hamming-loss} really is the perfect way to evaluate its performance.
 
 \subsection{Bias vs Variance}
 

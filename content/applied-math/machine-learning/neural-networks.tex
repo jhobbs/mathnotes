@@ -23,7 +23,7 @@ i.e. $F_{\beta}$ takes in a $24 \times 24$ matrix of integers between $0$ and $2
 Let's start by defining a neuron.
 
 \begin{definition}[Neuron]
-In a neural network, a \textbf{neuron} $N$ is a computation unit that takes $n$ input values, applies an \dref{affine-transformation}, then a typically non-linear activation function, and returns a single value.
+In a neural network, a \textbf{neuron} $N$ is a computation unit that takes $n$ input values, applies an \@{affine-transformation}, then a typically non-linear activation function, and returns a single value.
 
 That is, it is a function of the form
 
@@ -49,9 +49,9 @@ where
 \end{definition}
 
 \begin{definition}[Layer]
-A \textbf{layer} in a neural network is a collections of \dref{neurons} that operate in parallel on the same input \dref{vector}.
+A \textbf{layer} in a neural network is a collections of \@{neurons} that operate in parallel on the same input \@{vector}.
 
-A layer with $n_{\ell - 1}$ inputs and $n_{\ell}$ \dref{neurons} defines a \dref{function}
+A layer with $n_{\ell - 1}$ inputs and $n_{\ell}$ \@{neurons} defines a \@{function}
 
 \[ F_{\ell} : \mathbb{R}^{\ell - 1} \to \mathbb{R}^{\ell} \]
 
@@ -62,41 +62,41 @@ of the form
 where:
 
 \begin{itemize}
-\item $W_{\ell} \in \mathbb{R}^{n_{\ell} \times n_{\ell - 1}}$ is the weight matrix (with the $i$th row representing the weights for the inputs to the $i$th \dref{neuron} in the layer),
+\item $W_{\ell} \in \mathbb{R}^{n_{\ell} \times n_{\ell - 1}}$ is the weight matrix (with the $i$th row representing the weights for the inputs to the $i$th \@{neuron} in the layer),
 \end{itemize}
 
 \begin{itemize}
-\item $\vec{b}_{\ell} \in \mathbb{R}^{n_{\ell}}$ is the bias vector (with the $i$th entry representing the bias on the $i$th \dref{neuron} in the layer,
+\item $\vec{b}_{\ell} \in \mathbb{R}^{n_{\ell}}$ is the bias vector (with the $i$th entry representing the bias on the $i$th \@{neuron} in the layer,
 \end{itemize}
 
 \begin{itemize}
-\item $\phi_{\ell} : \mathbb{R} \to \mathbb{R} $ is an activation function, applied \dref{componentwise}, 
+\item $\phi_{\ell} : \mathbb{R} \to \mathbb{R} $ is an activation function, applied \@{componentwise}, 
 \end{itemize}
 
 \begin{itemize}
-\item each coordinate of $F_{\ell}(\vec{x})$ is the output of a single \dref{neuron} in that layer.
+\item each coordinate of $F_{\ell}(\vec{x})$ is the output of a single \@{neuron} in that layer.
 \end{itemize}
 
-A layer takes an input \dref{vector}, applies the same \dref{affine-transformation} to all \dref{neurons} (via a shared weight \dref{matrix} and bias \dref{vector}), and then applies an \dref{activation-function} to each neuron's output.
+A layer takes an input \@{vector}, applies the same \@{affine-transformation} to all \@{neurons} (via a shared weight \@{matrix} and bias \@{vector}), and then applies an \@{activation-function} to each neuron's output.
 
-Its output is the \dref{vector} of all \dref{neuron} outputs in that layer, and in this way, we can view a layer as a \dref{vector} of \dref{neurons}.
+Its output is the \@{vector} of all \@{neuron} outputs in that layer, and in this way, we can view a layer as a \@{vector} of \@{neurons}.
 \end{definition}
 
 Finally we'll define neural network itself!
 
 \begin{definition}[Neural Network]
-A \textbf{neural network} is a function obtained by \dref{composing} \dref{finitely-many} \dref{neurons} arranged in layers:
+A \textbf{neural network} is a function obtained by \@{composing} \@{finitely-many} \@{neurons} arranged in layers:
 
 \[ F(\vec{x}) = (\phi_L \circ A_L) \circ \cdots \circ (\phi_1 \circ A_1)(\vec{x}), \]
 
 where each
 
 \begin{itemize}
-\item $A_{\ell}(\vec{x}) = W_{\ell} \vec{x} + \vec{b}_{\ell}$ is an \dref{affine-transformation},
+\item $A_{\ell}(\vec{x}) = W_{\ell} \vec{x} + \vec{b}_{\ell}$ is an \@{affine-transformation},
 \end{itemize}
 
 \begin{itemize}
-\item $\phi_{\ell}$ is an \dref{activation-function} applied \dref{componentwise},
+\item $\phi_{\ell}$ is an \@{activation-function} applied \@{componentwise},
 \end{itemize}
 
 \begin{itemize}
