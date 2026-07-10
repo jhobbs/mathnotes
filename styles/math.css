@@ -18,21 +18,20 @@ math {
 math[display='block'] {
   overflow-x: auto;
   max-width: 100%;
+  position: relative; /* anchors \tag labels to the right margin */
+  scrollbar-width: thin;
 }
 
 /* \tag{...}: the build worker rewrites MathJax's mlabeledtr (absent from
-   MathML Core) into a plain row with the label cell last; give the content
-   cell the slack width and pin the label to the right margin */
-mtable.math-tagged {
-  width: 100%;
-}
-
-mtable.math-tagged > mtr > mtd:first-child {
-  width: 100%;
-}
-
+   MathML Core) into a plain row with the label cell last. Overlay that
+   label on the right margin: the equation stays truly centered and the
+   table keeps natural width (a 100%-wide table exactly fills the
+   overflow-x scroll container and sub-pixel overflow summons scrollbars) */
 mtd.math-tag {
-  text-align: right;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* \cancel{...}: the build worker rewrites menclose (absent from MathML
