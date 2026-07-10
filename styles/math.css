@@ -10,7 +10,7 @@
 math {
   font-family: 'STIX Two Math', math;
   /* STIX Two Math draws visually small next to the UI font */
-  font-size: 1.0625em;
+  font-size: 1.125em;
 }
 
 /* MathJax's scroll containers are gone; wide display equations scroll
