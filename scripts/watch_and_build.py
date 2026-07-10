@@ -14,21 +14,6 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from mathnotes.sitegenerator.builder import SiteBuilder
-from mathnotes.navigation import clear_navigation_cache
-from mathnotes.page_renderer import clear_page_cache
-
-# Configure logging with microsecond precision to debug duplicate output
-handler = logging.StreamHandler(sys.stdout)
-handler.setFormatter(logging.Formatter('%(asctime)s.%(msecs)03d - %(name)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S'))
-logging.root.addHandler(handler)
-logging.root.setLevel(logging.INFO)
-logger = logging.getLogger(__name__)
-
-# Process ID for debugging
-PROCESS_ID = random.randint(1000, 9999)
-logger.info(f"Python watcher starting with debug ID: {PROCESS_ID}")
-
 # Directories to watch for content changes
 CONTENT_DIRS = ['content', 'mathnotes', 'templates']
 # Signal file that shell script touches after JS/CSS rebuild
@@ -65,6 +50,28 @@ def get_mtimes(dirs: list) -> dict:
                     except OSError:
                         pass
     return mtimes
+
+
+# Baseline snapshot, captured BEFORE the mathnotes imports below load build
+# code: a .py file replaced while those imports run must register as a
+# change on the first poll, or this process runs stale code forever
+# believing it is current (the 2026-07-10 checkout/merge race).
+STARTUP_MTIMES = get_mtimes(CONTENT_DIRS)
+
+from mathnotes.sitegenerator.builder import SiteBuilder
+from mathnotes.navigation import clear_navigation_cache
+from mathnotes.page_renderer import clear_page_cache
+
+# Configure logging with microsecond precision to debug duplicate output
+handler = logging.StreamHandler(sys.stdout)
+handler.setFormatter(logging.Formatter('%(asctime)s.%(msecs)03d - %(name)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S'))
+logging.root.addHandler(handler)
+logging.root.setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Process ID for debugging
+PROCESS_ID = random.randint(1000, 9999)
+logger.info(f"Python watcher starting with debug ID: {PROCESS_ID}")
 
 
 def find_changes(old_mtimes: dict, new_mtimes: dict) -> list:
@@ -109,6 +116,17 @@ def build_site(output_dir: str, builder: SiteBuilder = None) -> SiteBuilder:
     return builder
 
 
+def snapshot_then_build(output_dir: str, builder: SiteBuilder = None):
+    """Snapshot file state BEFORE building, and return (builder, snapshot).
+
+    Changes that land while the build runs then surface as diffs on the
+    next poll (at worst one redundant rebuild) instead of being silently
+    absorbed into a post-build snapshot and lost."""
+    mtimes = get_mtimes(CONTENT_DIRS)
+    builder = build_site(output_dir, builder)
+    return builder, mtimes
+
+
 def main():
     output_dir = '/app/static-build/website'
     if len(sys.argv) > 2 and sys.argv[1] == '--output':
@@ -137,8 +155,9 @@ def main():
 
     logger.info("Initial build complete, watching for changes...")
 
-    # Get initial file state
-    last_mtimes = get_mtimes(CONTENT_DIRS)
+    # Baseline = the pre-import snapshot, so anything that changed during
+    # the imports or the initial build registers on the first poll
+    last_mtimes = STARTUP_MTIMES
 
     # Track JS rebuild signal file
     js_signal_path = Path(JS_REBUILD_SIGNAL)
@@ -197,7 +216,7 @@ def main():
 
             try:
                 build_start = time.time()
-                builder = build_site(output_dir, builder)
+                builder, last_mtimes = snapshot_then_build(output_dir, builder)
                 build_time = time.time() - build_start
 
                 # Write timestamp for browser refresh (survives clean since outside website dir)
@@ -206,10 +225,11 @@ def main():
                 logger.info(f"[ID:{PROCESS_ID}] Rebuild complete in {build_time:.2f}s")
             except Exception as e:
                 logger.exception(f"Build failed: {e}")
+                # accept the broken state as seen: retry on the next edit,
+                # not in a tight loop against the same broken file
+                last_mtimes = get_mtimes(CONTENT_DIRS)
 
             pending_changes = []
-            # Re-get mtimes after build in case more changes happened
-            last_mtimes = get_mtimes(CONTENT_DIRS)
 
 
 if __name__ == '__main__':
