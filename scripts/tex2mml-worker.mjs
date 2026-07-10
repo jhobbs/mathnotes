@@ -64,6 +64,34 @@ function escapeAttr(s) {
   return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// MathJax emits two elements that were dropped from MathML Core, which is
+// all Chrome/Safari implement. Rewrite them to Core-safe markup styled by
+// styles/math.css:
+//  - \tag{...} -> mlabeledtr: becomes a plain mtr with the label cell moved
+//    last (class="math-tag", table gets class="math-tagged"; CSS pins the
+//    label right, matching client MathJax's old tagSide default).
+//  - \cancel{...} -> menclose notation="updiagonalstrike": becomes an mrow
+//    with class="mml-cancel" (CSS draws the diagonal strike).
+function toMathMLCore(mml) {
+  if (mml.includes('<mlabeledtr>')) {
+    mml = mml.replace(/<mtable([^>]*)><mlabeledtr>/g,
+                      '<mtable$1 class="math-tagged"><mlabeledtr>');
+    mml = mml.replace(
+      /<mlabeledtr>(<mtd[^>]*>.*?<\/mtd>)(.*?)<\/mlabeledtr>/g,
+      (_, label, rest) =>
+        `<mtr>${rest}${label.replace('<mtd', '<mtd class="math-tag"')}</mtr>`);
+  }
+  // only updiagonalstrike menclose ever occurs (\cancel); leave any other
+  // notation untouched rather than mis-pairing close tags
+  if (mml.includes('<menclose notation="updiagonalstrike">')
+      && !/<menclose notation="(?!updiagonalstrike")/.test(mml)) {
+    mml = mml.replace(/<menclose notation="updiagonalstrike">/g,
+                      '<mrow class="mml-cancel">');
+    mml = mml.replace(/<\/menclose>/g, '</mrow>');
+  }
+  return mml;
+}
+
 const rl = createInterface({ input: process.stdin, terminal: false });
 rl.on('line', (line) => {
   if (!line.trim()) return;
@@ -82,6 +110,7 @@ rl.on('line', (line) => {
     let mml = MathJax.tex2mml(req.latex, { display: !!req.display });
     // single line: keeps page HTML compact and paragraph splitting inert
     mml = mml.replace(/\n\s*/g, '');
+    mml = toMathMLCore(mml);
     mml = mml.replace('<math', `<math alttext="${escapeAttr(req.latex)}"`);
     resp = { id: req.id, mathml: mml };
   } catch (err) {

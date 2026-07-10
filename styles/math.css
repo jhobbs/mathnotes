@@ -9,6 +9,8 @@
 
 math {
   font-family: 'STIX Two Math', math;
+  /* STIX Two Math draws visually small next to the UI font */
+  font-size: 1.0625em;
 }
 
 /* MathJax's scroll containers are gone; wide display equations scroll
@@ -16,4 +18,31 @@ math {
 math[display='block'] {
   overflow-x: auto;
   max-width: 100%;
+}
+
+/* \tag{...}: the build worker rewrites MathJax's mlabeledtr (absent from
+   MathML Core) into a plain row with the label cell last; give the content
+   cell the slack width and pin the label to the right margin */
+mtable.math-tagged {
+  width: 100%;
+}
+
+mtable.math-tagged > mtr > mtd:first-child {
+  width: 100%;
+}
+
+mtd.math-tag {
+  text-align: right;
+}
+
+/* \cancel{...}: the build worker rewrites menclose (absent from MathML
+   Core) to this mrow; draw the diagonal strike ourselves */
+mrow.mml-cancel {
+  background: linear-gradient(
+    to top right,
+    transparent 47.5%,
+    currentColor 48.5%,
+    currentColor 51.5%,
+    transparent 52.5%
+  );
 }

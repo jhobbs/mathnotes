@@ -86,6 +86,26 @@ def test_worker_tex_error_is_response_not_crash():
     assert r2["mathml"].startswith("<math")  # worker survived the TeX error
 
 
+def test_worker_tag_rewrites_mlabeledtr():
+    # \tag{} -> mlabeledtr, which is not MathML Core (Chrome shatters it).
+    # The worker rewrites it to a plain mtr with the label cell moved last.
+    import re
+    (r,) = worker_roundtrip([{"id": 1, "latex": "\\tag{g} x = y", "display": True}])
+    m = r["mathml"]
+    assert "mlabeledtr" not in m
+    assert 'class="math-tagged"' in m  # on the enclosing mtable, for CSS
+    assert re.search(
+        r'<mtr>.*<mtd class="math-tag" id="mjx-eqn:g"><mtext>\(g\)</mtext></mtd></mtr>', m)
+
+
+def test_worker_cancel_rewrites_menclose():
+    # menclose is not MathML Core (Chrome drops the strike); the worker
+    # rewrites updiagonalstrike to an mrow struck through with CSS.
+    (r,) = worker_roundtrip([{"id": 1, "latex": "\\cancel{x+1}", "display": False}])
+    assert "menclose" not in r["mathml"]
+    assert '<mrow class="mml-cancel">' in r["mathml"]
+
+
 def test_worker_malformed_protocol_exits_nonzero():
     proc = subprocess.run(["node", WORKER], input="not json\n",
                           capture_output=True, text=True, timeout=120)
