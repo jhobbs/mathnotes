@@ -91,7 +91,7 @@ window.demoMetadata = demoMetadata;
 // Initialize demos on page load
 document.addEventListener('DOMContentLoaded', () => {
   console.log('[Demo Framework] DOMContentLoaded fired');
-  
+
   // Initialize mathblock toggle functionality
   initMathBlockToggle();
 

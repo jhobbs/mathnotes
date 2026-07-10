@@ -17,21 +17,34 @@ math {
    inside the element instead of overflowing the page */
 math[display='block'] {
   overflow-x: auto;
+  /* never a vertical bar: Chromium reports 1-2px phantom vertical
+     overflow on display-math scroll containers, which summons scrollbars
+     on otherwise-fitting equations */
+  overflow-y: hidden;
   max-width: 100%;
-  position: relative; /* anchors \tag labels to the right margin */
   scrollbar-width: thin;
+  /* absorb the phantom overflow so no glyph ink is ever clipped */
+  padding-block: 4px;
 }
 
 /* \tag{...}: the build worker rewrites MathJax's mlabeledtr (absent from
-   MathML Core) into a plain row with the label cell last. Overlay that
-   label on the right margin: the equation stays truly centered and the
-   table keeps natural width (a 100%-wide table exactly fills the
-   overflow-x scroll container and sub-pixel overflow summons scrollbars) */
+   MathML Core) into a plain row with the label cell last. Stretch the row
+   so the equation keeps the slack width (staying ~centered) and the label
+   lands on the right margin. Plain table layout — measured pixel-exact in
+   both Gecko and Chromium; CSS positioning is NOT honored on MathML
+   internals in Firefox. */
+mtable.math-tagged {
+  width: 100%;
+}
+
+mtable.math-tagged > mtr > mtd:first-child {
+  width: 100%;
+}
+
 mtd.math-tag {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  /* the UA's 0.5ex cell padding would make the label outgrow one-line
+     equations, reading as vertical overflow */
+  padding-block: 0;
 }
 
 /* \cancel{...}: the build worker rewrites menclose (absent from MathML
