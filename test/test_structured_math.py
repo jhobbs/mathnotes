@@ -91,7 +91,8 @@ def test_render_block_html_shape():
     assert 'id="ftc"' in html and 'data-label="ftc"' in html
     assert '<span class="math-block-type">Theorem:</span>' in html
     assert '<a href="/mathnotes/x/#ftc">FTC</a>' in html
-    assert '<span class="block-label-ref">@ftc</span>' in html
+    # copy-reference badge carries the dialect's \@{...} shorthand verbatim
+    assert '<span class="block-label-ref">\\@{ftc}</span>' in html
     # unmarked child (amsthm-attached) appended inside the parent
     assert 'math-block-nested' in html and "<p>Because.</p>" in html
     assert 'alttext="\\square"' in html  # proof QED

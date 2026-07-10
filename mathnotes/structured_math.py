@@ -358,7 +358,7 @@ def render_block_html(block: MathBlock, content_html: str, url: str) -> str:
             f'<span class="block-tag">{html_lib.escape(t)}</span>' for t in block.tags
         )
         parts.append(f'<span class="block-tags">{tags_html}</span>')
-    parts.append(f'<span class="block-label-ref">@{block.label}</span>')
+    parts.append(f'<span class="block-label-ref">\\@{{{block.label}}}</span>')
     parts.append("</div>")
 
     marked = {int(i) for i in CHILD_MARKER_RE.findall(content_html)}
