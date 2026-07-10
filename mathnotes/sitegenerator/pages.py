@@ -181,6 +181,8 @@ class ContentPages(Page):
                 "navigation": navigation,
                 "sources": sources,
                 "page_description": result.get("page_description", ""),
+                # footer links to the page's .tex source on GitHub
+                "source_path": result.get("source_path", ""),
             }
 
             specs.append(
