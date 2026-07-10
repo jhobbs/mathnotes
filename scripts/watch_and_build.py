@@ -116,6 +116,36 @@ def build_site(output_dir: str, builder: SiteBuilder = None) -> SiteBuilder:
     return builder
 
 
+def _reexec():
+    """Replace this process with a fresh one (same PID, so
+    smart-rebuild.sh's liveness check and exit trap keep working)."""
+    sys.stdout.flush()
+    os.execv(sys.executable, [sys.executable] + sys.argv)
+
+
+def initial_build_with_retry(output_dir: str) -> SiteBuilder:
+    """Initial build. A content error present at startup (e.g. a LaTeX
+    dialect error) must not kill the watcher — wait for the file to be
+    fixed and retry. But if a .py changed after this process imported its
+    code (a mid-edit import), an in-process retry would rerun the same
+    stale modules forever: re-exec instead."""
+    while True:
+        try:
+            return build_site(output_dir)
+        except Exception as e:
+            logger.exception(f"Initial build failed: {e}")
+            failed_mtimes = get_mtimes(CONTENT_DIRS)
+            if requires_restart(find_changes(STARTUP_MTIMES, failed_mtimes)):
+                logger.info("Python source changed since startup; restarting to load fresh code...")
+                _reexec()
+            logger.error("Watcher still alive — fix the file above to trigger a retry")
+            while get_mtimes(CONTENT_DIRS) == failed_mtimes:
+                time.sleep(1)
+            if requires_restart(find_changes(failed_mtimes, get_mtimes(CONTENT_DIRS))):
+                logger.info("Python source changed; restarting to load fresh code...")
+                _reexec()
+
+
 def snapshot_then_build(output_dir: str, builder: SiteBuilder = None):
     """Snapshot file state BEFORE building, and return (builder, snapshot).
 
@@ -134,20 +164,8 @@ def main():
 
     logger.info(f"Starting persistent build watcher, output={output_dir}")
 
-    # Initial build. A content error present at startup (e.g. a LaTeX
-    # dialect error) must not kill the watcher — wait for the file to be
-    # fixed and retry instead
     logger.info("Performing initial build...")
-    builder = None
-    while builder is None:
-        try:
-            builder = build_site(output_dir)
-        except Exception as e:
-            logger.exception(f"Initial build failed: {e}")
-            logger.error("Watcher still alive — fix the file above to trigger a retry")
-            failed_mtimes = get_mtimes(CONTENT_DIRS)
-            while get_mtimes(CONTENT_DIRS) == failed_mtimes:
-                time.sleep(1)
+    builder = initial_build_with_retry(output_dir)
 
     # Write timestamp for browser refresh (outside website dir so it survives clean)
     timestamp_file = Path(TIMESTAMP_FILE)
@@ -208,11 +226,8 @@ def main():
                 logger.info(f"  ... and {len(pending_changes) - 5} more")
 
             if requires_restart(pending_changes):
-                # Re-exec keeps the same PID, so smart-rebuild.sh's liveness
-                # check and exit trap keep working across the restart
                 logger.info(f"[ID:{PROCESS_ID}] Python source changed, restarting watcher to load new code...")
-                sys.stdout.flush()
-                os.execv(sys.executable, [sys.executable] + sys.argv)
+                _reexec()
 
             try:
                 build_start = time.time()

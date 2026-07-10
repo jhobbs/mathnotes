@@ -23,7 +23,9 @@ for _root in _candidates:
         sys.path.insert(0, os.path.join(_root, "scripts"))
         break
 
-from watch_and_build import requires_restart, should_ignore, snapshot_then_build
+from watch_and_build import (
+    requires_restart, should_ignore, snapshot_then_build, initial_build_with_retry,
+)
 
 
 def test_python_source_changes_require_restart():
@@ -95,6 +97,45 @@ def test_startup_snapshot_precedes_heavy_imports():
     assert "STARTUP_MTIMES" in main_src
 
 
+def test_failed_initial_build_reexecs_when_python_changed_since_startup():
+    """If the initial build fails and a .py changed after this process
+    imported its code (a mid-edit import), an in-process retry would rerun
+    the same stale modules forever — the watcher must re-exec instead."""
+    import logging
+    import tempfile
+    import watch_and_build as wb
+
+    class Reexeced(Exception):
+        pass
+
+    def fake_reexec():
+        raise Reexeced
+
+    def failing_build(output_dir, builder=None):
+        raise RuntimeError("boom")
+
+    with tempfile.TemporaryDirectory() as td:
+        py = os.path.join(td, "mod.py")
+        with open(py, "w") as fh:
+            fh.write("x = 1")
+
+        orig = (wb.CONTENT_DIRS, wb.build_site, wb.STARTUP_MTIMES, wb._reexec)
+        wb.CONTENT_DIRS = [td]
+        wb.STARTUP_MTIMES = {}  # mod.py appeared after this process started
+        wb.build_site = failing_build
+        wb._reexec = fake_reexec
+        logging.disable(logging.CRITICAL)
+        try:
+            try:
+                initial_build_with_retry("/tmp/unused")
+                assert False, "expected re-exec"
+            except Reexeced:
+                pass
+        finally:
+            logging.disable(logging.NOTSET)
+            wb.CONTENT_DIRS, wb.build_site, wb.STARTUP_MTIMES, wb._reexec = orig
+
+
 if __name__ == "__main__":
     test_python_source_changes_require_restart()
     print("PASS: python source changes require restart")
@@ -106,3 +147,5 @@ if __name__ == "__main__":
     print("PASS: mid-build changes surface after the build")
     test_startup_snapshot_precedes_heavy_imports()
     print("PASS: startup snapshot precedes heavy imports")
+    test_failed_initial_build_reexecs_when_python_changed_since_startup()
+    print("PASS: failed initial build re-execs on stale python")
