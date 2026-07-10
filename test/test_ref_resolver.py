@@ -17,6 +17,7 @@ def make_index():
     d = MathBlock(block_type=MathBlockType.DEFINITION, content="A space with a metric.",
                   title="Metric Space", label="metric-space")
     d.rendered_html = '<div id="metric-space">RENDERED</div>'
+    d.content_html = "<p>A space with a metric.</p>"
     t = MathBlock(block_type=MathBlockType.THEOREM, content="Some statement here now ok.",
                   title=None, label="thm-1")
     t.rendered_html = '<div id="thm-1">T</div>'
@@ -117,12 +118,22 @@ def test_collect_only():
 
 
 def test_tooltip_data():
+    # entries are client-shaped (tooltip-system.ts) and identical in form to
+    # the global index JSON: inner content_html, raw type, synonym fields
     index, mapper = make_index()
     r = RefResolver(index, mapper)
-    r.resolve('<p><a data-dref="metric-space"></a></p>')
+    r.resolve('<p><a data-dref="metric-space"></a> and <a data-dref="metric-spaces"></a></p>')
     data = r.get_tooltip_data()
-    assert data["metric-space"]["content"] == '<div id="metric-space">RENDERED</div>'
-    assert data["metric-space"]["url"] == "/mathnotes/topology/x/#metric-space"
+    e = data["metric-space"]
+    assert e["content"] == "<p>A space with a metric.</p>"
+    assert e["url"] == "/mathnotes/topology/x/#metric-space"
+    assert e["type"] == "definition"
+    assert e["title"] == "Metric Space"
+    assert e["is_synonym"] is False and e["synonym_of"] is None
+    s = data["metric-spaces"]
+    assert s["is_synonym"] is True
+    assert s["synonym_title"] == "Metric Spaces"
+    assert s["synonym_of"] == "Metric Space"
 
 
 def test_labels_from_rendered_html():

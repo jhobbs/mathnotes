@@ -4,6 +4,7 @@ Each page is a self-contained unit with its own rendering logic,
 similar to views in Flask or Django.
 """
 
+import json
 import logging
 from typing import Dict, Any, List
 from dataclasses import dataclass, field
@@ -183,6 +184,12 @@ class ContentPages(Page):
                 "page_description": result.get("page_description", ""),
                 # footer links to the page's .tex source on GitHub
                 "source_path": result.get("source_path", ""),
+                # shadow the site-wide tooltip JSON global with just this
+                # page's referenced blocks (same client shape, ~2% the size)
+                "tooltip_data": json.dumps([
+                    {"label": label, **entry}
+                    for label, entry in sorted(result.get("tooltip_data", {}).items())
+                ]),
             }
 
             specs.append(

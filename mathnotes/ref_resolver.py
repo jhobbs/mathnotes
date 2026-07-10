@@ -20,6 +20,27 @@ _PAGELINK_RE = re.compile(r'<a data-pagelink="([^"]+)">(.*?)</a>', re.DOTALL)
 _REF_LABEL_RE = re.compile(r'<a[^>]+class="block-reference[^"]*"[^>]+data-ref-label="([^"]+)"')
 
 
+def tooltip_entry(bref) -> Dict[str, Any]:
+    """Client-shaped tooltip payload for one block reference (the shape
+    tooltip-system.ts consumes) — the single source for both the global
+    index JSON and each page's own tooltip JSON."""
+    block = bref.block
+    is_synonym = getattr(bref, "is_synonym", False)
+    synonym_title = getattr(bref, "synonym_title", None)
+    title = text_with_math_to_html(block.title) if block.title else ""
+    url = bref.full_url or ""
+    return {
+        "type": block.block_type.value,
+        "title": title,
+        "content": block.content_html,
+        "url": url if not url.startswith("#") else "",
+        "is_synonym": is_synonym,
+        "synonym_of": title if is_synonym and title else None,
+        "synonym_title": (text_with_math_to_html(synonym_title)
+                          if synonym_title else None),
+    }
+
+
 def _split_ref(ref: str) -> Tuple[Optional[str], str]:
     if ":" in ref:
         ref_type, label = ref.split(":", 1)
@@ -56,24 +77,7 @@ class RefResolver:
             bref = self.block_index.get_reference(label) if self.block_index else None
             if not bref:
                 continue
-            block = bref.block
-            is_synonym = getattr(bref, "is_synonym", False)
-            synonym_title = getattr(bref, "synonym_title", label)
-            if is_synonym and synonym_title:
-                display_type = (
-                    f"{block.block_type.value} ({text_with_math_to_html(synonym_title)}), "
-                    f"synonym of {text_with_math_to_html(block.title or label)}")
-                display_title = ""
-            else:
-                display_type = block.block_type.value
-                display_title = text_with_math_to_html(block.title) if block.title else ""
-            url = bref.full_url
-            tooltip_data[label] = {
-                "type": display_type,
-                "title": display_title,
-                "content": block.rendered_html,
-                "url": url if url and not url.startswith("#") else "",
-            }
+            tooltip_data[label] = tooltip_entry(bref)
         return tooltip_data
 
     # -- dref --
