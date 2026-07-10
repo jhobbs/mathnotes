@@ -20,6 +20,9 @@ def make_index():
     t = MathBlock(block_type=MathBlockType.THEOREM, content="Some statement here now ok.",
                   title=None, label="thm-1")
     t.rendered_html = '<div id="thm-1">T</div>'
+    o = MathBlock(block_type=MathBlockType.DEFINITION, content="A growth bound.",
+                  title="Big $O$ Notation", label="big-o-notation")
+    o.rendered_html = '<div id="big-o-notation">O</div>'
     refs = {
         "metric-space": SimpleNamespace(block=d, full_url="/mathnotes/topology/x/#metric-space",
                                         page_title="X Page"),
@@ -28,6 +31,8 @@ def make_index():
                                          synonym_title="Metric Spaces"),
         "thm-1": SimpleNamespace(block=t, full_url="/mathnotes/topology/x/#thm-1",
                                  page_title="X Page"),
+        "big-o-notation": SimpleNamespace(block=o, full_url="/mathnotes/algebra/y/#big-o-notation",
+                                          page_title="Y Page"),
     }
     index = SimpleNamespace(get_reference=lambda label, _r=refs: _r.get(label))
     mapper = SimpleNamespace(url_mappings={"topology/compact-sets/": "f1", "algebra/groups/": "f2"})
@@ -41,6 +46,17 @@ def test_auto_dref_definition_lowercase_title():
     assert ('<a href="/mathnotes/topology/x/#metric-space" class="block-reference" '
             'data-ref-type="definition" data-ref-label="metric-space">metric space</a>') in out
     assert r.referenced_labels == {"metric-space"}
+
+
+def test_definition_title_lowercase_skips_math():
+    # prose lowercases for mid-sentence link text; TeX inside $...$ must not
+    # ($O$ -> $o$ would change math meaning), and converts through the seam
+    index, mapper = make_index()
+    r = RefResolver(index, mapper)
+    out = r.resolve('<p>see <a data-dref="big-o-notation"></a></p>')
+    assert ">big <math" in out
+    assert 'alttext="O"' in out
+    assert " notation</a>" in out
 
 
 def test_custom_text_and_type_validation():

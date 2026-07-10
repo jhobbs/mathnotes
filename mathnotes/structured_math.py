@@ -70,6 +70,20 @@ def text_with_math_to_html(text: str) -> str:
     return "".join(out)
 
 
+def lowercase_outside_math(text: str) -> str:
+    """Lowercase prose while leaving $...$ math spans untouched. Definition
+    link text is lowercased for mid-sentence use; lowercasing TeX would
+    change math meaning ($O$ -> $o$) or break macros (\\Log -> \\log)."""
+    out = []
+    pos = 0
+    for m in _INLINE_MATH_RE.finditer(text):
+        out.append(text[pos:m.start()].lower())
+        out.append(m.group(0))
+        pos = m.end()
+    out.append(text[pos:].lower())
+    return "".join(out)
+
+
 class MathBlockType(Enum):
     """Types of mathematical content blocks."""
 

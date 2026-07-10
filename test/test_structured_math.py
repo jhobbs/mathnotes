@@ -11,7 +11,7 @@ except NameError:
 from mathnotes.structured_math import (
     MathBlock, MathBlockType, PageDoc, CHILD_MARKER_RE,
     body_text, finalize_blocks, render_block_html, math_to_dollar_text,
-    text_with_math_to_html,
+    text_with_math_to_html, lowercase_outside_math,
 )
 
 
@@ -136,6 +136,15 @@ def test_math_to_dollar_text_alttext_with_gt():
     h = '<p>Let <math alttext="\\epsilon &gt; 0" display="inline"><mi>e</mi></math> hold.</p>'
     assert body_text(h) == "Let $\\epsilon > 0$ hold."
     assert math_to_dollar_text('<math alttext="a &gt; b" display="block"><mi>a</mi></math>') == "$$a > b$$"
+
+
+def test_lowercase_outside_math():
+    assert lowercase_outside_math("Big $O$ Notation") == "big $O$ notation"
+    assert lowercase_outside_math("Principal $\\Log$ Branch") == "principal $\\Log$ branch"
+    assert lowercase_outside_math("No Math Here") == "no math here"
+    assert lowercase_outside_math("$X$") == "$X$"
+    # unpaired $ lowercases as prose
+    assert lowercase_outside_math("Costs $5 More") == "costs $5 more"
 
 
 def test_description_strips_math_elements():
