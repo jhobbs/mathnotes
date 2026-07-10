@@ -1,15 +1,15 @@
 /* Native MathML rendering (build-time MathJax -> MathML Core). */
 
 @font-face {
-  font-family: 'STIX Two Math';
-  src: url('./fonts/STIXTwoMath-Regular.woff2') format('woff2');
+  font-family: 'Latin Modern Math';
+  src: url('./fonts/LatinModernMath-Regular.woff2') format('woff2');
   /* brief invisibility beats math reflowing from fallback glyphs */
   font-display: block;
 }
 
 math {
-  font-family: 'STIX Two Math', math;
-  /* STIX Two Math draws visually small next to the UI font */
+  font-family: 'Latin Modern Math', math;
+  /* math fonts draw visually small next to the UI font */
   font-size: 1.125em;
 }
 
