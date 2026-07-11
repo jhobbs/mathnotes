@@ -12,7 +12,10 @@ import html as html_lib
 import re
 from typing import Any, Dict, Optional, Set, Tuple
 
-from .structured_math import MathBlockType, lowercase_outside_math, text_with_math_to_html
+from .structured_math import (
+    MathBlockType, apply_reference_case, lowercase_outside_math,
+    text_with_math_to_html,
+)
 
 _DEMBED_RE = re.compile(r'<div data-dembed="([^"]+)"></div>')
 _DREF_RE = re.compile(r'<a data-dref="([^"]+)">(.*?)</a>', re.DOTALL)
@@ -137,12 +140,14 @@ class RefResolver:
             elif is_synonym and getattr(bref, "synonym_title", None):
                 text = bref.synonym_title
                 if block.block_type == MathBlockType.DEFINITION:
-                    text = lowercase_outside_math(text)
+                    text = (apply_reference_case(label, text)
+                            or lowercase_outside_math(text))
                 text = text_with_math_to_html(text)
             elif block.title:
                 text = block.title
                 if block.block_type == MathBlockType.DEFINITION and ref_type is None:
-                    text = lowercase_outside_math(text)
+                    text = (apply_reference_case(label, text)
+                            or lowercase_outside_math(text))
                 text = text_with_math_to_html(text)
             else:
                 text = text_with_math_to_html(block.content_snippet)

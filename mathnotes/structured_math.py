@@ -123,6 +123,39 @@ def lowercase_outside_math(text: str) -> str:
     return "".join(out)
 
 
+def apply_reference_case(typed: str, title: str) -> Optional[str]:
+    """Transfer the capitalization of a typed reference label onto a title:
+    \\@{Set} renders "Set", \\@{set} renders "set". The title supplies the
+    words, separators, and $...$ math spans (typed case never alters TeX);
+    the typed label supplies only the letter case. Returns None when the
+    typed label doesn't spell the title, so callers fall back to
+    lowercase_outside_math."""
+    segments = []
+    pos = 0
+    for m in _INLINE_MATH_RE.finditer(title):
+        segments.append((title[pos:m.start()], True))
+        segments.append((m.group(0), False))
+        pos = m.end()
+    segments.append((title[pos:], True))
+
+    out = []
+    ti = 0
+    for seg, transfer in segments:
+        for ch in seg:
+            if not ch.isalnum():
+                out.append(ch)
+                continue
+            while ti < len(typed) and not typed[ti].isalnum():
+                ti += 1
+            if ti >= len(typed) or typed[ti].lower() != ch.lower():
+                return None
+            out.append(typed[ti] if transfer else ch)
+            ti += 1
+    if any(c.isalnum() for c in typed[ti:]):
+        return None
+    return "".join(out)
+
+
 class MathBlockType(Enum):
     """Types of mathematical content blocks."""
 

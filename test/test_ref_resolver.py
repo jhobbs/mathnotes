@@ -35,7 +35,8 @@ def make_index():
         "big-o-notation": SimpleNamespace(block=o, full_url="/mathnotes/algebra/y/#big-o-notation",
                                           page_title="Y Page"),
     }
-    index = SimpleNamespace(get_reference=lambda label, _r=refs: _r.get(label))
+    index = SimpleNamespace(get_reference=lambda label, _r=refs: _r.get(
+        MathBlock.normalize_label_from_title(label)))
     mapper = SimpleNamespace(url_mappings={"topology/compact-sets/": "f1", "algebra/groups/": "f2"})
     return index, mapper
 
@@ -157,7 +158,8 @@ def test_dembed_order_dependency_raises():
                   title=None, label="thm-2")
     t.rendered_html = None
     refs = {"thm-2": SimpleNamespace(block=t, full_url="/mathnotes/x/#thm-2", page_title="X")}
-    index = SimpleNamespace(get_reference=lambda label, _r=refs: _r.get(label))
+    index = SimpleNamespace(get_reference=lambda label, _r=refs: _r.get(
+        MathBlock.normalize_label_from_title(label)))
     mapper = SimpleNamespace(url_mappings={})
     r = RefResolver(index, mapper)
     try:
@@ -192,7 +194,8 @@ def test_synonym_title_escaping():
                                        page_title="X", is_synonym=True,
                                        synonym_title="A<B & C"),
     }
-    index = SimpleNamespace(get_reference=lambda label, _r=refs: _r.get(label))
+    index = SimpleNamespace(get_reference=lambda label, _r=refs: _r.get(
+        MathBlock.normalize_label_from_title(label)))
     mapper = SimpleNamespace(url_mappings={})
     out = RefResolver(index, mapper).resolve('<p><a data-dref="bad-synonym"></a></p>')
     assert 'a&lt;b &amp; c' in out, f"Expected escaped lowercase synonym_title in output, got: {out}"
@@ -248,6 +251,44 @@ def test_notation_collect_and_rendered_html_labels():
     stamped = ('<mi class="notation-ref notation-ref--integers" '
                'data-ref-label="integers" data-ref-url="/x#integers">Z</mi>')
     assert labels_from_rendered_html(stamped, {}) == {"integers"}
+
+
+def test_typed_case_preserved_in_link_text():
+    # capitalization at the reference site wins: \@{Metric-space} -> "Metric space"
+    index, mapper = make_index()
+    r = RefResolver(index, mapper)
+    out = r.resolve('<p><a data-dref="Metric-space"></a></p>')
+    assert ">Metric space</a>" in out, out
+    out = r.resolve('<p><a data-dref="metric-space"></a></p>')
+    assert ">metric space</a>" in out, out
+
+
+def test_typed_case_preserved_for_synonym():
+    index, mapper = make_index()
+    out = RefResolver(index, mapper).resolve('<p><a data-dref="Metric-Spaces"></a></p>')
+    assert "synonym-reference" in out
+    assert ">Metric Spaces</a>" in out, out
+
+
+def test_typed_case_never_touches_math():
+    # typed case transfers to prose only; TeX inside $...$ stays as authored
+    index, mapper = make_index()
+    out = RefResolver(index, mapper).resolve('<p><a data-dref="Big-o-notation"></a></p>')
+    assert ">Big <math" in out, out
+    assert 'alttext="O"' in out
+    assert " notation</a>" in out
+
+
+def test_typed_case_fallback_when_label_not_title():
+    # labels that don't spell the title keep the lowercased-title text
+    d = MathBlock(block_type=MathBlockType.DEFINITION, content="c",
+                  title="Fundamental Theorem of Calculus", label="ftc")
+    d.content_html = "<p>c</p>"
+    refs = {"ftc": SimpleNamespace(block=d, full_url="/mathnotes/a/#ftc", page_title="A")}
+    index = SimpleNamespace(get_reference=lambda label, _r=refs: _r.get(
+        MathBlock.normalize_label_from_title(label)))
+    out = RefResolver(index, None).resolve('<p><a data-dref="Ftc"></a></p>')
+    assert ">fundamental theorem of calculus</a>" in out, out
 
 
 if __name__ == "__main__":
