@@ -67,11 +67,11 @@ This works well when $n$ is large and $p$ is not extremely close to $0$ or $1$, 
 
 Let $X$ be a binomial random variable with parameters $n$ and $p.$ For large $n$, $X$ has approximately a normal distribution with $\mu = np$ and $\sigma^2 = npq = np(1-p)$ and
 
-\[ \begin{aligned}
+\bal
 P(X \leq x) & = \sum_{k=0}^x b(k; n, p) \\
             & \approx \text{area under normal curve to the left of } x + 0.5 \\
             & = P \left ( Z \leq \frac{x + 0.5 -np}{\sqrt{npq}} \right )
-\end{aligned} \]
+\eal
 
 and the approximation is good if $np$ and $n(1-p)$ are greater than or equal to 5.
 

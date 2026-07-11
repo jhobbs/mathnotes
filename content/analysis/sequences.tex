@@ -97,20 +97,20 @@ Suppose $\{s_n\}$ and $\{t_n\}$ are complex \@{sequences}, and $\lim_{n \to \inf
 \begin{proof}
 For (a), let $\epsilon > 0,$ pick $N_s$ such that $|s_n - s| < \epsilon/2$ when $n \geq N_s,$ and pick $N_t$ such that $|t_n - s| < \epsilon/2$ when $n \geq N_t.$ Then, let $N = \max\{N_s, N_t\}.$ Then, when $n \geq N,$
 
-\[ \begin{aligned}
+\bal
  |(s_n + t_n) - (s + t) | & = | (s_n - s) + (t_n - t)| \\
                           & \leq |s_n - s| + |t_n - t| \\
                           & < \epsilon.
-\end{aligned} \]
+\eal
 
 For (b), If $c = 0,$ let $\epsilon > 0,$ and then $|c s_n - c s| = 0 < \epsilon.$ Otherwise,
 
 Let $\epsilon / |c| > 0.$ For some $N,$ when $n \geq N,$ we have
 
-\[ \begin{aligned}
+\bal
 |s_n - s| < \epsilon / |c| & \iff |c| |s_n - s| < \epsilon  \\
                      & \iff |cs_n - cs | < \epsilon.
-\end{aligned} \]
+\eal
 
 For (c), let $\epsilon > 0.$ For some $N,$ when $n \geq N,$ we have
 
@@ -130,22 +130,22 @@ which means
 
 Applying this, along with the results of (a) and (b) to (1) gives:
 
-\[ \begin{aligned}
+\bal
 \lim_{n \to \infty} (s_n t_n - st) & = \lim_{n \to \infty} ((s_n - s)(t_n - t) + s(t_n - t) + t(s_n - s)) \\
                                    & = \lim_{n \to \infty} (s(t_n - t) + t(s_n - s)) \\
                                    & = \lim_{n \to \infty} (s(t_n - t)) + \lim_{n \to \infty} (t(s_n - s)) \\
                                    & = s * 0 + t * 0 \\
                                    & = 0.
-\end{aligned} \]
+\eal
 
 For (e), pick $m$ such that when $n \geq m, |s_n - s| < \frac{1}{2}|s|,$ so we have that
 
-\[ \begin{aligned}
+\bal
 |s_n - s| < \frac{1}{2}|s| & \iff |s_n| + |s| < \frac{1}{2}|s| \\
                            & \iff |s_n| < -\frac{1}{2}|s| \\
                            & \iff |s_n| > \frac{1}{2}|s| \\
                            & \iff \frac{1}{2 |s_n|}|s| < 1.
-\end{aligned} \]
+\eal
 
 Now, let $\epsilon > 0.$ For some \@{integer} $N > m,$ when $n \geq M,$ we have that
 
@@ -153,13 +153,13 @@ Now, let $\epsilon > 0.$ For some \@{integer} $N > m,$ when $n \geq M,$ we have 
 
 Thus, when $n \geq N,$
 
-\[ \begin{aligned}
+\bal
 \left | \frac{1}{s_n} - \frac{1}{s} \right | & = \left | \frac{s_n - s}{s_n s} \right | \\
                                              & = \frac{|s_n - s|}{|s_n s|} \\
                                              & < \frac{1}{2 |s_n||s|}|s|^2 \epsilon \\
                                              & = \frac{1}{2 |s_n|}|s| \epsilon \\
                                              & < \epsilon.
-\end{aligned} \]
+\eal
 \end{proof}
 
 \begin{theorem}[A sequence in $R^k$ converges iff its components converge]\label{sequence-in-rk-converges-iff-its-components-converge}
@@ -247,10 +247,10 @@ First, note that if the range of $\{p_n\}$ is just $\{q\},$ then $q$ is the only
 
 Choose $n_1$ so that $p_{n_1} \neq q,$ and let $\delta = d(q, p_{n_1}).$ Suppose $n_1, \dots, n_{i-1}$ are chosen. Since $q$ is a limit point of $E^*,$ there is an $x \in E^*$ with $d(q, x) < \frac{\delta}{2^i}.$ Since $x \in E^*$ and is thus the \@{limit-sequence} of some \@{subsequence} of $\{p_n\},$ there is an $n_i > n_{i-1}$ such that $d(x, p_{n_i}) < \frac{\delta}{2^i}.$ Now, via the triangle inequality,
 
-\[ \begin{aligned} d(q, p_{n_i}) & \leq d(q, x) + d(x, p_{n_i}) \\
+\bal d(q, p_{n_i}) & \leq d(q, x) + d(x, p_{n_i}) \\
                                  & < \frac{\delta}{2^i} + \frac{\delta}{2^i} \\
                                  & = \frac{2\delta}{2^i} = \frac{\delta}{2^{i-1}}, \quad i = 1, 2, 3, \dots.
-\end{aligned} \]
+\eal
 
 This means that $\{p_{n_i}\}$ \@{converges} to $q,$ because we can find a $p_{n_i}$ as close as desired to $q.$ Therefore $q$ is a \@{subsequential-limit} of $\{p_n\}$ and so $q \in E^*,$ and $E^*$ is \@{closed}.
 \end{proof}
@@ -294,11 +294,11 @@ Because $E \subset \closure{E},$ $\diam{E} \leq \diam{\closure{E}}.$
 
 Conversely, Let $p, q \in \closure{E},$ and $p', q' \in E,$ such that $d(p, p') < \epsilon, d(q, q') < \epsilon.$ Therefore, by the triangle inequality,
 
-\[ \begin{aligned}
+\bal
 d(p,q) & \leq d(p, p') + d(p', q') + d(q', q) \\
        & < 2 \epsilon + d(p', q') \\
        & \leq 2 \epsilon + \diam{E}.
-\end{aligned} \]
+\eal
 
 Therefore, $\diam{\closure{E}} \leq 2 \epsilon + \diam{E},$ and since $\epsilon$ was arbitrary, $\diam{\closure{E}} = \diam{E}.$
 \end{proof}

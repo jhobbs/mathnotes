@@ -69,6 +69,12 @@
 % In PDF output it degrades to a pointer.
 \NewDocumentCommand{\dembed}{m}{\begin{quote}\emph{[Embedded: \hyperref[#1]{#1}]}\end{quote}}
 
+% Aligned display block: \bal ... \eal, shorthand for
+% \[\begin{aligned} ... \end{aligned}\] (the site expands it the same way
+% before parsing)
+\def\bal{\[\begin{aligned}}
+\def\eal{\end{aligned}\]}
+
 % Math macros shared with the site: mathjax-init.ts parses the section
 % between the BEGIN/END MATH MACROS markers at build time, so this file is
 % the single source of truth. Only simple one-line

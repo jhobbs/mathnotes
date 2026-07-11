@@ -85,11 +85,11 @@ and
 \begin{proof}
 By assumption and definition of the \@{complex-derivative}, we have that
 
-\[ \begin{aligned}
+\bal
 f'(z_0) & = \lim_{\Delta z \to 0} \frac{f(z_0 + \Delta z) - f(z_0)}{\Delta z} \\
         & = \lim_{\Delta z \to 0} \frac{\left [ u(x_0 + \Delta x, y_0 + \Delta y) - u(x_0, y_0) \right ] +
                 i \left [ v(x_0 + \Delta x, y_0 + \Delta y) - v(x_0, y_0) \right ] }{\Delta z}.
-\end{aligned} \]
+\eal
 
 Now, this limit must exist and be the same no matter what path we take. So, we can take the path along the real axis by setting $\Delta y = 0$ and sending $\Delta x \to 0,$ and we get
 
@@ -112,12 +112,12 @@ that is,
 
 Now, we can repeat this trick by sending $\Delta z = \Delta x + i \Delta y$ to zero along the imaginary axis by setting $\Delta x = 0$ and sending $\Delta y \to 0$ to get
 
-\[ \begin{aligned}
+\bal
 f'(z_0) = f'(x_0 + i y_0) & = \lim_{\Delta y \to 0} \frac{\left [ u(x_0, y_0 + \Delta y) - u(x_0, y_0) \right ] +
                 i \left [ v(x_0, y_0 + \Delta y) - v(x_0, y_0) \right ] }{i \Delta y} \\
         & =  \lim_{\Delta y \to 0} \frac{\left [ v(x_0, y_0 + \Delta y) - v(x_0, y_0) \right ] -
                 i \left [ u(x_0, y_0 + \Delta y) - u(x_0, y_0) \right ] }{\Delta y},
-\end{aligned} \]
+\eal
 
 and hence
 

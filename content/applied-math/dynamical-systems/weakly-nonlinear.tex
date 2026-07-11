@@ -88,11 +88,11 @@ so
 
 \[ \dot{x} = (D_\tau + \varepsilon D_T)(x_0 + \varepsilon x_1 + O(\varepsilon^2)) = D_\tau x_0 + \varepsilon D_\tau x_1 + \varepsilon D_T x_0 + O(\varepsilon^2) = D_\tau x_0 + \varepsilon ( D_\tau x_1 + D_T x_0) + O(\varepsilon^2), \]
 
-\[ \begin{aligned}
+\bal
 	\ddot{x} & = (D_\tau^2 + 2 \varepsilon D_\tau D_T + \varepsilon^2 D_T^2)(x_0 + \varepsilon x_1 + O(\varepsilon^2)) \\
 	& = D_\tau^2 x_0 + \varepsilon D_\tau^2 x_1 + 2 \varepsilon D_\tau D_T x_0 + O(\varepsilon^2) \\
 	& = D_\tau^2 x_0 + \varepsilon( D_\tau^2 x_1 + 2 D_\tau D_T x_0) + O(\varepsilon^2).
-\end{aligned} \]
+\eal
 
 Now, we need to do some more expansion before plugging everything back into our original equation. First, if we look at $\dot{x}^3,$ any terms including $O(\varepsilon^2)$ will be combined so we leave it out for now, and then if we let $a = D_\tau x_0, b = \varepsilon ( D_\tau x_1 + D_T x_0),$ we can use the expansion $(a+b)^3 = a^3 + 3 a^2 b + 3 a b^2  + b^3.$ Any terms with $b^2$ or higher become part of $O(\varepsilon)^2,$ so we end up with
 
@@ -100,29 +100,29 @@ Now, we need to do some more expansion before plugging everything back into our 
 
 We'll leave it there without expanding more because all the $\varepsilon$ terms drop out here:
 
-\[ \begin{aligned}
+\bal
 	\varepsilon(x^2 - 1)\dot{x}^3 & = (x^2 -1)(\varepsilon (D_\tau x_0)^3 + 3 \varepsilon^2 (D_\tau x_0)^2 (( D_\tau x_1 + D_T x_0)) + O(\varepsilon^3)) \\
 	& = (x^2 -1)(\varepsilon(D_\tau x_0)^3) + O(\varepsilon^2) \\
 	& = ((x_0 + \varepsilon x_1 + O(\varepsilon^2))^2 - 1)((\varepsilon(D_\tau x_0)^3) + O(\varepsilon^2)) \\
 	& = (x_0^2  + 2 \varepsilon x_0 x_1 -1 + O(\varepsilon^2))((\varepsilon(D_\tau x_0)^3) + O(\varepsilon^2)) \\
 	& = (x_0^2  + 2 \varepsilon x_0 x_1 -1)(\varepsilon(D_\tau x_0)^3) + O(\varepsilon^2) \\
 	& = \varepsilon (D_\tau x_0)^3 (x_0^2 - 1) + O(\varepsilon^2). \\
-\end{aligned} \]
+\eal
 
 Finally we're ready to write out our expanded version of (f):
 
-\[ \begin{aligned}
+\bal
 \ddot{x} + x + \varepsilon(x^2 - 1)\dot{x}^3 & = 0 \\
 	D_\tau^2 x_0 + \varepsilon( D_\tau^2 x_1 + 2 D_\tau D_T x_0) + x_0 + \varepsilon x_1 + \varepsilon (D_\tau x_0)^3 (x_0^2 - 1) + O(\varepsilon^2) & = 0 \\
 	D_\tau^2 x_0 + x_0 + \varepsilon( D_\tau^2 x_1 + 2 D_\tau D_T x_0 + x_1 + (D_\tau x_0)^3 (x_0^2 - 1)) + O(\varepsilon^2) & = 0.
-\end{aligned} \]
+\eal
 
 Collecting powers of $\varepsilon$ yields a pair of differential equations (with the second one separating $x_0$ and $x_1$ terms):
 
-\[ \begin{aligned}
+\bal
 	O(1) & : D_\tau^2 x_0 + x_0 = 0 \\
 	O(\varepsilon) & : D_\tau^2 x_1 + x_1 = - 2 D_\tau D_T x_0 - (D_\tau x_0)^3 (x_0^2 - 1).
-\end{aligned} \]
+\eal
 
 The general solution for the $O(1)$ equation, whose eigenvalues are $\pm i,$ is $x_0 = c_1(T) e^{i\tau} + c_2(T) e^{-i \tau}, c_1, c_2 \in \complexes.$ But we have $x$ is real, so $c_1(T) = \overline{c_2(T)},$ and we can write our solution as
 
@@ -134,20 +134,20 @@ Letting $R(T) = 2 \rho(T)$ (and recalling that since $\rho$ is the modulus of a 
 
 Now we substitute our solution for $x_0$ into the $O(\varepsilon)$ equation:
 
-\[ \begin{aligned}
+\bal
 	D_\tau^2 x_1 + x_1 & = - 2 D_\tau D_T x_0 - (D_\tau x_0)^3 (x_0^2 - 1) \\
 	& =  - 2 D_\tau D_T (R(T)\cos{(\tau + \phi(T))}) - (D_\tau (R(T)\cos{(\tau + \phi(T))}))^3 ((R(T)\cos{(\tau + \phi(T))})^2 - 1) \\
 	& =  2 D_T (R(T)\sin{(\tau + \phi(T))}) + (R(T)\sin{(\tau + \phi(T))})^3 ((R(T)\cos{(\tau + \phi(T))})^2 - 1).
-\end{aligned} \]
+\eal
 
 To keep things from getting messy we'll just write $R = R(T)$ and $\phi = \phi(T), y = \tau + \phi.$ Proceeding with applying $D_T$ on the RHS we get
 
-\[ \begin{aligned}
+\bal
 	D_\tau^2 x_1 + x_1 & =  2 (R \phi'\cos{y} + R'\sin{y}) + (R^3\sin^3{y})((R^2\cos^2{y}) - 1) \\
 	& =  2 (R \phi'\cos{y} + R'\sin{y}) - R^3(1 - (R^2\cos^2{y}))(\sin^3{y}) \\
 	& =  2 (R \phi'\cos{y} + R'\sin{y}) - \frac{R^3}{16}((12 - 2R^2)\sin{y} - (4 + R^2)\sin{(3y)} + R^2\sin{(5y)})\\
 	& =  2 R\phi' \cos{y} + (2R' - \frac{R^3}{8}(6 - R^2))\sin{y} + \frac{R^3}{16}((4 + R^2)\sin{(3y)} - R^2\sin{(5y)}).\\
-\end{aligned} \]
+\eal
 
 Here, $'$ denotes derivative with respect to $T.$ We want to eliminate the resonant terms $\sin{y}$ and $\cos{y}$; to do so we'll require their coefficients to be zero:
 

@@ -44,13 +44,13 @@ We'll find its characteristic curves. First, let's parameterize $u(t,x)$ to get 
 
 Comparing (b) to (a), we see that if if $u_t + c u_x = 0,$ then $\frac{dx}{dt} = c.$ Now, we solve that ODE:
 
-\[ \begin{aligned}
+\bal
 \frac{dx}{dt} & = c \\
 dx & = cdt \\
 \int dx &  = \int cdt \\
 x & = ct + k \\
 x - ct & = k.
-\end{aligned} \]
+\eal
 
 So, we see that $x - ct$ is constant, and if we let $t=0,$ we get $x_0 = k.$ So, our characteristic curve is $\xi{(t,x)} = x - ct.$
 
@@ -78,11 +78,11 @@ Note: we can go from $v_t$ to $\frac{dv}{dt}$ because $v(t, x - ct)$ is only a f
 
 Now we solve this ODE:
 
-\[ \begin{aligned}
+\bal
 \int_0^t \frac{dv}{ds}(s, \xi) ds & = 0 \\
 v(t, \xi) - v(0, x_0) & = 0 \\
 v(t, \xi) & = v(0, x_0). \\
-\end{aligned} \]
+\eal
 
 We were given that $u(0, x) = f(x),$ and found that $\frac{dv}{dt} = 0,$ i.e. $v$ doesn't change with time so $v(t, \xi) = v(t, x_0) = v(0, x_0) = f(x_0) = f(\xi) = f(x - ct).$
 
@@ -126,10 +126,10 @@ So, if $\frac{dx}{dt} = c(x),$ then
 
 Solving $\frac{dx}{dt} = c(x)$ via separation of variables gives:
 
-\[ \begin{aligned}
+\bal
 \int \frac{dx}{c(x)} & = \int dt \\
 \beta(x) & := \int \frac{dx}{c(x)} = t + k,
-\end{aligned} \]
+\eal
 
 so $\beta(x) - t = k$ is constant and is our characteristic variable, i.e. $\xi(t,x) = \beta(x) - t,$ and hence
 
@@ -141,10 +141,10 @@ Let's say we're given initial condition $u(0, x) = f(x).$ Then $v(\xi) = f(x).$ 
 
 For example, if we have $u_t + \frac{1}{x} u_x = 0,$ then $c(x) = 1/x.$ We solve $\frac{dx}{dt} = 1/x$ to get $\beta{x} = \frac{x^2}{2} = t + k,$ i.e. $\xi = \frac{x^2}{2} + t.$ Now, to find $\beta^{-1}, let t = \frac{x^2}{2}.$ Swapping $x$ and $y$ gives $x = \frac{y^2}{2},$ and solving for $y = x(t)$ gives $\beta^{-1} = x(t) = \sqrt{2t}.$ Now our solution is
 
-\[ \begin{aligned}
+\bal
 u(t,x) & = f(\sqrt{2 ( \beta{x} - t)}) \\
        & = f(\sqrt{2 ( \frac{x^2}{2} -t )} \\
        & = f(\sqrt{x^2 -2t}). \\
-\end{aligned} \]
+\eal
 
 \end{document}

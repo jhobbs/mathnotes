@@ -9,10 +9,10 @@
 \begin{definition}[Entropy of a Source]
 Consider a discrete source with $i$ finite number of states, where in state $i$ there is probability $p_i(j)$ of producing symbol $j.$ Then, each state $i$ will have an entropy $H_i,$ and the \textbf{entropy of the source} will be defined as the average of these $H_i$ weighted by the probability of the occurrence of each state ($P_i$):
 
-\[ \begin{aligned}
+\bal
 H & = \sum_{i} P_i H_i \\
   & = - \sum_{i,j} P_i p_i(j) \log{p_i(j)}.
-\end{aligned} \]
+\eal
 
 In other words, $H = \mathbb{E}[H_i]$ - the \@{expected-value} of the per state entropy.
 
@@ -37,11 +37,11 @@ Simplifying, when successive symbols are \@{independent}, $H = - \sum p_i \log(p
 
 so
 
-\[ \begin{aligned}
+\bal
 \log{p} & \approx N \sum_{i} \left [ p_i \log{p_i} \right ] \\
 \log{p} & \approx - N H \\
 H & \approx \frac{\log{1/p}}{N}.
-\end{aligned} \]
+\eal
 
 so \@{entropy} is approximately the log of the reciprocal probability of a long sequence divided by the number of symbols in the sequence. The theorem below states this more formally.
 
@@ -89,12 +89,12 @@ $c_i$ is the only random thing in $p_S$ - it doesn't consider position of symbol
 
 Taking advantage of our symbols being emitted \@{i.i.d.}, we can convert our expression about the @surprisal@ of the sequence to an equivalent expression about the surprisal of individual symbols being emitted:
 
-\[ \begin{aligned}
+\bal
 \frac{1}{N} \log{\frac{1}{p_S}} & =  \frac{1}{N} \log{\frac{1}{\prod_{i = 1}^n p_i^{c_i}}} \\
                                 & =  - \frac{1}{N} \log{\prod_{i = 1}^n p_i^{c_i}} \\
                                 & =  - \frac{1}{N} \sum_{i=1}^n \log{p_i^{c_i}} \\
                                 & =  - \sum_{i=1}^n \frac{c_i}{N} \log{p_i}.
-\end{aligned} \]
+\eal
 
 This final term is very similar to $H = - \sum_{i=1}^{n} p_i \log{p_i};$ we just need to show that $\frac{c_i}{N} \to p_i$ as $N \to \infty.$ The expected value of $c_i$ for $N$ draws is the expected count of $a_i$ in $N$ draws, and is
 
@@ -120,6 +120,33 @@ This is just saying that the empirical frequencies in sequences of symbols gener
 \end{intuition}
 
 \end{theorem}
+
+\begin{theorem}[Strong Asymptotic Equipartition Property (Shannon--McMillan--Breiman)]
+    Start with a source of $n$ states $a_1, \dots, a_n,$ emitted by a \@{stationary}
+	\@{ergodic} \@{Markov-chain} with transition probabilities
+    \[ p_{ik} = \Pr(X_{t+1} = a_k \mid X_t = a_i), \qquad \textstyle\sum_{k=1}^n p_{ik} = 1, \]
+    and \@{stationary distribution} $P = (P_1, \dots, P_n)$ --- the left eigenvector
+    solving $P = PT$ for the transition matrix $T = (p_{ik})$ (eigenvalue $1,$
+    normalized so $\sum_i P_i = 1$). Its \@{entropy rate} is, by definition,
+    \[ H = -\sum_{i=1}^n \sum_{k=1}^n P_i\, p_{ik} \log{p_{ik}}. \]
+    A message is a sequence $S = (x_1, \dots, x_N)$ of length $N,$ each
+    $x_t \in \{a_1, \dots, a_n\}$ --- a path through the network --- with probability
+    \[ p_S = P_{x_1} \prod_{t=1}^{N-1} p_{x_t\, x_{t+1}}. \]
+    Let $\epsilon, \delta > 0.$ Then there exists $N_0$ such that for all $N \geq N_0$
+    the length-$N$ sequences split into two classes:
+    \begin{enumerate}
+        \item The typical set,
+              $A_\delta^{(N)} = \left\{ S : \left| \dfrac{1}{N} \log{\dfrac{1}{p_S}} - H \right| \leq \delta \right\}.$
+        \item The atypical set, $\overline{A_\delta^{(N)}},$ with total probability
+              $\Pr\!\left(\overline{A_\delta^{(N)}}\right) < \epsilon.$
+    \end{enumerate}
+    Moreover --- and this is the strengthening past convergence in probability --- the
+    convergence holds \@{almost surely}:
+    \[ \Pr\!\left( \lim_{N \to \infty} \frac{1}{N} \log{\frac{1}{p_S}} = H \right) = 1, \]
+    so with probability $1$ a drawn sequence is typical for all sufficiently large $N$
+    --- a statement about whole trajectories, not merely each $N$ separately.
+\end{theorem}
+
 
 \begin{theorem}[Noiseless channel transmitting discrete symbols]
 Given a communication channel which has a \@{capacity} of $C$ bits per second, accepting signals from a source of \@{entropy} (or information) of $H$ bits per symbols, it is possible, given a properly devised coding procedure, for the transmitter to transmit symbols over the channel at an average rate which is nearly $C/H$ but which, no matter how clever the coding, can never exceed $C/H.$

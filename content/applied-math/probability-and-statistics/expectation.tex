@@ -64,10 +64,10 @@ We will proceed by induction. Assume $X$ is discrete and takes on $n$ values $x_
 
 Base step, for $n=2$: Assume $X$ takes on two distinct values, $x_1$ and $x_2,$ with probabilities $p_1 = \lambda, p_2 = 1 - \lambda.$ Then we want to show that
 
-\[ \begin{aligned}
+\bal
 \varphi\big(E[X]\big) & \leq E\big[\varphi(X)\big] \\
 \varphi\big(\lambda x_1 + (1 - \lambda) x_2 \big) & \leq \lambda \varphi(x_1) + (1 - \lambda) \varphi(x_2). \\
-\end{aligned} \]
+\eal
 
 The last line is just the definition of a \@{convex-function}, so it's obviously true.
 
@@ -89,13 +89,13 @@ Now, from our inductive hypothesis we have that
 
 Tying it all together we have
 
-\[ \begin{aligned}
+\bal
 \varphi \big ( E[X] \big ) & = \varphi \big ( \sum_{i=1}^{n} p_i x_i \big ) \\
                            & \leq w \sum_{i=1}^{n-1} q_i \varphi(x_i) + p_n \varphi(x_n) \\
                            & = \sum_{i=1}^{n-1} p_i \varphi(x_i) + p_n \varphi(x_n) \\
                            & = \sum_{i=1}^{n} p_i \varphi(x_i) \\
                            & = E[\varphi(X)].
-\end{aligned} \]
+\eal
 
 TOOD: show the equality case only holds when the support is affine.
 \end{proof}

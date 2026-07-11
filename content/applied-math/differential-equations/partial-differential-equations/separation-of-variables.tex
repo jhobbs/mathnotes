@@ -92,7 +92,7 @@ The boundary conditions in (7) again yield $C_1 = C_2 = 0$, so for $\lambda = 0$
 
 Now, the boundary conditions $X(0) = X(L) = 0$ give the system
 
-\[ \begin{aligned} c_1 = 0 \\ c_1 \cos{\sqrt{\lambda}}L + c_2 \sin{\sqrt{\lambda}}L = 0. \end{aligned} \]
+\bal c_1 = 0 \\ c_1 \cos{\sqrt{\lambda}}L + c_2 \sin{\sqrt{\lambda}}L = 0. \eal
 
 Because c\_1 = 0, the system reduces to solving $c_2 \sin{\sqrt{\lambda}}L = 0.$ Hence, either $\sin{\sqrt{\lambda}L} = $ or $c_2 = 0$.
 
@@ -112,7 +112,7 @@ For each $n = 1, 2, 3 \dots$, the general solution to this linear first-order eq
 
 Combining this with equation (9), we obtain, for each $n = 1,2,3,\dots$, the functions
 
-\[ \begin{aligned} u_n(x_t) = X_n(x)T_n(t) = a_n\sin{(n \pi x / L)} b_n e^{-\beta (n \pi / L)^2 t} \\ = c_n  e^{-\beta (n \pi / L)^2 t} \sin{(n \pi x / L)}, \end{aligned} \]
+\bal u_n(x_t) = X_n(x)T_n(t) = a_n\sin{(n \pi x / L)} b_n e^{-\beta (n \pi / L)^2 t} \\ = c_n  e^{-\beta (n \pi / L)^2 t} \sin{(n \pi x / L)}, \eal
 
 where $c_n$ is also an arbitrary constant.
 
@@ -132,7 +132,7 @@ Comparing (11) with (1), we have that $\beta = 7$ and $L = \pi$. Hence, we need 
 
 The constants we require are $c_2 = 3$ and $c_5 = -6$. The solution to the heat flow problem (11)-(13) is:
 
-\[ \begin{aligned} u(x,t) = c_2e^{- \beta(2 \pi / L)^2t}\sin(2 \pi x/L) + c_5e^{- \beta(5 \pi / L)^2t}\sin(5 \pi x/L) \\ = 3e^{-28t}\sin{2x} - 6e^{-175t} \sin{5x}. \end{aligned} \]
+\bal u(x,t) = c_2e^{- \beta(2 \pi / L)^2t}\sin(2 \pi x/L) + c_5e^{- \beta(5 \pi / L)^2t}\sin(5 \pi x/L) \\ = 3e^{-28t}\sin{2x} - 6e^{-175t} \sin{5x}. \eal
 
 \subsubsection{Complete Solution to Generic Problem}
 

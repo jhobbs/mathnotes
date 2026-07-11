@@ -24,13 +24,13 @@ Note that this is just the rise-over-run formula for the slope between two point
 
 Now,
 
-\[ \begin{aligned}
+\bal
     \lim_{x \to a}(f(x) - f(a)) & = \lim_{x \to a} \left ( \frac{f(x) - f(a)}{(x - a)}(x - a) \right ) \\
                 \dots                   & = \lim_{x \to a} \left ( \frac{f(x) - f(a)}{(x - a)} \right ) \cdot \lim_{x \to a} (x - a) \\
                 \dots                    & = f'(a) \cdot 0 \\
     \lim_{x \to a}f(x) - f(a)       & = 0 \\
     \lim_{x \to a} f(x)             & = f(a). \square
-    \end{aligned} \]
+    \eal
 
 \subsection{Derivative Rules}
 
@@ -40,31 +40,31 @@ Linearity: $(f+cg)' = f'(x) + cg'(x).$
 
 \emph{Proof}:
 
-\[ \begin{aligned}
+\bal
     (f + cg)'(x) & = \lim_{y \to x} \frac{(f + cg)(y) - (f + cg)(x)}{y - x} \\
                  & = \lim_{y \to x} \frac{f(y) + (cg)(y) - f(x) - (cg)(x)}{y - x} \\
                  & = \lim_{y \to x} \frac{f(y) - f(x)}{y - x} + \lim_{y \to x} \frac{cg(y) - cg(x)}{y - x} \\
                  & = f'(x) + cg'(x). ~ \square
-\end{aligned} \]
+\eal
 
 Product: $(fg)'(x) = f'(x)g(x) +f(x)g'(x).$
 
 \emph{Proof:} The trick here is to subtract and add $f(y)g(x)$ to the numerator on the second line. This allows factoring, and then we just use limit laws.
 
-\[ \begin{aligned}
+\bal
     (fg)'(x) & = \lim_{y \to x} \frac{(fg)(y) - (fg)(x)}{y - x} \\
              & = \lim_{y \to x} \frac{f(y)g(y) - f(y)g(x) + f(y)g(x) - f(x)g(x)}{y - x} \\
              & = \lim_{y \to x} \frac{(g(y) - g(x))f(y) + (f(y) - f(x))g(x)}{y - x} \\
              & =  \lim_{y \to x} g(x)\frac{f(y) - f(x)}{y - x}  + \lim_{y \to x} f(y)\frac{g(y) - g(x)}{y - x} \\
              & =  \lim_{y \to x} g(x) \cdot \lim_{y \to x}\frac{f(y) - f(x)}{y - x}  + \lim_{y \to x} f(y) \cdot \lim_{y \to x}\frac{g(y) - g(x)}{y - x} \\
              & = f'(x)g(x)+ f(x)g'(x). ~ \square \\
-\end{aligned} \]
+\eal
 
 Quotient: $(f/g)'(x) = \frac{f'(x)g(x) - f(x)g'(x)}{[g(x)]^2}.$
 
 \emph{Proof:} Since division is multiplication by a reciprocal, we use the same trick as for the product rule.
 
-\[ \begin{aligned}
+\bal
     (f/g)'(x) & = \lim_{y \to x} \frac{(f/g)y - (f/g)x}{y - x} \\
               & = \lim_{y \to x}  \frac{\frac{f(y)}{g(y)} - \frac{f(x)}{g(x)}}{y - x} \\
               & = \lim_{y \to x}  \frac{\frac{f(y)g(x) - f(x)g(y)}{g(y)g(x)}}{y - x} \\
@@ -72,7 +72,7 @@ Quotient: $(f/g)'(x) = \frac{f'(x)g(x) - f(x)g'(x)}{[g(x)]^2}.$
               & = \lim_{y \to x}  \frac{\frac{f(y)g(x) - f(x)g(x)}{g(y)g(x)}}{y - x}  - \lim_{y \to x} \left (  \frac{\frac{f(x)g(y) - f(x)g(x)}{g(y)g(x)}}{y - x} \right ) \\
               & = \lim_{y \to x} \left ( \frac{f(y) - f(x)}{y - x}\frac{g(x)}{g(y)g(x)} \right )  - \lim_{y \to x} \left ( \frac{g(y) - g(x)}{y - x}\frac{f(x)}{g(y)g(x)} \right ) \\
               & = \frac{f'(x)g(x) - g'(x)f(x)}{[g(x)]^2}. ~ \square
-\end{aligned} \] 
+\eal 
 
 Let $h(x) = f(g(x)).$
 

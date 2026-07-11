@@ -53,6 +53,18 @@ def _wrap_notation_macros(latex: str) -> str:
     )
 
 
+# \bal ... \eal: display-math aligned shorthand, expanded textually before
+# the pylatexenc walk (mathnotes.sty defines the same pair for pdflatex).
+# Expansion preserves newlines so node positions keep mapping to source lines.
+_BAL_RE = re.compile(r"\\bal(?![A-Za-z])")
+_EAL_RE = re.compile(r"\\eal(?![A-Za-z])")
+
+
+def _expand_bal_eal(source: str) -> str:
+    source = _BAL_RE.sub(r"\\[\\begin{aligned}", source)
+    return _EAL_RE.sub(r"\\end{aligned}\\]", source)
+
+
 def render_math(latex: str, display: bool) -> str:
     """THE math seam: every math node renders through this one function.
 
@@ -200,7 +212,7 @@ def parse_latex_file(source: str, filepath: str = "<latex>") -> Tuple[Dict[str, 
 
 class _Parser:
     def __init__(self, source: str, filepath: str):
-        self.source = source
+        self.source = _expand_bal_eal(source)
         self.filepath = filepath
         self._demo_counter = 0
 

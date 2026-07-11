@@ -222,10 +222,10 @@ where $\epsilon$ is arbitrarily small.
 
 By property (2) of $A(n)$ (it is a \@{monotonically-increasing} function of $n$,)  
 
-\[ \begin{aligned}
+\bal
 A(s^m) & \leq A(t^n) \leq A(s^{m+1}) \\
 mA(s) & \leq nA(t) \leq (m+1)A(s).
-\end{aligned} \]
+\eal
 
 Then, dividing by $nA(s)$ gives
 
@@ -233,30 +233,30 @@ Then, dividing by $nA(s)$ gives
 
 Now, by the \@{triangle-inequality}, we have that
 
-\[ \begin{aligned}
+\bal
 \left | \frac{A(t)}{A(s)} - \frac{\log{t}}{\log{s}} \right | & \leq 2 \epsilon \\
 \left | A(t) - \frac{A(s)}{\log{s}} \log{t} \right | & \leq 2 \epsilon A(s).
-\end{aligned} \]
+\eal
 
 Since $\epsilon$ can be arbitrarily small, we have that $A(t) = K \log(t),$ with $K > 0$ so that property (2) holds. Now we know what $A(n)$ is, and thus what $H$ is when we have equal probabilities for all events.
 
 Now let's say that we have a choice from $n$ possible events with \@{commensurable} probabilities $p_i = \frac{n_i}{\sum n_i}.$ We can break down a choice from $\sum n_i$ possibilities into a choice from $n$ possibilities with probabilities $p_1, \dots, p_n$ and then, if the $i$th possibility was chosen, $n_i$ choices of equal probability $p_i.$ We do this because above, we found how to find $H$ when all events are equally likely, and property (3) of our desired function lets us break down our overall choice from $\sum n_i$ possibilities. This gives us
 
-\[ \begin{aligned}
+\bal
 K \log{\sum n_i} & = H(p_1, \dots, p_n) + \sum p_i A(n_i) \\
                  & = H(p_1, \dots, p_n) + \sum p_i K \log{n_i} \\
                  & = H(p_1, \dots, p_n) + K \sum p_i \log{n_i}. \\
-\end{aligned} \]
+\eal
 
 Then,
-\[ \begin{aligned}
+\bal
 H(p_1, \dots, p_n) & = K \log{\sum n_i} - K \sum p_i \log{n_i}  \\
                    & = K \left [ \log{\sum n_i} - \sum p_i \log{n_i}  \right ] \\
                    & = K \left [ \sum p_i \left ( \log{\sum n_i} \right ) - \sum p_i \left ( \log{n_i} \right )  \right ] \quad \text{ because } \sum p_i = 1  \\
                    & = K \left [ \sum p_i \left ( \log{\sum n_i} -  \log{n_i} \right )  \right ]  \\
                    & = K \left [ \sum p_i \left ( - \log{\frac{n_i}{\sum n_i}} \right )  \right ]  \\
                    & = - K  \sum p_i \log{p_i }.  \\
-\end{aligned} \]
+\eal
 
 If the $p_i$ are incommensurable, we can approximate them as closely as we'd like with \@{rationals}, since \@{rationals-are-dense-in-reals}. By the first property we assumed for $H,$ it is \@{continuous} in the $p_i,$ and so its value at the incommensurable $p_i$ equals its \@{limit} as we approach via the \@{rationals}, and so our expression holds in general. $K$ is left to us to pick, picking it is equivalent to picking a base for the logarithm.
 \end{proof}
@@ -330,10 +330,10 @@ We will use a \@{Lagrangian} function of \@{entropy} to show this. Let
 
 Then, for any $p_i$ we want
 
-\[ \begin{aligned} 
+\bal 
 \frac{\partial \mathcal{L}}{\partial p_i} & = -\ln{p_i} - 1 - \lambda = 0 \\
                                           & \implies p_i = e^{-1 - \lambda}.
-\end{aligned} \]
+\eal
 
 But, this means $p_i$ doesn't depend on $i,$ and so is the same for each $i$ and therefore $p_i = \frac{1}{n}.$
 
@@ -361,38 +361,38 @@ This is just treating each possible pair of individual outcomes as its own outco
 
 So,
 
-\[ \begin{aligned}
+\bal
 H(X) + H(Y) - H(X,Y) & = - \sum_{x,y} p(x,y) \log{\sum_{y'}{p(x,y')}} - \sum_{x,y} p(x,y) \log{\sum_{x'}{p(x',y)}} + \sum_{x,y} p(x,y) \log{p(x,y)} \\
                     & = \sum_{x,y} p(x, y) \left ( \log{p(x,y)} - \log{\sum_{y'}{p(x,y')}} - \log{\sum_{x'}{p(x',y)}}  \right ) \\
                     & = \sum_{x,y} p(x, y) \left ( \log{p(x,y)} - \log{p(x)} - \log{p(y)}  \right ) \\
                     & = \sum_{x,y} p(x, y) \left ( \log{\frac{p(x,y)}{p(x)p(y)}}  \right ) \\
                     & = - \sum_{x,y} p(x, y) \left ( \log{\frac{p(x)p(y)}{p(x,y)}}  \right ) 
-\end{aligned} \]
+\eal
 
 Now, let's define a new random variable for convenience, $Z = \frac{p(X)p(Y)}{p(X,Y)}.$ We now have that
 
-\[ \begin{aligned}
+\bal
 H(X) + H(Y) - H(X,Y) & = - \sum_{x,y} p(x, y) \left ( \log{\frac{p(x)p(y)}{p(x,y)}}  \right ) \\
                      & = - \sum_{x,y} p(x, y) \left ( \log{Z}  \right ) \\
                      & = -\mathbb{E}[\log{Z}]. \\
-\end{aligned} \]
+\eal
 
 Now, by \@{jensens-inequality}, because \@{log-is-concave}, we have that $\mathbb{E}[\log{Z}] \leq \log{\mathbb{E}[Z]}.$ Now,
 
-\[ \begin{aligned}
+\bal
 \mathbb{E}[Z] & = \sum_{x,y} p(x,y) \cdot \frac{p(x)p(y)}{p(x,y)} \\
      & = \sum_{x,y}p(x)p(y) \\
      & = \big ( \sum_{x}p(x) \big ) \big ( \sum_{y}p(y) \big )  \\
      & = 1 \cdot 1 \\
      & = 1. \\
-\end{aligned} \]
+\eal
 Therefore $\log{\mathbb{E}[Z]} = \log{1} = 0,$ and we have that $\mathbb{E}[\log{Z}] \leq 0 \implies -\mathbb{E}[\log{Z}] \geq 0,$ and
 
-\[ \begin{aligned}
+\bal
 H(X) + H(Y) - H(X,Y) & \geq 0 \\
 - H(X,Y) & \geq -H(X) -H(Y) \\
 H(X,Y) & \leq H(X) + H(Y). \\
-\end{aligned} \]
+\eal
 
 Now, for the equality part. Suppose $H(X) + H(Y) = H(X,Y).$ Then, $\mathbb{E}[\log{Z}] = 0,$ and recalling that $\mathbb{E}[Z] = 1,$ $\mathbb{E}[\log{Z}] = \log{\mathbb{E}[Z]} = 0.$ In \@{jensens-inequality}, equality holds only if our function is \@{affine} or if $Z$ is constant; since $\log$ is \@{affine} on no interval, $Z$ must be constant, and since $\mathbb{E}[Z] = 1,$ $Z = \frac{p(x)p(y)}{p(x,y)} = 1 \implies p(x)p(y) = p(x,y).$ 
 
@@ -458,13 +458,13 @@ with equality iff $p = q.$ Equivalently, \@{cross-entropy} is never less than \@
 \begin{proof}
 Because \@{log-is-concave}, by \@{jensens-inequality} we have that
 
-\[ \begin{aligned}
+\bal
 \mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] & \leq \log{ \left ( \mathbb{E}_p \left [ \frac{q_i}{p_i} \right ] \right ) }  \\
                                                      & = \log{ \left ( \sum_i \left [ p_i \frac{q_i}{p_i} \right ] \right ) }  \\
                                                      & = \log{ \left ( \sum_i q_i \right ) }  \\
                                                      & = \log{ 1 }  \\
                                                      & = 0.  \\
-\end{aligned} \]
+\eal
 
 Then, since $\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] = -D(p || q),$ we have that $D(p || q) \geq 0.$
 
@@ -482,30 +482,30 @@ Note that $q_i = \sum_{j} A_{ij} p_j,$ by the definition of vector matrix multip
 
 Now we find the \@{relative-entropy} from $s$ to $r$:
 
-\[ \begin{aligned}
+\bal
 D(r || s) & = \sum_{i,j} r_{ij} \log{\frac{r_{ij}}{s_{ij}}} \\
           & = \sum_{i,j} A_{ij} p_j \log{\frac{A_{ij} p_j}{A_{ij} q_i }} \\
           & = \sum_{i,j} A_{ij} p_j \log{\frac{p_j}{q_i}} \\
           & = \sum_{i,j} A_{ij} p_j \left ( \log{p_j} - \log{q_i} \right ) \\
           & = \sum_{i,j} A_{ij} p_j \log{p_j} - \sum_{i,j} A_{ij} p_j \log{q_i} \\
-\end{aligned} \]
+\eal
 
 Now, addressing the first term on the RHS of the last line:
 
-\[ \begin{aligned}
+\bal
 \sum_{i,j} A_{ij} p_j \log{p_j} & = \sum_j \left [ p_j \log{p_j} \sum_{i} A_{ij} \right ] \\
                                 & = \sum_j \left [ p_j \log{p_j} \cdot 1 \right ] \\
                                 & = \sum_j  p_j \log{p_j} \\
                                 & = -H(p). \\
-\end{aligned} \]
+\eal
 
 And the second term on the RHS of the last line:
 
-\[ \begin{aligned}
+\bal
 \sum_{i,j} A_{ij} p_j \log{q_i} & = \sum_{i} \left [ \log{q_i} \sum_{j} A_{ij} p_j \right ] \\
                                 & = \sum_{i} \left [ \log{q_i} q_i \right ] \\
                                 & = -H(q).
-\end{aligned} \]
+\eal
 
 So, we end up with $D(r || s) = H(q) - H(p).$ Since $D(r || s) \geq 0$ by \@{gibbs-inequality}, we have $H(q) - H(p) \geq 0,$ which implies that $H(q) \geq H(p),$ which is what we wanted to show.
 
@@ -519,13 +519,13 @@ that is $J_c$ is the set of indices of $p$ where $p_j = c,$ and similarly with $
 
 that is, rows in $I_c$ sum to $1$ over the columns $J_c,$ while rows outside $I_c$ have no mass in the columns $J_c$ at all. Now we count the mass:
 
-\[ \begin{aligned}
+\bal
 |I_c| & = \vec{1}^\top \vec{1}_{I_c}  \qquad \text{count entries via dot product} \\
       & = \vec{1}^\top (A \vec{1}_{J_c}) \qquad \text {identity from above} \\
       & = (\vec{1}^\top A) \vec{1}_{J_c} \qquad \text{associativity}  \\
       & = \vec{1}^\top \vec{1}_{J_c} \qquad \text{column-stochasticity}  \\
       & = |J_c| \qquad \text{count entries via dot product}.
-\end{aligned} \]
+\eal
 
 Therefore, $|I_c| = |J_c|$ for all $c,$ so each $c$ appears equally often in $p$ and in $q,$ and $q$ is therefore a rearrangement of $p.$
 \end{proof}
@@ -553,12 +553,12 @@ We can obtain the above formula for \@{conditional-entropy} as follows. First, i
 
 Now, summing across $X$ gives:
 
-\[ \begin{aligned}
+\bal
 H(Y|X) & = \sum_{x} p(x) H(Y | X = x) \\
        & = \sum_{x} p(x) \left [  -\sum_{y} p(y|x) \log{p(y|x)}  \right ]  \\
        & = - \sum_{x} \sum_{y}\left [ p(x)  p(y|x) \log{p(y|x)}  \right ]  \\
        & = - \sum_{x, y} p(x,y) \log{p(y|x)}. \\
-\end{aligned} \]
+\eal
 \end{note}
 
 \begin{theorem}\label{joint-entropy-is-base-plus-conditional}
@@ -568,18 +568,18 @@ The \@{entropy} of the joint event $X,Y$ is the \@{entropy} of $X$ plus the \@{e
 \begin{proof}
 Note that
 
-\[ \begin{aligned}
+\bal
 H(Y | X) & = - \sum_{x, y} p(x,y) \log{\frac{p(x,y)}{p(x)}} \\
          & = - \sum_{x, y} p(x,y) \log{p(x,y)} + \sum_{x, y} p(x,y) \log{p(x)}.\\
-\end{aligned} \]
+\eal
 
 The first term on the RHS is just $- \sum_{x, y} p(x,y) \log{p(x,y)} = H(X,Y).$ The second is
 
-\[ \begin{aligned}
+\bal
 \sum_{x, y} p(x,y) \log{p(x)} & = \sum_{x} \left [ \sum_{y} p(x,y) \right ] \log{p(x)}  \\
                               & = \sum_{x} p(x) \log{p(x)}  \\
                               & = -H(X).
-\end{aligned} \]
+\eal
 
 Altogether, we have that $H(Y | X) = H(X,Y) - H(X),$ or
 
@@ -593,10 +593,10 @@ The \@{uncertainty} of $Y$ is never increased by knowledge of $X.$ It will be de
 \begin{proof}
 From \@{joint-entropy-is-less-than-or-equal-to-entropy-of-parts} and \@{joint-entropy-is-base-plus-conditional}, we have
 
-\[ \begin{aligned}
+\bal
 H(X) + H(Y) & \geq H(X,Y) \\
             & = H(X) + H(Y|X), \\ 
-\end{aligned} \]
+\eal
 
 hence $H(Y) \geq H(Y|X).$
 \end{proof}

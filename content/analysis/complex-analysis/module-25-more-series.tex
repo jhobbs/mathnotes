@@ -19,27 +19,27 @@ First, define $S_N$ as
 
 Then
 
-\[ \begin{aligned}
+\bal
 S_N & = 1 + w + w^2 + \cdots + w^{N-1} \\
 wS_N & = w + w^2 + w^3 + \cdots + w^{N}
-\end{aligned} \]
+\eal
 
 Subtracting the second equation from the first gives
 
-\[ \begin{aligned}
+\bal
 S_N - wS_N & = (1 + w + w^2 + \cdots + w^{N-1}) - (w + w^2 + w^3 + \cdots + w^{N}) \\
            & = 1 - w^N,
-\end{aligned} \]
+\eal
 
 because everything in the middle cancels out.
 
 Now, we can factor out $1 - w$ from the left hand side to get
 
-\[ \begin{aligned}
+\bal
 (1 - w)S_N & = 1 - w^N \\
 S_N & = \frac{1 - w^N}{1 - w} \\
 \sum_{k=0}^{N-1} w^k & = \frac{1 - w^N}{1 - w}.
-\end{aligned} \]
+\eal
 \end{proof}
 
 \end{document}

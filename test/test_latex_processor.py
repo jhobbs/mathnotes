@@ -87,6 +87,15 @@ def test_math_seam():
     assert 'display="block"' in h
 
 
+def test_bal_eal_shorthand():
+    h = prose("Before\n\\bal\na &= b \\\\\n&= c\n\\eal\nafter.")
+    ref = prose("Before\n\\[\\begin{aligned}\na &= b \\\\\n&= c\n"
+                "\\end{aligned}\\]\nafter.")
+    assert h == ref, (h, ref)
+    # \balance etc. must not be mistaken for \bal
+    expect_error("\\balance", "balance")
+
+
 def test_sections():
     h = prose("\\section{Big Idea}\nText.\n\\subsection{Small $x$ Idea}")
     assert '<h1 id="big-idea">Big Idea</h1>' in h
