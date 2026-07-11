@@ -215,6 +215,41 @@ article {
   }
 }
 
+/* Browsers don't draw text-decoration across MathML (dropped from MathML
+   Core), so a link whose text contains math renders a gapped underline.
+   For links with math, drop the text-decoration and draw the line with
+   border-bottom, which spans prose and math alike. */
+a:has(math) {
+  text-decoration: none;
+  border-bottom: var(--border-width-base) solid currentColor;
+}
+
+a:has(math):hover {
+  border-bottom-width: var(--border-width-thick);
+}
+
+/* keep the block-reference affordance dotted and subtle (rule above) */
+a.block-reference:has(math) {
+  text-decoration: none;
+  border-bottom: 0.5px dotted color-mix(in srgb, var(--color-text-secondary) 50%, transparent);
+  transition: border-bottom-color 0.2s ease;
+}
+
+a.block-reference:has(math):hover {
+  border-bottom-color: var(--color-link);
+}
+
+/* block header titles are undecorated links that underline on hover
+   (rules below); preserve that when the title contains math */
+.math-block-title a:has(math) {
+  border-bottom: none;
+}
+
+.math-block-title a:has(math):hover {
+  text-decoration: none;
+  border-bottom: var(--border-width-base) solid currentColor;
+}
+
 /* Error styling for broken references */
 .block-reference-error {
   color: var(--color-error);

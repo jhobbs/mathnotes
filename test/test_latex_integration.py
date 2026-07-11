@@ -119,6 +119,39 @@ def test_tex_pages_end_to_end():
     in_temp_site(check)
 
 
+PAGE_C = r"""\title{Page C}
+\begin{definition}[Widget]\label{widget}
+A widget is a thing.
+\end{definition}
+"""
+
+PAGE_D = r"""\title{Page D}
+\begin{example}[Left Cosets of $3\mathbb{Z}$]\label{cosets-example}
+Every \dref{widget} is fine.
+\end{example}
+"""
+
+
+def test_referenced_by_panel_renders_math_in_titles():
+    def check(td):
+        with open("content/test/page-c.tex", "w") as f:
+            f.write(PAGE_C)
+        with open("content/test/page-d.tex", "w") as f:
+            f.write(PAGE_D)
+
+        discovery, index, renderer = fresh_pipeline()
+        c_html = renderer.render_page("content/test/page-c.tex")["content"]
+        start = c_html.index('id="widget"')
+        panel = c_html[start:]
+        assert "Referenced by" in panel, panel[:500]
+        # The referring block's title contains math: it must render through
+        # the math seam, not appear as raw TeX in the link text
+        assert "$3\\mathbb{Z}$" not in panel, panel[:2000]
+        assert 'alttext="3\\mathbb{Z}"' in panel, panel[:2000]
+
+    in_temp_site(check)
+
+
 def test_url_collision_errors():
     def check(td):
         with open("content/test/dup-a.tex", "w") as f:
@@ -151,7 +184,8 @@ def test_markdown_content_rejected():
 
 
 def main():
-    tests = [test_tex_pages_end_to_end, test_url_collision_errors, test_markdown_content_rejected]
+    tests = [test_tex_pages_end_to_end, test_url_collision_errors, test_markdown_content_rejected,
+             test_referenced_by_panel_renders_math_in_titles]
     failures = 0
     for t in tests:
         try:

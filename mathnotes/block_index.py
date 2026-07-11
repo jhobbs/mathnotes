@@ -9,10 +9,19 @@ import html
 import os
 from typing import Dict, Optional, List
 from dataclasses import dataclass
-from .structured_math import MathBlock, render_block_html, CHILD_MARKER_RE
+from .structured_math import (
+    MathBlock, render_block_html, text_with_math_to_html, CHILD_MARKER_RE,
+)
 from .ref_resolver import RefResolver
 from .reverse_index import ReverseIndex
 from .content_loader import load_content_file
+
+
+def _ref_link_text(ref) -> str:
+    """Reference-panel link text: source titles may contain $...$ math and
+    must render through the math seam, never as raw TeX."""
+    title = ref.source_title or ref.source_label or ref.source_file.replace("content/", "")
+    return text_with_math_to_html(title)
 
 
 @dataclass
@@ -378,10 +387,10 @@ class BlockIndex:
                     ref_html.append('<li>')
                     if ref.source_url:
                         ref_html.append(f'<a href="{ref.source_url}">')
-                        ref_html.append(html.escape(ref.source_title or ref.source_label or ref.source_file.replace('content/', '')))
+                        ref_html.append(_ref_link_text(ref))
                         ref_html.append('</a>')
                     else:
-                        ref_html.append(html.escape(ref.source_title or ref.source_label or ref.source_file))
+                        ref_html.append(_ref_link_text(ref))
                     if ref.is_embed:
                         ref_html.append(' <span class="ref-type">(embedded)</span>')
                     ref_html.append('</li>')
@@ -398,10 +407,10 @@ class BlockIndex:
                         ref_html.append('<li>')
                         if ref.source_url:
                             ref_html.append(f'<a href="{ref.source_url}">')
-                            ref_html.append(html.escape(ref.source_title or ref.source_label or ref.source_file.replace('content/', '')))
+                            ref_html.append(_ref_link_text(ref))
                             ref_html.append('</a>')
                         else:
-                            ref_html.append(html.escape(ref.source_title or ref.source_label or ref.source_file))
+                            ref_html.append(_ref_link_text(ref))
                         ref_html.append('</li>')
                     ref_html.append('</ul>')
                 ref_html.append('</div>')
