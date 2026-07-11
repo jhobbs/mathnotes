@@ -18,6 +18,10 @@ _DEMBED_RE = re.compile(r'<div data-dembed="([^"]+)"></div>')
 _DREF_RE = re.compile(r'<a data-dref="([^"]+)">(.*?)</a>', re.DOTALL)
 _PAGELINK_RE = re.compile(r'<a data-pagelink="([^"]+)">(.*?)</a>', re.DOTALL)
 _REF_LABEL_RE = re.compile(r'<a[^>]+class="block-reference[^"]*"[^>]+data-ref-label="([^"]+)"')
+# Notation refs: MathML elements class-tagged by render_math's \class wrap
+_NOTATION_RE = re.compile(r'<m[a-z]+\b[^>]*\bnotation-ref--([A-Za-z]+)\b[^>]*>')
+_MML_REF_LABEL_RE = re.compile(
+    r'<m[a-z]+\b[^>]*\bnotation-ref--[A-Za-z]+\b[^>]*\bdata-ref-label="([^"]+)"')
 
 
 def tooltip_entry(bref) -> Dict[str, Any]:
@@ -49,16 +53,19 @@ def _split_ref(ref: str) -> Tuple[Optional[str], str]:
 
 
 class RefResolver:
-    def __init__(self, block_index, url_mapper, current_file: str = None):
+    def __init__(self, block_index, url_mapper, current_file: str = None,
+                 current_block_label: str = None):
         self.block_index = block_index
         self.url_mapper = url_mapper
         self.current_file = current_file
+        self.current_block_label = current_block_label
         self.referenced_labels: Set[str] = set()
         self.embedded_labels: Set[str] = set()
 
     # -- public --
 
     def resolve(self, html: str) -> str:
+        html = _NOTATION_RE.sub(self._resolve_notation, html)
         html = _DEMBED_RE.sub(self._resolve_dembed, html)
         html = _DREF_RE.sub(self._resolve_dref, html)
         html = _PAGELINK_RE.sub(self._resolve_pagelink, html)
@@ -70,6 +77,10 @@ class RefResolver:
             self.referenced_labels.add(_split_ref(html_lib.unescape(m.group(1)))[1])
         for m in _DEMBED_RE.finditer(html):
             self.embedded_labels.add(_split_ref(html_lib.unescape(m.group(1)))[1])
+        for m in _NOTATION_RE.finditer(html):
+            bref = self._notation_target(m.group(1))
+            if bref is not None:
+                self.referenced_labels.add(bref.block.label)
 
     def get_tooltip_data(self) -> Dict[str, Dict[str, Any]]:
         tooltip_data: Dict[str, Dict[str, Any]] = {}
@@ -79,6 +90,35 @@ class RefResolver:
                 continue
             tooltip_data[label] = tooltip_entry(bref)
         return tooltip_data
+
+    # -- notation refs (MathML elements class-tagged by render_math) --
+
+    def _notation_target(self, name: str):
+        """BlockReference for a notation macro name, or None for a
+        self-reference (which renders as plain math)."""
+        notation_map = getattr(self.block_index, "notation_map", {}) if self.block_index else {}
+        bref = notation_map.get(name)
+        if bref is None:
+            raise ValueError(
+                f"notation macro \\{name} rendered into MathML but is missing "
+                f"from the block index's notation_map — registry and index "
+                f"disagree (file: {self.current_file})")
+        if self.current_block_label and bref.block.label == self.current_block_label:
+            return None
+        return bref
+
+    def _resolve_notation(self, m) -> str:
+        name = m.group(1)
+        if "data-ref-label=" in m.group(0):
+            return m.group(0)  # already stamped (e.g. re-resolved embed content)
+        bref = self._notation_target(name)
+        if bref is None:
+            return m.group(0)
+        self.referenced_labels.add(bref.block.label)
+        tag = m.group(0)
+        return (tag[:-1]
+                + f' data-ref-label="{html_lib.escape(bref.block.label, quote=True)}"'
+                + f' data-ref-url="{bref.full_url}">')
 
     # -- dref --
 
@@ -159,5 +199,6 @@ class RefResolver:
 
 def labels_from_rendered_html(html_content: str, exclude: Dict) -> Set[str]:
     """Labels referenced inside already-rendered block HTML that still need tooltip data."""
-    return {m.group(1) for m in _REF_LABEL_RE.finditer(html_content)
-            if m.group(1) not in exclude}
+    labels = {m.group(1) for m in _REF_LABEL_RE.finditer(html_content)}
+    labels |= {m.group(1) for m in _MML_REF_LABEL_RE.finditer(html_content)}
+    return {label for label in labels if label not in exclude}

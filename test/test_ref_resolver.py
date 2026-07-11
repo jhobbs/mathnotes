@@ -199,6 +199,57 @@ def test_synonym_title_escaping():
     assert '<B' not in out, f"Raw HTML tag should not appear: {out}"
 
 
+def _notation_fake_index():
+    from mathnotes.structured_math import MathBlock, MathBlockType
+    from mathnotes.block_index import BlockReference
+
+    blk = MathBlock(block_type=MathBlockType.DEFINITION, content="c",
+                    title="Integers", label="integers")
+
+    class FakeIndex:
+        notation_map = {
+            "integers": BlockReference(
+                block=blk, file_path="content/a.tex",
+                canonical_url="/mathnotes/algebra/numbers")
+        }
+
+        def get_reference(self, label):
+            return None
+
+    return FakeIndex()
+
+
+def test_notation_ref_stamped():
+    r = RefResolver(_notation_fake_index(), None, current_file="content/b.tex")
+    mml = ('<math alttext="x \\in \\integers"><mi>x</mi><mo>&#x2208;</mo>'
+           '<mi mathvariant="double-struck" class="notation-ref notation-ref--integers">Z</mi></math>')
+    out = r.resolve(mml)
+    assert 'data-ref-label="integers"' in out, out
+    assert 'data-ref-url="/mathnotes/algebra/numbers#integers"' in out, out
+    assert "integers" in r.referenced_labels
+
+
+def test_notation_self_reference_not_stamped():
+    r = RefResolver(_notation_fake_index(), None, current_file="content/a.tex",
+                    current_block_label="integers")
+    mml = '<mi class="notation-ref notation-ref--integers">Z</mi>'
+    out = r.resolve(mml)
+    assert "data-ref-label" not in out, out
+    assert "integers" not in r.referenced_labels
+
+
+def test_notation_collect_and_rendered_html_labels():
+    from mathnotes.ref_resolver import labels_from_rendered_html
+
+    r = RefResolver(_notation_fake_index(), None)
+    r.collect('<mi class="notation-ref notation-ref--integers">Z</mi>')
+    assert "integers" in r.referenced_labels
+
+    stamped = ('<mi class="notation-ref notation-ref--integers" '
+               'data-ref-label="integers" data-ref-url="/x#integers">Z</mi>')
+    assert labels_from_rendered_html(stamped, {}) == {"integers"}
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     failed = 0

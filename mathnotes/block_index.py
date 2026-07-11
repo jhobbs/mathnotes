@@ -38,6 +38,7 @@ class BlockIndex:
         self.url_mapper = url_mapper
         self.index: Dict[str, BlockReference] = {}  # Label-based index for cross-references
         self.all_blocks: List[BlockReference] = []  # All blocks, including unlabeled ones
+        self.notation_map: Dict[str, BlockReference] = {}  # Notation macro name -> declaring block
         self._is_built = False
         # Initialize reverse index for tracking references
         self.reverse_index = ReverseIndex()
@@ -60,6 +61,7 @@ class BlockIndex:
         # Clear existing data structures to allow rebuilding
         self.index.clear()
         self.all_blocks.clear()
+        self.notation_map.clear()
         self.reverse_index = ReverseIndex()
 
         # Phase 1: Scan and index all blocks
@@ -196,6 +198,15 @@ class BlockIndex:
                 page_title=page_title,
             )
 
+            for notation_name, _ in block.notations:
+                if notation_name in self.notation_map:
+                    existing = self.notation_map[notation_name]
+                    print(
+                        f"Warning: Duplicate notation '\\{notation_name}' in "
+                        f"{file_path} (previously in {existing.file_path})"
+                    )
+                self.notation_map[notation_name] = ref
+
             # Only add top-level blocks to all_blocks (for index pages)
             # Nested blocks will appear inside their parents
             if block.parent is None:
@@ -288,7 +299,8 @@ class BlockIndex:
             # References from inside blocks (any depth)
             for top in file_info["top_blocks"]:
                 for block in top.walk():
-                    r = RefResolver(self, self.url_mapper, current_file=file_path)
+                    r = RefResolver(self, self.url_mapper, current_file=file_path,
+                                    current_block_label=block.label)
                     r.collect(block.body_html)
                     full_url = f"{base_url}#{block.label}"
                     for label in sorted(r.referenced_labels):
@@ -323,7 +335,8 @@ class BlockIndex:
 
     def _process_block_content(self, block: MathBlock, file_path: str, full_url: str):
         """Resolve references in a block's body and render its final HTML."""
-        resolver = RefResolver(self, self.url_mapper, current_file=file_path)
+        resolver = RefResolver(self, self.url_mapper, current_file=file_path,
+                               current_block_label=block.label)
         content_html = resolver.resolve(block.body_html)
 
         # Tooltip content: this block's own content only, children removed
