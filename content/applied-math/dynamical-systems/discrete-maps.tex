@@ -14,7 +14,7 @@ A difference equation has the general form
 
 \[ \vec{x_{n+1}} = \vec{f(x_n, n)}, \]
 
-where $n$ is a time-like variable, $\vec{f}$ and $\vec{x_n}$ may be vectors, $n = 0, 1, 2, \dots = \mathbb{N}_0.$
+where $n$ is a time-like variable, $\vec{f}$ and $\vec{x_n}$ may be vectors, $n = 0, 1, 2, \dots = \naturals_0.$
 \end{definition}
 
 Solutions to \@{difference-equations} are \@{sequences} $(x_0, x_1, ..., x_n).$ If $x_0$ is the initial condition, then
@@ -32,7 +32,7 @@ We will consider ourselves, for now, with \@{autonomous-systems} where there is 
 
 \[ x_{n+1} = f(x_n). \]
 
-So $x_n \in \mathbb{R}^N$ and $f : \mathbb{R}^N \to \mathbb{R}^N. $
+So $x_n \in \reals^N$ and $f : \reals^N \to \reals^N. $
 
 Example: $x_{n+1} =  - x_n.$ If we start with $x_0,$ then $x_1 = -x_0, x_2 = -x_1 = -(-x_0) = x_0, dots$ so the solution is the sequence
 
@@ -52,13 +52,13 @@ A fixed point in a DTDS is a point whose further iteration does not change, i.e.
 
 Consider
 
-\[ x_{n+1} = \lambda x_n, \quad \lambda \in \mathbb{R}. \]
+\[ x_{n+1} = \lambda x_n, \quad \lambda \in \reals. \]
 
 Starting with $x_0,$ $x_1 = \lambda x_0, x_2 = \lambda x_1 = \lambda ( \lambda x_0) = \lambda^2 x_0, \dots,$ so our general solution is
 
 \[ x_n = \lambda^n x_0. \]
 
-Fixed points satisfy $x^* = f(x^*) \implies x^* = \lambda x^* \implies x^*(\lambda - 1) = 0.$ Therefore, $x^* = 0$ is always a fixed point, and if $lambda = 1,$ then every $x^* \in \mathbb{R}$ is a fixed point, i.e. the map is just $x_{n+1} = x_n.$ 
+Fixed points satisfy $x^* = f(x^*) \implies x^* = \lambda x^* \implies x^*(\lambda - 1) = 0.$ Therefore, $x^* = 0$ is always a fixed point, and if $lambda = 1,$ then every $x^* \in \reals$ is a fixed point, i.e. the map is just $x_{n+1} = x_n.$ 
 
 Given that $x^* = 0$ is always a fixed point of a linear map, we'll consider different cases of the value of $\lambda$ and how it impacts the stability of $x^*.$
 

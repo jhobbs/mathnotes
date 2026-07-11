@@ -50,7 +50,7 @@ A \textbf{vector} is an \@{element} in a \@{vector-space}.
 \end{definition}
 
 \begin{note}
-Typically, in physics and many other applications, when we say \@{vector} we mean a \@{vector} in $\mathbb{R}^n,$ which is an ordered tuple of real numbers, $\vec{x} = (x_1, x_2, \cdots, x_n).$ This is the algebraic representation of vector $\vec{x}$.
+Typically, in physics and many other applications, when we say \@{vector} we mean a \@{vector} in $\reals^n,$ which is an ordered tuple of \@{real-numbers}, $\vec{x} = (x_1, x_2, \cdots, x_n).$ This is the algebraic representation of vector $\vec{x}$.
 
 The geometric representation of vector $\vec{x}$ is, in an $n$ dimensional space, an arrow or directed line segment. When starting from the origin, it would be a line segment from $\vec{0}$ to the point $(x_1, x_2, \cdots, x_n)$.
 
@@ -68,15 +68,15 @@ A \@{vector} with a fixed endpoint is called a \textbf{bound vector.}
 \section{Properties of Vectors}
 
 \begin{definition}[Magnitude]\synonyms{norm, length}
-Let $\vec{x} = (x_1, x_2, \cdots, x_n) \in \mathbb{R}^n$.  The \textbf{magnitude}, or length, $\vec{x}$ is denoted as $|| \vec{x} ||$ and is defined as:
+Let $\vec{x} = (x_1, x_2, \cdots, x_n) \in \reals^n$.  The \textbf{magnitude}, or length, $\vec{x}$ is denoted as $|| \vec{x} ||$ and is defined as:
 
 \[ ||\vec{x}|| = \sqrt{ {x_1}^2 + {x_2}^2 + \cdots + {x_n}^2 } = \sqrt{\vec{x} \cdot \vec{x}} = \sqrt{\sum_{i=1}^n x_i^2} \]
 \end{definition}
 
 \begin{note}
-This is essentially the Pythagorean theorem in $n$ dimensions; in $\mathbb{R}^2$ the magnitude of a vector corresponds to the length of the hypotenuse of a right triangle whose other sides are of length $x_1$ and $x_2.$
+This is essentially the Pythagorean theorem in $n$ dimensions; in $\reals^2$ the magnitude of a vector corresponds to the length of the hypotenuse of a right triangle whose other sides are of length $x_1$ and $x_2.$
 
-While we define \textbf{norm} to be equivalent to magnitude here, this is actually a special case of the more general concept of a norm - there are other norms we could define on $\mathbb{R}^n,$ but I don't have need to explore that yet.
+While we define \textbf{norm} to be equivalent to magnitude here, this is actually a special case of the more general concept of a norm - there are other norms we could define on $\reals^n,$ but I don't have need to explore that yet.
 \end{note}
 
 \begin{definition}[Direction]
@@ -121,7 +121,7 @@ We can multiply \@{vectors} by a \@{scalar}. Given the \@{scalar} $c$:
 \end{definition}
 
 \begin{definition}[Inner product]\synonyms{"Dot Product", "Scalar product of two vectors"}
-If $\vec{x}$ and $\vec{y}$ are vectors in $\mathbb{R}^n,$ then their \textbf{inner product} is defined as
+If $\vec{x}$ and $\vec{y}$ are vectors in $\reals^n,$ then their \textbf{inner product} is defined as
 
 \[ \vec{X} \cdot \vec{y} = \sum_{i = 1}^n x_i y_i. \]
 \end{definition}
@@ -169,17 +169,17 @@ If $\vec{a} = (a_1, a_2, a_3)$ and $\vec{b} = (b_1, b_2, b_3),$ then we use the 
 \includedemo{cross-product}
 
 \begin{definition}[Linear Combination]
-Let $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n} \in \mathbb{R}^n$ and $c_1, c_2, \cdots, c_3 \in \mathbb{R}.$ Then, the vector
+Let $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n} \in \reals^n$ and $c_1, c_2, \cdots, c_3 \in \reals.$ Then, the vector
 
 \[ \vec{v} = c_1 \vec{v_1} +  c_2 \vec{v_2} + \cdots + c_n \vec{v_n} \]
 
 is called a \textbf{linear combination} of $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}.$
 
-Let $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n} \in \mathbb{R}^n.$ The set of all linear combinations of $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}$ is called their \textbf{span}, denoted $\Span{\left(\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}\right)}.$ 
+Let $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n} \in \reals^n.$ The set of all linear combinations of $\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}$ is called their \textbf{span}, denoted $\Span{\left(\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}\right)}.$ 
 
 That is:
 
-\[ \Span{\left(\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}\right)} = \left\{ \vec{v} \in \mathbb{R}^n : \vec{v} = c_1 \vec{v_1} + c_2 \vec{v_2} + \cdots + c_n \vec{v_n} ~ \text{for some scalars} ~ c_1, c_2, \cdots, c_n \right\} \]
+\[ \Span{\left(\vec{v_1}, \vec{v_2}, \cdots, \vec{v_n}\right)} = \left\{ \vec{v} \in \reals^n : \vec{v} = c_1 \vec{v_1} + c_2 \vec{v_2} + \cdots + c_n \vec{v_n} ~ \text{for some scalars} ~ c_1, c_2, \cdots, c_n \right\} \]
 \end{definition}
 
 \end{document}

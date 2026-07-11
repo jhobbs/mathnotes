@@ -11,7 +11,7 @@
 \subsection{Random Variables}
 
 :::define "Random Variable"
-A \textbf{random variable} is a \@{function} that associates a \@{real} number with each \@{element} in the \@{sample-space}. For \@{sample-space} $S$, we have $X: S \to \mathbb{R}$ and for $s \in S$, we have $x = X(s),$ where $x$ is a \@{value} of the random variable.
+A \textbf{random variable} is a \@{function} that associates a \@{real} number with each \@{element} in the \@{sample-space}. For \@{sample-space} $S$, we have $X: S \to \reals$ and for $s \in S$, we have $x = X(s),$ where $x$ is a \@{value} of the random variable.
 :::
 
 Random variables don't have to map to all reals; for example, \textbf{Bernoulli random variables} map to either 0 or 1.
@@ -40,14 +40,14 @@ Sometimes we want to know the probability that a random variable will be less th
 
 \subsubsection{Continuous Probabilty Distributions}
 
-A continuous random variable has a probabilty of $0$ of exactly assuming any particular value. That's because, in any interval of real numbers, there are infinitely many points, and so the denominator for the proportion is infinite. For example, there are infinitely many points between $1.1$ and $1.2$, and again, infinitely many points between $1.2$ and $1.21$ and so on, regardless of the level of precision.
+A continuous random variable has a probabilty of $0$ of exactly assuming any particular value. That's because, in any interval of \@{real-numbers}, there are infinitely many points, and so the denominator for the proportion is infinite. For example, there are infinitely many points between $1.1$ and $1.2$, and again, infinitely many points between $1.2$ and $1.21$ and so on, regardless of the level of precision.
 
 So, instead of focusing on probabilities of particular values, we focus on probabilities of values falling in various intervals. For example, instead of asking what the probability that someone weighs $150$ pounds is, we can ask what is the probability that they weigh between $149$ and $151$ pounds.
 
-The function $f(x)$ is a \textbf{probability distribution function} (pdf) for the continuous random variable $X$, defined on the reals, if
+The function $f(x)$ is a \textbf{probability distribution function} (pdf) for the continuous random variable $X$, defined on the \@{reals}, if
 
 \begin{enumerate}
-\item $f(x) \geq 0$ for all $x \in \mathbb{R}$
+\item $f(x) \geq 0$ for all $x \in \reals$
 \item $\int_{-\infty}^{\infty} f(x) dx = 1 $
 \item $P(a < X < b) = \int_{a}^{b} f(x) dx$
 \end{enumerate}

@@ -19,7 +19,7 @@ Given two sets, $A$ and $B$, if there is a bijection (a one-to-one mapping of $A
 \end{definition}
 
 \begin{definition}[Finite]
-A set $A$ is said to be \textbf{finite} if $A \sim \mathbb{N}_n$ for some $n.$
+A set $A$ is said to be \textbf{finite} if $A \sim \naturals_n$ for some $n.$
 \end{definition}
 
 \begin{definition}[Infinite]
@@ -27,7 +27,7 @@ A set $A$ is said to be \textbf{infinite} it is not finite.
 \end{definition}
 
 \begin{definition}[Countable]
-A set $A$ is said to be \textbf{countable} if there exists a bijection between $A$ and the set of all positive integers $\mathbb{Z}_{>0}$, that is, if $A \sim \mathbb{Z}_{>0}.$
+A set $A$ is said to be \textbf{countable} if there exists a bijection between $A$ and the set of all positive integers $\integers_{>0}$, that is, if $A \sim \integers_{>0}.$
 \end{definition}
 
 \begin{definition}[Uncountable]
@@ -47,7 +47,7 @@ Every infinite subset $E$ of a countably infinite set $A$ is countable.
 \begin{proof}
 Assume $A$ is countably infinite, $E \subset A,$ and $|E| = \infty.$ Arrange a sequence $\{x_n\}$ from the distinct elements of $A$. Let $n_1$ be the smallest positive integer such that $x_{n_1} \in E,$ and then pick $n_2, \dots, n_{k-1}$ by assigning the next $n$ in the sequence the index of the left-most entry in $\{x_n\}$ that has not yet been picked. Then, let $n_k$ be the smallest integer greater than $n_{k-1}$ such that $x_{n_k} \in E.$ Now, $\{n_k\}$ is a sequence of strictly increasing positive integers giving us the indices of the first $k$ elements of $E$ in $\{x_n\}.$
 
-Now, define $f : \mathbb{Z}_{>0} \to E$ as $f(k) = {x_{k_n}}$, which is a bijection between the positive integers and $E$, showing that $E$ is countable.
+Now, define $f : \integers_{>0} \to E$ as $f(k) = {x_{k_n}}$, which is a bijection between the positive integers and $E$, showing that $E$ is countable.
 \end{proof}
 
 \begin{intuition}
@@ -57,7 +57,7 @@ As an example, consider the even numbers $\{0, 2, 4, \dots\}$ as a subset of the
 \end{intuition}
 
 \begin{note}
-This means that countably infinite sets are the smallest infinite sets. Any infinite subset of one has the same cardinal number as the parent set, and the same cardinal number as the set of natural numbers - $\aleph_0$ - "aleph null."
+This means that countably infinite sets are the smallest infinite sets. Any infinite subset of one has the same cardinal number as the parent set, and the same cardinal number as the set of \@{natural-numbers} - $\aleph_0$ - "aleph null."
 \end{note}
 
 \subsubsection{Intersections and Unions of Sets}
@@ -100,11 +100,11 @@ So, for any given $n-1$-tuple $b$, we form $n$-tuples by appending each element 
 \end{proof}
 
 \begin{corollary}\label{rationals-are-countable}
-The set of rational numbers is countable.
+The set of \@{rational-numbers} is countable.
 \end{corollary}
 
 \begin{proof}
-Rational numbers just formed from pairs of integers: $(a, b) \to a/b, b \neq 0,$ so we use the above theorem with $n = 2.$
+\@[Rational numbers]{rational-numbers} just formed from pairs of \@{integers}: $(a, b) \to a/b, b \neq 0,$ so we use the above theorem with $n = 2.$
 \end{proof}
 
 \includedemo{countable-tuples}
@@ -128,7 +128,7 @@ This approach to proving this theorem is due to Cantor and is called diagonaliza
 \end{note}
 
 \begin{corollary}\label{reals-are-uncountable}
-The set of real numbers is uncountable.
+The set of \@{real-numbers} is uncountable.
 \end{corollary}
 
 \begin{proof}

@@ -69,7 +69,7 @@ Here, $\vec{\pi} = \langle \pi_1, \pi_2, \dots, \pi_N \rangle$ and the entries i
 Note that $\vec{\pi} \cdot P = \vec{\pi},$ which when combined with the fact that the entries of $\vec{\pi}$ sum to 1 lets us solve a linear system of equations to find the entries of $\vec{\pi}.$
 
 \begin{definition}[Stochastic Matrix]\synonyms{"probability matrix", "transition matrix", "Markov matrix", "right stochastic matrix", "row stochastic matrix"}
-A \textbf{stochastic matrix} (actually, a right stochastic matrix) is a \@{square-matrix} $A = (a_{ij}) \in \mathbb{R}^{n \times n}$ with nonnegative \@{entries} whose rows each sum to one:
+A \textbf{stochastic matrix} (actually, a right stochastic matrix) is a \@{square-matrix} $A = (a_{ij}) \in \reals^{n \times n}$ with nonnegative \@{entries} whose rows each sum to one:
 
 \[ a_{ij} \geq 0 \quad \text{for all } i,j, \qquad \sum_{j} a_{ij} = 1 \quad \text{for all } i. \]
 
@@ -77,7 +77,7 @@ Equivalently, $A\mathbf{1} = \mathbf{1}$ with $A \geq 0$ entrywise, where $\math
 \end{definition}
 
 \begin{definition}[Left Stochastic Matrix]\synonyms{"column stochastic matrix"}
-A \textbf{left stochastic matrix} is a \@{square-matrix} $A = (a_{ij}) \in \mathbb{R}^{n \times n}$ with nonnegative \@{entries} whose columns each sum to one:
+A \textbf{left stochastic matrix} is a \@{square-matrix} $A = (a_{ij}) \in \reals^{n \times n}$ with nonnegative \@{entries} whose columns each sum to one:
 \[ a_{ij} \geq 0 \quad \text{for all } i,j, \qquad \sum_{i} a_{ij} = 1 \quad \text{for all } j. \]
 Equivalently, $\mathbf{1}^\top A = \mathbf{1}^\top$ with $A \geq 0$ entrywise, where $\mathbf{1}$ is the all-ones vector.
 \end{definition}

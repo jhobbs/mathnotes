@@ -121,34 +121,34 @@ One more fact worth noting, now that we've established this isomorphism. On the 
 
 Thus, the $-k$th $n$th root of unit, $e^{2 \pi i (k)}$ equals the $(n - k)$th root of unity (because the $n$th $n$th root of unity corresponds to a full rotation). This corresponds to $-k \equiv n - k \pmod{n}$ on $\mathbb{Z}_n.$ For example, $-4 = 9 - 4 = 5$ on $\mathbb{Z}_9,$ and $e^{2 \pi i (5)/9} = e^{2 \pi i (-4)/9}$ on $\mu_{n}.$
 
-Coming soon... roots of unity as the elements of basis vectors for $\mathbb{C}^n,$ and DFT as computing the inner product (basically, cosine similarity * magnitude) between the sample points and these basis vectors. That is, DFT is a change of basis onto these basis vectors, it is literally projecting onto these.
+Coming soon... roots of unity as the elements of basis vectors for $\complexes^n,$ and DFT as computing the inner product (basically, cosine similarity * magnitude) between the sample points and these basis vectors. That is, DFT is a change of basis onto these basis vectors, it is literally projecting onto these.
 
-\subsection{Sample Points as Vectors in $\mathbb{C}^n.$}
+\subsection{Sample Points as Vectors in $\complexes^n.$}
 
-Let's say we have a contour on the complex plane, and we take $n$ sample points on it, in order, so $z_0, z_1, \dots, z_n.$ We can view these sample points (which form a \@{sequence}) as forming a vector in $\mathbb{C}^n:$
+Let's say we have a contour on the complex plane, and we take $n$ sample points on it, in order, so $z_0, z_1, \dots, z_n.$ We can view these sample points (which form a \@{sequence}) as forming a vector in $\complexes^n:$
 
 \[ ( z_0, z_1, \dots, z_n ). \]
 
-Now, the standard basis for $\mathbb{C}^n$ is the same as that of $\mathbb{R}^n,$ which is $\{ e_1, e_2, \dots, e_n \},$ where $e_k$ is a $n$-dimensional vector with a 1 in the $k$th position and 0's in the other position, i.e.
+Now, the standard basis for $\complexes^n$ is the same as that of $\reals^n,$ which is $\{ e_1, e_2, \dots, e_n \},$ where $e_k$ is a $n$-dimensional vector with a 1 in the $k$th position and 0's in the other position, i.e.
 
 \[ e_1 = ( 1, 0, \dots, 0 ), \quad e_2 = ( 0, 1, \dots, 0 ), \dots \]
 
-It's easy to see that these basis vectors are \@{orthogonal} (and therefore \@{linearly-independent}); to see that they span $\mathbb{C}^n$, suppose $w = ( w_1, w_2, \dots, w_n. ).$ Then, $w_1 * e_1 + w_2 * e_2 + \cdots + w_n * e_n = w,$ that is, the components of $w$ (which are complex numbers) are exactly the scalar coefficients we need to multiply by our basis vectors to form $w,$ so this basis spans $\mathbb{C}^n.$
+It's easy to see that these basis vectors are \@{orthogonal} (and therefore \@{linearly-independent}); to see that they span $\complexes^n$, suppose $w = ( w_1, w_2, \dots, w_n. ).$ Then, $w_1 * e_1 + w_2 * e_2 + \cdots + w_n * e_n = w,$ that is, the components of $w$ (which are complex numbers) are exactly the scalar coefficients we need to multiply by our basis vectors to form $w,$ so this basis spans $\complexes^n.$
 
-\subsubsection{$\mathbb{C}^n$ is an Inner Product Space}
+\subsubsection{$\complexes^n$ is an Inner Product Space}
 
 Now, we can equip this vector space with an \@{inner-product}
 
-\begin{theorem}[$\mathbb{C}^N$ is an inner product space]\label{complex-inner-product-space}
+\begin{theorem}[$\complexes^N$ is an inner product space]\label{complex-inner-product-space}
 The \@{function}
 
 \[ \langle z, w \rangle = \sum_{k=0}^{N-1} z_k \overline{w_k} \]
 
-defined on $z, w \in \mathbb{C}^N$ is an \@{inner-product}, and so $\mathbb{C}^N$ ($N$ a positive integer) forms an \@{inner-product-space}.
+defined on $z, w \in \complexes^N$ is an \@{inner-product}, and so $\complexes^N$ ($N$ a positive integer) forms an \@{inner-product-space}.
 \end{theorem}
 
 \begin{proof}
-Since $\mathbb{C}$ is a \@{field}, $\mathbb{C}^N$ is obviously a \@{vector-space}.
+Since $\complexes$ is a \@{field}, $\complexes^N$ is obviously a \@{vector-space}.
 
 To see that this is indeed an inner product, we'll show the required properties hold.
 
@@ -162,7 +162,7 @@ and
 
 and since $k$ is arbitrary, it holds for any respective pair of components in $z$ and $w,$ and so $\langle z, w \rangle = \overline{\langle w, z \rangle}.$
 
-For \@{linearity} in the first argument, let $w, v, z \in \mathbb{C}^n, a, b \in \mathbb{C}.$ Then
+For \@{linearity} in the first argument, let $w, v, z \in \complexes^n, a, b \in \complexes.$ Then
 
 \[ \langle ax + by, z \rangle = (a x_1 + b y_1) * z_1 + (a x_2 + b y_2) * z_2 + \cdots = a(x_1 * z_1) + a(x_2 * z_2) + \cdots + b(y_1 * z_1) + b(y_2 * z_2) + \cdots = a \langle x, z \rangle + b \langle x, z \rangle. \]
 
@@ -174,12 +174,12 @@ Now, to show \@{positive-definiteness} let $z = a + bi.$ Then,
 \detach
 
 \begin{remark}
-Since $\mathbb{C}^n$ is an inner-product space, we can use the inner product to compare how well aligned two vectors are, and to perform projections.
+Since $\complexes^n$ is an inner-product space, we can use the inner product to compare how well aligned two vectors are, and to perform projections.
 \end{remark}
 
 \subsection{Fourier Basis}
 
-We can use complex numbers representing varying degrees of rotation around the unit circle to form a basis vector. Given a sample count $N,$ we can make a basis from the $N$ vectors whose elements are defined as
+We can use \@{complex-numbers} representing varying degrees of rotation around the unit circle to form a basis vector. Given a sample count $N,$ we can make a basis from the $N$ vectors whose elements are defined as
 
 \[ \phi_n = \left ( e^{2 \pi i n k / N} \right )_{k=0}^{N-1}, \quad n = 0, \dots, N-1. \]
 
@@ -216,7 +216,7 @@ Let $N$ be a positive integer. Then the vectors
 
 \[ \phi_n = (e^{2 \pi i n k  / N})_{k=0}^{N-1} \]
 
-for $n = 0, \dots, N-1$ form a basis for $\mathbb{C}^N.$
+for $n = 0, \dots, N-1$ form a basis for $\complexes^N.$
 \end{theorem}
 
 \begin{proof}
@@ -256,9 +256,9 @@ Substituting back in $e^{\frac{2 \pi i}{N} r}$ for $w$ we get
 
 Thus, $\langle \phi_m, \phi_n \rangle = 0,$ and so when $m \neq n,$ $\phi_m$ an $\phi_n$ are \@{orthogonal} and therefore \@{linearly-independent}.
 
-Now we need to show that $\phi_0 \dots \phi_{N-1}$ span $\mathbb{C}^N.$
+Now we need to show that $\phi_0 \dots \phi_{N-1}$ span $\complexes^N.$
 
-Let $\vec{u} = (z_0, z_1, \dots, z_{N-1}) \in \mathbb{C}^N.$ We need to find $c_0, c_1, \dots, c_{N-1}$ such that
+Let $\vec{u} = (z_0, z_1, \dots, z_{N-1}) \in \complexes^N.$ We need to find $c_0, c_1, \dots, c_{N-1}$ such that
 
 \[ \vec{u} = c_0 \phi_0 + c_1 \phi_1 + \cdots + c_{N-1} \phi_{N-1}. \]
 
@@ -290,7 +290,7 @@ Therefore,
 
 \[ c_m = \frac{\langle \vec{u}, \phi_m \rangle}{N}. \]
 
-This shows that the Fourier basis described here indeed spans $\mathbb{C}^N,$ and shows how to compute the Fourier coefficients $c_0 \dots c_{N-1}.$
+This shows that the Fourier basis described here indeed spans $\complexes^N,$ and shows how to compute the Fourier coefficients $c_0 \dots c_{N-1}.$
 \end{proof}
 
 \detach
@@ -313,7 +313,7 @@ we need $\frac{1}{N}$ as a factor in either the DFT or the IDFT, but typically, 
 
 \end{remark}
 
-Now we're ready to see the DFT as a change of basis from the standard basis for $\mathbb{C}^N$ to the DFT (Fourier) Basis for $\mathbb{C}^N.$ The DFT is given as
+Now we're ready to see the DFT as a change of basis from the standard basis for $\complexes^N$ to the DFT (Fourier) Basis for $\complexes^N.$ The DFT is given as
 
 \[ \vec{X}[n] = \langle \vec{x}[k], \phi_n \rangle = \sum_{k=0}^{N-1} \vec{x}[k] e^{-2 \pi i n k / N}, \]
 
@@ -337,7 +337,7 @@ e^{-2\pi i\,1\cdot 0/N} & e^{-2\pi i\,1\cdot 1/N} & \cdots & e^{-2\pi i\,1\cdot 
 e^{-2\pi i\,(N-1)\cdot 0/N} & e^{-2\pi i\,(N-1)\cdot 1/N} & \cdots & e^{-2\pi i\,(N-1)\cdot (N-1)/N}
 \end{pmatrix}. \]
 
-Then, given a vector $\vec{x}$ in $\mathbb{C}^N,$ we can compute its DFT via matrix vector multiplication as
+Then, given a vector $\vec{x}$ in $\complexes^N,$ we can compute its DFT via matrix vector multiplication as
 
 \[ \vec{X} = F \vec{x}, \]
 

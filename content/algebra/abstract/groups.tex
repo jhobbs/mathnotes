@@ -30,11 +30,11 @@ This set/operation combination $G$ is commonly denoted as the pair $(G, *)$.
 Some examples of \@{groups}:
 
 \begin{itemize}
-\item The integers under addition: $(\integers, +)$. The identity element is $0$.
+\item The \@{integers} under addition: $(\integers, +)$. The identity element is $0$.
 \end{itemize}
 
 \begin{itemize}
-\item The non-zero reals under multiplication: $(\mathbb{R}^{*}, *)$. The identity element is $1$.
+\item The non-zero reals under multiplication: $(\reals^{*}, *)$. The identity element is $1$.
 \end{itemize}
 
 \begin{itemize}
@@ -43,7 +43,7 @@ Some examples of \@{groups}:
 
 \href{https://en.wikipedia.org/wiki/Examples_of_groups}{Loads more listed here}.
 
-A non-example is the naturals under addition - $(\mathbb{N}, +)$. The naturals are closed under addition, but there is no identity element since $0$ isn't included, and thus no inverses either.
+A non-example is the \@{naturals} under addition - $(\naturals, +)$. The naturals are closed under addition, but there is no identity element since $0$ isn't included, and thus no inverses either.
 \end{example}
 
 \subsection{Abelian Groups}
@@ -53,7 +53,7 @@ Abelian groups are groups whose operation is commutative. For $a,b \in G, a * b 
 \end{definition}
 
 \begin{example}[Abelian and Non-Abelian Groups]\label{abelian-examples}
-The integers under addition are \@{Abelian}, because $a + b = b + a$, but invertible $n \times n$ matrices are not, because it's not necessary that $AB = BA$.
+The \@{integers} under addition are \@{Abelian}, because $a + b = b + a$, but invertible $n \times n$ matrices are not, because it's not necessary that $AB = BA$.
 \end{example}
 
 \subsection{Finite Groups}
@@ -71,7 +71,7 @@ A subgroup $H$ of a group $G$ is a subset of $G$ together with the same operatio
 \end{definition}
 
 \begin{example}[Even Integers as a Subgroup]\label{even-integers-subgroup}
-The even integers under addition, $(2\integers, +)$, are a \@{subgroup} of the integers under addition.
+The even integers under addition, $(2\integers, +)$, are a \@{subgroup} of the \@{integers} under addition.
 \end{example}
 
 \begin{definition}[normal]
@@ -105,7 +105,7 @@ Let $G = \langle a \rangle$ be a cyclic group with $n$ elements. Let $b \in G$ a
 \end{theorem}
 
 \begin{proof}
-Suppose $g \in G$ with $\ord(g) = n$ and let $m \in \mathbb{N}$. Then, $\langle g^m \rangle = \langle g^{\gcd{(m,n)}} \rangle$.
+Suppose $g \in G$ with $\ord(g) = n$ and let $m \in \naturals$. Then, $\langle g^m \rangle = \langle g^{\gcd{(m,n)}} \rangle$.
 
 So, $ \langle g \rangle = \langle g^m \rangle \iff \gcd{(m,n)} = 1$.
 \end{proof}

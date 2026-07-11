@@ -161,14 +161,14 @@ These are some differential operators that apply to multivariable and/or vector 
 \subsection{Vector Differential Operator}
 
 \begin{definition}[del]\synonyms{"vector differential operator", nabla}
-In Euclidean space $\mathbb{R}^n$ with coordinates $(x_1, \dots, x_n)$ and standard basis $(\vec{e}_1, \dots, \vec{e}_n),$ \textbf{del} is a vector operator whose $x_1, \dots, x_n$ components are the partial derivative operators $\frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n}; $ that is
+In Euclidean space $\reals^n$ with coordinates $(x_1, \dots, x_n)$ and standard basis $(\vec{e}_1, \dots, \vec{e}_n),$ \textbf{del} is a vector operator whose $x_1, \dots, x_n$ components are the partial derivative operators $\frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n}; $ that is
 
 \[ \nabla = \sum_{i = 1}^n \vec{e}_i \frac{\partial}{\partial x_i} = \left ( \frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n} \right ). \]
 \end{definition}
 
 \subsection{Gradient}
 \begin{definition}[Gradient]
-Given a \@{scalar-function} $f : \mathbb{R}^n \to \mathbb{R}$, the \textbf{gradient} of $f$, denoted as $\nabla f$, is defined as the vector of its partial derivatives. Specifically, for a function $f(x_1, x_2, \cdots, x_n)$, the gradient is given by
+Given a \@{scalar-function} $f : \reals^n \to \reals$, the \textbf{gradient} of $f$, denoted as $\nabla f$, is defined as the vector of its partial derivatives. Specifically, for a function $f(x_1, x_2, \cdots, x_n)$, the gradient is given by
 
 \[ \nabla f = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\  \frac{\partial f}{\partial x_2} \\\ \vdots \\\ \frac{\partial f}{\partial x_n} \end{bmatrix} \]
 \end{definition}
@@ -271,7 +271,7 @@ The \@{normal-derivative} tells us how the value of a \@{function} changes as we
 \subsection{Divergence}
 
 \begin{definition}[Divergence]
-For a \@{vector-field} $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimensional space $\mathbb{R}^3$, the \textbf{divergence} is defined as
+For a \@{vector-field} $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimensional space $\reals^3$, the \textbf{divergence} is defined as
 
 \[ \div \vec{F} = \nabla \cdot \vec{F} = \frac{\partial F_1}{\partial x} + \frac{\partial F_2}{\partial y} + \frac{\partial F_3}{\partial z}. \]
 \end{definition}
@@ -295,7 +295,7 @@ Let $\vec{v}$ be the velocity \@{vector} of of the motion of particles in a flui
 \subsection{Curl}
 
 \begin{definition}[Curl]
-For a vector field $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimensional space $\mathbb{R}^3$, with each component function $F_i$ depending on the variables $x$, $y$, and $z$, the curl of $\vec{F}$ is defined as
+For a vector field $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimensional space $\reals^3$, with each component function $F_i$ depending on the variables $x$, $y$, and $z$, the curl of $\vec{F}$ is defined as
 
 \[ \curl \vec{F} = \nabla \times \vec{F} = \left ( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z} \right ) \mathbf{\vec{i}} + \left ( \frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x} \right ) \mathbf{\vec{j}} + \left ( \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y} \right ) \mathbf{\vec{k}} \]
 \end{definition}
@@ -368,7 +368,7 @@ that is, $f$ has a \@{Laplacian} of $0.$
 \subsection{Hessian}
 
 \begin{definition}[Hessian Matrix]\synonyms{"Hessian"}
-Suppose $f ~ : ~ \mathbb{R}^n \to \mathbb{R}$ is a \@{function} taking as input a \@{vector} $\vec{x} \in \mathbb{R}^n$ and outputting a \@{scalar} $f(\vec{x}) \in \mathbb{R}.$ If all second-order \@{partial-derivatives} of $f$ exist, then the \textbf{Hessian matrix} $\vec{H}$ of $f$ is a square $n \times n$ \@{matrix}, usually defined and arranged as 
+Suppose $f ~ : ~ \reals^n \to \reals$ is a \@{function} taking as input a \@{vector} $\vec{x} \in \reals^n$ and outputting a \@{scalar} $f(\vec{x}) \in \reals.$ If all second-order \@{partial-derivatives} of $f$ exist, then the \textbf{Hessian matrix} $\vec{H}$ of $f$ is a square $n \times n$ \@{matrix}, usually defined and arranged as 
 
 \[ \mathbf H_f= \begin{bmatrix}
   \dfrac{\partial^2 f}{\partial x_1^2} & \dfrac{\partial^2 f}{\partial x_1\,\partial x_2} & \cdots & \dfrac{\partial^2 f}{\partial x_1\,\partial x_n} \\[2.2ex]
@@ -381,7 +381,7 @@ That is, the \@{entry} of the $i$th row and the $j$th column is
 
 \[ (\vec{H}_f)_{i,j} = \frac{\partial^2 f}{\partial x_i \partial x_j}. \]
 
-For a \@{function} $f ~ : ~ \mathbb{R}^3 \to \mathbb{R},$ this is
+For a \@{function} $f ~ : ~ \reals^3 \to \reals,$ this is
 
 \[ \vec{H} =
 \begin{bmatrix}
@@ -396,7 +396,7 @@ Note that the \@{Laplacian} of $f$ is equal to the \@{trace} of the \@{Hessian} 
 \subsection{Jacobian}
 
 \begin{definition}[Jacobian Matrix]\synonyms{"Jacobian", "Total Derivative"}
-Let $\vec{f} ~ : ~ \mathbb{R}^n \to \mathbb{R}^m$ be a \@{function} such that each of its first-order \@{partial-derivatives} exists on $\mathbb{R}^n.$ This \@{function} takes a point $\vec{x} = (x_1, \dots, x_n) \in \mathbb{R}^n$ as input and produces the \@{vector} $\vec{f}(\vec{x}) = (f_1(\vec{x}), \dots, f_m(\vec{x})) \in \mathbb{R}^m$ as output. Then the \textbf{Jacobian matrix} of $\vec{f},$ denoted $\vec{J}_{\vec{f}},$ is the $m \times n$ \@{matrix} whose $(i,j)$ \@{entry} is $\frac{\partial f_i}{\partial x_j};$ explicitly
+Let $\vec{f} ~ : ~ \reals^n \to \reals^m$ be a \@{function} such that each of its first-order \@{partial-derivatives} exists on $\reals^n.$ This \@{function} takes a point $\vec{x} = (x_1, \dots, x_n) \in \reals^n$ as input and produces the \@{vector} $\vec{f}(\vec{x}) = (f_1(\vec{x}), \dots, f_m(\vec{x})) \in \reals^m$ as output. Then the \textbf{Jacobian matrix} of $\vec{f},$ denoted $\vec{J}_{\vec{f}},$ is the $m \times n$ \@{matrix} whose $(i,j)$ \@{entry} is $\frac{\partial f_i}{\partial x_j};$ explicitly
 
 \[ \begin{bmatrix} \dfrac{\partial \mathbf{f}}{\partial x_1} & \cdots & \dfrac{\partial \mathbf{f}}{\partial x_n}
 \end{bmatrix}
@@ -417,13 +417,13 @@ where $\nabla^{\mathsf{T}} f_i$ is the \@{transpose} (\@{row-vector}) of the \@{
 \begin{remark}
 For a \@{vector} valued \@{function},
 
-\[ \vec{F} : \mathbb{R}^n \to \mathbb{R}^m, \]
+\[ \vec{F} : \reals^n \to \reals^m, \]
 
 the \@{Jacobian} $\vec{J}(\vec{x})$ is the \@{linear-map} that best \@{approximates} $\vec{F}$ near $\vec{x}:$
 
 \[ \vec{F}(\vec{x_0} + \vec{\Delta x}) \approx \vec{F(x_0)} + \vec{J(x_0)} \vec{\Delta x}. \]
 
-At a point $x_0 \in \mathbb{R}^n,$ the \@{directional-derivative} of $F$ in the \@{direction} of $\vec{v} \in \mathbb{R}^n$ is
+At a point $x_0 \in \reals^n,$ the \@{directional-derivative} of $F$ in the \@{direction} of $\vec{v} \in \reals^n$ is
 
 \[ D_{\vec{v}} \vec{F(x_0)} = \vec{J(x_0)} \vec{v}. \]
 \end{remark}
@@ -437,7 +437,7 @@ Given a \@{vector-field} $F:$
   F_1(x,y,z) \\  
   F_2(x,y,z) \\
   F_3(x,y,z) \\   
-\end{bmatrix} : \mathbb{R}^3 \to \mathbb{R}^3, \]
+\end{bmatrix} : \reals^3 \to \reals^3, \]
 
 each component $F_i$ is itself a \@{scalar-field}, and so we can take the \@{gradient} of each one:
 
@@ -492,7 +492,7 @@ Given a \@{vector-field} $F:$
   F_1(x,y,z) \\  
   F_2(x,y,z) \\
   F_3(x,y,z) \\   
-\end{bmatrix} : \mathbb{R}^3 \to \mathbb{R}^3, \]
+\end{bmatrix} : \reals^3 \to \reals^3, \]
 
 with a \@{Jacobian}
 
@@ -533,7 +533,7 @@ Given a \@{vector-field} $F:$
   F_1(x,y,z) \\  
   F_2(x,y,z) \\
   F_3(x,y,z) \\   
-\end{bmatrix} : \mathbb{R}^3 \to \mathbb{R}^3, \]
+\end{bmatrix} : \reals^3 \to \reals^3, \]
 
 with a \@{Jacobian}
 

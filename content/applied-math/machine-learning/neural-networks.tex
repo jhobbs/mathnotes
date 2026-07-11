@@ -27,7 +27,7 @@ In a neural network, a \textbf{neuron} $N$ is a computation unit that takes $n$ 
 
 That is, it is a function of the form
 
-\[ N: \mathbb{R}^n \to \mathbb{R}, \quad N(\vec{x}) = \phi(\vec{w} \cdot \vec{x} + b), \]
+\[ N: \reals^n \to \reals, \quad N(\vec{x}) = \phi(\vec{w} \cdot \vec{x} + b), \]
 
 where
 
@@ -36,15 +36,15 @@ where
 \end{itemize}
 
 \begin{itemize}
-\item $\vec{w} \in \mathbb{R}^n$ is a vector of weights,
+\item $\vec{w} \in \reals^n$ is a vector of weights,
 \end{itemize}
 
 \begin{itemize}
-\item $b \in \mathbb{R}$ is a bias value, and
+\item $b \in \reals$ is a bias value, and
 \end{itemize}
 
 \begin{itemize}
-\item $\phi : \mathbb{R} \to \mathbb{R}$ is an activation function.
+\item $\phi : \reals \to \reals$ is an activation function.
 \end{itemize}
 \end{definition}
 
@@ -53,7 +53,7 @@ A \textbf{layer} in a neural network is a collections of \@{neurons} that operat
 
 A layer with $n_{\ell - 1}$ inputs and $n_{\ell}$ \@{neurons} defines a \@{function}
 
-\[ F_{\ell} : \mathbb{R}^{\ell - 1} \to \mathbb{R}^{\ell} \]
+\[ F_{\ell} : \reals^{\ell - 1} \to \reals^{\ell} \]
 
 of the form
 
@@ -62,15 +62,15 @@ of the form
 where:
 
 \begin{itemize}
-\item $W_{\ell} \in \mathbb{R}^{n_{\ell} \times n_{\ell - 1}}$ is the weight matrix (with the $i$th row representing the weights for the inputs to the $i$th \@{neuron} in the layer),
+\item $W_{\ell} \in \reals^{n_{\ell} \times n_{\ell - 1}}$ is the weight matrix (with the $i$th row representing the weights for the inputs to the $i$th \@{neuron} in the layer),
 \end{itemize}
 
 \begin{itemize}
-\item $\vec{b}_{\ell} \in \mathbb{R}^{n_{\ell}}$ is the bias vector (with the $i$th entry representing the bias on the $i$th \@{neuron} in the layer,
+\item $\vec{b}_{\ell} \in \reals^{n_{\ell}}$ is the bias vector (with the $i$th entry representing the bias on the $i$th \@{neuron} in the layer,
 \end{itemize}
 
 \begin{itemize}
-\item $\phi_{\ell} : \mathbb{R} \to \mathbb{R} $ is an activation function, applied \@{componentwise}, 
+\item $\phi_{\ell} : \reals \to \reals $ is an activation function, applied \@{componentwise}, 
 \end{itemize}
 
 \begin{itemize}

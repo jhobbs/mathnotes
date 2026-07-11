@@ -15,7 +15,7 @@ This section was developed by following Rudin, \emph{Principles of Mathematical 
 \subsection{Definition of a Metric Space}
 
 \begin{definition}[Metric Space]
-A set $X,$ whose elements we'll call points, together with a distance function $d: X \times X \to \mathbb{R}$ is called a \textbf{metric space} and the distance function $d$ is called a \textbf{metric,} if the following conditions, called the metric axioms, hold for $p, q, r \in X:$
+A set $X,$ whose elements we'll call points, together with a distance function $d: X \times X \to \reals$ is called a \textbf{metric space} and the distance function $d$ is called a \textbf{metric,} if the following conditions, called the metric axioms, hold for $p, q, r \in X:$
 
 \begin{itemize}
 \item If $p \neq q, d(p,q) > 0.$ (distance is always positive between two distinct points.)
@@ -41,11 +41,11 @@ We can denote a metric space on set $X$ with metric $d$ as the tuple $(X, d).$
 The most important metric spaces are the euclidean spaces $R^n$ together with a norm.
 
 \begin{theorem}\label{euclidean-space-is-metric-space}
-$(\mathbb{R}^n, d : \mathbb{R}^n \to \mathbb{R} = | \vec{x} - \vec{y} |)$ is a metric space for any $n \geq 0.$
+$(\reals^n, d : \reals^n \to \reals = | \vec{x} - \vec{y} |)$ is a metric space for any $n \geq 0.$
 \end{theorem}
 
 \begin{proof}
-First, for $n = 0$, $\mathbb{R}^0$ is just the empty set, so the metric axioms are vacuously satisfied for all points in the set. Now, for $n \geq 1,$
+First, for $n = 0$, $\reals^0$ is just the empty set, so the metric axioms are vacuously satisfied for all points in the set. Now, for $n \geq 1,$
 
 \begin{itemize}
 \item Let $p, q \in R^n, p \neq q.$ Then $|p - q| < 0,$ so $d(p,q) > 0.$
@@ -94,29 +94,29 @@ Also note that every subset $Y$ of a metric space $X$ is also a metric space, si
 \subsection{Segments, Intervals, Cells and Balls}
 
 \begin{definition}[Segment]
-A \textbf{segment} $(a, b)$ is the set of all real numbers $x$ such that $a < x < b.$
+A \textbf{segment} $(a, b)$ is the set of all \@{real-numbers} $x$ such that $a < x < b.$
 \end{definition}
 
 \begin{definition}[Interval]
-A \textbf{interval} $[a, b]$ is the set of all real numbers $x$ such that $a \leq x \leq b.$
+A \textbf{interval} $[a, b]$ is the set of all \@{real-numbers} $x$ such that $a \leq x \leq b.$
 \end{definition}
 
 \begin{definition}[Half-open Interval]
-A \textbf{half-open interval} $(a,b]$ or $[a, b)$ is the set of all real numbers such that $a < x \leq b$ or $a \leq x < b,$ respectively.
+A \textbf{half-open interval} $(a,b]$ or $[a, b)$ is the set of all \@{real-numbers} such that $a < x \leq b$ or $a \leq x < b,$ respectively.
 \end{definition}
 
 \begin{definition}[k-cell]
-Given $\vec{a}, \vec{b} \in \mathbb{R}^k,$ if $\vec{a}_i < \vec{b}_i$ for all $i = 1, 2, \dots, k,$ then the set of all points $\vec{x}$ who satisfy $\vec{a}_i \leq \vec{x}_i \leq \vec{b}_i,$ $i = 1, 2, \dots, k,$ is called a \textbf{k-cell}. So, a 1-cell is an interval, a 2-cell is a rectangle, and so on.
+Given $\vec{a}, \vec{b} \in \reals^k,$ if $\vec{a}_i < \vec{b}_i$ for all $i = 1, 2, \dots, k,$ then the set of all points $\vec{x}$ who satisfy $\vec{a}_i \leq \vec{x}_i \leq \vec{b}_i,$ $i = 1, 2, \dots, k,$ is called a \textbf{k-cell}. So, a 1-cell is an interval, a 2-cell is a rectangle, and so on.
 \end{definition}
 
 \begin{definition}[Ball]
-Given $\vec{x} \in \mathbb{R}^k, r > 0,$ the open or closed \textbf{ball} with center $\vec{x}$ and radius $r$ is defined as the set of points $\vec{y}$ such that $|\vec{x} - \vec{y}| < r$ or $|\vec{x} - \vec{y}| \leq r,$ respectively.
+Given $\vec{x} \in \reals^k, r > 0,$ the open or closed \textbf{ball} with center $\vec{x}$ and radius $r$ is defined as the set of points $\vec{y}$ such that $|\vec{x} - \vec{y}| < r$ or $|\vec{x} - \vec{y}| \leq r,$ respectively.
 \end{definition}
 
 \subsection{Convex Sets}
 
 \begin{definition}[Convex Set]
-A set $E \subset \mathbb{R}^k$ is said to be \textbf{convex} if
+A set $E \subset \reals^k$ is said to be \textbf{convex} if
 
 \[ \lambda \vec{x} + (1 - \lambda)\vec{y} \in E \]
 
@@ -335,7 +335,7 @@ A set $E$ and its limit points $E'$ do not necessarily have the same limit point
 \end{theorem}
 
 \begin{proof}
-Consider $P = \{\frac{1}{n} | n \in \mathbb{N}\}.$ Then $P$ has one limit point, $0,$ but $P' = \{0\}$ has no limit points, since the only number that contains $0$ in all its neighborhoods is $0$ itself (see \@{only-infinite-sets-have-limit-points}.)
+Consider $P = \{\frac{1}{n} | n \in \naturals\}.$ Then $P$ has one limit point, $0,$ but $P' = \{0\}$ has no limit points, since the only number that contains $0$ in all its neighborhoods is $0$ itself (see \@{only-infinite-sets-have-limit-points}.)
 \end{proof}
 
 \begin{theorem}\label{closure-distributes-over-finite-unions}
@@ -351,7 +351,7 @@ Conversely, let $p \in \closure{B_n}.$ If $p \in B_n,$ $p \in A_i$ for some $i,$
 \end{proof}
 
 \begin{theorem}\label{sup-is-in-closure-of-bounded-nonempty-set-of-reals}
-Let $E$ be a nonempty set of real numbers which is bounded above. Let $y = \sup{E}.$ Then $y \in \closure{E}.$ Hence $y \in E$ if $E$ is closed.
+Let $E$ be a nonempty set of \@{real-numbers} which is bounded above. Let $y = \sup{E}.$ Then $y \in \closure{E}.$ Hence $y \in E$ if $E$ is closed.
 \end{theorem}
 
 \begin{proof}

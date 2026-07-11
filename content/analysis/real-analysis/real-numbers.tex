@@ -9,19 +9,30 @@
 \section{Real Numbers}
 
 \begin{definition}[Real Numbers]\synonyms{reals}
-The real numbers $\mathbb{R}$ are a set of objects along with two binary operations $+ : \mathbb{R} \times \mathbb{R} \to \mathbb{R}$ and $\cdot : \mathbb{R} \times \mathbb{R} \to \mathbb{R}$ that satisfy the 9 field axioms along with the Order axiom and the Completeness axiom. That is, the reals are an ordered, complete field.
+\notation{\reals}{\mathbb{R}}
+The real numbers $\reals$ are a set of objects along with two binary operations $+ : \reals \times \reals \to \reals$ and $\cdot : \reals \times \reals \to \reals$ that satisfy the 9 field axioms along with the Order axiom and the Completeness axiom. That is, the reals are an ordered, complete field.
 \end{definition}
 
 We know that a \pagelink[field is a commutative division ring]{algebra/abstract/rings}.
 
-\begin{definition}[Integers]
-\notation{\integers}{\mathbb{Z}}
-The \textbf{integers} $\integers = \{\dots, -2, -1, 0, 1, 2, \dots\}$ are the natural numbers together with their negatives and zero.
+\begin{definition}[Natural Numbers]\synonyms{naturals}
+\notation{\naturals}{\mathbb{N}}
+The \textbf{natural numbers} $\naturals = \{1, 2, 3, \dots\}$ are the counting numbers.
 \end{definition}
 
-The \textbf{Order axiom} states that there exists a subset of $\mathbb{R}^+$ of $\mathbb{R}$ such that for all $a, b \in \mathbb{R}^+,a + b \in \mathbb{R}^+, a \cdot b \in \mathbb{R}^+.$ and for all $a \in \mathbb{R}$ exactly one of the following is true: (i) $a \in \mathbb{R}^+$, (ii) $-a \in \mathbb{R}^+$, or (iii) $a = 0$.
+\begin{definition}[Integers]
+\notation{\integers}{\mathbb{Z}}
+The \textbf{integers} $\integers = \{\dots, -2, -1, 0, 1, 2, \dots\}$ are the \@{natural-numbers} together with their negatives and zero.
+\end{definition}
 
-A more familiar and equivalent way of stating this can be achieved by defining $a < b$ to mean $b + (-a) \in \mathbb{R}^+$, and $a > b$ to mean $a + (-b) \in \mathbb{R}^+$, for $a, b, c \in \mathbb{R}$,
+\begin{definition}[Rational Numbers]\synonyms{rationals}
+\notation{\rationals}{\mathbb{Q}}
+The \textbf{rational numbers} $\rationals = \{p/q : p, q \in \integers, q \neq 0\}$ are the ratios of integers.
+\end{definition}
+
+The \textbf{Order axiom} states that there exists a subset of $\reals^+$ of $\reals$ such that for all $a, b \in \reals^+,a + b \in \reals^+, a \cdot b \in \reals^+.$ and for all $a \in \reals$ exactly one of the following is true: (i) $a \in \reals^+$, (ii) $-a \in \reals^+$, or (iii) $a = 0$.
+
+A more familiar and equivalent way of stating this can be achieved by defining $a < b$ to mean $b + (-a) \in \reals^+$, and $a > b$ to mean $a + (-b) \in \reals^+$, for $a, b, c \in \reals$,
 
 \begin{itemize}
 \item Exactly one of the following is true: $a < b, ~ a > b,$ or $a = b$.
@@ -35,7 +46,7 @@ A more familiar and equivalent way of stating this can be achieved by defining $
 \item If $a < b$ and $b < c$ then $a < c$ (transitivity).
 \end{itemize}
 
-Note that rational numbers also satisfy the field axioms and the Order axiom. Complex numbers satisfy the field axioms but not the Order axiom because there is no total ordering that can be defined on complex numbers.
+Note that \@{rational-numbers} also satisfy the field axioms and the Order axiom. \@[Complex numbers]{complex-numbers} satisfy the field axioms but not the Order axiom because there is no total ordering that can be defined on complex numbers.
 
 To give the Completeness axiom, we must first define what a least upper bound is.
 
@@ -61,19 +72,19 @@ The number $m$ is said to be a \textbf{lower bound} of a nonempty \@{set} $A$ if
 There is also a concept of a \textbf{greatest lower bound}, which is a \@{lower-bound} that is greater than or equal to every other \@{lower-bound}. The greatest lower bound is also known as the \textbf{infimum.}
 \end{definition}
 
-The \textbf{Completeness axiom} states that every nonempty subset $A$ of $\mathbb{R}$ that's bounded above has a least upper bound.
+The \textbf{Completeness axiom} states that every nonempty subset $A$ of $\reals$ that's bounded above has a least upper bound.
 
-One consequence of the Completeness axiom is that the real numbers contain numbers that are not rational. For example, the subset of $\mathbb{R}$ that is the finite decimal approximations of $\sqrt{5}$ is,
+One consequence of the Completeness axiom is that the \@{real-numbers} contain numbers that are not rational. For example, the subset of $\reals$ that is the finite decimal approximations of $\sqrt{5}$ is,
 
 \[ \{2, 2.2, 2.23, 2.236, \dots \}, \]
 
-must have a supremum due to the Completeness axiom. That supremum is $\sqrt{5}$, but $\sqrt{5}$ is not rational, therefore, the reals contain non-rational numbers.
+must have a supremum due to the Completeness axiom. That supremum is $\sqrt{5}$, but $\sqrt{5}$ is not rational, therefore, the \@{reals} contain non-rational numbers.
 
 The \textbf{absolute value} of a real number is defined as follows:
 
 \[ |x| = \begin{cases} x & \text{if } x \geq 0 \\ -x & \text{if } x < 0 \end{cases}. \]
 
-One fact that follow from this definition is that for $a, b \in \mathbb{R}$, if $\|a\| < b$, then $-b < a < b$. \emph{Proof}: We have two cases to consider:
+One fact that follow from this definition is that for $a, b \in \reals$, if $\|a\| < b$, then $-b < a < b$. \emph{Proof}: We have two cases to consider:
 
 \begin{itemize}
 \item If $a >= 0$, then $\|a\| = a$, so $a < b$. Since $a$ is positive, $b$ must also be positive, and therefore $-b$ must be negative, and so $-b < a < b$.
@@ -92,15 +103,15 @@ The Archimedean property is that given two positive numbers $x$ and $y,$ there i
 \end{definition}
 
 \begin{theorem}\label{reals-are-archimedean}
-The real numbers are Archimedean.
+The \@{real-numbers} are Archimedean.
 \end{theorem}
 
 \begin{theorem}\label{rationals-are-dense-in-reals}
-The rationals are \@{dense} in the reals.
+The \@{rationals} are \@{dense} in the \@{reals}.
 \end{theorem}
 
 \begin{proof}
-Let $x \in \mathbb{R}$ and $\epsilon > 0.$ Pick $n \in \mathbb{N}$ such that $1/n < \epsilon.$ Now, because \@[the reals are Archimedean]{reals-are-archimedean}, for some $m \in \integers$ we have that $m = \lfloor nx \rfloor.$ Then,
+Let $x \in \reals$ and $\epsilon > 0.$ Pick $n \in \naturals$ such that $1/n < \epsilon.$ Now, because \@[the reals are Archimedean]{reals-are-archimedean}, for some $m \in \integers$ we have that $m = \lfloor nx \rfloor.$ Then,
 
 \[ m \leq nx \leq m+1, \quad \frac{m}{n} \leq x \leq \frac{m+1}{n}. \]
 
@@ -108,15 +119,15 @@ Now, if we let $q = \frac{m}{n},$ we have
 
 \[ 0 \leq x - q < \frac{1}{n} < \epsilon, \]
 
-so $|x - q| < \epsilon.$ Therefore, every \@{neighborhood} of $x$ contains some $q \in \mathbb{Q},$ and so $x$ is either a limit point of $\mathbb{Q}$ or else $x \in \mathbb{Q},$ and so the rationals are therefore dense in the reals.
+so $|x - q| < \epsilon.$ Therefore, every \@{neighborhood} of $x$ contains some $q \in \rationals,$ and so $x$ is either a limit point of $\rationals$ or else $x \in \rationals,$ and so the rationals are therefore dense in the reals.
 \end{proof}
 
 \begin{corollary}\label{rational-between-any-two-reals}
-If $x, y \in \mathbb{R},$ and $x < y,$ then there exists a $p \in \mathbb{Q}$ such that $x < p < y.$ That is, there is always a rational number between any two distinct real numbers.
+If $x, y \in \reals,$ and $x < y,$ then there exists a $p \in \rationals$ such that $x < p < y.$ That is, there is always a rational number between any two distinct real numbers.
 \end{corollary}
 
 \begin{proof}
-Pick $n \in \mathbb{N}$ such that $n(y - a) > 1.$ Because because \@[the reals are Archimedean]{reals-are-archimedean}, there is some $k \in \integers$ such that $nx < k < ny$ and $x < n/k < y.$ Thus, $q = n/k \in \mathbb{Q}$ and $r \in (x, y).$
+Pick $n \in \naturals$ such that $n(y - a) > 1.$ Because because \@[the reals are Archimedean]{reals-are-archimedean}, there is some $k \in \integers$ such that $nx < k < ny$ and $x < n/k < y.$ Thus, $q = n/k \in \rationals$ and $r \in (x, y).$
 \end{proof}
 
 \end{document}
