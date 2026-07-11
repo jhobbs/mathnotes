@@ -37,7 +37,7 @@ A \@{complex-function} $f$ is said to be \textbf{analytic at a point} $z$ if it 
 \end{definition}
 
 \begin{definition}[Entire]\synonyms{entire-function}
-A function which is analytic on the whole complex plane is called an \textbf{entire function}.
+A function which is \@{analytic} on the whole complex plane is called an \textbf{entire function}.
 \end{definition}
 
 \begin{definition}[Derivative Function]
@@ -48,11 +48,11 @@ While the equation defined in (a) only applies to a specific point $z_0$, we can
 which defines the \@{complex-derivative} of $f$ at the \@{point} $z$. This equation defines the \@{complex-function} $f'$, known as the \textbf{derivative function.}
 \end{definition}
 
-The usual rules for real derivatives work for complex derivatives too, that is, sum, product, quotient, power and chain rules all remain in effect.
+The usual rules for real derivatives work for \@{complex-derivatives} too, that is, sum, product, quotient, power and chain rules all remain in effect.
 
 However, the real derivatives rules don't help with functions like $\Re{(z)}, \Im{(z)}, \|z\|$ or $\Arg{z}.$ We could use the limit definition of the derivative, but there is a better way.
 
-Also, we might have a complex function defined in terms of its real and imaginary parts rather than in terms of $z$, i.e. $f(z) = \frac{x}{x^2 + y^2} + \frac{-y}{x^2 + y^2}i$. We could try to rewrite $f(z)$ in terms of $z$, but this could be hard.
+Also, we might have a \@{complex-function} defined in terms of its real and imaginary parts rather than in terms of $z$, i.e. $f(z) = \frac{x}{x^2 + y^2} + \frac{-y}{x^2 + y^2}i$. We could try to rewrite $f(z)$ in terms of $z$, but this could be hard.
 
 Moreover, it's not yet clear how to tell when a \@{complex-combination} $u(x,y) + v(x,y)i$ of \@{real} \@{functions} $u(x,y)$ and $v(x,y)$ define a \@{function} $f(z)$ of $z = x + yi$.
 
@@ -70,7 +70,7 @@ so the condition is then
 \[ u_r = \frac{1}{r} v_{\theta}, \quad v_r =  - \frac{1}{r} u_{\theta}. \]
 \end{theorem}
 
-We can break this theorem down into a couple of parts - that if a function is analytic, the CR equations hold, and that if the CR equations hold, the function is analytic.
+We can break this theorem down into a couple of parts - that if a function is \@{analytic}, the CR equations hold, and that if the CR equations hold, the function is analytic.
 
 \begin{theorem}\label{analytic-implies-cr-equations}
 Assume a \@{complex-function} $f(z)$ is defined on a \@{neighborhood} of $z_0,$ and $f$ is \@{complex-differentiable} at $z_0.$ Let $z = x+iy$ and write $f(x +iy) = u(x,y) + iv(x,y).$ Then all of the \@{partial-derivatives} $u_x, u_y, v_x, v_y$ exist and
@@ -169,18 +169,18 @@ Now, if we take a small imaginary step, $\Delta z = i\Delta y,$ along the imagin
 
 \[ \Delta f \approx f'(z) i \Delta y = i(a + ib) \Delta y = (-b + ia) \Delta y. \tag{d} \]
 
-That's is a \@{vector} in the $uv$-plane as well, with the same magnitude as the vector in (c), but in the direction $i \arg(f'(z)),$ that is, (d) has the same magnitude as (c), but is rotated by 90 degrees as its multiplied by $i.$
+That's is a \@{vector} in the $uv$-plane as well, with the same \@{magnitude} as the vector in (c), but in the direction $i \arg(f'(z)),$ that is, (d) has the same magnitude as (c), but is rotated by 90 degrees as its multiplied by $i.$
 
-So, the two vectors are of equal magnitude and are orthogonal.
+So, the two vectors are of equal magnitude and are \@{orthogonal}.
 \end{intuition}
 
 \includedemo{cauchy-riemann}
 
 Some other potentially useful theorems:
 
-If $f'(z) = 0$ at every point of a domain $D$, then $f(z)$ must be constant in $D$.
+If $f'(z) = 0$ at every point of a \@{domain} $D$, then $f(z)$ must be constant in $D$.
 
-If $f(z) = u + vi$ is analytic in a domain $D$, and if either $u(x,y)$ or $v(x,y)$ is constant in $D$, then $f(z)$ is constant in $D$.
+If $f(z) = u + vi$ is \@{analytic} in a domain $D$, and if either $u(x,y)$ or $v(x,y)$ is constant in $D$, then $f(z)$ is constant in $D$.
 
 Also, here are the Cauchy-Reimann equations in terms of the modulus $r$ and argument $\theta$ of a functon of $z$, $f(z) = u(r,\theta) + v(r,\theta)i$:
 
@@ -194,7 +194,7 @@ or
 
 \[ f'(z) = e^{-\theta i}\left ( \frac{\partial v}{\partial \theta} - \frac{\partial u}{\partial \theta}i \right ) \]
 
-Given a complex function $f(z) = u(x,y) + v(x,y)i$, we can use a Jacobian matrix to represent the transformation from $(x,y)$ to $(u,v)$. The Jacobian matrix of $f$ is:
+Given a complex function $f(z) = u(x,y) + v(x,y)i$, we can use a \@{Jacobian-matrix} to represent the transformation from $(x,y)$ to $(u,v)$. The Jacobian matrix of $f$ is:
 
 \[ J_f = \begin{bmatrix} \frac{\partial u}{\partial x} & \frac{\partial u}{\partial y} \\\ \frac{\partial v}{\partial x} & \frac{\partial v}{\partial y} \end{bmatrix} \]
 

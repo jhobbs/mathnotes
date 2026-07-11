@@ -36,7 +36,7 @@ If we let $n$ be the number of trials, $x$ be the number of successes, and $p$ b
 
 To break this down some, there are ${n \choose x}$ ways to have $x$ successes out of $n$ trials (different orderings). For each, there are $x$ independent events that occurr with a probability of $p$ and $n - x$ independent events that occur with a probability of $q = 1 - p.$ 
 
-The mean and variance of the binomial distribution $b(x, n, p)$ are
+The mean and \@{variance} of the binomial distribution $b(x, n, p)$ are
 
 \[ \mu = np, ~ \text{and} ~ \sigma^2 = npq. \]
 
@@ -64,7 +64,7 @@ The probability distribution of $X$ describes the probability of $x$ successes i
 
 \[ h(x, N, n, k) = \frac{\binom{k}{x}\binom{N-k}{n-x}}{\binom{N}{n}}, \quad \max{(0, n - (N -k))} \leq x \leq \min{(n, k)}. \]
 
-The mean and variance of the Hypergeometric distrbution $h(x, N, n, k)$ are
+The mean and \@{variance} of the Hypergeometric distrbution $h(x, N, n, k)$ are
 
 \[ \mu = \frac{nk}{N} ~ \text{and} ~ \sigma^2 = \frac{N - n}{N - 1} \cdot n \cdot \frac{k}{N} \left ( 1 - \frac{k}{N} \right ). \]
 
@@ -94,7 +94,7 @@ The probability distrbution of the Poisson random variable $X,$ representing the
 
 \[ p(x, \lambda t) = \frac{e^{-\lambda t}(\lambda t)^x}{x!}. \]
 
-Both the mean and variance of the Poisson distribution $p(x, \lambda t)$ are $\lambda t.$
+Both the mean and \@{variance} of the Poisson distribution $p(x, \lambda t)$ are $\lambda t.$
 
 Given a binomial distribution, if $n$ is large and $p$ is close to 0, the Poisson distribution approximates binomial probabilities.
 
@@ -114,7 +114,7 @@ A \textbf{geometric random variable} is a discrete random variable that models t
 
 for $k = 1, 2, 3 \dots.$ $k$ represents the number of independent trials it takes to achieve the first success, and $p$ is the probability of any given trial being successful.
 
-The mean is $\frac{1}{p}$ and the variance is $\frac{1 - p}{p^2}.$
+The mean is $\frac{1}{p}$ and the \@{variance} is $\frac{1 - p}{p^2}.$
 
 \subsection{Negative Binomial Distirbution}
 

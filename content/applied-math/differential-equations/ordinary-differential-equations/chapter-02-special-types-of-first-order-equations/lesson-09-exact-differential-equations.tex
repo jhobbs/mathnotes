@@ -11,7 +11,7 @@
 \subsection{Review of Integration Theory}
 
 \begin{enumerate}
-\item Let $f(x)$ be a function of $x$ defined on an interval $I: a \leq x \leq b$. Let $I$ be divided into $n$ subintervals and call $\Delta x_k$ the width of the $k$ th subinterval. Then if
+\item Let $f(x)$ be a function of $x$ defined on an \@{interval} $I: a \leq x \leq b$. Let $I$ be divided into $n$ subintervals and call $\Delta x_k$ the width of the $k$ th subinterval. Then if
 \end{enumerate}
 
 \[ \tag{9.11} \lim_{n \to \infty} \sum\limits_{k=1}^n f(x_k) \Delta x_k \]
@@ -23,7 +23,7 @@ exists as the number of subintervals increases in such a manner that the largest
 This limit is called the \textbf{Riemann intergral} of $f(x)$ over $I$. If this limit does not exist, we say $f(x)$ is not Riemann integrable over $I$.
 
 \begin{enumerate}
-\item If $f(x)$ is a continuous funtion of $x$ on an interval $I: a \leq x \leq b,$ and
+\item If $f(x)$ is a \@{continuous} funtion of $x$ on an \@{interval} $I: a \leq x \leq b,$ and
 \end{enumerate}
 
 \[ \tag{9.13} F(x) = \int_{x_0}^{x} f(u)du, \]
@@ -49,7 +49,7 @@ A region is called a \textbf{simply connected region} if \emph{every} simple \em
 
 To summarize: We can perform the integrations called for in (9.16) only if:
 
-a) The common domain of definition of the functions is a simply connected region $R$.
+a) The common \@{domain-of-definition} of the functions is a simply connected region $R$.
 
 b) The point $(x_0,y_0)$ is in $R$
 
@@ -61,7 +61,7 @@ c) The rectangle determined by the lines joining the points $(x_0,y_0)$, $(x,y_0
 
 \[ \tag{9.24} P(x,y)dx + Q(x,y)dy \]
 
-is called an \textbf{exact differential} if it is the total differential of a function $f(x,y)$, i.e., if
+is called an \textbf{exact differential} if it is the \@[total differential]{total-derivative} of a function $f(x,y)$, i.e., if
 
 \[ \tag{9.241} P(x,y) = \frac{\partial}{\partial x}f(x,y) \quad \text{and} \quad Q(x,y) = \frac{\partial}{\partial y}f(x,y). \]
 
@@ -69,7 +69,7 @@ is called an \textbf{exact differential} if it is the total differential of a fu
 
 \[ \tag{9.28} P(x,y)dx + Q(x,y)dy = 0 \]
 
-is called \textbf{exact} if there exists a function $f(x,y)$ such that its partial derivative with respect to $x$ is $P(x,y)$ and its partial derivative with respect to $y$ is $Q(x,y)$. In symbolic notation, the definition says that (9.28) is an \textbf{exact differential equation} if there exists a function $f(x,y)$ such that:
+is called \textbf{exact} if there exists a function $f(x,y)$ such that its \@{partial-derivative} with respect to $x$ is $P(x,y)$ and its partial derivative with respect to $y$ is $Q(x,y)$. In symbolic notation, the definition says that (9.28) is an \textbf{exact differential equation} if there exists a function $f(x,y)$ such that:
 
 \[ \tag{9.29} \frac{\partial}{\partial x}f(x,y) = P(x,y), \frac{\partial}{\partial y}f(x,y) = Q(x,y) \]
 
@@ -87,7 +87,7 @@ A 1-parameter family of solutions of the exact differential equation (9.28) is t
 
 \[ \tag{9.32} \frac{\partial}{\partial y}P(x,y) = \frac{\partial}{\partial x}Q(x,y) \]
 
-\emph{where the functions defined by P(x,y) and Q(x,y), the partial derivatives in (9.32) and} $\partial P(x,y)/\partial x, \partial Q(x,y)/\partial y$ \emph{exist and are continuous in a simply connected region R}.
+\emph{where the functions defined by P(x,y) and Q(x,y), the \@{partial-derivatives} in (9.32) and} $\partial P(x,y)/\partial x, \partial Q(x,y)/\partial y$ \emph{exist and are \@{continuous} in a simply connected region R}.
 
 \emph{\textbf{Proof of necessary condition}} To summarize an already brief proof, recall from Calculus 3 that the order of partial derivatives doesn't matter, i.e. that $F_xy(x,y) == F_yx(x,y)$. Thus, if such a function $f(x,y)$ whose partial derivatives with respect to $x$ and $y$ are $P(x,y)$ and $Q(x,y)$, respectively, then the second partial derivatives of those functions with respect to $y$ and $x$ must also be equal.
 

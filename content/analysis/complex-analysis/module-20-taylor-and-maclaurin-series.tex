@@ -49,7 +49,7 @@ The radius of the \@{circle-of-convergence} is called the \textbf{radius of conv
 \end{definition}
 
 \begin{theorem}
-Every \@{power-series} representation of (or, Taylor series for) an \@{entire-function} has an infinite \@{radius-of-convergence}.
+Every \@{power-series} representation of (or, \@{Taylor-series} for) an \@{entire-function} has an infinite \@{radius-of-convergence}.
 \end{theorem}
 
 \begin{theorem}[A theorem about the uniqueness of Taylor series as @power-series expansions]
@@ -57,10 +57,10 @@ If $f$ has a \@{power-series} expansion about a point $z_0$ with nonzero \@{radi
 \end{theorem}
 
 \begin{theorem}[A theorem about radius of convergence]
-The \@{radius-of-convergence} of the Taylor series for a function $f(z)$ about a point $z_0$ is the distance from $z_0$ to the nearest singularity of $f(z)$.
+The \@{radius-of-convergence} of the \@{Taylor-series} for a function $f(z)$ about a point $z_0$ is the distance from $z_0$ to the nearest \@{singularity} of $f(z)$.
 \end{theorem}
 
-Here are some important and useful Maclaurin series that we can often use to find those of other functions:
+Here are some important and useful \@{Maclaurin-series} that we can often use to find those of other functions:
 
 \[ e^z = 1 + z + \frac{z^2}{2!} + \frac{z^3}{3!} + \cdots = \sum_{n=0}^{\infty} \frac{1}{n!}z^n, |z| < \infty, \]
 
@@ -94,7 +94,7 @@ Here we can see that $w$ contributes only a factor of $|w|,$ which doesn't depen
 
 \[ L = \lim_{n \to \infty} \left | \frac{a_{n+1}}{a_n} \right | \implies \text{series converges if} |w| < 1/L. \]
 
-So, our radius of convergence for our $w$ series here is $1/L.$ We have to bring $z$ back, so for example, if we had something like $w = (z - z_0)^{mn},$ then our radius of convergence would be $(1/L)^{1/m}.$ We get that by
+So, our \@{radius-of-convergence} for our $w$ series here is $1/L.$ We have to bring $z$ back, so for example, if we had something like $w = (z - z_0)^{mn},$ then our radius of convergence would be $(1/L)^{1/m}.$ We get that by
 
 \[ |w| < R \implies |z^m| < R \implies |z| < R^{1/m}. \]
 
@@ -109,7 +109,7 @@ For complex $z$ and complex $\alpha,$ we have
 
 \[ (1 + z)^{\alpha} = \sum_{n=0}^{\infty} \binom{\alpha}{n} z^n. \]
 
-If $|z| < 1,$ the series converges absolutely for any any complex $\alpha,$ including negative integers.
+If $|z| < 1,$ the series \@{converges} absolutely for any any complex $\alpha,$ including negative integers.
 
 Other convergence conditions are \href{https://en.wikipedia.org/wiki/Binomial_series}{listed here}.
 \end{theorem}

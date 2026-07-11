@@ -16,7 +16,7 @@ I'm not sure which of these are proper limit theorems and which are preliminarie
 
 \[ P(X \geq t) \leq \frac{E[X]}{t}. \]
 
-That is, the probability that X is at least $t$ has an upper-bound of the expectation (mean) of $X$ divided by $t.$ In simpler terms, the probability that $X > t$ can't be too big.
+That is, the probability that X is at least $t$ has an upper-bound of the \@{expectation} (mean) of $X$ divided by $t.$ In simpler terms, the probability that $X > t$ can't be too big.
 
 Note that as $t$ grows larger, the probability of $X$ being greater than $t$ grows smaller.
 
@@ -27,7 +27,7 @@ This follows from the the Law of Total Expectation, which is
 
 Here, we're partitioning $X's$ sample space into a portion above $t$ and a portion below $t.$ 
 
-Now, $E[X \mid X \ge t]$ is the expected value when $X \ge t,$ which is necessarily at least $t,$ since $X$ is restricted to taking on values of at least $t.$ So, we have that $E[X \mid X \ge t] > t.$
+Now, $E[X \mid X \ge t]$ is the \@{expected-value} when $X \ge t,$ which is necessarily at least $t,$ since $X$ is restricted to taking on values of at least $t.$ So, we have that $E[X \mid X \ge t] > t.$
 
 We can substitute this into (a) to get
 
@@ -45,7 +45,7 @@ Dividing both sides by $t$ and swapping sides gives us
 
 \subsubsection{An Example}
 
-Suppose the size of a fish (measured in inches) is modeled as a nonnegative random variable $X$ with an expected value
+Suppose the size of a fish (measured in inches) is modeled as a nonnegative random variable $X$ with an \@{expected-value}
 
 \[ E[X] = 12 \text{ inches}. \]
 
@@ -70,13 +70,13 @@ While Markov's inequality provides an upper bound of $75\%$, the actual probabil
 
 Chebyshev's inequality gives an upper-bound on the probability of $X$ taking on values more than $t$ away from its mean ($E[X]$)
 
-\emph{Theorem:} Suppose $t > 0$ and $X$ is a random variable with the finite mean $E[X]$ and standard deviation $\sigma.$ Then
+\emph{Theorem:} Suppose $t > 0$ and $X$ is a random variable with the finite mean $E[X]$ and \@{standard-deviation} $\sigma.$ Then
 
 \[ P(| X - E[X] | \geq t) \leq \frac{\sigma^2}{t^2}. \]
 
 Intuitively, this means that the probability that $X$ is far away from its mean can't be too big.
 
-Note that the upper-bound on this probability is proportional to the variance of the random variable and inversely proportional to the distance $t$ of $X$ from its mean. So, as the variance increases, the probability of $X$ taking on values further from its mean also increases, and as the distance from the mean increases, the probability of $X$ taking on values at least that far from $E[X]$ decreases.
+Note that the upper-bound on this probability is proportional to the \@{variance} of the random variable and inversely proportional to the distance $t$ of $X$ from its mean. So, as the variance increases, the probability of $X$ taking on values further from its mean also increases, and as the distance from the mean increases, the probability of $X$ taking on values at least that far from $E[X]$ decreases.
 
 Also note that while Markov's inequality only requires knowledge of the mean $E[X]$ (the first moment), Chebyshev's inequality requires knowledge of the variance $E[X^2] - E[X]^2$ (second moment). Also, Chebyshev's inequality works for any random variable with a variance defined, rather than just on non-negative random variables.
 
@@ -185,7 +185,7 @@ M_{X+Y}(t) & = E[e^{t(X+Y)}] \\
 
 In essence, The Continuity Theorem For Moment Generating Functions says that if you have a sequence of random variables whose MGFs converge “nicely” (in a neighborhood of zero) to a limit function, then that limit function is the MGF of some random variable and the distributions of your sequence converge to the distribution of that random variable.
 
-\emph{Theorem:} Let ${X_n}$ be a sequence of random variables with moment generating functions defined by
+\emph{Theorem:} Let ${X_n}$ be a \@{sequence} of random variables with moment generating functions defined by
 
 \[ M_{X_n}(t) = E[e^{tX_n}] \]  
 
@@ -203,7 +203,7 @@ Then the distributions of ${X_n}$ converge in distribution to $X$, i.e.,
 
 \subsection{Central Limit Theorem}
 
-The intuitive version of the Central Limit Theorem is that if $n$ values are sampled from a distribution with a mean $\mu$ and standard deviation $\sigma,$ then the sample mean of these values, $\bar{X},$ is approximately normal with mean $\mu$ and standard deviation $\frac{\sigma}{\sqrt{n}}$ for large $n.$
+The intuitive version of the Central Limit Theorem is that if $n$ values are sampled from a distribution with a mean $\mu$ and \@{standard-deviation} $\sigma,$ then the sample mean of these values, $\bar{X},$ is approximately normal with mean $\mu$ and standard deviation $\frac{\sigma}{\sqrt{n}}$ for large $n.$
 
 This means that no matter what the underlying distribution of a population is, any sufficiently large sample from the population will be approximately normal. How large is sufficiently large depends on the shape of the distribution - for symmetric distributions it is lower and for asymmetric it is higher, but a common value is $n \geq 30.$
 

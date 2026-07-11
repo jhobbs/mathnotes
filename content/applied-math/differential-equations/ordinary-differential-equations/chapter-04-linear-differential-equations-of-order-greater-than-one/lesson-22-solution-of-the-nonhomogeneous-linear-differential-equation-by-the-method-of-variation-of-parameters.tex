@@ -24,7 +24,7 @@ For purposes of demonstration, we will work with the second order linear equatio
 
 \[ \tag{22.2} a_2y'' + a_1y' + a_0y = Q(x), \quad a_2 \neq 0 \]
 
-where $Q(x)$ is a continuous function of $x$ on an interval $I$ and is $\not\equiv 0$ on $I$.
+where $Q(x)$ is a \@{continuous} function of $x$ on an interval $I$ and is $\not\equiv 0$ on $I$.
 
 If two independent solutions, $y_1$ and $y_2$, of the related homogenous equation:
 
@@ -46,6 +46,6 @@ Note that we can also use determinants to find ${u_1}'$ and ${u_2}'$:
 
 \[ {u_1}' = \frac{\begin{vmatrix} 0 & y_2 \\\ \frac{Q(x)}{a_2} & {y_2}' \end{vmatrix}}{\begin{vmatrix} y_1 & y_2 \\\ {y_1}' & {y_2}' \end{vmatrix}}, \quad {u_2}' = \frac{\begin{vmatrix} y_1 & 0 \\\ {y_1}' & \frac{Q(x)}{a_2} \end{vmatrix}}{\begin{vmatrix} y_1 & y_2 \\\ {y_1}' & {y_2}' \end{vmatrix}} \]
 
-We can generalize this method to higher order equations - see the book for details. We can also use this method for equations where $Q(x)$ has finite linearly independent derivatives, although the method of undetermined coefficients is usually less effort to use in those cases (however, with the method of variation of parameters, we don't have to worry about the 3 different cases we have to handle in the method of undetermined coefficients, so it can still be easier). We can also use this method to find a particular solution when the coefficients in $(22.2)$ are continuous functions of $x$, provided we know two independent solutions of the related homogenous equation.
+We can generalize this method to higher order equations - see the book for details. We can also use this method for equations where $Q(x)$ has finite linearly independent derivatives, although the method of undetermined coefficients is usually less effort to use in those cases (however, with the method of variation of parameters, we don't have to worry about the 3 different cases we have to handle in the method of undetermined coefficients, so it can still be easier). We can also use this method to find a particular solution when the coefficients in $(22.2)$ are \@{continuous} functions of $x$, provided we know two independent solutions of the related homogenous equation.
 
 \end{document}

@@ -23,7 +23,7 @@ i.e. $F_{\beta}$ takes in a $24 \times 24$ matrix of \@{integers} between $0$ an
 Let's start by defining a neuron.
 
 \begin{definition}[Neuron]
-In a neural network, a \textbf{neuron} $N$ is a computation unit that takes $n$ input values, applies an \@{affine-transformation}, then a typically non-linear activation function, and returns a single value.
+In a \@{neural-network}, a \textbf{neuron} $N$ is a computation unit that takes $n$ input values, applies an \@{affine-transformation}, then a typically non-linear activation function, and returns a single value.
 
 That is, it is a function of the form
 
@@ -36,7 +36,7 @@ where
 \end{itemize}
 
 \begin{itemize}
-\item $\vec{w} \in \reals^n$ is a vector of weights,
+\item $\vec{w} \in \reals^n$ is a \@{vector} of weights,
 \end{itemize}
 
 \begin{itemize}
@@ -49,7 +49,7 @@ where
 \end{definition}
 
 \begin{definition}[Layer]
-A \textbf{layer} in a neural network is a collections of \@{neurons} that operate in parallel on the same input \@{vector}.
+A \textbf{layer} in a \@{neural-network} is a collections of \@{neurons} that operate in parallel on the same input \@{vector}.
 
 A layer with $n_{\ell - 1}$ inputs and $n_{\ell}$ \@{neurons} defines a \@{function}
 
@@ -85,7 +85,7 @@ Its output is the \@{vector} of all \@{neuron} outputs in that layer, and in thi
 Finally we'll define neural network itself!
 
 \begin{definition}[Neural Network]
-A \textbf{neural network} is a function obtained by \@{composing} \@{finitely-many} \@{neurons} arranged in layers:
+A \textbf{neural network} is a function obtained by \@{composing} \@{finitely-many} \@{neurons} arranged in \@{layers}:
 
 \[ F(\vec{x}) = (\phi_L \circ A_L) \circ \cdots \circ (\phi_1 \circ A_1)(\vec{x}), \]
 

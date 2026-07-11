@@ -16,7 +16,7 @@ Let $P$ be any \@{point} in a \@{domain-of-definition}. Then we define a \textbf
 
 \[ \vec{v} = \vec{v}(P) = [v_1(P), v_2(P), v_3(P)] \]
 
-that depends on points $P$ in space. A \@{vector-function} depends only on the point $P,$ not on the coordinate system chosen to represent its components.
+that depends on points $P$ in space. A \@{vector-function} depends only on the point $P,$ not on the coordinate system chosen to represent its \@{components}.
 \end{definition}
 
 \begin{definition}[Vector Field]
@@ -61,11 +61,11 @@ For a space curve given parametrically by $\vec{r}(t),$ the \textbf{tangent vect
 
 \subsection{Differentiation}
 \begin{remark}
-If $f$ is a real \@{function} with \@{domain-of-definition} $(a, b) \subset R^1$ and if $x \in (a,b),$ then $f'(x)$ is usually defined to be the real number
+If $f$ is a real \@{function} with \@{domain-of-definition} $(a, b) \subset R^1$ and if $x \in (a,b),$ then $f'(x)$ is usually defined to be the \@{real-number}
 
 \[ lim_{h \to 0} \frac{(x+h) - f(x)}{h}, \]
 
-provided this limit exists. Thus,
+provided this \@{limit} exists. Thus,
 
 \[ f(x + h) - f(x) = f'(x)h + r(h) \tag{8} \]
 
@@ -77,7 +77,7 @@ Note that (8) expresses the difference $f(x+h) - f(x)$ as the sum of the linear 
 \end{remark}
 
 \begin{note}
-On linearity: every real number $\alpha$ gives rise to a linear operator on $R^1:$
+On linearity: every \@{real-number} $\alpha$ gives rise to a linear operator on $R^1:$
 
 \[ L_\alpha{x} = \alpha x. \]
 
@@ -125,7 +125,7 @@ Note that in (14), $\vec{h} \in R^n.$ If $|\vec{h}|$ is small enough, then $\vec
 
 \[ \vec{f}(\vec{x} + \vec{h}) - \vec{f}(\vec{x}) - A \vec{h} \in R^m. \]
 
-The norm in the numerator of (14) is that of $R^m,$ while the norm in the denominator is the $R^n$-norm.
+The \@{norm} in the numerator of (14) is that of $R^m,$ while the norm in the denominator is the $R^n$-norm.
 
 We can also rewrite (14) as
 
@@ -161,14 +161,14 @@ These are some differential operators that apply to multivariable and/or vector 
 \subsection{Vector Differential Operator}
 
 \begin{definition}[del]\synonyms{"vector differential operator", nabla}
-In Euclidean space $\reals^n$ with coordinates $(x_1, \dots, x_n)$ and standard basis $(\vec{e}_1, \dots, \vec{e}_n),$ \textbf{del} is a vector operator whose $x_1, \dots, x_n$ components are the partial derivative operators $\frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n}; $ that is
+In Euclidean space $\reals^n$ with coordinates $(x_1, \dots, x_n)$ and standard basis $(\vec{e}_1, \dots, \vec{e}_n),$ \textbf{del} is a vector operator whose $x_1, \dots, x_n$ \@{components} are the \@{partial-derivative} operators $\frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n}; $ that is
 
 \[ \nabla = \sum_{i = 1}^n \vec{e}_i \frac{\partial}{\partial x_i} = \left ( \frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n} \right ). \]
 \end{definition}
 
 \subsection{Gradient}
 \begin{definition}[Gradient]
-Given a \@{scalar-function} $f : \reals^n \to \reals$, the \textbf{gradient} of $f$, denoted as $\nabla f$, is defined as the vector of its partial derivatives. Specifically, for a function $f(x_1, x_2, \cdots, x_n)$, the gradient is given by
+Given a \@{scalar-function} $f : \reals^n \to \reals$, the \textbf{gradient} of $f$, denoted as $\nabla f$, is defined as the \@{vector} of its \@{partial-derivatives}. Specifically, for a function $f(x_1, x_2, \cdots, x_n)$, the gradient is given by
 
 \[ \nabla f = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\  \frac{\partial f}{\partial x_2} \\\ \vdots \\\ \frac{\partial f}{\partial x_n} \end{bmatrix} \]
 \end{definition}
@@ -217,7 +217,7 @@ Let $S$ be a surface represented by $f(x, y, z) = c,$ where $c$ is constant and 
 \end{definition}
 
 \begin{definition}[Tangent Plane]
-If $S$ is a \@{level-surface} of a function $f,$ and $P$ is a point of $S,$ then the set of all \@{tangent-vectors} of all curves passing through $P$ will generally form a plane, called the \textbf{tangent plane} of $S$ at $P.$
+If $S$ is a \@{level-surface} of a function $f,$ and $P$ is a \@{point} of $S,$ then the set of all \@{tangent-vectors} of all curves passing through $P$ will generally form a plane, called the \textbf{tangent plane} of $S$ at $P.$
 \end{definition}
 
 \begin{definition}[Surface Normal]
@@ -229,7 +229,7 @@ A \@{vector} in the \@{direction} of the \@{surface-normal} of a surface $S$ at 
 \end{definition}
 
 \begin{theorem}\label{gradient-as-surface-normal-vector}
-Let $f$ be a \@{differentiable} \@{scalar-function} in space. Let $f(x,y,z) = c$ (with $c$ constant) represent a surface $S.$ Then, if the \@{gradient} of $f$ at a point $P$ of $S$ is not the \@{zero-vector}, it is a \@{surface-normal-vector} of $S$ at $P.$
+Let $f$ be a \@{differentiable} \@{scalar-function} in space. Let $f(x,y,z) = c$ (with $c$ constant) represent a surface $S.$ Then, if the \@{gradient} of $f$ at a \@{point} $P$ of $S$ is not the \@{zero-vector}, it is a \@{surface-normal-vector} of $S$ at $P.$
 \end{theorem}
 
 \begin{proof}
@@ -241,11 +241,11 @@ Now, if we differentiate (a) with respect to $t,$ we get
 
 \[ \frac{df}{dt} = \frac{\partial f}{\partial x} x' + \frac{\partial f}{\partial y} y' + \frac{\partial f}{\partial z} z' = (\grad{f}) \cdot \vec{r}' = 0. \]
 
-Therefore, $\grad{f}$ is \@{orthogonal} to all the vectors $\vec{r}'$ in the \@{tangent-plane} of $S$ at $P,$ and is therefore a \@{surface-normal-vector} of $S$ at $P.$
+Therefore, $\grad{f}$ is \@{orthogonal} to all the \@{vectors} $\vec{r}'$ in the \@{tangent-plane} of $S$ at $P,$ and is therefore a \@{surface-normal-vector} of $S$ at $P.$
 \end{proof}
 
 \begin{theorem}\label{find-tangent-plane}
-If $S$ is given by $F(x,y,z) = 0,$ then at $P = (x_0, y_0, z_0),$ the tangent plane is
+If $S$ is given by $F(x,y,z) = 0,$ then at $P = (x_0, y_0, z_0),$ the \@{tangent-plane} is
 
 \[ \nabla F(P) \cdot \langle x - x_0, y - y_0, z - z_0 \rangle = 0. \]
 \end{theorem}
@@ -283,7 +283,7 @@ The \@{divergence} of a \@{vector-field} quantifies the extent to which the \@{v
 \end{remark}
 
 \begin{theorem}[Divergence Theorem, or, Gauss's Theorem]
-An important theorem related to divergence is the Divergence Theorem (also known as Gauss's theorem) which connects the flux of a vector field through a closed surface to the divergence of the field inside the volume bounded by the surface:
+An important theorem related to \@{divergence} is the Divergence Theorem (also known as Gauss's theorem) which connects the flux of a \@{vector-field} through a closed surface to the divergence of the field inside the volume bounded by the surface:
 
 \[ \iiint_V (\nabla \cdot \vec{F}) dV = \oint_s \vec{F} \cdot d\vec{S} \]
 \end{theorem}
@@ -295,17 +295,17 @@ Let $\vec{v}$ be the velocity \@{vector} of of the motion of particles in a flui
 \subsection{Curl}
 
 \begin{definition}[Curl]
-For a vector field $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimensional space $\reals^3$, with each component function $F_i$ depending on the variables $x$, $y$, and $z$, the curl of $\vec{F}$ is defined as
+For a \@{vector-field} $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimensional space $\reals^3$, with each \@{component} function $F_i$ depending on the variables $x$, $y$, and $z$, the curl of $\vec{F}$ is defined as
 
 \[ \curl \vec{F} = \nabla \times \vec{F} = \left ( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z} \right ) \mathbf{\vec{i}} + \left ( \frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x} \right ) \mathbf{\vec{j}} + \left ( \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y} \right ) \mathbf{\vec{k}} \]
 \end{definition}
 
 \begin{remark}
-The curl at a point in the field is represented by a vector whose length and direction denote the magnitude and axis of the maximum circulation. Circulation is the line integral of a vector field around a closed curve.
+The \@{curl} at a point in the field is represented by a \@{vector} whose \@{length} and \@{direction} denote the \@{magnitude} and axis of the maximum circulation. Circulation is the \@{line-integral} of a \@{vector-field} around a closed curve.
 
 More intuitively, curl measures the rotation of the vector field at a given point.
 
-Curl can also be expressed as the determinant of a 3x3 matrix involving the unit vectors, partial derivatives, and the components of the vector field:
+Curl can also be expressed as the determinant of a 3x3 matrix involving the \@{unit-vectors}, \@{partial-derivatives}, and the \@{components} of the vector field:
 
 \[ \nabla \times \vec{F} = \begin{vmatrix} \mathbf{\vec{i}} & \mathbf{\vec{j}} & \mathbf{\vec{k}}  \\\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\\ F_1 & F_2 & F_3  \end{vmatrix} \]
 \end{remark}
@@ -330,11 +330,11 @@ $\curl{\vec{v}}$ is a \@{vector}. It has a \@{length} and a \@{direction} that a
 
 \subsection{Laplacian}
 \begin{definition}[Laplacian]
-The Laplace operator is a second-order differential operator in the $n$-dimensional Euclidean space, defined as the divergence $(\nabla \cdot)$ of the gradient $(\nabla f$). Thus, if $f$ is a twice \@{differentiable} real-valued function, then the Laplacian of $f$ is the real-valued function defined by
+The Laplace operator is a second-order differential operator in the $n$-dimensional Euclidean space, defined as the \@{divergence} $(\nabla \cdot)$ of the \@{gradient} $(\nabla f$). Thus, if $f$ is a twice \@{differentiable} real-valued function, then the Laplacian of $f$ is the real-valued function defined by
 
 \[ \Delta f = \nabla^2 f = \nabla \cdot \nabla f. \]
 
-The Laplacian of $f$ is the sum of all the unmixed second partial derivatives in the Cartesian coordinates $x_i$:
+The Laplacian of $f$ is the sum of all the unmixed second \@{partial-derivatives} in the Cartesian coordinates $x_i$:
 
 \[ \nabla^2 f = \sum_{i=1}^n \frac{\partial^2 f}{\partial x_i^2}. \]
 
@@ -511,7 +511,7 @@ So, algebraically, \@{divergence} is the \@{trace} of the \@{Jacobian}.
 
 The \textbf{trace} measures how much the \@{linear-transformation} represented by $\vec{J}$ stretches space along its coordinate axes - it's the infinitesimal "net expansion rate."
 
-Geometrically, if we have a very small cube of points centered at $\vec{x_0},$ with a side length of $dx,$ then each corner of that cube corresponds to a slightly different $\vec{x} = \vec{x_0} + \vec{\Delta x}.$ If we take all the points in the box and map them through $\vec{F},$ the cube's image becomes a tiny, possibly deformed box in the $\vec{F}$-space. The way the box stretches, shears and rotates is determined by $\vec{J}.$ The change in volume of that box is determined by $\det{(\vec{J})}$ (the determinant of the Jacobian.)
+Geometrically, if we have a very small cube of points centered at $\vec{x_0},$ with a side length of $dx,$ then each corner of that cube corresponds to a slightly different $\vec{x} = \vec{x_0} + \vec{\Delta x}.$ If we take all the points in the box and map them through $\vec{F},$ the cube's image becomes a tiny, possibly deformed box in the $\vec{F}$-space. The way the box stretches, shears and rotates is determined by $\vec{J}.$ The change in volume of that box is determined by $\det{(\vec{J})}$ (the determinant of the \@{Jacobian}.)
 
 For an infinitesimally small cube, the \@{determinant} can be expanded as
 

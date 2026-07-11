@@ -15,13 +15,13 @@ where:
 \begin{enumerate}
 \item $\Sigma$ is a finite, nonempty \textbf{alphabet} (a set of symbols);
 \item $W \subseteq \Sigma^{*}$ is the set of \textbf{well-formed-formulas} (wffs), defined inductively by formation rules specifying which finite strings over $\Sigma$ belong to $W$
-\item $A \subseteq W$ is a distinguished subset of $W$, whose members are called \textbf{axioms.}
+\item $A \subseteq W$ is a distinguished \@{subset} of $W$, whose \@{members} are called \textbf{axioms.}
 \item $R$ is a finite set of \textbf{rules of inference}, each of which is a relation on $W$ determining from which formulas other formulas may be derived.
 \end{enumerate}
 \end{definition}
 
 \begin{definition}[Derivation]\synonyms{proof}
-A \textbf{derivation} (or \textbf{proof}) in $\mathcal{F}$ is a finite sequence of formulas
+A \textbf{derivation} (or \textbf{proof}) in $\mathcal{F}$ is a \@{finite} \@{sequence} of formulas
 
 \[ \varphi_1, \varphi_2, \dots, \varphi_n \]
 
@@ -34,13 +34,13 @@ such that for each $i \le n$,
 \end{definition}
 
 \begin{definition}[theorem]
-A formula $\psi \in W$ is a \textbf{theorem} (or \textbf{provable formula}) of $\mathcal{F}$ if there exists such a derivation ending with $\psi$. We then write
+A formula $\psi \in W$ is a \textbf{theorem} (or \textbf{provable formula}) of $\mathcal{F}$ if there exists such a \@{derivation} ending with $\psi$. We then write
 
 \[ \vdash_{\mathcal{F}} \psi. \]
 \end{definition}
 
 \begin{definition}[recursive]
-The system $\mathcal{F}$ is said to be \textbf{recursive} (or \textbf{effectively generated}) if $W$, $A$, and $R$ are all \@{recursively-enumerable} sets, so that derivations can be verified by a finite mechanical procedure.
+The system $\mathcal{F}$ is said to be \textbf{recursive} (or \textbf{effectively generated}) if $W$, $A$, and $R$ are all \@{recursively-enumerable} sets, so that \@{derivations} can be verified by a finite mechanical procedure.
 \end{definition}
 
 \begin{remark}
@@ -52,11 +52,11 @@ Its symbols are inert marks; its rules manipulate these marks according to synta
 
 No step depends on what any symbol "means."
 
-A proof in such a system is therefore a finite, mechanical transformation of strings; a sequence of moves in a symbol game governed entirely by explicit rules.
+A \@{proof} in such a system is therefore a finite, mechanical transformation of strings; a sequence of moves in a symbol game governed entirely by explicit rules.
 
 Semantics enter only afterward, when we interpret the symbols externally (e.g. as numbers, sets, or truth values).
 
-Until then, the system is a syntax engine; a rule-bound procedure that generates certain strings (theorems) from others (axioms), without regard to interpretation or truth.
+Until then, the system is a syntax engine; a rule-bound procedure that generates certain strings (\@{theorems}) from others (axioms), without regard to interpretation or truth.
 \end{remark}
 
 \begin{note}

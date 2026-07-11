@@ -10,14 +10,14 @@
 
 \subsection{Complex Numbers - Basics}
 
-A \textbf{pure imaginary number} is the product of a real number and a number $i$ which is defined by the relation $i^2 = -1$.
+A \textbf{pure imaginary number} is the product of a \@{real-number} and a number $i$ which is defined by the relation $i^2 = -1$.
 
 \begin{definition}[Complex Numbers]
 \notation{\complexes}{\mathbb{C}}
 A \textbf{complex number} is one which can be written in the form $a + bi$, where $a$ and $b$ are \@{real-numbers}. The set of all complex numbers is denoted $\complexes$.
 \end{definition}
 
-Note that the complex numbers include both the \@{real-numbers} and the imaginary numbers.
+Note that the \@{complex-numbers} include both the \@{real-numbers} and the imaginary numbers.
 
 The $a$ in the complex number $z = a + bi$ is called the \textbf{real part of z;} the $b$ is called the \textbf{imaginary part of z}.
 
@@ -91,7 +91,7 @@ This form makes it super obvious that arguments add and moduli multiply when mul
 
 \subsection{Algebra of Complex Numbers}
 
-Here are the rules for performing addition, subtraction, multiplication and division with complex numbers. They follow the normal rules of algebra, with the number $i^2$ being replaced by its agreed upon value $-1$. If $z_1 = a + bi$ and $z_2 = c + di$ are two complex numbers, then by definition:
+Here are the rules for performing addition, subtraction, multiplication and division with complex numbers. They follow the normal rules of algebra, with the number $i^2$ being replaced by its agreed upon value $-1$. If $z_1 = a + bi$ and $z_2 = c + di$ are two \@{complex-numbers}, then by definition:
 
 \[ z_1 + z_2 = (a + bi) + (c + di) = (a + c) + (b + d)i \tag{18.6} \]
 
@@ -120,7 +120,7 @@ We can use this property to easily compute powers of complex numbers, which is s
 \end{theorem}
 
 \begin{theorem}[nth root of z]\label{nth-root-of-z}
-For complex $z$ and integer $n,$ with $z = r(\cos{x} + i \sin{x}),$ we have
+For complex $z$ and \@{integer} $n,$ with $z = r(\cos{x} + i \sin{x}),$ we have
 
 \[ r^{\frac{1}{n}} \left ( \cos{\frac{x + 2 \pi k}{n}} + i \sin{\frac{x + 2 \pi k}{n}} \right ). \]
 \end{theorem}
@@ -153,7 +153,7 @@ where $a,$ $b,$ $c,$ and $z,$ are complex; it may require taking the square root
 
 \subsection{Exponential, Trigonometric and Hyperbolic Functions of Complex Numbers}
 
-Some Maclaurin series expansions for a complex valued $z$:
+Some \@{Maclaurin-series} expansions for a complex valued $z$:
 
 \[ e^z = 1 + \frac{z}{1!} + \frac{z^2}{2!} + \frac{z^3}{3!} + \cdots \tag{18.73} \]
 
@@ -233,7 +233,7 @@ Again using (z.2) and the fact that $r^n = r \cdot r \cdot r ....$ repeated $n$ 
 
 \[ \bar{a}_n \bar{r}^n + \bar{a}_{n-1} \bar{r}^{n-1} + \cdots + \bar{a}_1 \bar{r} + \bar{a}_0 = 0 \tag{g} \]
 
-Note that since $a_n,~a_{n-1}$ are real numbers, they are complex numbers of the form $a_n + 0i,~a_{n-1} + 0i,...$, and since $a_n+0i = a_n - 0i$ we have:
+Note that since $a_n,~a_{n-1}$ are \@{real-numbers}, they are \@{complex-numbers} of the form $a_n + 0i,~a_{n-1} + 0i,...$, and since $a_n+0i = a_n - 0i$ we have:
 
 \[ a_n = \bar{a}_n, a_{n-1} = \bar{a}_{n-1}, ... \tag{g} \]
 

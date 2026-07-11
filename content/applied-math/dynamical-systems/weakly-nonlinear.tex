@@ -15,7 +15,7 @@ Equations of the form
 where $0 \leq \epsilon \ll 1$ and $h(x, \dot{x})$ is an arbitrary \@{smooth} \@{function} represent small \@{perturbations} of the \@{linear} \@{oscillator} $\dot{x} + x = 0$ and are therefore called \textbf{weakly nonlinear oscillators.}
 \end{definition}
 
-We can try to find solutions of the weakly nonlinear oscillator defined above in the form of power series:
+We can try to find solutions of the \@{weakly-nonlinear-oscillator} defined above in the form of \@{power-series}:
 
 \[ x(t, \epsilon) = x_0(t) + \epsilon x_1(t) + \epsilon^2 x_2 (t) + \dots, \tag{b} \]
 
@@ -68,7 +68,7 @@ and our overall solution is
 Compare this to the actual solution we gave above. While the actual solution decays over time, the solution perturbation theory gives blows up to infinity over time! This leads us to.. two timing!
 
 \subsection{Two Timing}
-Given the weakly nonlinear oscillator
+Given the \@{weakly-nonlinear-oscillator}
 
 \[ \ddot{x} + x + \varepsilon(x^2 - 1)\dot{x}^3 = 0, \quad 0 < \varepsilon \ll 1, \tag{f} \]
 
@@ -157,10 +157,10 @@ Isolating the derivatives gives us
 
 \[ R' = \frac{R^3}{16}(6 - R^2), \quad \phi'  = 0. \]
 
-First consider the $R'$ equation. On the half-line $R \geq 0,$ we have that $R^* = 0$ is an unstable fixed point, and $R^* = \sqrt{6}$ is a stable fixed point. Therefore, $R(T) \to \sqrt{6}$ as $T \to \infty.$ Now, $\phi' = 0$ implies $\phi(T) = \phi_0$ for some constant $\phi_0.$ Hence $x_0(\tau, T) \to \sqrt{6}\cos{(\tau + \phi_0)}$ and therefore
+First consider the $R'$ equation. On the half-line $R \geq 0,$ we have that $R^* = 0$ is an unstable \@{fixed-point}, and $R^* = \sqrt{6}$ is a \@{stable} fixed point. Therefore, $R(T) \to \sqrt{6}$ as $T \to \infty.$ Now, $\phi' = 0$ implies $\phi(T) = \phi_0$ for some constant $\phi_0.$ Hence $x_0(\tau, T) \to \sqrt{6}\cos{(\tau + \phi_0)}$ and therefore
 
 \[ x(t) \to \sqrt{6}\cos{(t + \phi_0)} + O(\varepsilon) \]
 
-as $t \to \infty.$ Thus, all trajectories with $R_0 > 0$ approach an approximately circular stable limit cycle of radius $\sqrt{6} + O(\varepsilon)$ in the $(x, \dot{x})$ plane, traversed at a frequency of $1 + O(\varepsilon)$.
+as $t \to \infty.$ Thus, all \@{trajectories} with $R_0 > 0$ approach an approximately circular \@{stable-limit-cycle} of radius $\sqrt{6} + O(\varepsilon)$ in the $(x, \dot{x})$ plane, traversed at a frequency of $1 + O(\varepsilon)$.
 
 \end{document}

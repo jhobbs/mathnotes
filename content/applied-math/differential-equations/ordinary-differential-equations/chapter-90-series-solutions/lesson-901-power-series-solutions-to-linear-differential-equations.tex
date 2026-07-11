@@ -9,7 +9,7 @@
 
 It may be helpful to review \pagelink[shifting the summation index]{analysis/real-analysis/summation} before proceeding. 
 
-We'll also use the following theorem about power series vanishing on an interval: If $\sum_{n=0}^{\infty}{a_0(x-x_0)^n} = 0$ for all $x$ in some open interval, then each coefficient $a_n$ equals zero.
+We'll also use the following theorem about \@{power-series} vanishing on an interval: If $\sum_{n=0}^{\infty}{a_0(x-x_0)^n} = 0$ for all $x$ in some open interval, then each coefficient $a_n$ equals zero.
 
 I'll proceed with an example (from Nagle, Section 8.3).
 
@@ -17,7 +17,7 @@ Let's find a power series solution about x = 0 to
 
 \[ y' + 2xy = 0. \tag{a} \]
 
-The coefficient of $y$ here is $2x$, which is analytic everywhere, so $x = 0$ is an ordinary point of equation (a). So, we should expect to find a power series solution of the form:
+The coefficient of $y$ here is $2x$, which is \@{analytic} everywhere, so $x = 0$ is an ordinary point of equation (a). So, we should expect to find a power series solution of the form:
 
 \[ y(x) = a_0 + a_1 x + a_2 x^2 + \cdots = \sum_{n=0}^{\infty} a_n x^n. \tag{b} \]
 
@@ -79,7 +79,7 @@ and when we substitute this back into (b) we get
 
 Since $a_0$ is left undetermined as an arbitrary constant, this is a general solution to equation (a).
 
-Also note that the radius of convergence is infinite, and that it converges to
+Also note that the \@{radius-of-convergence} is infinite, and that it converges to
 
 \[ y(x) = a_0 e^{-x^2}. \]
 
@@ -89,11 +89,11 @@ Given the equation
 
 \[ y''(x) + p(x)y'(x) +q(x)y(x) = 0, \tag{1} \]
 
-Suppose $x_0$ is an ordinary point for equation (1). Then (1) has two linearly independent analytic solutions of the form
+Suppose $x_0$ is an ordinary point for equation (1). Then (1) has two linearly independent \@{analytic} solutions of the form
 
 \[ y(x) = \sum_{n=0}^{\infty} a_n (x-x_0)^n. \tag{2} \]
 
-Moreover, the radius of convergance of any power series solution of the form given by (2) is at least as large as the distance from $x_0$ to the nearest singular point (real or complex-valued) of equation (1).
+Moreover, the radius of convergance of any \@{power-series} solution of the form given by (2) is at least as large as the distance from $x_0$ to the nearest singular point (real or complex-valued) of equation (1).
 
 \subsection{Translation}
 

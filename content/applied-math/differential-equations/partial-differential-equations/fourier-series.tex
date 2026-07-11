@@ -8,7 +8,7 @@
 
 \section{Review}
 
-\textbf{Periodic Functions}: A function is \textbf{periodic of period} $T$ if $f(x + T) = f(x)$ for all $x$ in the domain of $f$.
+\textbf{Periodic Functions}: A function is \textbf{periodic of period} $T$ if $f(x + T) = f(x)$ for all $x$ in the \@[domain]{domain-of-definition} of $f$.
 
 \textbf{Even Functions}: A function that satisfies $f(-x) = f(x)$ for all $x$ in the domain of $f$ has a graph that is symmetric with respect to the $y$-axis. We say such a function is \textbf{even}. The functions $1, x^2, x^4,\dots$ are examples of even functions, as is $\cos{x}$.
 
@@ -26,7 +26,7 @@ if $f$ is an odd piecewise continuous function on $[-a, a]$, then
 
 \section{Some Important Integrals}
 
-The following three integrals are crucial in Fourier series. In each, $m$ and $n$ are nonnegative integers.
+The following three integrals are crucial in Fourier series. In each, $m$ and $n$ are nonnegative \@{integers}.
 
 The first integral:
 
@@ -50,7 +50,7 @@ Here, we have to consider two cases, $m = n$ and $m \neq n$. If $m = n$, $(m-n) 
 
 \[ \frac{1}{2}  \int_{-L}^{L} 1 - \cos{\frac{2m \pi x}{L}} dx = L - \left ( \frac{L\sin{\frac{2m \pi x}{L}}}{2 \pi m} \right)_0^L = L - \left ( \left (\frac{L\sin{2m \pi}}{2 \pi m} \right) - 0 \right ) = L. \tag{b.2} \]
 
-The final $\sin$ in (b.2) is always $0$ because $\sin{2 m \pi}$ for integer $m$ is always $0$. So, when $m = n$, (b) evaluates to $L$.
+The final $\sin$ in (b.2) is always $0$ because $\sin{2 m \pi}$ for \@{integer} $m$ is always $0$. So, when $m = n$, (b) evaluates to $L$.
 
 When $m \neq n$, we can't simplify either $\cos$ in the integrand and end up with two $\sin$'s that are always 0, so when $m \neq n$, (b) evaluates to $0$.
 
@@ -76,7 +76,7 @@ The following table (from "Differential Equations and Boundary Value Problems", 
 
 \section{Fourier Series}
 
-\textbf{Definition}: Let $f$ be a piecewise continuous function on the interval $[-L, L]$. The \textbf{Fourier Series} of $f$ is the trigonometric series
+\textbf{Definition}: Let $f$ be a piecewise continuous function on the \@{interval} $[-L, L]$. The \textbf{Fourier Series} of $f$ is the trigonometric series
 
 \[ f(x) \sim \frac{a_0}{2} + \sum_{n=1}^{\infty} \left \{ a_n \cos{\frac{n \pi x}{L}} + b_n \sin{\frac{n \pi x}{L}} \right \}, \tag{8} \] 
 

@@ -7,14 +7,14 @@
 
 \subsection{Polar Coordinate Methods}
 
-Given a system $\dot{x} = f(x,y), \dot{y} = g(x,y),$ it's sometimes useful, especially for the analysis of limit cycles, to convert to polar coordinates. This can be done the manual way from the start, which leads to needing to solve a system of equations for $\dot{r}$ and $\dot{\theta},$ or we can use these handy formulas, which are equivalent:
+Given a system $\dot{x} = f(x,y), \dot{y} = g(x,y),$ it's sometimes useful, especially for the analysis of \@{limit-cycles}, to convert to polar coordinates. This can be done the manual way from the start, which leads to needing to solve a system of equations for $\dot{r}$ and $\dot{\theta},$ or we can use these handy formulas, which are equivalent:
 
 \[ \dot{r} = \frac{x \dot{x} + y \dot{y}}{r}, \quad \dot{\theta} = \frac{x \dot{y} - y \dot{x}}{r^2}. \]
 
 \subsection{Conservative Systems}
 
 \begin{definition}[Conserved Quantity]
-Given a system $\dot{\vec{x}} = \vec{f(x)},$ a \textbf{conserved quantity} is a \@{real-valued} \@{continuous} \@{function} $E(\vec{x})$ that is constant on trajectories, i.e. $dE/dt = 0.$ We also require that $E(\vec{x})$ is nonconstant on every \@{open} set, to avoid trivial examples such as $E(\vec{x}) = 0.$
+Given a system $\dot{\vec{x}} = \vec{f(x)},$ a \textbf{conserved quantity} is a \@{real-valued} \@{continuous} \@{function} $E(\vec{x})$ that is constant on \@{trajectories}, i.e. $dE/dt = 0.$ We also require that $E(\vec{x})$ is nonconstant on every \@{open} set, to avoid trivial examples such as $E(\vec{x}) = 0.$
 \end{definition}
 
 As an example, consider a particle of mass $m$ moving along the $x$-axis, subject to a nonlinear force $F(x):$
@@ -40,24 +40,24 @@ Therefore, for a given solution $x(t),$ the total energy
 is a constant function of time. The energy is called a \@{conserved-quantity}, a constant of motion, or a first integral.
 
 \begin{definition}[Conservative system]
-Systems for which a conserved quantity exist are called \textbf{conservative systems.}
+Systems for which a \@{conserved-quantity} exist are called \textbf{conservative systems.}
 \end{definition}
 
 \begin{theorem}\label{conservative-systems-have-no-attracting-fixed-points}
-Conservative systems have no attracting \@{fixed-points}.
+\@{Conservative-systems} have no attracting \@{fixed-points}.
 \end{theorem}
 
 \begin{proof}
-Suppose $\vec{x^*}$ were an attracting \@{fixed-point} in a conservative system. Then, note that all trajectories in the basin of attraction approach $\vec{x^*}$ as $t \to \infty.$ Since $E(\vec{x})$ is continuous, the energy in the limit as trajectories approach $\vec{x^*}$ is equal to the energy at the fixed point, and so the energy along the entirety of each trajectory is equal to the energy at the fixed point. But, this implies that the energy in the entire basin of attraction is the same as the energy at the fixed point, which violates our definition of a conservative system (i.e. we require that $E(\vec{x})$ be nonconstant.) Therefore no such \@{fixed-point} can exist.
+Suppose $\vec{x^*}$ were an attracting \@{fixed-point} in a \@{conservative-system}. Then, note that all \@{trajectories} in the basin of attraction approach $\vec{x^*}$ as $t \to \infty.$ Since $E(\vec{x})$ is continuous, the energy in the limit as trajectories approach $\vec{x^*}$ is equal to the energy at the fixed point, and so the energy along the entirety of each trajectory is equal to the energy at the fixed point. But, this implies that the energy in the entire basin of attraction is the same as the energy at the fixed point, which violates our definition of a conservative system (i.e. we require that $E(\vec{x})$ be nonconstant.) Therefore no such \@{fixed-point} can exist.
 \end{proof}
 
-Now, while conservative systems can't have attracting fixed points, they can have other types, and generally have \@{saddles} and \@{centers}.
+Now, while \@{conservative-systems} can't have attracting \@{fixed-points}, they can have other types, and generally have \@{saddles} and \@{centers}.
 
 \begin{definition}[Homoclinic orbit]
 A \@{trajectory} that starts and ends at the same \@{fixed-point} is called a \textbf{homoclinic orbit.}
 \end{definition}
 
-These \@{homoclinic-orbits} are common in conservative systems but are rare otherwise. Note that \@{homoclinic-orbits} are not periodic because they take forever trying to reach the fixed point.
+These \@{homoclinic-orbits} are common in \@{conservative-systems} but are rare otherwise. Note that \@{homoclinic-orbits} are not periodic because they take forever trying to reach the \@{fixed-point}.
 
 Note that nonlinear \@{centers} are robust in conservative systems, because any trajectories sufficiently close to them are closed.
 
@@ -72,7 +72,7 @@ The function $H$ is called the \textbf{Hamiltonian.}
 \end{definition}
 
 \begin{theorem}
-For any \@{Hamiltonian-system}, $H$ is a conserved quantity.
+For any \@{Hamiltonian-system}, $H$ is a \@{conserved-quantity}.
 \end{theorem}
 
 \subsection{Reversible Systems}
@@ -81,13 +81,13 @@ For any \@{Hamiltonian-system}, $H$ is a conserved quantity.
 A \textbf{reversible system} is any second-order system that is invariant under $t \to -t$ and $y \to -y.$
 \end{definition}
 
-Centers are also robust in reversible systems.
+Centers are also robust in \@{reversible-systems}.
 
 \begin{definition}[Heteroclinic trajectories]
 Pairs of orbits connecting twin \@{saddle-points} are called \textbf{heteroclinic trajectories.}
 \end{definition}
 
-These \@{heteroclinic-orbits} are much more common in reversible or conservative systems than in other types of systems.
+These \@{heteroclinic-orbits} are much more common in reversible or \@{conservative-systems} than in other types of systems.
 
 % TODO: Hamiltonian systems, energy conservation, potential functions, energy level sets, closed orbits
 
@@ -112,23 +112,23 @@ Sometimes we want to show that a \@{system} does not have a \@{limit-cycle}.
 \paragraph{Gradient Systems}
 
 \begin{definition}[Gradient System]
-If a \@{system} can be written in the form $\dot{\vec{x}} = - \nabla V,$ for some \@{continuously-differentiable}, single-valued scalar function $V(\vec{x}),$ then it is said to be a \textbf{gradient system} with \textbf{potential function} $V.$
+If a \@{system} can be written in the form $\dot{\vec{x}} = - \nabla V,$ for some \@{continuously-differentiable}, single-valued \@{scalar-function} $V(\vec{x}),$ then it is said to be a \textbf{gradient system} with \textbf{potential function} $V.$
 \end{definition}
 
-We can check if a $2$d system is a gradient system by doing a comparison of the partial derivatives, just like we do for checking if an ODE an exact differential equation. If $\dot{x} = f(x,y), \dot{y} = g(x,y),$ then there is a potential function if $\frac{\partial f}{\partial y} = \frac{\partial g}{\partial x}.$ This means it's a gradient system. We can then find the potential function by doing the same process as we do for solving exact differential equations.
+We can check if a $2$d system is a \@{gradient-system} by doing a comparison of the \@{partial-derivatives}, just like we do for checking if an ODE an exact differential equation. If $\dot{x} = f(x,y), \dot{y} = g(x,y),$ then there is a \@{potential-function} if $\frac{\partial f}{\partial y} = \frac{\partial g}{\partial x}.$ This means it's a gradient system. We can then find the potential function by doing the same process as we do for solving exact differential equations.
 
 \begin{theorem}\label{closed-orbits-impossible-in-gradient-systems}
-Closed orbits are impossible in gradient systems.
+Closed orbits are impossible in \@{gradient-systems}.
 \end{theorem}
 
 \begin{intuition}
-If we're always moving "downhill" in some direction in a space, it's impossible to come back to where we started. This is another reason why oscillations aren't possible in one dimensional systems.
+If we're always moving "downhill" in some direction in a space, it's impossible to come back to where we started. This is another reason why oscillations aren't possible in \@[one dimensional systems]{one-dimensional-systems}.
 \end{intuition}
 
 \paragraph{Lyapunov Functions}
 
 \begin{definition}[Liapunov Function]\synonyms{"Lyapunov function"}
-Consider a system $\dot{\vec{x}} = \vec{f(x)}$ with a fixed point at $\vec{x^*}.$ If it has a function with the following properties:
+Consider a system $\dot{\vec{x}} = \vec{f(x)}$ with a \@{fixed-point} at $\vec{x^*}.$ If it has a function with the following properties:
 
 \begin{enumerate}
 \item $V(\vec{x}) > 0$ for all $\vec{x} \neq \vec{x^*},$ and $V(\vec{x^*}) = 0.$ (i.e. $V$ is \@{positive-definite}.)
@@ -142,7 +142,7 @@ Then such a function is called a \textbf{Liapunov function.}
 \end{definition}
 
 \begin{theorem}
-If a system has a \@{liapunov-function}, then its fixed point $\vec{x^*}$ is globally asymptotically stable: for all initial conditions, $\vec{x}(t) \to \vec{x^*}$ as $t \to \infty.$ Therefore, the system has no closed orbits.
+If a system has a \@{liapunov-function}, then its \@{fixed-point} $\vec{x^*}$ is globally asymptotically stable: for all initial conditions, $\vec{x}(t) \to \vec{x^*}$ as $t \to \infty.$ Therefore, the system has no closed orbits.
 \end{theorem}
 
 \begin{intuition}
@@ -172,7 +172,7 @@ The Poincaré-Bendixson theorem can be used to show that a \@{limit-cycle} must 
 \begin{theorem}\label{poincare-bendixson}
 Suppose that
 
-(1) $R$ is a closed, bounded subset of the plane;
+(1) $R$ is a \@{closed}, \@{bounded} \@{subset} of the plane;
 
 (2) $\dot{\vec{x}} = \vec{f(x)}$ is a \@{continuously-differentiable} \@{vector-field} on an \@{open-set} containing $R;$
 
@@ -183,6 +183,6 @@ Suppose that
 Then, either $C$ is a closed orbit, or it spirals toward a closed orbit as $t \to \infty.$ In either case, $R$ contains a closed orbit.
 \end{theorem}
 
-To show that a confined \@{trajectory} exists when applying \@{poincare-bendixson}, we usually construct a trapping region using polar coordinates. We usually do this for a \@{stable-limit-cycle}, but we can do it for an \@{unstable-limit-cycle} too, by looking at the system using reversed time. We want to keep it as tight as possible, so we find the maximum $r$ for which $\dot{r} > 0$ for all all $\theta.$ Anything inside of that $r$ will therefore be pushed outward into the region beyond it. Call this inner boundary $r_1.$ Similarly, we find the minimum $r$ for which all $\dot{r} < 0;$ call it $r_2.$ Thus, any trajectories that start beyond $r_2$ will be pushed into the region inside of $r_2.$ Now, any trajectories anywhere (other than those that start on a fixed point) will be pushed into our trapping region and will never leave it.
+To show that a confined \@{trajectory} exists when applying \@{poincare-bendixson}, we usually construct a trapping region using polar coordinates. We usually do this for a \@{stable-limit-cycle}, but we can do it for an \@{unstable-limit-cycle} too, by looking at the system using reversed time. We want to keep it as tight as possible, so we find the maximum $r$ for which $\dot{r} > 0$ for all all $\theta.$ Anything inside of that $r$ will therefore be pushed outward into the region beyond it. Call this inner boundary $r_1.$ Similarly, we find the minimum $r$ for which all $\dot{r} < 0;$ call it $r_2.$ Thus, any trajectories that start beyond $r_2$ will be pushed into the region inside of $r_2.$ Now, any trajectories anywhere (other than those that start on a \@{fixed-point}) will be pushed into our trapping region and will never leave it.
 
 \end{document}

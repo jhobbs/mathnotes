@@ -15,7 +15,7 @@ This section was developed by following Rudin, \emph{Principles of Mathematical 
 \subsection{Definition of a Metric Space}
 
 \begin{definition}[Metric Space]
-A set $X,$ whose elements we'll call points, together with a distance function $d: X \times X \to \reals$ is called a \textbf{metric space} and the distance function $d$ is called a \textbf{metric,} if the following conditions, called the metric axioms, hold for $p, q, r \in X:$
+A set $X,$ whose \@{elements} we'll call \@{points}, together with a distance \@{function} $d: X \times X \to \reals$ is called a \textbf{metric space} and the distance function $d$ is called a \textbf{metric,} if the following conditions, called the metric axioms, hold for $p, q, r \in X:$
 
 \begin{itemize}
 \item If $p \neq q, d(p,q) > 0.$ (distance is always positive between two distinct points.)
@@ -41,7 +41,7 @@ We can denote a metric space on set $X$ with metric $d$ as the tuple $(X, d).$
 The most important metric spaces are the euclidean spaces $R^n$ together with a norm.
 
 \begin{theorem}\label{euclidean-space-is-metric-space}
-$(\reals^n, d : \reals^n \to \reals = | \vec{x} - \vec{y} |)$ is a metric space for any $n \geq 0.$
+$(\reals^n, d : \reals^n \to \reals = | \vec{x} - \vec{y} |)$ is a \@{metric-space} for any $n \geq 0.$
 \end{theorem}
 
 \begin{proof}
@@ -63,17 +63,17 @@ First, for $n = 0$, $\reals^0$ is just the empty set, so the metric axioms are v
 \item Let $p, q, r \in R^n.$ $|p - q| \leq |p - r| + |r - p|,$ so $d(p,q) \leq d(p,r) + d(r, p).$
 \end{itemize}
 
-Therefore, $d$ is a metric on $R^n$ and $(R^n, d)$ is a metric space.
+Therefore, $d$ is a metric on $R^n$ and $(R^n, d)$ is a \@{metric-space}.
 \end{proof}
 
 \detach
 
 \begin{remark}\label{rn-vector-space-vs-metric-space}
-Note that $R^n$ by itself is just a vector space, but together with a norm forms a metric space. The proof above relies on the properties of norms without going into detail - norms are similar to distance metrics but they are even stricter because they require homogeneity - $a|x| = |ax|.$
+Note that $R^n$ by itself is just a \@{vector-space}, but together with a \@{norm} forms a \@{metric-space}. The proof above relies on the properties of norms without going into detail - norms are similar to distance metrics but they are even stricter because they require homogeneity - $a|x| = |ax|.$
 
-We could define other, non-norm metrics on $R^n,$ such as the \textbf{discrete metric,} which works for any set $X.$
+We could define other, non-norm metrics on $R^n,$ such as the \textbf{\@{discrete-metric},} which works for any set $X.$
 
-Also note that every subset of a $Y$ of a metric space $X$ is a metric space on its own, using the same distance function.
+Also note that every \@{subset} of a $Y$ of a metric space $X$ is a metric space on its own, using the same distance function.
 \end{remark}
 
 \begin{definition}[Discrete Metric]
@@ -88,7 +88,7 @@ The discrete metric is defined as:
 \begin{remark}\label{discrete-metric-satisfies-axioms}
 It's easy to see that this satisfies the metric axioms above for any set.
 
-Also note that every subset $Y$ of a metric space $X$ is also a metric space, since if the metric axioms hold for all points in $X,$ that necessarily includes the points in $Y.$
+Also note that every \@{subset} $Y$ of a \@{metric-space} $X$ is also a metric space, since if the metric axioms hold for all points in $X,$ that necessarily includes the points in $Y.$
 \end{remark}
 
 \subsection{Segments, Intervals, Cells and Balls}
@@ -106,7 +106,7 @@ A \textbf{half-open interval} $(a,b]$ or $[a, b)$ is the set of all \@{real-numb
 \end{definition}
 
 \begin{definition}[k-cell]
-Given $\vec{a}, \vec{b} \in \reals^k,$ if $\vec{a}_i < \vec{b}_i$ for all $i = 1, 2, \dots, k,$ then the set of all points $\vec{x}$ who satisfy $\vec{a}_i \leq \vec{x}_i \leq \vec{b}_i,$ $i = 1, 2, \dots, k,$ is called a \textbf{k-cell}. So, a 1-cell is an interval, a 2-cell is a rectangle, and so on.
+Given $\vec{a}, \vec{b} \in \reals^k,$ if $\vec{a}_i < \vec{b}_i$ for all $i = 1, 2, \dots, k,$ then the set of all points $\vec{x}$ who satisfy $\vec{a}_i \leq \vec{x}_i \leq \vec{b}_i,$ $i = 1, 2, \dots, k,$ is called a \textbf{k-cell}. So, a 1-cell is an \@{interval}, a 2-cell is a rectangle, and so on.
 \end{definition}
 
 \begin{definition}[Ball]
@@ -126,11 +126,11 @@ In geometric terms, this means a set is convex if we can connect any two points 
 \end{definition}
 
 \begin{theorem}\label{balls-are-convex}
-All balls are convex.
+All \@{balls} are \@[convex]{convex-set}.
 \end{theorem}
 
 \begin{proof}
-Let $\vec{y}, \vec{z}$ be points in a ball with center $\vec{x}$ and radius $r$. Then, by definition, $|\vec{y} - \vec{x}| < r,$ and $|\vec{z} - \vec{x}| < r.$ Suppose $\vec{p} \in \{ \lambda \vec{y} + (1 - \lambda)\vec{z} | 0 < \lambda < 1 \}.$ We will show that $|\vec{x} - \vec{p}| < r.$
+Let $\vec{y}, \vec{z}$ be points in a \@{ball} with center $\vec{x}$ and radius $r$. Then, by definition, $|\vec{y} - \vec{x}| < r,$ and $|\vec{z} - \vec{x}| < r.$ Suppose $\vec{p} \in \{ \lambda \vec{y} + (1 - \lambda)\vec{z} | 0 < \lambda < 1 \}.$ We will show that $|\vec{x} - \vec{p}| < r.$
 
 \bal
 |\vec{x}-\vec{p}| &= |\vec{x} - (\lambda\vec{y} + (1-\lambda)\vec{z})| \quad(\text{substitute definition of } \vec{p})\\
@@ -142,37 +142,37 @@ Let $\vec{y}, \vec{z}$ be points in a ball with center $\vec{x}$ and radius $r$.
   &= r \quad(\text{because } \lambda + (1-\lambda)=1).
 \eal
 
-So, $\vec{p}$ is within our ball and therefore all balls are convex.
+So, $\vec{p}$ is within our ball and therefore all balls are \@[convex]{convex-set}.
 \end{proof}
 
 \begin{note}
-Similar proofs can be used to show that closed balls and $k$-cells are also convex.
+Similar proofs can be used to show that closed \@{balls} and $k$-cells are also \@[convex]{convex-set}.
 \end{note}
 
 \subsection{Elements and Subsets of a Metric Space}
 
 \begin{note}\label{metric-space-context}
-Assume we have a metric space $(X, d).$
+Assume we have a \@{metric-space} $(X, d).$
 \end{note}
 
 \begin{definition}[Neighborhood]
-A \textbf{neighborhood,} or \textbf{r-neighborhood} of $p$ is a set $N_r(p)$ consisting of all $q$ such that $d(p, q) < r$ for some $r > 0.$ This subset of $X$ is all the points within a circle of radius $r$ - the open ball of radius $r$ centered at $p.$
+A \textbf{neighborhood,} or \textbf{r-neighborhood} of $p$ is a set $N_r(p)$ consisting of all $q$ such that $d(p, q) < r$ for some $r > 0.$ This subset of $X$ is all the points within a circle of radius $r$ - the open \@{ball} of radius $r$ centered at $p.$
 \end{definition}
 
 \begin{definition}[Limit Point]
-A point $p$ is a \textbf{limit point} of the set $E$ if every neighborhood of $p$ contains a point $q \neq p$ such that $q \in E.$
+A point $p$ is a \textbf{limit point} of the set $E$ if every \@{neighborhood} of $p$ contains a point $q \neq p$ such that $q \in E.$
 \end{definition}
 
 \begin{definition}[Isolated Point]
-If $p \in E$ and $p$ is not a limit point of $E,$ then $p$ is called an \textbf{isolated point} of E.
+If $p \in E$ and $p$ is not a \@{limit-point} of $E,$ then $p$ is called an \textbf{isolated point} of E.
 \end{definition}
 
 \begin{definition}[Closed]
-A set $E$ is \textbf{closed} if every limit point of $E$ is a point of $E.$
+A set $E$ is \textbf{closed} if every \@{limit-point} of $E$ is a point of $E.$
 \end{definition}
 
 \begin{definition}[Interior Point]
-A point $p$ is an \textbf{interior point} of $E$ if there is a neighborhood $N$ of $p$ such that $N \subset E.$
+A point $p$ is an \textbf{interior point} of $E$ if there is a \@{neighborhood} $N$ of $p$ such that $N \subset E.$
 \end{definition}
 
 \begin{definition}[Open]
@@ -192,40 +192,40 @@ $E$ is \textbf{bounded} if there is a \@{real-number} $M$ and a point $q \in X$ 
 \end{definition}
 
 \begin{definition}[Dense]
-$E$ is \textbf{dense} in $X$ if every point of $X$ is a limit point of $E,$ or a point of $E$ (or both.)
+$E$ is \textbf{dense} in $X$ if every point of $X$ is a \@{limit-point} of $E,$ or a point of $E$ (or both.)
 \end{definition}
 
 \begin{theorem}\label{every-neighborhood-is-an-open-set}
-Every neighborhood is an open set.
+Every \@{neighborhood} is an \@{open} set.
 \end{theorem}
 
 \begin{proof}
-Suppose $N_r(p)$ is a neighborhood in $X.$ Let $q \in N_r(p).$ We need to show that $q$ is an interior point of $N_r(p).$ Let $s = r - d(p, q);$ because $d(p, q) < r$, we have $s > 0.$ Now let $N_s(q)$ be the neighborhood of radius $s$ around $q.$ We need to show that $N_s(q) \subset N_r(p).$ Suppose $x \in N_s(q).$ First note that because $s = r - d(p, q),$ $d(p,q) = r - s.$ Now,
+Suppose $N_r(p)$ is a \@{neighborhood} in $X.$ Let $q \in N_r(p).$ We need to show that $q$ is an \@{interior-point} of $N_r(p).$ Let $s = r - d(p, q);$ because $d(p, q) < r$, we have $s > 0.$ Now let $N_s(q)$ be the neighborhood of radius $s$ around $q.$ We need to show that $N_s(q) \subset N_r(p).$ Suppose $x \in N_s(q).$ First note that because $s = r - d(p, q),$ $d(p,q) = r - s.$ Now,
 
 \bal d(p, x) & \leq d(p,q) + d(q, x) \\
                            & < r - s + s \\
                            & = r.
 \eal
 
-Therefore, $N_s(q) \subset N_r(p),$ so $q$ is an interior point of $N_r(p),$ and since $q$ was arbitrary, every point of $N_r(p)$ is interior. Hence, $N_r(p)$ is open.
+Therefore, $N_s(q) \subset N_r(p),$ so $q$ is an interior point of $N_r(p),$ and since $q$ was arbitrary, every point of $N_r(p)$ is interior. Hence, $N_r(p)$ is \@{open}.
 \end{proof}
 
 \includedemo{neighborhood}
 
 \begin{theorem}\label{neighborhood-of-limit-point-contains-infinitely-many-points}
-If $p$ is a limit point of a set $E,$ then every neighborhood of $p$ contains infinitely many points of $E.$
+If $p$ is a \@{limit-point} of a set $E,$ then every \@{neighborhood} of $p$ contains infinitely many points of $E.$
 \end{theorem}
 
 \begin{proof}
-Let $p$ be a limit point of $E$ and let $N_r(p)$ be a neighborhood of $p.$ Suppose that $N_r(p)$ contains only finitely many points of $E.$ Since we have finitely many points, we can inspect each and find the minimum distance from $p$ to any point in $N_r(p) \bigcup E\setminus\{p\}$ and call it $s.$ Now, we can make a new neighborhood $N_s(p),$ which contains none of the points in $N_r(p) \bigcup E\setminus\{p\}$ since they're all at least $s$ away from $p,$ by construction. But then, $p$ is not a limit point of $E,$ since it has a neighborhood that contains no points of $E\setminus\{p\}$ Therefore, we have a contradiction, and $N_r(p)$ must therefore contain infinitely many points.
+Let $p$ be a \@{limit-point} of $E$ and let $N_r(p)$ be a \@{neighborhood} of $p.$ Suppose that $N_r(p)$ contains only finitely many points of $E.$ Since we have finitely many points, we can inspect each and find the minimum distance from $p$ to any point in $N_r(p) \bigcup E\setminus\{p\}$ and call it $s.$ Now, we can make a new neighborhood $N_s(p),$ which contains none of the points in $N_r(p) \bigcup E\setminus\{p\}$ since they're all at least $s$ away from $p,$ by construction. But then, $p$ is not a limit point of $E,$ since it has a neighborhood that contains no points of $E\setminus\{p\}$ Therefore, we have a contradiction, and $N_r(p)$ must therefore contain infinitely many points.
 \end{proof}
 
 \begin{corollary}\label{only-infinite-sets-have-limit-points}
-From this, it's evident that a finite set of points has no limit points. That is, if a set has a limit point, then the set if infinite.
+From this, it's evident that a \@{finite} set of points has no \@{limit-points}. That is, if a set has a limit point, then the set if \@{infinite}.
 \end{corollary}
 
 \begin{theorem}\label{complement-of-union-is-intersection-of-complements-general}
-Let ${E_\alpha}$ be a collection of sets. Then
+Let ${E_\alpha}$ be a \@{collection} of sets. Then
 
 \[ \left ( \bigcup_{\alpha} E_\alpha \right )^c = \bigcap_{\alpha} \left ( E_{\alpha}^c \right ). \]
 \end{theorem}
@@ -239,15 +239,15 @@ This is just \@[De Morgan's law]{complement-of-union-is-intersection-of-compleme
 \end{note}
 
 \begin{theorem}\label{open-iff-complement-closed}
-A set $E$ is open iff its complement is closed.
+A set $E$ is \@{open} iff its \@[complement]{complement-of-a-set} is \@{closed}.
 \end{theorem}
 
 \begin{proof}
-First, consider the case that $E^c$ is empty, and therefore open. If $E^c$ has no limit points, it is vacuously closed. Suppose $E^c$ has a limit point $x.$ Since $E$ is empty, $x$ must be in $E^c,$ therefore $x$ is closed. Now, consider the case that $E^c$ is empty, and therefore closed. If $E$ is empty, it is open, and the theorem is satisfied. If $E$ is not empty, a point $x$ in $E$ has only points in $E$ in any neighborhood, since all points are in $E,$ and therefore $E$ is open.
+First, consider the case that $E^c$ is empty, and therefore \@{open}. If $E^c$ has no \@{limit-points}, it is vacuously \@{closed}. Suppose $E^c$ has a limit point $x.$ Since $E$ is empty, $x$ must be in $E^c,$ therefore $x$ is closed. Now, consider the case that $E^c$ is empty, and therefore closed. If $E$ is empty, it is open, and the theorem is satisfied. If $E$ is not empty, a point $x$ in $E$ has only points in $E$ in any \@{neighborhood}, since all points are in $E,$ and therefore $E$ is open.
 
 Now we deal with the cases where neither $E$ nor $E^c$ are empty.
 
-Now, let $E^c$ be closed. Let $x \in E.$ Since $E^c$ is closed, $x$ is not a limit point of $E^c,$ that is $x$ has some neighborhood that doesn't contain a point in $E^c$ and must therefore be a subset of $E.$ Therefore, $x$ is an interior point of $E,$ and $E$ is open.
+Now, let $E^c$ be closed. Let $x \in E.$ Since $E^c$ is closed, $x$ is not a limit point of $E^c,$ that is $x$ has some neighborhood that doesn't contain a point in $E^c$ and must therefore be a subset of $E.$ Therefore, $x$ is an \@{interior-point} of $E,$ and $E$ is open.
 
 Conversely, assume $E$ is open. Let $x$ be a limit point of $E^c.$ Suppose, for the sake of contradiction, that $x \in E.$ Then, since $E$ is open, $x$ is an interior point of $E$ and has some neighborhood that is a subset of $E.$ This is a contradiction, since every neighborhood of $x$ must contain at least one point of $E^c$ to be a limit point of $E^c.$ Therefore, $x$ must be in $E^c,$ and it follows that $E^c$ is closed.
 \end{proof}
@@ -255,27 +255,27 @@ Conversely, assume $E$ is open. Let $x$ be a limit point of $E^c.$ Suppose, for 
 \detach
 
 \begin{remark}\label{open-closed-intuition}
-For some intuition, consider $U = [0, 4], E = [0,3].$ Any point $x$ in $E$ has a neighborhood $N_r(x)$ that contains only points in $E$ with as $r < d(x, 3),$ so it is open. Since 3 must be in $E^c,$ we have $E^c = [3,4],$ which is obviously closed. Here, 3 is the boundary between the two sets - it is a limit point for both sets - and it has to be in one set or the other. So, $E$ is open, but not closed, since it doesn't contain one of its limit points, 3. $E^c$ is closed because if $x$ is a limit point of $E^c,$ it would be a contradiction for it to be in $E,$ which is open and only contains interior points of $E.$ $E^c$ is also not open, because 3 has no neighborhoods that contain only points of $E^c.$
+For some intuition, consider $U = [0, 4], E = [0,3].$ Any point $x$ in $E$ has a \@{neighborhood} $N_r(x)$ that contains only points in $E$ with as $r < d(x, 3),$ so it is \@{open}. Since 3 must be in $E^c,$ we have $E^c = [3,4],$ which is obviously \@{closed}. Here, 3 is the boundary between the two sets - it is a \@{limit-point} for both sets - and it has to be in one set or the other. So, $E$ is open, but not closed, since it doesn't contain one of its limit points, 3. $E^c$ is closed because if $x$ is a limit point of $E^c,$ it would be a contradiction for it to be in $E,$ which is open and only contains \@{interior-points} of $E.$ $E^c$ is also not open, because 3 has no neighborhoods that contain only points of $E^c.$
 \end{remark}
 
 \begin{theorem}\label{union-and-intersection-of-open-and-closed-sets}
-(a) - For any collection $\{G_a\}$ of open sets, $\bigcup_{\alpha} G_\alpha$ is open.
+(a) - For any \@{collection} $\{G_a\}$ of \@{open} sets, $\bigcup_{\alpha} G_\alpha$ is open.
 
-(b) - For any collection $\{F_a\}$ of closed sets, $\bigcap_{\alpha} F_\alpha$ is closed.
+(b) - For any collection $\{F_a\}$ of \@{closed} sets, $\bigcap_{\alpha} F_\alpha$ is closed.
 
-(c) - For any finite collection $G_1,\dots,G_n$ of open sets, $\bigcap_{i=1}^n G_i$ is open.
+(c) - For any \@{finite} collection $G_1,\dots,G_n$ of open sets, $\bigcap_{i=1}^n G_i$ is open.
 
 (d) - For any finite collection $F_1,\dots,F_n$ of closed sets, $\bigcup_{i=1}^n F_i$ is closed.
 \end{theorem}
 
 \begin{proof}
-Let $G = \bigcup_{\alpha} G_\alpha, x \in G.$ Then $x$ is in some $G_\alpha$ for some $\alpha,$ and is an interior point of that $G_\alpha,$ since $G_\alpha$ is open. Therefore, $x$ has some neighborhood that is a subset of $G_\alpha$ and therefore of $G,$ so $x$ is an interior point of $G$ and $G$ is open - this shows (a).
+Let $G = \bigcup_{\alpha} G_\alpha, x \in G.$ Then $x$ is in some $G_\alpha$ for some $\alpha,$ and is an \@{interior-point} of that $G_\alpha,$ since $G_\alpha$ is \@{open}. Therefore, $x$ has some \@{neighborhood} that is a \@{subset} of $G_\alpha$ and therefore of $G,$ so $x$ is an interior point of $G$ and $G$ is open - this shows (a).
 
 Note that
 
 \[ (\bigcap_{\alpha} F_\alpha)^c = \bigcup_{\alpha} F_\alpha^c, \tag{e} \]
 
-and by (a) above, (e) is open. Then its complement, $\bigcap{\alpha} F_\alpha$ is closed, and we've shown (b).
+and by (a) above, (e) is open. Then its \@[complement]{complement-of-a-set}, $\bigcap{\alpha} F_\alpha$ is \@{closed}, and we've shown (b).
 
 Now, let $x$ be in $G = \bigcap_{i=1}^n G_i,$ so $x$ is in every $G_i,$ and has a neighborhood $N_i$ in every $G_i$ with radius $r_i > 0.$ Let $r$ be $\min\{r_1, \dots, r_n\}.$ Then, $x$ has a neighborhood $N$ of radius $r$ in every $G_i,$ and thus in $G,$ so $x$ is an interior point of $G,$ and we've shown (c).
 
@@ -287,21 +287,21 @@ In parts (c) and (d) of the above theorem, finiteness of the collections of sets
 \end{note}
 
 \begin{theorem}\label{limit-points-form-closed-set}
-Let $E'$ be the set of all limit points of a set $E$ in space $X.$ Then $E'$ is closed.
+Let $E'$ be the set of all \@{limit-points} of a set $E$ in space $X.$ Then $E'$ is \@{closed}.
 \end{theorem}
 
 \begin{proof}
-Let $p \in X, p \notin E'.$ Then some neighborhood $N$ of $p$ contains no points in $E,$ other than possibly $p$ itself. If $N$ contains only $p,$ then $p$ is not a limit point of $E'.$ Suppose, for the sake of contradiction, some point $q \in N, q \neq p$ is a limit point of $E'.$ Then, every neighborhood of $q$ contains some point $m$ in $E'.$ Let $M \subset N, p \notin M,$ be such a neighborhood, and let $m \in M, m \neq q$ be a limit point of $E$. Now, $m$ has neighborhoods wholly in $N,$ and such neighborhoods can have no point in $E,$ so we have a contradiction, and therefore $q$ is not a limit point of $E'.$ Hence, $p$ is an interior point of $E'^c,$ and $E'^c$ is open, and therefore $E'$ is closed.
+Let $p \in X, p \notin E'.$ Then some \@{neighborhood} $N$ of $p$ contains no points in $E,$ other than possibly $p$ itself. If $N$ contains only $p,$ then $p$ is not a \@{limit-point} of $E'.$ Suppose, for the sake of contradiction, some point $q \in N, q \neq p$ is a limit point of $E'.$ Then, every neighborhood of $q$ contains some point $m$ in $E'.$ Let $M \subset N, p \notin M,$ be such a neighborhood, and let $m \in M, m \neq q$ be a limit point of $E$. Now, $m$ has neighborhoods wholly in $N,$ and such neighborhoods can have no point in $E,$ so we have a contradiction, and therefore $q$ is not a limit point of $E'.$ Hence, $p$ is an \@{interior-point} of $E'^c,$ and $E'^c$ is \@{open}, and therefore $E'$ is \@{closed}.
 \end{proof}
 
 \begin{definition}[Closure]
-If $X$ is a metric space, $E \subset X,$ and $E'$ denotes the set of all limit points of $E$ in $X,$ then the \textbf{closure} of $E$ is the set $\closure{E} = E \cup E'.$
+If $X$ is a \@{metric-space}, $E \subset X,$ and $E'$ denotes the set of all \@{limit-points} of $E$ in $X,$ then the \textbf{closure} of $E$ is the set $\closure{E} = E \cup E'.$
 \end{definition}
 
 \begin{theorem}\label{set-is-its-closure-iff-it-is-closed}
-If $X$ is a metric space and $E \subset X,$ then
+If $X$ is a \@{metric-space} and $E \subset X,$ then
 
-(a) $\closure{E}$ is closed.
+(a) $\closure{E}$ is \@{closed}.
 
 (b) $E = \closure{E}$ iff $E$ is closed.
 
@@ -311,7 +311,7 @@ By (a) and (c), $\closure{E}$ is the smallest closed subset of $X$ that contains
 \end{theorem}
 
 \begin{proof}
-(a) Suppose $p \in X$ and $p \notin \closure{E}.$ Then $p$ is not in $E$ and is not in $E',$ and is in fact in $\closure{E}^c.$ Now, since $p$ is not a limit point of $E,$ it has some neighborhood $N_r(p)$ that does not intersect $E.$ Any point $x$ in $N_r(p)$ is an interior point of $N_r(p)$, and therefore has its own neighborhood $N_\epsilon{(x)}$ that does not intersect $E,$ and therefore $x$ is not a limit point of $E.$ Thus, any point in $\closure{E}^c$ is an interior point of $\closure{E}^c,$ and $\closure{E}^c$ is therefore open and its complement, $\closure{E},$ is closed (since a set is open iff its complement is closed.)
+(a) Suppose $p \in X$ and $p \notin \closure{E}.$ Then $p$ is not in $E$ and is not in $E',$ and is in fact in $\closure{E}^c.$ Now, since $p$ is not a \@{limit-point} of $E,$ it has some \@{neighborhood} $N_r(p)$ that does not intersect $E.$ Any point $x$ in $N_r(p)$ is an \@{interior-point} of $N_r(p)$, and therefore has its own neighborhood $N_\epsilon{(x)}$ that does not intersect $E,$ and therefore $x$ is not a limit point of $E.$ Thus, any point in $\closure{E}^c$ is an interior point of $\closure{E}^c,$ and $\closure{E}^c$ is therefore \@{open} and its complement, $\closure{E},$ is \@{closed} (since a set is open iff its complement is closed.)
 
 (b) Suppose $E$ is closed. Then it contains its limit points, so $E = E \cup E' = \closure{E}.$ Conversely, suppose $E = \closure{E}.$ By (a), $E$ is closed.
 
@@ -319,61 +319,61 @@ By (a) and (c), $\closure{E}$ is the smallest closed subset of $X$ that contains
 \end{proof}
 
 \begin{theorem}\label{set-and-closure-have-same-limit-points}
-If $E$ is a set in a metric space, then $E$ and $\closure{E}$ have the same limit points.
+If $E$ is a set in a \@{metric-space}, then $E$ and $\closure{E}$ have the same \@{limit-points}.
 \end{theorem}
 
 \begin{proof}
 If $E$ is closed, then we are done, because \@[a set equals its closure if it is closed]{set-is-its-closure-iff-it-is-closed}. 
 
-Suppose $p$ is a limit point of $E.$ Then every neighborhood of $p$ contains some $q \in E, q \neq p.$ Since $q \in E, ~ q \in \closure{E}$, so $p$ is a limit point of $\closure{E}.$
+Suppose $p$ is a \@{limit-point} of $E.$ Then every neighborhood of $p$ contains some $q \in E, q \neq p.$ Since $q \in E, ~ q \in \closure{E}$, so $p$ is a limit point of $\closure{E}.$
 
 Conversely, suppose $p$ is a limit point of $\closure{E}.$ Then, every neighborhood $N$ of $p$ contains a point of $q \in \closure{E}, q \neq p.$ If $q \in E,$ then $N$ clearly contains a point in $E.$ Otherwise, $q \in E', q \not in E.$ Now, since $q \in N$ and \@[every neighborhood is an open set]{every-neighborhood-is-an-open-set}, $q$ has some neighborhood $M \subset N.$ Since $q \in E',$ $M$ contains some point $s \in E.$ Since $M \subset N,$ $s \in N,$ and therefore $N$ contains a point in $E.$ Thus, all neighborhoods of $p$ contain some point in $E,$ and $p$ is a limit point of $E.$
 \end{proof}
 
 \begin{theorem}\label{set-and-its-limit-points-may-have-different-limit-points}
-A set $E$ and its limit points $E'$ do not necessarily have the same limit points.
+A set $E$ and its \@{limit-points} $E'$ do not necessarily have the same limit points.
 \end{theorem}
 
 \begin{proof}
-Consider $P = \{\frac{1}{n} | n \in \naturals\}.$ Then $P$ has one limit point, $0,$ but $P' = \{0\}$ has no limit points, since the only number that contains $0$ in all its neighborhoods is $0$ itself (see \@{only-infinite-sets-have-limit-points}.)
+Consider $P = \{\frac{1}{n} | n \in \naturals\}.$ Then $P$ has one \@{limit-point}, $0,$ but $P' = \{0\}$ has no limit points, since the only number that contains $0$ in all its \@{neighborhoods} is $0$ itself (see \@{only-infinite-sets-have-limit-points}.)
 \end{proof}
 
 \begin{theorem}\label{closure-distributes-over-finite-unions}
-Closure distributes over finite unions.
+\@{Closure} distributes over \@{finite} unions.
 
 If $B_n = \bigcup_{i=i}^n A_i,$ then $\closure{B_n} = \bigcup_{i=1}^n \closure{A_i}, n = 1, 2, 3, \dots.$
 \end{theorem}
 
 \begin{proof}
-Let $p \in \bigcup_{i=1}^n \closure{A_i}.$ Then, $p \in \closure{A_i}$ for some $i.$ If $p \in A_i,$ then $p \in \bigcup_{i=i}^n A_i = B_n,$ so $p \in \closure{B_n}.$ If $p$ is in some $A_{i}',$ then every neighborhood of $p$ contains some point $q \in A_i, q \neq p,$ and since $A_i \subset B_n,$ $q \in B_n,$ so $p \in \closure{B_n}.$
+Let $p \in \bigcup_{i=1}^n \closure{A_i}.$ Then, $p \in \closure{A_i}$ for some $i.$ If $p \in A_i,$ then $p \in \bigcup_{i=i}^n A_i = B_n,$ so $p \in \closure{B_n}.$ If $p$ is in some $A_{i}',$ then every \@{neighborhood} of $p$ contains some point $q \in A_i, q \neq p,$ and since $A_i \subset B_n,$ $q \in B_n,$ so $p \in \closure{B_n}.$
 
 Conversely, let $p \in \closure{B_n}.$ If $p \in B_n,$ $p \in A_i$ for some $i,$ and thus $p \in \closure{A_i} \subset \bigcup_{i=1}^n \closure{A_i}.$ If $p$ is only in $B_{n}',$ suppose for contradiction that $p \notin \bigcup_{i=1}^n \closure{A_i}.$ For each $i,$ let $N_i$ be a neighborhood centered at $p$ with $N_i \cap A_i = \emptyset.$ Then, $N = \bigcap_{i=1}^n N_i$ is a neighborhood of $p$ (see \@{union-and-intersection-of-open-and-closed-sets},) but $N \cap N_i = \emptyset$ for all $i,$ so $N \cap B_n = \emptyset.$ But, this contradicts our hypothesis that $p \in \closure{B_n},$ so our contradictory assumption must be invalid, and $p \in \bigcup_{i=1}^n \closure{A_i}.$
 \end{proof}
 
 \begin{theorem}\label{sup-is-in-closure-of-bounded-nonempty-set-of-reals}
-Let $E$ be a nonempty set of \@{real-numbers} which is bounded above. Let $y = \sup{E}.$ Then $y \in \closure{E}.$ Hence $y \in E$ if $E$ is closed.
+Let $E$ be a nonempty set of \@{real-numbers} which is bounded above. Let $y = \sup{E}.$ Then $y \in \closure{E}.$ Hence $y \in E$ if $E$ is \@{closed}.
 \end{theorem}
 
 \begin{proof}
-Suppose $y \in E.$ Then $y \in \closure{E}.$ Suppose $y \notin E.$ Now, by hypothesis, for every $h > 0,$ there is some $x$ such that $y - h < x < y,$ because otherwise, $x$ would be an upper bound on $E.$ Therefore, every neighborhood $N_h(y)$ contains some $x \in E,$ and thus $y$ is a limit point of $E$ and $y \in \closure{E}.$
+Suppose $y \in E.$ Then $y \in \closure{E}.$ Suppose $y \notin E.$ Now, by hypothesis, for every $h > 0,$ there is some $x$ such that $y - h < x < y,$ because otherwise, $x$ would be an \@{upper-bound} on $E.$ Therefore, every \@{neighborhood} $N_h(y)$ contains some $x \in E,$ and thus $y$ is a \@{limit-point} of $E$ and $y \in \closure{E}.$
 \end{proof}
 
 \begin{definition}[Open Relative]
-Suppose $E \subset Y \subset X,$ and $X$ is a metric space. We say that $E$ is \textbf{open relative} to $Y$ if to each $p \in E$ there is associated an $r > 0$ such that $q \in E, q \in Y$ whenever $d(p, q) < r.$
+Suppose $E \subset Y \subset X,$ and $X$ is a \@{metric-space}. We say that $E$ is \textbf{open relative} to $Y$ if to each $p \in E$ there is associated an $r > 0$ such that $q \in E, q \in Y$ whenever $d(p, q) < r.$
 \end{definition}
 
 \begin{theorem}\label{open-relative-iff-intersection-with-open-subset}
-Suppose $Y \subset X.$ A subset $E$ of $Y$ is open relative to $Y$ iff $E = Y \cap G$ for some open subset $G$ of $X.$
+Suppose $Y \subset X.$ A subset $E$ of $Y$ is \@{open-relative} to $Y$ iff $E = Y \cap G$ for some open subset $G$ of $X.$
 \end{theorem}
 
 \begin{proof}
-Suppose $E$ is open relative to $Y.$ Then, for every $p \in E,$ there is some $r_p > 0$ such that $d(p, q) < r_p,$ $q \in X$ implies that $q \in Y.$ Let $V_p$ be the set of all $q \in X$ where $d(p,q) < r_p$ (and thus $q \in Y$) and let
+Suppose $E$ is \@{open-relative} to $Y.$ Then, for every $p \in E,$ there is some $r_p > 0$ such that $d(p, q) < r_p,$ $q \in X$ implies that $q \in Y.$ Let $V_p$ be the set of all $q \in X$ where $d(p,q) < r_p$ (and thus $q \in Y$) and let
 
 \[ G = \bigcup_{p \in E} V_p. \]
 
-Then, since each $V_p$ is an open subset of $X,$ so is $G.$ Now, since $p \in V_p$ for each $p \in E,$ $E \subset G \cap Y.$ Also, since $V_p \cap Y \subset E$ for every $p \in E,$ $G \cap Y \subset E,$ and $E = G \cap Y.$
+Then, since each $V_p$ is an \@{open} subset of $X,$ so is $G.$ Now, since $p \in V_p$ for each $p \in E,$ $E \subset G \cap Y.$ Also, since $V_p \cap Y \subset E$ for every $p \in E,$ $G \cap Y \subset E,$ and $E = G \cap Y.$
 
-Conversely, suppose $E = Y \cap G$ for some open subset $G$ of $X.$ Now, suppose $p \in E.$ Then, $p \in G,$ and there is some neighborhood $V_p \subset G.$ Then, $V_p \cap Y \subset E,$ so $E$ is open relative to $Y.$
+Conversely, suppose $E = Y \cap G$ for some open subset $G$ of $X.$ Now, suppose $p \in E.$ Then, $p \in G,$ and there is some \@{neighborhood} $V_p \subset G.$ Then, $V_p \cap Y \subset E,$ so $E$ is open relative to $Y.$
 \end{proof}
 
 \end{document}

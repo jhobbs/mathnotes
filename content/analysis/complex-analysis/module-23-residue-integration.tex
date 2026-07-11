@@ -8,13 +8,13 @@
 
 \section{Residue Integration}
 
-Suppose $f(z)$ has a \@{singularity} at $z = z_0$ inside a simple closed curve $C$ but is otherwise analytic on $C$ and inside $C.$
+Suppose $f(z)$ has a \@{singularity} at $z = z_0$ inside a simple closed curve $C$ but is otherwise \@{analytic} on $C$ and inside $C.$
 
 Then, $f(z)$ has a \@{laurent-series} 
 
 \[ f(z) = \sum_{n=0}^{\infty} a_n (z - z_0)^n + \frac{b_1}{z - z_0} + \frac{b_2}{(z - z_0)^2} + \cdots \]
 
-that \@{converges} for all \@{points} near $z = z_0$ (except at $z = z_0$ itself,) in some domain of the form $0 < |z - z_0| < R.$ 
+that \@{converges} for all \@{points} near $z = z_0$ (except at $z = z_0$ itself,) in some \@{domain} of the form $0 < |z - z_0| < R.$ 
 
 The coefficient $b_1$ of the first negative power $1/(z - z_0)$ of this \@{laurent-series} is given by the \@{Cauchy-integral-formula} as
 
@@ -24,7 +24,7 @@ Now, we can use this to find the value of the integral without using any of the 
 
 \[ \oint_C f(z) dz = 2 \pi i b_1. \]
 
-This is a CCW integral around a simple closed path $C$ that contains $z = z_0$ in its interior (but no other singularities of $f(z)$ on or inside C.)
+This is a CCW integral around a simple closed path $C$ that contains $z = z_0$ in its interior (but no other \@{singularities} of $f(z)$ on or inside C.)
 
 \begin{definition}[Residue]
 Given a convergent \@{laurent-series}
@@ -59,7 +59,7 @@ Instead of finding the \@{laurent-series}, we can use these handy formulas.
 \detach
 
 \begin{remark}
-For second order poles $(m = 2)$, this gives
+For second order \@{poles} $(m = 2)$, this gives
 
 \[ \Res_{z = z_0} f(z) = \lim_{z \to z_0} \{[(z - z_0)^2 f(z)]' \}. \]
 \end{remark}

@@ -11,7 +11,7 @@
 
 \subsection{A Brief Introduction to Manifolds and Boundaries}
 
-First, some preliminary definitions. I'll talk some about manifolds and boundaries, because, while we're not going to do a full generalized Stokes Theorem here (not yet, at least), I think it is useful to think about the connections between FTC, Fundamental Theorem of Line Integrals, Green's Theorem, Stoke's Theorem, and the Divergence Theorem.
+First, some preliminary definitions. I'll talk some about \@{manifolds} and \@{boundaries}, because, while we're not going to do a full generalized Stokes Theorem here (not yet, at least), I think it is useful to think about the connections between FTC, Fundamental Theorem of Line Integrals, Green's Theorem, Stoke's Theorem, and the Divergence Theorem.
 
 \begin{definition}[Homeomorphism]\synonyms{homeomorphic}
 A \textbf{homeomorphism} is a \@{bijective} and \@{continuous} \@{function} between \@{topological-spaces} that has a \@{continuous} \@{inverse-function}.
@@ -26,7 +26,7 @@ Another way to put this is that we can approximate a $k$-manifold as closely as 
 \end{remark}
 
 \begin{definition}[Tangent Space]
-If $M$ is locally given by a smooth parametrization
+If $M$ is locally given by a \@{smooth} parametrization
 
 \[ \varphi : U \subset \reals^k \to M \subset \reals^n, \]
 
@@ -39,11 +39,11 @@ and $p = \varphi(u_0)$, then
 \frac{\partial \varphi}{\partial u_k}(u_0)
 \right\}. \]
 
-So it’s the collection of all possible velocity vectors of curves on the manifold passing through $p,$ and is a $k$-dimensional linear subspace of $\reals^n.$
+So it’s the collection of all possible velocity \@{vectors} of curves on the \@{manifold} passing through $p,$ and is a $k$-dimensional linear subspace of $\reals^n.$
 \end{definition}
 
 \begin{example}
-One dimensional manifolds include lines and circles, but not curves that cross themselves. Two dimensional manifolds are also called surfaces, and include planes, discs, torus and more. A solid ball is a 3d manifold.
+One dimensional \@{manifolds} include lines and circles, but not curves that cross themselves. Two dimensional manifolds are also called surfaces, and include planes, discs, torus and more. A solid ball is a 3d manifold.
 \end{example}
 
 \begin{remark}
@@ -73,9 +73,9 @@ So, the \@{boundary} of a ball $B$, a 3-manifold, is a sphere ($\partial B^3 = S
 
 A simple curve in space is a 1-manifold, and if it is not closed, then its boundary is its endpoints, and they form a 0-manifold.
 
-An closed interval in $R^1$ is a 1-manifold and its boundary (its endpoints) form a 0-manifold.
+An closed \@{interval} in $R^1$ is a 1-manifold and its boundary (its endpoints) form a 0-manifold.
 
-Not all manifolds have boundaries. A sphere has no boundaries - it is a 2-manifold, and there is nowhere to go with its coordinates that is not part of the sphere. Contrast that with a 3-ball - if we keep moving outward from the center, we'll reach the edge and beyond. A closed curve in space is a 1-manifold without boundary. An open interval in $R^1$ is a manifold without boundary as well, because all points are interior points.
+Not all manifolds have boundaries. A sphere has no boundaries - it is a 2-manifold, and there is nowhere to go with its coordinates that is not part of the sphere. Contrast that with a 3-ball - if we keep moving outward from the center, we'll reach the edge and beyond. A closed curve in space is a 1-manifold without boundary. An open interval in $R^1$ is a manifold without boundary as well, because all points are \@{interior-points}.
 
 So, given a manifold $M$, $\partial(\partial(M)) = \emptyset.$ Taking the boundary of a $k$-manifold with boundary gives a new $(k-1)$-manifold without boundary. When we view it this way, it becomes apparent that the definition of \@{boundary-points} we would use from topology - points that are \@{limit-points} of both $M$ and $M^c$ - works for \@{manifolds} as well, but we have to be careful to consider the ambient space the manifold exists in. For a manifold to have a boundary, it must exist in an ambient space that contains points not in the manifold, but when we take the manifold's boundary, we reduce the ambient space to only those points in the boundary, and so it is impossible for any boundary points of the boundary to exist.
 \end{remark}
@@ -93,7 +93,7 @@ A \textbf{line integral} of a \@{vector-function} $\vec{F}(\vec{r})$ over a curv
 
 where $\vec{r}(t)$ is the parametric representation of $C.$
 
-Writing (a) in terms of components, with $d \vec{r} = [dx, dy, dz]$ and $' = d/dt,$ we get
+Writing (a) in terms of \@{components}, with $d \vec{r} = [dx, dy, dz]$ and $' = d/dt,$ we get
 
 \[ \int_{C} \int_{C} \vec{F}(\vec{r}) \cdot d \vec{r} = \int_{C} (F_1 dx + F_2 dy + F_3 dz) = \int_{a}^{b} (F_1 x' + F_2 y' + F_3 z') dt). \]
 \end{definition}
@@ -101,11 +101,11 @@ Writing (a) in terms of components, with $d \vec{r} = [dx, dy, dz]$ and $' = d/d
 \subsection{Green's Theorem}
 
 \begin{remark}
-When a line integral is required around a closed curve, and the line integral is not independent of path, Green's theorem can sometimes be used.
+When a \@{line-integral} is required around a closed curve, and the line integral is not \@{independent-of-path}, Green's theorem can sometimes be used.
 \end{remark}
 
 \begin{theorem}[Green's Theorem]\label{greens-theorem}
-Suppose $P(x,y)$ and $Q(x,y)$ have continuous first partial derivatives in a domain containing a simple, closed, piecewise smooth curve $C$ and its interior $R.$ Then
+Suppose $P(x,y)$ and $Q(x,y)$ have \@{continuous} first \@{partial-derivatives} in a \@{domain} containing a simple, closed, piecewise \@{smooth} curve $C$ and its interior $R.$ Then
 
 \[ \oint_C Pdx + Qdy = \iint_R \left ( \frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} \right ) dx dy. \]
 \end{theorem}
@@ -113,7 +113,7 @@ Suppose $P(x,y)$ and $Q(x,y)$ have continuous first partial derivatives in a dom
 \subsection{Surface Integrals}
 
 \begin{definition}[Surface Integral over Vector Field]\synonyms{"surface integral", "flux integral"}
-Given a piecewise smooth surface $S,$ we can parameterize it as
+Given a piecewise \@{smooth} surface $S,$ we can parameterize it as
 
 \[ \vec{r}(u,v) = \langle x(u,v), y(u,v), z(u,v) \rangle = x(u,v) \vec{i} + y(u,v) \vec{j} + z(u,v) \vec{k}, \]
 
@@ -131,7 +131,7 @@ at every point, except perhaps for some edges or cusps, such as for cubes and co
 \subsection{Volume Integrals}
 
 \begin{definition}[Volume Integral]\synonyms{"triple integral"}
-If $T$ is a closed, bounded, three-dimensional region of space, and $f(x,y,z)$ is defined and \@{continuous} in a \@{domain} containing $T,$ then the \textbf{volume integral} of $f(x,y,z)$ over the region $T$ is denoted by
+If $T$ is a closed, \@{bounded}, three-dimensional region of space, and $f(x,y,z)$ is defined and \@{continuous} in a \@{domain} containing $T,$ then the \textbf{volume integral} of $f(x,y,z)$ over the region $T$ is denoted by
 
 \[ \iiint_T f(x,y,z) dx dy dz = \iiint_T f(x,y,z) dV. \]
 
@@ -145,26 +145,26 @@ Note: for cylindrical coordinates, we need to include $r$ as a scaling factor in
 f(r\cos\theta,r\sin\theta,z)\, r\, dr\, d\theta\, dz. \]
 
 \subsubsection{Divergence Theorem of Gauss}
-The Divergence Theorem allows us to translate between a volume integral over an enclosed region and a surface integral over the surface enclosing that region, and vice-versa.
+The Divergence Theorem allows us to translate between a \@{volume-integral} over an enclosed region and a \@{surface-integral} over the surface enclosing that region, and vice-versa.
 
 \begin{theorem}[Divergence Theorem of Gauss]\label{divergence-theorem}
-Let $T$ be a closed bounded region in a space whose \@{boundary} is a \@{piecewise} \@{smooth} \@{orientable} surface $S.$ Let $\vec{F}(x,y,z)$ be a \@{vector-function} that is \@{continuous} and has \@{continuous} first \@{partial-derivatives} in some \@{domain} containing $T.$ Then
+Let $T$ be a closed \@{bounded} region in a space whose \@{boundary} is a \@{piecewise} \@{smooth} \@{orientable} surface $S.$ Let $\vec{F}(x,y,z)$ be a \@{vector-function} that is \@{continuous} and has \@{continuous} first \@{partial-derivatives} in some \@{domain} containing $T.$ Then
 
 \[ \iiint_T \div{\vec{F}} dV = \iint_S \vec{F} \cdot \vec{n} dA. \]
 \end{theorem}
 
 \subsubsection{Stoke's Theorem}
 
-Stoke's Theorem allows us to translate between a line integral around a boundary of a surface and an integral over that surface.
+Stoke's Theorem allows us to translate between a \@{line-integral} around a \@{boundary} of a surface and an integral over that surface.
 
 \begin{theorem}[Stoke's Theorem]
-Let $S$ be a \@{piecewise} \@{smooth} oriented surface in space and let the \@{boundary} of $S$ be a piecewise smooth simple closed curve $C.$ Let $\vec{F}(x,y,z)$ be a \@{continuous} \@{vector-function} that has \@{continuous} first \@{partial-derivatives} in a domain in space containing $S.$ Then
+Let $S$ be a \@{piecewise} \@{smooth} oriented surface in space and let the \@{boundary} of $S$ be a piecewise smooth simple closed curve $C.$ Let $\vec{F}(x,y,z)$ be a \@{continuous} \@{vector-function} that has \@{continuous} first \@{partial-derivatives} in a \@{domain} in space containing $S.$ Then
 
 \[ \iint_S (\curl{\vec{F}}) \cdot \vec{n} dA = \oint_C \vec{F} \cdot \vec{r'}(s) ds. \tag{2} \]
 
 Here $\vec{n}$ is a \@{unit} \@{normal-vector} of $S.$ $\vec{r'} = d \vec{r}/ds$ is the \@{unit} \@{tangent-vector} and $s$ the arc length of $C.$
 
-In components, (2) becomes
+In \@{components}, (2) becomes
 
 \[ \iint_R \left [ \left ( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z}\right ) N_1 +
 \left ( \frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x}\right ) N_2 +

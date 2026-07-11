@@ -23,7 +23,7 @@ if $X$ is \@{continuous}.
 
 The expected value is the "average value" we expect the random variable to take in the long run.
 
-Note that in the discrete case, the expected value is the dot product of the vector of $x$ values and corresponding vector of $f(x)$ values.
+Note that in the discrete case, the expected value is the \@{dot-product} of the vector of $x$ values and corresponding vector of $f(x)$ values.
 \end{definition}
 
 \subsection{Variance}
@@ -44,7 +44,7 @@ if $X$ is \@{continuous}.
 The positive square root of the \@{variance}, $\sigma,$ is called the \textbf{standard deviation} of $X.$
 \end{definition}
 
-Variance and standard deviation tell us about how spread out the values of $X$ are around its mean.
+\@{Variance} and \@{standard-deviation} tell us about how spread out the values of $X$ are around its mean.
 
 \begin{theorem}[Jensen's Inequality]\label{jensens-inequality}
 Let $X$ be a random variable with finite \@{expectation} $E[X]$, and let $\varphi : \reals \to \reals$ be
@@ -52,7 +52,7 @@ a \@{convex-function}. Then
 
 \[ \varphi\big(E[X]\big) \leq E\big[\varphi(X)\big]. \tag{a} \]
 
-If $\varphi$ is concave, the inequality reverses:
+If $\varphi$ is \@[concave]{concave-function}, the inequality reverses:
 
 \[ \varphi\big(E[X]\big) \geq E\big[\varphi(X)\big]. \]
 
@@ -79,7 +79,7 @@ Assuming $w > 0,$ let $q_i = p_i / w.$ Then, $q_i > 0, \sum q_i = 1,$ so the $q_
 
 \[ E[X] = \sum_{i=1}^{n} p_i x_i = w \sum_{i=1}^{n-1} q_i x_i + p_n x_n = w \overline{x} + p_n x_n, \tag{b} \]
 
-where $\overline{x} =  \sum_{i=1}^{n-1} q_i x_i.$ Now, because $w + p_n = 1,$ (b) is a two-point convex combination of $\overline{x}$ and $x_n.$ From our base case,
+where $\overline{x} =  \sum_{i=1}^{n-1} q_i x_i.$ Now, because $w + p_n = 1,$ (b) is a two-point \@{convex-combination} of $\overline{x}$ and $x_n.$ From our base case,
 
 \[ \varphi \big ( \sum_{i=1}^{n} p_i x_i \big ) = \varphi(w \overline{x} + p_n x_n) \leq w\varphi(\overline{x}) + p_n\varphi(x_n). \]
 

@@ -12,7 +12,7 @@
 
 The basic method for approximating $\int_a^{b} f(x) dx$ is called \textbf{numerical quadrature} and uses the sum $\sum_{i=0}^n a_i f(x_i).$
 
-We'll cover quadrature methods based on interpolation polynomials. The idea is to select a set of distinct nodes $\{x_0, \dots, x_n\}$ from the interval $[a, b],$ use them to construct a Lagrange interpolating polynomial and its error term, and then integrate those over $[a,b].$
+We'll cover quadrature methods based on interpolation polynomials. The idea is to select a set of distinct nodes $\{x_0, \dots, x_n\}$ from the \@{interval} $[a, b],$ use them to construct a Lagrange interpolating polynomial and its error term, and then integrate those over $[a,b].$
 
 When we use equally spaced nodes, the approximations produced from first and second Lagrange polynomials are known as the \textbf{Trapezoidal rule} and \textbf{Simpson's rule.} These are commonly introduced in calculus courses.
 
@@ -141,7 +141,7 @@ We will use a collection of orthogonal polynomials called the \textbf{Legendre P
 \item $\int_{-1}^{1}P(x)P_n(x)dx = 0$ whenever $P(x)$ is a polynomial of degree less than $n.$
 \end{enumerate}
 
-Note that these polynomials form an orthogonal basis for the monic polynomials over the interval $[-1, 1].$
+Note that these polynomials form an \@{orthogonal} basis for the monic polynomials over the interval $[-1, 1].$
 
 The roots of these polynomials are distinct, lie in $(-1, 1),$ are symmetric with respect to the origin, and are the correct choice for determining the parameters that give us the nodes and coefficients for Gaussian quadrature.
 

@@ -21,7 +21,7 @@ where $N(t)$ is the number of allowed \@{signals} of duration $t.$
 \end{definition}
 
 \begin{note}
-Given an information source where all symbols are of the same time duration, and each symbol represents $s$ bits of information (because it is chosen freely among $2^s$ symbols), and the channel can transmit $n$ symbols per second then the \textbf{capacity} $C$ of the channel is defined to be $ns$ bits per second.
+Given an information source where all symbols are of the same time duration, and each symbol represents $s$ bits of information (because it is chosen freely among $2^s$ symbols), and the channel can transmit $n$ symbols per second then the \textbf{\@{capacity}} $C$ of the channel is defined to be $ns$ bits per second.
 
 In the more general case we have to deal with symbols of various lengths that take different amounts of time to transmit, and so capacity measures not the number of symbols transmitted per second but the amount of information transmitted per second, retaining bits per second as its unit.
 
@@ -84,7 +84,7 @@ Now we have
 
 \[ N(t) = N(t - 2) + N(t - 4) + N(t - 5) + N(t - 7) + N(t - 8) + N(t - 10). \]
 
-So, our characteristic equation is
+So, our \@{characteristic-equation} is
 
 \[ W^{-2} + W^{-4} + W^{-5} + W^{-7} + W^{-8} + W^{-10} = 1. \tag{a} \]
 
@@ -287,7 +287,7 @@ Let's say we have an unfair coin and $p(h) = 0.9, p(t) = 0.1.$ Then
 
 \[ I(h) = - \log{(0.9)} \approx 0.152 \text{ bits}, \quad I(t) = - \log{(0.1)} \approx 3.32 \text{ bits}, \]
 
-and for entropy of $X$ we get
+and for \@{entropy} of $X$ we get
 
 \[ H(X) = p(h) \cdot I(h) + p(t) \cdot I(t) \approx 0.9 \cdot 0.152 + 0.1 \cdot 3.32 \approx 0.469 \text{ bits}. \]
 
@@ -301,7 +301,7 @@ Let's say we have an unfair die and $p(1) = 0.5$ and $p(x) = 0.1$ for $x \in \{2
 
 \[ I(1) = - \log{(0.5)} = 1 \text{ bit}, \quad I(x) = - \log{(0.1)} \approx 3.32 \text{ bits for } x \neq 1, \]
 
-and for entropy of $X$ we get
+and for \@{entropy} of $X$ we get
 
 \[ H(X) = p(1) \cdot I(1) + \sum_{x=2}^{6} p(x) \cdot I(x) \approx 0.5 \cdot 1 + 5 \cdot 0.1 \cdot 3.32 \approx 2.16 \text{ bits}. \]
 
@@ -509,7 +509,7 @@ And the second term on the RHS of the last line:
 
 So, we end up with $D(r || s) = H(q) - H(p).$ Since $D(r || s) \geq 0$ by \@{gibbs-inequality}, we have $H(q) - H(p) \geq 0,$ which implies that $H(q) \geq H(p),$ which is what we wanted to show.
 
-Now, the equivalence case. If $q$ is just a rearrangement of $p,$ then obviously it has the same entropy as we can just re-index to recover $p.$ Now assume $H(p) = H(q).$ Then, $H(q) - H(p) = 0 \implies D(r || s) = 0 \implies r = s \implies A_{ij} p_j = A_{ij} q_i \implies p_j = q_i$ whenever $A_{ij} > 0.$ Now, for each value $c$ appearing in $p$ or $q,$ let
+Now, the equivalence case. If $q$ is just a rearrangement of $p,$ then obviously it has the same \@{entropy} as we can just re-index to recover $p.$ Now assume $H(p) = H(q).$ Then, $H(q) - H(p) = 0 \implies D(r || s) = 0 \implies r = s \implies A_{ij} p_j = A_{ij} q_i \implies p_j = q_i$ whenever $A_{ij} > 0.$ Now, for each value $c$ appearing in $p$ or $q,$ let
 
 \[ J_c = \{j : p_j = c\}, \quad I_c = \{i : q_i = c\}, \]
 
@@ -531,7 +531,7 @@ Therefore, $|I_c| = |J_c|$ for all $c,$ so each $c$ appears equally often in $p$
 \end{proof}
 
 \begin{intuition}
-Averaging (well, replacing each probability with a \@{convex-combination} of all the probabilities in a way that retains their summing to 1) the probabilities in $p$ can only bring them closer to each other (if it doesn't just rearrange them), which increases entropy.
+Averaging (well, replacing each probability with a \@{convex-combination} of all the probabilities in a way that retains their summing to 1) the probabilities in $p$ can only bring them closer to each other (if it doesn't just rearrange them), which increases \@{entropy}.
 \end{intuition}
 
 \begin{definition}[Conditional Entropy]

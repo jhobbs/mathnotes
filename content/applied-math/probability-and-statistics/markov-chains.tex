@@ -13,7 +13,7 @@ If we have a system with N states and for each state, a set of N probabilities f
 
 Starting with some state, we can transition to another state, then another, with the probability of picking the next state dependent only on the existing state and the matrix $P.$ We call this sequence of random events a \textbf{Markov Chain}.
 
-More formally, the sequence $X_1, X_2, \dots$ is called a Markov Chain if
+More formally, the \@{sequence} $X_1, X_2, \dots$ is called a Markov Chain if
 
 \[ P(X_{n+1} = k|X_n = j, X_{n-1} = j_{n-1}, \dots, X_0 = j_0) = P(X_{n+1} = k | X_n = j). \]
 
@@ -53,10 +53,10 @@ Due to the magic of linear algebra, if we have a row vector $\vec{x}$ representi
 \subsection{Ergodic Markov Chains}
 
 \begin{definition}[Ergodic]
-If for some positive integer $m$ we have that $p_{jk}^{(m)} > 0$ for all $j,k = 1,2,\dots,N,$ then the Markov chain is said to be \textbf{ergodic.}
+If for some positive integer $m$ we have that $p_{jk}^{(m)} > 0$ for all $j,k = 1,2,\dots,N,$ then the \@{Markov-chain} is said to be \textbf{ergodic.}
 \end{definition}
 
-When the \@{markov-chain} is \@{ergodic}, the limit
+When the \@{markov-chain} is \@{ergodic}, the \@[limit]{limit-sequence}
 
 \[ \pi_k = \lim_{n \to \infty} p_{jk}^{(n)} \]
 
@@ -92,7 +92,7 @@ If a \@{matrix} is both a \@{row-stochastic-matrix} and a \@{column-stochastic-m
 A \@{doubly-stochastic-matrix} is a \@{convex-combination} of \@{permutation-matrices}.
 \end{note}
 
-A \@{stochastic-matrix} maps a probability vector to another probability vector — but only for the matching multiplication convention. A \@{row-stochastic-matrix} preserves the sum acting on the right, $\vec{x}^\top A$; a \@{column-stochastic-matrix} preserves it acting on the left, $A\vec{x}$; and a \@{doubly-stochastic-matrix} preserves it either way. The demo below lets you apply each type to a probability vector, build doubly-stochastic matrices as convex combinations of permutation matrices, and iterate the map toward its stationary distribution.
+A \@{stochastic-matrix} maps a probability vector to another probability vector — but only for the matching multiplication convention. A \@{row-stochastic-matrix} preserves the sum acting on the right, $\vec{x}^\top A$; a \@{column-stochastic-matrix} preserves it acting on the left, $A\vec{x}$; and a \@{doubly-stochastic-matrix} preserves it either way. The demo below lets you apply each type to a probability vector, build doubly-stochastic matrices as \@{convex-combinations} of permutation matrices, and iterate the map toward its stationary distribution.
 
 \includedemo{stochastic-matrix}
 

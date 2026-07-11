@@ -32,7 +32,7 @@ We calculate the Fourier Coefficient $c_n$ as
 \end{enumerate}
 
 \begin{enumerate}
-\item Each $c_n$ represents a vector in the complex plane with:
+\item Each $c_n$ represents a \@{vector} in the complex plane with:
 \end{enumerate}
 
 \begin{itemize}
@@ -81,10 +81,10 @@ Now, multiplying these roots by each other can be accomplished by adding their e
 
 Note that the resultant product is a root of unity as well, and in general the $nth$ roots of unit form a \@{cyclic} \@{abelian} \@{group} under multiplication.
 
-It also turns out that this group is isomorphic to $\mathbb{Z}_n$ under addition modulo $n.$ The multiplication we gave above is equivalent to $0 + 1 = 1$ on $\mathbb{Z}_2,$ and just like $-1 * -1 = 1,$ $1 + 1 = 0$ on $\mathbb{Z}_2.$
+It also turns out that this \@{group} is isomorphic to $\mathbb{Z}_n$ under addition modulo $n.$ The multiplication we gave above is equivalent to $0 + 1 = 1$ on $\mathbb{Z}_2,$ and just like $-1 * -1 = 1,$ $1 + 1 = 0$ on $\mathbb{Z}_2.$
 
 \begin{theorem}
-The $n$th roots of unity under multiplication are isomorphic to $\mathbb{Z}_n$ under addition.
+The $n$th roots of \@{unity} under multiplication are isomorphic to $\mathbb{Z}_n$ under addition.
 \end{theorem}
 
 \begin{proof}
@@ -96,13 +96,13 @@ be the $n$th roots of unity, and
 
 \[ \mathbb{Z}_n = \{ 0, 1, \dots, n - 1 \} \]
 
-be the first $n$ non-negative integers under addition modulo $n.$
+be the first $n$ non-negative \@{integers} under addition modulo $n.$
 
 Let
 
 \[ \phi : \mathbb{Z}_n \to \mu_n, \quad \phi(k) = e^{2 \pi i k / n} \]
 
-be a mapping we will show to be an isomorphism.
+be a \@{mapping} we will show to be an isomorphism.
 
 First, note that $\mu_n$ and $\mathbb{Z}_n$ are obviously the same cardinality, by their definitions.
 
@@ -121,11 +121,11 @@ One more fact worth noting, now that we've established this isomorphism. On the 
 
 Thus, the $-k$th $n$th root of unit, $e^{2 \pi i (k)}$ equals the $(n - k)$th root of unity (because the $n$th $n$th root of unity corresponds to a full rotation). This corresponds to $-k \equiv n - k \pmod{n}$ on $\mathbb{Z}_n.$ For example, $-4 = 9 - 4 = 5$ on $\mathbb{Z}_9,$ and $e^{2 \pi i (5)/9} = e^{2 \pi i (-4)/9}$ on $\mu_{n}.$
 
-Coming soon... roots of unity as the elements of basis vectors for $\complexes^n,$ and DFT as computing the inner product (basically, cosine similarity * magnitude) between the sample points and these basis vectors. That is, DFT is a change of basis onto these basis vectors, it is literally projecting onto these.
+Coming soon... roots of unity as the elements of basis vectors for $\complexes^n,$ and DFT as computing the \@{inner-product} (basically, cosine similarity * magnitude) between the sample points and these basis vectors. That is, DFT is a change of basis onto these basis vectors, it is literally projecting onto these.
 
 \subsection{Sample Points as Vectors in $\complexes^n.$}
 
-Let's say we have a contour on the complex plane, and we take $n$ sample points on it, in order, so $z_0, z_1, \dots, z_n.$ We can view these sample points (which form a \@{sequence}) as forming a vector in $\complexes^n:$
+Let's say we have a contour on the complex plane, and we take $n$ sample points on it, in order, so $z_0, z_1, \dots, z_n.$ We can view these sample points (which form a \@{sequence}) as forming a \@{vector} in $\complexes^n:$
 
 \[ ( z_0, z_1, \dots, z_n ). \]
 
@@ -133,11 +133,11 @@ Now, the standard basis for $\complexes^n$ is the same as that of $\reals^n,$ wh
 
 \[ e_1 = ( 1, 0, \dots, 0 ), \quad e_2 = ( 0, 1, \dots, 0 ), \dots \]
 
-It's easy to see that these basis vectors are \@{orthogonal} (and therefore \@{linearly-independent}); to see that they span $\complexes^n$, suppose $w = ( w_1, w_2, \dots, w_n. ).$ Then, $w_1 * e_1 + w_2 * e_2 + \cdots + w_n * e_n = w,$ that is, the components of $w$ (which are complex numbers) are exactly the scalar coefficients we need to multiply by our basis vectors to form $w,$ so this basis spans $\complexes^n.$
+It's easy to see that these basis vectors are \@{orthogonal} (and therefore \@{linearly-independent}); to see that they span $\complexes^n$, suppose $w = ( w_1, w_2, \dots, w_n. ).$ Then, $w_1 * e_1 + w_2 * e_2 + \cdots + w_n * e_n = w,$ that is, the \@{components} of $w$ (which are \@{complex-numbers}) are exactly the scalar coefficients we need to multiply by our basis vectors to form $w,$ so this basis spans $\complexes^n.$
 
 \subsubsection{$\complexes^n$ is an Inner Product Space}
 
-Now, we can equip this vector space with an \@{inner-product}
+Now, we can equip this \@{vector-space} with an \@{inner-product}
 
 \begin{theorem}[$\complexes^N$ is an inner product space]\label{complex-inner-product-space}
 The \@{function}
@@ -150,7 +150,7 @@ defined on $z, w \in \complexes^N$ is an \@{inner-product}, and so $\complexes^N
 \begin{proof}
 Since $\complexes$ is a \@{field}, $\complexes^N$ is obviously a \@{vector-space}.
 
-To see that this is indeed an inner product, we'll show the required properties hold.
+To see that this is indeed an \@{inner-product}, we'll show the required properties hold.
 
 For \@{conjugate-symmetry}, let $z_k = a + bi$ and let $w_k = c + di.$ Then,
 
@@ -174,7 +174,7 @@ Now, to show \@{positive-definiteness} let $z = a + bi.$ Then,
 \detach
 
 \begin{remark}
-Since $\complexes^n$ is an inner-product space, we can use the inner product to compare how well aligned two vectors are, and to perform projections.
+Since $\complexes^n$ is an inner-product space, we can use the \@{inner-product} to compare how well aligned two vectors are, and to perform projections.
 \end{remark}
 
 \subsection{Fourier Basis}

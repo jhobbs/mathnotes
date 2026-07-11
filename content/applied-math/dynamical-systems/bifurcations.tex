@@ -46,7 +46,7 @@ The first ensures this is only a double root, not a triple root or worse. The se
 \subsection{Transcritical Bifurcation}
 
 \begin{definition}[Transcritical]
-A \textbf{transcritical} bifurcation occurs when a given $x^*$ is always a \@{fixed-point}, but its stability changes when crossing the \@{bifurcation-point} $r^*$. At all values of $r$ other than $r^*,$ there are two \@{fixed-points} (and at $r^*$ one degenerate \@{fixed-point}), but their stability is exchanged at the crossing.
+A \textbf{transcritical} \@{bifurcation} occurs when a given $x^*$ is always a \@{fixed-point}, but its stability changes when crossing the \@{bifurcation-point} $r^*$. At all values of $r$ other than $r^*,$ there are two \@{fixed-points} (and at $r^*$ one degenerate \@{fixed-point}), but their stability is exchanged at the crossing.
 \end{definition}
 
 The normal form for a \@{transcritical-bifurcation} is $\dot{x} = r x - x^2.$
@@ -55,7 +55,7 @@ The normal form for a \@{transcritical-bifurcation} is $\dot{x} = r x - x^2.$
 
 \subsection{Summary of Conditions}
 
-At a candidate bifurcation point where $f(x,r) = 0$ and $f_x(x,r) = 0,$ evaluate these derivatives to tell what kind of bifurcation occurs there.
+At a candidate \@{bifurcation-point} where $f(x,r) = 0$ and $f_x(x,r) = 0,$ evaluate these derivatives to tell what kind of \@{bifurcation} occurs there.
 
 \subsubsection{Saddle-Node}
 
@@ -64,7 +64,7 @@ At a candidate bifurcation point where $f(x,r) = 0$ and $f_x(x,r) = 0,$ evaluate
 \[ f_{xx} \neq 0. \]
 
 \begin{intuition}
-The \@{fixed-point} doesn't persist as $r$ varies $(f_r \neq 0)$ and the nullcline has quadratic tangency $(f_{xx} \neq 0)$, so two \@{fixed-points} collide and annihilate.
+The \@{fixed-point} doesn't persist as $r$ varies $(f_r \neq 0)$ and the \@{nullcline} has quadratic tangency $(f_{xx} \neq 0)$, so two \@{fixed-points} collide and annihilate.
 \end{intuition}
 
 Normal form: $\dot{x} = r \pm x^2. $
@@ -109,7 +109,7 @@ Normal form: $\dot{x} = r * x \pm x^3.$
 
 \subsection{Normal Form Analysis}
 
-We can find the normal form by shifting to $u = x - x^*, \mu = r - r^*,$ and finding the taylor expansion of $f$ at $(u, \mu.)$ We may need the derivatives above, but sometimes it is just obvious which normal form fits.
+We can find the normal form by shifting to $u = x - x^*, \mu = r - r^*,$ and finding the \@[taylor expansion]{taylor-series} of $f$ at $(u, \mu.)$ We may need the derivatives above, but sometimes it is just obvious which normal form fits.
 
 \section{Nondimensionalization}
 
@@ -119,7 +119,7 @@ Say we start with
 
 \[ \dot{u} = \frac{du}{dt} = au + bu^3 - cu^5. \]
 
-This equations has three parameters, $a, b, and c$ which is mighty inconvenient and difficult to analyze because it means we have a three dimensional parameter space. It'd be nice if we could reduce it to a single parameter. It'd be extra nice if this parameter was on the linear term, because the linear term determines the stability of fixed points. So, we want to end up with something equivalent that has the form
+This equations has three parameters, $a, b, and c$ which is mighty inconvenient and difficult to analyze because it means we have a three dimensional parameter space. It'd be nice if we could reduce it to a single parameter. It'd be extra nice if this parameter was on the linear term, because the linear term determines the stability of \@{fixed-points}. So, we want to end up with something equivalent that has the form
 
 \[ \frac{dx}{d \tau} = r x + x^3 - x^5. \]
 
@@ -189,7 +189,7 @@ Determine stability along each branch:
 
 \[ \begin{cases} f_x < 0 & \Rightarrow \text{stable equilibrium}, \\ f_x > 0 & \Rightarrow \text{unstable equilibrium}, \\ f_x = 0 & \Rightarrow \text{non-hyperbolic equilibrium}. \end{cases} \]
 
-Identify candidate bifurcation points by solving
+Identify candidate \@{bifurcation-points} by solving
 
 \[ f(x,r) = 0 \quad \text{and} \quad f_x(x,r) = 0 \]
 
