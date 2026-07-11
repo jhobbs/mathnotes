@@ -137,12 +137,24 @@ def get_registry() -> Dict[str, str]:
 
 
 def refresh_registry() -> bool:
-    """Rescan; True if the registry changed (callers must then invalidate
-    every content/page cache — the registry is input to all math)."""
+    """Rescan; True if the registry changed. The registry is input to every
+    page's math (render_math substitutes expansions at parse time), so a
+    change makes every cached PageDoc and page render stale regardless of
+    mtimes: invalidate both caches here, where every refresh point —
+    build_index's per-rebuild refresh and _parse_notation's stale-registry
+    recheck — inherits it."""
     global _registry
     old = get_registry()
-    _registry = scan_content("content") if os.path.isdir("content") else {}
-    return _registry != old
+    new = scan_content("content") if os.path.isdir("content") else {}
+    if new == old:
+        return False
+    _registry = new
+    from .content_loader import clear_content_cache
+    from .page_renderer import clear_page_cache
+
+    clear_content_cache()
+    clear_page_cache()
+    return True
 
 
 def reset_registry() -> None:

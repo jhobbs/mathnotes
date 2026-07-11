@@ -45,6 +45,14 @@ class BlockIndex:
 
     def build_index(self):
         """Build the global index by scanning all content files."""
+        # Refresh the notation registry first: a changed registry clears the
+        # content and page caches (see notation.refresh_registry), forcing
+        # re-parse of every page whose math embeds a stale expansion.
+        from . import notation
+
+        if notation.refresh_registry():
+            print("Notation registry changed: invalidated all content/page caches")
+
         # Reset any residue from a build that failed partway (e.g. a content
         # dialect error during an incremental rebuild) so blocks aren't
         # double-registered on the next attempt

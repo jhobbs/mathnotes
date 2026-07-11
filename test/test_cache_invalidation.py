@@ -158,6 +158,71 @@ def test_url_mappings_drop_deleted_files():
             os.chdir(old_cwd)
 
 
+NOTATION_DEFINING = r"""\title{Number Sets}
+
+\begin{definition}[Integers]\label{integers}
+\notation{\integers}{%s}
+The integers.
+\end{definition}
+"""
+
+NOTATION_USING = r"""\title{Using Page}
+
+We have $x \in \integers$ here.
+"""
+
+
+def test_notation_change_invalidates_all_pages():
+    from mathnotes import notation
+    from mathnotes.content_loader import clear_content_cache
+
+    old_cwd = os.getcwd()
+    with tempfile.TemporaryDirectory() as tmp:
+        os.chdir(tmp)
+        try:
+            os.makedirs("content/test")
+            with open("content/test/using.tex", "w") as f:
+                f.write(NOTATION_USING)
+            with open("content/test/defining.tex", "w") as f:
+                f.write(NOTATION_DEFINING % r"\mathbb{Z}")
+
+            clear_page_cache()
+            clear_content_cache()
+            notation.reset_registry()
+            url_mapper = ContentDiscovery()
+            url_mapper.build_url_mappings()
+            block_index = BlockIndex(url_mapper)
+            block_index.build_index()
+            processor = PageRenderer(url_mapper, block_index)
+
+            result = processor.render_page("content/test/using.tex")
+            assert 'alttext="x \\in \\integers"' in result["content"], result["content"]
+            assert 'data-ref-label="integers"' in result["content"], result["content"]
+            # MathJax renders \mathbb{Z} as <mi ...>Z</mi>; ">Z</mi>" is the
+            # discriminating fragment ("Z"/"W" alone match prose like "We")
+            assert ">Z</mi>" in result["content"], result["content"]
+
+            # Change the expansion; using.tex is untouched, so its
+            # mtime-keyed caches would serve stale MathML without global
+            # invalidation.
+            with open("content/test/defining.tex", "w") as f:
+                f.write(NOTATION_DEFINING % r"\mathbb{W}")
+            future = time.time() + 1
+            os.utime("content/test/defining.tex", (future, future))
+
+            incremental_rebuild(url_mapper, block_index)
+
+            result = processor.render_page("content/test/using.tex")
+            assert ">W</mi>" in result["content"], (
+                "stale cache: using page still renders the old expansion"
+            )
+        finally:
+            os.chdir(old_cwd)
+            clear_page_cache()
+            clear_content_cache()
+            notation.reset_registry()
+
+
 if __name__ == "__main__":
     test_new_definition_invalidates_referencing_page()
     print("PASS: new definition invalidates referencing page")
@@ -165,3 +230,5 @@ if __name__ == "__main__":
     print("PASS: removed definition invalidates referencing page")
     test_url_mappings_drop_deleted_files()
     print("PASS: deleted files drop out of URL mappings")
+    test_notation_change_invalidates_all_pages()
+    print("PASS: notation change invalidates all pages")

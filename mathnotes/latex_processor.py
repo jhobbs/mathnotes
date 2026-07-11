@@ -480,6 +480,12 @@ class _Parser:
         expansion = exp_group.latex_verbatim().strip()
         if expansion.startswith("{") and expansion.endswith("}"):
             expansion = expansion[1:-1].strip()
+        if notation.get_registry().get(name) != expansion:
+            # Not necessarily drift: this file may have just been edited and
+            # parsed before the build's refresh point (build_index refreshes
+            # after build_url_mappings has already re-parsed changed files).
+            # Rescan once before declaring the scan and the parser diverged.
+            notation.refresh_registry()
         registry = notation.get_registry()
         if registry.get(name) != expansion:
             self._err(
