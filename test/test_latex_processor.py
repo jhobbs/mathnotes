@@ -96,6 +96,48 @@ def test_bal_eal_shorthand():
     expect_error("\\balance", "balance")
 
 
+def test_preexpansion_macro_parsing():
+    from mathnotes.latex_processor import _parse_preexpansion_macros
+    sty = ("junk before\n"
+           "% BEGIN PRE-EXPANSION MACROS\n"
+           "\\def\\bal{\\[\\begin{aligned}}\n"
+           "\\def\\eal{\\end{aligned}\\]}\n"
+           "% END PRE-EXPANSION MACROS\n"
+           "\\def\\outside{ignored}\n")
+    m = _parse_preexpansion_macros(sty)
+    assert m == {"bal": "\\[\\begin{aligned}", "eal": "\\end{aligned}\\]"}, m
+    # missing markers is a loud error, not a silent no-op
+    try:
+        _parse_preexpansion_macros("\\def\\bal{x}")
+        assert False, "expected ValueError for missing markers"
+    except ValueError:
+        pass
+    # multi-line bodies would break source-line mapping in errors
+    try:
+        _parse_preexpansion_macros("% BEGIN PRE-EXPANSION MACROS\n"
+                                   "\\def\\x{a\nb}\n"
+                                   "% END PRE-EXPANSION MACROS\n")
+        assert False, "expected ValueError for multi-line body"
+    except ValueError:
+        pass
+
+
+def test_preexpansion_from_real_sty():
+    # latex/mathnotes.sty is the single source of truth shared with pdflatex
+    from mathnotes.latex_processor import _load_preexpansion_macros
+    m = _load_preexpansion_macros()
+    assert m["bal"] == "\\[\\begin{aligned}" and m["eal"] == "\\end{aligned}\\]", m
+
+
+def test_preexpansion_expansion_rules():
+    from mathnotes.latex_processor import _expand_preexpansion
+    macros = {"bx": "\\begin{xx}", "b": "B"}
+    # longest name wins; \bxy matches neither (letter follows); bodies with
+    # backslashes must not be re-escaped by the substitution
+    s = _expand_preexpansion("\\bx \\bxy \\b{}", macros)
+    assert s == "\\begin{xx} \\bxy B{}", s
+
+
 def test_sections():
     h = prose("\\section{Big Idea}\nText.\n\\subsection{Small $x$ Idea}")
     assert '<h1 id="big-idea">Big Idea</h1>' in h

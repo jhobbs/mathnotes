@@ -46,6 +46,25 @@ def test_bytecode_churn_is_ignored():
     assert not should_ignore("content/algebra/groups.md")
 
 
+def test_sty_changes_require_restart():
+    """latex_processor (PRE-EXPANSION MACROS) and the MathML worker (MATH
+    MACROS) each read mathnotes.sty once per process, so an in-process
+    rebuild would keep serving stale macros — .sty changes must re-exec."""
+    assert requires_restart(["latex/mathnotes.sty"])
+
+
+def test_latex_dir_is_watched():
+    import watch_and_build as wb
+    assert "latex" in wb.CONTENT_DIRS
+
+
+def test_generated_notation_sty_is_ignored():
+    """mathnotes-notation.sty is written BY the build (like a lockfile);
+    reacting to it would restart the watcher after every notation change."""
+    assert should_ignore("latex/mathnotes-notation.sty")
+    assert not should_ignore("latex/mathnotes.sty")
+
+
 def test_changes_landing_during_a_build_surface_afterward():
     """The snapshot must be taken BEFORE the build: a file that changes
     while the build runs has to show up as a diff on the next poll (at
@@ -143,6 +162,12 @@ if __name__ == "__main__":
     print("PASS: content/template changes rebuild in process")
     test_bytecode_churn_is_ignored()
     print("PASS: bytecode churn is ignored")
+    test_sty_changes_require_restart()
+    print("PASS: sty changes require restart")
+    test_latex_dir_is_watched()
+    print("PASS: latex dir is watched")
+    test_generated_notation_sty_is_ignored()
+    print("PASS: generated notation sty is ignored")
     test_changes_landing_during_a_build_surface_afterward()
     print("PASS: mid-build changes surface after the build")
     test_startup_snapshot_precedes_heavy_imports()

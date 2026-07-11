@@ -53,16 +53,68 @@ def _wrap_notation_macros(latex: str) -> str:
     )
 
 
-# \bal ... \eal: display-math aligned shorthand, expanded textually before
-# the pylatexenc walk (mathnotes.sty defines the same pair for pdflatex).
-# Expansion preserves newlines so node positions keep mapping to source lines.
-_BAL_RE = re.compile(r"\\bal(?![A-Za-z])")
-_EAL_RE = re.compile(r"\\eal(?![A-Za-z])")
+# Structural shorthand macros (\bal ... \eal): parameterless one-line \def's
+# read from the PRE-EXPANSION MACROS section of latex/mathnotes.sty (the
+# single source of truth, shared with pdflatex) and expanded textually before
+# the pylatexenc walk — pylatexenc parses surface syntax without expanding
+# macros, so anything that changes document structure (like opening display
+# math) must be substituted first. Bodies are required to be single-line so
+# node positions keep mapping to source lines.
+_STY_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "latex", "mathnotes.sty")
+
+_PREEXPANSION_DEF_RE = re.compile(r"\\def\\([A-Za-z]+)\{")
 
 
-def _expand_bal_eal(source: str) -> str:
-    source = _BAL_RE.sub(r"\\[\\begin{aligned}", source)
-    return _EAL_RE.sub(r"\\end{aligned}\\]", source)
+def _parse_preexpansion_macros(sty: str) -> Dict[str, str]:
+    begin = sty.find("% BEGIN PRE-EXPANSION MACROS")
+    end = sty.find("% END PRE-EXPANSION MACROS")
+    if begin == -1 or end == -1 or end <= begin:
+        raise ValueError("mathnotes.sty: PRE-EXPANSION MACROS markers not found")
+    section = sty[begin:end]
+    macros: Dict[str, str] = {}
+    for m in _PREEXPANSION_DEF_RE.finditer(section):
+        depth, i = 1, m.end()
+        while i < len(section) and depth > 0:
+            if section[i] == "\\":
+                i += 1
+            elif section[i] == "{":
+                depth += 1
+            elif section[i] == "}":
+                depth -= 1
+            i += 1
+        if depth != 0:
+            raise ValueError(f"mathnotes.sty: unbalanced braces in \\def\\{m.group(1)}")
+        body = section[m.end():i - 1]
+        if "\n" in body:
+            raise ValueError(
+                f"mathnotes.sty: \\def\\{m.group(1)} body spans multiple lines; "
+                f"pre-expansion bodies must be single-line to preserve "
+                f"source-line mapping")
+        macros[m.group(1)] = body
+    if not macros:
+        raise ValueError("mathnotes.sty: no macros in PRE-EXPANSION MACROS section")
+    return macros
+
+
+def _load_preexpansion_macros() -> Dict[str, str]:
+    with open(_STY_PATH, "r", encoding="utf-8") as f:
+        return _parse_preexpansion_macros(f.read())
+
+
+_preexpansion_macros: Optional[Dict[str, str]] = None
+
+
+def _expand_preexpansion(source: str, macros: Optional[Dict[str, str]] = None) -> str:
+    if macros is None:
+        global _preexpansion_macros
+        if _preexpansion_macros is None:
+            _preexpansion_macros = _load_preexpansion_macros()
+        macros = _preexpansion_macros
+    names = "|".join(sorted(macros, key=len, reverse=True))
+    pattern = re.compile(r"\\(" + names + r")(?![A-Za-z])")
+    return pattern.sub(lambda m: macros[m.group(1)], source)
 
 
 def render_math(latex: str, display: bool) -> str:
@@ -212,7 +264,7 @@ def parse_latex_file(source: str, filepath: str = "<latex>") -> Tuple[Dict[str, 
 
 class _Parser:
     def __init__(self, source: str, filepath: str):
-        self.source = _expand_bal_eal(source)
+        self.source = _expand_preexpansion(source)
         self.filepath = filepath
         self._demo_counter = 0
 
