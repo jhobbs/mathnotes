@@ -14,6 +14,11 @@ The real numbers $\mathbb{R}$ are a set of objects along with two binary operati
 
 We know that a \pagelink[field is a commutative division ring]{algebra/abstract/rings}.
 
+\begin{definition}[Integers]
+\notation{\integers}{\mathbb{Z}}
+The \textbf{integers} $\integers = \{\dots, -2, -1, 0, 1, 2, \dots\}$ are the natural numbers together with their negatives and zero.
+\end{definition}
+
 The \textbf{Order axiom} states that there exists a subset of $\mathbb{R}^+$ of $\mathbb{R}$ such that for all $a, b \in \mathbb{R}^+,a + b \in \mathbb{R}^+, a \cdot b \in \mathbb{R}^+.$ and for all $a \in \mathbb{R}$ exactly one of the following is true: (i) $a \in \mathbb{R}^+$, (ii) $-a \in \mathbb{R}^+$, or (iii) $a = 0$.
 
 A more familiar and equivalent way of stating this can be achieved by defining $a < b$ to mean $b + (-a) \in \mathbb{R}^+$, and $a > b$ to mean $a + (-b) \in \mathbb{R}^+$, for $a, b, c \in \mathbb{R}$,
@@ -95,7 +100,7 @@ The rationals are \@{dense} in the reals.
 \end{theorem}
 
 \begin{proof}
-Let $x \in \mathbb{R}$ and $\epsilon > 0.$ Pick $n \in \mathbb{N}$ such that $1/n < \epsilon.$ Now, because \@[the reals are Archimedean]{reals-are-archimedean}, for some $m \in \mathbb{Z}$ we have that $m = \lfloor nx \rfloor.$ Then,
+Let $x \in \mathbb{R}$ and $\epsilon > 0.$ Pick $n \in \mathbb{N}$ such that $1/n < \epsilon.$ Now, because \@[the reals are Archimedean]{reals-are-archimedean}, for some $m \in \integers$ we have that $m = \lfloor nx \rfloor.$ Then,
 
 \[ m \leq nx \leq m+1, \quad \frac{m}{n} \leq x \leq \frac{m+1}{n}. \]
 
@@ -111,7 +116,7 @@ If $x, y \in \mathbb{R},$ and $x < y,$ then there exists a $p \in \mathbb{Q}$ su
 \end{corollary}
 
 \begin{proof}
-Pick $n \in \mathbb{N}$ such that $n(y - a) > 1.$ Because because \@[the reals are Archimedean]{reals-are-archimedean}, there is some $k \in \mathbb{Z}$ such that $nx < k < ny$ and $x < n/k < y.$ Thus, $q = n/k \in \mathbb{Q}$ and $r \in (x, y).$
+Pick $n \in \mathbb{N}$ such that $n(y - a) > 1.$ Because because \@[the reals are Archimedean]{reals-are-archimedean}, there is some $k \in \integers$ such that $nx < k < ny$ and $x < n/k < y.$ Thus, $q = n/k \in \mathbb{Q}$ and $r \in (x, y).$
 \end{proof}
 
 \end{document}

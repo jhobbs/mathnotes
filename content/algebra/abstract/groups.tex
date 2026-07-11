@@ -30,7 +30,7 @@ This set/operation combination $G$ is commonly denoted as the pair $(G, *)$.
 Some examples of \@{groups}:
 
 \begin{itemize}
-\item The integers under addition: $(\mathbb{Z}, +)$. The identity element is $0$.
+\item The integers under addition: $(\integers, +)$. The identity element is $0$.
 \end{itemize}
 
 \begin{itemize}
@@ -71,7 +71,7 @@ A subgroup $H$ of a group $G$ is a subset of $G$ together with the same operatio
 \end{definition}
 
 \begin{example}[Even Integers as a Subgroup]\label{even-integers-subgroup}
-The even integers under addition, $(2\mathbb{Z}, +)$, are a \@{subgroup} of the integers under addition.
+The even integers under addition, $(2\integers, +)$, are a \@{subgroup} of the integers under addition.
 \end{example}
 
 \begin{definition}[normal]
@@ -83,11 +83,11 @@ A subgroup $H$ of a group $G$ is normal if its left and right cosets coincide, t
 \begin{definition}[cyclic group]
 A \textbf{cyclic group} is a group where there exists some $g \in G$ such that every element in $G$ can be generated from the group operation applied to $g$.
 
-That is, $G = \{g^n | n \in \mathbb{Z}\}$ when we think of the operation as multiplication, or $G = \{ng | n \in \mathbb{Z}\}$ when we think of the operation as addition.
+That is, $G = \{g^n | n \in \integers\}$ when we think of the operation as multiplication, or $G = \{ng | n \in \integers\}$ when we think of the operation as addition.
 \end{definition}
 
 \begin{note}[Generator Notation]
-We use angle brackets to denote an element as a generator. For example, $\langle 1 \rangle$ is a generator of $(\mathbb{Z}, +)$, because every integer can be written as $n1$ for some $n \in \mathbb{Z}$.
+We use angle brackets to denote an element as a generator. For example, $\langle 1 \rangle$ is a generator of $(\integers, +)$, because every integer can be written as $n1$ for some $n \in \integers$.
 \end{note}
 
 \begin{definition}[order]
@@ -185,9 +185,9 @@ Let $A$ be a nonempty set, and $S_A$ be the collection of all permutations of $A
 \begin{definition}[orbit containing a point]
 Let $\sigma$ be a \@{permutation} of $A$, the orbit of $\sigma$ containing $a \in A$ is the set
 
-\[ \{ \cdots, \sigma^{-2}(a), \sigma^{-1}(a), a, \sigma{(a)}, \sigma^{2}(a), \cdots \} = \{\sigma^n(a) | n \in \mathbb{Z}\}. \]
+\[ \{ \cdots, \sigma^{-2}(a), \sigma^{-1}(a), a, \sigma{(a)}, \sigma^{2}(a), \cdots \} = \{\sigma^n(a) | n \in \integers\}. \]
 
-So, $a,b \in A$ are in the same orbit of $\sigma$, written as $a \sim b$, if and only if $b = \sigma^n(a)$ for some $n \in \mathbb{Z}$.
+So, $a,b \in A$ are in the same orbit of $\sigma$, written as $a \sim b$, if and only if $b = \sigma^n(a)$ for some $n \in \integers$.
 
 The relation "\textasciitilde{}" is an equivalence relation (reflexive, symmetric, transitive). This means $A$ can be partitioned into orbits of $\sigma$.
 \end{definition}
@@ -260,10 +260,10 @@ The subgroup of $S_n$ consisting of all even permutations of $n$ letters is the 
 Let $H$ be a subgroup of $G$. Given $a \in G$, the subset $aH = \{ah | h \in H\}$ of $G$ is the \textbf{left coset} of $H$ containing $a$, while the subset $Ha = \{ha | h \in H\}$ is the \textbf{right coset} of $H$ containing $a$.
 \end{definition}
 
-\begin{example}[Left Cosets of $3\mathbb{Z}$]
-Left \@{cosets} of \@{subgroup} $3\mathbb{Z}$ of $\mathbb{Z}$:
+\begin{example}[Left Cosets of $3\integers$]
+Left \@{cosets} of \@{subgroup} $3\integers$ of $\integers$:
 
-\[ \begin{aligned} 0 + 3\mathbb{Z} = \{\dots, -9, -6, 0, 3, 6, 9, \dots\} \\ 1 + 3\mathbb{Z} = \{\dots, -8, -5, 1, 4, 7, 10, \dots\} \\  2 + 3\mathbb{Z} = \{\dots, -7, -4, 2, 5, 8, 11, \dots\} \\  \end{aligned} \]
+\[ \begin{aligned} 0 + 3\integers = \{\dots, -9, -6, 0, 3, 6, 9, \dots\} \\ 1 + 3\integers = \{\dots, -8, -5, 1, 4, 7, 10, \dots\} \\  2 + 3\integers = \{\dots, -7, -4, 2, 5, 8, 11, \dots\} \\  \end{aligned} \]
 \end{example}
 
 \begin{proposition}[Properties of Cosets]\label{coset-properties}
@@ -272,7 +272,7 @@ Left \@{cosets} of \@{subgroup} $3\mathbb{Z}$ of $\mathbb{Z}$:
 \end{itemize}
 
 \begin{itemize}
-\item If $G$ is \@{Abelian}, the left cosets and right cosets of $H$ will be equal. So, in the example above, $a + 3\mathbb{Z} = 3\mathbb{Z} + a$.
+\item If $G$ is \@{Abelian}, the left cosets and right cosets of $H$ will be equal. So, in the example above, $a + 3\integers = 3\integers + a$.
 \end{itemize}
 
 \begin{itemize}
@@ -284,7 +284,7 @@ Left \@{cosets} of \@{subgroup} $3\mathbb{Z}$ of $\mathbb{Z}$:
 The number of left cosets of a subgroup $H$ in a group $G$ is the \textbf{index}  $(G:H)$ of $H$ in $G$.
 \end{definition}
 
-From the example above, the index of $3\mathbb{Z}$ in $\mathbb{Z}$ is $3$ since there are 3 left cosets.
+From the example above, the index of $3\integers$ in $\integers$ is $3$ since there are 3 left cosets.
 
 \paragraph{Layered Cosets}
 
