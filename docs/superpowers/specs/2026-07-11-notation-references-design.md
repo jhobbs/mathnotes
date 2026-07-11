@@ -35,16 +35,20 @@ The \emph{integers} are ...
    over `content/**/*.tex` collects `name → expansion`. Loud build errors
    on: duplicate declarations (same name declared twice anywhere) and
    collisions with names in the `.sty` MATH MACROS section.
-2. **Worker.** The notation macro table is passed to the MathJax worker at
-   spawn, merged with the `.sty` table. The worker eagerly loads the
-   `html` TeX extension (provides `\class`; eager for the same reason
-   `cancel` is — the synchronous tex2mml API cannot service autoload).
+2. **Worker.** The worker eagerly loads the `html` TeX extension
+   (provides `\class`; eager for the same reason `cancel` is — the
+   synchronous tex2mml API cannot service autoload). It never learns the
+   notation macros themselves: expansions substitute in Python (next
+   step), so the worker needs no respawn when the registry changes. The
+   request protocol gains an optional `alttext` field so the emitted
+   `<math alttext>` carries the author's original TeX, not the wrapper.
 3. **Wrapping.** `render_math()` pre-processes TeX before sending it to
    the worker: each registered macro occurrence `\integers` (matched with
    a word-boundary-safe regex) is rewritten to
-   `\class{notation-ref notation-ref--integers}{\integers}`, so the
+   `\class{notation-ref notation-ref--integers}{<expansion>}`, so the
    emitted MathML carries identifiable class attributes on the right
-   element.
+   element. Because substitution is a single textual pass, expansions may
+   not reference other notation macros (enforced at scan time).
 4. **Resolution.** During block/page HTML assembly, elements with
    `notation-ref--<name>` classes are resolved: macro → declaring block
    label → block index. The element is stamped with `data-ref-label` and
