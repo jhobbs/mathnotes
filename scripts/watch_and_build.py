@@ -93,6 +93,13 @@ def find_changes(old_mtimes: dict, new_mtimes: dict) -> list:
 
 def build_site(output_dir: str, builder: SiteBuilder = None) -> SiteBuilder:
     """Build the site, optionally reusing an existing builder."""
+    # Refresh notation macros before anything parses content: the URL mapper
+    # below parses pages before block_index's own refresh runs, so a macro
+    # newly declared in one file but used in an alphabetically-earlier file
+    # would fail the build against the stale in-memory registry.
+    from mathnotes import notation
+
+    notation.refresh_registry()
     if builder is None:
         # First build - create fresh builder
         logger.info("Creating new SiteBuilder...")
