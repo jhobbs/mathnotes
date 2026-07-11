@@ -390,11 +390,14 @@ def test_notation_outside_block_is_error():
 
 def test_notation_mismatch_with_registry_is_error():
     from mathnotes import notation
-    notation.set_registry({})  # pre-scan saw nothing: parse/scan drift
+    # Pre-scan saw nothing: parse/scan drift. _parse_notation retries with a
+    # real rescan before erroring, so the probe name must be one that can
+    # never appear in actual repo content.
+    notation.set_registry({})
     try:
         expect_error(
-            "\\begin{definition}[Integers]\n"
-            "\\notation{\\integers}{\\mathbb{Z}}\nBody.\n\\end{definition}",
+            "\\begin{definition}[Drift Probe]\n"
+            "\\notation{\\zzqdriftprobe}{\\mathbb{T}}\nBody.\n\\end{definition}",
             "pre-scan",
         )
     finally:

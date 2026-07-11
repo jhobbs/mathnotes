@@ -183,6 +183,7 @@ with `file:line`, failing the build loudly rather than rendering broken math.
 - `\dref[Custom text]{label}` - Custom link text
 - `\dembed{label}` - Transcludes the entire block content inline
 - `\pagelink{slug}` / `\pagelink[Custom text]{slug}` - Links to a page
+- `\notation{\integers}{\mathbb{Z}}` - Declared at the top of a block: defines a site-wide math macro whose every use in math links back to the declaring block (registry in `mathnotes/notation.py`; `latex/mathnotes-notation.sty` is generated and committed like a lockfile)
 
 ### Demo Integration
 ```latex
