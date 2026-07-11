@@ -174,6 +174,7 @@ def _latex_context():
             macrospec.MacroSpec("source", "{"),
             macrospec.MacroSpec("synonyms", "{"),
             macrospec.MacroSpec("tags", "{"),
+            macrospec.MacroSpec("notation", "{{"),
             macrospec.MacroSpec("href", "{{"),
             macrospec.MacroSpec("paragraph", "*[{"),
             macrospec.MacroSpec("subparagraph", "*[{"),
@@ -404,9 +405,14 @@ class _Parser:
             title = body_text(self._prose(args[0].nodelist))
         body = list(n.nodelist)
         extracted: Dict[str, str] = {}
+        notations: List[Tuple[str, str]] = []
         i = 0
         while i < len(body):
             child = body[i]
+            if isinstance(child, LatexMacroNode) and child.macroname == "notation":
+                notations.append(self._parse_notation(child))
+                del body[i]
+                continue
             if isinstance(child, LatexMacroNode) and child.macroname in ("label", "synonyms", "tags"):
                 name = child.macroname
                 if name in extracted:
@@ -420,6 +426,11 @@ class _Parser:
                 del body[i]
                 continue
             i += 1
+        seen_notation_names = set()
+        for notation_name, _ in notations:
+            if notation_name in seen_notation_names:
+                self._err(n, f"\\{notation_name} declared more than once in this block")
+            seen_notation_names.add(notation_name)
 
         children: List[MathBlock] = []
         pieces: List[str] = []
@@ -450,9 +461,34 @@ class _Parser:
         )
         blk.body_html = body_html
         blk.children = children
+        blk.notations = notations
         for c in children:
             c.parent = blk
         return blk
+
+    def _parse_notation(self, n) -> Tuple[str, str]:
+        """\\notation{\\name}{expansion}: name from a single macro node,
+        expansion verbatim. Must agree with the notation pre-scan — a
+        mismatch means notation.scan_file's regex and this parse have
+        drifted."""
+        name_group, exp_group = n.nodeargd.argnlist
+        inner = [c for c in name_group.nodelist
+                 if not (isinstance(c, LatexCharsNode) and not c.chars.strip())]
+        if len(inner) != 1 or not isinstance(inner[0], LatexMacroNode):
+            self._err(n, "\\notation's first argument must be a single macro like {\\integers}")
+        name = inner[0].macroname
+        expansion = exp_group.latex_verbatim().strip()
+        if expansion.startswith("{") and expansion.endswith("}"):
+            expansion = expansion[1:-1].strip()
+        registry = notation.get_registry()
+        if registry.get(name) != expansion:
+            self._err(
+                n,
+                f"\\notation{{\\{name}}} disagrees with the pre-scan registry "
+                f"(scan saw {registry.get(name)!r}) — notation.scan_file and the "
+                f"parser have drifted",
+            )
+        return name, expansion
 
     def _prose(self, nodes) -> str:
         out = []
@@ -565,7 +601,7 @@ class _Parser:
             return ""
         if name == "label":
             self._err(n, "\\label is only supported at the top of a block environment")
-        if name in ("synonyms", "tags"):
+        if name in ("synonyms", "tags", "notation"):
             self._err(n, f"\\{name} is only supported at the top of a block environment")
         if name == "source":
             self._err(n, "\\source is only supported at page level, outside block environments")

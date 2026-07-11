@@ -119,6 +119,7 @@ class MathBlock:
     synonyms: List[Tuple[str, str]] = field(default_factory=list)  # List of (synonym_title, synonym_label)
     auto_generated_synonyms: List[Tuple[str, str]] = field(default_factory=list)  # Auto-generated synonyms (not shown in UI)
     tags: List[str] = field(default_factory=list)  # List of tags for categorization
+    notations: List[Tuple[str, str]] = field(default_factory=list)  # (macro name, TeX expansion)
 
     def walk(self) -> Iterator["MathBlock"]:
         yield self
@@ -353,6 +354,13 @@ def render_block_html(block: MathBlock, content_html: str, url: str) -> str:
     if block.synonyms:
         names = ", ".join(html_lib.escape(s[0]) for s in block.synonyms)
         parts.append(f'<span class="block-synonyms">(also: {names})</span>')
+    if block.notations:
+        from .latex_processor import render_math  # local: latex_processor imports this module
+
+        rendered = ", ".join(
+            render_math(expansion, display=False) for _, expansion in block.notations
+        )
+        parts.append(f'<span class="block-notation">Notation: {rendered}</span>')
     if block.tags:
         tags_html = "".join(
             f'<span class="block-tag">{html_lib.escape(t)}</span>' for t in block.tags

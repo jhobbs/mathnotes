@@ -179,6 +179,27 @@ def test_render_block_html_title_goes_through_math_seam():
     assert "Bound on <math" in out and 'alttext="\\|x\\|"' in out
 
 
+def test_render_block_html_shows_notation():
+    from mathnotes import notation
+    notation.set_registry({"integers": "\\mathbb{Z}"})
+    try:
+        b = MathBlock(
+            block_type=MathBlockType.DEFINITION,
+            content="Body.",
+            title="Integers",
+            label="integers",
+        )
+        b.notations = [("integers", "\\mathbb{Z}")]
+        html_out = render_block_html(b, "<p>Body.</p>", "#integers")
+        assert 'class="block-notation"' in html_out, html_out
+        assert "Notation:" in html_out
+        # the annotation renders the raw expansion (never a self-link)
+        i = html_out.index('class="block-notation"')
+        assert "notation-ref--integers" not in html_out[i:i + 400], html_out[i:i + 400]
+    finally:
+        notation.reset_registry()
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     failed = 0

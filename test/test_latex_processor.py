@@ -361,6 +361,60 @@ def test_render_math_wraps_registered_notation():
         notation.reset_registry()
 
 
+def test_notation_declaration_parsed():
+    from mathnotes import notation
+    notation.set_registry({"integers": "\\mathbb{Z}"})
+    try:
+        doc = page(
+            "\\begin{definition}[Integers]\\label{integers}\n"
+            "\\notation{\\integers}{\\mathbb{Z}}\n"
+            "Body text.\n\\end{definition}"
+        )
+        blk = doc.top_blocks()[0]
+        assert blk.notations == [("integers", "\\mathbb{Z}")], blk.notations
+        assert "\\notation" not in blk.body_html
+        # declaration must not leave an empty paragraph behind
+        assert "<p></p>" not in blk.body_html
+    finally:
+        notation.reset_registry()
+
+
+def test_notation_outside_block_is_error():
+    from mathnotes import notation
+    notation.set_registry({"integers": "\\mathbb{Z}"})
+    try:
+        expect_error("\\notation{\\integers}{\\mathbb{Z}}", "\\notation")
+    finally:
+        notation.reset_registry()
+
+
+def test_notation_mismatch_with_registry_is_error():
+    from mathnotes import notation
+    notation.set_registry({})  # pre-scan saw nothing: parse/scan drift
+    try:
+        expect_error(
+            "\\begin{definition}[Integers]\n"
+            "\\notation{\\integers}{\\mathbb{Z}}\nBody.\n\\end{definition}",
+            "pre-scan",
+        )
+    finally:
+        notation.reset_registry()
+
+
+def test_duplicate_notation_name_in_block_is_error():
+    from mathnotes import notation
+    notation.set_registry({"integers": "\\mathbb{Z}"})
+    try:
+        expect_error(
+            "\\begin{definition}[Integers]\n"
+            "\\notation{\\integers}{\\mathbb{Z}}\n"
+            "\\notation{\\integers}{\\mathbb{Z}}\nBody.\n\\end{definition}",
+            "more than once",
+        )
+    finally:
+        notation.reset_registry()
+
+
 def test_render_math_without_registry_unchanged():
     from mathnotes import notation
     notation.set_registry({})
