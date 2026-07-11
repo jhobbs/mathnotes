@@ -58,3 +58,19 @@ mrow.mml-cancel {
     transparent 52.5%
   );
 }
+
+/* Notation references: math symbols that link to their defining block.
+   Only stamped refs (data-ref-url present) get the affordance — an
+   unstamped ref is a self-reference inside its own definition and renders
+   as plain math. text-decoration is unreliable on MathML internals;
+   border-bottom is honored (border properties are in MathML Core). Match
+   .block-reference's dotted-underline look (styles/main.css). */
+math .notation-ref[data-ref-url] {
+  cursor: pointer;
+  border-bottom: 1px dotted color-mix(in srgb, var(--color-text-secondary) 50%, transparent);
+  transition: border-bottom-color 0.2s ease;
+}
+
+math .notation-ref[data-ref-url]:hover {
+  border-bottom-color: var(--color-text-secondary);
+}

@@ -450,6 +450,15 @@ input, textarea, select {
   font-size: 0.95em;
 }
 
+/* Notation display in block headers (\notation declarations) */
+.block-notation {
+  margin-left: var(--space-sm);
+  font-weight: normal;
+  font-style: normal;
+  color: var(--color-text-muted);
+  font-size: 0.95em;
+}
+
 /* Tags display in block headers */
 .block-tags {
   margin-left: var(--space-sm);

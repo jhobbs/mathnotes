@@ -13,6 +13,11 @@ interface TooltipCache {
   [key: string]: TooltipData;
 }
 
+// Reference targets: prose links, plus notation refs — MathML elements
+// stamped with data-ref-label/data-ref-url by the build (anchors are
+// invalid inside <math>, so those need JS-driven navigation too)
+const REF_SELECTOR = 'a.block-reference, .notation-ref[data-ref-label]';
+
 class TooltipSystem {
   private tooltipElement: HTMLDivElement | null = null;
   private currentTarget: HTMLElement | null = null;
@@ -74,44 +79,57 @@ class TooltipSystem {
     document.body.appendChild(this.tooltipElement);
   }
 
+  private findRefTarget(target: EventTarget | null): HTMLElement | null {
+    if (!(target instanceof Element)) return null;
+    // MathML elements are not HTMLElements, but the positioning code only
+    // uses getBoundingClientRect (present on Element); the cast is safe
+    return target.closest(REF_SELECTOR) as HTMLElement | null;
+  }
+
   private attachEventListeners(): void {
     // Mouse events
     document.addEventListener('mouseover', (e) => {
       if (this.isTouchDevice) return;
-      
-      const target = e.target as HTMLElement;
-      const link = target.closest('a.block-reference') as HTMLAnchorElement;
-      
-      if (link && link.dataset.refLabel) {
+
+      const link = this.findRefTarget(e.target);
+
+      if (link && link.getAttribute('data-ref-label')) {
         this.handleMouseEnter(link);
       }
     });
 
     document.addEventListener('mouseout', (e) => {
       if (this.isTouchDevice) return;
-      
-      const target = e.target as HTMLElement;
-      const link = target.closest('a.block-reference') as HTMLAnchorElement;
-      
+
+      const link = this.findRefTarget(e.target);
+
       if (link && link === this.currentTarget) {
         this.handleMouseLeave();
       }
     });
 
+    // Notation refs live inside <math> where <a> is invalid; navigate via JS
+    document.addEventListener('click', (e) => {
+      if (!(e.target instanceof Element)) return;
+      const ref = e.target.closest('.notation-ref[data-ref-url]');
+      if (ref) {
+        const url = ref.getAttribute('data-ref-url');
+        if (url) window.location.href = url;
+      }
+    });
+
     // Touch events for mobile
     document.addEventListener('touchstart', (e) => {
-      const target = e.target as HTMLElement;
-      const link = target.closest('a.block-reference') as HTMLAnchorElement;
-      
-      if (link && link.dataset.refLabel) {
+      const link = this.findRefTarget(e.target);
+
+      if (link && link.getAttribute('data-ref-label')) {
         this.handleTouchStart(e, link);
       }
     });
 
     document.addEventListener('touchend', (e) => {
-      const target = e.target as HTMLElement;
-      const link = target.closest('a.block-reference') as HTMLAnchorElement;
-      
+      const link = this.findRefTarget(e.target);
+
       if (link && link === this.currentTarget) {
         this.handleTouchEnd(e);
       }
@@ -127,7 +145,7 @@ class TooltipSystem {
     // Close tooltip on any tap outside
     document.addEventListener('touchstart', (e) => {
       const target = e.target as HTMLElement;
-      if (!target.closest('.math-tooltip') && !target.closest('a.block-reference')) {
+      if (!target.closest('.math-tooltip') && !this.findRefTarget(target)) {
         this.hideTooltip();
       }
     });
@@ -146,7 +164,7 @@ class TooltipSystem {
     });
   }
 
-  private handleTouchStart(e: TouchEvent, link: HTMLAnchorElement): void {
+  private handleTouchStart(e: TouchEvent, link: HTMLElement): void {
     this.touchStartTime = Date.now();
     this.currentTarget = link;
     
@@ -177,7 +195,7 @@ class TooltipSystem {
     }
   }
 
-  private handleMouseEnter(link: HTMLAnchorElement): void {
+  private handleMouseEnter(link: HTMLElement): void {
     this.currentTarget = link;
     this.cancelHide();
     
@@ -218,11 +236,11 @@ class TooltipSystem {
     }
   }
 
-  private showTooltip(link: HTMLAnchorElement): void {
+  private showTooltip(link: HTMLElement): void {
     if (!this.tooltipElement) return;
-    
-    const label = link.dataset.refLabel;
-    
+
+    const label = link.getAttribute('data-ref-label');
+
     if (!label) return;
 
     const data = this.cache[label];
