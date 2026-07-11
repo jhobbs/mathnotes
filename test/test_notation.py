@@ -142,6 +142,23 @@ def test_set_registry_for_tests():
     reset_registry()
 
 
+def test_write_notation_sty():
+    from mathnotes.notation import write_notation_sty
+    with tempfile.TemporaryDirectory() as tmp:
+        out = os.path.join(tmp, "mathnotes-notation.sty")
+        set_registry({"integers": "\\mathbb{Z}", "rationals": "\\mathbb{Q}"})
+        try:
+            assert write_notation_sty(out) is True
+            text = open(out).read()
+            assert "\\ProvidesPackage{mathnotes-notation}" in text
+            assert "\\providecommand{\\integers}{\\mathbb{Z}}" in text
+            assert "\\providecommand{\\rationals}{\\mathbb{Q}}" in text
+            assert text.index("integers") < text.index("rationals")  # sorted
+            assert write_notation_sty(out) is False  # unchanged -> no rewrite
+        finally:
+            reset_registry()
+
+
 if __name__ == "__main__":
     test_scan_finds_declarations()
     print("PASS: scan finds declarations")
@@ -163,3 +180,5 @@ if __name__ == "__main__":
     print("PASS: registry empty without content dir")
     test_set_registry_for_tests()
     print("PASS: set_registry test helper")
+    test_write_notation_sty()
+    print("PASS: write_notation_sty")

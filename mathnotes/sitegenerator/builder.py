@@ -187,6 +187,16 @@ class SiteBuilder:
         # 1. Clean output directory
         self.clean_output_dir()
 
+        # Regenerate the pdflatex notation package (checked in like a
+        # lockfile; harmless no-op when nothing changed)
+        from mathnotes.notation import write_notation_sty
+
+        try:
+            if write_notation_sty():
+                logger.info("Regenerated latex/mathnotes-notation.sty")
+        except OSError as e:
+            logger.warning(f"Could not write latex/mathnotes-notation.sty: {e}")
+
         # 2. Set up global template context
         self.setup_global_context()
 

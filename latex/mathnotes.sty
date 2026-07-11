@@ -36,6 +36,15 @@
 % Clears the site's block-attachment anchor; does nothing in PDF
 \newcommand{\detach}{}
 
+% Notation declarations: \notation{\integers}{\mathbb{Z}} inside a block
+% declares the macro site-wide (the site cross-references every use back to
+% the declaring block). For PDF: define the macro if the generated package
+% below hasn't already, and typeset the annotation inline.
+\IfFileExists{mathnotes-notation.sty}{\RequirePackage{mathnotes-notation}}{}
+\NewDocumentCommand{\notation}{m m}{%
+  \providecommand{#1}{#2}\emph{(notation: \ensuremath{#1})} %
+}
+
 % Definition synonyms (site: index aliases + "(also: ...)" in the header)
 \newcommand{\synonyms}[1]{\emph{(also: #1)} }
 % Block tags (site: header chips; no-op in PDF)

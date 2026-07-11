@@ -46,6 +46,14 @@ Highlights:
 - `\synonyms{open covers, coverings}` on a definition (next to `\label`)
   = index aliases (alternate names that also resolve to the block).
   `\tags{topology}` works on any block.
+- `\notation{\integers}{\mathbb{Z}}` at the top of a block (next to
+  `\label`) declares a zero-argument math macro usable in math on any page;
+  on the site every use links back to the declaring block (with tooltip and
+  "Referenced by" entry), and the block header shows "Notation: ℤ".
+  Expansions may use MATH MACROS and MathJax builtins but not other
+  notation macros. For pdflatex, the build regenerates
+  `latex/mathnotes-notation.sty` (committed like a lockfile) so cross-file
+  uses compile standalone.
 - Theorem-like environments follow the amsthm sibling convention
   (`\begin{proof}` *after* `\end{theorem}`); the site re-nests them.
   `\detach` stops a following note/remark from attaching to the previous
