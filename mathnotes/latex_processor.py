@@ -31,8 +31,26 @@ from .structured_math import (
     math_to_dollar_text,
 )
 from .mathml import MathConversionError, get_converter
+from . import notation
 
 import html as html_lib
+
+
+def _wrap_notation_macros(latex: str) -> str:
+    """Rewrite registered notation macros (\\integers) as
+    \\class{notation-ref notation-ref--integers}{<expansion>} so the emitted
+    MathML carries an identifiable class for the resolver to stamp. The
+    worker never sees notation names — expansions substitute here."""
+    registry = notation.get_registry()
+    if not registry:
+        return latex
+    names = "|".join(sorted(registry, key=len, reverse=True))
+    pattern = re.compile(r"\\(" + names + r")(?![A-Za-z])")
+    return pattern.sub(
+        lambda m: "\\class{notation-ref notation-ref--%s}{%s}"
+        % (m.group(1), registry[m.group(1)]),
+        latex,
+    )
 
 
 def render_math(latex: str, display: bool) -> str:
@@ -43,7 +61,9 @@ def render_math(latex: str, display: bool) -> str:
     Raises MathConversionError on unconvertible TeX; the emitter turns that
     into a LatexDialectError with file:line.
     """
-    return get_converter().convert(latex.strip(), display)
+    stripped = latex.strip()
+    return get_converter().convert(
+        _wrap_notation_macros(stripped), display, alttext=stripped)
 
 
 class LatexDialectError(ValueError):

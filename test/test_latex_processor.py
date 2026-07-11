@@ -342,6 +342,35 @@ def test_unconvertible_math_is_dialect_error_with_line():
         os.remove(f.name)
 
 
+def test_render_math_wraps_registered_notation():
+    from mathnotes import notation
+    notation.set_registry({"integers": "\\mathbb{Z}"})
+    try:
+        mml = render_math("x \\in \\integers", display=False)
+        assert "notation-ref--integers" in mml, mml
+        assert 'alttext="x \\in \\integers"' in mml, mml
+        # word boundary: \integersquared must NOT match (and errors as undefined)
+        try:
+            render_math("\\integersquared", display=False)
+            assert False, "expected MathConversionError for \\integersquared"
+        except AssertionError:
+            raise
+        except Exception:
+            pass
+    finally:
+        notation.reset_registry()
+
+
+def test_render_math_without_registry_unchanged():
+    from mathnotes import notation
+    notation.set_registry({})
+    try:
+        mml = render_math("x^2", display=False)
+        assert "notation-ref" not in mml
+    finally:
+        notation.reset_registry()
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     failures = 0

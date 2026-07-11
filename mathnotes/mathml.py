@@ -55,9 +55,11 @@ class MathConverter:
             raise _WorkerDied("worker closed stdout")
         return json.loads(line)
 
-    def convert(self, latex: str, display: bool) -> str:
+    def convert(self, latex: str, display: bool, alttext: Optional[str] = None) -> str:
         self._next_id += 1
         payload = {"id": self._next_id, "latex": latex, "display": display}
+        if alttext is not None and alttext != latex:
+            payload["alttext"] = alttext
         try:
             resp = self._request_once(payload)
         except _WorkerDied:

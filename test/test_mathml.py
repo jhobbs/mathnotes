@@ -167,6 +167,18 @@ def test_get_converter_is_singleton():
     assert get_converter() is get_converter()
 
 
+def test_worker_class_macro_and_alttext_override():
+    r1, = worker_roundtrip([{
+        "id": 1,
+        "latex": "x \\in \\class{notation-ref notation-ref--integers}{\\mathbb{Z}}",
+        "alttext": "x \\in \\integers",
+        "display": False,
+    }])
+    assert "notation-ref--integers" in r1["mathml"], r1
+    assert 'alttext="x \\in \\integers"' in r1["mathml"], r1
+    assert "\\class" not in r1["mathml"].replace('alttext="', "")
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     failed = 0

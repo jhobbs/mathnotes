@@ -47,14 +47,15 @@ const styPath = path.join(
   path.dirname(fileURLToPath(import.meta.url)), '..', 'latex', 'mathnotes.sty');
 
 const MathJax = await mathjax.init({
-  loader: { load: ['input/tex', '[tex]/cancel'] },
+  loader: { load: ['input/tex', '[tex]/cancel', '[tex]/html'] },
   tex: {
     // input/tex bundles base+ams+newcommand+autoload. noundefined would
     // render undefined macros as red text instead of erroring; drop it so
-    // every bad expression is a loud build failure. cancel is eagerly loaded
-    // here because the synchronous tex2mml API cannot service autoload's async
-    // retry mechanism.
-    packages: { '[-]': ['noundefined'], '[+]': ['cancel'] },
+    // every bad expression is a loud build failure. cancel and html are
+    // eagerly loaded here because the synchronous tex2mml API cannot service
+    // autoload's async retry mechanism (html provides \class, which
+    // render_math uses to tag notation references).
+    packages: { '[-]': ['noundefined'], '[+]': ['cancel', 'html'] },
     macros: parseStyMacros(readFileSync(styPath, 'utf8')),
     formatError: (_jax, err) => { throw err; },
   },
@@ -111,7 +112,10 @@ rl.on('line', (line) => {
     // single line: keeps page HTML compact and paragraph splitting inert
     mml = mml.replace(/\n\s*/g, '');
     mml = toMathMLCore(mml);
-    mml = mml.replace('<math', `<math alttext="${escapeAttr(req.latex)}"`);
+    // alttext override: render_math sends the \class-wrapped TeX as latex
+    // but the author's original TeX as alttext (snippets and heading ids
+    // derive from alttext and must not see the wrapper)
+    mml = mml.replace('<math', `<math alttext="${escapeAttr(req.alttext ?? req.latex)}"`);
     resp = { id: req.id, mathml: mml };
   } catch (err) {
     resp = { id: req.id, error: String(err.message || err) };
