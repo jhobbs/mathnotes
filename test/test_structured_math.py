@@ -45,6 +45,36 @@ def test_finalize_definition_auto_label_and_plural():
     assert ("Open Covers", "open-covers") in d.auto_generated_synonyms
 
 
+def test_generate_singular():
+    assert MathBlock.generate_singular("Integers") == "Integer"
+    assert MathBlock.generate_singular("Real Numbers") == "Real Number"
+    assert MathBlock.generate_singular("reals") == "real"
+    assert MathBlock.generate_singular("identities") == "identity"
+    assert MathBlock.generate_singular("matrices") == "matrix"
+    assert MathBlock.generate_singular("Bases") == "Basis"
+    # not plural / invariant -> None
+    assert MathBlock.generate_singular("Series") is None
+    assert MathBlock.generate_singular("Open Cover") is None
+    assert MathBlock.generate_singular("class") is None
+    assert MathBlock.generate_singular("") is None
+
+
+def test_finalize_definition_singular_synonyms():
+    d = blk("definition", title="Integers")
+    finalize_blocks([d])
+    assert d.label == "integers"
+    assert ("Integer", "integer") in d.auto_generated_synonyms
+
+    d2 = blk("definition", title="Real Numbers", metadata={"synonyms": "reals"})
+    finalize_blocks([d2])
+    assert ("reals", "reals") in d2.synonyms
+    assert ("Real Number", "real-number") in d2.auto_generated_synonyms
+    assert ("real", "real") in d2.auto_generated_synonyms
+    # plural title generates no plural variant, and no duplicate labels
+    labels = [lbl for _, lbl in d2.auto_generated_synonyms]
+    assert len(labels) == len(set(labels)) and "real-numbers" not in labels
+
+
 def test_finalize_manual_synonyms_and_tags():
     d = blk("definition", title="Element", label="element",
             metadata={"synonyms": "member, point", "tags": "algebra, sets"})

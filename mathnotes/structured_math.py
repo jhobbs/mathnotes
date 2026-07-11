@@ -19,6 +19,45 @@ _MATH_EL_RE = re.compile(r"<math\b[^>]*>.*?</math>", re.DOTALL)
 _ALTTEXT_RE = re.compile(r'\balttext="([^"]*)"')
 _INLINE_MATH_RE = re.compile(r"\$([^$]+)\$")
 
+# Irregular noun plurals used by MathBlock.generate_plural and, reversed,
+# by MathBlock.generate_singular.
+_IRREGULAR_PLURALS = {
+    'matrix': 'matrices',
+    'vertex': 'vertices',
+    'simplex': 'simplices',
+    'vortex': 'vortices',
+    'helix': 'helices',
+    'index': 'indices',
+    'axis': 'axes',
+    'analysis': 'analyses',
+    'basis': 'bases',
+    'crisis': 'crises',
+    'hypothesis': 'hypotheses',
+    'parenthesis': 'parentheses',
+    'thesis': 'theses',
+    'formula': 'formulas',
+    'datum': 'data',
+    'criterion': 'criteria',
+    'phenomenon': 'phenomena',
+    'polyhedron': 'polyhedra',
+    'automaton': 'automata',
+    'radius': 'radii',
+    'locus': 'loci',
+    'focus': 'foci',
+    'nucleus': 'nuclei',
+    'syllabus': 'syllabi',
+    'corpus': 'corpora',
+    'genus': 'genera',
+    # Mathematical terms
+    'modulus': 'moduli',
+    'torus': 'tori',
+    'annulus': 'annuli',
+    'calculus': 'calculi',
+}
+_IRREGULAR_SINGULARS = {v: k for k, v in _IRREGULAR_PLURALS.items()}
+# Nouns that are their own plural; neither variant is generated.
+_INVARIANT_NOUNS = {'series', 'species'}
+
 
 def math_to_dollar_text(html_str: str) -> str:
     """Replace <math> elements with their $-delimited alttext TeX (display
@@ -195,47 +234,14 @@ class MathBlock:
         if word.endswith('s') and not word.endswith('ss'):
             return None
 
-        # Common irregular plurals
-        irregular_plurals = {
-            'matrix': 'matrices',
-            'vertex': 'vertices',
-            'simplex': 'simplices',
-            'vortex': 'vortices',
-            'helix': 'helices',
-            'index': 'indices',
-            'axis': 'axes',
-            'analysis': 'analyses',
-            'basis': 'bases',
-            'crisis': 'crises',
-            'hypothesis': 'hypotheses',
-            'parenthesis': 'parentheses',
-            'thesis': 'theses',
-            'formula': 'formulas',
-            'datum': 'data',
-            'criterion': 'criteria',
-            'phenomenon': 'phenomena',
-            'polyhedron': 'polyhedra',
-            'automaton': 'automata',
-            'radius': 'radii',
-            'locus': 'loci',
-            'focus': 'foci',
-            'nucleus': 'nuclei',
-            'syllabus': 'syllabi',
-            'corpus': 'corpora',
-            'genus': 'genera',
-            # Mathematical terms
-            'modulus': 'moduli',
-            'torus': 'tori',
-            'annulus': 'annuli',
-            'calculus': 'calculi',
-        }
-
         word_lower = word.lower()
-        if word_lower in irregular_plurals:
+        if word_lower in _INVARIANT_NOUNS:
+            return None
+        if word_lower in _IRREGULAR_PLURALS:
             # Preserve the original case
             if word[0].isupper():
-                return irregular_plurals[word_lower].capitalize()
-            return irregular_plurals[word_lower]
+                return _IRREGULAR_PLURALS[word_lower].capitalize()
+            return _IRREGULAR_PLURALS[word_lower]
 
         # Regular plural rules
         if word.endswith('y'):
@@ -248,6 +254,41 @@ class MathBlock:
             return word + 'es'
         else:
             return word + 's'
+
+    @staticmethod
+    def generate_singular(name: str) -> Optional[str]:
+        """Generate the singular form of a plural word or multi-word name
+        (only the last word is singularized: "Real Numbers" -> "Real Number").
+
+        Returns None if the name is not plural or is an invariant noun
+        like "series".
+        """
+        if not name:
+            return None
+
+        head, sep, word = name.rpartition(' ')
+        if sep:
+            singular = MathBlock.generate_singular(word)
+            return head + sep + singular if singular else None
+
+        word_lower = word.lower()
+        if word_lower in _INVARIANT_NOUNS:
+            return None
+        if word_lower in _IRREGULAR_SINGULARS:
+            # Preserve the original case
+            if word[0].isupper():
+                return _IRREGULAR_SINGULARS[word_lower].capitalize()
+            return _IRREGULAR_SINGULARS[word_lower]
+
+        # Not plural (basic heuristic, mirroring generate_plural)
+        if not word.endswith('s') or word.endswith('ss'):
+            return None
+
+        if word_lower.endswith('ies') and len(word) > 3:
+            return word[:-3] + 'y'
+        if word_lower.endswith(('sses', 'shes', 'ches', 'xes', 'zes', 'oes')):
+            return word[:-2]
+        return word[:-1]
 
 
 @dataclass
@@ -306,7 +347,19 @@ def finalize_blocks(top_blocks: List[MathBlock]) -> None:
 
 
 def _build_definition_synonyms(block: MathBlock) -> None:
-    manual_labels = set()
+    seen_labels = {block.label}
+    seen_labels.update(lbl for _, lbl in block.synonyms)
+    seen_labels.update(lbl for _, lbl in block.auto_generated_synonyms)
+
+    def add_auto(name: Optional[str]) -> None:
+        if not name:
+            return
+        label = MathBlock.normalize_label_from_title(name)
+        if label not in seen_labels:
+            seen_labels.add(label)
+            block.auto_generated_synonyms.append((name, label))
+
+    names = []
     if "synonyms" in block.metadata and not block.synonyms:
         for syn in block.metadata["synonyms"].split(","):
             syn = syn.strip().strip('"')
@@ -314,18 +367,13 @@ def _build_definition_synonyms(block: MathBlock) -> None:
                 continue
             syn_label = MathBlock.normalize_label_from_title(syn)
             block.synonyms.append((syn, syn_label))
-            manual_labels.add(syn_label)
-            plural = MathBlock.generate_plural(syn)
-            if plural:
-                plural_label = MathBlock.normalize_label_from_title(plural)
-                if plural_label not in manual_labels:
-                    block.auto_generated_synonyms.append((plural, plural_label))
+            seen_labels.add(syn_label)
+            names.append(syn)
     if block.title:
-        plural = MathBlock.generate_plural(block.title)
-        if plural:
-            plural_label = MathBlock.normalize_label_from_title(plural)
-            if plural_label not in manual_labels:
-                block.auto_generated_synonyms.append((plural, plural_label))
+        names.append(block.title)
+    for name in names:
+        add_auto(MathBlock.generate_plural(name))
+        add_auto(MathBlock.generate_singular(name))
 
 
 def render_block_html(block: MathBlock, content_html: str, url: str) -> str:

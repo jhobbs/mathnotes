@@ -30,7 +30,7 @@ Now,
 
 \[ \frac{3}{n+1} < \epsilon \iff 3 < \epsilon (n+1) \iff 3 < \epsilon n + \epsilon \iff -\epsilon n > \epsilon - 3 \iff n > \frac{3 - \epsilon}{\epsilon}. \]
 
-Therefore, if we pick a natural number $N \geq \frac{3 - \epsilon}{\epsilon}$, then $\|a_n - 3\| < \epsilon$ whenever $n \geq N$, and $\lim_{n \to \infty} \frac{3n}{n+1} = 3.$
+Therefore, if we pick a \@{natural-number} $N \geq \frac{3 - \epsilon}{\epsilon}$, then $\|a_n - 3\| < \epsilon$ whenever $n \geq N$, and $\lim_{n \to \infty} \frac{3n}{n+1} = 3.$
 
 We can simplify this proof a bit by recognizing that because $\frac{3}{n+1} < \frac{3}{n}$, if $\frac{3}{n} < \epsilon$, then $\frac{3}{n+1}$ is also less than $\epsilon$. $\frac{3}{n} < \epsilon$ when $n < \frac{3}{\epsilon},$ so we can choose $N$ as a natural number greater than $\frac{3}{\epsilon}.$
 
@@ -64,7 +64,7 @@ Limit of a Sum is the Sum of the Limits: If $a_n$ and $b_n$ are convergent seque
 
 Limit of a Difference is the Difference of the Limits: If $a_n$ and $b_n$ are convergent sequences, then $\lim_{n \to \infty}{(a_n - b_n)} = \lim_{n \to \infty}{a_n} - \lim_{n \to \infty}{b_n}$.
 
-Factoring a Constant Through the Limit: If $a_n$ is a convergent sequence and $c$ is a real number, then $\lim_{n \to \infty} ca_n = c \lim_{n \to \infty} a_n.$
+Factoring a Constant Through the Limit: If $a_n$ is a convergent sequence and $c$ is a \@{real-number}, then $\lim_{n \to \infty} ca_n = c \lim_{n \to \infty} a_n.$
 
 Limit of a Product is the Product of the Limits: If $a_n$ and $b_n$ are convergent sequences, then $\lim_{n \to \infty}{(a_n \cdot b_n)} = \lim_{n \to \infty}{a_n} \cdot \lim_{n \to \infty}{b_n}$.
 
@@ -73,12 +73,12 @@ Limit of a Quotient is the Quotient of the Limits: If $a_n$ and $b_n$ are conver
 Squeeze Theorem: If $a_n$ and $c_n$ are convergent sequences with the same liimt $L$, and $b_n$ is a sequence for which $a_n \leq b_n \leq c_n$ for all $n$, then $\lim_{n \to \infty}{b_n} = L$.
 
 \subsection{Bounded Sequences}
-A sequence is said to be a \textbf{bounded sequence} if there exists a \@[real number]{real-numbers} $M$ such that $\|a_n\| \leq M$ for all natural numbers $n$. In other words, $a_n$ is never further from $0$ than $\pm M$. If $a_n$ is less than or equal to some real number for all $n$, then $a_n$ is said to be \textbf{bounded above}, and if $a_n$ is greater than or equal to some real number for all $n$, it is said to be \textbf{bounded below.}
+A sequence is said to be a \textbf{bounded sequence} if there exists a \@{real-number} $M$ such that $\|a_n\| \leq M$ for all natural numbers $n$. In other words, $a_n$ is never further from $0$ than $\pm M$. If $a_n$ is less than or equal to some real number for all $n$, then $a_n$ is said to be \textbf{bounded above}, and if $a_n$ is greater than or equal to some real number for all $n$, it is said to be \textbf{bounded below.}
 
 \subsection{Divergent Sequences}
 In general, any sequence that does not converge is said to \textbf{diverge} and is a \textbf{divergent sequence}.
 
-The real sequence $a_n$ is said to \textbf{diverge to infinity} if for every real number $M$, there exists a natural number $N$ such that $a_n > M$ whenever $n \geq N.$ In this case, we write $\lim_{n->\infty}{a_n} = \infty$. This means that for any given real number, not matter how large, we can find an $n$ that makes $a_n > M$.  
+The real sequence $a_n$ is said to \textbf{diverge to infinity} if for every \@{real-number} $M$, there exists a \@{natural-number} $N$ such that $a_n > M$ whenever $n \geq N.$ In this case, we write $\lim_{n->\infty}{a_n} = \infty$. This means that for any given real number, not matter how large, we can find an $n$ that makes $a_n > M$.  
 
 The real sequence $a_n$ is said to \textbf{diverge to minus infinity} if for every real number $M$, there exists a natural number $N$ such that $a_n < M$ whenever $n \geq N.$ In this case, we write $\lim_{n->\infty}{a_n} = -\infty$. This means that for any given real number, not matter how small, we can find an $n$ that makes $a_n < M$. 
 

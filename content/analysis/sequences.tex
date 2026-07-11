@@ -13,7 +13,7 @@ Review the definition of a sequence:
 \dembed{sequence}
 
 \begin{definition}[Converge]
-A sequence $\{p_n\}$ in a \@{metric-space} $X$ is said to \textbf{converge} if there is a point $p \in X$ with the following property: For every $\epsilon > 0,$ there is an integer $N$ such that $n \geq N$ implies that $d(p_n, p) < \epsilon.$
+A sequence $\{p_n\}$ in a \@{metric-space} $X$ is said to \textbf{converge} if there is a point $p \in X$ with the following property: For every $\epsilon > 0,$ there is an \@{integer} $N$ such that $n \geq N$ implies that $d(p_n, p) < \epsilon.$
 \end{definition}
 
 \begin{definition}[Convergent]
@@ -51,7 +51,7 @@ $\{p_n\}$ converges to $p \in X$ if and only if every neighborhood of $p$ contai
 \end{theorem}
 
 \begin{proof}
-Suppose $\{p_n\}$ \@{converges} to $p \in X.$ Let $\epsilon > 0.$ For some integer $N,$ $d(p, p_n) < \epsilon$ when $n > N.$ Therefore, $p_n \in B_\epsilon(p)$ for all but the finitely many $p_n$ where $n \leq N.$ 
+Suppose $\{p_n\}$ \@{converges} to $p \in X.$ Let $\epsilon > 0.$ For some \@{integer} $N,$ $d(p, p_n) < \epsilon$ when $n > N.$ Therefore, $p_n \in B_\epsilon(p)$ for all but the finitely many $p_n$ where $n \leq N.$ 
 
 Conversely, suppose every \@{neighborhood} of $p$ contains all but finitely many $p_n,$ i.e., for all but $N$ elements of $\{p_n\}.$ Let $\epsilon > 0.$ Then, $p_n \in B_\epsilon(p)$ whenever $n \geq N,$ therefore, $d(p, p_n) < \epsilon.$
 \end{proof}
@@ -69,7 +69,7 @@ If $\{p_n\}$ \@{converges}, then $\{p_n\}$ is \@{bounded-sequence}.
 \end{theorem}
 
 \begin{proof}
-Let $\epsilon > 0.$ \@[Only finitely many points in $\{p_n\}$ lie outside of $B_\epsilon(p)$]{sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. That is, for some integer $N,$ only the points $p_n$ where $n \leq N$ lie outside of $B_\epsilon(p).$ Let $\delta = \max\{\epsilon, d(p, p_1), d(p, p_2), \dots, d(p, p_n)\}, n = 1, 2, \dots, N.$ Then, $d(p, p_n) < \delta$ for all $n = 1, 2, 3, \dots.$
+Let $\epsilon > 0.$ \@[Only finitely many points in $\{p_n\}$ lie outside of $B_\epsilon(p)$]{sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. That is, for some \@{integer} $N,$ only the points $p_n$ where $n \leq N$ lie outside of $B_\epsilon(p).$ Let $\delta = \max\{\epsilon, d(p, p_1), d(p, p_2), \dots, d(p, p_n)\}, n = 1, 2, \dots, N.$ Then, $d(p, p_n) < \delta$ for all $n = 1, 2, 3, \dots.$
 \end{proof}
 
 \begin{theorem}\label{limit-point-implies-convergent-sequence}
@@ -147,7 +147,7 @@ For (e), pick $m$ such that when $n \geq m, |s_n - s| < \frac{1}{2}|s|,$ so we h
                            & \iff \frac{1}{2 |s_n|}|s| < 1.
 \end{aligned} \]
 
-Now, let $\epsilon > 0.$ For some integer $N > m,$ when $n \geq M,$ we have that
+Now, let $\epsilon > 0.$ For some \@{integer} $N > m,$ when $n \geq M,$ we have that
 
 \[ |s_n - s | < \frac{1}{2}|s|^2 \epsilon. \]
 
@@ -181,7 +181,7 @@ For (a), assume $\vec x_{n} \to \vec x.$ Then, from the definition of the \@{nor
 
 that is, the distance from $\alpha_{k,n}$ to $\alpha_{n}$ is always less than or equal to the distance from $\vec{x}_n$ to $\vec{x}.$ Therefore, for $\epsilon > 0,$ $|\vec{x}_n - \vec{x}| < \epsilon \implies |\alpha_{j,n} - \alpha_j| < \epsilon,$ and we can pick $n$ to make this true for as small of $\epsilon$ as we'd like. Therefore, $\lim_{n \to \infty} \alpha_{j, n} = \alpha_j.$
 
-Conversely, assume $\lim_{n \to \infty} \alpha_{j, n} = \alpha_j.$ Let $\epsilon > 0.$ For some integer $N,$ when $n \geq N$ we have
+Conversely, assume $\lim_{n \to \infty} \alpha_{j, n} = \alpha_j.$ Let $\epsilon > 0.$ For some \@{integer} $N,$ when $n \geq N$ we have
 
 \[ |\alpha_{j,n} - \alpha_{j}| \leq \frac{\epsilon}{\sqrt{k}}, \quad (1 \leq j \leq k). \]
 
@@ -264,7 +264,7 @@ The \@[theorem above]{subsequential-limits-of-a-metric-space-form-a-closed-set} 
 \section{Cauchy Sequences}
 
 \begin{definition}[Cauchy Sequence]\synonyms{Cauchy}
-A \@{sequence} $\{p_n\}$ in a \@{metric-space} $X$ is said to be a \textbf{Cauchy sequence} if for every $\epsilon > 0$ there is an integer $N$ such that $d(p_n, p_m) < \epsilon$ is $n \geq N$ and $m \geq N.$
+A \@{sequence} $\{p_n\}$ in a \@{metric-space} $X$ is said to be a \textbf{Cauchy sequence} if for every $\epsilon > 0$ there is an \@{integer} $N$ such that $d(p_n, p_m) < \epsilon$ is $n \geq N$ and $m \geq N.$
 \end{definition}
 
 \begin{definition}[Diameter]
@@ -278,7 +278,7 @@ if $\{p_n\}$ is a \@{sequence} in $X$ and if $E_N$ consists of the \@{points} $p
 \end{theorem}
 
 \begin{proof}
-Suppose $\{p_n\}$ is a \@{Cauchy-sequence}. Then, let $\epsilon > 0.$ For some integer $N,$ $d(p_n, p_m) < \epsilon$ when $n, m \geq N.$ Therefore, $\diam{E_N} < \epsilon.$ Since $\epsilon$ was arbitrary, we can see that the sequence $\{\diam{E_N}\}$ converges to $0.$
+Suppose $\{p_n\}$ is a \@{Cauchy-sequence}. Then, let $\epsilon > 0.$ For some \@{integer} $N,$ $d(p_n, p_m) < \epsilon$ when $n, m \geq N.$ Therefore, $\diam{E_N} < \epsilon.$ Since $\epsilon$ was arbitrary, we can see that the sequence $\{\diam{E_N}\}$ converges to $0.$
 
 Conversely, suppose $lim_{N \to \infty} \diam{E_N} = 0.$ Then, \@[every neighborhood of $0$ contains $\{\diam{E_N}\}$ for all but finitely many N]{sequence-converges-iff-neighborhood-contains-all-but-finitely-many-points}. Let $\epsilon > 0.$ Then, pick $N$ such that $\diam{E_n} < \epsilon.$ Letting $m, n \geq N,$ we have that $d(p_m, p_n) \leq \diam{E_n} < \epsilon.$
 \end{proof}
@@ -344,7 +344,7 @@ Let $\{p_n\}$ be a \@{cauchy-sequence} in the \@{compact} \@{metric-space} $X.$ 
 
 by \@[two]{limit-of-diameter-of-remaining-points-in-cauchy-sequence-is-zero} \@[theorems]{diameter-of-set-equals-diameter-of-closure} above. Each $\closure{E_n}$ is a \@{closed} \@{subset} of the \@{compact} space $X,$ and \@[is thus compact]{closed-subsets-of-compact-sets-are-compact}. Also, $E_{N+1} \subset E_{N},$ which \@[implies that $\closure{E_{N+1}} \subset \closure{E_{N}}$]{set-is-its-closure-iff-it-is-closed}. Now, we have that \@[there is a unique $p \in X$ which lies in every $\closure{E_n}.$]{nested-sequence-of-compact-sets-with-lim-diam-zero-has-singleton-intersection}
 
-Let $\epsilon > 0.$ Since $\lim_{N \to \infty}{\diam{\closure{E_N}}}= 0,$ there is an integer $N_0$ such that $\diam{\closure{E_n}} < \epsilon$ if $N \geq N_0.$ Since $p \in \closure{E_n},$ we have that $d(p, q) < \epsilon$ for every $q \in \closure{E_N}$ and thus for every $q \in E_n.$ That is, $d(p, p_n) < \epsilon$ if $n \geq N_0,$ so $\{p_n\}$ converges to $p.$
+Let $\epsilon > 0.$ Since $\lim_{N \to \infty}{\diam{\closure{E_N}}}= 0,$ there is an \@{integer} $N_0$ such that $\diam{\closure{E_n}} < \epsilon$ if $N \geq N_0.$ Since $p \in \closure{E_n},$ we have that $d(p, q) < \epsilon$ for every $q \in \closure{E_N}$ and thus for every $q \in E_n.$ That is, $d(p, p_n) < \epsilon$ if $n \geq N_0,$ so $\{p_n\}$ converges to $p.$
 \end{proof}
 
 \begin{theorem}\label{euclidean-spaces-are-complete}
