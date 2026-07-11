@@ -6,8 +6,8 @@
 
 \begin{document}
 
-\begin{definition}[Entropy of a Source]
-Consider a discrete source with $i$ finite number of states, where in state $i$ there is probability $p_i(j)$ of producing symbol $j.$ Then, each state $i$ will have an entropy $H_i,$ and the \textbf{entropy of the source} will be defined as the average of these $H_i$ weighted by the probability of the occurrence of each state ($P_i$):
+\begin{definition}[Entropy Rate]
+Consider a discrete source with $i$ finite number of states, where in state $i$ there is probability $p_i(j)$ of producing symbol $j.$ Then, each state $i$ will have an entropy $H_i,$ and the \textbf{entropy rate} of the source will be defined as the average of these $H_i$ weighted by the probability of the occurrence of each state ($P_i$):
 
 \bal
 H & = \sum_{i} P_i H_i \\
@@ -43,14 +43,14 @@ so
 H & \approx \frac{\log{1/p}}{N}.
 \eal
 
-so \@{entropy} is approximately the log of the reciprocal probability of a long sequence divided by the number of symbols in the sequence. The theorem below states this more formally.
+so \@{entropy} is approximately the log of the reciprocal probability of a long \@{sequence} divided by the number of symbols in the sequence. The theorem below states this more formally.
 
 \begin{theorem}[Weak Asymptotic Equipartition Property]
 	Start with a source alphabet with $n$ symbols $a_1, \dots, a_n,$ emitted \@{i.i.d.} with probabilities $p_1, \dots, p_n$ (so $p_i = \Pr(a_i)).$ Its \@{entropy} is, by definition,
 
 \[ H = - \sum_{i=1}^{n} p_i \log{p_i}. \]
 
-A message is a sequence $S = (x_1, \dots, x_N)$ of length $N,$ each $x_j \in \{a_1, \dots, a_n\}.$ By independence,
+A message is a \@{sequence} $S = (x_1, \dots, x_N)$ of length $N,$ each $x_j \in \{a_1, \dots, a_n\}.$ By independence,
 
 \[ p_S = \prod_{j=1}^N \Pr(x_j) \]
 
@@ -87,7 +87,7 @@ If we let $c_i = \#\{j : x_j = a_i\}$ be the count of symbol $a_i$ in $S,$ so $\
 
 $c_i$ is the only random thing in $p_S$ - it doesn't consider position of symbols, just the total count of each symbol (random) and the probability of that symbol being emitted on any given turn (fixed).
 
-Taking advantage of our symbols being emitted \@{i.i.d.}, we can convert our expression about the @surprisal@ of the sequence to an equivalent expression about the surprisal of individual symbols being emitted:
+	Taking advantage of our symbols being emitted \@{i.i.d.}, we can convert our expression about the \@{surprisal} of the sequence to an equivalent expression about the surprisal of individual symbols being emitted:
 
 \bal
 \frac{1}{N} \log{\frac{1}{p_S}} & =  \frac{1}{N} \log{\frac{1}{\prod_{i = 1}^n p_i^{c_i}}} \\
@@ -96,7 +96,7 @@ Taking advantage of our symbols being emitted \@{i.i.d.}, we can convert our exp
                                 & =  - \sum_{i=1}^n \frac{c_i}{N} \log{p_i}.
 \eal
 
-This final term is very similar to $H = - \sum_{i=1}^{n} p_i \log{p_i};$ we just need to show that $\frac{c_i}{N} \to p_i$ as $N \to \infty.$ The expected value of $c_i$ for $N$ draws is the expected count of $a_i$ in $N$ draws, and is
+This final term is very similar to $H = - \sum_{i=1}^{n} p_i \log{p_i};$ we just need to show that $\frac{c_i}{N} \to p_i$ as $N \to \infty.$ The \@{expected-value} of $c_i$ for $N$ draws is the expected count of $a_i$ in $N$ draws, and is
 
 \[ \mathbb{E}(c_i) = N p_i. \]
 
@@ -122,29 +122,27 @@ This is just saying that the empirical frequencies in sequences of symbols gener
 \end{theorem}
 
 \begin{theorem}[Strong Asymptotic Equipartition Property (Shannon--McMillan--Breiman)]
-    Start with a source of $n$ states $a_1, \dots, a_n,$ emitted by a \@{stationary}
-	\@{ergodic} \@{Markov-chain} with transition probabilities
+Start with a source of $n$ states $a_1, \dots, a_n,$ emitted by a \@{stationary} \@{ergodic} \@{Markov-chain} with transition probabilities
     \[ p_{ik} = \Pr(X_{t+1} = a_k \mid X_t = a_i), \qquad \textstyle\sum_{k=1}^n p_{ik} = 1, \]
-    and \@{stationary distribution} $P = (P_1, \dots, P_n)$ --- the left eigenvector
-    solving $P = PT$ for the transition matrix $T = (p_{ik})$ (eigenvalue $1,$
-    normalized so $\sum_i P_i = 1$). Its \@{entropy rate} is, by definition,
+and \@{stationary distribution} $P = (P_1, \dots, P_n)$. Its \@{entropy rate} is, by definition,
     \[ H = -\sum_{i=1}^n \sum_{k=1}^n P_i\, p_{ik} \log{p_{ik}}. \]
-    A message is a sequence $S = (x_1, \dots, x_N)$ of length $N,$ each
-    $x_t \in \{a_1, \dots, a_n\}$ --- a path through the network --- with probability
+A message is a \@{sequence} $S = (x_1, \dots, x_N)$ of length $N,$ each $x_t \in \{a_1, \dots, a_n\}$. Such a message is a path through the network with probability
     \[ p_S = P_{x_1} \prod_{t=1}^{N-1} p_{x_t\, x_{t+1}}. \]
-    Let $\epsilon, \delta > 0.$ Then there exists $N_0$ such that for all $N \geq N_0$
-    the length-$N$ sequences split into two classes:
+Let $\epsilon, \delta > 0.$ Then there exists $N_0$ such that for all $N \geq N_0$ the length-$N$ sequences split into two classes:
     \begin{enumerate}
         \item The typical set,
               $A_\delta^{(N)} = \left\{ S : \left| \dfrac{1}{N} \log{\dfrac{1}{p_S}} - H \right| \leq \delta \right\}.$
         \item The atypical set, $\overline{A_\delta^{(N)}},$ with total probability
               $\Pr\!\left(\overline{A_\delta^{(N)}}\right) < \epsilon.$
     \end{enumerate}
-    Moreover --- and this is the strengthening past convergence in probability --- the
-    convergence holds \@{almost surely}:
+Moreover the convergence holds \@{almost surely}:
     \[ \Pr\!\left( \lim_{N \to \infty} \frac{1}{N} \log{\frac{1}{p_S}} = H \right) = 1, \]
-    so with probability $1$ a drawn sequence is typical for all sufficiently large $N$
-    --- a statement about whole trajectories, not merely each $N$ separately.
+so with probability $1$ a drawn sequence is typical for all sufficiently large $N$
+\begin{proof}
+ --- the left eigenvector
+    solving $P = PT$ for the \@{transition-matrix} $T = (p_{ik})$ (eigenvalue $1,$
+    normalized so $\sum_i P_i = 1$).
+\end{proof}
 \end{theorem}
 
 
@@ -161,7 +159,7 @@ The unit of $C$ is bits (information) per second, and the unit of $H$ is bits (i
 
 so the unit of $C/H$ is symbols per second.
 
-The best transmitter is one which codes the message in such a way that maximizes the signal entropy and makes it equal to the capacity of the channel, which allows reaching the maximum rate $C/H$ for the transmission of symbols.
+The best transmitter is one which codes the message in such a way that maximizes the signal \@{entropy} and makes it equal to the \@{capacity} of the channel, which allows reaching the maximum rate $C/H$ for the transmission of symbols.
 \end{note}
 
 \end{document}
