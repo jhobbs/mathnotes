@@ -21,8 +21,11 @@ except NameError:
     pass  # running via stdin; cwd must be the repo/app root
 
 from mathnotes.content_discovery import ContentDiscovery
-from mathnotes.block_index import BlockIndex
-from mathnotes.page_renderer import PageRenderer, clear_page_cache
+from latexblocks.block_index import BlockIndex
+from latexblocks.page_renderer import PageRenderer, clear_page_cache
+
+from mathnotes.config import configure_latexblocks
+configure_latexblocks()
 
 REFERENCING = r"""\title{Referencing Page}
 
@@ -173,8 +176,8 @@ We have $x \in \integers$ here.
 
 
 def test_notation_change_invalidates_all_pages():
-    from mathnotes import notation
-    from mathnotes.content_loader import clear_content_cache
+    from latexblocks import notation
+    from latexblocks.content_loader import clear_content_cache
 
     old_cwd = os.getcwd()
     with tempfile.TemporaryDirectory() as tmp:

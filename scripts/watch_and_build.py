@@ -66,7 +66,10 @@ STARTUP_MTIMES = get_mtimes(CONTENT_DIRS)
 
 from mathnotes.sitegenerator.builder import SiteBuilder
 from mathnotes.navigation import clear_navigation_cache
-from mathnotes.page_renderer import clear_page_cache
+from latexblocks.page_renderer import clear_page_cache
+
+from mathnotes.config import configure_latexblocks
+configure_latexblocks()
 
 # Configure logging with microsecond precision to debug duplicate output
 handler = logging.StreamHandler(sys.stdout)
@@ -103,7 +106,7 @@ def build_site(output_dir: str, builder: SiteBuilder = None) -> SiteBuilder:
     # below parses pages before block_index's own refresh runs, so a macro
     # newly declared in one file but used in an alphabetically-earlier file
     # would fail the build against the stale in-memory registry.
-    from mathnotes import notation
+    from latexblocks import notation
 
     notation.refresh_registry()
     if builder is None:

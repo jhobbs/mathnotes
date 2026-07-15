@@ -21,7 +21,10 @@ try:
 except NameError:
     pass  # running via stdin; cwd must be the repo/app root
 
-from mathnotes.structured_math import MathBlock, MathBlockType, body_text
+from latexblocks.structured_math import MathBlock, MathBlockType, body_text
+
+from mathnotes.config import configure_latexblocks
+configure_latexblocks()
 
 DEFINING = r"""\title{Defining Page}
 
@@ -76,9 +79,9 @@ def test_content_snippet_flattens_custom_and_typed_references():
 
 def test_rendered_link_text_has_no_raw_references():
     from mathnotes.content_discovery import ContentDiscovery
-    from mathnotes.block_index import BlockIndex
-    from mathnotes.page_renderer import PageRenderer, clear_page_cache
-    from mathnotes.content_loader import clear_content_cache
+    from latexblocks.block_index import BlockIndex
+    from latexblocks.page_renderer import PageRenderer, clear_page_cache
+    from latexblocks.content_loader import clear_content_cache
 
     old_cwd = os.getcwd()
     with tempfile.TemporaryDirectory() as tmp:

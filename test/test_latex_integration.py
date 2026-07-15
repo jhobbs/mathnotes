@@ -14,6 +14,9 @@ try:
 except NameError:
     sys.path.insert(0, "/app")
 
+from mathnotes.config import configure_latexblocks
+configure_latexblocks()
+
 PAGE_A = r"""\title{Page A}
 \begin{definition}[Gizmo]\label{gizmo}\synonyms{gadget}
 A gizmo is a thing.
@@ -55,9 +58,9 @@ def in_temp_site(fn):
 
 def fresh_pipeline():
     from mathnotes.content_discovery import ContentDiscovery
-    from mathnotes.block_index import BlockIndex
-    from mathnotes.page_renderer import PageRenderer, clear_page_cache
-    from mathnotes.content_loader import clear_content_cache
+    from latexblocks.block_index import BlockIndex
+    from latexblocks.page_renderer import PageRenderer, clear_page_cache
+    from latexblocks.content_loader import clear_content_cache
     from mathnotes.navigation import clear_navigation_cache
 
     clear_page_cache()
@@ -159,7 +162,7 @@ def test_url_collision_errors():
         with open("content/test/dup-b.tex", "w") as f:
             f.write("\\title{Dup Two}\n\\slug{dup}\nx\n")
         from mathnotes.content_discovery import ContentDiscovery
-        from mathnotes.content_loader import clear_content_cache
+        from latexblocks.content_loader import clear_content_cache
         clear_content_cache()
         try:
             ContentDiscovery().build_url_mappings()

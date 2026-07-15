@@ -4,7 +4,7 @@ File system utilities for the Mathnotes application.
 
 from pathlib import Path
 from typing import List, Dict
-from .content_loader import load_content_file
+from latexblocks.content_loader import load_content_file
 
 
 def get_all_content_for_section(section_path: str, file_to_canonical: Dict[str, str]) -> List[Dict]:

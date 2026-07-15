@@ -35,15 +35,12 @@ Mathnotes is a static site generator that renders mathematics notes with interac
 ### Running Tests
 Python tests are standalone assert scripts (no pytest in the container); run them via stdin into the dev builder container:
 ```bash
-docker exec -i mathnotes-static-builder python3 - < test/test_structured_math.py
-docker exec -i mathnotes-static-builder python3 - < test/test_latex_processor.py
-docker exec -i mathnotes-static-builder python3 - < test/test_mathml.py
-docker exec -i mathnotes-static-builder python3 - < test/test_ref_resolver.py
 docker exec -i mathnotes-static-builder python3 - < test/test_latex_integration.py
 docker exec -i mathnotes-static-builder python3 - < test/test_reference_snippets.py
 docker exec -i -w /app mathnotes-static-builder python3 - < test/test_cache_invalidation.py
 docker exec -i mathnotes-static-builder python3 - < test/test_watcher.py
 ```
+The core LaTeX/block/reference pipeline lives in the latexblocks library (github.com/jhobbs/latexblocks); its tests run there via pytest.
 
 ### Development Server
 ```bash
@@ -118,25 +115,34 @@ When moving/renaming a content file: `git mv` it, then update any `\pagelink{...
 5. **Build Script** (`scripts/build_static_simple.py`): Minimal entry point
 
 #### Processing Components
+
+Items 2-6 are the core parse/index/render pipeline and now live in the
+**latexblocks** library (github.com/jhobbs/latexblocks), imported as
+`latexblocks.*` rather than `mathnotes.*`. The site wires the library to this
+repo's layout (url prefix, content dir, sty paths) through
+`mathnotes/config.py:configure_latexblocks()`, which every entry point (build
+script, watcher, `SiteBuilder.__init__`, and the remaining tests) calls before
+any parsing. Module names below are the library modules.
+
 1. **URL Resolution** (`url_mapper.py`): Maps slugs to file paths
-2. **LaTeX Parsing** (`latex_processor.py`): parses the `.tex` dialect directly
+2. **LaTeX Parsing** (`latexblocks/latex_processor.py`): parses the `.tex` dialect directly
    with pylatexenc into a typed `PageDoc` (prose HTML plus `MathBlock` trees);
    `content_loader.py` is the single `(metadata, PageDoc)` entry point, cached by mtime
-3. **Document Model** (`structured_math.py`):
+3. **Document Model** (`latexblocks/structured_math.py`):
    - Defines the `MathBlock`/`PageDoc` types
    - Assigns auto-labels, definition synonyms/plurals, and tags (`finalize_blocks`)
    - Renders a block's final card HTML (`render_block_html`)
-4. **Block Index** (`block_index.py`):
+4. **Block Index** (`latexblocks/block_index.py`):
    - Scans all content files and builds the global label index
    - Builds the reverse-reference index (`reverse_index.py`) for "Referenced by" panels
    - Pre-renders every block's HTML once cross-file references are known
-5. **Reference Resolution** (`ref_resolver.py`): resolves the placeholder
+5. **Reference Resolution** (`latexblocks/ref_resolver.py`): resolves the placeholder
    elements `latex_processor.py` emits (`data-dref`, `data-pagelink`,
    `data-dembed`) against the block index and URL mapper
-6. **Page Assembly** (`page_renderer.py`): combines a page's prose segments and
+6. **Page Assembly** (`latexblocks/page_renderer.py`): combines a page's prose segments and
    pre-rendered blocks, resolves remaining reference placeholders, and produces
    the final page HTML
-7. **Security** (`security.py`): Embeds CSP and security headers in HTML
+7. **Security**: CSP and security headers are applied at serve time by `nginx.conf` (and the Flask dev server in `server/app.py`)
 8. **Rendering**: Jinja2 templates generate static HTML with native MathML
 9. **Output**: Complete static site ready for nginx serving
 

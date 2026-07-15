@@ -99,7 +99,7 @@ def build_bibliography(url_mapper) -> list[dict[str, Any]]:
     Returns:
         Bibliography entries sorted by title.
     """
-    from .content_loader import load_content_file
+    from latexblocks.content_loader import load_content_file
 
     entries: dict[tuple[str, str], dict[str, Any]] = {}
 

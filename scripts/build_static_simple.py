@@ -30,7 +30,10 @@ def main():
     
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
-    
+
+    from mathnotes.config import configure_latexblocks
+    configure_latexblocks()
+
     # Build the site
     builder = SiteBuilder(output_dir=args.output)
     

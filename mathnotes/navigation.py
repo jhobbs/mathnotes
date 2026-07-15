@@ -6,7 +6,7 @@ Provides a tree-style navigation structure like Windows Explorer.
 
 from pathlib import Path
 from typing import Dict, List, Any
-from .content_loader import load_content_file
+from latexblocks.content_loader import load_content_file
 
 # Module-level caches
 _title_cache: Dict[str, str] = {}

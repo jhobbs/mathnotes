@@ -10,8 +10,8 @@ from .context import build_global_context
 from .pages import PageRegistry
 
 from mathnotes.content_discovery import ContentDiscovery
-from mathnotes.page_renderer import PageRenderer
-from mathnotes.block_index import BlockIndex
+from latexblocks.page_renderer import PageRenderer
+from latexblocks.block_index import BlockIndex
 from mathnotes.config import BASE_URL
 
 logger = logging.getLogger(__name__)
@@ -26,6 +26,9 @@ class SiteBuilder:
         Args:
             output_dir: Directory for output files
         """
+        from mathnotes.config import configure_latexblocks
+        configure_latexblocks()
+
         self.output_dir = Path(output_dir)
         self.base_url = BASE_URL
 
@@ -103,7 +106,7 @@ class SiteBuilder:
         The global tooltip JSON covers listing pages (definitions/theorems)
         that reference blocks site-wide; content pages shadow it with their
         own much smaller per-page JSON (see pages.py)."""
-        from mathnotes.ref_resolver import tooltip_entry
+        from latexblocks.ref_resolver import tooltip_entry
 
         tooltip_data = {
             label: tooltip_entry(ref)
@@ -189,7 +192,7 @@ class SiteBuilder:
 
         # Regenerate the pdflatex notation package (checked in like a
         # lockfile; harmless no-op when nothing changed)
-        from mathnotes.notation import write_notation_sty
+        from latexblocks.notation import write_notation_sty
 
         try:
             if write_notation_sty():

@@ -5,3 +5,4 @@
 Jinja2
 PyYAML
 pylatexenc
+latexblocks @ https://github.com/jhobbs/latexblocks/archive/refs/tags/v0.1.0.tar.gz

@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Dict
 from .config import CONTENT_DIRS
-from .content_loader import load_content_file
+from latexblocks.content_loader import load_content_file
 
 
 class ContentDiscovery:

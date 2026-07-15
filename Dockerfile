@@ -35,7 +35,7 @@ FROM python:3.14-slim AS builder
 
 WORKDIR /app
 
-# Node runs the build-time MathML worker (scripts/tex2mml-worker.mjs)
+# Node runs the build-time MathML worker packaged in the latexblocks library
 RUN apt-get update && \
     apt-get install -y curl && \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
@@ -53,9 +53,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY mathnotes/ ./mathnotes/
 COPY content/ ./content/
 COPY templates/ ./templates/
-COPY scripts/build_static_simple.py scripts/tex2mml-worker.mjs ./scripts/
+COPY scripts/build_static_simple.py ./scripts/
 COPY latex/ ./latex/
-# The MathML worker needs only the mathjax package (it has no runtime deps)
+# latexblocks ships the build-time MathML worker; it resolves the mathjax
+# package from the node_modules_dir configure_latexblocks() points at (the
+# repo root, /app), so that package still needs to land here.
 COPY --from=esbuild-builder /app/node_modules/mathjax ./node_modules/mathjax
 COPY favicon.ico robots.txt ./
 
