@@ -16,6 +16,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Directories to watch for content changes
 CONTENT_DIRS = ['content', 'mathnotes', 'templates', 'latex']
+if os.path.isdir('/latexblocks/src/latexblocks'):
+    CONTENT_DIRS.append('/latexblocks/src/latexblocks')
 # Signal file that shell script touches after JS/CSS rebuild
 JS_REBUILD_SIGNAL = '/tmp/js_rebuild_complete'
 # Timestamp file for browser auto-reload (placed outside website dir so it survives clean)

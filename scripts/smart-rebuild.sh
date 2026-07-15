@@ -66,6 +66,13 @@ mkdir -p /version
 git describe --always --tags > /version/version.txt || echo "unknown" > /version/version.txt
 mkdir -p /app/static-build
 
+# Live library development: a mounted latexblocks checkout shadows the
+# pip-installed tarball (PYTHONPATH precedes site-packages).
+if [ -f /latexblocks/pyproject.toml ]; then
+  export PYTHONPATH="/latexblocks/src${PYTHONPATH:+:$PYTHONPATH}"
+  echo "latexblocks: using mounted checkout at /latexblocks/src"
+fi
+
 # Initial JS/CSS build
 echo "[$(date)] Initial build starting..."
 echo "[$(date)] Running TypeScript type check..."

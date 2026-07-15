@@ -12,6 +12,7 @@ services:
       - ./demos-framework:/app/demos-framework:ro
       - ./styles:/app/styles:ro
       - ./scripts:/app/scripts:ro
+      - ../latexblocks:/latexblocks:ro
       - ./latex:/app/latex:ro
       - ./esbuild.config.js:/app/esbuild.config.js:ro
     container_name: mathnotes-static-builder
