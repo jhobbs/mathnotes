@@ -1,5 +1,9 @@
 # Content Parsing Pipeline
 
+> **Note:** The parsing pipeline described here now lives in the latexblocks
+> library ([github.com/jhobbs/latexblocks](https://github.com/jhobbs/latexblocks));
+> this document remains its design reference.
+
 This document explains how Mathnotes turns a `.tex` content file into a rendered
 page: direct LaTeX parsing, a global block index with pre-rendered blocks, and a
 placeholder-resolution pass at page-assembly time. There is no markdown involved
