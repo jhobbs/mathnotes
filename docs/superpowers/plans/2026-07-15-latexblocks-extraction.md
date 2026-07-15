@@ -4,23 +4,24 @@
 
 **Goal:** Extract mathnotes' LaTeX-dialect + structured-block + cross-reference pipeline into a standalone `latexblocks` Python library, then migrate mathnotes to consume it and add a latexblocks-powered glossary/definitions system to imagining-syntax.
 
-**Architecture:** The library is the nine core modules (`latex_processor`, `structured_math`, `block_index`, `ref_resolver`, `page_renderer`, `content_loader`, `reverse_index`, `notation`, `mathml`) plus three prebuilt, committed assets: a self-contained Node MathML worker (ported from the un-bundleable `mathjax` npm package to `mathjax-full`), a standalone tooltip/label-copy JS bundle, and a standalone block/tooltip CSS file with variable fallbacks. Site-specific seams (the `/mathnotes/` URL prefix, the `content` dir, `.sty` and worker paths) become a `latexblocks.configure()` call. mathnotes keeps its site generator and becomes a consumer; imagining-syntax renders a glossary at Docker **build** time (node in a build stage only) so its runtime image stays a 4-dependency Flask slim image that never imports latexblocks.
+**Architecture:** The library is the nine core modules (`latex_processor`, `structured_math`, `block_index`, `ref_resolver`, `page_renderer`, `content_loader`, `reverse_index`, `notation`, `mathml`) plus packaged assets: the Node MathML worker **as plain source** (still driven by the `mathjax` npm package, which each consumer's Docker build provides — the library vendors no third-party code), a tooltip/label-copy JS bundle and a standalone block/tooltip CSS file (both compiled from the library's own source only). Site-specific seams (the `/mathnotes/` URL prefix, the `content` dir, `.sty`/worker paths, the node_modules location) become a `latexblocks.configure()` call. mathnotes keeps its site generator and becomes a consumer; imagining-syntax renders a glossary at Docker **build** time (node in a build stage only) so its runtime image stays a 4-dependency Flask slim image that never imports latexblocks.
 
-**Tech Stack:** Python ≥3.10, pylatexenc==2.10, setuptools src-layout; Node ≥18 (library dev + math-rendering builds only), mathjax-full 3.2.2, esbuild, PostCSS (nesting/custom-media/lab/autoprefixer); pip installs via GitHub release tarball URLs.
+**Tech Stack:** Python ≥3.14, pylatexenc==2.10, setuptools src-layout; Node ≥24 and mathjax 3.2.2 (Docker-only — never installed on the host), esbuild, PostCSS (nesting/custom-media/lab/autoprefixer); pip installs via GitHub release tarball URLs.
 
 ## Global Constraints
 
 - New repo: `/home/jason/latexblocks`, GitHub `jhobbs/latexblocks`, **public** (pip tarball installs need no auth), default branch `main`.
-- Package name `latexblocks`, version starts at `0.1.0`. Runtime dependency: **only** `pylatexenc==2.10`. `requires-python = ">=3.10"`.
+- Package name `latexblocks`, version starts at `0.1.0`. Runtime dependency: **only** `pylatexenc==2.10`. `requires-python = ">=3.14"`.
+- **Node is NEVER installed on the host.** Every node/npm/pytest invocation for the library runs in the `latexblocks-dev` Docker image (python:3.14-slim + node 24, built in Task 1, invoked via `./dev.sh`); mathnotes uses its existing builder containers; imagining-syntax uses a Docker build stage; CI uses GitHub-hosted runners. Node floor is 24 everywhere.
+- **No third-party code is vendored.** Math rendering requires the `mathjax` npm package (`^3.2.2`) resolvable from the worker process's cwd (or `configure(node_modules_dir=...)`); each consumer's build image provides it — mathnotes' Dockerfile already copies `node_modules/mathjax`, imsyn's glossary build stage npm-installs it, and the library's own dev image installs it for tests.
 - Module names and public symbols are preserved: `latexblocks.latex_processor`, `.structured_math`, `.block_index`, `.ref_resolver`, `.page_renderer`, `.content_loader`, `.reverse_index`, `.notation`, `.mathml` plus new `.config`, `.assets`, `.mapper`. Dataclass field names (`BlockReference.block/.full_url/.page_title`, `MathBlock.*`) are load-bearing in mathnotes Jinja templates (`templates/block_index.html:26-28`) — do not rename.
 - With `configure(url_prefix="/mathnotes", content_dir="content", sty_path=<mathnotes sty>)`, emitted HTML must be byte-identical to today's output. The mathnotes migration ends with a whole-site before/after HTML diff.
-- Prebuilt assets (`assets/tex2mml-worker.mjs`, `assets/latexblocks.js`, `assets/latexblocks.css`, `assets/fonts/`) are **committed** to the library repo (lockfile-style, like `latex/mathnotes-notation.sty`); CI verifies freshness. Consumers never run npm.
+- `assets/tex2mml-worker.mjs` ships as **readable source** (it is our code). `assets/latexblocks.js` and `assets/latexblocks.css` are committed build outputs of the library's **own** frontend source (tooltip-system/label-copy have zero imports; the CSS is ours) — lockfile-style, like `latex/mathnotes-notation.sty`, with CI verifying freshness. No third-party code is baked into any committed asset.
 - Distribution: `latexblocks @ https://github.com/jhobbs/latexblocks/archive/refs/tags/vX.Y.Z.tar.gz` in consumer requirements (works in python-slim images with no git binary).
 - imagining-syntax's **runtime** image must not gain node or latexblocks; glossary artifacts are rendered in a Docker build stage. Its site keeps serving identical experiment content.
 - mathnotes git policy: commits in the mathnotes repo happen only on explicit user go-ahead. Library-repo and imsyn-branch commits per task are normal. No AI attribution in commit messages.
 - mathnotes tests keep running as stdin scripts in the dev container (no pytest there); library tests use pytest in the library repo.
-- The host has no node today: Task 1 installs it user-locally via nvm AND symlinks node/npm/npx into `~/.local/bin` — nvm's bashrc hook does not load in the non-interactive shells later steps run in, so every later `node`/`npm` command relies on those symlinks.
-- `/home/jason/mathnotes` and `/home/jason/imagining-syntax` are sibling checkouts of the library repo; Task 3's parity check and Task 9's dev mounts rely on those relative locations.
+- `/home/jason/mathnotes` and `/home/jason/imagining-syntax` are sibling checkouts of the library repo; Task 9's dev mount relies on that relative location.
 
 ## Known-stale docs (do not be confused by them)
 
@@ -32,36 +33,20 @@
 
 # Phase 1 — the latexblocks library
 
-### Task 1: Scaffold the library repo and toolchains
+### Task 1: Scaffold the library repo and the Docker dev environment
 
 **Files:**
 - Create: `/home/jason/latexblocks/pyproject.toml`
 - Create: `/home/jason/latexblocks/.gitignore`
 - Create: `/home/jason/latexblocks/src/latexblocks/__init__.py`
+- Create: `/home/jason/latexblocks/Dockerfile.dev`, `/home/jason/latexblocks/dev.sh`
 - Create: `/home/jason/latexblocks/README.md` (stub)
 - Create: `/home/jason/latexblocks/LICENSE` (MIT, Jason Hobbs — swap if the user prefers another license)
 
 **Interfaces:**
-- Produces: an installable empty package `latexblocks` at `/home/jason/latexblocks` with a venv at `venv/` and working `node`/`npm` on the host. Later tasks run `./venv/bin/pytest` and `node` from this repo root.
+- Produces: the `latexblocks-dev` Docker image (python:3.14-slim + node 24, repo mounted at `/app`, `PYTHONPATH=/app/src`) and the `./dev.sh <cmd>` wrapper. EVERY later library-repo command — `pytest`, `node`, `npm` — runs as `./dev.sh <cmd>`; nothing is installed on the host.
 
-- [ ] **Step 1: Ensure node ≥18 exists (host has none)**
-
-```bash
-node --version 2>/dev/null || {
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-  export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
-  nvm install 22
-  # nvm only loads in interactive shells; make node visible to every later
-  # (non-interactive) step via ~/.local/bin, which is on PATH:
-  mkdir -p ~/.local/bin
-  ln -sf "$(dirname "$(nvm which 22)")"/node ~/.local/bin/node
-  ln -sf "$(dirname "$(nvm which 22)")"/npm  ~/.local/bin/npm
-  ln -sf "$(dirname "$(nvm which 22)")"/npx  ~/.local/bin/npx
-}
-node --version && npm --version   # both must work in a FRESH shell too
-```
-
-- [ ] **Step 2: Create the repo skeleton**
+- [ ] **Step 1: Create the repo skeleton**
 
 ```bash
 mkdir -p /home/jason/latexblocks/src/latexblocks /home/jason/latexblocks/test
@@ -81,7 +66,7 @@ name = "latexblocks"
 version = "0.1.0"
 description = "LaTeX-dialect structured math blocks -> HTML with cross-references, tooltips, and build-time MathML"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.14"
 license = { text = "MIT" }
 dependencies = ["pylatexenc==2.10"]
 
@@ -117,20 +102,54 @@ __version__ = "0.1.0"
 
 `README.md` stub: one line `# latexblocks` (fully written in Task 6).
 
-- [ ] **Step 3: Venv + editable install + pytest smoke**
+- [ ] **Step 2: Dev container image + wrapper**
+
+`Dockerfile.dev` (mirrors the mathnotes builder's node-in-python pattern, Dockerfile:38-43):
+
+```dockerfile
+# Dev/test environment: python 3.14 + node 24. The repo mounts at /app;
+# PYTHONPATH makes src/latexblocks importable without pip install.
+FROM python:3.14-slim
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
+ && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
+ && apt-get install -y --no-install-recommends nodejs \
+ && rm -rf /var/lib/apt/lists/* \
+ && node --version
+RUN pip install --no-cache-dir pylatexenc==2.10 pytest
+ENV PYTHONPATH=/app/src
+WORKDIR /app
+```
+
+`dev.sh`:
+
+```bash
+#!/bin/sh
+# Run a command in the latexblocks dev container. Runs as the host user so
+# files written into the mounted repo (node_modules, build outputs) are not
+# root-owned; HOME=/tmp keeps npm's cache writable for that user.
+exec docker run --rm -v "$(pwd)":/app -w /app \
+  -u "$(id -u):$(id -g)" -e HOME=/tmp \
+  latexblocks-dev "$@"
+```
 
 ```bash
 cd /home/jason/latexblocks
-python3 -m venv venv
-./venv/bin/pip install -e '.[dev]'
-./venv/bin/python -c "import latexblocks; print(latexblocks.__version__)"   # 0.1.0
-./venv/bin/pytest -q   # "no tests ran" is the expected PASS state
+chmod +x dev.sh
+docker build -f Dockerfile.dev -t latexblocks-dev .
+```
+
+- [ ] **Step 3: Smoke the environment**
+
+```bash
+./dev.sh python -c "import latexblocks; print(latexblocks.__version__)"   # 0.1.0
+./dev.sh node --version                                                   # v24.x
+./dev.sh pytest -q   # "no tests ran" is the expected PASS state
 ```
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add -A && git commit -m "Scaffold latexblocks package"
+git add -A && git commit -m "Scaffold latexblocks package and Docker dev environment"
 ```
 
 ---
@@ -143,11 +162,11 @@ Copy the nine modules and the five library-only test files **unchanged in behavi
 - Create: `src/latexblocks/{latex_processor,structured_math,block_index,ref_resolver,page_renderer,content_loader,reverse_index,notation,mathml}.py` (copies)
 - Create: `src/latex/mathnotes.sty`, `src/scripts/tex2mml-worker.mjs` (temporary locations, removed in Tasks 3–4)
 - Create: `test/{test_latex_processor,test_structured_math,test_ref_resolver,test_mathml,test_notation}.py` (copies, imports rewritten)
-- Create: `package.json` + `package-lock.json` (npm init; dependency `mathjax@3.2.2` — removed again in Task 3)
+- Create: `package.json` + `package-lock.json` (npm init; dependency `mathjax@3.2.2` — permanent: the library's own tests exercise the worker)
 
 **Interfaces:**
 - Consumes: source files from `/home/jason/mathnotes` (modules under `mathnotes/`, tests under `test/`, `latex/mathnotes.sty`, `scripts/tex2mml-worker.mjs`).
-- Produces: importable `latexblocks.<module>` with today's exact behavior; `./venv/bin/pytest` green. Test files keep their `def test_*` + `__main__` structure (they are pytest-collectable as-is).
+- Produces: importable `latexblocks.<module>` with today's exact behavior; `./dev.sh pytest` green. Test files keep their `def test_*` + `__main__` structure (they are pytest-collectable as-is).
 
 - [ ] **Step 1: Copy modules and assets**
 
@@ -165,11 +184,10 @@ cp "$MN/scripts/tex2mml-worker.mjs" src/scripts/
 
 Intra-package imports are all relative (`from .structured_math import ...`) and need no edits.
 
-- [ ] **Step 2: npm mathjax for the (still unported) worker**
+- [ ] **Step 2: npm mathjax for the worker (in the dev container)**
 
 ```bash
-npm init -y >/dev/null && npm install mathjax@3.2.2
-node -e "console.log('node ok')"
+./dev.sh npm init -y >/dev/null && ./dev.sh npm install mathjax@3.2.2
 ```
 
 - [ ] **Step 3: Copy the five LIB test files and rewrite imports**
@@ -199,7 +217,7 @@ Each file has a 3–8 line `sys.path.insert(...)` preamble (three variants; e.g.
 - [ ] **Step 6: Run the suite — the green baseline**
 
 ```bash
-./venv/bin/pytest -q
+./dev.sh pytest -q
 ```
 
 Expected: all tests pass (≈80+ tests across 5 files). This exact suite state is the regression contract for Tasks 3–4. If anything fails, fix the *harness* (paths, imports) — never the module code — before proceeding.
@@ -212,123 +230,79 @@ git add -A && git commit -m "Import nine core modules and library test suite fro
 
 ---
 
-### Task 3: Port the MathML worker to mathjax-full and ship it as a committed bundle
+### Task 3: Parameterize the MathML worker and package it as source (mathjax stays a consumer-provided npm dependency)
 
-The `mathjax` npm package cannot be esbuild-bundled (its loader does a fully dynamic `require(t)` — verified). Port the worker to `mathjax-full` 3.2.2's direct API, keep the JSON-lines protocol, `parseStyMacros`, `toMathMLCore`, and alttext handling **verbatim**, take the sty path as `argv[2]`, bundle to a single self-contained file, and prove equivalence against the old worker over every math expression in the real mathnotes content.
+**No port, no bundling, no vendoring.** The worker keeps running on the exact same `mathjax` npm engine it uses today — the library ships the worker as readable source inside the package, and each consumer's Docker build provides the `mathjax` package (mathnotes' Dockerfile already carries `node_modules/mathjax`; imsyn's build stage installs it; the library's dev image has it from Task 2). Two mechanical changes make the worker location-independent: the sty path arrives as `argv[2]` (instead of an `import.meta.url`-relative guess), and `mathjax` is resolved via `createRequire` against `argv[3]`-or-cwd (a bare `import mathjax` cannot resolve from inside site-packages, where no `node_modules` exists above the worker file). Conversion behavior is untouched, so the existing test_mathml assertions are the complete regression gate.
 
 **Files:**
-- Create: `frontend/worker/tex2mml-worker.mjs` (ported source)
-- Create: `build.mjs` (asset builder; grows in Task 5)
-- Create: `src/latexblocks/assets/tex2mml-worker.mjs` (committed esbuild output)
-- Create: `scripts/parity_check.py`
-- Modify: `src/latexblocks/mathml.py` (worker path + sty argv)
-- Modify: `test/test_mathml.py` (spawn with sty argv; point at the bundle)
-- Delete: `src/scripts/tex2mml-worker.mjs`; npm `mathjax` dependency
+- Move: `src/scripts/tex2mml-worker.mjs` → `src/latexblocks/assets/tex2mml-worker.mjs` (edited: argv sty + createRequire)
+- Modify: `src/latexblocks/mathml.py` (worker path, sty + node_modules argv, `reset_converter`)
+- Modify: `test/test_mathml.py` (spawn with sty argv; point at the packaged worker)
+- Delete: `src/scripts/`
 
 **Interfaces:**
-- Consumes: `src/latex/mathnotes.sty` (still the temp location; Task 4 moves it), the old worker for parity.
-- Produces: `MathConverter(worker_path: str = _WORKER_PATH, sty_path: str = _STY_PATH)` spawning `["node", worker_path, sty_path]`; `mathml.reset_converter()`; committed bundle at `src/latexblocks/assets/tex2mml-worker.mjs`. Protocol unchanged: `{"id", "latex", "display", "alttext"?}` → `{"id", "mathml"|"error"}`.
+- Consumes: `src/latex/mathnotes.sty` (still the temp location; Task 4 moves it), the repo-root `node_modules/mathjax` from Task 2.
+- Produces: `MathConverter(worker_path: str = _WORKER_PATH, sty_path: Optional[str] = None, node_modules_dir: Optional[str] = None)` spawning `["node", worker_path, sty_path(, node_modules_dir)]`; `mathml.reset_converter()`; packaged worker source at `src/latexblocks/assets/tex2mml-worker.mjs`. Protocol unchanged: `{"id", "latex", "display", "alttext"?}` → `{"id", "mathml"|"error"}`. Consumer contract: node ≥24 on PATH and `mathjax@^3.2.2` resolvable from the worker process's cwd (or the configured node_modules dir).
 
-- [ ] **Step 1: Write the ported worker source**
+- [ ] **Step 1: Move the worker into the package and parameterize it**
 
-`frontend/worker/tex2mml-worker.mjs` — copy the old worker (`src/scripts/tex2mml-worker.mjs`) and change ONLY the import/init/sty-path sections. `parseStyMacros`, `escapeAttr`, `toMathMLCore`, and the readline loop stay character-identical. New header:
-
-```js
-// Build-time LaTeX -> MathML worker. JSON-lines protocol on stdin/stdout:
-//   {"id": 1, "latex": "x^2", "display": false}
-//   -> {"id": 1, "mathml": "<math ...>"}  or  {"id": 1, "error": "message"}
-// A TeX parse error is a per-request error response, never a crash;
-// malformed protocol input terminates the worker with a nonzero exit.
-// Usage: node tex2mml-worker.mjs <path-to-macros.sty>
-import { createInterface } from 'node:readline';
-import { readFileSync } from 'node:fs';
-
-import { mathjax } from 'mathjax-full/js/mathjax.js';
-import { TeX } from 'mathjax-full/js/input/tex.js';
-import { liteAdaptor } from 'mathjax-full/js/adaptors/liteAdaptor.js';
-import { RegisterHTMLHandler } from 'mathjax-full/js/handlers/html.js';
-import { SerializedMmlVisitor } from 'mathjax-full/js/core/MmlTree/SerializedMmlVisitor.js';
-// Package registrations (side-effect imports). The old mathjax.init loaded
-// the 'input/tex' component = base+ams+newcommand+configmacros(+noundefined,
-// autoload, require — the first dropped deliberately, the other two useless
-// under the synchronous tex2mml API) plus eager cancel and html.
-import 'mathjax-full/js/input/tex/base/BaseConfiguration.js';
-import 'mathjax-full/js/input/tex/ams/AmsConfiguration.js';
-import 'mathjax-full/js/input/tex/newcommand/NewcommandConfiguration.js';
-import 'mathjax-full/js/input/tex/configmacros/ConfigMacrosConfiguration.js';
-import 'mathjax-full/js/input/tex/cancel/CancelConfiguration.js';
-import 'mathjax-full/js/input/tex/html/HtmlConfiguration.js';
-import { STATE } from 'mathjax-full/js/core/MathItem.js';
+```bash
+mkdir -p src/latexblocks/assets
+git mv src/scripts/tex2mml-worker.mjs src/latexblocks/assets/tex2mml-worker.mjs
+rmdir src/scripts
 ```
 
-Then, replacing the old `styPath` const and `mathjax.init` block:
+Then edit `src/latexblocks/assets/tex2mml-worker.mjs` — exactly two changes; `parseStyMacros`, `escapeAttr`, `toMathMLCore`, the whole `mathjax.init({...})` block (top-level `await` stays — the file remains ESM), and the readline loop stay character-identical.
+
+Change 1 — the import block. Replace
 
 ```js
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import mathjax from 'mathjax';
+```
+
+with
+
+```js
+import path from 'node:path';
+import { createRequire } from 'node:module';
+
+// The worker lives inside an installed Python package, where no node_modules
+// exists above it, so a bare `import mathjax` cannot resolve. The consumer's
+// environment provides mathjax (^3.2.2); resolve it from argv[3] (see
+// mathml.py / configure(node_modules_dir=...)) or from the process cwd.
+const requireFrom = createRequire(
+  path.join(process.argv[3] || process.cwd(), 'noop.js'));
+const mathjax = requireFrom('mathjax');
+```
+
+(`createRequire` is the supported way to do CJS resolution from ESM; the `mathjax` package is CJS, so `requireFrom('mathjax')` yields the same module object the old default-import did — `mathjax.init` and everything downstream behave identically.)
+
+Change 2 — the sty path. Replace the `import.meta.url`-relative `styPath` computation (old lines 46-47) with
+
+```js
+// Usage: node tex2mml-worker.mjs <macros.sty> [node-modules-parent-dir]
 const styPath = process.argv[2];
 if (!styPath) {
-  process.stderr.write('tex2mml-worker: usage: node tex2mml-worker.mjs <macros.sty>\n');
+  process.stderr.write(
+    'tex2mml-worker: usage: node tex2mml-worker.mjs <macros.sty> [node-modules-parent]\n');
   process.exit(1);
 }
-
-const adaptor = liteAdaptor();
-RegisterHTMLHandler(adaptor);
-const tex = new TeX({
-  packages: ['base', 'ams', 'newcommand', 'configmacros', 'cancel', 'html'],
-  macros: parseStyMacros(readFileSync(styPath, 'utf8')),
-  formatError: (_jax, err) => { throw err; },
-});
-const doc = mathjax.document('', { InputJax: tex });
-const visitor = new SerializedMmlVisitor();
 ```
 
-and in the request handler, replace `MathJax.tex2mml(req.latex, {display: !!req.display})` with:
-
-```js
-    let mml = visitor.visitTree(
-      doc.convert(req.latex, { display: !!req.display, end: STATE.CONVERT }));
-```
-
-`end: STATE.CONVERT` is load-bearing: the document has no OutputJax, and without it `convert()` runs on to the typeset phase and throws `Cannot read properties of null` on every request (this is why the canonical mathjax-full tex2mml demo passes it).
-
-(`configmacros` is what makes the `macros:` option work — do not drop it.) Everything after that line (single-line collapse, `toMathMLCore`, alttext splice, response write) is unchanged from the old worker.
-
-- [ ] **Step 2: Install build deps and write `build.mjs`**
+- [ ] **Step 2: Smoke-test the packaged worker in the dev container**
 
 ```bash
-npm install --save-dev mathjax-full@3.2.2 esbuild@0.19.12
+printf '%s\n' '{"id":1,"latex":"\\vec{v} + \\alpha^2","display":false}' \
+  | ./dev.sh node src/latexblocks/assets/tex2mml-worker.mjs src/latex/mathnotes.sty
 ```
 
-(Keep the `mathjax` runtime dep from Task 2 installed for now — the OLD worker needs it until Step 7's parity check passes; Step 8 removes it.)
+Expected: one line of JSON containing `"mathml":"<math ...` with `\vec` expanded (proves sty macros loaded, and that `mathjax` resolved from the repo-root `node_modules` via cwd with no third argument).
 
-`build.mjs`:
+- [ ] **Step 3: Update `mathml.py` for the packaged worker + argv + reset hook**
 
-```js
-// Builds the committed assets in src/latexblocks/assets/.
-// Task 5 extends this with the browser JS bundle and the CSS.
-import esbuild from 'esbuild';
-
-await esbuild.build({
-  entryPoints: ['frontend/worker/tex2mml-worker.mjs'],
-  bundle: true,
-  platform: 'node',
-  format: 'esm',
-  target: 'node18',
-  outfile: 'src/latexblocks/assets/tex2mml-worker.mjs',
-  banner: { js: '// GENERATED by build.mjs from frontend/worker/ — do not edit.' },
-});
-console.log('built assets/tex2mml-worker.mjs');
-```
-
-```bash
-node build.mjs
-echo '{"id":1,"latex":"\\vec{v} + \\alpha^2","display":false}' | node src/latexblocks/assets/tex2mml-worker.mjs src/latex/mathnotes.sty
-```
-
-Expected: one line of JSON containing `"mathml":"<math ...` (the `\vec` macro proves sty macros loaded).
-
-- [ ] **Step 3: Update `mathml.py` for the bundle + sty argv + reset hook**
-
-In `src/latexblocks/mathml.py`: `MathConverter` gains an optional `sty_path` passed to the worker as `argv[2]`; the default worker path now points into `assets/`; `get_converter()` supplies a temporary sty default (Task 4 replaces it with config); add `reset_converter()`.
+In `src/latexblocks/mathml.py`: `MathConverter` gains optional `sty_path` (worker `argv[2]`) and `node_modules_dir` (worker `argv[3]`); the default worker path points into `assets/`; `get_converter()` supplies a temporary sty default (Task 4 replaces it with config); add `reset_converter()`.
 
 ```python
 _WORKER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -339,9 +313,11 @@ _TEMP_STY_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__
 
 
 class MathConverter:
-    def __init__(self, worker_path: str = _WORKER_PATH, sty_path: Optional[str] = None):
+    def __init__(self, worker_path: str = _WORKER_PATH, sty_path: Optional[str] = None,
+                 node_modules_dir: Optional[str] = None):
         self.worker_path = worker_path
         self.sty_path = sty_path
+        self.node_modules_dir = node_modules_dir
         self._proc: Optional[subprocess.Popen] = None
         self._next_id = 0
 
@@ -349,6 +325,8 @@ class MathConverter:
         cmd = ["node", self.worker_path]
         if self.sty_path:
             cmd.append(self.sty_path)
+            if self.node_modules_dir:  # argv[3] only meaningful after argv[2]
+                cmd.append(self.node_modules_dir)
         # ... rest of _spawn unchanged (Popen + error message uses ' '.join(cmd))
 ```
 
@@ -384,85 +362,18 @@ STY = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
 
 Every spawn becomes `["node", WORKER, STY]`. Constructor call sites: the three **no-argument** `MathConverter()` constructions (test_mathml.py lines 119, 130, 144) become `MathConverter(WORKER, STY)`; the startup-failure test (line 156) keeps its bogus **worker** path (signature unchanged in position 1) — do not give it a sty.
 
-- [ ] **Step 5: Run the mathml tests**
+- [ ] **Step 5: Run the full suite**
 
 ```bash
-./venv/bin/pytest test/test_mathml.py -q
+./dev.sh pytest -q
 ```
 
-Expected: PASS. The `\tag`→`mtr` rewrite, `\cancel`→`mrow` rewrite, sty macros, error semantics, and alttext tests are the port's correctness gate.
+Expected: everything green, `test_mathml` in particular — the `\tag`→`mtr` rewrite, `\cancel`→`mrow` rewrite, sty macros, error semantics, and alttext tests all still pass **unchanged** because the conversion engine is the identical mathjax package; only the sty path and module resolution moved. No parity harness is needed for the same reason.
 
-- [ ] **Step 6: Write the corpus parity check**
-
-`scripts/parity_check.py`:
-
-```python
-#!/usr/bin/env python3
-"""One-shot equivalence check: old worker (npm mathjax) vs new bundle
-(mathjax-full) over every math expression in the mathnotes content tree.
-Run from the latexblocks repo root; requires ../../mathnotes... actually
-/home/jason/mathnotes checked out."""
-import re
-import sys
-from pathlib import Path
-
-sys.path.insert(0, "src")
-from latexblocks.mathml import MathConverter  # noqa: E402
-
-CONTENT = Path("/home/jason/mathnotes/content")
-STY = "src/latex/mathnotes.sty"
-OLD = MathConverter("src/scripts/tex2mml-worker.mjs", None)  # old worker self-locates the sty
-NEW = MathConverter("src/latexblocks/assets/tex2mml-worker.mjs", STY)
-
-INLINE = re.compile(r"(?<!\$)\$([^$\n]+)\$(?!\$)")
-DISPLAY = re.compile(r"\\\[(.+?)\\\]", re.DOTALL)
-
-exprs = set()
-for tex in sorted(CONTENT.rglob("*.tex")):
-    src = tex.read_text(encoding="utf-8")
-    exprs.update((m.strip(), False) for m in INLINE.findall(src))
-    exprs.update((m.strip(), True) for m in DISPLAY.findall(src))
-
-diffs = errors = same = 0
-for latex, display in sorted(exprs):
-    try:
-        old = OLD.convert(latex, display)
-    except Exception:
-        errors += 1  # regex over-capture (not real math) — both sides skip
-        continue
-    new = NEW.convert(latex, display)
-    if old == new:
-        same += 1
-    else:
-        diffs += 1
-        if diffs <= 10:
-            print(f"DIFF ({'display' if display else 'inline'}): {latex!r}\n  old: {old[:200]}\n  new: {new[:200]}")
-print(f"{same} identical, {diffs} different, {errors} skipped (old-worker errors)")
-sys.exit(1 if diffs else 0)
-```
-
-- [ ] **Step 7: Run parity**
+- [ ] **Step 6: Commit**
 
 ```bash
-./venv/bin/python scripts/parity_check.py
-```
-
-Expected: `N identical, 0 different` over the full corpus (N in the thousands). If diffs appear, inspect them: attribute-order or namespace differences mean the serializer setup differs — fix the port (not the assertion) until zero. Only if a diff is *provably* cosmetically equivalent MathML and unavoidable, document it in the commit message and update `test_mathml` expectations deliberately.
-
-- [ ] **Step 8: Remove the old worker and the mathjax dep; full suite**
-
-```bash
-git rm -r src/scripts
-npm uninstall mathjax
-./venv/bin/pytest -q
-```
-
-Expected: full suite green. (`scripts/parity_check.py` keeps a dangling reference to `src/scripts/` — that's fine; it's a one-shot tool. Add a comment noting it ran against commit history.)
-
-- [ ] **Step 9: Commit**
-
-```bash
-git add -A && git commit -m "Port MathML worker to mathjax-full; ship self-contained committed bundle (corpus parity: 0 diffs)"
+git add -A && git commit -m "Package MathML worker as source; sty path and mathjax resolution via argv"
 ```
 
 ---
@@ -481,7 +392,7 @@ Introduce `latexblocks.config` and thread it through the exact seam list below. 
 **Interfaces:**
 - Consumes: `mathml.reset_converter()` (Task 3).
 - Produces:
-  - `latexblocks.configure(**kwargs) -> Config` / `latexblocks.get_config() -> Config` with fields `url_prefix: str = ""`, `content_dir: str = "content"`, `sty_path: Optional[str] = None` (None → packaged `default.sty`), `worker_path: Optional[str] = None` (None → packaged bundle), `notation_sty_path: str = "latex/mathnotes-notation.sty"`.
+  - `latexblocks.configure(**kwargs) -> Config` / `latexblocks.get_config() -> Config` with fields `url_prefix: str = ""`, `content_dir: str = "content"`, `sty_path: Optional[str] = None` (None → packaged `default.sty`), `worker_path: Optional[str] = None` (None → packaged worker source), `node_modules_dir: Optional[str] = None` (None → worker cwd resolves mathjax), `notation_sty_path: str = "latex/mathnotes-notation.sty"`.
   - `latexblocks.config.sty_path() -> str`, `latexblocks.config.worker_path() -> str` (resolved).
   - `latexblocks.assets.default_sty_path() / worker_js_path()` returning filesystem paths into the installed package.
   - `latexblocks.mapper.UrlMapper` (a `typing.Protocol`: `url_mappings: Dict[str, str]`, `get_canonical_url(file_path: str) -> str`).
@@ -516,6 +427,7 @@ def test_defaults():
     cfg = get_config()
     assert cfg.url_prefix == ""
     assert cfg.content_dir == "content"
+    assert cfg.node_modules_dir is None
     assert sty_path().endswith(os.path.join("assets", "default.sty"))
     assert worker_path().endswith(os.path.join("assets", "tex2mml-worker.mjs"))
     assert os.path.exists(sty_path()) and os.path.exists(worker_path())
@@ -551,7 +463,7 @@ def test_custom_sty_path():
         assert _load_preexpansion_macros() == {"zz": "Z"}
 ```
 
-Run: `./venv/bin/pytest test/test_config.py -q` — expected FAIL (`No module named latexblocks.config`).
+Run: `./dev.sh pytest test/test_config.py -q` — expected FAIL (`No module named latexblocks.config`).
 
 - [ ] **Step 2: Write `config.py`**
 
@@ -585,6 +497,10 @@ class Config:
     sty_path: Optional[str] = None
     # Node worker script. None -> the packaged assets/tex2mml-worker.mjs.
     worker_path: Optional[str] = None
+    # Directory whose node_modules/ provides the mathjax npm package the
+    # worker requires. None -> the worker process's cwd (both consumers run
+    # builds from a directory that has node_modules).
+    node_modules_dir: Optional[str] = None
     # Default output path for notation.write_notation_sty().
     notation_sty_path: str = "latex/mathnotes-notation.sty"
 
@@ -741,13 +657,14 @@ Every edit references the current line in the copied module (same numbers as mat
        return text_with_math_to_html(title)
    ```
 6. `notation.py:21-23` — delete `_STY_PATH`; `_sty_macro_names()` opens `config.sty_path()`. Lines 87/135/148: `scan_content(content_dir: Optional[str] = None)` resolving `content_dir = content_dir or get_config().content_dir`; `get_registry`/`refresh_registry` use `cfg = get_config()`: `scan_content(cfg.content_dir) if os.path.isdir(cfg.content_dir) else {}`. Line 180: `def write_notation_sty(path: Optional[str] = None)` with `path = path or get_config().notation_sty_path`.
-7. `mathml.py` — `get_converter()` from Task 3 now reads config:
+7. `mathml.py` — `get_converter()` from Task 3 now reads config (and `_TEMP_STY_PATH` is deleted):
    ```python
    def get_converter() -> MathConverter:
        global _converter
        if _converter is None:
-           from .config import sty_path, worker_path
-           _converter = MathConverter(worker_path(), sty_path())
+           from .config import get_config, sty_path, worker_path
+           _converter = MathConverter(worker_path(), sty_path(),
+                                      get_config().node_modules_dir)
            atexit.register(_converter.close)
        return _converter
    ```
@@ -774,7 +691,7 @@ Note: `configure()` closes the worker; it runs once before tests, so worker reus
 - [ ] **Step 6: Full suite + config tests**
 
 ```bash
-./venv/bin/pytest -q
+./dev.sh pytest -q
 ```
 
 Expected: everything green — the old assertions (e.g. `test_href_and_images`' `/mathnotes/test/plot.png`, `test_pagelink`'s `/mathnotes/topology/compact-sets/`) now pass *because of* the conftest configure, proving prefix-threading is complete. Grep to prove no literal remains:
@@ -803,7 +720,8 @@ The browser half of the block contract: `tooltip-system.ts` (zero imports — co
 - Create: `frontend/src/tooltip-system.ts` (copy of `demos-framework/src/tooltip-system.ts`, 347 lines, unchanged)
 - Create: `frontend/src/label-copy.ts`, `frontend/src/index.ts`
 - Create: `frontend/css/latexblocks.css` (source), `frontend/fonts/LatinModernMath-Regular.woff2` + `GUST-FONT-LICENSE.txt` (copies from `styles/fonts/`)
-- Modify: `build.mjs`, `package.json` (postcss deps), `src/latexblocks/assets.py`
+- Create: `build.mjs`
+- Modify: `package.json` (esbuild/postcss devDeps), `src/latexblocks/assets.py`
 - Create: committed outputs `src/latexblocks/assets/{latexblocks.js,latexblocks.css,fonts/*}`
 - Create: `test/test_assets.py`
 
@@ -936,13 +854,18 @@ Copy each range with `sed -n 'START,ENDp' $MN/styles/main.css >> frontend/css/la
 - [ ] **Step 4: Extend `build.mjs` with JS + CSS + fonts**
 
 ```bash
-npm install --save-dev typescript@5.3.3 postcss@8.5.6 postcss-nesting@12.1.5 \
-  postcss-custom-media@10.0.8 postcss-lab-function@6.0.19 autoprefixer@10.4.21
+./dev.sh npm install --save-dev esbuild@0.19.12 typescript@5.3.3 postcss@8.5.6 \
+  postcss-nesting@12.1.5 postcss-custom-media@10.0.8 postcss-lab-function@6.0.19 \
+  autoprefixer@10.4.21
 ```
 
-Append to `build.mjs`:
+Create `build.mjs`:
 
 ```js
+// Builds the committed web assets in src/latexblocks/assets/ from the
+// library's OWN frontend source. No third-party code is bundled: the two
+// entry modules (tooltip-system, label-copy) have zero imports.
+import esbuild from 'esbuild';
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync, readdirSync } from 'node:fs';
 import postcss from 'postcss';
 import postcssNesting from 'postcss-nesting';
@@ -978,7 +901,7 @@ console.log('built assets/latexblocks.js, assets/latexblocks.css, assets/fonts/'
 ```
 
 ```bash
-node build.mjs
+./dev.sh node build.mjs
 ```
 
 - [ ] **Step 5: Extend `assets.py` and write the failing asset tests**
@@ -1043,8 +966,8 @@ def test_copy_web_assets(tmp_path):
 ```
 
 ```bash
-./venv/bin/pytest test/test_assets.py -q   # PASS (assets were built in Step 4)
-./venv/bin/pytest -q                        # full suite green
+./dev.sh pytest test/test_assets.py -q   # PASS (assets were built in Step 4)
+./dev.sh pytest -q                        # full suite green
 ```
 
 - [ ] **Step 6: Commit**
@@ -1091,7 +1014,7 @@ index = BlockIndex(mapper)
 index.build_index()
 ```
 
-(the `render_page("content/test/referencing.tex")` call and all assertions stay identical — output URLs still say `/mathnotes/...` thanks to the session configure). Run `./venv/bin/pytest test/test_reference_snippets.py -q` → PASS.
+(the `render_page("content/test/referencing.tex")` call and all assertions stay identical — output URLs still say `/mathnotes/...` thanks to the session configure). Run `./dev.sh pytest test/test_reference_snippets.py -q` → PASS.
 
 - [ ] **Step 3: Port the core of `test_cache_invalidation.py`**
 
@@ -1132,9 +1055,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: { python-version: "3.12" }
+        with: { python-version: "3.14" }
       - uses: actions/setup-node@v4
-        with: { node-version: "22" }
+        with: { node-version: "24" }
       - run: npm ci
       - run: node build.mjs
       - name: committed assets are fresh
@@ -1145,19 +1068,21 @@ jobs:
 
 - [ ] **Step 5: Write the real README**
 
-Sections (write them fully, ~150 lines): what it is (the dialect + blocks + cross-refs + MathML in one paragraph); install (`pip install "latexblocks @ https://github.com/jhobbs/latexblocks/archive/refs/tags/v0.1.0.tar.gz"`); runtime requirements (node ≥18 on PATH **only if content contains math**); 20-line quickstart (configure → mapper → BlockIndex → PageRenderer → page dict); `configure()` reference table (the five fields); the UrlMapper protocol; the browser contract (`copy_web_assets`, the `tooltip-data` island, selector list); the `.sty` contract (PRE-EXPANSION / MATH MACROS marker sections); development (`npm ci && node build.mjs`, committed assets, pytest); consumers (mathnotes, imagining-syntax).
+Sections (write them fully, ~150 lines): what it is (the dialect + blocks + cross-refs + MathML in one paragraph); install (`pip install "latexblocks @ https://github.com/jhobbs/latexblocks/archive/refs/tags/v0.1.0.tar.gz"`); runtime requirements (**only if content contains math**: node ≥24 on PATH plus the `mathjax@^3.2.2` npm package resolvable from the process cwd or `configure(node_modules_dir=...)` — provide both in your build image, never on a host); 20-line quickstart (configure → mapper → BlockIndex → PageRenderer → page dict); `configure()` reference table (the six fields); the UrlMapper protocol; the browser contract (`copy_web_assets`, the `tooltip-data` island, selector list); the `.sty` contract (PRE-EXPANSION / MATH MACROS marker sections); development (everything via `./dev.sh` — `npm ci`, `node build.mjs`, `pytest`; committed web assets are built from the library's own source only); consumers (mathnotes, imagining-syntax).
 
 - [ ] **Step 6: Publish and tag**
 
 ```bash
-./venv/bin/pytest -q                            # final green check
+./dev.sh pytest -q                              # final green check
 git add -A && git commit -m "Port remaining library tests; add CI and README"
 gh repo create jhobbs/latexblocks --public --source . --push
 git tag v0.1.0 && git push origin v0.1.0
-# verify the tarball pip-installs cold:
-python3 -m venv /tmp/lbtest && /tmp/lbtest/bin/pip install \
-  "latexblocks @ https://github.com/jhobbs/latexblocks/archive/refs/tags/v0.1.0.tar.gz"
-/tmp/lbtest/bin/python -c "import latexblocks, latexblocks.assets as a; print(a.worker_js_path().exists())"  # True
+# verify the tarball pip-installs cold (inside the dev container; PYTHONPATH
+# is overridden so only the installed copy is importable):
+./dev.sh sh -c 'pip install --target /tmp/lb \
+    "latexblocks @ https://github.com/jhobbs/latexblocks/archive/refs/tags/v0.1.0.tar.gz" \
+  && PYTHONPATH=/tmp/lb python -c "import latexblocks, latexblocks.assets as a; print(a.worker_js_path().exists())"'
+# expect: True
 ```
 
 ---
@@ -1274,9 +1199,9 @@ In `test/test_cache_invalidation.py`, `test/test_latex_integration.py`, `test/te
 
 `Dockerfile` stage 3 ("builder"):
 - line 56: remove `scripts/tex2mml-worker.mjs` from the `COPY` (keep `build_static_simple.py`).
-- line 59: delete `COPY --from=esbuild-builder /app/node_modules/mathjax ./node_modules/mathjax`.
+- line 59: **KEEP** `COPY --from=esbuild-builder /app/node_modules/mathjax ./node_modules/mathjax` — the packaged worker resolves `mathjax` from the process cwd (`/app`), so this copy is exactly what feeds it. `mathjax` also stays in `package.json`.
 - Keep the nodejs install (lines 38-43) — the packaged worker still runs under node.
-`Dockerfile.dev`: no worker/mathjax lines exist; nothing to change beyond rebuild picking up requirements.
+`Dockerfile.dev`: nothing to change beyond rebuild picking up requirements (`npm ci` at line 22 already provides `/app/node_modules/mathjax` for the dev watcher's builds).
 
 - [ ] **Step 8: Rebuild dev and run everything in-container**
 
@@ -1308,7 +1233,7 @@ git commit -m "Consume latexblocks for the core parse/index/render pipeline"
 ### Task 8: mathnotes frontend consumption (JS/CSS from the library)
 
 **Files:**
-- Modify: `mathnotes/sitegenerator/builder.py` (`copy_static_assets`), `templates/base.html`, `demos-framework/src/main.ts:24,99`, `demos-framework/src/mathblock-toggle.ts`, `styles/main.css`, `styles/math.css`, `styles/pages/block-index.module.css`, `package.json`
+- Modify: `mathnotes/sitegenerator/builder.py` (`copy_static_assets`), `templates/base.html`, `demos-framework/src/main.ts:24,99`, `demos-framework/src/mathblock-toggle.ts`, `styles/main.css`, `styles/math.css`, `styles/pages/block-index.module.css`
 - Delete: `demos-framework/src/tooltip-system.ts`
 
 **Interfaces:**
@@ -1342,12 +1267,7 @@ The `tooltip-data` island (lines 87-89) is already exactly the contract — unch
 - `demos-framework/src/main.ts`: delete line 24 (`import { initTooltipSystem } ...`) and line 99 (`initTooltipSystem();`).
 - `demos-framework/src/mathblock-toggle.ts`: delete `initLabelCopyToClipboard` (lines 45-97) and its call at line 101 (the comment line 100 too). The statements-toggle stays.
 - `git rm demos-framework/src/tooltip-system.ts`
-- Remove the mathjax dependency **with the lockfile kept in sync** — `npm ci` (run by both Dockerfile.dev:22 and the prod esbuild stage) hard-fails if package.json and package-lock.json disagree, so hand-editing package.json alone breaks every Docker build:
-  ```bash
-  cd /home/jason/mathnotes
-  npm uninstall mathjax --package-lock-only   # updates package.json AND package-lock.json, no node_modules needed
-  git diff --stat package.json package-lock.json   # both must show changes
-  ```
+- `package.json` is untouched: `mathjax` STAYS a dependency — the library's packaged worker resolves it from `/app/node_modules` at build time (Task 7 kept the Dockerfile copy).
 
 - [ ] **Step 4: Delete the extracted CSS rules from mathnotes**
 
@@ -1646,19 +1566,27 @@ if __name__ == "__main__":
 Replace `site/Dockerfile` with:
 
 ```dockerfile
-# Build stage: render the glossary with latexblocks (needs node for MathML).
-FROM python:3.12-slim AS glossary
-RUN apt-get update && apt-get install -y --no-install-recommends nodejs \
+# Build stage: render the glossary with latexblocks. Node 24 (nodesource;
+# Debian's apt nodejs is far older) + the mathjax npm package feed the
+# library's MathML worker, which resolves mathjax from this WORKDIR's
+# node_modules at render time.
+FROM python:3.14-slim AS glossary
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
+    && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir \
     "latexblocks @ https://github.com/jhobbs/latexblocks/archive/refs/tags/v0.1.0.tar.gz"
 WORKDIR /build
+RUN npm install mathjax@3.2.2
 COPY glossary/ glossary/
 COPY render_glossary.py .
 RUN python render_glossary.py --glossary-dir glossary --out build/glossary --assets-out static
 
-# Runtime stage: unchanged shape — no node, no latexblocks.
-FROM python:3.12-slim
+# Runtime stage: unchanged shape — no node, no latexblocks. (Base bumped
+# 3.12 -> 3.14 per project policy; Flask/gunicorn/boto3/Markdown pins are
+# all 3.14-compatible.)
+FROM python:3.14-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -2074,7 +2002,7 @@ git add site/README.md && git commit -m "docs: glossary editing workflow" && git
 
 ## Appendix B — risk register
 
-- **mathjax-full port output drift** → gated by test_mathml + the zero-diff corpus parity check (Task 3 Step 7).
+- **Worker behavior drift** → near-zero by construction: the conversion engine is the SAME `mathjax` npm package as today; only the sty path and module-resolution mechanics changed, and test_mathml's protocol/macro/rewrite assertions gate those.
 - **CSS split visual regressions** → gated by the whole-site diff (Task 10), full crawl, and manual dark/light checks; library-before-site load order keeps mathnotes' variables authoritative.
 - **configure() ordering bugs** (something parses before configure) → configure is called at every entry point (build script, watcher, builder ctor) and the watcher's early `refresh_registry` is explicitly covered (Task 7 Step 4).
 - **Tarball install needs the repo public**; if it must go private later, switch consumers to `git+ssh` (adds git + keys to images) or vendor a wheel.
