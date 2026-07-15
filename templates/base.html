@@ -50,6 +50,9 @@
         }
     </style>
     
+    <!-- latexblocks stylesheet (loaded before the site bundle so site vars win) -->
+    <link rel="stylesheet" href="/static/dist/latexblocks.css">
+
     <!-- Main stylesheet -->
     <link rel="stylesheet" href="{{ css_url }}">
     
@@ -90,5 +93,7 @@
     
     <!-- Main JavaScript -->
     <script type="module" src="{{ main_js_url }}"></script>
+    <!-- latexblocks block/tooltip frontend (deferred, after the main script) -->
+    <script defer src="/static/dist/latexblocks.js"></script>
 </body>
 </html>

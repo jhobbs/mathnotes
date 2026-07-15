@@ -20,9 +20,6 @@ import { initSourcesToggle } from './sources-toggle';
 // Import demo viewer functionality
 import { initDemoViewer } from './demo-viewer';
 
-// Import tooltip system for block-reference hover previews
-import { initTooltipSystem } from './tooltip-system';
-
 // Demo metadata type
 interface DemoMetadata {
   title: string;
@@ -94,9 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize mathblock toggle functionality
   initMathBlockToggle();
-
-  // Initialize reference tooltips (content ships pre-rendered MathML)
-  initTooltipSystem();
 
   // Initialize section toggle for index page
   const isIndexPage = document.querySelector('.sections-container');

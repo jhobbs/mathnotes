@@ -12,6 +12,7 @@ from .pages import PageRegistry
 from mathnotes.content_discovery import ContentDiscovery
 from latexblocks.page_renderer import PageRenderer
 from latexblocks.block_index import BlockIndex
+from latexblocks.assets import copy_web_assets
 from mathnotes.config import BASE_URL
 
 logger = logging.getLogger(__name__)
@@ -147,6 +148,12 @@ class SiteBuilder:
                 shutil.rmtree(static_dst)
             shutil.copytree(static_src, static_dst)
             logger.info(f"Copied static directory to {static_dst}")
+
+        # Copy the latexblocks browser assets (css, js, fonts/) next to the
+        # site bundle so /static/dist/latexblocks.css and its relative font url
+        # resolve.
+        copy_web_assets(self.output_dir / "static" / "dist")
+        logger.info("Copied latexblocks web assets to static/dist")
 
         # Copy favicon if exists
         favicon = Path("favicon.ico")

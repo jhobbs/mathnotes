@@ -48,94 +48,14 @@
   font-style: italic;
 }
 
-/* References section - embedded in blocks, hidden by default */
+/* Referenced-by panel display policy. The panel's own styling ships from
+   latexblocks.css (which sets an unscoped `.block-references-section {
+   display: block }`); here we hide it by default and reveal it only on the
+   block index pages. This site policy loads after the library, so it wins. */
 .block-references-section {
   display: none;
 }
 
-/* Show references only on block index pages */
 .block-index-page .block-references-section {
   display: block;
-  margin-top: var(--gap-base);
-  padding: var(--gap-sm);
-  background: var(--color-code-bg);
-  border-radius: var(--radius-sm);
-}
-
-.block-index-page .block-references-section details {
-  cursor: pointer;
-}
-
-.block-index-page .block-references-section summary {
-  font-weight: 500;
-  color: var(--text-secondary);
-  padding: var(--gap-xs);
-  user-select: none;
-}
-
-.block-index-page .block-references-section summary:hover {
-  color: var(--text-primary);
-}
-
-.block-index-page .direct-references,
-.block-index-page .transitive-references {
-  margin-top: var(--gap-sm);
-  padding-left: var(--gap-base);
-}
-
-.block-index-page .block-references-section h4 {
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  margin-bottom: var(--gap-xs);
-  color: var(--text-secondary);
-}
-
-.block-index-page .block-references-section ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.block-index-page .block-references-section li {
-  padding: var(--gap-xs) 0;
-  font-size: var(--font-size-sm);
-}
-
-.block-index-page .block-references-section li::before {
-  content: "→ ";
-  color: var(--text-secondary);
-  margin-right: var(--gap-xs);
-}
-
-.block-index-page .ref-type,
-.block-index-page .ref-location {
-  margin-left: var(--gap-xs);
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
-  font-style: italic;
-}
-
-/* Dark mode variables */
-@media (prefers-color-scheme: dark) {
-  .block-index-page {
-    --card-background: var(--color-card-bg);
-    --border-color: var(--color-border);
-    --text-secondary: var(--color-text-secondary);
-  }
-  
-  .block-index-page .block-references-section {
-    background: var(--color-bg-secondary);
-  }
-}
-
-/* Mobile responsive */
-@media (--phone) {
-  .block-index-page .block-references-section {
-    padding: var(--gap-xs);
-  }
-  
-  .block-index-page .direct-references,
-  .block-index-page .transitive-references {
-    padding-left: var(--gap-sm);
-  }
 }
