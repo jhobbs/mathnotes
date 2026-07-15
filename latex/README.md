@@ -1,9 +1,12 @@
 # LaTeX content support
 
 Content files under `content/` are written in `.tex`. The site build parses
-them directly (`mathnotes/latex_processor.py`) — there is no intermediate
-markup format; see [PARSING.md](../PARSING.md) for the full pipeline. This
-directory exists so the same files also compile to PDF locally.
+them directly, via the [latexblocks](https://github.com/jhobbs/latexblocks)
+library's `latex_processor.py` (this repo consumes it as a pinned dependency;
+see `requirements.txt` and `mathnotes/config.py:configure_latexblocks()`) —
+there is no intermediate markup format; see [PARSING.md](../PARSING.md) for
+the full pipeline. This directory exists so the same files also compile to
+PDF locally.
 
 ## Compile a content file
 
@@ -78,7 +81,8 @@ Highlights:
 - `verbatim` or `\begin{lstlisting}[language=Python]` for code blocks.
 - `\begin{tabular}{colspec}` for tables — see below.
 - Unsupported LaTeX is a build error by design; extend the dialect in
-  `mathnotes/latex_processor.py` deliberately.
+  the [latexblocks](https://github.com/jhobbs/latexblocks) library's
+  `latex_processor.py` deliberately.
 - Author notes: use LaTeX's native `%` comment. It's parsed as a real
   comment by pylatexenc, so `% ...` text never reaches the page.
 

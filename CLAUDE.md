@@ -13,7 +13,7 @@ Mathnotes is a static site generator that renders mathematics notes with interac
 - Comprehensive security headers with Content Security Policy
 - Modern CSS system with PostCSS, CSS custom properties, and hot module replacement
 
-**Content pipeline**: `.tex` files are parsed directly by `mathnotes/latex_processor.py` into a typed `PageDoc` (prose HTML segments plus `MathBlock` trees) — there is no intermediate markdown dialect. `mathnotes/block_index.py` scans every content file, builds the global cross-file label index, and pre-renders each block's HTML; `mathnotes/page_renderer.py` assembles a page's `PageDoc` into final HTML, resolving the `\dref`/`\pagelink`/`\dembed` placeholder elements `latex_processor.py` emits against that index via `mathnotes/ref_resolver.py`. Unsupported LaTeX constructs are loud build errors with file:line — extend the dialect deliberately in `latex_processor.py`, never silently. Content is 100% `.tex`.
+**Content pipeline**: the parser, block index, and page renderer live in the [latexblocks](https://github.com/jhobbs/latexblocks) library (pinned in `requirements.txt`), wired to this site's layout by `mathnotes/config.py:configure_latexblocks()`. `.tex` files are parsed directly by `latexblocks.latex_processor` into a typed `PageDoc` (prose HTML segments plus `MathBlock` trees) — there is no intermediate markdown dialect. `latexblocks.block_index` scans every content file, builds the global cross-file label index, and pre-renders each block's HTML; `latexblocks.page_renderer` assembles a page's `PageDoc` into final HTML, resolving the `\dref`/`\pagelink`/`\dembed` placeholder elements `latex_processor` emits against that index via `latexblocks.ref_resolver`. Unsupported LaTeX constructs are loud build errors with file:line — extend the dialect deliberately in the library's `latex_processor.py`, never silently. Content is 100% `.tex`.
 
 ## Security and Best Practices
 
@@ -151,12 +151,12 @@ any parsing. Module names below are the library modules.
 1. **URL System**: Content uses slug-based canonical URLs (`/mathnotes/section/slug`). This allows content reorganization without breaking links.
 
 2. **Math Processing Pipeline**: 
-   - `latex_processor.py` parses each `.tex` file's math nodes directly out of
-     the LaTeX AST (pylatexenc) and renders them through `render_math()`, the
-     single math seam
+   - latexblocks' `latex_processor.py` parses each `.tex` file's math nodes
+     directly out of the LaTeX AST (pylatexenc) and renders them through
+     `render_math()`, the single math seam
    - Structured blocks are parsed and indexed globally
    - Cross-references resolved using the global index
-   - The build-time MathML worker (`scripts/tex2mml-worker.mjs` via `mathnotes/mathml.py`) renders final MathML at build time
+   - The build-time MathML worker (`latexblocks/assets/tex2mml-worker.mjs` via `latexblocks/mathml.py`) renders final MathML at build time
    - For detailed explanation of the parsing pipeline, see [PARSING.md](./PARSING.md)
 
 3. **Demo System**: TypeScript demos are registered in `demos-framework/src/main.ts` and loaded dynamically with code splitting. Demos can use:
@@ -172,13 +172,16 @@ any parsing. Module names below are the library modules.
 ## Important Implementation Details
 
 ### Math Rendering Seam
-`render_math()` in `latex_processor.py` is the single function every math
-node (inline `$...$` and display `\[...\]`) renders through. Because
-pylatexenc parses math nodes directly out of the LaTeX AST, there is no
-markdown to protect math from — no protection/restoration phases exist.
-`render_math()` delegates to `mathnotes/mathml.py`, which speaks a JSON-lines
-protocol to a persistent Node worker (`scripts/tex2mml-worker.mjs`, MathJax's
-TeX-to-MathML conversion) and returns serializer output — well-formed MathML,
+`render_math()` in latexblocks' `latex_processor.py` is the single function
+every math node (inline `$...$` and display `\[...\]`) renders through.
+Because pylatexenc parses math nodes directly out of the LaTeX AST, there is
+no markdown to protect math from — no protection/restoration phases exist.
+`render_math()` delegates to `latexblocks/mathml.py`, which speaks a
+JSON-lines protocol to a persistent Node worker shipped inside the package
+(`latexblocks/assets/tex2mml-worker.mjs`, MathJax's TeX-to-MathML
+conversion), spawned with the `.sty` path supplied by
+`configure_latexblocks()` and resolving the `mathjax` npm package from
+`/app/node_modules`. It returns serializer output — well-formed MathML,
 inserted raw, no client-side typesetting. Unconvertible TeX raises
 `MathConversionError`, which the emitter turns into a `LatexDialectError`
 with `file:line`, failing the build loudly rather than rendering broken math.
@@ -189,7 +192,7 @@ with `file:line`, failing the build loudly rather than rendering broken math.
 - `\dref[Custom text]{label}` - Custom link text
 - `\dembed{label}` - Transcludes the entire block content inline
 - `\pagelink{slug}` / `\pagelink[Custom text]{slug}` - Links to a page
-- `\notation{\integers}{\mathbb{Z}}` - Declared at the top of a block: defines a site-wide math macro whose every use in math links back to the declaring block (registry in `mathnotes/notation.py`; `latex/mathnotes-notation.sty` is generated and committed like a lockfile)
+- `\notation{\integers}{\mathbb{Z}}` - Declared at the top of a block: defines a site-wide math macro whose every use in math links back to the declaring block (registry in `latexblocks/notation.py`; `latex/mathnotes-notation.sty` is generated and committed like a lockfile)
 
 ### Demo Integration
 ```latex

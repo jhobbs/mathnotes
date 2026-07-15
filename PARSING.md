@@ -17,17 +17,17 @@ anywhere in this pipeline — the dialect itself is documented in
            (latex_processor.py)     (block_index.py)      (page_renderer.py)
 ```
 
-1. **Parse**: `mathnotes/latex_processor.py` walks the real LaTeX AST (via
+1. **Parse**: `latexblocks/latex_processor.py` walks the real LaTeX AST (via
    pylatexenc) for one file and produces a typed `PageDoc` — no intermediate
    textual dialect, no second parser.
-2. **Index**: `mathnotes/block_index.py` parses every content file (through the
+2. **Index**: `latexblocks/block_index.py` parses every content file (through the
    same cached loader), builds a global `label -> block` index and a
-   reverse-reference index (`mathnotes/reverse_index.py`), then pre-renders
+   reverse-reference index (`latexblocks/reverse_index.py`), then pre-renders
    every block's HTML exactly once, globally, with full knowledge of who
    references it.
-3. **Assemble**: `mathnotes/page_renderer.py` renders one page by splicing in
+3. **Assemble**: `latexblocks/page_renderer.py` renders one page by splicing in
    its blocks' already-rendered HTML and resolving any reference placeholders
-   left in its prose text, via `mathnotes/ref_resolver.py`.
+   left in its prose text, via `latexblocks/ref_resolver.py`.
 
 Splitting index-building from page assembly is what makes cross-file
 references and "Referenced by" backlinks possible without double-rendering a
@@ -36,7 +36,7 @@ block for every page that mentions it.
 ## Stage 1: Parsing (`latex_processor.py`)
 
 `parse_latex_file(source, filepath) -> (metadata, PageDoc)` is the only entry
-point, reached through `mathnotes/content_loader.py`'s `load_content_file()`
+point, reached through `latexblocks/content_loader.py`'s `load_content_file()`
 (mtime-cached, since a full build loads each file in several phases and the
 `PageDoc`/`MathBlock` objects are deliberately shared and mutated in place —
 see Stage 2).
@@ -73,8 +73,8 @@ objects (not text containing `$`), there's no risk of a general text
 processor misinterpreting `$`, `_`, `\`, or any other math character; math is
 never "protected" or "restored" the way the old markdown pipeline had to
 guard `$...$` spans from a third-party markdown parser. `render_math()`
-delegates to `mathnotes/mathml.py`, which drives a persistent Node worker
-(`scripts/tex2mml-worker.mjs`, MathJax's TeX-to-MathML conversion) over a
+delegates to `latexblocks/mathml.py`, which drives a persistent Node worker
+(`latexblocks/assets/tex2mml-worker.mjs`, MathJax's TeX-to-MathML conversion) over a
 JSON-lines protocol and returns serializer output — well-formed MathML,
 inserted raw at build time, no client-side typesetting. Unconvertible TeX
 raises `MathConversionError`, which becomes a `LatexDialectError` with
@@ -100,7 +100,7 @@ Any LaTeX construct pylatexenc parses that `latex_processor.py` has no
 handler for is a build error (`_Parser._err` raises `LatexDialectError` with
 `file:line: message`), never a silent pass-through or drop. Extending the
 dialect is deliberate: add a case to `_macro`/`_environment` (or wherever the
-construct falls) plus a regression test in `test/test_latex_processor.py`.
+construct falls) plus a regression test in the library's test suite.
 
 ## Stage 2: The block index (`block_index.py`, `reverse_index.py`)
 
@@ -173,17 +173,17 @@ single module's own output rather than a cross-module protect/restore pass:
 
 ## Related Files
 
-- `mathnotes/latex_processor.py`: Stage 1 — direct `.tex` parsing, the math
+- `latexblocks/latex_processor.py`: Stage 1 — direct `.tex` parsing, the math
   seam, placeholder emission, tabular rendering.
-- `mathnotes/structured_math.py`: the `MathBlock`/`PageDoc` document model,
+- `latexblocks/structured_math.py`: the `MathBlock`/`PageDoc` document model,
   block finalization (labels/synonyms/tags), block card HTML rendering.
-- `mathnotes/block_index.py`: Stage 2 — global scan, reference collection,
+- `latexblocks/block_index.py`: Stage 2 — global scan, reference collection,
   block rendering.
-- `mathnotes/reverse_index.py`: "Referenced by" direct/transitive reference
+- `latexblocks/reverse_index.py`: "Referenced by" direct/transitive reference
   tracking, used by Stage 2.
-- `mathnotes/ref_resolver.py`: placeholder resolution against the block
+- `latexblocks/ref_resolver.py`: placeholder resolution against the block
   index, used by both Stage 2 (block bodies) and Stage 3 (page prose).
-- `mathnotes/page_renderer.py`: Stage 3 — page assembly.
-- `mathnotes/content_loader.py`: the shared, mtime-cached `(metadata,
+- `latexblocks/page_renderer.py`: Stage 3 — page assembly.
+- `latexblocks/content_loader.py`: the shared, mtime-cached `(metadata,
   PageDoc)` entry point used by both Stage 1 callers (Stage 2's scan and
   Stage 3's page render).
