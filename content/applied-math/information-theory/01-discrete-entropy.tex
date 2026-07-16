@@ -340,10 +340,22 @@ But, this means $p_i$ doesn't depend on $i,$ and so is the same for each $i$ and
 It remains to show that this extreme of $H$ is a maximum. This follows from the facts that the domain is a \@{convex}, \@{compact} set and that the entropy function is strictly \@{concave}. TODO: more details on these.
 \end{proof}
 
+\begin{definition}[Joint Entropy]
+	The \textbf{joint entropy} $H(X,Y)$ of a pair of \@{discrete} \@{random-variables} $(X,Y)$ with a \@{joint-distribution} $p(x,y)$ is defined as
+
+\[ H(X,Y) = -\sum_{x \in \mathcal{X}} -\sum_{y \in \mathcal{y}} p(x,y) \log{p(x,y)}, \]
+
+which can also be expressed as
+
+	\[ H(X,Y) = - \mathbb{E} \left [ \log{p(X,Y)} \right ]. \]
+
+\end{definition}
+
+
 \begin{theorem}\label{joint-entropy-is-less-than-or-equal-to-entropy-of-parts}
 Let $X$ and $Y$ be discrete \@{random-variables} with alphabets $\mathcal{X}$ and $\mathcal{Y},$ and let $p(x,y)$ be the probability of the joint occurrence of $X = x$ and $Y = y.$
 
-The \@{entropy} of the joint event, $H(X,Y),$ is less than or equal to the sum of the individual entropies, i.e.
+	The \@{entropy} of the joint event (the \@{joint-entropy}), $H(X,Y),$ is less than or equal to the sum of the individual entropies, i.e.
 
 \[ H(X,Y) \leq H(X) + H(Y), \]
 
@@ -561,8 +573,8 @@ H(Y|X) & = \sum_{x} p(x) H(Y | X = x) \\
 \eal
 \end{note}
 
-\begin{theorem}\label{joint-entropy-is-base-plus-conditional}
-The \@{entropy} of the joint event $X,Y$ is the \@{entropy} of $X$ plus the \@{entropy} of $Y$ when $X$ is known.
+\begin{theorem}[Chain rule for joint entropy]\label{joint-entropy-is-base-plus-conditional}
+	The \@{entropy} (\@{joint-entropy}) of the joint event $X,Y$ is the \@{entropy} of $X$ plus the \@{entropy} of $Y$ when $X$ is known.
 \end{theorem}
 
 \begin{proof}

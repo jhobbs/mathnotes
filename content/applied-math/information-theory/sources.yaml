@@ -5,3 +5,10 @@ sources:
     isbn: "978-0-252-72548-7"
     published: "1998"
     url: "https://www.bibliovault.org/BV.book.epl?ISBN=9780252725487"
+  - title: "Elements of Information Theory"
+    author: "Thomas M. Cover and Joy A. Thomas"
+    type: book
+    isbn: "978-0-471-24195-9"
+    section: "2nd Edition"
+    published: "2006"
+    url: "https://www.wiley.com/en-us/Elements+of+Information+Theory,+2nd+Edition-p-9780471241959"
