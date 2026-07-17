@@ -10,9 +10,9 @@
 
 \subsection{Random Variables}
 
-:::define "Random Variable"
+\begin{definition}[Random Variable]\synonyms{"variate"}
 A \textbf{random variable} is a \@{function} that associates a \@{real} number with each \@{element} in the \@{sample-space}. For \@{sample-space} $S$, we have $X: S \to \reals$ and for $s \in S$, we have $x = X(s),$ where $x$ is a \@{value} of the random variable.
-:::
+\end{definition}
 
 Random variables don't have to map to all \@{reals}; for example, \textbf{Bernoulli random variables} map to either 0 or 1.
 
@@ -26,7 +26,10 @@ Similarly, a random variable is called a \textbf{discrete random variable} if it
 
 \subsubsection{Discrete Probability Distributions}
 
-A discrete random variable takes each of its values with a certain probability. The function $f(x)$ that gives the probability of each value $x$ of a random variable $X$ occurring is called the \textbf{probability function,} \textbf{probability mass function,} or \textbf{probability distribution.} More formally, the set of ordered pairs $(x, f(x))$ is a probability distribution of the discrete random variable $X$ if, for each possible outcome $x$
+
+\begin{definition}[Probability Distribution]\synonyms{"probability mass function", "probability function"}
+A discrete random variable takes each of its values with a certain probability. The function $f(x)$ that gives the probability of each value $x$ of a random variable $X$ occurring is called the \textbf{probability function,} \textbf{probability mass function,} or \textbf{probability distribution.} More formally, the set of ordered pairs $(x, f(x))$ is a probability distribution of the discrete random variable $X$ if, for each possible outcome $x.$
+\end{definition}
 
 \begin{enumerate}
 \item $f(x) \geq 0$
