@@ -92,10 +92,10 @@ Suspected mathematical errors found during the formalization scan. Per policy th
 ## Probability, Discrete Math, Topology, Info Theory, ML, Misc
 - [ ] probability-and-statistics/continuous-probability-distributions.md:64 — "$Z = \lim_{n\to\infty}\frac{X-np}{\sqrt{npq}} = n(z;0,1)$" equates a random variable with a density function; correct statement is convergence in distribution, $\frac{X-np}{\sqrt{npq}} \xrightarrow{d} N(0,1)$.
 - [ ] probability-and-statistics/continuous-probability-distributions.md:27 — uniform CDF "$F(x) = \frac{x-a}{b-a}$" uses undefined lowercase $a,b$; for a distribution on $[A,B]$ it must be $\frac{x-A}{B-A}$.
-- [ ] probability-and-statistics/discrete-probability-distributions.md:105 — negative binomial pmf "$P(x=n) = \binom{n-1}{r-1} p^r (1-)^{n-r}$" — "$(1-)$" is missing the $p$; also $P(x=n)$ should be $P(X=n)$.
+- [x] probability-and-statistics/discrete-probability-distributions.md:105 — negative binomial pmf "$P(x=n) = \binom{n-1}{r-1} p^r (1-)^{n-r}$" — "$(1-)$" is missing the $p$; also $P(x=n)$ should be $P(X=n)$. (fixed 2026-07-19: now $P(X=n) = \binom{n-1}{r-1} p^r (1-p)^{n-r}$)
 - [ ] probability-and-statistics/joint-probability.md:26 — multinomial "$P(X_1=n_1, \dots, X_n=n_r)$" — last variable should be $X_r$, not $X_n$.
 - [ ] probability-and-statistics/markov-chains.md:29 — "$\sum_{k=0}^{N} p_{jk} = 1$" sums $N+1$ terms but states are indexed $1,\dots,N$; sum should start at $k=1$.
-- [ ] probability-and-statistics/expectation.md:33,37 — missing "$=$" makes the variance definition read as a product $E[(X-\mu)^2]\cdot\sum(\dots)$ rather than an equality (also filed as typo).
+- [x] probability-and-statistics/expectation.md:33,37 — missing "$=$" makes the variance definition read as a product $E[(X-\mu)^2]\cdot\sum(\dots)$ rather than an equality (also filed as typo). (fixed 2026-07-19)
 - [ ] probability-and-statistics/probability.md:33 — "the sum of the probabilities of all *events* in a sample space is 1" — events overlap ($2^{|S|}$ of them); it's the probabilities of all sample points/outcomes that sum to 1.
 - [ ] probability-and-statistics/limit-theorems.md:30 — "$E[X \mid X \ge t] > t$" should be $\ge t$ (equality possible); line 34 correctly uses $\ge$. (minor)
 - [ ] discrete-math/cellular-automata/game-of-life.md:73 — "critical density ≈ 0.37; above this patterns die out, below they stabilize" is not a recognized Game of Life result; random soups settle to ash density ≈ 0.03 regardless of starting density. Likely incorrect. (moderate confidence)

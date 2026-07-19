@@ -3,36 +3,36 @@
 ## Formalization candidates
 
 ### content/applied-math/probability-and-statistics/confidence.md
-- [ ] lines 10–14: **definition** `{label: confidence-interval}` "Confidence Interval" — excerpt: "A confidence interval tells us how likely it is that a population parameter falls within..."
-- [ ] lines 16–18: **theorem** `{label: ci-mean-known-variance}` — excerpt: "If $\bar{x}$ is the mean of a random sample of size $n$ from a population with a known variance..."
-- [ ] lines 21–25: **theorem** `{label: sample-size-mean}` — excerpt: "If $\bar{x}$ is used as an estimate of $\mu,$ we can be $100(1-\alpha)\%$ confident..."
-- [ ] lines 28–32: **theorem** `{label: ci-mean-unknown-variance}` — excerpt: "If $\bar{x}$ is the mean of a random sample of size $n$ from a population with an unknown variance..." (refs: student t-distribution)
-- [ ] lines 36–40: **theorem** `{label: ci-proportion}` "Large-Sample CI for p" — excerpt: "If $\hat{p}$ is the proportion of successes in a random sample of size $n$..."
-- [ ] lines 42–44: **theorem** `{label: sample-size-proportion}` — excerpt: "If $\hat{p}$ is used as an estimate of $p,$ we can be $100(1-\alpha)\%$ confident that the error..."
-- [ ] line 46: **theorem** `{label: sample-size-proportion-conservative}` — excerpt: "If $\hat{p}$ is used as an estimate of $p,$ we can be **at least** $100(1-\alpha)\%$ confident..." (statement is truncated; file ends mid-sentence)
+- [x] lines 10–14: **definition** `{label: confidence-interval}` "Confidence Interval" — excerpt: "A confidence interval tells us how likely it is that a population parameter falls within..."
+- [x] lines 16–18: **theorem** `{label: ci-mean-known-variance}` — excerpt: "If $\bar{x}$ is the mean of a random sample of size $n$ from a population with a known variance..."
+- [x] lines 21–25: **theorem** `{label: sample-size-mean}` — excerpt: "If $\bar{x}$ is used as an estimate of $\mu,$ we can be $100(1-\alpha)\%$ confident..."
+- [x] lines 28–32: **theorem** `{label: ci-mean-unknown-variance}` — excerpt: "If $\bar{x}$ is the mean of a random sample of size $n$ from a population with an unknown variance..." (refs: student t-distribution)
+- [x] lines 36–40: **theorem** `{label: ci-proportion}` "Large-Sample CI for p" — excerpt: "If $\hat{p}$ is the proportion of successes in a random sample of size $n$..."
+- [x] lines 42–44: **theorem** `{label: sample-size-proportion}` — excerpt: "If $\hat{p}$ is used as an estimate of $p,$ we can be $100(1-\alpha)\%$ confident that the error..."
+- [x] lines 42–44: **theorem** `{label: sample-size-proportion-conservative}` — excerpt: "If $\hat{p}$ is used as an estimate of $p,$ we can be **at least** $100(1-\alpha)\%$ confident..." (wrapped; statement truncated in source — TODO left in block for missing formula)
 
 ### content/applied-math/probability-and-statistics/continuous-probability-distributions.md
-- [ ] lines 10–31: **definition** `{label: uniform-distribution}` "Uniform Distribution" — excerpt: "The **uniform distribution** has a \"flat\" density function and thus a uniform probability..."
-- [ ] lines 35–58: **definition** `{label: normal-distribution}` "Normal Distribution" — excerpt: "The **normal distribution** or **Gaussian distribution** is the classic bell-shaped distribution." (refs: @random-variable)
-- [ ] lines 47–49: **definition** `{label: standard-normal-distribution}` "Standard Normal Distribution" — excerpt: "The **standard normal distribution** is the distribution of a normal random variable with mean $0$..."
-- [ ] lines 60–77: **theorem** `{label: normal-approximation-binomial}` "Normal Approximation to the Binomial" — excerpt: "If $X$ is a binomial random variable with mean $\mu = np$ and variance $\sigma^2 = npq$..." (refs: @binomial-distribution)
-- [ ] lines 79–81: **note** `{label: continuity-correction}` "Continuity Correction" — excerpt: "The $0.5$ is called a **continuity correction** and comes from the fact that..."
+- [x] lines 10–31: **definition** `{label: uniform-distribution}` "Uniform Distribution" — excerpt: "The **uniform distribution** has a \"flat\" density function and thus a uniform probability..." (also fixed CDF typo: $(x-a)/(b-a)$ → $(x-A)/(B-A)$)
+- [x] lines 35–58: **definition** `{label: normal-distribution}` "Normal Distribution" — excerpt: "The **normal distribution** or **Gaussian distribution** is the classic bell-shaped distribution." (refs: @random-variable; also fixed $n(x; \mu \sigma)$ → $n(x; \mu, \sigma)$)
+- [x] lines 47–49: **definition** `{label: standard-normal-distribution}` "Standard Normal Distribution" — excerpt: "The **standard normal distribution** is the distribution of a normal random variable with mean $0$..." (also fixed garbled "into a random variable with a standard normal random variable" → "into a standard normal random variable")
+- [x] lines 60–77: **theorem** `{label: normal-approximation-binomial}` "Normal Approximation to the Binomial" — excerpt: "If $X$ is a binomial random variable with mean $\mu = np$ and variance $\sigma^2 = npq$..." (refs: @binomial-distribution — resolves once discrete-probability-distributions is formalized)
+- [x] lines 79–81: **note** `{label: continuity-correction}` "Continuity Correction" — excerpt: "The $0.5$ is called a **continuity correction** and comes from the fact that..."
 
 ### content/applied-math/probability-and-statistics/cuped.md
-- [ ] lines 9–15: **definition** `{label: ab-test}` "A/B Test" — excerpt: "An A/B test is a two-sample statistical inference problem. Given two @random-variables..." (file is a stub; content is incomplete)
+- [x] lines 9–15: **definition** `{label: ab-test}` "A/B Test" — excerpt: "An A/B test is a two-sample statistical inference problem. Given two @random-variables..." (wrapped coherent description; dropped dangling "• X" fragment; TODO left in block to finish the two-sample/CUPED setup)
 
 ### content/applied-math/probability-and-statistics/discrete-probability-distributions.md
-- [ ] lines 12–20: **definition** `{label: bernoulli-process}` "Bernoulli Process" — excerpt: "A **Bernoulli Process** must possess the following properties: 1. The experiment consists of repeated trials..."
-- [ ] lines 22–36: **definition** `{label: binomial-distribution}` "Binomial Distribution" — excerpt: "A **binomial distribution** aggregates the outcomes of a Bernoulli process across multiple trials..." (refs: @bernoulli-process)
-- [ ] lines 43–61: **definition** `{label: hypergeometric-distribution}` "Hypergeometric Distribution" — excerpt: "A **Hypergeometric experiment** has the following properties: 1. A random sample of size $n$..." (refs: @binomial-distribution)
-- [ ] lines 63–89: **definition** `{label: poisson-distribution}` "Poisson Distribution" — excerpt: "Experiments that give numerical values of a random variable $X,$ the number of outcomes..."
-- [ ] lines 83–87: **theorem** `{label: poisson-approximation-binomial}` — excerpt: "Let $X$ be a binomial random variable with probability distribution $b(x, n, p).$ When $n \to \infty$..." (refs: @binomial-distribution)
-- [ ] lines 91–99: **definition** `{label: geometric-distribution}` "Geometric Distribution" — excerpt: "A **geometric random variable** is a discrete random variable that models the number of independent Bernoulli trials..."
-- [ ] lines 101–105: **definition** `{label: negative-binomial-distribution}` "Negative Binomial Distribution" — excerpt: "The **negative binomial random variable** generalizes the geometric random variable..." (refs: @geometric-distribution; see math-errors queue re: line 105)
+- [x] lines 12–20: **definition** `{label: bernoulli-process}` "Bernoulli Process" — excerpt: "A **Bernoulli Process** must possess the following properties: 1. The experiment consists of repeated trials..." (merged 4 split single-item enumerates into one list)
+- [x] lines 22–36: **definition** `{label: binomial-distribution}` "Binomial Distribution" — excerpt: "A **binomial distribution** aggregates the outcomes of a Bernoulli process across multiple trials..." (refs: @bernoulli-process; fixed "occurr" → "occur")
+- [x] lines 43–61: **definition** `{label: hypergeometric-distribution}` "Hypergeometric Distribution" — excerpt: "A **Hypergeometric experiment** has the following properties: 1. A random sample of size $n$..." (refs: @binomial-distribution; merged split enumerate; fixed similiar/distrbution×4/Bionomial/vairable/hypergeoemetric×4 typos and dangling "…failure items is")
+- [x] lines 63–89: **definition** `{label: poisson-distribution}` "Poisson Distribution" — excerpt: "Experiments that give numerical values of a random variable $X,$ the number of outcomes..." (merged 3 split enumerates; fixed heading Distbution/recieves/occurr/distrbution)
+- [x] lines 83–87: **theorem** `{label: poisson-approximation-binomial}` — excerpt: "Let $X$ be a binomial random variable with probability distribution $b(x, n, p).$ When $n \to \infty$..." (refs: @binomial-distribution)
+- [x] lines 91–99: **definition** `{label: geometric-distribution}` "Geometric Distribution" — excerpt: "A **geometric random variable** is a discrete random variable that models the number of independent Bernoulli trials..."
+- [x] lines 101–105: **definition** `{label: negative-binomial-distribution}` "Negative Binomial Distribution" — excerpt: "The **negative binomial random variable** generalizes the geometric random variable..." (refs: @geometric-distribution; fixed heading "Distirbution", $P(x=n)$→$P(X=n)$, and pmf math error $(1-)$→$(1-p)$; title-line "Distbutions" typo also fixed)
 
 ### content/applied-math/probability-and-statistics/expectation.md
 (Mostly already formalized.)
-- [ ] line 46: **intuition/remark** `{label: variance-interpretation}` — excerpt: "Variance and standard deviation tell us about how spread out the values of $X$ are around its mean." (outside any block; short)
+- [x] line 46: **intuition/remark** `{label: variance-interpretation}` — excerpt: "Variance and standard deviation tell us about how spread out the values of $X$ are around its mean." (wrapped as intuition; also fixed missing `=` in both variance formulas and "TOOD"→"TODO")
 
 ### content/applied-math/probability-and-statistics/hypothesis.md
 - [ ] lines 12–18: **definition** `{label: null-alternative-hypothesis}` — excerpt: "We could say that our null hypothesis is that the population mean is what we expect..."

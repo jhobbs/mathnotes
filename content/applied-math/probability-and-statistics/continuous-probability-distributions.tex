@@ -10,11 +10,12 @@
 
 \subsection{Uniform Distribution}
 
+\begin{definition}[Uniform Distribution]
 The \textbf{uniform distribution} has a "flat" density function and thus a uniform probability in a closed \@{interval} $[A, B]$.
 
 The density function of the continuous uniform random variable $X$ on the interval $[A,B]$ is
 
-\[ f(x; A, B) = \begin{cases} 
+\[ f(x; A, B) = \begin{cases}
 \frac{1}{B - A} & \text{for } A \leq x \leq B \\
 0 & \text{otherwise}
 \end{cases} \]
@@ -25,29 +26,34 @@ The mean and \@{variance} of the uniform distributions are
 
 The cumulative distribution function for a uniform distribution is
 
-\[ F(x) = \frac{x - a}{b - a}, \quad a \leq x \leq b \]
+\[ F(x) = \frac{x - A}{B - A}, \quad A \leq x \leq B \]
 
 and the probability that a value falls between $a$ and $b$ is
 
 \[ \int_{a}^{b} \frac{1}{B-A} dx = \frac{b - a}{B - A}, \quad A \leq a,b \leq B \]
+\end{definition}
 
 \subsection{Normal Distribution}
 
+\begin{definition}[Normal Distribution]
 The \textbf{normal distribution} or \textbf{Gaussian distribution} is the classic bell-shaped distribution.
 
-The density of the normal random variable $X,$ with mean $\mu$ and \@{variance} $\sigma^2,$ is
+The density of the normal \@{random-variable} $X,$ with mean $\mu$ and \@{variance} $\sigma^2,$ is
 
 \[ n(x; \mu, \sigma) = \frac{1}{\sqrt{2 \pi} \sigma}e^{-\frac{1}{2 \sigma^2}{(x - \mu)^2}}, \quad -\infty < x < \infty. \]
 
-The mean and variance of $n(x; \mu \sigma)$ are $\mu$ and $\sigma^2,$ respectively.
+The mean and variance of $n(x; \mu, \sigma)$ are $\mu$ and $\sigma^2,$ respectively.
+\end{definition}
 
 The curve of a continuous probability distribution is constructed so that the area under the curve bounded by two coordinates $x = x_1$ and $x = x_2$ equals the probability that the random variable $X$ assumes a value between $x = x_1$ and $x = x_2.$ Thus
 
 \[ P(x_1 < X < x_2) = \int_{x_1}^{x_2} n(x; \mu, \sigma) dx = \frac{1}{\sqrt{2 \pi} \sigma} \int_{x_1}^{x_2} e^{-\frac{1}{2 \sigma^2}(x-\mu)^2} dx. \]
 
-The \textbf{standard normal distribution} is the distribution of a normal random variable with mean $0$ and variance $1.$ We can transform a normal random variable $X$ into a random variable with a standard normal random variable by
+\begin{definition}[Standard Normal Distribution]
+The \textbf{standard normal distribution} is the distribution of a normal \@{random-variable} with mean $0$ and variance $1.$ We can transform a normal random variable $X$ into a standard normal random variable by
 
 \[ Z = \frac{X - \mu}{\sigma}. \]
+\end{definition}
 
 Thus, with $z_1 = (x_1 - \mu)/\sigma$ and $z_2 = (x_2 - \mu)/\sigma,$ we have 
 
@@ -59,7 +65,8 @@ This can make it easier to find probabilities using $Z$ tables, which are used b
 
 \subsubsection{Normal Approximation to the Binomial}
 
-If $X$ is a binomial random variable with mean $\mu = np$ and variance $\sigma^2 = npq,$ then
+\begin{theorem}[Normal Approximation to the Binomial]\label{normal-approximation-binomial}
+If $X$ is a \@[binomial]{binomial-distribution} random variable with mean $\mu = np$ and variance $\sigma^2 = npq,$ then
 
 \[ Z = \lim_{n \to \infty} \frac{X - np}{\sqrt{npq}} = n(z; 0, 1). \]
 
@@ -74,9 +81,12 @@ P(X \leq x) & = \sum_{k=0}^x b(k; n, p) \\
 \eal
 
 and the approximation is good if $np$ and $n(1-p)$ are greater than or equal to 5.
+\end{theorem}
 
+\begin{note}[Continuity Correction]\label{continuity-correction}
 The $0.5$ is called a \textbf{continuity correction} and comes from the fact that
 
 \[ P(X = k) \approx P(k - 0.5 \leq X \leq k + 0.5). \]
+\end{note}
 
 \end{document}
