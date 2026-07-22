@@ -35,47 +35,48 @@
 - [x] line 46: **intuition/remark** `{label: variance-interpretation}` — excerpt: "Variance and standard deviation tell us about how spread out the values of $X$ are around its mean." (wrapped as intuition; also fixed missing `=` in both variance formulas and "TOOD"→"TODO")
 
 ### content/applied-math/probability-and-statistics/hypothesis.md
-- [ ] lines 12–18: **definition** `{label: null-alternative-hypothesis}` — excerpt: "We could say that our null hypothesis is that the population mean is what we expect..."
-- [ ] lines 24–30: **definition/note** `{label: p-value}` "p-value" — excerpt: "the probability of getting a test statistic ($z$) this extreme or more extreme if the actual mean is $\mu_0$..."
-- [ ] lines 10–54: whole page is an unformalized procedure; could become an **example** of a two-tailed z-test / t-test — excerpt: "Given a baseline population mean $\mu_0,$ a sample mean $\bar{x}$..."
+- [x] lines 12–18: **definition** `{label: null-alternative-hypothesis}` — excerpt: "We could say that our null hypothesis is that the population mean is what we expect..." (bolded null/alternative hypothesis terms)
+- [x] lines 24–30: **definition** `{label: p-value}` "p-value" — excerpt: "the probability of getting a test statistic ($z$) this extreme or more extreme if the actual mean is $\mu_0$..." (lifted out of the procedural sentence into its own block, referenced via \@{p-value}; cleared the double-comma)
+- [x] lines 10–54: decided NOT to wrap whole page as one example (per Jason) — extracted the two definitions instead, left the walkthrough as prose; fixed $p-values$→$p$-values, "that that"/mu_0/period-comma typos
 
 ### content/applied-math/probability-and-statistics/joint-probability.md
-- [ ] lines 10–20: **definition** `{label: joint-distribution}` "Joint Probability Distribution / Marginalization" — excerpt: "Two random variables $X$ and $Y$ can be paired as a single **random vector**..." (refs: @random-variable)
-- [ ] lines 22–32: **definition** `{label: multinomial-distribution}` "Multinomial Distribution" — excerpt: "For a sequence of $n$ independent, identical experiments with each one of the experiments resulting in $r$ outcomes..." (see math-errors queue re: line 26)
-- [ ] lines 34–44: **definition** `{label: convolution}` "Sums of Independent Random Variables (Convolution)" — excerpt: "Sums of independent random variables are called convolutions."
-- [ ] lines 47–49: **theorem** `{label: sum-independent-poisson}` — excerpt: "If $X_1, X_2, \dots X_n$ are independent Poisson random variables with parameters $\lambda_1$..." (refs: @poisson-distribution)
-- [ ] lines 51–53: **theorem** `{label: sum-independent-normal}` — excerpt: "If $X_1, X_2, \dots X_n$ are independent normal random variables with means $\mu_1$..." (refs: @normal-distribution)
-- [ ] lines 56–67: **definition** `{label: covariance}` / `{label: correlation-coefficient}` — excerpt: "Covariance is a measure of the joint variability of two random variables."
+- [x] lines 10–20: split into **joint-probability-distribution** + **marginalization** definitions (one concept each, per Jason) — excerpt: "Two random variables $X$ and $Y$ can be paired as a single **random vector**..." (refs: @random-variables via auto-plural; fixed soley→solely, bare X/Y→math)
+- [x] lines 22–32: split into **multinomial-distribution** + **multinomial-coefficient** definitions (per Jason) — excerpt: "For a sequence of $n$ independent, identical experiments with each one of the experiments resulting in $r$ outcomes..." (fixed math error $X_n$→$X_r$ in the pmf)
+- [x] lines 34–44: **definition** `{label: convolution}` "Convolution" — excerpt: "Sums of independent random variables are called convolutions." (bolded defined term)
+- [x] lines 47–49: **theorem** `{label: sum-independent-poisson}` — excerpt: "If $X_1, X_2, \dots X_n$ are independent Poisson random variables with parameters $\lambda_1$..." (refs: @poisson-distribution; fixed "Indepenent" heading)
+- [x] lines 51–53: **theorem** `{label: sum-independent-normal}` — excerpt: "If $X_1, X_2, \dots X_n$ are independent normal random variables with means $\mu_1$..." (refs: @normal-distribution)
+- [x] lines 56–67: split into **covariance** + **correlation-coefficient** definitions (per Jason) — excerpt: "Covariance is a measure of the joint variability of two random variables." (fixed altenative→alternative; bolded terms; \Cov macro is defined in mathnotes.sty — queue's "undefined macro" note was stale)
 
 ### content/applied-math/probability-and-statistics/limit-theorems.md
-- [ ] lines 15–44: **theorem** `{label: markovs-inequality}` "Markov's Inequality" with nested **proof** — excerpt: "Let $X$ be a non-negative random variable ($X \geq 0,$) and $t > 0.$ Then..."
-- [ ] lines 46–67: **example** `{label: markov-inequality-fish}` with a trailing **remark** (lines 66–67 "Interpretation") — excerpt: "Suppose the size of a fish (measured in inches) is modeled as a nonnegative random variable..." (refs: @markovs-inequality)
-- [ ] lines 73–107: **theorem** `{label: chebyshevs-inequality}` "Chebyshev's Inequality" with nested **proof** — excerpt: "Suppose $t > 0$ and $X$ is a random variable with the finite mean $E[X]$ and standard deviation..." (refs: @markovs-inequality)
-- [ ] lines 111–127: **example** `{label: chebyshev-fish}` — excerpt: "Suppose the length $X$ of a fish is a random variable measured in inches with mean..."
-- [ ] lines 131–149: **theorem** `{label: law-of-large-numbers}` "Law of Large Numbers" with nested **proof** — excerpt: "Suppose $X_1, X_2, \dots$ are independent and identically distributed random variables with finite mean..." (refs: @chebyshevs-inequality)
-- [ ] lines 153–169: **definition** `{label: moment-generating-function}` "Moment Generating Function" — excerpt: "If $X$ is a random variable, then its moment generating function is a real-valued function..."
-- [ ] lines 171–184: **theorem** `{label: mgf-of-sum}` with nested **proof** — excerpt: "The moment generating function for the sum of two random variables is the product..." (refs: @moment-generating-function)
-- [ ] lines 186–204: **theorem** `{label: mgf-continuity-theorem}` "Continuity Theorem for MGFs" — excerpt: "Let ${X_n}$ be a sequence of random variables with moment generating functions..."
-- [ ] lines 206–218: **theorem** `{label: central-limit-theorem}` "Central Limit Theorem" — excerpt: "If $n$ values are sampled from a distribution with a mean $\mu$..." (statement at line 218 is truncated — file ends at "then")
+- [x] lines 15–44: **theorem** `{label: markovs-inequality}` "Markov's Inequality" with nested **note** + **proof** — excerpt: "Let $X$ be a non-negative random variable ($X \geq 0,$) and $t > 0.$ Then..." (commentary→note per Jason; proof sibling-attaches; fixed the-the/We-we/$X's$; math error $>t$→$\ge t$)
+- [x] lines 46–67: **example** `{label: markov-inequality-fish}` with nested **remark** ("Interpretation") — excerpt: "Suppose the size of a fish (measured in inches) is modeled as a nonnegative random variable..." (refs: @markovs-inequality; remark nested literally in example for a clean label)
+- [x] lines 73–107: **theorem** `{label: chebyshevs-inequality}` "Chebyshev's Inequality" with nested **note** + **proof** — excerpt: "Suppose $t > 0$ and $X$ is a random variable with the finite mean $E[X]$ and standard deviation..." (refs: @markovs-inequality)
+- [x] lines 111–127: **example** `{label: chebyshev-fish}` — excerpt: "Suppose the length $X$ of a fish is a random variable measured in inches with mean..." (refs: @chebyshevs-inequality)
+- [x] lines 131–149: **theorem** `{label: law-of-large-numbers}` "Law of Large Numbers" with nested **note** + **proof** — excerpt: "Suppose $X_1, X_2, \dots$ are independent and identically distributed random variables with finite mean..." (refs: @chebyshevs-inequality)
+- [x] lines 153–169: **definition** `{label: moment-generating-function}` "Moment Generating Function" — excerpt: "If $X$ is a random variable, then its moment generating function is a real-valued function..." (properties left as prose; fixed $M_x$→$M_X$ subscripts)
+- [x] lines 171–184: **theorem** `{label: mgf-of-sum}` with nested **proof** — excerpt: "The moment generating function for the sum of two random variables is the product..." (refs: @moment-generating-function)
+- [x] lines 186–204: **theorem** `{label: mgf-continuity-theorem}` "Continuity Theorem for MGFs" — excerpt: "Let ${X_n}$ be a sequence of random variables with moment generating functions..." (fixed ${X_n}$→$\{X_n\}$ so set braces render)
+- [x] lines 206–218: **theorem** `{label: central-limit-theorem}` "Central Limit Theorem" — excerpt: "If $n$ values are sampled from a distribution with a mean $\mu$..." (precise statement truncated in source — wrapped with TODO; intuitive version left as prose)
 
 ### content/applied-math/probability-and-statistics/markov-chains.md
 (Mostly already formalized.)
-- [ ] lines 58–68: **theorem** `{label: stationary-distribution}` "Stationary Distribution of an Ergodic Chain" — excerpt: "When the @markov-chain is @ergodic, the limit ... exists and ..." (refs: @markov-chain, @ergodic)
-- [ ] line 84: **note** — excerpt: "A @stochastic-matrix can be used to describe the transitions of a @markov-chain." (short)
+- [x] lines 58–68: **theorem** `{label: stationary-distribution}` "Stationary Distribution of an Ergodic Chain" with attached **note** — excerpt: "When the @markov-chain is @ergodic, the limit ... exists and ..." (refs: @markov-chain, @ergodic)
+- [x] line 84: **note** — excerpt: "A @stochastic-matrix can be used to describe the transitions of a @markov-chain." (short)
+  - Also fixed in the Markov Chain definition: $NxN$→$N\times N$, invisible `{1,\dots,N}`→`\{1,\dots,N\}`, and math error $\sum_{k=0}^N$→$\sum_{k=1}^N$.
 
 ### content/applied-math/probability-and-statistics/probability.md
-- [ ] lines 12–28: **definition** `{label: sample-space}` "Sample Space" (and "Event") — excerpt: "The set of all possible outcomes of a statistical experiment is called the **sample space**..." (this term is referenced as @sample-space elsewhere but is not in a block here)
-- [ ] lines 30–37: **axiom/definition** `{label: probability-axioms}` "Probability" — excerpt: "We can assign a probability or weight to each sample point in a sample space..." (see math-errors queue re: line 33)
-- [ ] lines 40–58: **proposition** `{label: probability-rules}` "Addition and Multiplication Rules" — excerpt: "The probability of $A$ or $B$ is the probability of $A$ plus the probability of $B$ minus..."
-- [ ] lines 60–66: **definition** `{label: conditional-probability}` "Conditional Probability" — excerpt: "From this, we can give the formula for conditional probability."
+- [x] lines 12–28: **definition** `{label: sample-space}` "Sample Space" (and "Event") — excerpt: "The set of all possible outcomes of a statistical experiment is called the **sample space**..." (split into sample-space + event definitions; merged 3 split itemizes; fixed roles→rolls, $\{1,3,5\}$ punctuation, "the the"→"that the")
+- [x] lines 30–37: **definition** `{label: probability}` "Probability" — excerpt: "We can assign a probability or weight to each sample point in a sample space..." (used auto-label `probability` not `probability-axioms` — resolves existing \@{probability} ref in 01-discrete-entropy.tex; fixed events→sample-points math error; `event A`→`event $A$`)
+- [x] lines 40–58: **theorem** `{label: probability-rules}` "Addition and Multiplication Rules" — excerpt: "The probability of $A$ or $B$ is the probability of $A$ plus the probability of $B$ minus..." (used theorem not proposition, matching codebase convention; mathified bare "A and B")
+- [x] lines 60–66: **definition** `{label: conditional-probability}` "Conditional Probability" — excerpt: "From this, we can give the formula for conditional probability."
 
 ### content/applied-math/probability-and-statistics/random-variables-and-probability-distributions.md
-- [ ] lines 19–23: **definition** `{label: discrete-continuous-random-variable}` — excerpt: "if a sample space contains a finite number of possibilities... it is called a **discrete sample space**." (these define @discrete / @continuous, which are referenced in expectation.md)
-- [ ] lines 27–37: **definition** `{label: probability-mass-function}` / `{label: cumulative-distribution-function}` — excerpt: "A discrete random variable takes each of its values with a certain probability..."
-- [ ] lines 39–55: **definition** `{label: probability-density-function}` "Continuous Probability Distributions" — excerpt: "A continuous random variable has a probabilty of $0$ of exactly assuming any particular value."
+- [x] lines 19–23: split into **four** definitions (`discrete-sample-space`, `continuous-sample-space`, `discrete-random-variable`, `continuous-random-variable`) — one concept each, per Jason. Did NOT hijack `discrete`/`continuous` as synonyms (those are broader than probability); the `\@{discrete}`/`\@{continuous}` refs in expectation.tex stay dangling for now.
+- [x] lines 27–37: **definition** `{label: probability-mass-function}` / `{label: cumulative-distribution-function}` — excerpt: "A discrete random variable takes each of its values with a certain probability..." (pulled the 3 conditions enumerate inside the existing Probability Distribution block, fixed dangling "…outcome $x.$"→colon; added Cumulative Distribution Function definition; fixed $F(X)$→$F(x)$)
+- [x] lines 39–55: **definition** `{label: probability-density-function}` "Probability Density Function" — excerpt: "A continuous random variable has a probabilty of $0$ of exactly assuming any particular value." (fixed "distribution function"→"density function" per pdf; heading/probabilty typos; continuous CDF left as prose to avoid label collision, F(X)→F(x) fixed)
 
 ### content/applied-math/probability-and-statistics/slots.md
-- [ ] lines 8–89: entire page is an unformalized worked problem; could be one **example**/**solution** (or the two sub-derivations at lines 18–62 and 64–72 as nested example/solution blocks) — excerpt: "My dad told a story at dinner once about playing slots in Las Vegas." (low priority; primarily narrative)
+- [x] ~~lines 8–89: entire page is an unformalized worked problem; could be one **example**/**solution**~~ — SKIPPED (per Jason 2026-07-21): narrative essay organized with \subsection/\subsubsection headings + \includegraphics; section headings can't live inside a block (parser flushes the anchor on a section macro), so a single example/solution block would break the structure. Left as prose.
 
 ### content/discrete-math/recurrence-relations.md
 - [ ] lines 11–17: **definition** `{label: linear-recurrence-constant-coefficients}` — excerpt: "A linear recurrence with constant coefficients is an equation of the form..." (also defines homogeneous/non-homogeneous and order)

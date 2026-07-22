@@ -16,11 +16,25 @@ A \textbf{random variable} is a \@{function} that associates a \@{real} number w
 
 Random variables don't have to map to all \@{reals}; for example, \textbf{Bernoulli random variables} map to either 0 or 1.
 
-Returning to sample spaces briefly, if a sample space contains a finite number of possibilities, or an unending \@{sequence} with as many elements as there are whole numbers (\@[countably infinite]{countable}), it is called a \textbf{discrete sample space}.
+Returning to sample spaces briefly:
 
+\begin{definition}[Discrete Sample Space]
+If a sample space contains a finite number of possibilities, or an unending \@{sequence} with as many elements as there are whole numbers (\@[countably infinite]{countable}), it is called a \textbf{discrete sample space}.
+\end{definition}
+
+\begin{definition}[Continuous Sample Space]
 If a sample space contains an infinite number of possibilities equal to the number of points on a line segment, it is called a \textbf{continuous sample space}.
+\end{definition}
 
-Similarly, a random variable is called a \textbf{discrete random variable} if its set of possible outcomes is \@{countable}, or a \textbf{continuous random variable} if it takes values on a continuous scale. Discrete random variables tend to represent counted data, while continuous random variables tend to represent measured data.
+\begin{definition}[Discrete Random Variable]
+A \@{random-variable} is called a \textbf{discrete random variable} if its set of possible outcomes is \@{countable}.
+\end{definition}
+
+\begin{definition}[Continuous Random Variable]
+A \@{random-variable} is called a \textbf{continuous random variable} if it takes values on a continuous scale.
+\end{definition}
+
+Discrete random variables tend to represent counted data, while continuous random variables tend to represent measured data.
 
 \subsection{Probability Distributions}
 
@@ -28,37 +42,41 @@ Similarly, a random variable is called a \textbf{discrete random variable} if it
 
 
 \begin{definition}[Probability Distribution]\synonyms{"probability mass function", "probability function"}
-A discrete random variable takes each of its values with a certain probability. The function $f(x)$ that gives the probability of each value $x$ of a random variable $X$ occurring is called the \textbf{probability function,} \textbf{probability mass function,} or \textbf{probability distribution.} More formally, the set of ordered pairs $(x, f(x))$ is a probability distribution of the discrete random variable $X$ if, for each possible outcome $x.$
-\end{definition}
+A discrete random variable takes each of its values with a certain probability. The function $f(x)$ that gives the probability of each value $x$ of a random variable $X$ occurring is called the \textbf{probability function,} \textbf{probability mass function,} or \textbf{probability distribution.} More formally, the set of ordered pairs $(x, f(x))$ is a probability distribution of the discrete random variable $X$ if, for each possible outcome $x$:
 
 \begin{enumerate}
 \item $f(x) \geq 0$
 \item $\sum_{x}{f(x)} = 1$
 \item $P(X = x) = f(x)$
 \end{enumerate}
+\end{definition}
 
-Sometimes we want to know the probability that a random variable will be less than or equal to some real number $x.$ If we let $F(X) = P(X \leq x)$ for all real $x$, we define $F(X)$ to be the \textbf{cumulative distribution function} of the random variable $X.$ More formally, the \textbf{cumulative distribution function} $F(X)$ of a discrete random variable $X$ with a probability distribution $f(x)$ is:
+\begin{definition}[Cumulative Distribution Function]
+Sometimes we want to know the probability that a random variable will be less than or equal to some real number $x.$ If we let $F(x) = P(X \leq x)$ for all real $x$, we define $F(x)$ to be the \textbf{cumulative distribution function} of the random variable $X.$ More formally, the \textbf{cumulative distribution function} $F(x)$ of a discrete random variable $X$ with a probability distribution $f(x)$ is:
 
 \[ F(x) = P(X \leq x) = \sum_{t \leq x}{f(t)}, \quad -\infty < x < \infty. \]
+\end{definition}
 
-\subsubsection{Continuous Probabilty Distributions}
+\subsubsection{Continuous Probability Distributions}
 
-A continuous random variable has a probabilty of $0$ of exactly assuming any particular value. That's because, in any \@{interval} of \@{real-numbers}, there are infinitely many points, and so the denominator for the proportion is infinite. For example, there are infinitely many points between $1.1$ and $1.2$, and again, infinitely many points between $1.2$ and $1.21$ and so on, regardless of the level of precision.
+A continuous random variable has a probability of $0$ of exactly assuming any particular value. That's because, in any \@{interval} of \@{real-numbers}, there are infinitely many points, and so the denominator for the proportion is infinite. For example, there are infinitely many points between $1.1$ and $1.2$, and again, infinitely many points between $1.2$ and $1.21$ and so on, regardless of the level of precision.
 
 So, instead of focusing on probabilities of particular values, we focus on probabilities of values falling in various intervals. For example, instead of asking what the probability that someone weighs $150$ pounds is, we can ask what is the probability that they weigh between $149$ and $151$ pounds.
 
-The function $f(x)$ is a \textbf{probability distribution function} (pdf) for the continuous random variable $X$, defined on the \@{reals}, if
+\begin{definition}[Probability Density Function]
+The function $f(x)$ is a \textbf{probability density function} (pdf) for the continuous random variable $X$, defined on the \@{reals}, if
 
 \begin{enumerate}
 \item $f(x) \geq 0$ for all $x \in \reals$
 \item $\int_{-\infty}^{\infty} f(x) dx = 1 $
 \item $P(a < X < b) = \int_{a}^{b} f(x) dx$
 \end{enumerate}
+\end{definition}
 
 In other words, if we integrate $f(x)$ from $a$ to $b$ we will get the probability of $X$ taking on a value between $a$ and $b$.
 
-From here, the \textbf{cumulative distribution function} F(X) of a continuous random variable $X$ with density function $f(x)$ is attained by simply integrating $f(x)$ from $-\infty$ to $x$:
+From here, the \textbf{cumulative distribution function} $F(x)$ of a continuous random variable $X$ with density function $f(x)$ is attained by simply integrating $f(x)$ from $-\infty$ to $x$:
 
-\[ F(X) = P(X \leq x) = \int_{-\infty}^{x} f(t)dt, \quad -\infty < x < \infty. \]
+\[ F(x) = P(X \leq x) = \int_{-\infty}^{x} f(t)dt, \quad -\infty < x < \infty. \]
 
 \end{document}
