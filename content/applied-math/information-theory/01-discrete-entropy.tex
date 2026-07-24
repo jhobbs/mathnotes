@@ -415,6 +415,17 @@ Now, suppose $p(x)p(y) = p(x,y).$ Then $Z = 1$ and
 so $H(X) + H(Y) = H(X,Y).$
 \end{proof}
 
+\begin{definition}[Mutual Information]\label{mutual-information}
+	Consider two \@{random-variables} $X$ and $Y$ with \@{joint probability mass function} $p(x,y)$ and \@{marginal probability mass functions} $p(x)$ and $p(y).$ The \textbf{mutual information} $I(X; Y)$ is the \@{relative-entropy} between the \@{joint distribution} and the \@{product-distribution} $p(x)p(y)$:
+
+\bal
+	I(X; Y) & = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log{\frac{p(x,y)}{p(x)p(y)}} \\
+	        & = D(p(x,y)||p(x)p(y)) \\
+		& = \mathbb{E}_{p(x,y)} \log{\frac{p(X,Y)}{p(X)p(Y)}}.
+\eal
+
+\end{definition}
+
 \detach
 
 \begin{note}

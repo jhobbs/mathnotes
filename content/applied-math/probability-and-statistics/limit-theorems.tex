@@ -4,6 +4,8 @@
 \title{Limit Theorems}
 \description{Fundamental probability limit theorems including Markov and Chebyshev inequalities, Law of Large Numbers, and Central Limit Theorem with moment generating functions.}
 
+\source{title={CS 6815: Pseudorandomness and Combinatorial Constructions}, author=Eshan Chattopadhyay, type={lecture notes}, section={Lecture 3 (Aug 30, 2022)}, published=2022, url={https://courses.cs.cornell.edu/cs6815/2022fa/lec3.pdf}, accessed=2026-07-22, notes={Cornell University; scribed by Noam Ringach}}
+
 \begin{document}
 
 \section{Limit Theorems}
@@ -142,8 +144,40 @@ This tells us that the probability of a fish's length deviating from 20 inches b
 
 \subsection{Law of Large Numbers}
 
+\begin{definition}[Pairwise Independence]\synonyms{"pairwise independent"}
+        \@{Random variables} $X_1, \dots, X_n$ are said to be \textbf{pairwise independent} if $X_i$ and $X_j$ are \@{independent} for every $\{i,j\} \in \binom{[n]}{2}$, that is, if
+        \[ F_{X_i, X_j}(x, y) = F_{X_i}(x) F_{X_j}(y) \]
+        for all $x, y \in \mathbb{R}$, where $F_{X_i, X_j}(x,y) = P(X_i \leq x, X_j \leq y)$ is the joint \@{cumulative distribution function} of the pair.
+
+        \@{Events} $A_1, \dots, A_n$ are said to be \textbf{pairwise independent} if
+        \[ P(A_i \cap A_j) = P(A_i) P(A_j) \]
+        for every $\{i,j\} \in \binom{[n]}{2}$.
+\end{definition}
+
+\begin{definition}[Mutual Independence]\synonyms{"mutually independent"}
+        \@{Random variables} $X_1, \dots, X_n$ are said to be \textbf{mutually independent} if their joint \@{cumulative distribution function} factors as
+        \[ F_{X_1, \dots, X_n}(x_1, \dots, x_n) = \prod_{i=1}^{n} F_{X_i}(x_i) \]
+        for all $x_1, \dots, x_n \in \mathbb{R}$, where $F_{X_i}(x) = P(X_i \leq x)$ is the cumulative distribution function of $X_i$.
+
+        \@{Events} $A_1, \dots, A_n$ are said to be \textbf{mutually independent} if
+        \[ P\left( \bigcap_{i \in S} A_i \right) = \prod_{i \in S} P(A_i) \]
+        for every $S \subseteq [n]$ with $|S| \geq 2$, where $[n] = \{1, \dots, n\}$ and $|S|$ denotes the number of elements of $S$.
+
+        An infinite collection is said to be mutually independent if every finite subfamily is.
+\end{definition}
+
+\begin{theorem}
+\@{Pairwise independence} is strictly weaker than \@{mutual independence}.
+\end{theorem}
+
+\begin{definition}[Independent and Identically Distributed]\synonyms{"i.i.d."}
+\@{Random variables} $X_1, \dots, X_n$ are said to be \textbf{independent and identically distributed} if they are \@{mutually independent} and each has the same \@{probability distribution}; equivalently, if their joint \@{cumulative distribution function} factors as
+   \[ F_{X_1, \dots, X_n}(x_1, \dots, x_n) = \prod_{i=1}^{n} F(x_i), \]
+where $F$ is the common cumulative distribution function shared by every $X_i$ and $x_1, \dots, x_n$ are real numbers.
+\end{definition}
+
 \begin{theorem}[Law of Large Numbers]\label{law-of-large-numbers}
-Suppose $X_1, X_2, \dots$ are independent and identically distributed random variables with finite mean $\mu.$ Then for any $\epsilon > 0,$
+	Suppose $X_1, X_2, \dots$ are \@{independent and identically distributed} \@{random variables} with \@{finite} \@{mean} $\mu.$ Then for any $\epsilon > 0,$
 
 \[ \lim_{n \to \infty} P \left ( \left |\frac{X_1 + \cdots + X_n}{n} - \mu  \right | \geq \epsilon \right ) = 0. \]
 \end{theorem}

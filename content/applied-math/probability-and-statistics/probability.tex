@@ -4,6 +4,9 @@
 \title{Probability Basics}
 \description{Foundational concepts including sample spaces, events, probability rules, conditional probability, and independence using set theory operations.}
 
+\source{title=Log probability, type=web, url={https://en.wikipedia.org/wiki/Log_probability}, accessed=2026-07-21}
+\source{title=Probability, author=Nathan Ponder, type=book, published=2020, notes={Louisiana State University at Alexandria}}
+
 \begin{document}
 
 \section{Probability Basics}
@@ -25,7 +28,7 @@ An \textbf{event} is a \@{subset} of a \@{sample-space}. For example, we can say
 A lot of the rest of basic probability is just set theory from there:
 
 \begin{itemize}
-\item The event that the roll of a die is not less than or equal to 4 is the \@[complement]{complement-of-a-set} of $C$, written as $C' = \{5,6\}$.
+\item The event that the roll of a die is not less than or equal to 4 is the \@[complement]{complement-of-a-set} of $C$, written as $C^c = \{5,6\}$.
 \item The event that the roll is both even and less than or equal to 4 is the intersection of $A$ and $C$, written as $A \cap C = \{2,4\}.$
 \item The event that the roll is either even or less than or equal to 4 is the union of $A$ and $C$, written as $A \cup C = \{1,2,3,4,6\}.$
 \end{itemize}
@@ -44,7 +47,41 @@ Then, the \textbf{probability} of an event $A$ is the sum of the probabilities o
 \[ 0 \leq P(A) \leq 1, \quad P(\emptyset) = 0, \quad P(S) = 1. \]
 \end{definition}
 
+\begin{definition}[Odds]
+\notation{\odds}{\operatorname{odds}}
+The \textbf{odds} of an \@{event} $A$ occurring are defined as
+
+	\[ \odds(A) = \frac{P(A)}{P(A^c)} = \frac{P(A)}{1 - P(A)} \]
+
+that is, the \@{probability} $A$ occurs divided by the probability of the \@{complement} of $A$ (i.e., the probability that $A$ does not occur.)
+\end{definition}
+\begin{note}
+\@{Odds} are often written as a \@{ratio} of positive \@{integers}. So we'd say that the odds of drawing an ace from a standard deck of 52 cards is
+
+\[ \odds(\text{Ace}) = \frac{\frac{4}{52}}{\frac{48}{52}} = \frac{4}{48} = \frac{1}{12} = 1 : 12. \]
+
+\end{note}
+
+\begin{definition}[Log Probability]
+	A \textbf{log probability} is just a \@{logarithm} of a \@{probability}.
+\end{definition}
+\begin{note}
+Using \@{log probability} has some advantages:
+\begin{itemize}
+\item It converts multiplication of probabilities into addition, which are faster to compute.
+\item It improves \@{numerical stability} when very small probabilities are involved.
+\item It eliminates \@{exponentiation}.
+\item Logarithms are \@{concave} which is useful for \@{optimization}.
+\end{itemize}
+\end{note}
+
 \subsection{Probability Rules}
+
+\begin{definition}[Independence]\synonyms{"independent"}
+	The \@{events} $A$ and $B$ are said to be \textbf{independent} if
+
+\[ P(A \cap B) = P(A)P(B). \]
+\end{definition}
 
 \begin{theorem}[Addition and Multiplication Rules]\label{probability-rules}
 The probability of $A$ or $B$ is the probability of $A$ plus the probability of $B$ minus the probability of $A$ and $B$ occurring together:

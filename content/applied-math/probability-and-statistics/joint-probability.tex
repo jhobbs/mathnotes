@@ -8,13 +8,13 @@
 
 \section{Joint Probability}
 
-\begin{definition}[Joint Probability Distribution]
+\begin{definition}[Joint Probability Distribution]\synonyms{"joint distribution", "joint probability mass function", "joint probability"}
 Two \@{random-variables} $X$ and $Y$ can be paired as a single \textbf{random vector} or \textbf{bivariate random variable.} If it's discrete (i.e. both $X$ and $Y$ are discrete) it has a \textbf{joint probability mass function} and if it's continuous ($X$ and $Y$ are both continuous) it has a \textbf{joint probability density function.}
 
 In the discrete case, $f(x,y) = P(X = x, Y = y).$
 \end{definition}
 
-\begin{definition}[Marginalization]
+\begin{definition}[Marginalization]\synonyms{"marginal distribution", "marginal probability mass function"}
 We can \textbf{marginalize} over $Y$ to find solely the distribution of $X,$ we denote this $f_X(x)$ and give it as
 
 \[ f_X(x) = \sum_y f(x, y). \]
@@ -23,6 +23,18 @@ We can similarly find $f_Y(y)$ by marginalizing over $X$:
 
 \[ f_Y(y) = \sum_x f(x, y). \]
 \end{definition}
+
+\begin{definition}[Product Distribution]\synonyms{"product measure"}
+        A \@{probability-distribution} $\mu$ on $\mathcal{X}_1 \times \cdots \times \mathcal{X}_n$ is a \textbf{product distribution} if there are distributions $\mu_1, \dots, \mu_n$ on $\mathcal{X}_1, \dots, \mathcal{X}_n$ respectively such that
+        \[ \mu(x_1, \dots, x_n) = \prod_{i=1}^{n} \mu_i(x_i) \]
+        for every tuple $(x_1, \dots, x_n)$.
+
+	Such a distribution is written $\mu_1 \otimes \cdots \otimes \mu_n$, or $\mu^{\otimes n}$ when every factor is equal to a common distribution $\mu$.
+\end{definition}
+
+\begin{theorem}
+	\@{Random variables} are \@{mutually independent} exactly when their \@{joint distribution} is a \@{product distribution}.
+\end{theorem}
 
 \subsection{Multinomial Distribution}
 
