@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage{mathnotes}
+
+\title{Logarithms}
+\description{Definition of the logarithm, the product, quotient, and power rules, change of base, and concavity.}
+\source{title={Principles of Mathematical Analysis}, author={Walter Rudin}, type={book}, isbn={978-0-07-054235-8}, section={3rd Edition}, published={1976}}
+
+\begin{document}
+
+\section{Logarithms}
+
+\begin{definition}[Logarithm]
+	For $b > 1,$ $y > 0$ the unique \@{real} $x$ such that $b^x = y$ is called the \textbf{logarithm of} $y$ \textbf{to the base} $b$.
+\end{definition}
+
+\begin{note}
+The logarithm extends to complex arguments; see \pagelink[the complex logarithm]{analysis/complex-analysis/module-08-elementary-functions}.
+\end{note}
+
+\begin{theorem}[Product Rule for Logarithms]
+TODO: the log of a product is the sum of the logs.
+\end{theorem}
+
+\begin{theorem}[Quotient Rule for Logarithms]
+TODO: the log of a quotient is the difference of the logs.
+\end{theorem}
+
+\begin{theorem}[Power Rule for Logarithms]
+TODO: the log of a power moves the exponent out front.
+\end{theorem}
+
+\begin{theorem}[Logarithm Change of Base]\label{logarithm-change-of-base}
+\[ \log_b{(a)} = \frac{\log_x{(a)}}{\log_x{(b)}}. \]
+\end{theorem}
+
+\begin{theorem}[Log is Concave]\label{log-is-concave}
+The $\log$ \@{function} is \@[concave]{concave-function}, i.e. $-\log$ is \@[convex]{convex-function}.
+\end{theorem}
+
+\begin{proof}
+The second derivative of natural $\log$ is $\frac{-1}{x^2},$ which is always non-positive. By \@{second-derivative-test-for-convexity}, $\log$ is therefore \@[concave]{concave-function}.
+\end{proof}
+
+\end{document}

@@ -24,7 +24,7 @@ Starting with \@{convex-function}, $\varphi$ is \textbf{strictly convex} if the 
 A function $\varphi$ is said to be \textbf{concave} if $-\varphi$ is a \@{convex-function}.
 \end{definition}
 
-\begin{theorem}[Second Derivative Test for Convexity]
+\begin{theorem}[Second Derivative Test for Convexity]\label{second-derivative-test-for-convexity}
 Let $\varphi$ be twice \@{differentiable} on an \@{open} \@{interval} $(a,b).$ Then
 $\varphi$ is \@{convex} on $(a,b)$ if and only if $\varphi''(x) \geq 0$ for all
 $x \in (a,b),$ and \@{concave} if and only if $\varphi''(x) \leq 0$ for all
@@ -38,13 +38,5 @@ A \textbf{convex combination} is a \@{linear-combination} of \@{points} where al
 \begin{note}
 Every \@{convex-combination} of two \@{points} lies on the \@{line-segment} between the \@{points}.
 \end{note}
-
-\begin{theorem}[Log is Concave]\label{log-is-concave}
-The $\log$ \@{function} is \@{concave}, i.e. $-\log$ is \@{convex}.
-\end{theorem}
-
-\begin{proof}
-The second derivative of natural $\log$ is $\frac{-1}{x^2},$ which is always non-positive. By \@{second-derivative-test-for-convexity}, $\log$ is therefore \@{concave}.
-\end{proof}
 
 \end{document}

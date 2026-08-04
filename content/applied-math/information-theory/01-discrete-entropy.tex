@@ -267,6 +267,12 @@ If the $p_i$ are incommensurable, we can approximate them as closely as we'd lik
 The \@{entropy} of a \@{random-variable} quantifies the average level of uncertainty or information associated with the variable's possible outcomes. It measures the expected amount of information needed to describe the state of the variable, considering the distribution of probabilities across all potential states.
 \end{remark}
 
+\detach
+
+\begin{note}
+When we decrease the probability of an \@{element} occurring, its \@{self-information} increases only logarithmically, while its weight in the entropy sum decreases linearly.
+\end{note}
+
 The demo below makes these quantities concrete. It uses a discrete alphabet of $N$ symbols whose probabilities follow a \emph{Zipfian} distribution,
 
 \[ p(n) = \frac{n^{-\alpha}}{\sum_{k=1}^{N} k^{-\alpha}}, \qquad n = 1, 2, \dots, N, \]
@@ -311,6 +317,29 @@ and for \@{entropy} of $X$ we get
 When a \@{random-variable} is uniformly distributed over an alphabet of $n$ \@{elements}, the \@{self-information} of any given \@{element} equals the \@{entropy} of the \@{random-variable} and is $\log{n}.$
 \end{theorem}
 
+\begin{lemma}[Nonnegativity of Entropy]
+\[ H(X) \geq 0. \]
+\begin{proof}
+	\[ 0 \leq p(x) \leq 1 \implies \log{p(x)} \leq 0 \implies - \log{p(x)} \geq 0. \]
+\end{proof}
+\end{lemma}
+
+\begin{lemma}[Change of Logarithm Base]
+\[ H_b(X) = (\log_b{a})H_a(X). \]
+
+\begin{proof}
+We use the \@{logarithm-change-of-base} here.
+
+\bal
+    H_b(x) & = - \sum_{x \in \mathcal{X}} p(x) \log_b{x} \\
+           & = - (\log_b{a}) \sum_{x \in \mathcal{X}} p(x) \frac{\log_b{x}}{\log_b{a}} \\
+           & = - (\log_b{a}) \sum_{x \in \mathcal{X}} p(x) \log_a{x} \\
+	   & = (\log_b{a})H_a(X)
+\eal
+\end{proof}
+
+\end{lemma}
+
 \begin{theorem}
 $H = 0$ iff all the $p_i$ but one are zero, this one having the value of one.
 \end{theorem}
@@ -319,8 +348,195 @@ $H = 0$ iff all the $p_i$ but one are zero, this one having the value of one.
 Suppose $H(p_1, \dots, p_n) = 0.$ Then, $0 = - \sum_{i=1}^n p_i \log{p_i}.$ Note that because $0 \leq p_i \leq 1,$ we have $\log{p_i} \leq 0,$ and $-p_i \log{p_i} \geq 0$ (with the convention $0 \log 0 = 0,$ since $\lim_{p \to 0^+} p \log p = 0$).  Assume for contradiction that more than one $p_i$ is non-zero. Then, because $\sum p_i = 1,$ each non-zero $p_i$ is in $(0, 1)$ and therefore its $- p_i \log{p_i} > 0,$ and the sum of these terms is therefore non-zero, a contradiction. Now, since all probabilities are required to sum to 1, it can't be the case that all probabilities are zero, which means that exactly one probability must be non-zero and that probability must be $1.$
 \end{proof}
 
+\subsection{Joint and Conditional Entropy}
+
+\begin{definition}[Joint Entropy]
+	The \textbf{joint entropy} $H(X,Y)$ of a pair of \@{discrete} \@{random-variables} $(X,Y)$ with a \@{joint-distribution} $p(x,y)$ is defined as
+
+\[ H(X,Y) = -\sum_{x \in \mathcal{X}} -\sum_{y \in \mathcal{y}} p(x,y) \log{p(x,y)}, \]
+
+which can also be expressed as
+
+	\[ H(X,Y) = - \mathbb{E} \left [ \log{p(X,Y)} \right ]. \]
+
+\end{definition}
+
+\begin{definition}[Conditional Entropy]
+Let $X$ and $Y$ be \@{random-variables}, not necessarily \@{independent}. The probability that $Y$ takes the value $y$ when $X$ takes the value $x$ (for any specific $x \in \mathcal{X}, y \in \mathcal{Y}$) is called the \@{conditional-probability} $p(y|x)$ and is given by:
+
+\[ p(y|x) = \frac{p(x, y)}{p(x)}, \quad p(x) = \sum_{y} p(x,y). \]
+
+(Note that $p(x,y)$ is the \@{joint-probability} of $X = x, Y = y.$)
+
+We define the \textbf{conditional entropy} of $Y$ given $X,$ $H(Y|X),$ as the average of the entropy of $Y$ for each value $x$ of $X$ weighted according to the probability of getting that particular $x.$ That is,
+
+\[ H(Y|X) = -\sum_{x \in \mathcal{X}, y \in \mathcal{Y}} p(x,y) \log{p(y|x)}. \]
+\end{definition}
+
+\begin{note}
+We can obtain the above formula for \@{conditional-entropy} as follows. First, if $X = x,$ then our \@{entropy} for $Y$ is
+
+\[ H(Y | X = x) = -\sum_{y} p(y|x) \log{p(y|x)}. \]
+
+Now, summing across $X$ gives:
+
+\bal
+H(Y|X) & = \sum_{x} p(x) H(Y | X = x) \\
+       & = \sum_{x} p(x) \left [  -\sum_{y} p(y|x) \log{p(y|x)}  \right ]  \\
+       & = - \sum_{x} \sum_{y}\left [ p(x)  p(y|x) \log{p(y|x)}  \right ]  \\
+       & = - \sum_{x, y} p(x,y) \log{p(y|x)}. \\
+\eal
+\end{note}
+
+\begin{theorem}[Chain rule for joint entropy]\label{joint-entropy-is-base-plus-conditional}
+	The \@{entropy} (\@{joint-entropy}) of the joint event $X,Y$ is the \@{entropy} of $X$ plus the \@{entropy} of $Y$ when $X$ is known.
+\end{theorem}
+
+\begin{proof}
+Note that
+
+\bal
+H(Y | X) & = - \sum_{x, y} p(x,y) \log{\frac{p(x,y)}{p(x)}} \\
+         & = - \sum_{x, y} p(x,y) \log{p(x,y)} + \sum_{x, y} p(x,y) \log{p(x)}.\\
+\eal
+
+The first term on the RHS is just $- \sum_{x, y} p(x,y) \log{p(x,y)} = H(X,Y).$ The second is
+
+\bal
+\sum_{x, y} p(x,y) \log{p(x)} & = \sum_{x} \left [ \sum_{y} p(x,y) \right ] \log{p(x)}  \\
+                              & = \sum_{x} p(x) \log{p(x)}  \\
+                              & = -H(X).
+\eal
+
+Altogether, we have that $H(Y | X) = H(X,Y) - H(X),$ or
+
+\[ H(X,Y) = H(X) + H(Y | X). \]
+\end{proof}
+
+\begin{corollary}[Chain Rule for Conditional Joint Entropy]
+TODO: Cover \& Thomas, corollary to Theorem 2.2.1.
+\end{corollary}
+
+\subsection{Relative Entropy and Mutual Information}
+
+\begin{definition}[Cross-Entropy]
+Given two discrete probability distributions, $p$ and $q,$ that share a support $\mathcal{X},$ \textbf{cross-entropy} measures the average number of bits needed to represent an event drawn from $\mathcal{X}$ when the coding scheme is optimized for an estimated distribution $q$ rather than the true distribution $p.$ Its formula is very similar to that of \@{entropy}, except \@{surprisal} is calculated using $q$ while \@{expectation} uses $p$:
+
+\[ H(p,q) = - \sum_{x \in \mathcal{X}} p(x) \log{q(x)}. \]
+
+We can write it in \@{expectation} form as
+
+\[ H(p,q) = \mathbb{E}_p \left [- \log{q}  \right ], \]
+
+where $\mathbb{E}_p$ is expectation under $p.$
+\end{definition}
+
+Note that when $p = q,$ \@{cross-entropy} equals \@{entropy}. The symbol $H$ is overloaded: $H(p,q)$ with distributions as arguments means \@{cross-entropy}, while $H(X,Y)$ with \@{random-variables} as arguments means joint entropy.
+
+\begin{definition}[KL Divergence]\synonyms{relative-entropy, "Kullback-Leibler divergence"}
+For discrete probability distributions, $p$ and $q,$ that share a support $\mathcal{X},$ the \textbf{relative entropy} from $q$ to $p$ is defined to be
+
+\[ D_{KL}(p || q) = \sum_{x \in \mathcal{X}} p(x) \log{\frac{p(x)}{q(x)}}, \]
+
+which is just \@{cross-entropy} minus \@{entropy}:
+
+\[ D(p || q) = H(p,q) - H(p). \]
+
+Note that we don't always use the $KL$ subscript where it's obvious from the context.
+
+We can also write it as
+
+\[ D(p || q) = \mathbb{E}_p \left [ - \log{q} \right ] - \mathbb{E}_p \left [ - \log{p} \right ]  =  \mathbb{E}_p \left [ \log{\frac{p}{q}}  \right ], \]
+
+which makes it clear that it's the expected inefficiency in an encoding optimized for $q$ rather than $p.$
+\end{definition}
+
+\begin{remark}
+\@{kl-divergence} tells us how different an approximating distribution $q$ is from a true probability distribution $p.$ It's not a true distance metric - it's asymmetric, but it does behave like distance in that it gets smaller as $q$ gets more like $p$ and is zero when $q = p.$ It is a sort of directed distance.
+
+Another way to think about it is as a measure of how inefficient a coding scheme optimized for $q$ is when the actual distribution is $p.$ If $q$ says some event is rare, and so we use a longer symbol for it (more bits), but the event actually occurs frequently, we'll waste bits representing the event when we could have used a shorter symbol for it.
+\end{remark}
+
+\begin{definition}[Mutual Information]\label{mutual-information}
+	Consider two \@{random-variables} $X$ and $Y$ with \@{joint probability mass function} $p(x,y)$ and \@{marginal probability mass functions} $p(x)$ and $p(y).$ The \textbf{mutual information} $I(X; Y)$ is the \@{relative-entropy} between the \@{joint distribution} and the \@{product-distribution} $p(x)p(y)$:
+
+\bal
+	I(X; Y) & = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log{\frac{p(x,y)}{p(x)p(y)}} \\
+	        & = D(p(x,y)||p(x)p(y)) \\
+		& = \mathbb{E}_{p(x,y)} \log{\frac{p(X,Y)}{p(X)p(Y)}}.
+\eal
+
+\end{definition}
+
+\subsection{Relationship Between Entropy and Mutual Information}
+
+\begin{theorem}[Mutual Information and Entropy]
+TODO: Cover \& Thomas Theorem 2.4.1.
+\end{theorem}
+
+\subsection{Chain Rules}
+
+\begin{theorem}[Chain Rule for Entropy]
+TODO: Cover \& Thomas Theorem 2.5.1.
+\end{theorem}
+
+\begin{definition}[Conditional Mutual Information]
+TODO: Cover \& Thomas, Section 2.5.
+\end{definition}
+
+\begin{theorem}[Chain Rule for Mutual Information]
+TODO: Cover \& Thomas Theorem 2.5.2.
+\end{theorem}
+
+\begin{definition}[Conditional Relative Entropy]
+TODO: Cover \& Thomas, Section 2.5.
+\end{definition}
+
+\begin{theorem}[Chain Rule for Relative Entropy]
+TODO: Cover \& Thomas Theorem 2.5.3.
+\end{theorem}
+
+\subsection{Inequalities}
+
+\begin{theorem}[Gibbs' Inequality]\label{gibbs-inequality}
+For discrete probability distributions $p$ and $q$ that share a support $\mathcal{X},$
+
+\[ D(p || q) \geq 0, \]
+
+with equality iff $p = q.$ Equivalently, \@{cross-entropy} is never less than \@{entropy}: $H(p,q) \geq H(p),$ with equality iff $q = p.$
+\end{theorem}
+
+\begin{proof}
+Because \@{log-is-concave}, by \@{jensens-inequality} we have that
+
+\bal
+\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] & \leq \log{ \left ( \mathbb{E}_p \left [ \frac{q_i}{p_i} \right ] \right ) }  \\
+                                                     & = \log{ \left ( \sum_i \left [ p_i \frac{q_i}{p_i} \right ] \right ) }  \\
+                                                     & = \log{ \left ( \sum_i q_i \right ) }  \\
+                                                     & = \log{ 1 }  \\
+                                                     & = 0.  \\
+\eal
+
+Then, since $\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] = -D(p || q),$ we have that $D(p || q) \geq 0.$
+
+Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p || q) = 0.$ Conversely, suppose $D(p || q) = 0.$ Since $\log$ is strictly \@{concave}, it is not \@{affine}, and \@{jensens-inequality} condition for equality gives us that $\frac{q_i}{p_i} = c.$ Now, $\sum_i q_i = \sum_i c p_i = 1,$ and since $p$ is a probability distribution, $c = 1,$ and therefore $p_i = q_i$ and $p = q.$
+\end{proof}
+
+\begin{corollary}[Nonnegativity of Mutual Information]
+TODO: Cover \& Thomas, corollary to Theorem 2.6.3.
+\end{corollary}
+
+\begin{corollary}[Nonnegativity of Conditional Relative Entropy]
+TODO: Cover \& Thomas, corollary to Theorem 2.6.3.
+\end{corollary}
+
+\begin{corollary}[Nonnegativity of Conditional Mutual Information]
+TODO: Cover \& Thomas, corollary to Theorem 2.6.3.
+\end{corollary}
+
 \begin{theorem}
 A \@{random-variable} has the most \@{entropy} when the \@{elements} of its alphabet are all equally likely to occur.
+% TODO (path B): re-derive from D(p || u) = log|X| - H(X) >= 0, with u uniform (Cover and Thomas Thm 2.6.4). The current proof below uses Lagrange multipliers.
 \end{theorem}
 
 \begin{proof}
@@ -340,17 +556,21 @@ But, this means $p_i$ doesn't depend on $i,$ and so is the same for each $i$ and
 It remains to show that this extreme of $H$ is a maximum. This follows from the facts that the domain is a \@{convex}, \@{compact} set and that the entropy function is strictly \@{concave}. TODO: more details on these.
 \end{proof}
 
-\begin{definition}[Joint Entropy]
-	The \textbf{joint entropy} $H(X,Y)$ of a pair of \@{discrete} \@{random-variables} $(X,Y)$ with a \@{joint-distribution} $p(x,y)$ is defined as
+\begin{theorem}
+The \@{uncertainty} of $Y$ is never increased by knowledge of $X.$ It will be decreased unless $X$ and $Y$ are independent events, in which case it is not changed.
+% TODO (path B): re-derive from I(X;Y) >= 0 (Cover and Thomas Thm 2.6.5). The current proof below uses subadditivity and the chain rule, which reverses the intended dependency.
+\end{theorem}
 
-\[ H(X,Y) = -\sum_{x \in \mathcal{X}} -\sum_{y \in \mathcal{y}} p(x,y) \log{p(x,y)}, \]
+\begin{proof}
+From \@{joint-entropy-is-less-than-or-equal-to-entropy-of-parts} and \@{joint-entropy-is-base-plus-conditional}, we have
 
-which can also be expressed as
+\bal
+H(X) + H(Y) & \geq H(X,Y) \\
+            & = H(X) + H(Y|X), \\ 
+\eal
 
-	\[ H(X,Y) = - \mathbb{E} \left [ \log{p(X,Y)} \right ]. \]
-
-\end{definition}
-
+hence $H(Y) \geq H(Y|X).$
+\end{proof}
 
 \begin{theorem}\label{joint-entropy-is-less-than-or-equal-to-entropy-of-parts}
 Let $X$ and $Y$ be discrete \@{random-variables} with alphabets $\mathcal{X}$ and $\mathcal{Y},$ and let $p(x,y)$ be the probability of the joint occurrence of $X = x$ and $Y = y.$
@@ -360,6 +580,7 @@ Let $X$ and $Y$ be discrete \@{random-variables} with alphabets $\mathcal{X}$ an
 \[ H(X,Y) \leq H(X) + H(Y), \]
 
 with equality iff $X$ and $Y$ are independent, that is, iff $p(x,y) = p(x)p(y).$
+% TODO (path B): re-derive from the chain rule and conditioning-reduces-entropy (Cover and Thomas Thm 2.6.6, the independence bound). The current proof below uses Jensen directly.
 \end{theorem}
 
 \begin{proof}
@@ -413,85 +634,6 @@ Now, suppose $p(x)p(y) = p(x,y).$ Then $Z = 1$ and
 \[ H(X) + H(Y) - H(X,Y) = - \sum_{x,y} p(x, y) \left ( \log{1}  \right ) = 0, \]
 
 so $H(X) + H(Y) = H(X,Y).$
-\end{proof}
-
-\begin{definition}[Mutual Information]\label{mutual-information}
-	Consider two \@{random-variables} $X$ and $Y$ with \@{joint probability mass function} $p(x,y)$ and \@{marginal probability mass functions} $p(x)$ and $p(y).$ The \textbf{mutual information} $I(X; Y)$ is the \@{relative-entropy} between the \@{joint distribution} and the \@{product-distribution} $p(x)p(y)$:
-
-\bal
-	I(X; Y) & = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log{\frac{p(x,y)}{p(x)p(y)}} \\
-	        & = D(p(x,y)||p(x)p(y)) \\
-		& = \mathbb{E}_{p(x,y)} \log{\frac{p(X,Y)}{p(X)p(Y)}}.
-\eal
-
-\end{definition}
-
-\detach
-
-\begin{note}
-When we decrease the probability of an \@{element} occurring, its \@{self-information} increases only logarithmically, while its weight in the entropy sum decreases linearly.
-\end{note}
-
-\begin{definition}[Cross-Entropy]
-Given two discrete probability distributions, $p$ and $q,$ that share a support $\mathcal{X},$ \textbf{cross-entropy} measures the average number of bits needed to represent an event drawn from $\mathcal{X}$ when the coding scheme is optimized for an estimated distribution $q$ rather than the true distribution $p.$ Its formula is very similar to that of \@{entropy}, except \@{surprisal} is calculated using $q$ while \@{expectation} uses $p$:
-
-\[ H(p,q) = - \sum_{x \in \mathcal{X}} p(x) \log{q(x)}. \]
-
-We can write it in \@{expectation} form as
-
-\[ H(p,q) = \mathbb{E}_p \left [- \log{q}  \right ], \]
-
-where $\mathbb{E}_p$ is expectation under $p.$
-\end{definition}
-
-Note that when $p = q,$ \@{cross-entropy} equals \@{entropy}. The symbol $H$ is overloaded: $H(p,q)$ with distributions as arguments means \@{cross-entropy}, while $H(X,Y)$ with \@{random-variables} as arguments means joint entropy.
-
-\begin{definition}[KL Divergence]\synonyms{relative-entropy, "Kullback-Leibler divergence"}
-For discrete probability distributions, $p$ and $q,$ that share a support $\mathcal{X},$ the \textbf{relative entropy} from $q$ to $p$ is defined to be
-
-\[ D_{KL}(p || q) = \sum_{x \in \mathcal{X}} p(x) \log{\frac{p(x)}{q(x)}}, \]
-
-which is just \@{cross-entropy} minus \@{entropy}:
-
-\[ D(p || q) = H(p,q) - H(p). \]
-
-Note that we don't always use the $KL$ subscript where it's obvious from the context.
-
-We can also write it as
-
-\[ D(p || q) = \mathbb{E}_p \left [ - \log{q} \right ] - \mathbb{E}_p \left [ - \log{p} \right ]  =  \mathbb{E}_p \left [ \log{\frac{p}{q}}  \right ], \]
-
-which makes it clear that it's the expected inefficiency in an encoding optimized for $q$ rather than $p.$
-\end{definition}
-
-\begin{remark}
-\@{kl-divergence} tells us how different an approximating distribution $q$ is from a true probability distribution $p.$ It's not a true distance metric - it's asymmetric, but it does behave like distance in that it gets smaller as $q$ gets more like $p$ and is zero when $q = p.$ It is a sort of directed distance.
-
-Another way to think about it is as a measure of how inefficient a coding scheme optimized for $q$ is when the actual distribution is $p.$ If $q$ says some event is rare, and so we use a longer symbol for it (more bits), but the event actually occurs frequently, we'll waste bits representing the event when we could have used a shorter symbol for it.
-\end{remark}
-
-\begin{theorem}[Gibbs' Inequality]\label{gibbs-inequality}
-For discrete probability distributions $p$ and $q$ that share a support $\mathcal{X},$
-
-\[ D(p || q) \geq 0, \]
-
-with equality iff $p = q.$ Equivalently, \@{cross-entropy} is never less than \@{entropy}: $H(p,q) \geq H(p),$ with equality iff $q = p.$
-\end{theorem}
-
-\begin{proof}
-Because \@{log-is-concave}, by \@{jensens-inequality} we have that
-
-\bal
-\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] & \leq \log{ \left ( \mathbb{E}_p \left [ \frac{q_i}{p_i} \right ] \right ) }  \\
-                                                     & = \log{ \left ( \sum_i \left [ p_i \frac{q_i}{p_i} \right ] \right ) }  \\
-                                                     & = \log{ \left ( \sum_i q_i \right ) }  \\
-                                                     & = \log{ 1 }  \\
-                                                     & = 0.  \\
-\eal
-
-Then, since $\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] = -D(p || q),$ we have that $D(p || q) \geq 0.$
-
-Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p || q) = 0.$ Conversely, suppose $D(p || q) = 0.$ Since $\log$ is strictly \@{concave}, it is not \@{affine}, and \@{jensens-inequality} condition for equality gives us that $\frac{q_i}{p_i} = c.$ Now, $\sum_i q_i = \sum_i c p_i = 1,$ and since $p$ is a probability distribution, $c = 1,$ and therefore $p_i = q_i$ and $p = q.$
 \end{proof}
 
 \begin{theorem}[Doubly stochastic maps increase entropy]
@@ -557,71 +699,56 @@ Therefore, $|I_c| = |J_c|$ for all $c,$ so each $c$ appears equally often in $p$
 Averaging (well, replacing each probability with a \@{convex-combination} of all the probabilities in a way that retains their summing to 1) the probabilities in $p$ can only bring them closer to each other (if it doesn't just rearrange them), which increases \@{entropy}.
 \end{intuition}
 
-\begin{definition}[Conditional Entropy]
-Let $X$ and $Y$ be \@{random-variables}, not necessarily \@{independent}. The probability that $Y$ takes the value $y$ when $X$ takes the value $x$ (for any specific $x \in \mathcal{X}, y \in \mathcal{Y}$) is called the \@{conditional-probability} $p(y|x)$ and is given by:
+\subsection{Log Sum Inequality and Its Applications}
 
-\[ p(y|x) = \frac{p(x, y)}{p(x)}, \quad p(x) = \sum_{y} p(x,y). \]
+\begin{theorem}[Log Sum Inequality]
+TODO: Cover \& Thomas Theorem 2.7.1.
+\end{theorem}
 
-(Note that $p(x,y)$ is the \@{joint-probability} of $X = x, Y = y.$)
+\begin{theorem}[Convexity of Relative Entropy]
+TODO: Cover \& Thomas Theorem 2.7.2.
+\end{theorem}
 
-We define the \textbf{conditional entropy} of $Y$ given $X,$ $H(Y|X),$ as the average of the entropy of $Y$ for each value $x$ of $X$ weighted according to the probability of getting that particular $x.$ That is,
+\begin{theorem}[Concavity of Entropy]
+TODO: Cover \& Thomas Theorem 2.7.3.
+\end{theorem}
 
-\[ H(Y|X) = -\sum_{x \in \mathcal{X}, y \in \mathcal{Y}} p(x,y) \log{p(y|x)}. \]
+\subsection{Data-Processing Inequality}
+
+\begin{definition}[Markov Chain]
+TODO: Cover \& Thomas, Section 2.8.
 \end{definition}
 
-\begin{note}
-We can obtain the above formula for \@{conditional-entropy} as follows. First, if $X = x,$ then our \@{entropy} for $Y$ is
-
-\[ H(Y | X = x) = -\sum_{y} p(y|x) \log{p(y|x)}. \]
-
-Now, summing across $X$ gives:
-
-\bal
-H(Y|X) & = \sum_{x} p(x) H(Y | X = x) \\
-       & = \sum_{x} p(x) \left [  -\sum_{y} p(y|x) \log{p(y|x)}  \right ]  \\
-       & = - \sum_{x} \sum_{y}\left [ p(x)  p(y|x) \log{p(y|x)}  \right ]  \\
-       & = - \sum_{x, y} p(x,y) \log{p(y|x)}. \\
-\eal
-\end{note}
-
-\begin{theorem}[Chain rule for joint entropy]\label{joint-entropy-is-base-plus-conditional}
-	The \@{entropy} (\@{joint-entropy}) of the joint event $X,Y$ is the \@{entropy} of $X$ plus the \@{entropy} of $Y$ when $X$ is known.
+\begin{theorem}[Data-Processing Inequality]
+TODO: Cover \& Thomas Theorem 2.8.1.
 \end{theorem}
 
-\begin{proof}
-Note that
+\begin{corollary}[Processing Cannot Increase Information]
+TODO: Cover \& Thomas, corollary to Theorem 2.8.1.
+\end{corollary}
 
-\bal
-H(Y | X) & = - \sum_{x, y} p(x,y) \log{\frac{p(x,y)}{p(x)}} \\
-         & = - \sum_{x, y} p(x,y) \log{p(x,y)} + \sum_{x, y} p(x,y) \log{p(x)}.\\
-\eal
+\subsection{Sufficient Statistics}
 
-The first term on the RHS is just $- \sum_{x, y} p(x,y) \log{p(x,y)} = H(X,Y).$ The second is
+\begin{definition}[Sufficient Statistic]
+TODO: Cover \& Thomas, Section 2.9.
+\end{definition}
 
-\bal
-\sum_{x, y} p(x,y) \log{p(x)} & = \sum_{x} \left [ \sum_{y} p(x,y) \right ] \log{p(x)}  \\
-                              & = \sum_{x} p(x) \log{p(x)}  \\
-                              & = -H(X).
-\eal
-
-Altogether, we have that $H(Y | X) = H(X,Y) - H(X),$ or
-
-\[ H(X,Y) = H(X) + H(Y | X). \]
-\end{proof}
-
-\begin{theorem}
-The \@{uncertainty} of $Y$ is never increased by knowledge of $X.$ It will be decreased unless $X$ and $Y$ are independent events, in which case it is not changed.
+\begin{theorem}[Characterization of Sufficiency]
+TODO: Cover \& Thomas, Section 2.9.
 \end{theorem}
 
-\begin{proof}
-From \@{joint-entropy-is-less-than-or-equal-to-entropy-of-parts} and \@{joint-entropy-is-base-plus-conditional}, we have
+\begin{definition}[Minimal Sufficient Statistic]
+TODO: Cover \& Thomas, Section 2.9.
+\end{definition}
 
-\bal
-H(X) + H(Y) & \geq H(X,Y) \\
-            & = H(X) + H(Y|X), \\ 
-\eal
+\subsection{Fano's Inequality}
 
-hence $H(Y) \geq H(Y|X).$
-\end{proof}
+\begin{theorem}[Fano's Inequality]
+TODO: Cover \& Thomas Theorem 2.10.1.
+\end{theorem}
+
+\begin{corollary}[Weak Form of Fano's Inequality]
+TODO: Cover \& Thomas, Section 2.10.
+\end{corollary}
 
 \end{document}
