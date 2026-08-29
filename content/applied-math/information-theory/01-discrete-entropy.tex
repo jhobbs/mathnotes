@@ -481,7 +481,15 @@ TODO: Cover \& Thomas Theorem 2.5.1.
 \end{theorem}
 
 \begin{definition}[Conditional Mutual Information]
-TODO: Cover \& Thomas, Section 2.5.
+	The \textbf{conditional mutual information} of \@{random-variables} $X$ and $Y$ given $Z$ is defined by
+
+\bal
+	I(X;Y  | Z) & = H(X|Z) - H(X|Y, Z) \\
+	             & = E_{p(x,y,z)} \log{ \frac{p(X, Y|Z)}{p(X|Z)p(Y|Z)} }.
+\eal
+
+It is the \@{uncertainty} about $X$ after learning $Z$ minus the uncertainty about $X$ after learning $Y$ and $Z$.
+
 \end{definition}
 
 \begin{theorem}[Chain Rule for Mutual Information]
