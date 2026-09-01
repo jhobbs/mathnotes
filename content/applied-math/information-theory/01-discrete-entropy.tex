@@ -421,7 +421,12 @@ Altogether, we have that $H(Y | X) = H(X,Y) - H(X),$ or
 
 \end{corollary}
 \begin{proof}
-The proof is much like that of the theorem.
+\bal
+	H(X, Y|Z) & = \sum_{z \in \mathcal{Z}} p(z) H(X,Y | Z = z) \\
+	          & = \sum_{z \in \mathcal{Z}} p(z) \left ( H(X | Z = z ) + H(Y|X,Z=z) \right ) \\
+	          & = \sum_{z \in \mathcal{Z}} p(z)  H(X | Z = z ) + \sum_{z \in \mathcal{Z}} p(z) H(Y|X,Z=z) \\
+		  & = H(X | Z) + H(Y | X, Z).
+\eal
 \end{proof}
 
 \subsection{Relative Entropy and Mutual Information}
