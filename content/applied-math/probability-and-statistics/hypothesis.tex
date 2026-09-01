@@ -20,12 +20,12 @@ and that the \textbf{alternative hypothesis} is that it is different from what w
 \[ H_1: \mu \neq \mu_0. \]
 \end{definition}
 
-We'd then compute a test statistic. Here, we will assume we know the population's standard deviation $\sigma$ 
+We'd then compute a test statistic. Here, we will assume we know the population's \@{standard deviation} $\sigma$
 
 \[ z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}. \]
 
 \begin{definition}[p-value]\label{p-value}
-The \textbf{p-value} is the probability of getting a test statistic ($z$) this extreme or more extreme if the actual mean is $\mu_0.$
+The \textbf{p-value} is the \@{probability} of getting a test statistic ($z$) this extreme or more extreme if the actual mean is $\mu_0.$
 \end{definition}
 
 Then, since we want to know the \@{p-value}, we have a two-tailed test because the sample mean could either be lower than or higher than our actual mean. So, we do
@@ -36,7 +36,7 @@ or in Mathematica notation:
 
 \[ 2 * (1 - CDF[NormalDistribution[0, 1], Abs[z]]). \]
 
-Low $p$-values (typically, $p < 0.05$ or so) lead us to reject the null-hypothesis and adopt the alternative hypothesis. A very low $p$-value means that the probability of getting the sample we got if $\mu = \mu_0$ is very low.
+Low $p$-values (typically, $p < 0.05$ or so) lead us to reject the null-hypothesis and adopt the alternative hypothesis. A very low $p$-value means that the \@{probability} of getting the sample we got if $\mu = \mu_0$ is very low.
 
 Instead of hypothesizing that $\mu \neq \mu_0,$ we could hypothesize that $\mu > \mu_0,$ or that $\mu < \mu_0.$ These would be single-tailed tests and we'd use, for example:
 
@@ -48,7 +48,7 @@ Instead of hypothesizing that $\mu \neq \mu_0,$ we could hypothesize that $\mu >
  
 instead.
 
-Additionally, if we don't know $\sigma$ but only know $s,$ the standard deviation of the sample, we would use a Student T Distribution. We'd calculate a $t$ value instead of a $z$ value:
+Additionally, if we don't know $\sigma$ but only know $s,$ the \@{standard deviation} of the sample, we would use a Student T Distribution. We'd calculate a $t$ value instead of a $z$ value:
 
 \[ t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}. \]
 
@@ -58,6 +58,6 @@ Note that if we wanted to test the alternative hypothesis $H_1: \mu < \mu_0$ we'
 
 \[ CDF[StudentTDistribution[n-1], t], \]
 
-and similarly for when $\sigma$ is known, except we'd use the standard normal distribution and a $z$ value.
+and similarly for when $\sigma$ is known, except we'd use the \@{standard normal distribution} and a $z$ value.
 
 \end{document}
