@@ -494,18 +494,41 @@ Another way to think about it is as a measure of how inefficient a coding scheme
 
 \end{theorem}
 \begin{proof}
-	We'll start with (c):
+	We'll prove (c) first:
 
 \bal
 	I(X; Y) & = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log{\frac{p(x,y)}{p(x)p(y)}} \\
-	        & = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log{p(x,y) - p(x)p(y)} \\
+	        & = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) ( \log{p(x,y)} - \log{p(x)p(y)} ) \\
 		& = -H(X,Y) - \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log{p(x)p(y)} \\
 		& = -H(X,Y) - \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) ( \log{p(x)} + \log{p(y)} ) \\
 		& = -H(X,Y) - \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log{p(x)} - \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log{p(y)} \\
 		& = H(X) + H(Y) - H(X,Y)
 \eal
 
-TODO: other cases
+
+	Now, from \@{joint-entropy-is-base-plus-conditional} we prove (a) and (b) with
+
+\bal
+	H(X) + H(Y) - H(X,Y) & = H(X) + H(Y) - H(Y) - H(X|Y) \\
+	                     & = H(X) - H(X|Y).
+\eal
+
+	and
+
+\bal
+	H(X) + H(Y) - H(X,Y) & = H(X) + H(Y) - H(X) - H(Y|X) \\
+	                     & = H(Y) - H(Y|X).
+\eal
+
+	(d) is trivial from symmetry of $p(a,b) = p(b,a)$ and $a * b = b * a.$
+
+	To prove (e) we use our result from (a):
+\bal
+	I(X;X) & = H(X) + H(X) - H(X,X) \\
+	       & = H(X) + H(X) - H(X) \\
+	       & = H(X).
+\eal
+
 
 \end{proof}
 
