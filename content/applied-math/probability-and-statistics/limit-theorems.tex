@@ -170,10 +170,18 @@ This tells us that the \@{probability} of a fish's length deviating from 20 inch
 \@{Pairwise independence} is strictly weaker than \@{mutual independence}.
 \end{theorem}
 
+\begin{definition}[Identically Distributed]
+	Given \@{random variables} $X$ and $Y,$ we say $X$ and $Y$ are \textbf{identically distributed} if they have the same probability law, i.e. 
+\[ X \overset{d}{=} Y \text{ if } P(X \in A) = P(Y \in A) \]
+
+	for every \@{measurable set} $A$ in their common \@{state space}. For \@{discrete random variables} this reduces to $P(X = x) = P(Y = x)$ for every possible value of $x.$ Equivalently, if they have the same \@{probability mass function} in the discrete case or the same \@{cumulative distribution function} in the real-valued case:
+	\[ F_X(t) = F_Y(t) ~ \forall t. \]
+\end{definition}
+
 \begin{definition}[Independent and Identically Distributed]\synonyms{"i.i.d."}
-\@{Random variables} $X_1, \dots, X_n$ are said to be \textbf{independent and identically distributed} if they are \@{mutually independent} and each has the same \@{probability distribution}; equivalently, if their joint \@{cumulative distribution function} factors as
+	\@{Random variables} $X_1, \dots, X_n$ are said to be \textbf{independent and identically distributed} if they are \@{mutually independent} and \@{identically distributed}; equivalently, if their joint \@{cumulative distribution function} factors as
    \[ F_{X_1, \dots, X_n}(x_1, \dots, x_n) = \prod_{i=1}^{n} F(x_i), \]
-where $F$ is the common cumulative distribution function shared by every $X_i$ and $x_1, \dots, x_n$ are \@{real numbers}.
+	where $F$ is the \@{common cumulative distribution function} shared by every $X_i$ and $x_1, \dots, x_n$ are \@{real numbers}.
 \end{definition}
 
 \begin{theorem}[Law of Large Numbers]\label{law-of-large-numbers}
