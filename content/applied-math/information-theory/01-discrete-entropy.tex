@@ -415,7 +415,7 @@ Altogether, we have that $H(Y | X) = H(X,Y) - H(X),$ or
 \[ H(X,Y) = H(X) + H(Y | X). \]
 \end{proof}
 
-\begin{corollary}[Chain Rule for Conditional Joint Entropy]
+\begin{corollary}[Chain Rule for Conditional Joint Entropy]\label{chain-rule-for-conditional-joint-entropy}
 
 \[ H(X, Y|Z) = H(X|Z) + H(Y | X,Z). \]
 
@@ -482,7 +482,7 @@ Another way to think about it is as a measure of how inefficient a coding scheme
 
 \subsection{Relationship Between Entropy and Mutual Information}
 
-\begin{theorem}[Mutual Information and Entropy]
+\begin{theorem}[Mutual Information and Entropy]\label{mutual-information-and-entropy}
 
 \bal
 	I(X; Y) & = H(X) - H(X|Y) & & \text{(a)} \\
@@ -529,14 +529,31 @@ Another way to think about it is as a measure of how inefficient a coding scheme
 	       & = H(X).
 \eal
 
-
+	
 \end{proof}
 
 \subsection{Chain Rules}
 
-\begin{theorem}[Chain Rule for Entropy]
-TODO: Cover \& Thomas Theorem 2.5.1.
+\begin{theorem}[Chain Rule for Entropy]\label{chain-rule-for-entropy}
+
+Let $X_1, X_2, \dots, X_n$ be drawn according to $p(x_1, x_2, \dots, x_n).$ Then
+
+	\[ H(X_1, X_2, \dots, X_n) = \sum_{i=1}^n H(X_i | X_{i-1}, \dots, X_1). \]
+
 \end{theorem}
+\begin{proof}
+	From \@{joint-entropy-is-base-plus-conditional}, we have
+
+\bal
+	H(X_1, X_2) & = H(X_1) + H(X_2 | X_1), \\
+	H(X_1, X_2, X_3) & = H(X_1) + H(X_2, X_3 | X_1) \\
+	                 & = H(X_1) + H(X_2 | X_1) + H(X_3 | X_2, X_1), \\
+	                 & \ \vdots \\
+	H(X_1, X_2, \dots, X_n) & = H(X_1) + H(X_2|X_1) + \cdots + H(X_n | X_{n-1}, \dots, X_1) \\
+	                        & = \sum_{i = 1}^n H(X_i | X_{i-1}, \dots, X_1).
+\eal
+
+\end{proof}
 
 \begin{definition}[Conditional Mutual Information]
 	The \textbf{conditional mutual information} of \@{random-variables} $X$ and $Y$ given $Z$ is defined by
@@ -551,16 +568,64 @@ It is the \@{uncertainty} about $X$ after learning $Z$ minus the uncertainty abo
 \end{definition}
 
 \begin{theorem}[Chain Rule for Mutual Information]
-TODO: Cover \& Thomas Theorem 2.5.2.
+
+\[ I(X_1, X_2, \dots, X_n; Y) = \sum_{i=1}^n I(X_i; Y|X_{i-1},X_{i-2}, \dots, X_1)  \]
+
 \end{theorem}
+\begin{proof}
+
+
+From \@{mutual-information-and-entropy} we have
+
+\[ I(X_1, X_2, \dots, X_n; Y) = H(X_1, X_2, \dots, X_n) - H(X_1, X_2, \dots, X_n | Y ) \]
+
+Then, from \@{chain-rule-for-entropy} and \@{chain-rule-for-conditional-joint-entropy}  we have, simplifying,
+
+\bal
+	H(X_1, X_2, \dots, X_n) - H(X_1, X_2, \dots, X_n | Y ) & = \sum_{i=1}^n H(X_i | X_{i-1}, \dots, X_1) - \sum_{i=1}^n H(X_i | X_{i-1}, \dots, X_1, Y) \\
+	& = \sum_{i=1}^n H(X_i | X_{i-1}, \dots, X_1) -  H(X_i | Y, X_{i-1}, \dots, X_1).
+\eal
+
+	Now, from our definition of \@{conditional-mutual-information} we get
+
+	\[ \sum_{i=1}^n H(X_i | X_{i-1}, \dots, X_1) -  H(X_i | Y, X_{i-1}, \dots, X_1) = \sum_{i=1}^n I(X_i; Y|X_1, X_2, \dots, X_{i-1}). \] 
+\end{proof}
 
 \begin{definition}[Conditional Relative Entropy]
-TODO: Cover \& Thomas, Section 2.5.
+	For \@{joint probability mass functions} $p(x,y)$ and $q(x,y),$ the \textbf{conditional relative entropy}
+
+	\[ D(p(y|x) || q(y|x) \]
+
+	is the \@{average} of the \@{relative-entropies} between the \@{conditional probability mass functions} $p(y|x)$ and $q(y|x)$ averaged over the \@{probability mass function} $p(x).$ More formally,
+
+\bal
+	D(p(y|x) || q(y|x)) & = \sum_{x \in \mathcal{X}} p(x) \sum_{y \in \mathcal{Y}} p(y|x) \log{\frac{p(y|x)}{q(y|x)}} \\
+	                    & = E_{p(x,y)} \log{\frac{p(Y|X)}{q(Y|X)}}.
+\eal
+
 \end{definition}
 
 \begin{theorem}[Chain Rule for Relative Entropy]
-TODO: Cover \& Thomas Theorem 2.5.3.
+	\[  D(p(x,y) || q(x, y)) =  D(p(x) || q(x)) + D(p(y|x) || q(y|x)). \]
 \end{theorem}
+\begin{proof}
+	From the definition of \@{relative-entropy} we have
+
+	\[ D(p(x,y) || q(x, y))  = \sum_{x} \sum_{y} p(x,y) \log{\frac{p(x,y)}{q(x,y)}}. \]
+
+        From \@{joint-is-marginal-times-conditional} we have
+	\[ \sum_{x} \sum_{y} p(x,y) \log{\frac{p(x,y)}{q(x,y)}} = \sum_{x} \sum_{y} p(x,y) \log{\frac{p(x)p(y|x)}{q(x) q(y|x)}}. \]
+
+	Then, from \@{product-rule-for-logarithms} we have
+        \[ \sum_{x} \sum_{y} p(x,y) \log{\frac{p(x)p(y|x)}{q(x) q(y|x)}} = 
+	       \sum_{x} \sum_{y} p(x,y) \log{\frac{p(x)}{q(x)}} +
+	       \sum_{x} \sum_{y} p(x,y) \log{\frac{p(y|x)}{q(y|x)}}.\]
+
+	Now from the definitions of \@{relative-entropy} and \@{conditional-relative-entropy} we have
+	\[     \sum_{x} \sum_{y} p(x,y) \log{\frac{p(x)}{q(x)}} +
+	       \sum_{x} \sum_{y} p(x,y) \log{\frac{p(y|x)}{q(y|x)}} = D(p(x)||q(x)) + D(p(y|x)||q(y|x)).
+	\]
+\end{proof}
 
 \subsection{Inequalities}
 

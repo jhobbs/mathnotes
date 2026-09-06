@@ -24,6 +24,17 @@ We can similarly find $f_Y(y)$ by marginalizing over $X$:
 \[ f_Y(y) = \sum_x f(x, y). \]
 \end{definition}
 
+\begin{definition}[Conditional Probability Distribution]\synonyms{"conditional distribution", "conditional probability mass function"}
+TODO: define $f_{Y|X}(y|x)$ for the discrete and continuous cases; note it is a \@{probability-distribution} in $y$ for each fixed $x$ with $f_X(x) > 0.$ Relate to \@{conditional-probability}, which states the event-level version.
+\end{definition}
+
+\begin{theorem}[Multiplication Rule for Distributions]\label{joint-is-marginal-times-conditional}
+TODO: state $f(x,y) = f_X(x) f_{Y|X}(y|x) = f_Y(y) f_{X|Y}(x|y),$ and the $n$-variable chain rule $f(x_1, \dots, x_n) = \prod_{i=1}^n f(x_i | x_{i-1}, \dots, x_1).$ Note it reduces to a \@{product-distribution} when the variables are \@{independent}.
+\end{theorem}
+\begin{proof}
+TODO: rearrange the definition of \@{conditional-probability-distribution}; induct for the $n$-variable form.
+\end{proof}
+
 \begin{definition}[Product Distribution]\synonyms{"product measure"}
         A \@{probability-distribution} $\mu$ on $\mathcal{X}_1 \times \cdots \times \mathcal{X}_n$ is a \textbf{product distribution} if there are distributions $\mu_1, \dots, \mu_n$ on $\mathcal{X}_1, \dots, \mathcal{X}_n$ respectively such that
         \[ \mu(x_1, \dots, x_n) = \prod_{i=1}^{n} \mu_i(x_i) \]
