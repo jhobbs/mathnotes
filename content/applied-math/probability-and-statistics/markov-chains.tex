@@ -13,7 +13,7 @@ If we have a system with N states and for each state, a set of N \@{probabilitie
 
 Starting with some state, we can transition to another state, then another, with the probability of picking the next state dependent only on the existing state and the matrix $P.$ We call this sequence of random events a \textbf{Markov Chain}.
 
-More formally, the \@{sequence} $X_1, X_2, \dots$ is called a Markov Chain if
+	More formally, the \@{sequence} or \@{random-variables}  $X_1, X_2, \dots, X_n$ is called a Markov Chain if
 
 \[ P(X_{n+1} = k|X_n = j, X_{n-1} = j_{n-1}, \dots, X_0 = j_0) = P(X_{n+1} = k | X_n = j). \]
 
@@ -30,6 +30,11 @@ and
 \[ \sum_{k=1}^{N} p_{jk} =  1 \]
 
 for $j = 1,2, \dots, N.$ We call the $p_{jk}$ values the transition probabilities of the Markov chain.
+
+	Alternatively, we can say the \@{sequence} or \@{random-variables}  $X, Y, Z$ is said to form a Markov Chain (denoted $X \to Y \to Z$) if and only if $X$ and $Z$ are \@{conditionally independent} given $Y.$ Specifically, $X, Y$ and $Z$ form a Markov Chain $X \to Y \to Z$ if the \@{joint probability mass function} can be written as
+
+	\[ p(x, y, z) = p(x) p(y|x) p(z|y). \]
+
 \end{definition}
 
 \begin{note}
