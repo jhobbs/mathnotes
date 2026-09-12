@@ -877,17 +877,36 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 \begin{theorem}[Log Sum Inequality]
 	For \@{non-negative} numbers, $a_1, a_2, \dots, a_n$ and $b_1, b_2, \dots, b_n,$
 
-	\[ \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} \geq \left ( \sum_{i=1}^{n} a_i \right ) \log{\frac{\sum_{i=1}^n a_i }{ \sum_{i=1}^n b_i}}, \]
+	\[ \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} \geq \left ( \sum_{i=1}^{n} a_i \right ) \log{ \left ( \frac{\sum_{i=1}^n a_i }{ \sum_{i=1}^n b_i} \right ) }, \]
 
 	with equality if and only if $\frac{a_i}{b_i} = \text{const}.$
 
 	We use the conventions that $0 \log{0} = 0, a \log{\frac{a}{0}} = \infty$ if $a > 0,$ and $0\log{\frac{0}{0}} = 0,$ all of which follow from \@{continuity}.
-
-
 \end{theorem}
+\begin{proof}
+	We can assume without loss of generality, due to the $0$-handling conventions specified above, that $a_i > 0$ and $b_i > 0.$ Now, note that the function $f(t) = t \log{t}$ is \@{strictly convex}, since $f''(t) = \frac{1}{t} \log{e} > 0$ for all positive $t.$ Then, by \@{jensens-inequality} we have
+
+	\[ \sum \alpha_i f(t_i) \geq f \left ( \sum \alpha_i t_i \right ). \]
+
+	as long as $\alpha_i > 0, \sum_i \alpha_i = 1,$ i.e. if the $\alpha_i$ form a \@{discrete probability distribution}.
+
+	If we let $\alpha_i = \frac{b_i}{\sum_{j=1}^n b_j}$, i.e. $\alpha_i$ is the \@{probability mass} assigned to index $i,$ then this condition is met. We can then pick $t_i = \frac{a_i}{b_i}$ and we get
+
+	\bal
+	\sum_{i=1}^n \alpha_i f(t_i) & \geq f \left ( \sum_{i=1}^n \alpha_i t_i \right ) \\ 
+	     \iff \sum_{i=1}^n \alpha_i t_i \log{t_i} & \geq \left ( \sum_{i=1}^n \alpha_i t_i \right ) \log{\left ( \sum_{i=1}^n \alpha_i t_i \right )} \\
+	     \iff \sum_{i=1}^n \frac{b_i}{\sum_{j=1}^n b_j} \frac{a_i}{b_i} \log{\frac{a_i}{b_i}} & \geq \left ( \sum_{i=1}^n \frac{b_i}{\sum_{j=1}^n b_j} \frac{a_i}{b_i} \right ) \log{\left ( \sum_{i=1}^n \frac{b_i}{\sum_{j=1}^n b_j} \frac{a_i}{b_i} \right )} \\
+	     \iff \sum_{i=1}^n \frac{a_i}{\sum_{j=1}^n b_j} \log{\frac{a_i}{b_i}} & \geq \left ( \sum_{i=1}^n \frac{a_i}{\sum_{j=1}^n b_j}  \right ) \log{\left ( \sum_{i=1}^n \frac{a_i}{\sum_{j=1}^n b_j} \right )} \\
+	     \iff \frac{1}{\sum_{j=1}^n b_j} \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} & \geq \frac{1}{\sum_{j=1}^n b_j} \left ( \sum_{i=1}^n a_i  \right ) \log{\left (  \frac{\sum_{i=1}^n a_i}{\sum_{i=1}^n b_j} \right )} \\
+	     \iff \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} & \geq  \left ( \sum_{i=1}^n a_i  \right ) \log{\left (  \frac{\sum_{i=1}^n a_i}{\sum_{i=1}^n b_j} \right )}.
+	\eal
+
+\end{proof}
 
 \begin{theorem}[Convexity of Relative Entropy]
 TODO: Cover \& Thomas Theorem 2.7.2.
+
+
 \end{theorem}
 
 \begin{theorem}[Concavity of Entropy]
