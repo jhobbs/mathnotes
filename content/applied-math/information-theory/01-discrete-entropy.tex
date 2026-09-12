@@ -656,7 +656,6 @@ Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p \| q) = 0.$ Conversely
 \bal
 	I(X; Y) & = D(p(x,y) \| p(x)p(y)) \geq 0,
 \eal
-
 		with equality if and only if $p(x,y) = p(x)p(y),$ i.e. $X$ and $Y$ are \@{independent}.
 
 	\end{proof}
@@ -664,9 +663,10 @@ Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p \| q) = 0.$ Conversely
 \end{corollary}
 
 \begin{corollary}[Nonnegativity of Conditional Relative Entropy]
-	\[ D(p(y|x) \| q(y|x) \geq 0, \]
+	\[ D(p(y|x)  \| q(y|x) \geq 0, \]
 
 	with equality if and only if $p(y|x) = q(y|x)$ for all $y$ and $x$ such that $p(x) > 0.$
+
 \begin{proof}
 	
 	From the definition of \@{conditional relative entropy} we have
@@ -677,7 +677,6 @@ Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p \| q) = 0.$ Conversely
 	\eal
 
 	This is just the average of the \@{relative entropy} over distributions over $y$ for each fixed $x.$ For $p(x) > 0,$ each is $0$ if and only if $p(y|x) = q(y|x),$ by \@{gibbs-inequality}, and positive otherwise.
-	
 \end{proof}
 \end{corollary}
 
