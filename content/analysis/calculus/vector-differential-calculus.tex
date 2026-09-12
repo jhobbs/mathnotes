@@ -56,7 +56,7 @@ is therefore often used in place of $D_j f_i,$ and $D_j f_i$ is called a \textbf
 \begin{definition}[Tangent Vector]
 For a space curve given parametrically by $\vec{r}(t),$ the \textbf{tangent vector} (or specifically, the \textbf{unit tangent vector}) at the point $\vec{r}(t)$ is the \@{unit-vector} defined by:
 
-\[ \vec{T}(t) = \frac{\vec{r}'(t)}{||\vec{r}'(t)||} \]
+\[ \vec{T}(t) = \frac{\vec{r}'(t)}{\lVert\vec{r}'(t)\rVert} \]
 \end{definition}
 
 \subsection{Differentiation}
@@ -149,7 +149,7 @@ Suppose $E$ is an \@{open} \@{set} in $R^n,$ $\vec{f} : E \to R^m,$ and $\vec{x}
 \begin{definition}[Continuously Differentiable]
 A \@{differentiable} \@{function} $\vec{f}$ of an \@{open} \@{set} $E \subset R^n$ into $R^m$ is said to be \textbf{continuously differentiable} in $E$ if $\vec{f}'$ is a \@{continuous} function of $E$ into $L(R^n, R^m).$ More explicitly, it is required that to every $\vec{x} \in E$ and to every $\epsilon > 0$ corresponds a $\delta > 0$ such that
 
-\[ ||\vec{f}'(\vec{y}) - \vec{f}'(\vec{x})|| < \epsilon \]
+\[ \lVert\vec{f}'(\vec{y}) - \vec{f}'(\vec{x})\rVert < \epsilon \]
 
 if $\vec{y} \in E$ and $|\vec{x} - \vec{y}| < \delta.$
 
@@ -597,7 +597,7 @@ Then,
 \end{itemize}
 
 \begin{itemize}
-\item The \@{magnitude} $||\omega||$ is the local \@{angular-velocity} (half the \@{curl} \@{magnitude}.)
+\item The \@{magnitude} $\lVert\omega\rVert$ is the local \@{angular-velocity} (half the \@{curl} \@{magnitude}.)
 \end{itemize}
 
 More visually, if we take a small \@{ball} of \@{points} around $\vec{x_0},$
@@ -625,7 +625,7 @@ So, if we dropped a tiny paddle wheel into the flow:
 \end{itemize}
 
 \begin{itemize}
-\item Its spin rate is $\frac{1}{2} || \nabla \times \vec{F} ||.$ 
+\item Its spin rate is $\frac{1}{2} \lVert \nabla \times \vec{F} \rVert.$ 
 \end{itemize}
 
 \subsubsection{Jacobian Related to Directional Derivative}
