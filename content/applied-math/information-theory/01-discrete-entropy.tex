@@ -682,11 +682,31 @@ Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p \| q) = 0.$ Conversely
 \end{corollary}
 
 \begin{corollary}[Nonnegativity of Conditional Mutual Information]
-	\[ I(X; Y |Z \geq 0, \]
+	\[ I(X; Y |Z) \geq 0, \]
 
 	with equality if and only if $X$ and $Y$ are \@{conditionally independent} given $Z.$
+	\begin{proof}
+        We have that
+	\[ I(X; Y | Z) = \sum_{z \in \mathcal{Z}} p(z) I(X; Y | Z = z), \]
 
+	and for each fixed $z,$
+	
+	\[ I(X; Y | Z = z)  = D(p(x,y |z) \| p(x |z)p(y |z)) \geq 0 \].
+	
+	By \@{gibbs-inequality}, the quantity for each fixed $z$ is non-negative, so the sum weighted by the probability of each $z$ is also non-negative.
+
+	For equality, the average is $0$ if and only if for each $z$ with $p(z) > 0,$
+
+	\[ I(X; Y | Z = z) = 0, \]
+
+	why by \@{gibbs-inequality} means
+	
+	\[ p(x, y|z) = p(x|z) p(y|z) \]
+	
+		for all $x, y,$ i.e. $X$ and $Y$ are \@{conditionally independent} given $Z.$
+	\end{proof}
 \end{corollary}
+
 
 \begin{theorem}
 A \@{random-variable} has the most \@{entropy} when the \@{elements} of its alphabet are all equally likely to occur.
