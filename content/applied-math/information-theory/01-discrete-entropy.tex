@@ -903,6 +903,28 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 
 \end{proof}
 
+\begin{theorem}[Nonnegativity of Relative Entropy]
+	For discrete probability distributions $p$ and $q$ that share a support $\mathcal{X},$
+
+	\[ D(p \| q) \geq 0, \]
+
+	with equality if and only if $p = q.$
+\end{theorem}
+\begin{proof}
+	This restates \@{gibbs-inequality}, which the \@{log-sum-inequality} proves more directly.
+	TODO: apply the \@{log-sum-inequality} with $a_i = p_i$ and $b_i = q_i.$
+
+	\bal
+	D(p \| q) & = \sum_{x \in \mathcal{X}} p(x) \log{\frac{p(x)}{q(x)}} \\
+		  & \geq \left ( \sum_{x \in \mathcal{X}} p(x) \right ) \log{\left ( \frac{\sum_x p(x)}{\sum_x q(x)} \right )} \\
+		  & = 1 \log{\left ( \frac{1}{1} \right )} \\
+		  & = 0,
+	\eal
+
+	with equality if and only if $\frac{p(x)}{q(x)} = c.$ Both $p$ and $q$ are \@{probability mass functions}, so $c = 1$ (otherwise they wouldn't both sum to 1) and hence we have $D(p||q) = 0$ if and only if $p(x) = q(x)$ for all $x.$
+
+\end{proof}
+
 \begin{theorem}[Convexity of Relative Entropy]
 TODO: Cover \& Thomas Theorem 2.7.2.
 
