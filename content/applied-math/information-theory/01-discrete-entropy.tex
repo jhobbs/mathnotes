@@ -875,7 +875,15 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 \subsection{Log Sum Inequality and Its Applications}
 
 \begin{theorem}[Log Sum Inequality]
-TODO: Cover \& Thomas Theorem 2.7.1.
+	For \@{non-negative} numbers, $a_1, a_2, \dots, a_n$ and $b_1, b_2, \dots, b_n,$
+
+	\[ \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} \geq \left ( \sum_{i=1}^{n} a_i \right ) \log{\frac{\sum_{i=1}^n a_i }{ \sum_{i=1}^n b_i}}, \]
+
+	with equality if and only if $\frac{a_i}{b_i} = \text{const}.$
+
+	We use the conventions that $0 \log{0} = 0, a \log{\frac{a}{0}} = \infty$ if $a > 0,$ and $0\log{\frac{0}{0}} = 0,$ all of which follow from \@{continuity}.
+
+
 \end{theorem}
 
 \begin{theorem}[Convexity of Relative Entropy]
