@@ -446,7 +446,7 @@ where $\mathbb{E}_p$ is expectation under $p.$
 Note that when $p = q,$ \@{cross-entropy} equals \@{entropy}. The symbol $H$ is overloaded: $H(p,q)$ with distributions as arguments means \@{cross-entropy}, while $H(X,Y)$ with \@{random-variables} as arguments means joint entropy.
 
 \begin{definition}[KL Divergence]\synonyms{relative-entropy, "Kullback-Leibler divergence"}
-For discrete probability distributions, $p$ and $q,$ that share a support $\mathcal{X},$ the \textbf{relative entropy} from $q$ to $p$ is defined to be
+	For discrete probability distributions, $p$ and $q,$ on a common \@{alphabet} $\mathcal{X},$ the \textbf{relative entropy} from $q$ to $p$ is defined to be
 
 \[ D_{KL}(p \| q) = \sum_{x \in \mathcal{X}} p(x) \log{\frac{p(x)}{q(x)}}, \]
 
@@ -931,12 +931,42 @@ TODO: Cover \& Thomas Theorem 2.7.2.
 	\[ D(\lambda p_1 + (1 - \lambda) p_2 \| \lambda q_1 + (1 - \lambda) q_2) \leq \lambda D(p_1 \| q_1) + (1 - \lambda) D(p_2 \| q_2) \]
 
 	for all $0 \leq \lambda \leq 1.$
-
-
 \end{theorem}
+\begin{proof}
+	First, note that the set of \@{probability mass functions} on $\mathcal{X}$ is the set of \@{probability vectors} in $\reals^n,$ where $n = |\mathcal{X}|,$ and thus \@[is a convex set]{probability-vectors-form-a-convex-compact-set}. $D$ takes a pair $(p, q) \in \reals^n \times \reals^n,$ which is \@[again convex]{product-of-convex-sets-is-convex}, so $D$ is defined on a \@{convex set}.
+
+	Now we'll apply \@{log-sum-inequality} to the one term with a fixed $x$ left-hand side of the inequality in the theorem, but we'll do some replacements to make it more obvious what's happening.
+
+	Let
+	\bal
+	a_1 = \lambda p_1(x), \quad a_2 = (1 - \lambda)p_2(x) \\
+	b_1 = \lambda q_1(x), \quad b_2 = (1 - \lambda)q_2(x).
+	\eal
+
+	Using those substitutions, with \@{log-sum-inequality}, we have
+
+        \bal
+        \left ( \lambda p_1(x) + (1 - \lambda) p_2(x) \right ) \log{\frac{ \lambda p_1(x) + (1 - \lambda) p_2(x) }{ \lambda q_1(x) + (1 - \lambda) q_2(x) }} & =
+	\left ( a_1 + a_2 \right ) \log{\frac{ a_1 + a_2 }{ b_1 + b_2 }} \\
+	  & \leq a_1 \log{\frac{a_1}{b_1}} +   a_2 \log{\frac{a_2}{b_2}} \\
+	   & =  \lambda p_1(x) \log{\frac{\lambda p_1(x)}{\lambda q_1(x)}} +   (1 - \lambda)p_2(x) \log{\frac{(1 - \lambda)p_2(x)}{(1 - \lambda)q_2(x)}} \\
+	   & =  \lambda p_1(x) \log{\frac{p_1(x)}{q_1(x)}} +   (1 - \lambda)p_2(x) \log{\frac{p_2(x)}{q_2(x)}}
+	\eal
+
+	Summing both sides of this over $x \in \mathcal{X}$ gives us
+
+	\[ D(\lambda p_1 + (1 - \lambda) p_2 \| \lambda q_1 + (1 - \lambda) q_2) \leq \lambda D(p_1 \| q_1) + (1 - \lambda) D(p_2 \| q_2). \]
+\end{proof}
+\begin{intuition}
+	\@{relative entropy} is a \@{convex} \@{surface} over \@{pairs} $(p,q)$, with a flat-bottomed zero valley along $p=q$, rising as $p$ and $q$ differ.
+
+	\includegraphics[alt={Convexity of Relative Entropy}]{convexity-of-relative-entropy.png}
+	The image above was generated using GPT-5.6 Sol.
+
+	Another way to think of this is that mixing $p_1$ and $p_2$, and $q_1$ and $q_2$ can't make the results more distinguishable than the weighted average distinguishabilities between $p_1$ and $q_1$ and $p_2$ and $q_2$, i.e., mixing distributions tends to wash out distinctions.
+\end{intuition}
 
 \begin{theorem}[Concavity of Entropy]
-TODO: Cover \& Thomas Theorem 2.7.3.
 \end{theorem}
 
 \subsection{Data-Processing Inequality}
