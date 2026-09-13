@@ -707,9 +707,8 @@ Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p \| q) = 0.$ Conversely
 \end{corollary}
 
 
-\begin{theorem}
+\begin{theorem}[Uniform distribution maximizes entropy]
 A \@{random-variable} has the most \@{entropy} when the \@{elements} of its alphabet are all equally likely to occur.
-% TODO (path B): re-derive from D(p || u) = log|X| - H(X) >= 0, with u uniform (Cover and Thomas Thm 2.6.4). The current proof below uses Lagrange multipliers.
 \end{theorem}
 
 \begin{proof}
@@ -731,7 +730,6 @@ It remains to show that this extreme of $H$ is a maximum. This follows from the 
 
 \begin{theorem}
 The \@{uncertainty} of $Y$ is never increased by knowledge of $X.$ It will be decreased unless $X$ and $Y$ are independent events, in which case it is not changed.
-% TODO (path B): re-derive from I(X;Y) >= 0 (Cover and Thomas Thm 2.6.5). The current proof below uses subadditivity and the chain rule, which reverses the intended dependency.
 \end{theorem}
 
 \begin{proof}
@@ -967,6 +965,40 @@ TODO: Cover \& Thomas Theorem 2.7.2.
 \end{intuition}
 
 \begin{theorem}[Concavity of Entropy]
+$H(p)$ is a \@{concave function} of $p.$
+\end{theorem}
+\begin{proof}
+Let $u$ be the uniform distribution on $|\mathcal{X}|$ outcomes. Then from the definition of @{relative-entropy},
+
+	\[ D(P \| u) = H(p, u) - H(p) \iff H(p) = H(p, u) - D(p \| u). \]
+        
+	Then, from the definition of \@{cross-entropy}
+
+	\bal
+	H(p, u) & = - \sum_{x \in \mathcal{X}} p(x) \log{u(x)} \\
+		& = - \sum_{x \in \mathcal{X}} p(x) \log{\frac{1}{|\mathcal{X}|}} \\ 
+		& = - \sum_{x \in \mathcal{X}} p(x) \left ( \log{1} - \log{|\mathcal{X}|} \right ) \\ 
+		& = \sum_{x \in \mathcal{X}} p(x) \log{|\mathcal{X}|} \\ 
+		& = \log{|\mathcal{X}|} \\ 
+	\eal
+
+	So,
+
+	\[ H(p) = \log{|\mathcal{X}|}  -  D(p \| u), \]
+
+	and by \@{convexity of relative entropy}, \@{entropy} is a \@{concave function}.
+\end{proof}
+\begin{intuition}
+The intuition is that mixing distributions can never decrease uncertaintity.
+
+\includegraphics[alt={Convexity of Relative Entropy}]{concavity-of-entropy.png}
+The image above was generated using GPT-5.6 Sol.
+
+	We already proved \@{Uniform distribution maximizes entropy} using Lagrangian multipliers, but the proof above shows it in another way. If $p = u,$ then $D(p \| u) = 0,$ and since $\log{|\mathcal{X}|}$ is constant in $|\mathcal{X}|,$ $H$ is maximized by $u$.
+\end{intuition}
+
+\begin{theorem}[Concavity and Convexity of Mutual Information]
+TODO: Cover \& Thomas Theorem 2.7.4.
 \end{theorem}
 
 \subsection{Data-Processing Inequality}
