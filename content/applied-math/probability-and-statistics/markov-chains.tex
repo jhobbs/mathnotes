@@ -81,6 +81,70 @@ Note that $\vec{\pi} \cdot P = \vec{\pi},$ which when combined with the fact tha
 	A \@{vector} whose \@{entries} are \@{non-negative} and sum to 1 is called a \textbf{probability vector}.
 \end{definition}
 
+\begin{theorem}\label{probability-vectors-form-a-convex-compact-set}
+The set of \@{probability vectors} in $\reals^n$ is a \@{convex-set}, and it is \@{compact}.
+
+
+	\begin{proof}
+		Let $E$ be the set of \@{probability vectors} in $\reals^n.$ That is,
+
+		\[ E = \left \{ \vec{p} \in \reals^n : \vec{p}_i \geq 0, \sum_{i=1}^n \vec{p}_i = 1. \right \} \]
+
+		(Note: $E$ is a $n-1$ dimensional \@{simplex}).
+
+		Suppose $\vec{X}, \vec{Y} \in E.$ Then
+
+		\[ \sum_{i=1}^n \vec{X}_i = 1, \quad \sum_{i=1}^n \vec{Y}_i = 1 \].
+
+		Then, let $\lambda \in [0,1].$ Now,
+
+		\[ \sum_{i=1}^n \lambda  \vec{X}_i = \lambda,  \quad \sum_{i=1}^n (1 - \lambda) \vec{Y}_i = 1 - \lambda, \]
+
+		\bal
+		\lambda \vec{X} + (1 - \lambda) \vec{Y} & = \sum_{i=1}^n \left ( \lambda  \vec{X}_i + (1 - \lambda) \vec{Y}_i \right ) \\
+		& = \lambda + 1 - \lambda \\
+		& = 1.
+		\eal
+
+		Since either $\lambda$ or $1 - \lambda$ are non-negative, all entries of this \@{convex combination} are non-negative, so the
+		combination is again in $E$ and is therefore a \@{probability-vector}.
+
+		We can use \@{heine-borel} to show that $E$ is \@{compact} by showing it is \@{closed} and \@{bounded}.
+
+		Noe that for each $\vec{p} \in E,$ and each \@{coordinate} $i,$
+
+		\[ \{ \vec{p} \in \reals^n : \vec{p}_i \geq 0 \} \]
+
+		is a \@{closed} half-space. Now, note that the map
+
+		\[ f : \reals^n \to \reals, \quad f(\vec{p}) = \sum_{i=1}^n \vec{p}_i \]
+
+		is \@{continuous}, the \@{pre-image} of $1$ under $f$ is
+
+		\[ \left \{ \vec{p} \in \reals^n : \sum_{i=1}^n \vec{p}_i = 1. \right \} = f^{-1}(\{1\}). \]
+
+		Because ${1}$ is \@{closed} in $\reals,$ by \@{mapping-continuous-iff-inverse-images-of-closed-sets-are-closed} we have that
+
+                \[ \left \{ \vec{p} \in \reals^n : \sum_{i=1}^n \vec{p}_i = 1. \right \} \]
+
+		is \@{closed.}
+
+		Now,
+
+		\[ E = \left ( \bigcap_{i=1}^n \{ \vec{p} : \vec{p}_i \geq 0 \} \right ) \cap \left \{ \vec{p} : \sum_{i=1}^n \vec{p}_i = 1 \right \} \]
+
+		is an \@{intersection} of \@{closed} \@{sets}, \@[which is also closed]{union-and-intersection-of-open-and-closed-sets}.
+
+		$E$ is obviously bounded - the sum of all coordinates in $\vec{p} \in E$ is always $1,$ so $E \subset$ the \@{closed} \@{ball} of radius $1$ centered at the origin.
+
+		Therefore, $E$ is closed and bounded, and is compact.
+
+
+                TODO: we can generalize this to the fact that \@{simplexes} are \@{convex} and \@{compact}.
+	\end{proof}
+
+\end{theorem}
+
 \begin{definition}[Stochastic Matrix]\synonyms{"probability matrix", "transition matrix", "Markov matrix", "right stochastic matrix", "row stochastic matrix"}
 A \textbf{stochastic matrix} (actually, a right stochastic matrix) is a \@{square-matrix} $A = (a_{ij}) \in \reals^{n \times n}$ with \@{non-negative} \@{entries} whose rows each sum to one:
 

@@ -164,4 +164,14 @@ Assume $f$ is continuous on $X$ and $V$ is an \@{open} set in $Y.$ Suppose, for 
 Conversely, suppose $f^{-1}(V)$ is \@{open} in $X$ for every \@{open} set $V$ in $Y.$ Let $V$ be an \@{open} set in $Y.$ Assume, for the sake of contradiction that there is some $p \in f^{-1}(V)$ at which $f$ is not continuous. Let $\epsilon > 0.$ Then, there is no $\delta > 0$ for which $B_\delta(p)$ contains only points that are mapped by $f$ to $V,$ i.e. every \@{neighborhood} of $p$ contains some point that is not in $f^{-1}(V),$ and therefore $p$ is not an \@{interior-point} of $f^{-1}(V),$ and $f^{-1}(V)$ is not open, a contradiction. Thus, our assumption must be incorrect, and there is no such $p,$ and since entire space $Y$ is an \@{open} \@{subset} of itself, $f$ must be continuous on all of $X.$
 \end{proof}
 
+\begin{corollary}\label{mapping-continuous-iff-inverse-images-of-closed-sets-are-closed}
+A \@{mapping} $f$ of a \@{metric-space} $X$ into a \@{metric-space} $Y$ is \@{continuous} on $X$ if and only if $f^{-1}(C)$ is \@{closed} in $X$ for every \@{closed} set $C$ in $Y.$
+\end{corollary}
+
+\begin{proof}
+First, note that for any $E \subset Y,$ we have $f^{-1}(E^c) = f^{-1}(E)^c,$ since $x \in f^{-1}(E^c)$ exactly when $f(x) \notin E,$ which is exactly when $x \notin f^{-1}(E).$
+
+Now, as $V$ ranges over the \@{open} \@{subsets} of $Y,$ its \@[complement]{complement-of-a-set} $V^c$ ranges over the \@{closed} subsets of $Y,$ by \@{open-iff-complement-closed}. So, by \@{mapping-continuous-iff-inverse-images-of-open-sets-are-open}, $f$ is continuous on $X$ if and only if $f^{-1}(C^c)$ is \@{open} in $X$ for every closed set $C$ in $Y.$ By the observation above, $f^{-1}(C^c) = f^{-1}(C)^c,$ and this is open in $X$ if and only if $f^{-1}(C)$ is closed in $X,$ again by \@{open-iff-complement-closed}.
+\end{proof}
+
 \end{document}

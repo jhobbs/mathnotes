@@ -726,7 +726,7 @@ Then, for any $p_i$ we want
 
 But, this means $p_i$ doesn't depend on $i,$ and so is the same for each $i$ and therefore $p_i = \frac{1}{n}.$
 
-It remains to show that this extreme of $H$ is a maximum. This follows from the facts that the domain is a \@{convex}, \@{compact} set and that the entropy function is strictly \@{concave}. TODO: more details on these.
+It remains to show that this extreme of $H$ is a maximum. This follows from the facts that the domain is a \@[convex]{convex-set}, \@{compact} set and that the entropy function is strictly \@{concave}. TODO: more details on these.
 \end{proof}
 
 \begin{theorem}
@@ -912,8 +912,6 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 \end{theorem}
 \begin{proof}
 	This restates \@{gibbs-inequality}, which the \@{log-sum-inequality} proves more directly.
-	TODO: apply the \@{log-sum-inequality} with $a_i = p_i$ and $b_i = q_i.$
-
 	\bal
 	D(p \| q) & = \sum_{x \in \mathcal{X}} p(x) \log{\frac{p(x)}{q(x)}} \\
 		  & \geq \left ( \sum_{x \in \mathcal{X}} p(x) \right ) \log{\left ( \frac{\sum_x p(x)}{\sum_x q(x)} \right )} \\
@@ -921,12 +919,18 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 		  & = 0,
 	\eal
 
-	with equality if and only if $\frac{p(x)}{q(x)} = c.$ Both $p$ and $q$ are \@{probability mass functions}, so $c = 1$ (otherwise they wouldn't both sum to 1) and hence we have $D(p||q) = 0$ if and only if $p(x) = q(x)$ for all $x.$
+	with equality if and only if $\frac{p(x)}{q(x)} = c.$ Both $p$ and $q$ are \@{probability mass functions}, so $c = 1$ (otherwise they wouldn't both sum to 1) and hence we have $D(p \| q) = 0$ if and only if $p(x) = q(x)$ for all $x.$
 
 \end{proof}
 
 \begin{theorem}[Convexity of Relative Entropy]
 TODO: Cover \& Thomas Theorem 2.7.2.
+
+	$D(p \| q)$ is \@{convex} in the pair $(p, q);$ that is, if $(p_1, q_1)$ and $(p_2, q_2)$ are two pairs of \@{probability mass functions}, then
+
+	\[ D(\lambda p_1 + (1 - \lambda) p_2 \| \lambda q_1 + (1 - \lambda) q_2) \leq \lambda D(p_1 \| q_1) + (1 - \lambda) D(p_2 \| q_2) \]
+
+	for all $0 \leq \lambda \leq 1.$
 
 
 \end{theorem}
