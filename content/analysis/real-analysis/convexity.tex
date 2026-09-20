@@ -24,6 +24,18 @@ Starting with \@{convex-function}, $\varphi$ is \textbf{strictly convex} if the 
 A function $\varphi$ is said to be \textbf{concave} if $-\varphi$ is a \@{convex-function}.
 \end{definition}
 
+\begin{theorem}[Adding an Affine Function Preserves Convexity]
+Let $E \subseteq \reals^k$ be a \@{convex-set}, let $\varphi : E \to \reals,$ and let $\ell : E \to \reals$ be \@{affine}. If $\varphi$ is \@{convex}, then $\varphi + \ell$ and $\varphi - \ell$ are convex. If $\varphi$ is \@{concave}, then $\varphi + \ell$ and $\varphi - \ell$ are concave. A linear function is affine, so this covers adding or subtracting a linear function.
+
+TODO: prove this. $\ell$ satisfies the convexity inequality with equality, so adding it to both sides of the inequality for $\varphi$ leaves the inequality intact; subtraction is the same argument applied to $-\ell,$ which is also affine.
+\end{theorem}
+
+\begin{theorem}[Affine Precomposition Preserves Convexity]
+Let $D \subseteq \reals^k$ and $E \subseteq \reals^m$ be \@{convex-set}s, let $A : D \to E$ be \@{affine}, and let $\varphi : E \to \reals.$ If $\varphi$ is \@{convex}, then $\varphi \circ A$ is convex on $D.$ If $\varphi$ is \@{concave}, then $\varphi \circ A$ is concave on $D.$
+
+TODO: prove this. $A$ carries a \@{convex-combination} of two points to the same convex combination of their images, so the inequality for $\varphi$ applies to $A(\vec{x})$ and $A(\vec{y})$ directly.
+\end{theorem}
+
 \begin{theorem}[Second Derivative Test for Convexity]\label{second-derivative-test-for-convexity}
 Let $\varphi$ be twice \@{differentiable} on an \@{open} \@{interval} $(a,b).$ Then
 $\varphi$ is \@{convex} on $(a,b)$ if and only if $\varphi''(x) \geq 0$ for all

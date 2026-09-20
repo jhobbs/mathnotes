@@ -998,8 +998,41 @@ The image above was generated using GPT-5.6 Sol.
 \end{intuition}
 
 \begin{theorem}[Concavity and Convexity of Mutual Information]
-TODO: Cover \& Thomas Theorem 2.7.4.
+	Let $(X,Y) \sim p(x,y) = p(x)p(y|x).$ The \@{mutual information} $I(X;Y)$ is a \@{concave function} of $p(x)$ for fixed $p(y|x)$ and a \@{convex function} of $p(y|x)$ for fixed $p(x).$
 \end{theorem}
+\begin{proof}
+For the first part, first expand \@{mutual information}:
+
+	\[ I(X; Y) = H(Y) - H(Y|X) = H(Y) - \sum_{x} p(x) H(Y|X = x). \]
+
+	If $p(y|x)$ is fixed, then
+
+	\[ p(y) = \sum_{x} p(y | x) p(x) \]
+
+	is a \@{linear function} of $p(x).$ Since $H(y)$ is a \@{concave function} of $p(y),$ by \@{affine precomposition preserves convexity} it is a concave function of $p(x).$ The second term is a linear function of $p(x),$ so by \@{adding an affine function preserves convexity}, their difference is a concave function of $p(x)$ as well.
+
+	For the second part, fix $p(x)$ and consider two different \@{conditional distributions} $p_1(y|x)$ and $p_2(y|x).$ Their corresponding \@{joint distributions} are $p_1(x,y) = p(x) p_1(y|x)$ and $p_2(x,y) = p(x)p_2(y|x),$ and their respective \@{marginals} are $p(x),p_1(y)$ and $p(x), p_2(y).$ Consider a conditional distribution formed from their \@{convex combination}
+
+	\[ p_\lambda(y|x) = \lambda p_1(y|x) + (1 - \lambda)p_2(y|x). \]
+
+	Their corresponding joint distributions are also a convex combination of the corresponding joint distributions,
+
+	\[ p_\lambda(x,y) = \lambda p_1(x,y) + (1 - \lambda) p_2(x,y), \]
+
+	and the distribution of $Y$ is also a \@{convex combination},
+
+	\[ p_\lambda(y) = \lambda p_1(y) + (1 - \lambda) p_2(y). \]
+
+	Now, if we let $q_\lambda(x,y) = p(x) p_\lambda(y)$ be the product of the marginal distributions, we have
+
+	\[ q_\lambda(x,y) = \lambda q_1(x,y) + (1 - \lambda) q_2(x,y). \]
+
+	The mutual information is the \@{relative entropy} between the joint distribution and the product of the marginals, so
+
+	\[ I(X;Y) = D(p_\lambda(x,y) \| q_\lambda(x,y)), \]
+
+	and relative entropy is a \@{convex function} of $(p, q),$ so the mutual information is a convex function of the conditional distribution.
+\end{proof}
 
 \subsection{Data-Processing Inequality}
 
