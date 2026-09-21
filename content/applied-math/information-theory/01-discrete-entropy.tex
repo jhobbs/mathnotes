@@ -1037,12 +1037,43 @@ For the first part, first expand \@{mutual information}:
 \subsection{Data-Processing Inequality}
 
 \begin{theorem}[Data-Processing Inequality]
-TODO: Cover \& Thomas Theorem 2.8.1.
+	If $X \to Y \to Z,$ then $I(X;Y) \geq I(X; Z).$
 \end{theorem}
+\begin{proof}
+	Using \@{Chain Rule for Mutual Information}, we can expand $I(X; Y, Z)$ in two ways:
+
+	\bal
+	I(X; Y, Z) & = I(X; Z) + I(X; Y| Z) \\
+	           & = I(X; Y) + I(X; Z | Y).
+	\eal
+
+	Now, $X$ and $Z$ are \@{conditionally independent} given $Y,$ so $I(X; Z|Y) = 0,$ and recalling that $I(X; Y|Z) \geq 0$ we have
+
+	
+	\bal
+	I(X;Y) & = I(X;Z) + I(X; Y|Z) \\
+	\iff I(X;Y) & \geq I(X; Z).
+	\eal
+\end{proof}
 
 \begin{corollary}[Processing Cannot Increase Information]
-TODO: Cover \& Thomas, corollary to Theorem 2.8.1.
+	If $Z = g(Y),$ we have $I(X; Y) \geq I(X; g(Y)).$
 \end{corollary}
+\begin{proof}
+	From \@{Function of middle variable forms Markov Chain} we have that $X \to Y \to g(Y)$ is a \@{markov chain} and \@{data-processing inequality} gives us $I(X; Y) \geq I(X; g(Y)).$
+\end{proof}
+\begin{corollary}
+	If $X \to Y \to Z,$ then $I(X; Y|Z) \leq I(X; Y).$
+\end{corollary}
+\begin{proof}
+	In \@{proof-of-data-processing inequality} we showed that $I(X; Z|Y) = 0$ and $I(X; Z) \geq 0.$ Then,
+
+	\bal
+	I(X;Z) + I(X; Y|Z) & = I(X;Y)  \\
+	\iff I(X; Y | Z) & \leq I(X; Y).
+	\eal
+\end{proof}
+
 
 \subsection{Sufficient Statistics}
 
