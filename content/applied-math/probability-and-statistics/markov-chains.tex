@@ -37,6 +37,72 @@ for $j = 1,2, \dots, N.$ We call the $p_{jk}$ values the transition probabilitie
 
 \end{definition}
 
+\begin{theorem}[Conditional Independence Given Intermediate Step]
+	\@{Random Variables} $X, Y, Z$ form a \@{markov chain} $X \to Y \to Z$ if and only if $X$ and $Z$ are \@{conditionally independent} given $Y.$
+\end{theorem}
+\begin{proof}
+	Suppose $X$ and $Z$ are \@{conditionally independent} given $Y.$ Then, using \@{bayes theorem} we have
+
+	\bal
+	p(x, z | y) & = p(x|y)p(z|y) \\
+	            & = \frac{p(x)p(y|x) p(z|y)}{p(y)}
+	\eal
+
+	Then,
+
+	\bal
+	p(x,y,z) & = p(y)p(x|y)p(z|y) \\
+		 & =  p(y) \frac{p(x)p(y|x) p(z|y)}{p(y)} \\
+		 & = p(x)p(y|x)p(z|y).
+	\eal
+
+	Now assume we have Markovicity, i.e $p(x,y,z) = p(x)p(y|x)p(z|y).$ Again, using Bayes:
+
+	\bal
+	p(x,y,z) & = p(x)p(y|x)p(z|y) \\
+	         & = \frac{p(x) p(x|y) p(y) p(z|y)}{p(x)} \\
+	         & = p(x|y) p(y) p(z|y).
+	\eal
+
+	So, for a fixed $y$ we have
+	\[ \frac{p(x,y,z)}{p(y)} = p(x|y)p(z|y). \]
+\end{proof}
+
+\begin{theorem}[Reversibility of Markov Chains]
+	If \@{Random Variables} $X, Y, Z$ form a \@{markov chain} $X \to Y \to Z,$ then $Z \to Y \to X$ is also a Markov Chain (hence it is sometimes written as $X \leftrightarrow Y \leftrightarrow Z.)$
+\end{theorem}
+\begin{proof}
+Using \@{bayes theorem},
+
+\bal
+	p(x, z | y) & = p(x|y)p(z|y) \\
+		    & = \frac{p(x|y)p(y|z)p(z)}{p(y)}.
+\eal
+	Then,
+
+\bal
+	p(x,y,z) & = p(y)p(x|y)p(z|y) \\
+		 & = p(y) \frac{p(x|y)p(y|z)p(z)}{p(y)}. \\
+		 & = p(z)p(y|z)p(x|y).
+\eal
+\end{proof}
+
+\begin{theorem}
+Given \@{Random Variables} $X, Y, Z$ if $Z = f(Y),$ then $X \to Y\ \to Z.$
+\end{theorem}
+\begin{proof}
+If $Z = f(Y),$ then $Z$ is independent of $X,$ so
+
+	\[ p(y,z | x) = p(y|x,z) = p(y|x)p(z|y), \]
+
+	and then
+
+	\[ p(x,y,z) = p(x)p(y|x)p(z|y). \]
+\end{proof}
+
+
+\detach
+
 \begin{note}
 Note that $p_{jk}$ is the \@{probability} of going from state $j$ to state $k$ in one step. We use the notation
 
