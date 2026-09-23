@@ -1049,11 +1049,12 @@ For the first part, first expand \@{mutual information}:
 
 	Now, $X$ and $Z$ are \@{conditionally independent} given $Y,$ so $I(X; Z|Y) = 0,$ and recalling that $I(X; Y|Z) \geq 0$ we have
 
-	
 	\bal
 	I(X;Y) & = I(X;Z) + I(X; Y|Z) \\
 	\iff I(X;Y) & \geq I(X; Z).
 	\eal
+
+	We have equality if and only if $I(X; Y|Z) = 0,$ i.e. if $X \to Z \to Y$ forms a \@{markov chain}.
 \end{proof}
 
 \begin{corollary}[Processing Cannot Increase Information]
@@ -1078,16 +1079,38 @@ For the first part, first expand \@{mutual information}:
 \subsection{Sufficient Statistics}
 
 \begin{definition}[Sufficient Statistic]
-TODO: Cover \& Thomas, Section 2.9.
+	A \@{function} $T(X)$ is said to be a \textbf{sufficient statistic} relative to the family $\{f_\theta(x)\}$ if $X$ is \@{independent} of $\theta$ given $T(X)$ for any \@{probability distribution} on $\theta,$ that is, $\theta \to T(X) \to X$ forms a \@{Markov chain}.
 \end{definition}
 
 \begin{theorem}[Characterization of Sufficiency]
-TODO: Cover \& Thomas, Section 2.9.
+	Let $X$ have \@{probability mass function} $f_\theta(x)$ from the family
+	$\{f_\theta(x)\}$, and let $T(X)$ be a \@{statistic} of $X$.
+	Then $T(X)$ is a \@{sufficient statistic} for $\theta$ if and only if
+
+	\[
+		I(\theta;X) = I(\theta;T(X))
+	\]
+
+	for every probability distribution on $\theta$.
 \end{theorem}
+\begin{proof}
+	If $I(\theta;X) = I(\theta;T(X))$, then by \@{data-processing-inequality} we have that $\theta \to T(X) \to X$ forms a \@{Markov Chain}, i.e. $T(X)$ is a \@{sufficient statistic} for $\theta.$
+
+	Now, assume $T(X)$ is a \@{sufficient statistic} for $\theta.$ Then again by \@{data-processing-inequality}, $I(\theta;X) = I(\theta;T(X))$.
+
+\end{proof}
+\begin{example}
+	For a sequence of $n$ coin-flips with parameter $\theta = \Pr{(X_i = \text{heads})},$ the number of heads is a \@{sufficient statistic} for $\theta$, because if we know the number of heads we got, knowing the specific order of heads and tails in the sequence tells us nothing more about $\theta$, as all possible sequences with that many heads are equally likely.
+\end{example}
 
 \begin{definition}[Minimal Sufficient Statistic]
-TODO: Cover \& Thomas, Section 2.9.
+	A \@{statistic} $T(X)$ is a \@{minimal sufficient statistic} relative to $\{f_\theta(x)\}$ if it is a \@{function} of every other \@{sufficient statistic} $U.$ 
 \end{definition}
+\begin{note}
+	In terms of the \@{data-processing inequality}, this implies that
+
+	\[ \theta \to T(X) \to U(X) \to X. \]
+\end{note}
 
 \subsection{Fano's Inequality}
 
