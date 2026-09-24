@@ -1114,8 +1114,25 @@ For the first part, first expand \@{mutual information}:
 
 \subsection{Fano's Inequality}
 
+\begin{definition}[Probability of Error]
+	Given a \@{discrete random variable} $X,$ if $\hat{X}$ is an \@{estimate} of $X,$ then we define the probability of error as
+
+	\[ P_e = \Pr{(\hat{X} \neq X)} \].
+\end{definition}
+
 \begin{theorem}[Fano's Inequality]
 TODO: Cover \& Thomas Theorem 2.10.1.
+	For any \@{estimator} $\hat{X}$ such that $X \to Y \to \hat{X},$ with $P_e = \Pr{(X \neq \hat{X})}$, we have
+
+	\[ H(P_e) + P_e \log{|\mathcal{X}|} \geq H(X|\hat{X}) \geq H(X|Y). \]
+
+	This inequality can be weakened to
+
+	\[ 1 + P_e \log{|\mathcal{X}} \geq H(X|Y) \]
+
+	or
+
+	\[ P_e \geq \frac{H(X|Y) - 1}{\log{|\mathcal{X}|}}. \]
 \end{theorem}
 
 \begin{corollary}[Weak Form of Fano's Inequality]
