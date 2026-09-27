@@ -13,7 +13,7 @@
 \section{Statistics}
 
 \begin{definition}[Data set]
-	In statistics, the \textbf{data set} is viewed as a realization or observation of a \@{random element} defined on a \@{probability space} $(\Omega, \mathcal{F}, P)$ related to the random experiment.
+	In statistics, the \textbf{data set} is viewed as a realization or observation of a \@{random element} defined on a \@{probability space} $(\Omega, \mathcal{F}, P)$ related to the \@{random} \@{experiment}.
 \end{definition}
 
 \begin{definition}[Population]
@@ -37,47 +37,107 @@
 \end{definition}
 
 \begin{definition}[Statistical Model]
-	A \textbf{statistical model} is a \@{collection} of \@{probability measures} on a common \@{measurable space} $(\Omega, \mathcal{F}).$
+	A \textbf{statistical model} $\mathcal{P}$ is a \@{collection} of \@{probability measures} on a common \@{measurable space} $(\Omega, \mathcal{F}).$
 
 	Equivalently, $\mathcal{P} \subseteq \mathsf{P}(\Omega, \mathcal{F}),$ where $\mathsf{P}(\Omega, \mathcal{F})$ denotes the set of all probability measures on $(\Omega, \mathcal{F}).$
+
+	In other words, a statistical model is a set of \@{populations} constrained by some set of assumptions about the populations, or, is the assumptions themselves.
 \end{definition}
 
-
-\begin{definition}[Parameter Space]
-	The \textbf{parameter space} $\Theta$ is the set of all possible \@{parameter} values indexing the \@{distributions} in a \@{parameterized statistical model}.
-\end{definition}
 
 \begin{definition}[Parameter]
-	A \textbf{parameter} is a quantity $\theta \in \Theta$ used to specify a member $P_\theta$ of a \@{parameterized statistical model}.
-
-	Equivalently, if $\theta \mapsto P_\theta$ is a parameterization of a \@{statistical model} $\mathcal{P},$ then $\theta$ is the \textbf{parameter} and $\Theta$ is its \@{parameter space}.
+        Let $\mathcal{P}$ be a \@{statistical model}. A \textbf{parameter} is a function
+        $\vartheta : \mathcal{P} \to \Lambda$ into some set $\Lambda$. For $P \in \mathcal{P}$,
+        the element $\vartheta(P)$ is the \textbf{value} of the parameter at $P$.
 \end{definition}
 
+\begin{definition}[Parameterization]
+	A \textbf{parameterization} of a \@{statistical model} $\mathcal{P}$ is a \@{surjective} \@{map}
+        $\pi : \Theta \to \mathcal{P}$ written $P_\theta = \pi(\theta)$.
+\end{definition}
+
+\begin{proposition}[Parameters Factor Through the Parameterization]
+        Let $\pi : \Theta \to \mathcal{P}$ be a \@{parameterization}.
+        \begin{enumerate}
+                \item Every \@{parameter} $\vartheta$ is a function of $\theta$: setting
+                $g = \vartheta \circ \pi$ gives $\vartheta(P_\theta) = g(\theta)$ for all $\theta \in \Theta$.
+                \item Conversely, a function $g : \Theta \to \Lambda$ arises this way from some
+                \@{parameter} if and only if $P_{\theta_1} = P_{\theta_2}$ implies
+                $g(\theta_1) = g(\theta_2)$.
+        \end{enumerate}
+\end{proposition}
+\begin{proof}
+	TODO
+\end{proof}
+
+\begin{definition}[Identifiable]
+	A \@{parameterization} $\pi$ is \textbf{identifiable} if the \@{identity map} on $\Theta$
+	satisfies the condition in \@{Parameters Factor Through the Parameterization}, that is, if $\pi$ is \@{injective}. Then
+        $\pi^{-1} : \mathcal{P} \to \Theta$ is a \@{parameter}, the \textbf{indexing parameter},
+	and $\Theta$ is its \@{range}.
+\end{definition}
+
+\begin{definition}[Parameter Space]
+	The \textbf{parameter space} of a \@{parameterization} $\pi : \Theta \to \mathcal{P}$ is its \@{domain} $\Theta.$ 
+\end{definition}
 
 \begin{definition}[Parametric Family]
-	A \@{set} of \@{probability measures} $P_\theta$ on a \@{measurable space} $(\Omega, \mathcal{F})$ indexed by a \@{parameter} $\theta \in \Theta$ is said to be a \textbf{parametric family} if and only if $\Theta \subseteq \mathbb{R}^d$ for some fixed positive \@{integer} $d$ (the \@{dimension} of the \@{parameter space} $\Theta$) and each $P_\theta$ is a known probability measure when $\theta$ is known.
+        A \@{statistical model} $\mathcal{P}$ on a \@{measurable space} $(\Omega, \mathcal{F})$ is a
+        \textbf{parametric family} if it has a \@{parameterization} $\theta \mapsto P_\theta$ whose
+        \@{parameter space} satisfies $\Theta \subseteq \mathbb{R}^d$ for some fixed positive
+        \@{integer} $d$.
 \end{definition}
-
-\begin{definition}[Population Parameter]
-	A \textbf{population parameter} is a fixed quantity determined by the \@{population}.
-
-	Formally, it is a \@{map} $\theta : \mathcal{P} \to \Theta$ assigning to each population $P \in \mathcal{P}$ a value in the \@{parameter space} $\Theta.$
-\end{definition}
-\begin{note}
-	A \@{population parameter} can coincide with a \@{parameter} used in a \@{parametric statistical model}, but it's not necessary. For example, let $\mathcal{P}$ be the set of all \@{populations} with \@{finite} \@{mean}. That is a \@{nonparametric family}, but
-
-	\[ \mu (P) = \int x P(x) \]
-
-	is still a \@{population parameter}. 
-\end{note}
 
 \begin{definition}[Statistic]
+	Assume that we have a \@{data set} that is a realization of a \@{sample} $X$ (a \@{random vector}) from an unknown \@{population} $P$ on a \@{probability space}.
+
+	A \@{measurable function} of $X,$ $T(X),$ is called a \textbf{statistic} if $T(X)$ is a known value whenever $X$ is known, i.e., the function $T$ is a known function (i.e. $T$ doesn't depend on the unknown $P$.)
+\end{definition}
+\begin{remark}
+	The \@{identity map} $T(X) = X$ is a \@{statistic}, but a trivial one. A useful statistic usually
+	has a simpler \@{range} than $X$. For example, if $X = (X_1, \dots, X_n)$ is a list of $n$
+	measurements, the \@{sample} \@{mean} $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ reduces the data
+	from \@{dimension} $n$ to dimension $1$. In contrast, $\bar{X} - \mu(P)$, where $\mu(P)$ is the
+        mean of $P$, is not a statistic, because it depends on the unknown $P$.
+
+	In statistical analysis, we usually think of $P$ as being a \@{population} in some \@{statistical model},
+	but that's not necessary.
+
+	Every statistic is a \@{random element}. If the \@{distribution} of $X$ is unknown, then the
+	distribution of $T$ may also be unknown. Determining the distribution of $T$ is one of the
+	major problems in statistical inference and decision theory.
+\end{remark}
+
+\begin{remark}
+        \@{Parameters} and \@{statistics} are analogous: a parameter is a function of the
+        \@{population}:
+
+	\[ \vartheta : \mathcal{P} \to \Lambda, \]
+
+	and a statistic is a function of the \@{sample}:
+	
+	\[ T : \Omega \to \Lambda. \]
+
+	A parameter's value is fixed once the population is fixed, while a statistic's value is random because the
+	sample is random. Also, a parameter needs a \@{statistical model} to be defined on (a set of populations),
+	while a statistic needs only the \@{sample space}.
+
+	Many statistics are parameters applied to the sample itself, via the \@{empirical distribution}.
+\end{remark}
+
+\begin{definition}[Empirical Distribution]
 TODO: define this.
 \end{definition}
 
 \begin{definition}[Estimator]
-TODO: define this.
+        Let $\mathcal{P}$ be a \@{statistical model} on $(\Omega, \mathcal{F})$, and let
+        $\vartheta : \mathcal{P} \to \Lambda$ be a \@{parameter}, where $(\Lambda, \mathcal{G})$ is a
+        \@{measurable space}. An \textbf{estimator} of $\vartheta$ is a \@{statistic}
+        $T : (\Omega, \mathcal{F}) \to (\Lambda, \mathcal{G})$. If $x \in \Omega$ is an observed
+	\@{data set} (i.e. one value that a \@{sample} $X$ happened to take), the value $T(x)$ is
+	called an \textbf{estimate} of $\vartheta$.
 \end{definition}
+
 
 \begin{definition}[Estimate]
 TODO: define this.
