@@ -47,6 +47,9 @@
 
 % Definition synonyms (site: index aliases + "(also: ...)" in the header)
 \newcommand{\synonyms}[1]{\emph{(also: #1)} }
+% A further term a definition defines: \term[synonyms]{text}
+% (site: indexed alias whose references land on the term; bold in PDF)
+\newcommand{\term}[2][]{\textbf{#2}}
 % Block tags (site: header chips; no-op in PDF)
 \newcommand{\tags}[1]{}
 
