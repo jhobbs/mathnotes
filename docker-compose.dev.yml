@@ -15,6 +15,12 @@ services:
       - ../latexblocks:/latexblocks:ro
       - ./latex:/app/latex:ro
       - ./esbuild.config.js:/app/esbuild.config.js:ro
+    # Every process in the container (watcher, vim check_tex hook, docker
+    # exec tests) uses the mounted latexblocks checkout, so they all agree on
+    # the dialect. Without ../latexblocks the path is empty and Python falls
+    # back to the pip-installed pin.
+    environment:
+      - PYTHONPATH=/latexblocks/src
     container_name: mathnotes-static-builder
     
   web:
