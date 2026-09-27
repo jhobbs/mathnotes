@@ -4,17 +4,72 @@
 \title{Statistics}
 \description{Statistics, estimators, and sufficiency.}
 
+\source{title={Mathematical Statistics}, author={Jun Shao}, type=book, section={2nd Edition}, published=2003, isbn={978-0-387-95382-3}, url={https://link.springer.com/book/10.1007/b97553}}
+\source{title={What Is a Statistical Model?}, author={Peter McCullagh}, type=paper, section={The Annals of Statistics, Vol. 30, No. 5, pp. 1225-1310}, published=2002, url={https://projecteuclid.org/journals/annals-of-statistics/volume-30/issue-5/What-is-a-statistical-model/10.1214/aos/1035844977.full}}
+\source{title={Statistical model}, type=web, url={https://en.wikipedia.org/wiki/Statistical_model}, accessed=2026-09-24}
+
 \begin{document}
 
 \section{Statistics}
 
+\begin{definition}[Data set]
+	In statistics, the \textbf{data set} is viewed as a realization or observation of a \@{random element} defined on a \@{probability space} $(\Omega, \mathcal{F}, P)$ related to the random experiment.
+\end{definition}
+
+\begin{definition}[Population]
+	Given a \@{data set}, the \@{probability measure} $P$ is called the \textbf{population}.
+\end{definition}
+
+\begin{definition}[Sample]
+	A \@{data set} or the \@{random element} that produces the data is called a \textbf{sample} from $P.$
+\end{definition}
+
+\begin{definition}[Sample Size]
+	The size of the \@{data set} is called the \textbf{sample size}. 
+\end{definition}
+
+\begin{definition}[Known]
+	The \@{population} $P$ is \textbf{known} if and only if $P(A)$ is a known \@{value} for every event $A \in \mathcal{F}.$
+\end{definition}
+
+\begin{definition}[statistical problem]
+	In a \textbf{statistical problem}, the \@{population} $P$ is at least partially unknown and we would like to deduce some properties of $P$ based on the available \@{sample}.
+\end{definition}
+
 \begin{definition}[Statistical Model]
-TODO: define this.
+	A \textbf{statistical model} is a \@{collection} of \@{probability measures} on a common \@{measurable space} $(\Omega, \mathcal{F}).$
+
+	Equivalently, $\mathcal{P} \subseteq \mathsf{P}(\Omega, \mathcal{F}),$ where $\mathsf{P}(\Omega, \mathcal{F})$ denotes the set of all probability measures on $(\Omega, \mathcal{F}).$
+\end{definition}
+
+
+\begin{definition}[Parameter Space]
+	The \textbf{parameter space} $\Theta$ is the set of all possible \@{parameter} values indexing the \@{distributions} in a \@{parameterized statistical model}.
+\end{definition}
+
+\begin{definition}[Parameter]
+	A \textbf{parameter} is a quantity $\theta \in \Theta$ used to specify a member $P_\theta$ of a \@{parameterized statistical model}.
+
+	Equivalently, if $\theta \mapsto P_\theta$ is a parameterization of a \@{statistical model} $\mathcal{P},$ then $\theta$ is the \textbf{parameter} and $\Theta$ is its \@{parameter space}.
+\end{definition}
+
+
+\begin{definition}[Parametric Family]
+	A \@{set} of \@{probability measures} $P_\theta$ on a \@{measurable space} $(\Omega, \mathcal{F})$ indexed by a \@{parameter} $\theta \in \Theta$ is said to be a \textbf{parametric family} if and only if $\Theta \subseteq \mathbb{R}^d$ for some fixed positive \@{integer} $d$ (the \@{dimension} of the \@{parameter space} $\Theta$) and each $P_\theta$ is a known probability measure when $\theta$ is known.
 \end{definition}
 
 \begin{definition}[Population Parameter]
-TODO: define this.
+	A \textbf{population parameter} is a fixed quantity determined by the \@{population}.
+
+	Formally, it is a \@{map} $\theta : \mathcal{P} \to \Theta$ assigning to each population $P \in \mathcal{P}$ a value in the \@{parameter space} $\Theta.$
 \end{definition}
+\begin{note}
+	A \@{population parameter} can coincide with a \@{parameter} used in a \@{parametric statistical model}, but it's not necessary. For example, let $\mathcal{P}$ be the set of all \@{populations} with \@{finite} \@{mean}. That is a \@{nonparametric family}, but
+
+	\[ \mu (P) = \int x P(x) \]
+
+	is still a \@{population parameter}. 
+\end{note}
 
 \begin{definition}[Statistic]
 TODO: define this.
