@@ -49,7 +49,8 @@
 \newcommand{\synonyms}[1]{\emph{(also: #1)} }
 % A further term a definition defines: \term[synonyms]{text}
 % (site: indexed alias whose references land on the term; bold in PDF)
-\newcommand{\term}[2][]{\textbf{#2}}
+% followed by any synonyms as "(also: ...)", matching the site
+\newcommand{\term}[2][]{\textbf{#2}\if\relax\detokenize{#1}\relax\else\ \emph{(also: #1)}\fi}
 % Block tags (site: header chips; no-op in PDF)
 \newcommand{\tags}[1]{}
 

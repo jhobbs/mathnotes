@@ -2,6 +2,7 @@
 \usepackage{mathnotes}
 
 \title{Set Theory}
+\source{title={Book of Proof}, author={Richard Hammack}, type={book}, section={Third Edition (3.2)}, published={2018}, url={https://www.people.vcu.edu/~rhammack/BookOfProof/}}
 
 \begin{document}
 
@@ -36,15 +37,17 @@ If $X$ and $Y$ are \@{sets} such that every \@{element} of $Y$ is also an elemen
 \end{definition}
 
 \begin{definition}[Union]
-TODO
-\end{definition}
+	Suppose $A$ and $B$ are \@{sets}.
 
-\begin{definition}[Intersection]
-TODO
+	\begin{tabular}{ll}
+		The \term{union} of $A$ and $B$ is the set & $A \cup B = \{ x : x \in A \text{ or } x \in B \}.$ \\
+		The \term{intersection} of $A$ and $B$ is the set & $A \cap B = \{ x : x \in A \text{ and } x \in B \}.$ \\
+		The \term[set difference, relative complement]{difference} of $A$ and $B$ is the set & $A \setminus B = \{ x : x \in A \text{ and } x \notin B \}.$ \\
+	\end{tabular}
 \end{definition}
 
 \begin{definition}[Empty Set]
-TODO
+	The \term{empty set} is the \@{set} that has no \@{elements} and is denoted $\{\}$ or $\emptyset.$ It is the unique set with \@{cardinality} of $0$.
 \end{definition}
 
 \begin{theorem}\label{set-equality-via-subset-inclusion}
@@ -71,17 +74,16 @@ If $f$ is a \@{function} from the \@{set} $A$ to the \@{set} $B,$ the \@{element
 The \@{set} of all \@{values} of a \@{function} $f$ is called the \textbf{range} of $f.$
 \end{definition}
 
-\begin{definition}[Injective]\synonyms{injection, one-to-one}
-TODO: define this.
+\begin{definition}[Injective]
+	A \@{function} $f : A \to B$ is 
+
+	\begin{tabular}{ll}
+		\term[one-to-one, injection]{Injective} if for all $a, a' \in A, a \neq a' \implies f(a) \neq f(a').$ \\
+		\term[onto, surjection]{Surjective} if for every $b \in B$ there is an $a \in A$ with $f(a) = b.$ \\
+		\term[bijection]{Bijective} if $f$ is both injective and surjective. \\
+	\end{tabular}
 \end{definition}
 
-\begin{definition}[Surjective]\synonyms{surjection, onto}
-TODO: define this.
-\end{definition}
-
-\begin{definition}[Bijective]\synonyms{bijection, one-to-one correspondence}
-TODO: define this.
-\end{definition}
 
 \begin{definition}[Sequence]
 A \textbf{sequence} is a \@{function} $f$ defined on the \@{set} $J$ of all positive \@{integers}.

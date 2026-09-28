@@ -102,12 +102,13 @@ a & b & c \\
   `text-align: left/center/right`); `|` and whitespace in the spec are
   ignored. Anything else (e.g. `p{2cm}`, `m{3cm}`) is a loud build error —
   there's no fixed-width-column support.
-- **First row is the header**, rendered in `<thead>` as `<th>`; every
-  subsequent row is `<tbody>`/`<td>`.
+- **Header row**: when `\hline` directly follows the first row, that row
+  is the header, rendered in `<thead>` as `<th>`. Without it, every row is
+  `<tbody>`/`<td>` (a headerless table, e.g. for aligning definitions).
 - Cells are separated by `&`; rows end with `\\`. A cell may contain inline
   math, including math with its own `&` (e.g. inside an `aligned`
   environment) — math spans are parsed as opaque units, so `&` inside `$...$`
   never splits a cell.
-- `\hline` is accepted and ignored on the site (pure PDF/print decoration).
+- Any other `\hline` is accepted and ignored on the site (pure PDF/print decoration).
 - A row with more `&`-separated cells than the column spec has columns is a
   loud build error; a row with fewer cells is padded with empty cells.
