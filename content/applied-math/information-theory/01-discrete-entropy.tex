@@ -728,7 +728,7 @@ But, this means $p_i$ doesn't depend on $i,$ and so is the same for each $i$ and
 It remains to show that this extreme of $H$ is a maximum. This follows from the facts that the domain is a \@[convex]{convex-set}, \@{compact} set and that the entropy function is strictly \@{concave}. TODO: more details on these.
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[Conditioning Reduces Entropy]
 The \@{uncertainty} of $Y$ is never increased by knowledge of $X.$ It will be decreased unless $X$ and $Y$ are independent events, in which case it is not changed.
 \end{theorem}
 
@@ -922,8 +922,6 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 \end{proof}
 
 \begin{theorem}[Convexity of Relative Entropy]
-TODO: Cover \& Thomas Theorem 2.7.2.
-
 	$D(p \| q)$ is \@{convex} in the pair $(p, q);$ that is, if $(p_1, q_1)$ and $(p_2, q_2)$ are two pairs of \@{probability mass functions}, then
 
 	\[ D(\lambda p_1 + (1 - \lambda) p_2 \| \lambda q_1 + (1 - \lambda) q_2) \leq \lambda D(p_1 \| q_1) + (1 - \lambda) D(p_2 \| q_2) \]
@@ -1108,22 +1106,161 @@ For the first part, first expand \@{mutual information}:
 \end{definition}
 
 \begin{theorem}[Fano's Inequality]
-TODO: Cover \& Thomas Theorem 2.10.1.
 	For any \@{estimator} $\hat{X}$ such that $X \to Y \to \hat{X},$ with $P_e = \Pr{(X \neq \hat{X})}$, we have
 
 	\[ H(P_e) + P_e \log{|\mathcal{X}|} \geq H(X|\hat{X}) \geq H(X|Y). \]
+\end{theorem}
 
-	This inequality can be weakened to
+\begin{remark}
+	We're treating $P_e$ as a \@{parameter} in a \@{Bernoulli distribution} with probabilities
 
-	\[ 1 + P_e \log{|\mathcal{X}} \geq H(X|Y) \]
+	\[ (P_e, 1 - P_e). \]
+
+	So, $H(P_e)$ is the \@{entropy} of that distribution, i.e.
+
+	\[ H(P_e) = - \left (P_e \log{P_e} + (1 - P_e)\log{(1 - P_e)} \right ). \]
+
+	Now, if $\hat{X} = g(Y),$ and $P_e = \Pr{(\hat{X} \neq X)} = 0,$ then if we know $Y,$ we know $X,$ so 
+	it follows that $P_e = 0$ implies $H(X|Y) = 0.$
+\end{remark}
+
+\begin{proof}
+First, we'll ignore the effect of $Y$ and prove the first inequality
+
+	\[ H(P_e) + P_e \log{|\mathcal{X}|} \geq H(X|\hat{X}). \]
+
+	Let's define a \@{random variable} $E$ as
+
+        \[ E = \begin{cases}
+		1 & \hat{X} \neq X \\
+		0 & \hat{X} = X.
+	\end{cases} \]
+
+	Now we'll use \@{chain-rule-for-conditional-joint-entropy} to expand $H(E, X | \hat{X})$ in two ways:
+
+	\bal
+	H(E , X| \hat{X}) & = H(X | \hat{X}) + H(E|X, \hat{X}) \\
+	                  & = H(E | \hat{X}) + H(X|E,\hat{X}) \\
+	\eal
+
+	A few things to note:
+	\begin{itemize}
+		\item Because $H(E) = - \left (P_e \log{P_e} + (1 - P_e)\log{(1 - P_e)} \right ),$ we have that $H(E) = H(P_e).$
+		\item Since $E$ is a function of $X$ and $\hat{X},$ $H(E|X, \hat{X}) = 0.$
+		\item Because \@{conditioning reduces entropy}, $H(E | \hat{X}) \leq H(E) = H(P_e).$
+	\end{itemize}
+
+	We can bound the remaining term as follows:
+
+	\bal
+	H(X|E, \hat{X}) & = \Pr{(E = 0)}H(X | \hat{X}, E = 0) + \Pr{(E = 1)}H(X, \hat{X}, E= 1) \\
+                        & \leq (1 - P_e)0 + P_e \log{|\mathcal{X}|},
+	\eal
+
+	because $E = 0 \implies X = \hat{X} \implies H(X|\hat{X}) = 0,$ and given $E = 1,$ we can upper bound
+	the conditional entropy as $H(X) \leq \log{|\mathcal{X}|}.$
+
+	Now, taking
+
+	\[ H(E|\hat{X}) + H(X|E, \hat{X}) = H(X|\hat{X}) \]
+
+	and replacing the terms on the left with the upper bounds for them we found, we have
+
+	\[ H(P_e) + P_e \log{|\mathcal{X}|} \geq H(X|\hat{X}). \]
+
+	Now, by the \@{data-processing inequality}, we have $I(X; \hat{X}) \leq I(X; Y)$ because
+	$X \to Y \to \hat{X}$ is a \@{markov chain}, and therefore $H(X|\hat{X}) \geq H(X|Y),$ and finally
+
+	\[ H(P_e) + P_e \log{|\mathcal{X}|} \geq H(X|\hat{X}) \geq H(X|Y). \]
+\end{proof}
+
+\begin{corollary}[Weak Form of Fano's Inequality]
+        Under the hypotheses of \@{fanos-inequality},
+
+	\[ 1 + P_e \log{|\mathcal{X}|} \geq H(X|Y) \]
 
 	or
 
 	\[ P_e \geq \frac{H(X|Y) - 1}{\log{|\mathcal{X}|}}. \]
-\end{theorem}
-
-\begin{corollary}[Weak Form of Fano's Inequality]
-TODO: Cover \& Thomas, Section 2.10.
 \end{corollary}
+\begin{proof}
+This follows because $H(P_e) \leq 1.$
+\end{proof}
+
+\begin{corollary}
+Take $\hat{X} = Y$ in \@{fanos-inequality}.
+	For any two \@{random variables} $X$ and $Y,$ let $p = \Pr{(X \neq Y)}.$ Then
+
+	\[ H(p) + p \log{|\mathcal{X}|} \geq H(X|Y). \]
+\end{corollary}
+\begin{proof}
+	Let $\hat{X} = Y$ in \@{fanos inequality}. 
+\end{proof}
+
+\begin{corollary}
+	Let $P_e = \Pr{(X \neq \hat{X})},$ and let $\hat{X} : \mathcal{Y} \to \mathcal{X};$ then
+
+	\[ H(P_e) + P_e \log{(|\mathcal{X}| - 1)} \geq H(X|Y). \]
+\end{corollary}
+
+\begin{proof}
+	If the \@{estimator} $g(Y)$ takes values in the set $\mathcal{X},$ then the number of possible values of $X$ when $X \neq Y$ is reduced by 1, so we can strengthen the inequality from \@{fanos-inequality} to
+
+
+	\[ H(P_e) + P_e \log{(|\mathcal{X}| - 1)} \geq H(X|Y). \]
+\end{proof}
+
+\begin{remark}
+	With no knowledge of $Y,$ let $X \in \{1, \ldots, m\}$ with $p_1 \geq p_2 \geq \cdots \geq p_m.$ The best guess is $\hat{X} = 1,$ so $P_e = 1 - p_1,$ and the previous corollary becomes
+
+	\[ H(P_e) + P_e \log{(m - 1)} \geq H(X). \]
+
+	The distribution $\left(1 - P_e, \frac{P_e}{m-1}, \ldots, \frac{P_e}{m-1}\right)$ achieves equality.
+
+	Thus, \@{Fano's inequality} is \@{sharp}, i.e., its bound cannot be improved.
+\end{remark}
+
+\begin{lemma}
+TODO: Cover \& Thomas Lemma 2.10.1. Proof by Jensen.
+	If $X$ and $X'$ are \@{i.i.d.} with \@{entropy} $H(X),$ then
+
+	\[ \Pr{(X = X')} \geq 2^{-H(X)}, \]
+
+	with equality if and only if $X$ has a \@{uniform distribution}.
+\end{lemma}
+\begin{proof}
+	Suppose that $X \sim p(x).$ By \@{jensens inequality} we have
+
+	\[ 2^{\mathbb{E}[\log{p(X)}]} \leq \mathbb{E}[2^{\log{p(X)}}], \]
+
+	which implies that
+
+	\bal
+	2^{-H(X)} & = 2^{\sum p(x) \log{p(x)}} \\
+		  & \leq \sum p(x) 2^{\log{p(x)}} \\
+		  & = \sum p^2(x).
+	\eal
+\end{proof}
+
+\begin{corollary}
+	Let $X, X'$ be \@{independent} with $X \sim p(x),$ $X' \sim r(x),$ $x, x' \in \mathcal{X}.$ Then
+
+	\[ \Pr{(X = X')} \geq 2^{-H(p) - D(p \| r)}, \]
+	\[ \Pr{(X = X')} \geq 2^{-H(r) - D(r \| p)}. \]
+\end{corollary}
+\begin{proof}
+	Note that
+
+	\bal
+	2^{-H(p) - D(p \| r)} & = 2^{\sum p(x) \log{p(x)} + \sum p(x) \log{\frac{r(x)}{p(x)}}} \\
+	                     & = 2^{\sum p(x) \log{r(x)}} \\
+			     & \leq \sum p(x) 2^{\log{r(x)}} \\
+			     & = \sum p(x) r(x) \\
+			     & = \Pr{(X = X')},
+
+	\eal
+
+	where the inequality follows from \@{jensens inequality} and the fact that $f(y) = 2^y$ is a \@{convex function}.
+\end{proof}
 
 \end{document}
