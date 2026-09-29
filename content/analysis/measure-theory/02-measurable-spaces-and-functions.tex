@@ -2,10 +2,29 @@
 \usepackage{mathnotes}
 
 \title{Measurable Spaces and Functions}
+\slug{measurable-spaces-and-functions}
 \description{Sigma-algebras, measurable spaces, and measurable functions.}
 
 \begin{document}
 
 \section{Measurable Spaces and Functions}
+
+\begin{theorem}[nonexistence of extension of length to all subsets of $\reals$]
+	There does not exist a \@{function} $\mu$ with all of the following properties:
+
+	\begin{enumerate}[label=(\alph*)]
+		\item $\mu$ is a \@{function} from the \@{set} of \@{subsets} of $\reals$ to $[0, \infty].$
+		\item $\mu(I) = \length(I)$ for every \@{open interval} $I$ of $\reals.$
+		\item $\mu \left ( \bigcup_{k=1}^{\infty} A_k \right ) = \sum_{k=1}^{\infty} \mu(A_k)$ for every \@{disjoint} \@{sequence} $A_1, A_2, \dots$ of \@{subsets} of $\reals.$
+		\item $\mu(t + A) = \mu(A)$ for every $A \subset \reals$ and every $t \in \reals.$
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	Outline: assume such a $\mu$ exists. Then we can show that it has all of the \@[properties of outer measure]{outer-measure-properties} that were used to prove \@{nonadditivity of outer measure}.
+\end{proof}
+
+\subsection{$\sigma$-Algebras}
+
+
 
 \end{document}

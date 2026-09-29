@@ -30,7 +30,7 @@ Our intention is to come up with an \@{extension} of the \@{length} of \@{interv
 	\[ |A| = \inf \left \{ \sum_{k=1}^{\infty} \length(I_k) : I_1, I_2, \dots \text{ are open intervals such that } A \subset \bigcup_{k=1}^\infty I_k \right \}. \]
 \end{definition}
 
-\subsection{Good Properties of Outer Measure}
+\subsection{Good Properties of Outer Measure}\label{outer-measure-properties}
 TODO: I have proofs for these written down in paper notes, transcribe them.
 
 \begin{theorem}[Countable Sets Have Outer Measure 0]
@@ -45,12 +45,12 @@ TODO: I have proofs for these written down in paper notes, transcribe them.
 \end{theorem}
 
 \begin{definition}[translation]
-	If $t \in real$ and $A \subset \reals,$ then the \term{translation} $t + A$ is defined by
+	If $t \in \reals$ and $A \subset \reals,$ then the \term{translation} $t + A$ is defined by
 
 	\[ t + A = \{ t + a : a \in A \}. \]
 \end{definition}
 
-\begin{theorem}[Outer measure is translation invariant.]
+\begin{theorem}[Outer measure is translation invariant]
 Suppose $t \in \reals$ and $A \subset \reals.$ Then $|t + A| = |A|.$
 \end{theorem}
 
@@ -76,7 +76,7 @@ Suppose $t \in \reals$ and $A \subset \reals.$ Then $|t + A| = |A|.$
 
 This is the problem with \@{outer measure}, or really, the problem with $\reals.$
 
-\begin{theorem}[Non additivity of outer measure]
+\begin{theorem}[Nonadditivity of outer measure]
 	There exist \@{disjoint} \@{subsets} $A$ and $B$ or $\reals$ such that
 
 	\[ |A \cup B| \neq |A| + |B|. \]
