@@ -70,6 +70,10 @@ Highlights:
   kernel's `\@` only adjusts sentence spacing, which this prose never uses).
 - `\pagelink{slug}` / `\pagelink[custom text]{slug}` = page link (rendered as
   plain text in PDF).
+- `\subsection{Title}\label{label}` = a labeled section: `\@{label}` links
+  to that heading from any page, with the heading as link text
+  (`\dref{section:label}` type-checks it). The `\label` must come directly
+  after the sectioning command.
 - `\includedemo{name}` = interactive demo placeholder.
 - `\dembed{label}` = transclude a block's full content (degrades to a pointer in PDF).
 - Display math via `\[ ... \]`.
