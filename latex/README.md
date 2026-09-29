@@ -78,6 +78,10 @@ Highlights:
 - `\includegraphics[alt={...}, title={...}]{path}` for images; with
   `width=344px, height=336px` a sized raw `<img>` is emitted instead.
 - `itemize`/`enumerate` may nest one level.
+- Lettered or roman lists use enumitem's label option:
+  `\begin{enumerate}[label=(\alph*)]` gives (a), (b), (c). The label is
+  plain text around exactly one counter: `\alph*`, `\Alph*`, `\arabic*`,
+  `\roman*`, or `\Roman*`.
 - `verbatim` or `\begin{lstlisting}[language=Python]` for code blocks.
 - `\begin{tabular}{colspec}` for tables — see below.
 - Unsupported LaTeX is a build error by design; extend the dialect in
