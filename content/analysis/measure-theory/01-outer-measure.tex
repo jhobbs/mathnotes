@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage{mathnotes}
+
+\title{Outer Measure}
+\slug{outer-measure}
+\description{Outer measure on the real line.}
+
+\begin{document}
+
+\section{Outer Measure}
+
+Our intention is to come up with an \@{extension} of the \@{length} of \@{intervals} that works on more complicated \@{domains} than the \@{subintervals} that \@{Riemann integration} uses, for example, \@{unions} of \@{subsets} of the \@{reals}.
+
+\begin{definition}[length of open interval]
+\notation{\length}{\ell}
+
+	The \textbf{length $\length(I)$ of an \@{open interval}} $I$ is defined by
+
+	\[ \begin{cases}
+		b - a & \text{ if } I = (a,b) \text{ for some } a,b \in \reals \text{ with } a < b, \\
+		0 & \text{ if } I = \emptyset, \\
+		\infty & \text{ if } I = (-\infty,a) \text{ or } I = (a, \infty) \text{ for some } a \in \reals, \\
+		\infty & \text{ if } I = (-\infty,\infty) \\
+	\end{cases} \]
+\end{definition}
+
+\begin{definition}[outer measure]
+	The \term{outer measure} $|A|$ of a \@{set} $A \subset \reals$ is defined by
+
+	\[ |A| = \inf \left \{ \sum_{k=1}^{\infty} \length(I_k) : I_1, I_2, \dots \text{ are open intervals such that } A \subset \bigcup_{k=1}^\infty I_k \right \}. \]
+\end{definition}
+
+\subsection{Good Properties of Outer Measure}
+TODO: I have proofs for these written down in paper notes, transcribe them.
+
+\begin{theorem}[Countable Sets Have Outer Measure 0]
+	Every \@{countable} \@{subset} of $\reals$ has \@{outer measure} 0.
+\end{theorem}
+\begin{corollary}
+	From this and \@{rationals-are-countable}, we have that $|\rationals| = 0.$
+\end{corollary}
+
+\begin{theorem}[Outer Measure Preserves Order]
+	Suppose $A$ and $B$ are \@{subsets} of $\reals$ with $A \subset B.$ Then $|A| \leq |B|.$
+\end{theorem}
+
+\begin{definition}[translation]
+	If $t \in real$ and $A \subset \reals,$ then the \term{translation} $t + A$ is defined by
+
+	\[ t + A = \{ t + a : a \in A \}. \]
+\end{definition}
+
+\begin{theorem}[Outer measure is translation invariant.]
+Suppose $t \in \reals$ and $A \subset \reals.$ Then $|t + A| = |A|.$
+\end{theorem}
+
+\begin{theorem}[Countable subadditivity of outer measure]
+	Suppose $A_1, A_2, \dots$ is a \@{sequence} of \@{subsets} of $\reals.$ Then
+
+	\[ \left | \bigcup_{k=1}^{\infty} A_k \right | \leq \sum_{k=1}^{\infty} |A_k|.  \]
+\end{theorem}
+
+\begin{theorem}[Outer measure of a closed interval]
+	Suppose $a,b \in \reals$ with $a < b,$ Then $|[a,b]| = b - a.$
+\end{theorem}
+\begin{note}
+	The proof for this theorem uses \@{heine-borel}.
+\end{note}
+
+\begin{theorem}[Nontrivial intervals are uncountable]
+	Every \@{interval} in $\reals$ that contains at least two \@{distinct} \@{elements} is \@{uncountable}.
+\end{theorem}
+
+
+\subsection{Outer Measure is Not Additive}
+
+This is the problem with \@{outer measure}, or really, the problem with $\reals.$
+
+\begin{theorem}[Non additivity of outer measure]
+	There exist \@{disjoint} \@{subsets} $A$ and $B$ or $\reals$ such that
+
+	\[ |A \cup B| \neq |A| + |B|. \]
+\end{theorem}
+\begin{note}
+	The proof of this theorem uses \href{https://en.wikipedia.org/wiki/Vitali_set}{Vitali Sets}. 
+\end{note}
+
+
+\end{document}
