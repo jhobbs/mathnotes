@@ -20,11 +20,20 @@
 	\end{enumerate}
 \end{theorem}
 \begin{proof}
-	Outline: assume such a $\mu$ exists. Then we can show that it has all of the \@[properties of outer measure]{outer-measure-properties} that were used to prove \@{nonadditivity of outer measure}.
+	Outline: assume such a $\mu$ exists. Then we can show that it has all of the \@[properties of outer measure]{outer-measure-properties} that were used to prove \@{nonadditivity of outer measure}, but this means $\mu$ doesn't satisfy (c), a contradiction.
+	TODO: full proof.
 \end{proof}
 
 \subsection{$\sigma$-Algebras}
 
+\begin{definition}[$\sigma$-Algebra]
+	Suppose $X$ is a \@{set} and $\mathcal{S}$ is the set of \@{subsets} of $X.$ Then $\mathcal{S}$ is called a $\sigma$-algebra on $X$ if the following three conditions are satisfied:
+	\begin{itemize}
+		\item $\emptyset \subset \mathcal{S}.$
+		\item if $E \in \mathcal{S},$ then $X \setminus E \in \mathcal{S}$ ($\mathcal{S}$ is \@{closed} under \@{set difference}.)
+		\item if $E_1, E_2, \dots$ is a \@{sequence} of \@{elements} of $\mathcal{S},$ then $\bigcup_{k=1}^{\infty} E_k \in \mathcal{S}$ ($\mathcal{S}$ is \@{closed} under \@{countable} \@{unions}.
+	\end{itemize}
+\end{definition}
 
 
 \end{document}
