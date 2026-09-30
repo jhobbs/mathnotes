@@ -21,19 +21,61 @@
 \end{theorem}
 \begin{proof}
 	Outline: assume such a $\mu$ exists. Then we can show that it has all of the \@[properties of outer measure]{outer-measure-properties} that were used to prove \@{nonadditivity of outer measure}, but this means $\mu$ doesn't satisfy (c), a contradiction.
-	TODO: full proof.
+	TODO: full proof from paper notes.
 \end{proof}
 
 \subsection{$\sigma$-Algebras}
 
 \begin{definition}[$\sigma$-Algebra]
-	Suppose $X$ is a \@{set} and $\mathcal{S}$ is the set of \@{subsets} of $X.$ Then $\mathcal{S}$ is called a $\sigma$-algebra on $X$ if the following three conditions are satisfied:
+	Suppose $X$ is a \@{set} and $\mathcal{S}$ is the set of \@{subsets} of $X.$ Then $\mathcal{S}$ is called a \@{sigma-algebra} on $X$ if the following three conditions are satisfied:
 	\begin{itemize}
 		\item $\emptyset \subset \mathcal{S}.$
 		\item if $E \in \mathcal{S},$ then $X \setminus E \in \mathcal{S}$ ($\mathcal{S}$ is \@{closed} under \@{set difference}.)
 		\item if $E_1, E_2, \dots$ is a \@{sequence} of \@{elements} of $\mathcal{S},$ then $\bigcup_{k=1}^{\infty} E_k \in \mathcal{S}$ ($\mathcal{S}$ is \@{closed} under \@{countable} \@{unions}.
 	\end{itemize}
 \end{definition}
+\begin{example}
+	\begin{itemize}
+		\item Suppose $X$ is a set. Then $\{ \emptyset, X \}$ is a \@{sigma-algebra} on $X$.
+		\item Suppose $X$ is a set. Then the \@{power set} of $X$ is a \@{sigma-algebra} on $X$.
+		\item Suppose $X$ is a set. Then the set of all \@{subsets} $E$ of $X$ such that $E$ is \@{countable} or $X \setminus E$ is countable is a \@{sigma-algebra} on $X$.
+	\end{itemize}
+\end{example}
 
+\begin{theorem}[\@{sigma-algebra}s are \@{closed} under \@{countable} \@{intersection}]
+	Suppose $\mathcal{S}$ is a \@{sigma-algebra} on a \@{set} $X$. Then
+	\begin{enumerate}[label=(\alph*)]
+		\item $X \in \mathcal{S}$
+		\item if $D, E \in \mathcal{S},$ then $D \cup E \in \mathcal{S}$ and $D \cap E \in \mathcal{S}$ and $D \setminus E \in \mathcal{S}$
+		\item if $E_1, E_2, \dots$ is a \@{sequence} of \@{elements} of $\mathcal{S},$ then $\bigcap_{k=1}^\infty E_k \in \mathcal{S}.$
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	TODO: full proof from paper notes.
+\end{proof}
+
+\begin{definition}[measurable space]
+	\begin{itemize}
+		\item A \term{measurable space} is an \@{ordered pair} $(X, \mathcal{S}),$ where $X$ is a \@{set} and $\mathcal{S}$ is a \@{sigma-algebra} on $X.$
+		\item An \@{element} of $\mathcal{S}$ is called an $\mathcal{S}$-\term[measurable]{measurable set} or just a \textbf{measurable set} if $\mathcal{S}$ is clear from the context.
+	\end{itemize}
+\end{definition}
+\begin{example}
+	If $X = \reals$ and $\mathcal{S}$ is the \@{set} of all \@{subsets} of $\reals$ that are \@{countable} or have a \@{countable} \@{complement}, then $\rationals$ is $\mathcal{S}$-measurable but the set of positive real numbers is not $\mathcal{S}$-\@{measurable}.
+\end{example}
+
+\begin{theorem}[smallest \@{sigma-algebra} containing a \@{collection} of \@{subsets}.]
+	Suppose $X$ is a \@{set} and $\mathcal{A}$ is a set of \@{subsets} of $X.$ Then, the \@{intersection} of all \@{sigma-algebras} on $X$ that contain $\mathcal{A}$ is a \@{sigma-algebra} on $X.$
+\end{theorem}
+\begin{proof}
+	We know there is at least one \@{sigma-algebra} on $X$ that contains $\mathcal{A}$ because the \@{power set} of $X$ is a \@{sigma}-algebra and contains $\mathcal{A}.$
+
+	Now, let $\mathcal{S}$ be the \@{intersection} of all \@{sigma-algebras} on $X$ that contain $\mathcal{A}.$ Then $\emptyset \in \mathcal{S}$ because by definition of \@{sigma-algebra}, every \@{sigma-algebra} contains the empty set.
+	Suppose $E \in \mathcal{S}.$ Then $E$ is in every \@{sigma-algebra} on $X$ that contains $\mathcal{A},$ and by definition, each \@{sigma-algebra} also contains $X \setminus E,$ so $X \setminus E \in \mathcal{S}.$
+	Suppose $E_1, E_2, \dots$ is a \@{sequence} of \@{elements} of $S.$ Then each $E_k$ is in every \@{sigma algebra} on $X$ that contains $\mathcal{A},$ and so is the \@{union} of these $E_k,$ and so it is in their intersection $\mathcal{S}$ as well.
+\end{proof}
+\begin{note}
+	Smallest makes sense for terminology here because this intersection is a subset of every \@{sigma algebra} that contains $\mathcal{A}.$
+\end{note}
 
 \end{document}
