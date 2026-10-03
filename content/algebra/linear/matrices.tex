@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage{mathnotes}
+
+\title{Matrices}
+\description{Matrices, matrix multiplication}
+
+\begin{document}
+\section{Matrices}
+
+\begin{definition}[matrix]
+	An $m \times n$ \term{matrix} with entries from a \@{field} $\mathbb{F}$ is a \@{rectangular} \@{array} of the form
+
+        \[ \begin{pmatrix}
+		a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\
+		a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{m,1} & a_{m,2} & \cdots & a_{m,n} \\
+	\end{pmatrix} \]
+
+	where each \@{entry} $a_{i,j} (1 \ leq i \leq m, 1 \leq j \leq n)$ is an \@{element} of $\mathbb{F}.$
+
+	We call the entries $a_{i,j}$ with $i = j$ the \term{diagonal entries} of the matrix.
+\end{definition}
+
+\begin{definition}[matrix product]\synonyms{"product", "matrix multiplication"}
+	Let $A$ be an $m \times n$ \@{matrix} and $B$ be an $n \times p$ matrix. We define the \term{product} of $A$ an $B$, denoted $AB$, to be the $m \times p$ matrix such that
+
+	\[ (AB)_{i,j} = \sum_{k=1}^n A_{i,k} B_{k,j} \quad \text{for } 1 \leq i \leq m, 1 \leq j \leq p. \]
+\end{definition}
+\begin{note}
+	$(AB)_{i,j}$ is the \@{sum} of products of corresponding \@{entries} from the $i$th \@{row} of $A$ and the $j$th \@{column} of $B.$
+
+	The following mnemonic is helpful:
+
+	\[ (m \times n) \cdot (n \times p) = (m \times p). \]
+\end{note}
+
+
+\end{document}
