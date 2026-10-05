@@ -4,10 +4,12 @@ sources:
     type: book
     isbn: "978-0-9969962-8-0"
     section: "2nd Edition"
+    publisher: "Textbook Media Press"
     published: "2017"
   - title: "Advanced Engineering Mathematics"
     author: "Erwin Kreyszig"
     type: book
     isbn: "978-0-470-45836-5"
     section: "10th Edition"
+    publisher: "John Wiley & Sons"
     published: "2011"

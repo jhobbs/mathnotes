@@ -22,6 +22,8 @@
 	We call the entries $a_{i,j}$ with $i = j$ the \term{diagonal entries} of the matrix.
 \end{definition}
 
+\subsection{Matrix Multiplication}
+
 \begin{definition}[matrix product]\synonyms{"product", "matrix multiplication"}
 	Let $A$ be an $m \times n$ \@{matrix} and $B$ be an $n \times p$ matrix. We define the \term{product} of $A$ an $B$, denoted $AB$, to be the $m \times p$ matrix such that
 
@@ -34,6 +36,24 @@
 
 	\[ (m \times n) \cdot (n \times p) = (m \times p). \]
 \end{note}
+
+\begin{remark}[The Four Ways to View Matrix Multiplication]
+We can view the matrix product $AB = C$ in (at least) four different ways:
+
+\begin{enumerate}
+	\item \textbf{Each entry of $C$ is a dot product:} The \@{entry} $C_{i,j} = (\text{row } i \text{ of } A) \cdot (\text{column } j \text{ of } B) = \sum_{k=1}^n A_{i,k} B_{k,j}.$
+	\item \textbf{Each column of $C$ is $A$ times the corresponding column of $B$:} $C_{\cdot, j} = A B_{\cdot, j},$ so
+		\[ C_{\cdot, j} = B_{1,j} A_{\cdot, 1} + \cdots + B_{n,j} A_{\cdot, n} \]
+		In other words, the columns of $C$ are \@{linear combinations} of the columns of $A.$
+	\item \textbf{Each row of $C$ is the corresponding row of $A$ multiplied by $B:$} $C_{i, \cdot} = A_{i, \cdot} B,$ so
+		\[ C_{i, \cdot} = A_{i,1}B_{1, \cdot} + \cdots + A_{i,n} B_{n, \cdot}. \]
+		In other words, the rows of $C$ are \@{linear combinations} of the rows of $B.$
+	\item \textbf{$C$ is a sum of column $\times$ row outer products}:
+		\[ C = AB = a_1 b_1^\top + a_s b_2^\top + \cdots + a_n b_n^\top. \]
+\end{enumerate}
+\end{remark}
+
+
 
 
 \end{document}

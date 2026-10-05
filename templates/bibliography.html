@@ -37,9 +37,10 @@
                     <span class="source-type">{{ entry.type }}</span>
                     {% endif %}
                 </div>
-                {% if entry.section or entry.published or entry.isbn or entry.notes %}
+                {% if entry.section or entry.publisher or entry.published or entry.isbn or entry.notes %}
                 <div class="source-meta">
                     {% if entry.section %}<span class="source-section">{{ entry.section }}</span>{% endif %}
+                    {% if entry.publisher %}<span class="source-publisher">{{ entry.publisher }}</span>{% endif %}
                     {% if entry.published %}<span class="source-published">{{ entry.published }}</span>{% endif %}
                     {% if entry.isbn %}<span class="source-isbn">ISBN: {{ entry.isbn }}</span>{% endif %}
                     {% if entry.notes %}<span class="source-notes">{{ entry.notes }}</span>{% endif %}

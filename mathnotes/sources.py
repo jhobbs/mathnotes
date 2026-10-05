@@ -60,12 +60,29 @@ def merge_sources(
         page_sources: Sources from page frontmatter (may be None)
 
     Returns:
-        Combined list with directory sources first, then page sources.
+        Combined list with directory sources first, then page sources. A page
+        source citing the same work as a directory source (same title and
+        author) is merged into it, page fields winning, instead of listed
+        twice.
     """
     result = list(directory_sources)
-    if page_sources:
-        result.extend(page_sources)
+    positions = {_source_key(source): i for i, source in enumerate(result)}
+    for source in page_sources or []:
+        i = positions.get(_source_key(source))
+        if i is None:
+            positions[_source_key(source)] = len(result)
+            result.append(source)
+        else:
+            result[i] = {**result[i], **source}
     return result
+
+
+def _source_key(source: dict[str, Any]) -> tuple[str, str]:
+    """Identity of a cited work: title and author, case-insensitive."""
+    return (
+        str(source.get("title", "")).strip().lower(),
+        str(source.get("author", "")).strip().lower(),
+    )
 
 
 def get_sources_for_page(
@@ -117,10 +134,7 @@ def build_bibliography(url_mapper) -> list[dict[str, Any]]:
 
         seen_keys = set()
         for source in sources:
-            key = (
-                str(source.get("title", "")).strip().lower(),
-                str(source.get("author", "")).strip().lower(),
-            )
+            key = _source_key(source)
             if key in seen_keys:
                 continue
             seen_keys.add(key)

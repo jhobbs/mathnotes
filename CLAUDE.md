@@ -39,6 +39,7 @@ docker exec -i mathnotes-static-builder python3 - < test/test_latex_integration.
 docker exec -i mathnotes-static-builder python3 - < test/test_reference_snippets.py
 docker exec -i -w /app mathnotes-static-builder python3 - < test/test_cache_invalidation.py
 docker exec -i mathnotes-static-builder python3 - < test/test_watcher.py
+docker exec -i mathnotes-static-builder python3 - < test/test_sources.py
 ```
 The core LaTeX/block/reference pipeline lives in the latexblocks library (github.com/jhobbs/latexblocks); its tests run there via pytest.
 

@@ -4,4 +4,12 @@ sources:
     type: book
     isbn: "978-1-4292-1521-3"
     section: "2nd Edition"
+    publisher: "W. H. Freeman"
     published: "2010"
+  - title: "Linear Algebra"
+    author: "Stephen H. Friedberg, Arnold J. Insel, and Lawrence E. Spence"
+    type: book
+    isbn: "978-0-13-008451-4"
+    section: "4th Edition"
+    publisher: "Prentice Hall"
+    published: "2002"
