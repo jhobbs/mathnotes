@@ -3,6 +3,8 @@
 
 \title{Matrices}
 \description{Matrices, matrix multiplication}
+\source{title={18.06SC Linear Algebra}, author={Gilbert Strang}, type={lecture notes}, section={Lecture 10: The Four Fundamental Subspaces (session summary)}, publisher={MIT OpenCourseWare}, published=2011, url={https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/62a9db9eeab190694d40afe4734068ca_MIT18_06SCF11_Ses1.10sum.pdf}, accessed=2026-10-05, notes={Fall 2011; summary notes by Heidi Burgiel}}
+\source{title={The Four Fundamental Subspaces: 4 Lines}, author={Gilbert Strang}, type={essay}, publisher={Massachusetts Institute of Technology}, url={https://web.mit.edu/18.06/www/Essays/newpaper_ver3.pdf}, accessed=2026-10-05, notes={Undated essay for MIT 18.06 Linear Algebra}}
 
 \begin{document}
 \section{Matrices}
@@ -53,7 +55,62 @@ We can view the matrix product $AB = C$ in (at least) four different ways:
 \end{enumerate}
 \end{remark}
 
+\subsection{The Four Fundamental Subspaces}
 
+\begin{definition}[Four Fundamental Subspaces]
+	Any $m \times n$ \@{matrix} $A$ determines four \@{subspaces} (each possibly containing only the zero vector):
 
+	\begin{itemize}
+		\item The \term{Column space}, denoted $C(A),$ consists of all \@{linear combinations} of the columns of $A$ and is a \@{vector} in $\reals^m.$
+		\item The \term{Nullspace}, denoted $N(A),$ consists of all solutions $\vec{x}$ of the equation $A \vec{x} = \vec{0}$ and is a subspace of $\reals^n.$
+		\item The \term{Row space}, denoted $C(A^\top),$ consists of all \@{linear combinations} of the rows of $A$ and forms a subspace of $\reals^n.$ We equate this with $C(A^\top),$ the column space of the \@{transpose} of $A$.
+		\item The \term{left nullspace}, denoted $N(A^\top),$ which is a subspace of $\reals^m.$ 
+	\end{itemize}
+\end{definition}
+
+\begin{theorem}[Basis and Dimension for Column Space]
+	For an $m \times n$ \@{matrix} with $r = \rank{A},$ the $r$ \@{pivot columns} form a \@{basis} for the \@{column space} $C(A)$ and $\dim{C(A)} = r.$
+\end{theorem}
+
+\begin{theorem}[Basis and Dimension for Nullspace]
+	For an $m \times n$ \@{matrix} with $r = \rank{A},$ the \@{special solutions} to $A\vec{x} = \vec{0}$ correspond to \@{free variables} and form a \@{basis} for the \@{nullspace} $N(A).$ An $m \times n$ matrix has $n - r$ free variables, so $\dim{N(A)} = n - r.$
+\end{theorem}
+
+\begin{theorem}[Basis and Dimension for Row Space]
+	For an $m \times n$ \@{matrix} with $r = \rank{A},$ let $R$ be the \@{reduced echelon} form of $A.$ The \@{row space} of $R$ is the same as the row space of $A$ - the rows of $A$ are \@{linear combinations} of the rows of $R.$ 
+
+	The first $r$ rows of $R$ are the \term{echelon basis} for the row space of $A$ and $\dim{C(A^\top)} = r.$
+\end{theorem}
+
+\begin{theorem}[Basis and Dimension for Left Nullspace]
+	For an $m \times n$ \@{matrix} with $r = \rank{A},$ we know from \@{basis and dimension for row space} that $r$ is the \@{rank} of $A^\top,$ so the number of \@{free columns} of $A^\top$ must be $m - r$ and $\dim{N(A^\top)} = m - r.$
+
+	The left nullspace is the collection of vectors $\vec{y}$ for which $A^\top \vec{y} = 0.$ Equivalently, $\vec{y}^\top A = \vec{0},$ with $\vec{y}$ and $\vec{0}$ row vectors - this is why we say \@{left nullspace}. To find a basis for the left nullspace we reduce an \@{augmented} version of $A$:
+
+	\[ \begin{bmatrix} A_{m \times n} I_{m \times n} \end{bmatrix} \to \begin{bmatrix} R_{m \times n} E_{m \times n} \end{bmatrix}. \]
+
+	From this we get the matrix $E$ for which $EA = R,$ and if $A$ is a \@{square}, \@{invertible} matrix, then $E = A^{-1}.$ The bottom $m - r$ rows of $E$ satisfy the equation $\vec{y}^\top A = \vec{0}$ and form a basis for the left nullspace of $A.$
+\end{theorem}
+
+\begin{theorem}[Row space and nullspace are orthogonal complements]
+	The \@{row space} and \@{nullspace} are orthogonal complements. That is,
+	\begin{itemize}
+		\item $C(A^\top) = N(A)^\perp$ (orthogonal components in $\reals^n$)
+		\item $N(A^\top) = C(A)^\perp$ (orthogonal components in $\reals^m$)
+	\end{itemize}
+
+	In other words, each $\vec{x}$ in the nullspace is orthogonal to each row, which comes directly from $A\vec{x} = \vec{0}:$
+
+	\[ A\vec{x} = \vec{0} \quad \begin{bmatrix} \text{(row 1)} \\ \cdots \\ \text{(row m)} \end{bmatrix}
+		\begin{bmatrix} \text{ } \\ \vec{x} \\ \text{ } \end{bmatrix}
+	       = \begin{bmatrix} 0 \\ \cdots \\ 0 \end{bmatrix}
+		       \quad
+           \begin{array}{l}
+           \longleftarrow\quad x \text{ is orthogonal to row 1}\\
+		   \\ \text{ } \\
+           \longleftarrow\quad x \text{ is orthogonal to row }m
+           \end{array}
+	\]
+\end{theorem}
 
 \end{document}

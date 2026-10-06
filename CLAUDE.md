@@ -194,7 +194,7 @@ with `file:line`, failing the build loudly rather than rendering broken math.
 - `\dembed{label}` - Transcludes the entire block content inline
 - `\subsection{Title}\label{label}` then `\@{label}` - Links to a section heading on any page (`\label` directly after the sectioning command)
 - `\pagelink{slug}` / `\pagelink[Custom text]{slug}` - Links to a page
-- `\term{estimate}` / `\term[syn, syn]{estimate}` - Inside a definition body: marks a further term that block defines (the title is the primary one); gets its own label, synonyms, and plurals, and `\@{estimate}` lands on the term
+- `\term{estimate}` / `\term[syn, syn]{estimate}` - Inside any block's body (definition, theorem, ...): marks a term that block defines (a definition's title is its primary term); gets its own label, synonyms, and plurals, and `\@{estimate}` lands on the term
 - `\notation{\integers}{\mathbb{Z}}` - Declared at the top of a block: defines a site-wide math macro whose every use in math links back to the declaring block (registry in `latexblocks/notation.py`; `latex/mathnotes-notation.sty` is generated and committed like a lockfile)
 
 ### Demo Integration
