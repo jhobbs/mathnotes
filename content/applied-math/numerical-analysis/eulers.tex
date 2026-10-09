@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{mathnotes}
+
+\title{Euler's Method}
+\description{Euler's numerical methods for approximating solutions to initial value problems for ordinary differential equations.}
+
+\begin{document}
+
+\section{Euler's Method}
+
+We'll consider a first order IVP of the form
+
+\[ \frac{du}{dt} f(t, u), \quad u(0) = c, \]
+
+with the goal of numerically estimating the solution on a finite time interval $[0, T]$ for some $T > 0.$
+
+First we'll establish this is a reasonable thing to do.
+
+\begin{theorem}[Well-posedness of IVPs]
+Consider the IVP
+
+	\[ \frac{d\vec{u}}{dt} = \vec{f}(t, \vec{u}), \quad \vec{u}(0) = \vec{c}. \]
+
+	Suppose that $\vec{f}: [0, T] \times \reals^d \to \reals^d$ is \@{continuous} in its \@{domain} and \@{Lipschitz continuous} in $\vec{u}$, i.e., there exists a constant $L > 0$ such that
+
+	\[ |\vec{f}(t, \vec{u}) - \vec{f}(t, \vec{v})| \leq L\|\vec{u} - \vec{v}\|, \forall(t, \vec{u}), (t, \vec{v}) \in [0, T] \times \reals^d. \]
+
+	Then it holds that:
+
+	\begin{enumerate}
+		\item \textbf{Existence and Uniqueness:} There exists a unique solution $\vec{u}(t)$ for any $\vec{u}_0 \in \reals^d.$
+		\item \textbf{Continuous Dependence on initial data and right hand side:} Suppose $\vec{r} : [0,T] \times \reals^d \to \reals^d$ is a bounded \@{perturbation} of $\vec{f},$ i.e. there exists a constant $M > 0$ such that
+			\[ \| \vec{r}(t, \vec{u}) \| \leq M, \quad \forall(t, \vec{u}) \in [0, T] \times \reals^d. \]
+			Further let $\vec{\hat{u}}(t)$ be the solution of the perturbed IVP
+
+			\[ \frac{d \vec{\hat{u}}}{dt} = \vec{f}(t, \vec{\hat{u}}) + \vec{r}(t, \vec{\hat{u}}), \quad \vec{\hat{u}}(0) = \vec{\hat{c}},  \]
+			which we assume exists and is unique. Then we have
+
+			\[ \|\vec{u}(t) - \vec{\hat{u}}(t) \| \leq e^{Lt} \| \vec{c} - \vec{\hat{c}} \| + \frac{M}{L}(e^{Lt} - 1), \quad \forall t \in [0, T]. \]
+	\end{enumerate}
+
+\end{theorem}
+
+
+Consider a \@{partition} $0 = t_0 < t_1 < \cdots < t_N = T$ of the time interval $[0, T].$ 
+
+\end{document}
