@@ -41,7 +41,10 @@ Consider the IVP
 
 \end{theorem}
 
+Now that we've established that IVPs are well posed, we can look at how to approximate our unknown function $u(t)$ at a discrete set of points in time. 
 
-Consider a \@{partition} $0 = t_0 < t_1 < \cdots < t_N = T$ of the time interval $[0, T].$ 
+\begin{definition}[discrete time points]\synonyms{"time mesh points", "time grid points"}
+	Consider a \@{partition} $0 = t_0 < t_1 < \cdots < t_N = T$ of the time interval $[0, T].$ We can call the points $t_n$ the \textbf{discrete time points}. Then our goal is to approximate the values $u(t_n)$ with a set of quantities $\{u_n\}_{n=0}^N,$ that is, $u_n \approx u(t_n)$ for $n = 0, 1, \dots, N.$ We can also write $\delta t_n = t_{n+1} - t_n$ to denote the \term[time step]{step size} between between consecutive points. For simplicity we often assume that $\delta t_n = \delta t$ for all $n = 0, 1, \dots, N-1,$ i.e. the time steps are constant. Such a mesh is called a \@{uniform mesh}.
+\end{definition}
 
 \end{document}
