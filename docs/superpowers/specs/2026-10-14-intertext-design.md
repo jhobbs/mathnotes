@@ -38,6 +38,13 @@ written.
   prose block afterwards. The worker's own prose parser (plain text, `$...$`,
   the escapes `\& \% \# \_ \$ \{ \}`, `~`; anything else a loud error)
   remains for direct worker use.
+- Spaces at either end of a text run next to a tag in that HTML are written
+  as U+00A0. Gecko applies MathML's token whitespace trimming to every text
+  node under an `mtext`, HTML descendants included, regardless of
+  `white-space`, so in Firefox a plain space before or after inline math, a
+  reference or `\emph` vanishes ("Becausea andb"). No-break spaces survive,
+  render as spaces everywhere, and lines still break at the element
+  boundary in all three engines (measured).
 - `\shortintertext` is identical except for tighter vertical spacing.
 
 ## Markup contract (worker output)
@@ -112,6 +119,18 @@ column widths, so the alignment point would jump across the text. Why
 flanks: with the table at full width, two equal percentage columns are the
 only way to keep the equation group centered regardless of text width
 (verified; proportional distribution otherwise shifts the alignment point).
+
+## Column alignment in Core engines (found on the way)
+
+MathML Core dropped `columnalign` on `mtable`, so Chromium and WebKit
+center every cell: on any aligned display whose rows differ in width the
+relation signs drifted apart (measured: a two-row `\bal` display had its
+`\leq` signs 54px apart in Chromium). The worker now stamps each cell with
+its column's alignment (`mtd[columnalign="right"|"left"]`, center left
+unstamped; a `\tag` label is not a column) and the stylesheet maps that to
+`text-align`, which every engine honors and which agrees with Firefox's
+native handling. This affects every aligned display on the site, not only
+intertext ones.
 
 ## Downstream
 
