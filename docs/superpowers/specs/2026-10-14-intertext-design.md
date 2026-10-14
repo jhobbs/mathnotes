@@ -28,12 +28,16 @@ written.
 - Works right after `\\`, and also mid-row: amsmath ends the row itself
   (`\ifvmode\else\\\fi`), so do we. May be the last thing in the
   environment.
-- The argument is prose plus `$...$` (or `\(...\)`) inline math, parsed by
-  MathJax's text-with-math parser, with the text escapes `\& \% \# \_ \$
-  \{ \}`, `~` (nbsp), and LaTeX's grouping braces (removed). Newlines
-  inside the argument collapse to spaces. Everything else is a loud error,
-  as pdflatex would error or render differently: any other control sequence
-  (`\emph`, `\ref`, `\\`), a bare `& # ^ _ %`, a blank line.
+- The argument is dialect prose. The processor (`latex_processor.py`,
+  `_display_math_env_html`) parses each `\intertext{...}` argument in text
+  mode at its real source position and renders it with `_prose`, so
+  `\@{label}` / `\dref` / `\pagelink` references, `\emph`, `$...$` inline
+  math (with notation refs) and the rest of the dialect work exactly as in a
+  paragraph; block-level content there is an error. The worker only ever
+  sees a placeholder word (`LBINTERTEXTn`) and the HTML is spliced into the
+  prose block afterwards. The worker's own prose parser (plain text, `$...$`,
+  the escapes `\& \% \# \_ \$ \{ \}`, `~`; anything else a loud error)
+  remains for direct worker use.
 - `\shortintertext` is identical except for tighter vertical spacing.
 
 ## Markup contract (worker output)
