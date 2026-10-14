@@ -76,7 +76,17 @@ Highlights:
   after the sectioning command.
 - `\includedemo{name}` = interactive demo placeholder.
 - `\dembed{label}` = transclude a block's full content (degrades to a pointer in PDF).
-- Display math via `\[ ... \]`.
+- Display math via `\[ ... \]`, or the unnumbered amsmath environments
+  `align*`, `gather*`, `multline*`, `equation*`. Numbered forms (`align`,
+  `equation`, ...) are an error since the site doesn't number equations; use
+  `\tag{...}` inside the starred form.
+- `\intertext{...}` and `\shortintertext{...}` work inside `align*`,
+  `gather*`, `alignat*`, `flalign*` exactly as in amsmath/mathtools: a prose
+  interjection at the left margin that wraps, with the alignment preserved
+  across it. The prose is plain text plus `$...$` inline math, the text
+  escapes `\& \% \# \_ \$ \{ \}`, and `~`; any other macro, a bare
+  `& # ^ _ %`, or a blank line is a build error. Not inside `aligned` (so not
+  in `\bal ... \eal`), matching LaTeX.
 - `\href{url}{text}` for external links — escape `%` and `#` in URLs as
   `\%` / `\#` (hyperref's own convention).
 - `\includegraphics[alt={...}, title={...}]{path}` for images; with
