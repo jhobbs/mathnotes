@@ -99,7 +99,8 @@ Suppose $f$ is \@{continuous} on $[a,b]$ and \@{differentiable} on $(a,b).$ Then
 This means that for a function continuous on an interval, and differentiable on that interval except maybe at its endpoints, there is a point on the interval where the derivative of the function at that point equals the slope of the function between its endpoints.
 \end{theorem}
 
-\emph{L'Hospital Rule (Theorem)}: Suppose there is a $\delta > 0$ such that $f$ and $g$ are differentiable on $(c  - \delta, c + \delta)$ with $g'(x) \neq 0$ on this interval. Suppose also that
+\begin{theorem}[L'Hospital]
+Suppose there is a $\delta > 0$ such that $f$ and $g$ are differentiable on $(c  - \delta, c + \delta)$ with $g'(x) \neq 0$ on this interval. Suppose also that
 
 \[ \lim_{x \to c} \frac{f'(x)}{g'(x)} = L. \]
 
@@ -108,5 +109,22 @@ Then if $\lim_{x \to c}f(x) = \lim_{x \to c}g(x) = 0,$ $\lim_{x \to c}f(x) = \li
 \[ \lim_{x \to c} \frac{f(x)}{g(x)} = L. \]
 
 The endpoint $c$ can also be $\pm \infty.$
+\end{theorem}
+
+\begin{theorem}[\@{Continuously Differentiable} implies \@{Lipschitz Continuous}]
+	Suppose $f : [a,b] \to \reals$ is \@{continuously differentiable}. Then $f$ is \@{Lipschitz continuous} with a \@{Lipschitz constant}
+
+	\[ L = \sup_{x \in [a,b]} \abs{f'(x)}. \]
+\end{theorem}
+\begin{proof}
+	Because $[a,b]$ is \@{compact} and $f'$ is \@{continuous}, by the \@{extreme value theorem} we have that $f'$ attains a minimum and a maximum on $[a,b],$ which gives us $L$ (actually a stronger condition: $L = \max_{x \in [a,b]} \abs{f'(x)}$). By the \@{mean value theorem}, for any $(x_1, x_2) \subset [a,b],$ there exists some $c$ such that
+	\bal
+	f(x_2) - f(x_1) & = f'(c)(x_2 - x_1). \\
+	\shortintertext{The EVT implies that $\abs{f'(c)} \leq L$, so}
+	\abs{f(x_2) - f(x_1)} & \leq L \abs{x_2 - x_1},
+	\eal
+	which is what we wanted to show.
+\end{proof}
+
 
 \end{document}
