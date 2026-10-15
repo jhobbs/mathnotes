@@ -21,7 +21,7 @@ Let $f$ be \@{analytic} in a \@{domain} $D$ and $z_0$ be a \@{point} in $D$. The
 
 \[ f(z) = f(z_0) + f'(z_0)(z - z_0) + \frac{f''(z_0)}{2!}(z - z_0)^2 + \cdots, \]
 
-valid in all circles $\|z - z_0\| < r$ containing only \@{points} of $D$.
+valid in all circles $\abs{z - z_0} < r$ containing only \@{points} of $D$.
 \end{theorem}
 
 \begin{definition}[Taylor series]
@@ -41,7 +41,7 @@ is called the \textbf{Maclaurin series} of f.
 \end{definition}
 
 \begin{definition}[Circle of Convergence]
-The circle $\|z - z_0\| < $ in which the \@{Taylor-series} \@{converges} to the \@{function} is called the \textbf{circle of convergence} for the \@{Taylor-series}.
+The circle $\abs{z - z_0} < $ in which the \@{Taylor-series} \@{converges} to the \@{function} is called the \textbf{circle of convergence} for the \@{Taylor-series}.
 \end{definition}
 
 \begin{definition}[Radius of Convergence]
@@ -62,13 +62,13 @@ The \@{radius-of-convergence} of the \@{Taylor-series} for a function $f(z)$ abo
 
 Here are some important and useful \@{Maclaurin-series} that we can often use to find those of other functions:
 
-\[ e^z = 1 + z + \frac{z^2}{2!} + \frac{z^3}{3!} + \cdots = \sum_{n=0}^{\infty} \frac{1}{n!}z^n, |z| < \infty, \]
+\[ e^z = 1 + z + \frac{z^2}{2!} + \frac{z^3}{3!} + \cdots = \sum_{n=0}^{\infty} \frac{1}{n!}z^n, \abs{z} < \infty, \]
 
-\[ \sin{z} = z - \frac{z^3}{3!} + \frac{z^5}{5!} - \frac{z^7}{7!} + \cdots = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!}z^{2n+1}, |z| < \infty, \]
+\[ \sin{z} = z - \frac{z^3}{3!} + \frac{z^5}{5!} - \frac{z^7}{7!} + \cdots = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!}z^{2n+1}, \abs{z} < \infty, \]
 
-\[ \cos{z} = z - \frac{z^2}{2!} + \frac{z^4}{4!} - \frac{z^6}{6!} + \cdots = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n)!}z^{2n}, |z| < \infty, \]
+\[ \cos{z} = z - \frac{z^2}{2!} + \frac{z^4}{4!} - \frac{z^6}{6!} + \cdots = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n)!}z^{2n}, \abs{z} < \infty, \]
 
-\[ \frac{1}{1 - z} = 1 + z + z^2 + z^3 + \cdots = \sum_{n = 0}^{\infty} z^n, |z| < 1. \]
+\[ \frac{1}{1 - z} = 1 + z + z^2 + z^3 + \cdots = \sum_{n = 0}^{\infty} z^n, \abs{z} < 1. \]
 
 \subsection{Finding the Center and Radius of Convergence}
 
@@ -88,19 +88,19 @@ Now, the series becomes
 
 Now, we can proceed with either to the ratio test or the root test. First, the root test.
 
-\[ \left | \frac{a_{n+1}w^{a_{n+1}}}{a_n w^n} \right | = \left | \frac{a_{n+1}}{a_n} \right | |w|. \]
+\[ \abs{\frac{a_{n+1}w^{a_{n+1}}}{a_n w^n}} = \abs{\frac{a_{n+1}}{a_n}} \abs{w}. \]
 
-Here we can see that $w$ contributes only a factor of $|w|,$ which doesn't depend on $n.$ So, when we take the limit as $n \to \infty,$ all of the $n$-dependence is in the coefficient ratio $|a_{n+1}/a_n|.$ Thus,
+Here we can see that $w$ contributes only a factor of $\abs{w},$ which doesn't depend on $n.$ So, when we take the limit as $n \to \infty,$ all of the $n$-dependence is in the coefficient ratio $\abs{a_{n+1}/a_n}.$ Thus,
 
-\[ L = \lim_{n \to \infty} \left | \frac{a_{n+1}}{a_n} \right | \implies \text{series converges if} |w| < 1/L. \]
+\[ L = \lim_{n \to \infty} \abs{\frac{a_{n+1}}{a_n}} \implies \text{series converges if} \abs{w} < 1/L. \]
 
 So, our \@{radius-of-convergence} for our $w$ series here is $1/L.$ We have to bring $z$ back, so for example, if we had something like $w = (z - z_0)^{mn},$ then our radius of convergence would be $(1/L)^{1/m}.$ We get that by
 
-\[ |w| < R \implies |z^m| < R \implies |z| < R^{1/m}. \]
+\[ \abs{w} < R \implies \abs{z^m} < R \implies \abs{z} < R^{1/m}. \]
 
 Similarly with the root test, we end up with something like
 
-\[ |w| < \frac{1}{\limsup{|a_n|^{1/n}}}. \]
+\[ \abs{w} < \frac{1}{\limsup{\abs{a_n}^{1/n}}}. \]
 
 \subsection{Binomial Series}
 
@@ -109,7 +109,7 @@ For complex $z$ and complex $\alpha,$ we have
 
 \[ (1 + z)^{\alpha} = \sum_{n=0}^{\infty} \binom{\alpha}{n} z^n. \]
 
-If $|z| < 1,$ the series \@{converges} absolutely for any any complex $\alpha,$ including negative integers.
+If $\abs{z} < 1,$ the series \@{converges} absolutely for any any complex $\alpha,$ including negative integers.
 
 Other convergence conditions are \href{https://en.wikipedia.org/wiki/Binomial_series}{listed here}.
 \end{theorem}

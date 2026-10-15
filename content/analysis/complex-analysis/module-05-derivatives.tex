@@ -50,7 +50,7 @@ which defines the \@{complex-derivative} of $f$ at the \@{point} $z$. This equat
 
 The usual rules for real derivatives work for \@{complex-derivatives} too, that is, sum, product, quotient, power and chain rules all remain in effect.
 
-However, the real derivatives rules don't help with functions like $\Re{(z)}, \Im{(z)}, \|z\|$ or $\Arg{z}.$ We could use the limit definition of the derivative, but there is a better way.
+However, the real derivatives rules don't help with functions like $\Re{(z)}, \Im{(z)}, \abs{z}$ or $\Arg{z}.$ We could use the limit definition of the derivative, but there is a better way.
 
 Also, we might have a \@{complex-function} defined in terms of its real and imaginary parts rather than in terms of $z$, i.e. $f(z) = \frac{x}{x^2 + y^2} + \frac{-y}{x^2 + y^2}i$. We could try to rewrite $f(z)$ in terms of $z$, but this could be hard.
 
@@ -87,14 +87,14 @@ By assumption and definition of the \@{complex-derivative}, we have that
 
 \bal
 f'(z_0) & = \lim_{\Delta z \to 0} \frac{f(z_0 + \Delta z) - f(z_0)}{\Delta z} \\
-        & = \lim_{\Delta z \to 0} \frac{\left [ u(x_0 + \Delta x, y_0 + \Delta y) - u(x_0, y_0) \right ] +
-                i \left [ v(x_0 + \Delta x, y_0 + \Delta y) - v(x_0, y_0) \right ] }{\Delta z}.
+        & = \lim_{\Delta z \to 0} \frac{\brackets{u(x_0 + \Delta x, y_0 + \Delta y) - u(x_0, y_0)} +
+                i \brackets{v(x_0 + \Delta x, y_0 + \Delta y) - v(x_0, y_0)} }{\Delta z}.
 \eal
 
 Now, this limit must exist and be the same no matter what path we take. So, we can take the path along the real axis by setting $\Delta y = 0$ and sending $\Delta x \to 0,$ and we get
 
-\[ f'(z_0) = f'(x_0 + i y_0) =  \lim_{\Delta x \to 0} \frac{\left [ u(x_0 + \Delta x, y_0) - u(x_0, y_0) \right ] +
-                i \left [ v(x_0 + \Delta x, y_0) - v(x_0, y_0) \right ] }{\Delta x}, \]
+\[ f'(z_0) = f'(x_0 + i y_0) =  \lim_{\Delta x \to 0} \frac{\brackets{u(x_0 + \Delta x, y_0) - u(x_0, y_0)} +
+                i \brackets{v(x_0 + \Delta x, y_0) - v(x_0, y_0)} }{\Delta x}, \]
 
 and hence,
 
@@ -113,10 +113,10 @@ that is,
 Now, we can repeat this trick by sending $\Delta z = \Delta x + i \Delta y$ to zero along the imaginary axis by setting $\Delta x = 0$ and sending $\Delta y \to 0$ to get
 
 \bal
-f'(z_0) = f'(x_0 + i y_0) & = \lim_{\Delta y \to 0} \frac{\left [ u(x_0, y_0 + \Delta y) - u(x_0, y_0) \right ] +
-                i \left [ v(x_0, y_0 + \Delta y) - v(x_0, y_0) \right ] }{i \Delta y} \\
-        & =  \lim_{\Delta y \to 0} \frac{\left [ v(x_0, y_0 + \Delta y) - v(x_0, y_0) \right ] -
-                i \left [ u(x_0, y_0 + \Delta y) - u(x_0, y_0) \right ] }{\Delta y},
+f'(z_0) = f'(x_0 + i y_0) & = \lim_{\Delta y \to 0} \frac{\brackets{u(x_0, y_0 + \Delta y) - u(x_0, y_0)} +
+                i \brackets{v(x_0, y_0 + \Delta y) - v(x_0, y_0)} }{i \Delta y} \\
+        & =  \lim_{\Delta y \to 0} \frac{\brackets{v(x_0, y_0 + \Delta y) - v(x_0, y_0)} -
+                i \brackets{u(x_0, y_0 + \Delta y) - u(x_0, y_0)} }{\Delta y},
 \eal
 
 and hence
@@ -188,11 +188,11 @@ Also, here are the Cauchy-Reimann equations in terms of the modulus $r$ and argu
 
 And here are formulas to express the derivative function in such cases:
 
-\[ f'(z) = e^{-\theta i}\left ( \frac{\partial u}{\partial r} + \frac{\partial v}{\partial r}i \right ) \]
+\[ f'(z) = e^{-\theta i}\parens{\frac{\partial u}{\partial r} + \frac{\partial v}{\partial r}i} \]
 
 or
 
-\[ f'(z) = e^{-\theta i}\left ( \frac{\partial v}{\partial \theta} - \frac{\partial u}{\partial \theta}i \right ) \]
+\[ f'(z) = e^{-\theta i}\parens{\frac{\partial v}{\partial \theta} - \frac{\partial u}{\partial \theta}i} \]
 
 Given a complex function $f(z) = u(x,y) + v(x,y)i$, we can use a \@{Jacobian-matrix} to represent the transformation from $(x,y)$ to $(u,v)$. The Jacobian matrix of $f$ is:
 
@@ -206,6 +206,6 @@ To satisfy the Cauchy-Riemann equations, this matrix must have the form:
 
 where $a = \frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}$ and $b = \frac{\partial v}{\partial x} = -\frac{\partial u}{\partial y}$.
 
-The matrix form shows that the linear transformation corresponding to the derivative of $f$ (if $f$ is differentiable and satisfies the Cauchy-Riemann equations) is a rotation combined with a scaling. In fact, $\|J_f\| = \|f'(z)\|^2$ and gives the area magnification/scaling factor of $f$ at $z$ and $\text{atan2}(b,a)$ gives an argument of $f'(z)$, which is a measure of the rotational effect of $f$.
+The matrix form shows that the linear transformation corresponding to the derivative of $f$ (if $f$ is differentiable and satisfies the Cauchy-Riemann equations) is a rotation combined with a scaling. In fact, $\abs{J_f} = \abs{f'(z)}^2$ and gives the area magnification/scaling factor of $f$ at $z$ and $\text{atan2}(b,a)$ gives an argument of $f'(z)$, which is a measure of the rotational effect of $f$.
 
 \end{document}

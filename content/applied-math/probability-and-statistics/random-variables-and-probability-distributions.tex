@@ -38,7 +38,7 @@ If a \@{sample space} contains an infinite number of possibilities equal to the 
 \begin{definition}[Discrete Random Variable]
 	A \@{random-variable} is called a \textbf{discrete random variable} if there exists a \@{countable} \@{set} $S \subseteq \mathcal{X}$ such that
 
-\[ P \left ( \omega \in \Omega : X(\omega) \in S \right ) = 1. \]
+\[ P \parens{\omega \in \Omega : X(\omega) \in S} = 1. \]
 
 In this case its state space is often called an alphabet.
 \end{definition}
@@ -46,15 +46,15 @@ In this case its state space is often called an alphabet.
 \begin{definition}[Absolutely Continuous Random Variable]\synonyms{"continuous random variable"}
 	For a \@{real} valued \@{random-variable}
 
-	\[ X : \Omega \to \mathbb{R}, \]
+	\[ X : \Omega \to \reals, \]
 
 	we call $X$ a \textbf{continuous random variable} if there exists a \@{function}
 
-	\[ f_X : \mathbb{R} \to [0, \infty) \]
+	\[ f_X : \reals \to [0, \infty) \]
 
-	such that for every \@{measurable} set $A \subseteq \mathbb{R},$
+	such that for every \@{measurable} set $A \subseteq \reals,$
 
-	\[ P \left ( \omega \in \Omega : X(\omega) \in A \right ) = \int_{A}{f_X(x) dx} \]
+	\[ P \parens{\omega \in \Omega : X(\omega) \in A} = \int_{A}{f_X(x) dx} \]
 
 	where $f_X$ is the \@{probability-density-function} of $X.$
 

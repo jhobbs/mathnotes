@@ -25,7 +25,7 @@ We know that $P$ is infinite, because by definition, \@[all points in perfect se
 
 Suppose, for the sake of contradiction, that $P$ is \@{countable}. Label the points of $P$ as $x_1, x_2, \dots.$ We will construct a \@{sequence} of ${V_n}$ of \@{neighborhoods}.
 
-As a base step, let $V_1$ be any neighborhood of $x_1;$ let $V_1 = \{ y \in R^k | ~ |y - x_1| < r \}$ (note: subsequent $V_{n+1}$ aren't required to be neighborhoods of $x_{n+1}.$) Then the \@{closure} $\closure{V_1}$ of $V_1$ is $\closure{V_1} =  \{ y \in R^k | ~ |y - x_1| \leq r \}.$
+As a base step, let $V_1$ be any neighborhood of $x_1;$ let $V_1 = \set{y \in R^k \abs{~}y - x_1| < r}$ (note: subsequent $V_{n+1}$ aren't required to be neighborhoods of $x_{n+1}.$) Then the \@{closure} $\closure{V_1}$ of $V_1$ is $\closure{V_1} =  \set{y \in R^k \abs{~}y - x_1| \leq r}.$
 
 For the inductive step, suppose as an induction hypothesis that we have some $V_n$ that's been constructed such that $V_n \cap P$ is not empty. Since every point of $P$ is a limit point of $P,$ we can make a neighborhood $V_{n+1}$ such that (i) $\closure{V_{n+1}} \subset V_n,$ (ii) $x_n \notin \closure{V_{n+1}},$ (iii) $V_{n+1} \cap P$ is not empty. Now, $V_{n+1}$ satisfies our induction hypothesis, and since $V_1$ does too, we have ${V_n}$ defined for all $n = 1, 2, 3, \dots.$
 
@@ -53,7 +53,7 @@ We know that \@[the rationals are countable]{rationals-are-countable}, and becau
 
 To show $Q^k$ is dense, consider an arbitrary point $p$ in $R^k.$ Now, let $\epsilon > 0.$ Since the \@[the rationals are dense in the reals]{rationals-are-dense-in-reals}, we can pick a $q \in Q^k$ with $d(p, q) < \epsilon,$ by picking rational approximations of the coordinates of $p$ and forming $q$ such that $q$ is within $\epsilon$ of $p,$ i.e.
 
-\[ |p_i - q_i| < \frac{\epsilon}{\sqrt{k}} \implies |p - q| < \sqrt{\sum_{i=1}^k (p_i - q_i)^2 } < \sqrt{k} \cdot \frac{\epsilon}{\sqrt{k}} = \epsilon. \]
+\[ \abs{p_i - q_i} < \frac{\epsilon}{\sqrt{k}} \implies \abs{p - q} < \sqrt{\sum_{i=1}^k (p_i - q_i)^2 } < \sqrt{k} \cdot \frac{\epsilon}{\sqrt{k}} = \epsilon. \]
 \end{proof}
 
 \subsection{Base}
@@ -77,7 +77,7 @@ Let $X$ be a \@{metric-space} in which every \@{infinite} subset has a \@{limit-
 \end{theorem}
 
 \begin{proof}
-Let $\delta > 0,$ and pick $x_1 \in X.$ Now, continue picking $x_{j+1}$ such that $d(x_i, x_{j+1}) \geq \delta$ i.e. so that each new point is at least $\delta$ away from each existing point. Suppose this process continues infinitely; then the points $\{x_i\}$ are an \@{infinite} subset of $X,$ and thus must have a \@{limit-point} $p.$ Now, because \@[every neighborhood of $p$ must contain infinitely many points in ${x_i}$]{neighborhood-of-limit-point-contains-infinitely-many-points}, we can let $r = \delta / 2,$ $N_r{p}$ be a neighborhood of $p,$ and pick $x, y \in \{x_i\}, N_r{p}.$ But, by the triangle inequality
+Let $\delta > 0,$ and pick $x_1 \in X.$ Now, continue picking $x_{j+1}$ such that $d(x_i, x_{j+1}) \geq \delta$ i.e. so that each new point is at least $\delta$ away from each existing point. Suppose this process continues infinitely; then the points $\set{x_i}$ are an \@{infinite} subset of $X,$ and thus must have a \@{limit-point} $p.$ Now, because \@[every neighborhood of $p$ must contain infinitely many points in ${x_i}$]{neighborhood-of-limit-point-contains-infinitely-many-points}, we can let $r = \delta / 2,$ $N_r{p}$ be a neighborhood of $p,$ and pick $x, y \in \set{x_i}, N_r{p}.$ But, by the triangle inequality
 
 \bal
 d(x, y) & \leq d(x, p) + d(p, y) \\
@@ -85,11 +85,11 @@ d(x, y) & \leq d(x, p) + d(p, y) \\
         & = \delta
 \eal
 
-so $d(x,y) < \epsilon,$ which contradicts our assumption that $\{x_i\}$ could be an infinite set where all points were at least $\delta$ apart. Therefore, $\{x_i\}$ has only finitely many points, and $X$ can be covered with finitely many open balls of radius $\delta$ (for if it couldn't be, we could always fit another point into $\{x_i\}.$)
+so $d(x,y) < \epsilon,$ which contradicts our assumption that $\set{x_i}$ could be an infinite set where all points were at least $\delta$ apart. Therefore, $\set{x_i}$ has only finitely many points, and $X$ can be covered with finitely many open balls of radius $\delta$ (for if it couldn't be, we could always fit another point into $\set{x_i}.$)
 
-Now, if we let $\delta = 1/n, n=1,2,3,\dots,$ we can consider the set of points $\{x_i\}_n$ as the finite set of points at least $1/n$ apart in $X.$ The collection of all such points can be called $\{x_{i_n}\}$ and is \@{dense} in $X:$ let $p$ be a point in $X.$ and $N_r{p}, r>0$ a neighborhood of $p.$ If we pick $n$ such that $1/n < r,$ then some $\{x_i\}_n$ will be in $N_r{p},$ because if not, we would have a contradiction with the fact that shown above that no point in $X$ is more than $1/n$ away from a point in $\{x_i\}_n.$
+Now, if we let $\delta = 1/n, n=1,2,3,\dots,$ we can consider the set of points $\set{x_i}_n$ as the finite set of points at least $1/n$ apart in $X.$ The collection of all such points can be called $\set{x_{i_n}}$ and is \@{dense} in $X:$ let $p$ be a point in $X.$ and $N_r{p}, r>0$ a neighborhood of $p.$ If we pick $n$ such that $1/n < r,$ then some $\set{x_i}_n$ will be in $N_r{p},$ because if not, we would have a contradiction with the fact that shown above that no point in $X$ is more than $1/n$ away from a point in $\set{x_i}_n.$
 
-Since each $\{x_i\}_n$ is finite, and there are countably many $\{x_i\}_n,$ the $\{x_{i_n}\}$ is a countably dense subset of $X$ and therefore $X$ is \@{separable}.
+Since each $\set{x_i}_n$ is finite, and there are countably many $\set{x_i}_n,$ the $\set{x_{i_n}}$ is a countably dense subset of $X$ and therefore $X$ is \@{separable}.
 \end{proof}
 
 \begin{theorem}\label{compact-metric-space-has-countable-base}
@@ -97,13 +97,13 @@ Every \@{compact} \@{metric-space} has a \@{countable} \@{base} and is therefore
 \end{theorem}
 
 \begin{proof}
-Let $K$ be a \@{compact} \@{metric-space}. Fix $n \in \naturals$ (any natural number will do,) then, consider the \@{open-cover} $\{G_\alpha\}_n$ of \@{balls} of radius $1/n$ centered at $x \in K.$ Now, because $K$ is compact, some finite $\{V_\alpha\}_n \subset \{G_\alpha\}_n$ covers $K.$
+Let $K$ be a \@{compact} \@{metric-space}. Fix $n \in \naturals$ (any natural number will do,) then, consider the \@{open-cover} $\set{G_\alpha}_n$ of \@{balls} of radius $1/n$ centered at $x \in K.$ Now, because $K$ is compact, some finite $\set{V_\alpha}_n \subset \set{G_\alpha}_n$ covers $K.$
 
 Now, consider the set of all balls for all $n,$
 
-\[ C = \bigcup_{n=1}^{\infty} \{V_\alpha\}_n \]
+\[ C = \bigcup_{n=1}^{\infty} \set{V_\alpha}_n \]
 
-Because \@[the union of a sequence of countable sets is countable]{union-of-a-sequence-of-countable-sets-is-countable}, $C$ is countable. To show $C$ is a \@{base} for $K,$ let $G$ be an open subset of $K,$ and let $x \in G.$ Let $\epsilon > 0$ such that $B_{\epsilon}(x) \subset G.$ Pick natural $n$ such that $1/n < \epsilon/2.$ Then, $x \in \{V_\alpha\}_n$ for some $\alpha,$ (because no point in $K$ is more than $1/n$ away from the center of some $\{V_\alpha\}_n$ and therefore $C$ is a countable base of $K.$ Since we can make $\epsilon$ as close to $0$ as we like, the centers of $\{V_\alpha\}_n$ are \@{dense} as well as countable, and are therefore a countable dense subset of $K,$ so $K$ is \@{separable}.
+Because \@[the union of a sequence of countable sets is countable]{union-of-a-sequence-of-countable-sets-is-countable}, $C$ is countable. To show $C$ is a \@{base} for $K,$ let $G$ be an open subset of $K,$ and let $x \in G.$ Let $\epsilon > 0$ such that $B_{\epsilon}(x) \subset G.$ Pick natural $n$ such that $1/n < \epsilon/2.$ Then, $x \in \set{V_\alpha}_n$ for some $\alpha,$ (because no point in $K$ is more than $1/n$ away from the center of some $\set{V_\alpha}_n$ and therefore $C$ is a countable base of $K.$ Since we can make $\epsilon$ as close to $0$ as we like, the centers of $\set{V_\alpha}_n$ are \@{dense} as well as countable, and are therefore a countable dense subset of $K,$ so $K$ is \@{separable}.
 \end{proof}
 
 \begin{theorem}\label{infinite-subset-has-limit-point-implies-compact}
@@ -111,19 +111,19 @@ Let $X$ be a \@{metric-space} in which every \@{infinite} subset has a \@{limit-
 \end{theorem}
 
 \begin{proof}
-By \@{every-metric-space-where-every-infinite-subset-has-a-limit-point-is-separable}, we know that $X$ is separable and by \@{every-separable-metric-space-has-a-countable-base}, we know that $X$ has a countable base. By the definition of \@{base}, we have that every \@{open-cover} of $X$ has a \@{countable} subcover $\{G_n\}, n = 1, 2, 3, \dots.$
+By \@{every-metric-space-where-every-infinite-subset-has-a-limit-point-is-separable}, we know that $X$ is separable and by \@{every-separable-metric-space-has-a-countable-base}, we know that $X$ has a countable base. By the definition of \@{base}, we have that every \@{open-cover} of $X$ has a \@{countable} subcover $\set{G_n}, n = 1, 2, 3, \dots.$
 
-Suppose, for the sake of contradiction, that $\{G_n\}$ has no finite subcollection that covers $X.$ Let
+Suppose, for the sake of contradiction, that $\set{G_n}$ has no finite subcollection that covers $X.$ Let
 
 \[ F_n = (G_1 \cup \cdots \cup G_n)^c. \]
 
-Then, each $F_n$ must be nonempty (otherwise a finite subcollection of $\{G_n\}$ would cover $X.$ However, since every point in $X$ is in some $G_n,$
+Then, each $F_n$ must be nonempty (otherwise a finite subcollection of $\set{G_n}$ would cover $X.$ However, since every point in $X$ is in some $G_n,$
 
 \[ \bigcap_{n=1}^{\infty} F_n = \emptyset. \]
 
 Now, let $E$ be a set with a point from each $F_n.$ Since there are infinitely many $F_n,$ $E$ is an \@{infinite} subset of $X,$ and therefore $E$ has a \@{limit-point}, $p.$ Now, $p$ must be in some open $G_m,$ and so for some $\epsilon > 0,$ $N_{\epsilon}(p) \subset G_m.$
 
-Now, note that each $F_{n+1} \subset F_n,$ because $F_{n+1}$ is formed by excluding all the points in $F_n$ that are also in $G_{n+1}.$ Because $p$ is a limit point of $E,$ $N_\epsilon{p}$ must contain infinitely many points of $E.$ However, only finitely many points of $E$ can be in $N_{\epsilon}(p) \subset G_m,$ because for $n >= m,$ $F_n$ contains no points in $G_m.$ Therefore, $p$ is not a limit point of $E,$ and no such limit point can exist, contradicting our hypothesis that every infinite subset of $X$ has a limit point. Therefore, $E$ must be finite, and $\{G_n\}$ must have a finite subcollection that covers $X,$ meaning $X$ is \@{compact}.
+Now, note that each $F_{n+1} \subset F_n,$ because $F_{n+1}$ is formed by excluding all the points in $F_n$ that are also in $G_{n+1}.$ Because $p$ is a limit point of $E,$ $N_\epsilon{p}$ must contain infinitely many points of $E.$ However, only finitely many points of $E$ can be in $N_{\epsilon}(p) \subset G_m,$ because for $n >= m,$ $F_n$ contains no points in $G_m.$ Therefore, $p$ is not a limit point of $E,$ and no such limit point can exist, contradicting our hypothesis that every infinite subset of $X$ has a limit point. Therefore, $E$ must be finite, and $\set{G_n}$ must have a finite subcollection that covers $X,$ meaning $X$ is \@{compact}.
 \end{proof}
 
 \begin{definition}[Condensation Point]
@@ -139,7 +139,7 @@ Suppose $E \subset R^k,$ with $E$ \@{uncountable}, and let $P$ be the set of all
 \end{theorem}
 
 \begin{proof}
-Let $\{V_n\}$ be a \@{countable} \@{base} of $R^k$ (see \@{euclidean-space-is-separable} and \@{every-separable-metric-space-has-a-countable-base},) and let $W$ be the union of those $V_n$ for which $E \cap V_n$ is \@{at-most-countable}. We will show that $P = W^c.$
+Let $\set{V_n}$ be a \@{countable} \@{base} of $R^k$ (see \@{euclidean-space-is-separable} and \@{every-separable-metric-space-has-a-countable-base},) and let $W$ be the union of those $V_n$ for which $E \cap V_n$ is \@{at-most-countable}. We will show that $P = W^c.$
 
 Suppose $p \in W^c.$ Then $p$ is in no $V_n$ for which $V_n \cap E$ is at most countable, that is, every \@{neighborhood} of $p$ has uncountably many points in $E,$ and thus $p \in P.$
 
@@ -173,7 +173,7 @@ Every \@{open} set in $R^1$ is the union of an at most \@{countable} union of di
 \end{theorem}
 
 \begin{proof}
-Let $E$ be an open set in $R^1.$ Let $x \in E.$ Let $a = \inf \{ y : (y, x] \subset E \}$ and $b = \sup \{ y : [x, y) \subset E \}.$ Then, $a < x < b,$ because $E$ is open and thus $x$ is an \@{interior-point} of $E$ and there is some \@{neighborhood} around $x$ that is entirely within $E.$ Let $I(x) = (a, b).$ By construction, $I(x)$ is \@{connected}. For all $u \in I(x),$ $I(u)$ must have the same end points as $I(x),$ since if it extended beyond, our construction of $I(x)$ would be contradicted. Also note that for all $v \in E \setminus I(x),$ $I(v) \cap I(x) = \emptyset,$ for if they intersected, they would form an \@[open interval]{union-and-intersection-of-open-and-closed-sets}. Thus, each $I(x), x \in E$ is either disjoint from all others or identical to some other $I(y), y \in E,$ and $E$ is the union of all such unique $I.$
+Let $E$ be an open set in $R^1.$ Let $x \in E.$ Let $a = \inf \set{y : (y, x] \subset E}$ and $b = \sup \set{y : [x, y) \subset E}.$ Then, $a < x < b,$ because $E$ is open and thus $x$ is an \@{interior-point} of $E$ and there is some \@{neighborhood} around $x$ that is entirely within $E.$ Let $I(x) = (a, b).$ By construction, $I(x)$ is \@{connected}. For all $u \in I(x),$ $I(u)$ must have the same end points as $I(x),$ since if it extended beyond, our construction of $I(x)$ would be contradicted. Also note that for all $v \in E \setminus I(x),$ $I(v) \cap I(x) = \emptyset,$ for if they intersected, they would form an \@[open interval]{union-and-intersection-of-open-and-closed-sets}. Thus, each $I(x), x \in E$ is either disjoint from all others or identical to some other $I(y), y \in E,$ and $E$ is the union of all such unique $I.$
 
 Now, in each $I,$ we can \@[pick a rational number]{rationals-are-dense-in-reals}. Because \@[the rationals are countable]{rationals-are-countable}, we have at most countably many unique $I,$ and $E$ is their union.
 \end{proof}
@@ -191,7 +191,7 @@ As a base step, let $x_1$ be some point in $R^k,$ and let $B_1$ be an open \@{ba
 
 For the inductive step, suppose we have some $B_n$ that's constructed such that $B_n \cap F_n^c$ is non-empty and open. Then, we can pick a point $x_{n+1} \in B_n \cap F_n^c, x_{n+1} \neq x_n,$ and make a ball $B_{n+1}$ around it such that $B_{n+1} \subset B_n \cap F_{n}^c,$ $x_n \notin B_{n+1},$ and $B_{n+1} \cap F_{n+1}^c$ is open and not empty. Now, since $B_{n+1}$ satisfies our induction hypothesis, and since $B_1$ does as well, we have $B_n$ defined for all $n = 1, 2, 3, \dots.$
 
-Since the set of points $\{x_n\}$ is \@{infinite} (by induction) and \@{bounded} (all points are within $B_1$,) \@[it has a limit point $p$ in $R^k.$]{weierstrass}. Now, suppose, for contradiction, that $p$ is not in every $F_n^c.$ Then, for some $N,$ $p$ is not in $F_N^c.$ Since $p \notin F_N^c$ and $B_{N+1} \subseteq F_N^c$, we have $p \notin B_{N+1}$. Since $B_{N+1}$ is open and $p$ is outside it, $p$ is at some positive distance $\varepsilon$ from any point $q \in B_{N+1}$. But $x_n \in B_n \subseteq B_{N+1}$ for all $n > N$, so all these infinitely many points are at distance at least $\varepsilon$ from $p$. Thus any neighborhood of $p$ with radius less than $\varepsilon$ contains at most finitely many points of $\{x_n\}$, contradicting that $p$ is a limit point.
+Since the set of points $\set{x_n}$ is \@{infinite} (by induction) and \@{bounded} (all points are within $B_1$,) \@[it has a limit point $p$ in $R^k.$]{weierstrass}. Now, suppose, for contradiction, that $p$ is not in every $F_n^c.$ Then, for some $N,$ $p$ is not in $F_N^c.$ Since $p \notin F_N^c$ and $B_{N+1} \subseteq F_N^c$, we have $p \notin B_{N+1}$. Since $B_{N+1}$ is open and $p$ is outside it, $p$ is at some positive distance $\varepsilon$ from any point $q \in B_{N+1}$. But $x_n \in B_n \subseteq B_{N+1}$ for all $n > N$, so all these infinitely many points are at distance at least $\varepsilon$ from $p$. Thus any neighborhood of $p$ with radius less than $\varepsilon$ contains at most finitely many points of $\set{x_n}$, contradicting that $p$ is a limit point.
 
 Now, this means that $p \in \bigcap_{n=1}^\infty F_n^c,$ meaning $\bigcap_{n=1}^\infty F_n^c \neq \emptyset,$ a contradiction! Therefore, our supposition that every $F_n$ has an empty interior must be incorrect, and some $F_n$ must have a non-empty interior.
 \end{proof}

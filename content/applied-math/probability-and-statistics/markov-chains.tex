@@ -9,7 +9,7 @@
 \section{Markov Chains}
 
 \begin{definition}[Markov Chain]
-If we have a system with N states and for each state, a set of N \@{probabilities} from transitioning from that state to another state (including itself) we end up with an $N \times N$ \@{matrix} $P$ where the \@{entry} $P_{jk}, j,k \in \{1, \dots, N\}$ represents the probability of transitioning from state $j$ to state $k$.
+If we have a system with N states and for each state, a set of N \@{probabilities} from transitioning from that state to another state (including itself) we end up with an $N \times N$ \@{matrix} $P$ where the \@{entry} $P_{jk}, j,k \in \set{1, \dots, N}$ represents the probability of transitioning from state $j$ to state $k$.
 
 Starting with some state, we can transition to another state, then another, with the probability of picking the next state dependent only on the existing state and the matrix $P.$ We call this sequence of random events a \textbf{Markov Chain}.
 
@@ -154,7 +154,7 @@ The set of \@{probability vectors} in $\reals^n$ is a \@{convex-set}, and it is 
 	\begin{proof}
 		Let $E$ be the set of \@{probability vectors} in $\reals^n.$ That is,
 
-		\[ E = \left \{ \vec{p} \in \reals^n : \vec{p}_i \geq 0, \sum_{i=1}^n \vec{p}_i = 1. \right \} \]
+		\[ E = \set{\vec{p} \in \reals^n : \vec{p}_i \geq 0, \sum_{i=1}^n \vec{p}_i = 1.} \]
 
 		(Note: $E$ is a $n-1$ dimensional \@{simplex}).
 
@@ -167,7 +167,7 @@ The set of \@{probability vectors} in $\reals^n$ is a \@{convex-set}, and it is 
 		\[ \sum_{i=1}^n \lambda  \vec{X}_i = \lambda,  \quad \sum_{i=1}^n (1 - \lambda) \vec{Y}_i = 1 - \lambda, \]
 
 		\bal
-		\lambda \vec{X} + (1 - \lambda) \vec{Y} & = \sum_{i=1}^n \left ( \lambda  \vec{X}_i + (1 - \lambda) \vec{Y}_i \right ) \\
+		\lambda \vec{X} + (1 - \lambda) \vec{Y} & = \sum_{i=1}^n \parens{\lambda  \vec{X}_i + (1 - \lambda) \vec{Y}_i} \\
 		& = \lambda + 1 - \lambda \\
 		& = 1.
 		\eal
@@ -179,7 +179,7 @@ The set of \@{probability vectors} in $\reals^n$ is a \@{convex-set}, and it is 
 
 		Noe that for each $\vec{p} \in E,$ and each \@{coordinate} $i,$
 
-		\[ \{ \vec{p} \in \reals^n : \vec{p}_i \geq 0 \} \]
+		\[ \set{\vec{p} \in \reals^n : \vec{p}_i \geq 0} \]
 
 		is a \@{closed} half-space. Now, note that the map
 
@@ -187,17 +187,17 @@ The set of \@{probability vectors} in $\reals^n$ is a \@{convex-set}, and it is 
 
 		is \@{continuous}, the \@{pre-image} of $1$ under $f$ is
 
-		\[ \left \{ \vec{p} \in \reals^n : \sum_{i=1}^n \vec{p}_i = 1. \right \} = f^{-1}(\{1\}). \]
+		\[ \set{\vec{p} \in \reals^n : \sum_{i=1}^n \vec{p}_i = 1.} = f^{-1}(\set{1}). \]
 
 		Because ${1}$ is \@{closed} in $\reals,$ by \@{mapping-continuous-iff-inverse-images-of-closed-sets-are-closed} we have that
 
-                \[ \left \{ \vec{p} \in \reals^n : \sum_{i=1}^n \vec{p}_i = 1. \right \} \]
+                \[ \set{\vec{p} \in \reals^n : \sum_{i=1}^n \vec{p}_i = 1.} \]
 
 		is \@{closed.}
 
 		Now,
 
-		\[ E = \left ( \bigcap_{i=1}^n \{ \vec{p} : \vec{p}_i \geq 0 \} \right ) \cap \left \{ \vec{p} : \sum_{i=1}^n \vec{p}_i = 1 \right \} \]
+		\[ E = \parens{\bigcap_{i=1}^n \set{\vec{p} : \vec{p}_i \geq 0}} \cap \set{\vec{p} : \sum_{i=1}^n \vec{p}_i = 1} \]
 
 		is an \@{intersection} of \@{closed} \@{sets}, \@[which is also closed]{union-and-intersection-of-open-and-closed-sets}.
 

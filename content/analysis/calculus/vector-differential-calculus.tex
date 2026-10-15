@@ -34,7 +34,7 @@ A scalar function depends only on the point $P,$ not on the coordinate system ch
 \end{definition}
 
 \begin{definition}[Component Function]
-Let $\vec{f}$ be a \@{function} that maps an \@{open} \@{set} $E \subset R^n$ into $R^m.$ Let $\{\vec{e}_1, \dots, \vec{e}_n\}$ and $\{\vec{u}_1, \dots, \vec{u}_n\}$ be the standard bases of $R^n$ and $R^m.$ The \textbf{component functions} of $\vec{f}$ are the real \@{functions} $f_1, \dots, f_m$ defined by
+Let $\vec{f}$ be a \@{function} that maps an \@{open} \@{set} $E \subset R^n$ into $R^m.$ Let $\set{\vec{e}_1, \dots, \vec{e}_n}$ and $\set{\vec{u}_1, \dots, \vec{u}_n}$ be the standard bases of $R^n$ and $R^m.$ The \textbf{component functions} of $\vec{f}$ are the real \@{functions} $f_1, \dots, f_m$ defined by
 
 \[ \vec{f}(\vec{x}) = \sum_{i=1}^m f_i(\vec{x})\vec{u}_i \quad (\vec{x} \in E), \]
 
@@ -56,7 +56,7 @@ is therefore often used in place of $D_j f_i,$ and $D_j f_i$ is called a \textbf
 \begin{definition}[Tangent Vector]
 For a space curve given parametrically by $\vec{r}(t),$ the \textbf{tangent vector} (or specifically, the \textbf{unit tangent vector}) at the point $\vec{r}(t)$ is the \@{unit-vector} defined by:
 
-\[ \vec{T}(t) = \frac{\vec{r}'(t)}{\lVert\vec{r}'(t)\rVert} \]
+\[ \vec{T}(t) = \frac{\vec{r}'(t)}{\norm{\vec{r}'(t)}} \]
 \end{definition}
 
 \subsection{Differentiation}
@@ -87,7 +87,7 @@ Conversely, every linear function from $R^1$ to $R^1$ is multiplication by some 
 \begin{remark}
 Now, consider a \@{function} $\vec{f}$ that maps $(a, b) \subset R^1$ into $R^m.$ Then $\vec{f}'(x)$ is defined to be the \@{vector} $y \in R^m$ (if one exists) for which
 
-\[ \lim_{h \to 0} \left ( \frac{\vec{f}(x+h) - \vec{f}(x)}{h}  - \vec{y} \right ) = 0. \]
+\[ \lim_{h \to 0} \parens{\frac{\vec{f}(x+h) - \vec{f}(x)}{h}  - \vec{y}} = 0. \]
 
 This can be rewritten as
 
@@ -105,7 +105,7 @@ Therefore, if $\vec{f}$ is a \@{differentiable} \@{function} of $(a, b) \subset 
 
 or, equivalently,
 
-\[ \lim_{h \to 0} \frac{|\vec{f}(x + h) - \vec{f}(x) - \vec{f}'(x) h|}{|h|} = 0. \]
+\[ \lim_{h \to 0} \frac{\abs{\vec{f}(x + h) - \vec{f}(x) - \vec{f}'(x) h}}{\abs{h}} = 0. \]
 
 We can now take on the general $R^n \to R^m$ case.
 \end{remark}
@@ -113,7 +113,7 @@ We can now take on the general $R^n \to R^m$ case.
 \begin{definition}[Differentiable]
 Suppose $E$ is an \@{open} \@{set} in $R^n,$ $\vec{f} : E \to R^m,$ and $\vec{x} \in E.$ If there exists a linear transformation $A : R^n \to R^m$ such that
 
-\[ \lim_{\vec{h} \to \vec{0}} \frac{|\vec{f}(\vec{x} + \vec{h}) - \vec{f}(\vec{x}) - A\vec{h}|}{|\vec{h}|} = 0, \tag{14} \]
+\[ \lim_{\vec{h} \to \vec{0}} \frac{\abs{\vec{f}(\vec{x} + \vec{h}) - \vec{f}(\vec{x}) - A\vec{h}}}{\abs{\vec{h}}} = 0, \tag{14} \]
 
 then we say that $\vec{f}$ is \textbf{differentiable} at $\vec{x}$ and we write
 
@@ -121,7 +121,7 @@ then we say that $\vec{f}$ is \textbf{differentiable} at $\vec{x}$ and we write
 
 If $\vec{f}$ is differentiable at every $\vec{x} \in E,$ we say that $\vec{f}$ is \textbf{differentiable in} $E.$
 
-Note that in (14), $\vec{h} \in R^n.$ If $|\vec{h}|$ is small enough, then $\vec{x} + \vec{h} \in E,$ because $E$ is \@{open}. Therefore, $\vec{f}(\vec{x} + \vec{h})$ is defined, $\vec{f}(\vec{x} + \vec{h}) \in R^m,$ and since $A \in L(R^n, R^m),$ $A \vec{h} \in R^m.$ Therefore,
+Note that in (14), $\vec{h} \in R^n.$ If $\abs{\vec{h}}$ is small enough, then $\vec{x} + \vec{h} \in E,$ because $E$ is \@{open}. Therefore, $\vec{f}(\vec{x} + \vec{h})$ is defined, $\vec{f}(\vec{x} + \vec{h}) \in R^m,$ and since $A \in L(R^n, R^m),$ $A \vec{h} \in R^m.$ Therefore,
 
 \[ \vec{f}(\vec{x} + \vec{h}) - \vec{f}(\vec{x}) - A \vec{h} \in R^m. \]
 
@@ -133,7 +133,7 @@ We can also rewrite (14) as
 
 where the remainder $\vec{r}(\vec{h})$ satisfies
 
-\[ \lim_{\vec{h} \to \vec{0}} \frac{|\vec{r}(\vec{h})|}{|\vec{h}|} = 0. \]
+\[ \lim_{\vec{h} \to \vec{0}} \frac{\abs{\vec{r}(\vec{h})}}{\abs{\vec{h}}} = 0. \]
 
 This means that for a fixed $\vec{x}$ and a small $\vec{h},$ the left side of (17) is approximately equal to $\vec{f}'(\vec{x})\vec{h},$ that is, to the value of a linear transformation applied to $\vec{h}.$
 \end{definition}
@@ -149,9 +149,9 @@ Suppose $E$ is an \@{open} \@{set} in $R^n,$ $\vec{f} : E \to R^m,$ and $\vec{x}
 \begin{definition}[Continuously Differentiable]
 A \@{differentiable} \@{function} $\vec{f}$ of an \@{open} \@{set} $E \subset R^n$ into $R^m$ is said to be \textbf{continuously differentiable} in $E$ if $\vec{f}'$ is a \@{continuous} function of $E$ into $L(R^n, R^m).$ More explicitly, it is required that to every $\vec{x} \in E$ and to every $\epsilon > 0$ corresponds a $\delta > 0$ such that
 
-\[ \lVert\vec{f}'(\vec{y}) - \vec{f}'(\vec{x})\rVert < \epsilon \]
+\[ \norm{\vec{f}'(\vec{y}) - \vec{f}'(\vec{x})} < \epsilon \]
 
-if $\vec{y} \in E$ and $|\vec{x} - \vec{y}| < \delta.$
+if $\vec{y} \in E$ and $\abs{\vec{x} - \vec{y}} < \delta.$
 
 If this is the case, we also say that $\vec{f}$ is a $\mathscr{C}'$-mapping or that $\vec{f} \in \mathscr{C}'(E).$
 \end{definition}
@@ -163,7 +163,7 @@ These are some differential operators that apply to multivariable and/or vector 
 \begin{definition}[del]\synonyms{"vector differential operator", nabla}
 In Euclidean space $\reals^n$ with coordinates $(x_1, \dots, x_n)$ and standard basis $(\vec{e}_1, \dots, \vec{e}_n),$ \textbf{del} is a vector operator whose $x_1, \dots, x_n$ \@{components} are the \@{partial-derivative} operators $\frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n}; $ that is
 
-\[ \nabla = \sum_{i = 1}^n \vec{e}_i \frac{\partial}{\partial x_i} = \left ( \frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n} \right ). \]
+\[ \nabla = \sum_{i = 1}^n \vec{e}_i \frac{\partial}{\partial x_i} = \parens{\frac{\partial}{\partial x_1}, \dots, \frac{\partial}{\partial x_n}}. \]
 \end{definition}
 
 \subsection{Gradient}
@@ -178,7 +178,7 @@ We can write the \@{gradient} as either a row \@{vector} or a column \@{vector}.
 
 In three-dimensional Euclidean space, the \@{gradient} of a function $f,$ if it exists, is given by
 
-\[ \grad{f} = \nabla f = \frac{\partial f}{\partial x} \vec{i} + \frac{\partial f}{\partial y} \vec{j} + \frac{\partial f}{\partial z} \vec{k} = \left [ \frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}, \frac{\partial f}{\partial z} \right ] \]
+\[ \grad{f} = \nabla f = \frac{\partial f}{\partial x} \vec{i} + \frac{\partial f}{\partial y} \vec{j} + \frac{\partial f}{\partial z} \vec{k} = \brackets{\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}, \frac{\partial f}{\partial z}} \]
 \end{remark}
 
 \subsection{Directional Derivative}
@@ -203,11 +203,11 @@ Let $f(P) = f(x,y,z)$ be a \@{scalar-function} having \@{continuous} first \@{pa
 \begin{proof}
 The \@{directional-derivative} of $f$ in the direction of some \@{unit-vector} $\vec{u}$ is
 
-\[ D_\vec{u} f = \vec{u} \cdot \grad{f} = |\vec{u}| |\grad{f}| \cos{\theta} \tag{a} \]
+\[ D_\vec{u} f = \vec{u} \cdot \grad{f} = \abs{\vec{u}} \abs{\grad{f}} \cos{\theta} \tag{a} \]
 
 where $\theta$ is the angle between $\vec{u}$ and $\grad{f}$ (see \@{directional-derivative-is-inner-product-of-vector-and-grad} and \@{cos-characterization-of-dot-product}). Note that $f$ is a \@{scalar-function}, as is the \@{directional-derivative} of $f.$ Now, $cos{\theta}$ has its maximum \@{value} of $1$ whenever $\theta = 0,$ and since $\vec{u}$ is a \@{unit-vector} with \@{magnitude} of 1, (a) simplifies to
 
-\[ D_{\vec{u}} f = |\grad{f}|, \]
+\[ D_{\vec{u}} f = \abs{\grad{f}}, \]
 
 which tells us that that \@{direction} and \@{magnitude} of $\grad{f}$ are independent of the coordinate system chosen. Now, since $\theta = 0$ if and only if $\vec{b}$ and $\grad{f}$ are \@{parallel}, $\grad{f}$ is the direction of maximum increase of $f$ at $P,$ assuming $\grad{f} \neq 0$ at $P.$
 \end{proof}
@@ -297,7 +297,7 @@ Let $\vec{v}$ be the velocity \@{vector} of of the motion of particles in a flui
 \begin{definition}[Curl]
 For a \@{vector-field} $\vec{F} = (F_1, F_2, F_3)$ defined in three-dimensional space $\reals^3$, with each \@{component} function $F_i$ depending on the variables $x$, $y$, and $z$, the curl of $\vec{F}$ is defined as
 
-\[ \curl \vec{F} = \nabla \times \vec{F} = \left ( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z} \right ) \mathbf{\vec{i}} + \left ( \frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x} \right ) \mathbf{\vec{j}} + \left ( \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y} \right ) \mathbf{\vec{k}} \]
+\[ \curl \vec{F} = \nabla \times \vec{F} = \parens{\frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z}} \mathbf{\vec{i}} + \parens{\frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x}} \mathbf{\vec{j}} + \parens{\frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y}} \mathbf{\vec{k}} \]
 \end{definition}
 
 \begin{remark}
@@ -354,7 +354,7 @@ Solutions to Laplace's equation $\nabla^2 f = 0$ are called \pagelink[harmonic f
 \begin{theorem}\label{gravitational-potential-is-a-solution-to-laplaces-equation}
 The force of attraction
 
-\[ \vec{p} = - \frac{c}{r^3} \vec{r} = -c \left [ \frac{x - x_0}{r^3}, \frac{y - y_0}{r^3}, \frac{z - z_0}{r^3} \right ] \]
+\[ \vec{p} = - \frac{c}{r^3} \vec{r} = -c \brackets{\frac{x - x_0}{r^3}, \frac{y - y_0}{r^3}, \frac{z - z_0}{r^3}} \]
 
 between two particles at points $P_0 = (x_0, y_0, z_0)$ and $P = (x, y, z)$ (as given by Newton's law of gravitation) has the \@{potential-function} $f(x, y, z) = c/r,$ where $r > 0$ is the distance between $P_0$ and $P.$
 
@@ -597,7 +597,7 @@ Then,
 \end{itemize}
 
 \begin{itemize}
-\item The \@{magnitude} $\lVert\omega\rVert$ is the local \@{angular-velocity} (half the \@{curl} \@{magnitude}.)
+\item The \@{magnitude} $\norm{\omega}$ is the local \@{angular-velocity} (half the \@{curl} \@{magnitude}.)
 \end{itemize}
 
 More visually, if we take a small \@{ball} of \@{points} around $\vec{x_0},$
@@ -625,7 +625,7 @@ So, if we dropped a tiny paddle wheel into the flow:
 \end{itemize}
 
 \begin{itemize}
-\item Its spin rate is $\frac{1}{2} \lVert \nabla \times \vec{F} \rVert.$ 
+\item Its spin rate is $\frac{1}{2} \norm{\nabla \times \vec{F}}.$ 
 \end{itemize}
 
 \subsubsection{Jacobian Related to Directional Derivative}

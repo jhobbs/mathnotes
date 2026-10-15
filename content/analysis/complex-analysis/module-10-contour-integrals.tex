@@ -52,9 +52,9 @@ Some additional properties:
 
 \[ \Im \int_C f(z) dz = \int_C \Im[f(z)dz]; \]
 
-\[ \left | \int_C f(z) dz \right | \le \int_C |f(z)||dz| \le ML \]
+\[ \abs{\int_C f(z) dz} \le \int_C \abs{f(z)} \abs{dz} \le ML \]
 
-where $M$ is the maximum value of $\|f(z)\|$ for $z$ on $C$, and $L$ is the length of $C$.
+where $M$ is the maximum value of $\abs{f(z)}$ for $z$ on $C$, and $L$ is the length of $C$.
 
 Here's an example problem: evaluate $\oint_C e^z dz$ where $C$ is the closed (triangular) path from $0$ to $1$ ($C_1$) to $1 + i$ ($C_2$) back to $0$ ($C_3$):
 
@@ -74,7 +74,7 @@ Thus,
 
 \[ \oint_C e^z dz = \int_0^1 e^x dx + \int_0^1 e^{1+yi}idy + \int_1^0 e^{t+ti} (dt +dt~i) \]
 
-\[ = \left \{ e^x \right \}^1_0 + \left \{ e^{1+yi} \right \}^1_0 + \left \{ e^{(1+i)t} \right \}^0_1 \] 
+\[ = \set{e^x}^1_0 + \set{e^{1+yi}}^1_0 + \set{e^{(1+i)t}}^0_1 \] 
 
 \[ = (e - 1) + (e^{1+i} -e) + (1 - e^{1 +i}) = 0. \]
 

@@ -70,8 +70,8 @@ First, review my notes on \pagelink[Frequency and Period]{geometry/trigonometry/
 We can reuse $(d)$ and $(e)$ above to find the description of motion for any simple harmonic motion. Here are some important parameters from it (we'll use a particle as an example although not all problems will involve particles):
 
 \begin{itemize}
-\item $\|c\|$ - the amplitude of motion, i.e., the maximum distance of the particle from the origin.
-\item $\| c \omega_0 \|$ - the maximum velocity of the particle.
+\item $\abs{c}$ - the amplitude of motion, i.e., the maximum distance of the particle from the origin.
+\item $\abs{c \omega_0}$ - the maximum velocity of the particle.
 \item $x = 0$ - the equilibrium point, i.e. the center point of motion.
 \item $T = \frac{2 \pi}{\omega_0}$ - the period of the motion, i.e. the amount of time it takes the particle to make one complete oscillation about its equilibrium point
 \item $\nu = \frac{1}{T} = \frac{\omega_0}{2 \pi}$ - the natural (undamped) frequency of the motion. The number of complete revolutions or cycles made by the particle in a unit of time.
@@ -112,8 +112,8 @@ Since $mg = kl$, we have:
 Which is the form of a differential equation of a particle exhibiting simple harmonic motion. In place of ${\omega_0}^2$ we have $\frac{k}{m}$, and we can let $c$ be the distance we stretch the spring past its equilibrium point.
 
 \begin{itemize}
-\item Amplitude: $\|c\|$, because we stretch the spring $c$ beyond its equilibrium point.
-\item Maximum velocity: $\|c \sqrt{\frac{k}{m}}\|$
+\item Amplitude: $\abs{c}$, because we stretch the spring $c$ beyond its equilibrium point.
+\item Maximum velocity: $\abs{c \sqrt{\frac{k}{m}}}$
 \item Equilibrium point: $y = 0$
 \item Period: Note that ${\omega_0}^2 = \frac{k}{m}$. The period is then $\frac{2 \pi}{\frac{k}{m}} = 2 \pi \sqrt{\frac{m}{k}}$.
 \item Natural Frequency: $\nu = \frac{\sqrt{k}}{2 \pi \sqrt{m}} \text{cps}$
@@ -142,19 +142,19 @@ If a simple pendulum of length $l$ ft is given an angular velocity of $\omega_0$
 \item Position of the bob as a function of time:
 \end{itemize}
 
-\[ \theta{(t)} = \sqrt{ {\theta_0}^2 + \frac{l}{g}{ \omega_0}^2} \cos{\left (\sqrt{ \frac{g}{l}}t - \arctan2{\left (\omega_0 \sqrt{\frac{l}{g}}, { \theta_0}\right )}\right)} ~ \text{rad} \]
+\[ \theta{(t)} = \sqrt{ {\theta_0}^2 + \frac{l}{g}{ \omega_0}^2} \cos{\parens{\sqrt{ \frac{g}{l}}t - \arctan2{\parens{\omega_0 \sqrt{\frac{l}{g}}, { \theta_0}}}}} ~ \text{rad} \]
 
 \begin{itemize}
 \item Angular velocity of the bob as a function of time:
 \end{itemize}
 
-\[ \frac{d\theta}{dt} = \omega{(t)} = - \sqrt{ \frac{g}{l} {\theta_0}^2 + { \omega_0}^2} \sin{\left (\sqrt{ \frac{g}{l}}t - \arctan2{\left ( \omega_0 \sqrt{\frac{l}{g}}, { \theta_0}\right )} \right)} ~ \text{rad/sec} \]
+\[ \frac{d\theta}{dt} = \omega{(t)} = - \sqrt{ \frac{g}{l} {\theta_0}^2 + { \omega_0}^2} \sin{\parens{\sqrt{ \frac{g}{l}}t - \arctan2{\parens{\omega_0 \sqrt{\frac{l}{g}}, { \theta_0}}}}} ~ \text{rad/sec} \]
 
 \begin{itemize}
 \item Linear velocity of the bob as a function of time:
 \end{itemize}
 
-\[ l \frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l {\theta_0}^2 + l^2 { \omega_0}^2} \sin{\left (\sqrt{ \frac{g}{l}}t - \arctan2{\left ( \omega_0 \sqrt{\frac{l}{g}}, { \theta_0}\right )} \right)} ~ \text{ft/sec} \]
+\[ l \frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l {\theta_0}^2 + l^2 { \omega_0}^2} \sin{\parens{\sqrt{ \frac{g}{l}}t - \arctan2{\parens{\omega_0 \sqrt{\frac{l}{g}}, { \theta_0}}}}} ~ \text{ft/sec} \]
 
 \begin{itemize}
 \item Amplitude: $A = \sqrt{ {\theta_0}^2 + \frac{l}{g}{ \omega_0}^2} $ ft
@@ -169,19 +169,19 @@ Compare this to the motion of a pendulum of length $l$ ft released from the posi
 \item Position of the bob as a function of time:
 \end{itemize}
 
-\[ \theta{(t)} = \theta_0 \cos{\left (\sqrt{\frac{g}{l}}t \right )} ~ \text{rad} \]
+\[ \theta{(t)} = \theta_0 \cos{\parens{\sqrt{\frac{g}{l}}t}} ~ \text{rad} \]
 
 \begin{itemize}
 \item Angular velocity of the bob as a function of time:
 \end{itemize}
 
-\[ \frac{d\theta}{dt} = \omega{(t)} = - \sqrt{\frac{g}{l}} {\theta_0} \sin{\left (\sqrt{ \frac{g}{l}}t \right )} ~ \text{rad/sec} \]
+\[ \frac{d\theta}{dt} = \omega{(t)} = - \sqrt{\frac{g}{l}} {\theta_0} \sin{\parens{\sqrt{ \frac{g}{l}}t}} ~ \text{rad/sec} \]
 
 \begin{itemize}
 \item Linear velocity of the bob as a function of time:
 \end{itemize}
 
-\[ l\frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l } {\theta_0} \sin{\left (\sqrt{ \frac{g}{l}}t \right )} ~ \text{ft/sec} \]
+\[ l\frac{d\theta}{dt} = v{(t)} = - \sqrt{ g l } {\theta_0} \sin{\parens{\sqrt{ \frac{g}{l}}t}} ~ \text{ft/sec} \]
 
 \begin{itemize}
 \item Amplitude: $A = \omega_0 $ rad
@@ -204,15 +204,15 @@ Without the small angle approximation, we have a non-linear second order differe
 
 We can seperate/rearrange terms and then multiply both sides of $(28.74)$ by $\frac{2d\theta}{dt}$ to get:
 
-\[ \tag{a} 2 \left (\frac{d^2 \theta}{dt^2} \right ) \frac{d \theta}{dt} = -2\frac{g}{l}\sin{\theta} \frac{d\theta}{dt} \]
+\[ \tag{a} 2 \parens{\frac{d^2 \theta}{dt^2}} \frac{d \theta}{dt} = -2\frac{g}{l}\sin{\theta} \frac{d\theta}{dt} \]
 
-Using the identity $2 \left (\frac{d^2 \theta}{dt^2} \right ) \frac{d \theta}{dt} = \frac{d}{dt} \left (\frac{d\theta}{dt} \right)^2$, we can rewrite $(a)$ to get:
+Using the identity $2 \parens{\frac{d^2 \theta}{dt^2}} \frac{d \theta}{dt} = \frac{d}{dt} \parens{\frac{d\theta}{dt}}^2$, we can rewrite $(a)$ to get:
 
-\[ \tag{b} \frac{d}{dt} \left (\frac{d\theta}{dt} \right )^2  = -2\frac{g}{l}\sin{\theta} \frac{d\theta}{dt} \]
+\[ \tag{b} \frac{d}{dt} \parens{\frac{d\theta}{dt}}^2  = -2\frac{g}{l}\sin{\theta} \frac{d\theta}{dt} \]
 
 By integrating both sides of $(b)$ with respect to $dt$ we get:
 
-\[ \tag{c} \left (\frac{d\theta}{dt} \right )^2 = \frac{2g}{l} \cos{\theta} + c \]
+\[ \tag{c} \parens{\frac{d\theta}{dt}}^2 = \frac{2g}{l} \cos{\theta} + c \]
 
 Taking the square root of both sides we get:
 
@@ -224,7 +224,7 @@ Plugging in initial conditions we get:
 
 And so our equation for $\frac{d\theta}{dt}$ with the initial conditions becomes:
 
-\[ \tag{f} \frac{d\theta}{dt} = \pm \sqrt{\frac{2g}{l}\left ( \cos{\theta} - \cos{\theta_0} \right )} \]
+\[ \tag{f} \frac{d\theta}{dt} = \pm \sqrt{\frac{2g}{l}\parens{\cos{\theta} - \cos{\theta_0}}} \]
 
 To find $t(\theta)$, we can rewrite $(f)$ to show $\theta$ as the independent variable (we'll also separate the constant term out of the radical):
 
@@ -268,7 +268,7 @@ Hence, by $(28.82)$ and $(28.83)$ the general solution of $(28.81)$ is:
 
 \[ \tag{28.84}  y(t) = c \sin{(\omega_0 t + \delta}) + \frac{F}{ {\omega_0}^2 - \omega^2} \sin{(\omega t + \beta)} \]
 
-Here, the maximum displacement of this particle cannot exceed $\|c\| + \|F/({\omega_0}^2 - \omega^2)\|$.
+Here, the maximum displacement of this particle cannot exceed $\abs{c} + \abs{F/({\omega_0}^2 - \omega^2)}$.
 
 I've made a \href{https://www.desmos.com/calculator/caqdrbowgi}{Desmos graph of this general solution}.
 
@@ -288,7 +288,7 @@ And the general solution is:
 
 \[ \tag{28.93} y(t) = c \sin{(\omega_0 t + \delta}) - \frac{F}{2 \omega_0} t \cos{(\omega_0 t + \beta)} \]
 
-Now we have that the maximum displacement of the particle is $\|c\| + \left \| \frac{F}{2 \omega_0} t \right \| $. The presence of the variable $t$ in the second term implies that the displacement due to this part of the motion increases with time. A motion in which the displacement increases beyond all bounds as time passes is called an \textbf{unstable motion}. In such cases, a mechanical breakdown of the system is bound to occur. This condition is known as \textbf{undamped resonance} and $\omega_0$ is called the \textbf{undamped resonant frequency}.
+Now we have that the maximum displacement of the particle is $\abs{c} + \abs{\frac{F}{2 \omega_0} t} $. The presence of the variable $t$ in the second term implies that the displacement due to this part of the motion increases with time. A motion in which the displacement increases beyond all bounds as time passes is called an \textbf{unstable motion}. In such cases, a mechanical breakdown of the system is bound to occur. This condition is known as \textbf{undamped resonance} and $\omega_0$ is called the \textbf{undamped resonant frequency}.
 
 Here is a \href{https://www.desmos.com/calculator/6a4rofhsfe}{Desmos graph of this general solution}.
 

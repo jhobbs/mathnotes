@@ -19,13 +19,13 @@ We can define a sequence $s_n$ of partial sums of the infinite series $\sum_{n=1
 The series $\sum_{n=1}^{\infty}{a_n}$ is said to be convergent and to have a sum $m$ if the sequence of partial sums $s_n$ \@{converges} to $m.$ If the sequence $s_n$ \@{diverges}, then the series is said to diverge.
 
 \subsection{Absolute Convergence}
-The series $\sum_{n=1}^{\infty}{a_n}$ is said to \textbf{converge absolutely} if $\sum_{n=1}^{\infty}{\|a_n\|}$ converges. The infinite series $\sum_{n=1}^{\infty}{a_n}$ is said to \textbf{converge conditionally} if it converges but $\sum_{n=1}^{\infty}{\|a_n\|}$ diverges.
+The series $\sum_{n=1}^{\infty}{a_n}$ is said to \textbf{converge absolutely} if $\sum_{n=1}^{\infty}{\abs{a_n}}$ converges. The infinite series $\sum_{n=1}^{\infty}{a_n}$ is said to \textbf{converge conditionally} if it converges but $\sum_{n=1}^{\infty}{\abs{a_n}}$ diverges.
 
 \subsection{Linearity of Summation of Convergent Series}
 
 \emph{Theorem}: If $c$ is a \@{real-number} and the series $\sum_{n=1}^{\infty}{a_n}$ and $\sum_{n=1}^{\infty}{b_n}$ are convergent, then
 
-\[ \sum_{n=1}^{\infty}{ \left ( a_n + c \cdot b_n \right )} =  \sum_{n=1}^{\infty}{a_n} + c \sum_{n=1}^{\infty}{b_n}. \]
+\[ \sum_{n=1}^{\infty}{ \parens{a_n + c \cdot b_n}} =  \sum_{n=1}^{\infty}{a_n} + c \sum_{n=1}^{\infty}{b_n}. \]
 
 \subsection{Convergence Tests}
 
@@ -43,9 +43,9 @@ Note that $a_n$ converging to $0$ is a necessary condition for $\sum_{n=1}^{\inf
 
 \subsubsection{Geometric Series Test}
 
-\emph{Theorem}: The \textbf{geometric series test} says that the geometric series $\sum_{n=1}^{\infty}{r^n}$ converges if $\|r\| < 1$ and diverges otherwise. If $\|r\| < 1,$ then $\sum_{n=1}^{\infty}{r^n} = \frac{r}{1 - r}.$
+\emph{Theorem}: The \textbf{geometric series test} says that the geometric series $\sum_{n=1}^{\infty}{r^n}$ converges if $\abs{r} < 1$ and diverges otherwise. If $\abs{r} < 1,$ then $\sum_{n=1}^{\infty}{r^n} = \frac{r}{1 - r}.$
 
-\emph{Proof}: Suppose $\|r\| < 1.$ Note that
+\emph{Proof}: Suppose $\abs{r} < 1.$ Note that
 
 \[ s_n = (r + r^2 + \cdots + r^n) = r(1 + r + r^2 + \cdots + r^{n-1}) = r\frac{1-r^n}{1 - r}. \]
 
@@ -53,7 +53,7 @@ Note that $a_n$ converging to $0$ is a necessary condition for $\sum_{n=1}^{\inf
 
 \[ \lim_{n \to \infty}{s_n} = \lim_{n \to \infty}{r \frac{1 - r^n}{1 - r}} = r \frac{1}{1 - r} = \frac{r}{1 - r}. \square \]
 
-Note that when $\|r\| \geq 1,$ the series diverges.
+Note that when $\abs{r} \geq 1,$ the series diverges.
 
 \subsubsection{Bounded Series with Nonnegative Terms}
 
@@ -74,16 +74,16 @@ Note that when $\|r\| \geq 1,$ the series diverges.
 \emph{Theorem:}  If the series $\sum_{n=1}^{\infty}{a_n}$ converges absolutely then it simply converges too.
 
 \subsubsection{Comparison Test}
-\emph{Theorem:} Suppose $\sum_{n=1}^{\infty}{a_n}$ and $\sum_{n=1}^{\infty}{b_n}$ are series for which $\|a_n\| \leq \|b_n\|$ for all natural $n.$ Then if $\sum_{n=1}^{\infty}{b_n}$ converges absolutely, so does $\sum_{n=1}^{\infty}{a_n}.$ If $\sum_{n=1}^{\infty}{\|a_n\|}$ diverges, so does $\sum_{n=1}^{\infty}{\|b_n\|}.$
+\emph{Theorem:} Suppose $\sum_{n=1}^{\infty}{a_n}$ and $\sum_{n=1}^{\infty}{b_n}$ are series for which $\abs{a_n} \leq \abs{b_n}$ for all natural $n.$ Then if $\sum_{n=1}^{\infty}{b_n}$ converges absolutely, so does $\sum_{n=1}^{\infty}{a_n}.$ If $\sum_{n=1}^{\infty}{\abs{a_n}}$ diverges, so does $\sum_{n=1}^{\infty}{\abs{b_n}}.$
 
 \subsubsection{Limit Ratio Test}
 \emph{Theorem:} For the series $\sum_{n=1}^{\infty}{a_n},$ let
 
-\[ L = \lim_{n \to \infty}{\left | \frac{a_{n+1}}{a_n} \right |}. \] 
+\[ L = \lim_{n \to \infty}{\abs{\frac{a_{n+1}}{a_n}}}. \] 
 
 Then, if $L < 1,$ $\sum_{n=1}^{\infty}{a_n}$ converges absolutely. If $L > 1,$ $\sum_{n=1}^{\infty}{a_n}$ diverges.
 
 \subsubsection{Root Test}
-\emph{Theorem:}  For the series $\sum_{n=1}^{\infty}{a_n},$ let $L = \limsup_{n \to \infty}{\|a_n\|^{1/n}}.$ Then if $L < 1,$ $\sum_{n=1}^{\infty}{a_n}$ converges absolutely. If $L > 1,$ $\sum_{n=1}^{\infty}{a_n}$ diverges.
+\emph{Theorem:}  For the series $\sum_{n=1}^{\infty}{a_n},$ let $L = \limsup_{n \to \infty}{\abs{a_n}^{1/n}}.$ Then if $L < 1,$ $\sum_{n=1}^{\infty}{a_n}$ converges absolutely. If $L > 1,$ $\sum_{n=1}^{\infty}{a_n}$ diverges.
 
 \end{document}

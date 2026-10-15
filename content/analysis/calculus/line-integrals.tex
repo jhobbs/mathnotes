@@ -33,11 +33,11 @@ and the differential formula for arc length is then:
 \begin{theorem}\label{arc-length-in-plane}
 If a \@{smooth} curve $x = f(t), y = g(t), a \le t \le b$, is traversed exactly once as $t$ increases from $a$ to $b$, the curve's length is
 
-\[ L = \int_a^b ds = \int_a^b \sqrt{ \left ( \frac{dx}{dt} \right )^2 + \left ( \frac{dy}{dt} \right )^2} dt \]
+\[ L = \int_a^b ds = \int_a^b \sqrt{ \parens{\frac{dx}{dt}}^2 + \parens{\frac{dy}{dt}}^2} dt \]
 
 The arc length of curve in $\reals^3$ can be defined the same way, assuming $z = h(t)$:
 
-\[ L = \int_a^b ds = \int_a^b \sqrt{ \left ( \frac{dx}{dt} \right )^2 + \left ( \frac{dy}{dt} \right )^2 + \left ( \frac{dz}{dt} \right )^2 } dt \]
+\[ L = \int_a^b ds = \int_a^b \sqrt{ \parens{\frac{dx}{dt}}^2 + \parens{\frac{dy}{dt}}^2 + \parens{\frac{dz}{dt}}^2 } dt \]
 \end{theorem}
 
 \detach
@@ -45,7 +45,7 @@ The arc length of curve in $\reals^3$ can be defined the same way, assuming $z =
 \begin{note}
 Note that the arc length formula for both 2 and 3 dimensions can be written using vector notation in the more compact form:
 
-\[ L = \int_a^b \left |\vec{r'}(t) \right | dt \]
+\[ L = \int_a^b \abs{\vec{r'}(t)} dt \]
 \end{note}
 
 \subsection{Line Integrals}
@@ -63,7 +63,7 @@ If $f$ is defined on a \@{smooth} curve C given by $x = x(t), y = y(t), a \le t 
 \begin{theorem}\label{line-integral-over-a-plane-curve}
 If $f$ is a \@{continuous} function of two variables $x = x(t), y = y(t)$ whose domain includes the \@{smooth} curve $C$, then the \@{line-integral} can be evaluated as:
 
-\[ \int_C f(x,y) ds = \int_a^b f(x(t), y(t)) \sqrt{ \left ( \frac{dx}{dt} \right )^2 + \left ( \frac{dy}{dt} \right )^2} dt \]
+\[ \int_C f(x,y) ds = \int_a^b f(x(t), y(t)) \sqrt{ \parens{\frac{dx}{dt}}^2 + \parens{\frac{dy}{dt}}^2} dt \]
 \end{theorem}
 
 \detach
@@ -77,7 +77,7 @@ If $f$ is a \@{continuous} function of two variables $x = x(t), y = y(t)$ whose 
 \begin{theorem}\label{all-parameterizations-of-curve-have-same-line-integral}
 When $P(x,y)$ and $Q(x,y)$ are \@{continuous} and $C$ is \@{smooth}, we can calculate the value of the \@{line-integral} by expressing $P, Q, dx$ and $dy$ in terms of any parametric representation of $C$ and evaluating the resulting definite integral:
 
-\[ \int_{C} P(x,y)dx + Q(x,y)dy = \int_{\alpha}^{\beta} \left \{ P[x(t), y(t)]\frac{dx}{dt} + Q[x(t), y(t)]\frac{dy}{dt} \right \}dt. \tag{4.7} \]
+\[ \int_{C} P(x,y)dx + Q(x,y)dy = \int_{\alpha}^{\beta} \set{P[x(t), y(t)]\frac{dx}{dt} + Q[x(t), y(t)]\frac{dy}{dt}}dt. \tag{4.7} \]
 
 All parameterizations of the curve lead to the same value.
 \end{theorem}
@@ -107,7 +107,7 @@ There are two ways to ensure that a \@{line-integral} is \@{independent-of-path}
 \begin{theorem}\label{fundamental-theorem-of-line-integrals}
 When a \@{line-integral} is known to be \@{independent-of-path}, and its value is required along some curve with initial point $A$ and final point $B$, we can either replace the given curve with a simpler curve, or, take the difference in the values of the function $\phi(x,y)$ at $B$ and $A$.
 
-\[ \int_{C} P(x,y)dx + Q(x,y)dy = \left \{ \phi(x,y) \right \}_{A}^{B} = \phi(x_B, y_B) - \phi(x_A, y_A). \]
+\[ \int_{C} P(x,y)dx + Q(x,y)dy = \set{\phi(x,y)}_{A}^{B} = \phi(x_B, y_B) - \phi(x_A, y_A). \]
 \end{theorem}
 
 \begin{theorem}\label{closed-path-of-path-independent-integral-is-zero}

@@ -14,7 +14,7 @@ Then, $f(z)$ has a \@{laurent-series}
 
 \[ f(z) = \sum_{n=0}^{\infty} a_n (z - z_0)^n + \frac{b_1}{z - z_0} + \frac{b_2}{(z - z_0)^2} + \cdots \]
 
-that \@{converges} for all \@{points} near $z = z_0$ (except at $z = z_0$ itself,) in some \@{domain} of the form $0 < |z - z_0| < R.$ 
+that \@{converges} for all \@{points} near $z = z_0$ (except at $z = z_0$ itself,) in some \@{domain} of the form $0 < \abs{z - z_0} < R.$ 
 
 The coefficient $b_1$ of the first negative power $1/(z - z_0)$ of this \@{laurent-series} is given by the \@{Cauchy-integral-formula} as
 
@@ -53,7 +53,7 @@ Instead of finding the \@{laurent-series}, we can use these handy formulas.
 \subsubsection{Poles of any Order at $z_0$}
 
 \begin{theorem}\label{residue-at-mth-order-pole}
-\[ \Res_{z=z_0} f(z) = \frac{1}{(m - 1)!} \lim_{z \to z_0} \left \{ \frac{d^{m-1}}{dz^{m-1}} \left [ (z - z_0)^m f(z) \right ] \right \}. \]
+\[ \Res_{z=z_0} f(z) = \frac{1}{(m - 1)!} \lim_{z \to z_0} \set{\frac{d^{m-1}}{dz^{m-1}} \brackets{(z - z_0)^m f(z)}}. \]
 \end{theorem}
 
 \detach
@@ -61,7 +61,7 @@ Instead of finding the \@{laurent-series}, we can use these handy formulas.
 \begin{remark}
 For second order \@{poles} $(m = 2)$, this gives
 
-\[ \Res_{z = z_0} f(z) = \lim_{z \to z_0} \{[(z - z_0)^2 f(z)]' \}. \]
+\[ \Res_{z = z_0} f(z) = \lim_{z \to z_0} \set{[(z - z_0)^2 f(z)]'}. \]
 \end{remark}
 
 \subsubsection{Several Singularities Inside the Contour}

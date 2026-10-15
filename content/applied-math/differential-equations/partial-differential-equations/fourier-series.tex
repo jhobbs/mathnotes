@@ -48,7 +48,7 @@ This time we use the trig identity $\sin{(a)}\sin{(b)} = \frac{1}{2}(\cos{(a - b
 
 Here, we have to consider two cases, $m = n$ and $m \neq n$. If $m = n$, $(m-n) = 0, (m+n) = 2m$; also note that this integral is over an even function from $-L$ to $L$, so (b.1)
 
-\[ \frac{1}{2}  \int_{-L}^{L} 1 - \cos{\frac{2m \pi x}{L}} dx = L - \left ( \frac{L\sin{\frac{2m \pi x}{L}}}{2 \pi m} \right)_0^L = L - \left ( \left (\frac{L\sin{2m \pi}}{2 \pi m} \right) - 0 \right ) = L. \tag{b.2} \]
+\[ \frac{1}{2}  \int_{-L}^{L} 1 - \cos{\frac{2m \pi x}{L}} dx = L - \parens{\frac{L\sin{\frac{2m \pi x}{L}}}{2 \pi m}}_0^L = L - \parens{\parens{\frac{L\sin{2m \pi}}{2 \pi m}} - 0} = L. \tag{b.2} \]
 
 The final $\sin$ in (b.2) is always $0$ because $\sin{2 m \pi}$ for \@{integer} $m$ is always $0$. So, when $m = n$, (b) evaluates to $L$.
 
@@ -78,7 +78,7 @@ The following table (from "Differential Equations and Boundary Value Problems", 
 
 \textbf{Definition}: Let $f$ be a piecewise continuous function on the \@{interval} $[-L, L]$. The \textbf{Fourier Series} of $f$ is the trigonometric series
 
-\[ f(x) \sim \frac{a_0}{2} + \sum_{n=1}^{\infty} \left \{ a_n \cos{\frac{n \pi x}{L}} + b_n \sin{\frac{n \pi x}{L}} \right \}, \tag{8} \] 
+\[ f(x) \sim \frac{a_0}{2} + \sum_{n=1}^{\infty} \set{a_n \cos{\frac{n \pi x}{L}} + b_n \sin{\frac{n \pi x}{L}}}, \tag{8} \] 
 
 where the $a_n$'s and $b_n$'s are given by the formulas:
 
@@ -90,23 +90,23 @@ Formulas (9) and (10) are called the \textbf{Euler-Fourier formulas}. The $\sim$
 
 \subsection{Example 1}
 
-Find the Fourier series for $f(x) = \|3x\|$, $-\pi < x < \pi$.
+Find the Fourier series for $f(x) = \abs{3x}$, $-\pi < x < \pi$.
 
-Here, $L$ = $pi$. We get lucky here because $\|3x\|$ is even, so all $b_n$ terms are 0 (if it were odd, all $a_n$ terms would be 0). First, we'll find $a_0$ using (8). Since $f(x)$ is even, we simplify and integrate over just the positive half and double the result:
+Here, $L$ = $pi$. We get lucky here because $\abs{3x}$ is even, so all $b_n$ terms are 0 (if it were odd, all $a_n$ terms would be 0). First, we'll find $a_0$ using (8). Since $f(x)$ is even, we simplify and integrate over just the positive half and double the result:
 
-\[ a_0 = \frac{1}{\pi} = \int_{-\pi}^{\pi} |3x| dx = \frac{6}{\pi} \int_{0}^{\pi} x dx = 3 \pi. \]
+\[ a_0 = \frac{1}{\pi} = \int_{-\pi}^{\pi} \abs{3x} dx = \frac{6}{\pi} \int_{0}^{\pi} x dx = 3 \pi. \]
 
 Now, we find $a_n$ using (8), again taking advantage of our integrand being even, and then using integration by parts:
 
-\[ a_n = \frac{1}{\pi} \int_{-\pi}^{\pi} |3x|\cos{(nx)}dx = \frac{6}{\pi} \int_{0}^{\pi} x \cos{nx} dx = \frac{6}{\pi n^2}((-1)^n - 1). \]
+\[ a_n = \frac{1}{\pi} \int_{-\pi}^{\pi} \abs{3x}\cos{(nx)}dx = \frac{6}{\pi} \int_{0}^{\pi} x \cos{nx} dx = \frac{6}{\pi n^2}((-1)^n - 1). \]
 
 Now, using (9) we can write our Fourier series:
 
-\[ |3x| \sim \frac{3\pi}{2} + \sum_{n=1}^{\infty} \left ( \frac{6}{\pi n^2} \left ( (-1)^n - 1 \right ) \cos{(nx)}  \right ) \]
+\[ \abs{3x} \sim \frac{3\pi}{2} + \sum_{n=1}^{\infty} \parens{\frac{6}{\pi n^2} \parens{(-1)^n - 1} \cos{(nx)}} \]
 
 The first few terms are:
 
-\[ |3x| \sim \frac{3 \pi}{2} - \frac{12}{\pi}\cos{x} - \frac{12}{9 \pi}\cos{3x} - \frac{12}{25\pi}\cos{5x} - \cdots \]
+\[ \abs{3x} \sim \frac{3 \pi}{2} - \frac{12}{\pi}\cos{x} - \frac{12}{9 \pi}\cos{3x} - \frac{12}{25\pi}\cos{5x} - \cdots \]
 
 \subsection{Extensions}
 

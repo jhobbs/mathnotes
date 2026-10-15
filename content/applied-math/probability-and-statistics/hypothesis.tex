@@ -30,7 +30,7 @@ The \textbf{p-value} is the \@{probability} of getting a test statistic ($z$) th
 
 Then, since we want to know the \@{p-value}, we have a two-tailed test because the sample mean could either be lower than or higher than our actual mean. So, we do
 
-\[ \text{p-value} = P(|Z| \geq |z|) = 2 \times P(Z \geq |z|) = 2 \left(1 - \int_{-\infty}^{|z|} \frac{1}{\sqrt{2\pi}} e^{-\frac{t^2}{2}} \, dt \right) \]
+\[ \text{p-value} = P(\abs{Z} \geq \abs{z}) = 2 \times P(Z \geq \abs{z}) = 2 \parens{1 - \int_{-\infty}^{\abs{z}} \frac{1}{\sqrt{2\pi}} e^{-\frac{t^2}{2}} \, dt} \]
 
 or in Mathematica notation:
 

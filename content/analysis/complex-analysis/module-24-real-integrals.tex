@@ -20,9 +20,9 @@ with a rational function $g$ of $\sin{\theta}$ and $\cos{\theta},$ we can do som
 
 We can let $z = e^{i \theta},$ we get
 
-\[ \cos{\theta} = \frac{1}{2}(e^{i \theta} + e^{-i \theta}) = \frac{1}{2} \left ( z + \frac{1}{z} \right ). \]
+\[ \cos{\theta} = \frac{1}{2}(e^{i \theta} + e^{-i \theta}) = \frac{1}{2} \parens{z + \frac{1}{z}}. \]
 
-\[ \sin{\theta} = \frac{1}{2i}(e^{i \theta} - e^{-i \theta}) = \frac{1}{2i} \left ( z - \frac{1}{z} \right ). \]
+\[ \sin{\theta} = \frac{1}{2i}(e^{i \theta} - e^{-i \theta}) = \frac{1}{2i} \parens{z - \frac{1}{z}}. \]
 
 Additionally,
 
@@ -30,7 +30,7 @@ Additionally,
 
 and because our integral ranges from $0$ to $2 \pi,$ the variable $z = e^{i \theta}$ ranges counterclockwise once around the unit circle, so our integral becomes
 
-\[ J = \oint_{|z|} f(z) \frac{dz}{iz}. \]
+\[ J = \oint_{\abs{z}} f(z) \frac{dz}{iz}. \]
 
 We then can proceed with a normal contour integral, using \@{residue} methods to deal with any \@{singularities} enclosed by the contour.
 
@@ -103,7 +103,7 @@ Then, (a) means, by definition
 
 However, it may be the case that neither limit exists when both $\epsilon$ and $\eta$ approach $0$ independently, but that the limit
 
-\[ \lim_{\epsilon \to 0} \left [ \int_A^{a - \epsilon} f(x) dx +  \int_{a + \epsilon}^{B} f(x) dx \right ] \]
+\[ \lim_{\epsilon \to 0} \brackets{\int_A^{a - \epsilon} f(x) dx +  \int_{a + \epsilon}^{B} f(x) dx} \]
 
 does exist.
 
@@ -136,6 +136,6 @@ For example, given the situation illustrated below:
 
 we have
 
-\[ \text{pr. v. } \int_{- \infty}^{\infty} f(x) dx = 2 \pi i \left ( \Res_{z \to z_1}f(z) + \Res_{z \to z_2}f(z) \right )  + \pi i \left (  \Res_{z \to a_1}f(z) + \Res_{z \to a_2}f(z) + \Res_{z \to a_3}f(z) \right ). \]
+\[ \text{pr. v. } \int_{- \infty}^{\infty} f(x) dx = 2 \pi i \parens{\Res_{z \to z_1}f(z) + \Res_{z \to z_2}f(z)}  + \pi i \parens{\Res_{z \to a_1}f(z) + \Res_{z \to a_2}f(z) + \Res_{z \to a_3}f(z)}. \]
 
 \end{document}

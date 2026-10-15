@@ -10,28 +10,82 @@
 
 \subsection{Definition of Projection}
 
-Take two \@{vectors} in $R^n$, $\vec{u}$ and $\vec{v}$.
 
-The \textbf{projection} of $\vec{u}$ onto $\vec{v}$ is the \@{vector} paralell to $\vec{v}$ that's \@{magnitude} is component of $\vec{u}$ in the \@{direction} of $\vec{v}$.
+\begin{definition}[projection]\synonyms{vector projection", "orthogonal projection"}
+	Take two \@{vectors} in $R^n$, $\vec{u}$ and $\vec{v}$, with $\vec{v} \neq \vec{0}$.
 
+	The \term[scalar component]{scalar projection} of $\vec{u}$ onto $\vec{b}$ is a scalar equal to $a_1 = \norm{\vec{a}} \cos{\theta},$ where $\theta$ is the \@{angle} between $\vec{a}$ and $\vec{b}.$ It is denoted as follows, with an equivalent formula:
+
+	\[ \comp_{\vec{v}} \vec{u} =  \norm{\proj_{\vec{v}} \vec{u}} = \frac{\inner{\vec{u}}{\vec{v}}}{\norm{\vec{v}}} \]
+
+
+	The \textbf{projection} of $\vec{u}$ onto $\vec{v}$ is the vector whose \@{magnitude} is the \@{scalar projection} of $\vec{u}$ onto $\vec{v}$ with the same \@{direction} as $\vec{v}$:
+
+	\[ \proj_{\vec{v}} \vec{u} = \frac{\inner{\vec{u}}{\vec{v}}}{\norm{\vec{v}}^2} \vec{v} = (\norm{\vec{a}}\cos{\theta})\vec{\hat{b}}. \]
+
+	The \term[vector rejection]{rejection} of $\vec{u}$ from $\vec{v}$ is the component of $\vec{u}$ that is \@{orthogonal} to $\vec{v}$ and is given as
+
+        \[ \oproj_\vec{v} \vec{u} = \vec{u} -  \proj_{\vec{v}} \vec{u}. \]
+\end{definition}
+
+\begin{intuition}
 One way to visualize this is to shine a flashlight from a direction \@{perpendicular} to $\vec{v}$, with $\vec{u}$ between the flashlight and $\vec{v}$ (pretend the vectors are opaque). The shadow the flashlight casts onto $\vec{v}$ will be the projection of $\vec{u}$ onto $\vec{v}$.
+\end{intuition}
 
-The notation and formula for projection of $\vec{u}$ onto $\vec{v}$ is:
+\begin{theorem}[Orthogonal Decomposition]
+	For $\vec{a}, \vec{b} \in \reals^n$, with $\vec{b} \neq \vec{0},$ 
 
-\[ \proj_{\vec{v}} \vec{u} = \frac{\vec{u} \cdot \vec{v}}{\lVert \vec{v} \rVert^2} \vec{v} \]
+	\[ \vec{a} = \proj_{b} a + \oproj_{b} a. \]
+\end{theorem}
 
-\subsection{Component}
 
-The \@{length} of the projection of $\vec{u}$ in the direction of $\vec{v}$ is called the \textbf{component} of $\vec{u}$ in the direction of $\vec{v}$ and is written as:
+\begin{theorem}[Pythagorean Theorem]
+	For \@{orthogonal} \@{vectors} $\vec{a}, \vec{b} \in \reals^n,$
 
-\[ \comp_v u =  \lVert \proj_{\vec{v}} \vec{u} \rVert = \frac{\vec{u} \cdot \vec{v}}{\lVert \vec{v} \rVert} \]
+	\[ \norm{\vec{a}}^2 + \norm{\vec{b}}^2 = \norm{\vec{a} + \vec{b}}^2. \]
+\end{theorem}
+\begin{proof}
+	By definition of the \@{euclidean norm},
+	\begin{align*}
+	\norm{\vec{a} + \vec{b}}^2 & = \inner{\vec{a} + \vec{b}}{\vec{a} + \vec{b}} \\
+	                          & = \norm{\vec{a}}^2 + 2 \inner{\vec{a}}{\vec{b}} + \norm{\vec{b}}^2.
+	\intertext{Because $\vec{a}$ and $\vec{b}$ are \@{orthogonal}, their \@{euclidean inner product} is $\vec{0},$ and we have}
+	\norm{\vec{a} + \vec{b}}^2 & = \norm{\vec{a}}^2 + \norm{\vec{b}}^2.
+	\end{align*}
 
-\subsection{Orthogonal}
+\end{proof}
 
-The \@{orthogonal} projection of $\vec{u}$ onto $\vec{v}$ is given as:
+\begin{theorem}[Cauchy-Schwarz Inequality]
+For any \@{vectors} $\vec{x},\vec{y} \in \reals^n,$
 
-\[ \orth_\vec{v} \vec{u} = \vec{u} -  \proj_{\vec{v}} \vec{u} \]
+	\[ \abs{\inner{\vec{x}}{\vec{y}}} \leq \norm{\vec{x}} \norm{\vec{y}}, \]
 
-This is the component of $\vec{u}$ that is orthogonal to $\vec{v}$.
+	where $\inner{\vec{x}}{\vec{y}}$ denotes the \@{euclidean inner product} and $\norm{\vec{x}} = \sqrt{ \inner{\vec{x}}{\vec{x}} }$ is the \@{euclidean norm}.
+\end{theorem}
+\begin{proof}
+From \@{orthogonal decomposition} we have
+	\begin{align*}
+		\vec{a} & = \proj_{b} a + \oproj_{b} a.
+		\shortintertext{Taking the \@{euclidean norm} squared of both sides gives }
+		\norm{\vec{a}}^2 & = \norm{\proj_{b} a + \oproj_{b} a}^2 \\
+		              & = \norm{\proj_{b} a}^2 + 2 \inner{\proj_{b} a}{\oproj_{b} a} + \norm{\oproj_{b} a}^2 \\
+		              & = \norm{\proj_{b} a}^2 + \norm{\oproj_{b} a}^2, \\
+		\shortintertext{with the middle term dropping out due to orthogonality. Now, because $\norm{\oproj_{b} a}^2 \geq 0$,}
+		\norm{\vec{a}}^2 & \geq \norm{\proj_{b} a}^2. \\
+		\shortintertext{Now we'll flip sides and expand \@{projection} according to its definition}
+		 \norm{\proj_{b} a}^2 & \leq \norm{\vec{a}}^2  \\
+		 \norm{\frac{ \inner{\vec{a}}{\vec{b}} }{\norm{\vec{b}}^2} \vec{b}}^2 & \leq \\
+		 \parens{\frac{ \inner{\vec{a}}{\vec{b}} }{\norm{\vec{b}}^2}}^2 \norm{\vec{b}}^2 & \leq \\
+		 \frac{ \inner{\vec{a}}{\vec{b}}^2 }{\norm{\vec{b}}^2} & \leq \norm{\vec{a}}^2 \\
+		 \inner{\vec{a}}{\vec{b}}^2 & \leq \norm{\vec{a}}^2 \norm{\vec{b}}^2. \\
+		 \shortintertext{Taking the square root of both sides we get what we want to show:}
+		 \sqrt{\inner{\vec{a}}{\vec{b}}^2} & \leq \sqrt{\norm{\vec{a}}^2 \norm{\vec{b}}^2} \\
+		 \inner{\vec{a}}{\vec{b}} & \leq \norm{\vec{a}} \norm{\vec{b}}.
+	\end{align*}
+\end{proof}
+\begin{intuition}
+	This is saying that the length of the \@{projection} of $\vec{a}$ onto $\vec{b}$ cannot exceed the length of $\vec{a}.$
+\end{intuition}
+
 
 \end{document}

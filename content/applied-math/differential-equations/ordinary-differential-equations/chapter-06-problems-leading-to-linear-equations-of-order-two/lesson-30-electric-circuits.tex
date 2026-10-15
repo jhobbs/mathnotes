@@ -44,9 +44,9 @@ If we assume $E(t) = F \sin{(\omega t + \beta)}$ then $(30.15)$ becomes:
 
 Its solution is:
 
-\[ \tag{30.21} i(t) = Ae^{-(R/2L)t} \sin{\left (\frac{\sqrt{4CL - R^2 C^2}}{2CL}t + \delta \right)} + \frac{F \omega C}{\sqrt{(R \omega C)^2 + (1 - CL \omega^2)^2}}\sin{(\omega t + \beta + \alpha)} \]
+\[ \tag{30.21} i(t) = Ae^{-(R/2L)t} \sin{\parens{\frac{\sqrt{4CL - R^2 C^2}}{2CL}t + \delta}} + \frac{F \omega C}{\sqrt{(R \omega C)^2 + (1 - CL \omega^2)^2}}\sin{(\omega t + \beta + \alpha)} \]
 
-where $\alpha = \sin^{-1}{\left ( \frac{1 - CL\omega^2}{R \omega C} \right )}$
+where $\alpha = \sin^{-1}{\parens{\frac{1 - CL\omega^2}{R \omega C}}}$
 
 The first term on the right hand side is the transient current, and the second term is the steady-state current. You can see that the transient current will decay to $0$, and that the steady-state current has the same frequency as the input current but not necessarily the same amplitude and phase.
 
@@ -56,11 +56,11 @@ from $(30.17b)$ we see that the natural frequency of the system is $\frac{1}{\sq
 
 Note that solving the homogenous version of $(30.15)$ gives the transient current of the system and finding a particular solution gives the steady-state current of the system (see book for solution). The amplitude of the the steady-state will be:
 
-\[ \tag{30.22} A = \frac{F}{\sqrt{R^2 + \left ( \frac{1}{\omega C} - L \omega \right )^2}} \]
+\[ \tag{30.22} A = \frac{F}{\sqrt{R^2 + \parens{\frac{1}{\omega C} - L \omega}^2}} \]
 
 The denominator is called the \textbf{impedance} of the system and is denoted as $Z$:
 
-\[ \tag{30.23} Z = \sqrt{R^2 + \left ( \frac{1}{\omega C} - L \omega \right )^2} \]
+\[ \tag{30.23} Z = \sqrt{R^2 + \parens{\frac{1}{\omega C} - L \omega}^2} \]
 
 Taking the derivative of $Z$ with respect to $\omega$ and finding its positive zero gives the value that minimizes impedance, $\omega = \sqrt{1/CL}$. When impedance is minimized, the driving $E(t)$ electromotive force is said to be in \textbf{resonance} with the system and the amplitude of the steady-state current will reach its maximum $A = \frac{F}{R}$.
 

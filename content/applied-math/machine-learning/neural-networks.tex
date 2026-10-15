@@ -14,7 +14,7 @@ Each of our pixels are represented by a value from 0 to 255 representing the int
 
 At the most basic level, we want to make a function
 
-\[ F_{\beta} : M(\mathbb{Z}_{255})_{24,24} \to \mathbb{Z}_{10} \]
+\[ F_{\beta} : M(\integers_{255})_{24,24} \to \integers_{10} \]
 
 i.e. $F_{\beta}$ takes in a $24 \times 24$ matrix of \@{integers} between $0$ and $255$ and outputs an integer between $0$ and $9,$ the predicted digit represented by the image.
 
@@ -57,7 +57,7 @@ A layer with $n_{\ell - 1}$ inputs and $n_{\ell}$ \@{neurons} defines a \@{funct
 
 of the form
 
-\[ F_{\ell}(\vec{x}) = \phi_{\ell} \left ( W_{\ell} \vec{x} + \vec{b}_{\ell} \right ), \]
+\[ F_{\ell}(\vec{x}) = \phi_{\ell} \parens{W_{\ell} \vec{x} + \vec{b}_{\ell}}, \]
 
 where:
 

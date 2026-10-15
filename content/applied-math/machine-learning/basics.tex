@@ -39,7 +39,7 @@ We can think of the task of \@{binary-classification} as the operation of a \@{f
 
 \[ f : \reals^n \to {0,1}, \]
 
-where the domain is a \@{vector} $\vec{x} = \{x_1, x_2, \dots, x_n\}$ of \@{real-numbers} representing \@{features} of an object, and ${0,1}$ represents whether or not that object belongs to the \@{target-class}. This assume we've turned \@{categorical} data into numerical features, while we can use numerical features as is, or that we've produced new features from our data.
+where the domain is a \@{vector} $\vec{x} = \set{x_1, x_2, \dots, x_n}$ of \@{real-numbers} representing \@{features} of an object, and ${0,1}$ represents whether or not that object belongs to the \@{target-class}. This assume we've turned \@{categorical} data into numerical features, while we can use numerical features as is, or that we've produced new features from our data.
 
 Now, each object in our training dataset can be thought of as being composed of an $\vec{x}$ component and a $y$ component. In \@{binary-classification}, the $y$ component is just a boolean value - $0$ or $1$. The training set then looks like a \@{sequence} of \@{feature} vectors and \@{labels}
 
@@ -52,7 +52,7 @@ If we think of $f_\theta(x)$ as a parameterized function, $\theta$ represents th
 \begin{definition}[Model Training]\synonyms{learning}
 Then, the job of machine learning in \@{binary-classification} is to produce a good function $f.$ This is called \textbf{model training} or \textbf{learning.} More formally, if $f_\theta(x) : \reals^n \to {0,1}$ is a parameterized function, model training is the task of minimizing loss, that is, we want to find the set of parameters $\theta$ that minimizes
 
-\[ \sum_{i=1}^m L \left ( f_\theta(x^{(i)}), y^{(i)} \right ) \]
+\[ \sum_{i=1}^m L \parens{f_\theta(x^{(i)}), y^{(i)}} \]
 
 where $L$ is a loss function, for example, \@{cross-entropy} loss.
 \end{definition}
@@ -72,8 +72,8 @@ Symbol & Meaning & Common names \\
 \hline
 $y^{(i)}$ & True value for object $i$ & label, target, ground truth \\
 $\hat{y}^{(i)}$ & Model's output & prediction, estimated label, classification \\
-$\{y^{(i)}\}_{i=1}^m$ & All true values & label vector, target vector \\
-$\{\hat{y}^{(i)}\}_{i=1}^m$ & All predicted values & predicted label vector, sequence of classifications \\
+$\set{y^{(i)}}_{i=1}^m$ & All true values & label vector, target vector \\
+$\set{\hat{y}^{(i)}}_{i=1}^m$ & All predicted values & predicted label vector, sequence of classifications \\
 \end{tabular}
 
 \begin{definition}[Model pipeline]\synonyms{"classifier pipeline"}
@@ -99,7 +99,7 @@ The "perfect" loss evaluation for a binary classifier is its \@{Hamming-Loss}, w
 \begin{definition}[Hamming Distance]
 Given a string of $m$ symbols, the Hamming Loss is the number of positions for which the symbols differ. For binary strings, this is
 
-\[ d_H{(\hat{y}, y)} = \sum_{i=1}^{m} \big|\, \hat{y}^{(i)} - y^{(i)} \,\big|. \]
+\[ d_H{(\hat{y}, y)} = \sum_{i=1}^{m} \abs{\hat{y}^{(i)} - y^{(i)}}. \]
 \end{definition}
 
 \begin{definition}[Hamming Loss]

@@ -112,7 +112,7 @@ We can think of these states being the \@{nodes} of a \@{directed-graph} with th
 \begin{theorem}
 Let $b_{ij}^{(s)}$ be the duration of the $s$-th symbol which is allowable in state $i$ and leads to state $j.$ Then the \@{channel-capacity} $C$ is equal to $\log{W}$ where $W$ is the largest real root of the \@{determinantal-equation}
 
-\[ \left | \sum_{s} W^{-b_{ij}^{(s)}} - \delta_{ij}  \right | = 0, \]
+\[ \abs{\sum_{s} W^{-b_{ij}^{(s)}} - \delta_{ij}} = 0, \]
 
 where $\delta_{ij}$ is the \@{Kronecker-delta}.
 \end{theorem}
@@ -180,7 +180,7 @@ We can choose different bases for the logarithm; throughout these notes a bare $
 
 An alternative, equivalent definition is that \textbf{entropy} is the \@{expected-value} of the \@{self-information} of a \@{random-variable}:
 
-\[ H(X) = \mathbb{E}\left[I(X) \right ] =  \mathbb{E} \left [ -\log p(X) \right ]. \]
+\[ H(X) = \E\brackets{I(X)} =  \E \brackets{-\log p(X)}. \]
 
 The unit for entropy is bits per symbol.
 \end{definition}
@@ -216,7 +216,7 @@ and dividing by $n \log{s}$ gives
 
 and because $n$ is arbitrarily large, 
 
-\[ \left | \frac{m}{n} - \frac{\log{t}}{\log{s}} \right | < \epsilon, \]
+\[ \abs{\frac{m}{n} - \frac{\log{t}}{\log{s}}} < \epsilon, \]
 
 where $\epsilon$ is arbitrarily small.
 
@@ -229,13 +229,13 @@ mA(s) & \leq nA(t) \leq (m+1)A(s).
 
 Then, dividing by $nA(s)$ gives
 
-\[ \frac{m}{n} \leq \frac{A(t)}{A(s)} \leq \frac{m}{n} + \frac{1}{n} \text{ or } \left | \frac{m}{n} - \frac{A(t)}{A(s)} \right | < \epsilon, \]
+\[ \frac{m}{n} \leq \frac{A(t)}{A(s)} \leq \frac{m}{n} + \frac{1}{n} \text{ or } \abs{\frac{m}{n} - \frac{A(t)}{A(s)}} < \epsilon, \]
 
 Now, by the \@{triangle-inequality}, we have that
 
 \bal
-\left | \frac{A(t)}{A(s)} - \frac{\log{t}}{\log{s}} \right | & \leq 2 \epsilon \\
-\left | A(t) - \frac{A(s)}{\log{s}} \log{t} \right | & \leq 2 \epsilon A(s).
+\abs{\frac{A(t)}{A(s)} - \frac{\log{t}}{\log{s}}} & \leq 2 \epsilon \\
+\abs{A(t) - \frac{A(s)}{\log{s}} \log{t}} & \leq 2 \epsilon A(s).
 \eal
 
 Since $\epsilon$ can be arbitrarily small, we have that $A(t) = K \log(t),$ with $K > 0$ so that property (2) holds. Now we know what $A(n)$ is, and thus what $H$ is when we have equal probabilities for all events.
@@ -251,10 +251,10 @@ K \log{\sum n_i} & = H(p_1, \dots, p_n) + \sum p_i A(n_i) \\
 Then,
 \bal
 H(p_1, \dots, p_n) & = K \log{\sum n_i} - K \sum p_i \log{n_i}  \\
-                   & = K \left [ \log{\sum n_i} - \sum p_i \log{n_i}  \right ] \\
-                   & = K \left [ \sum p_i \left ( \log{\sum n_i} \right ) - \sum p_i \left ( \log{n_i} \right )  \right ] \quad \text{ because } \sum p_i = 1  \\
-                   & = K \left [ \sum p_i \left ( \log{\sum n_i} -  \log{n_i} \right )  \right ]  \\
-                   & = K \left [ \sum p_i \left ( - \log{\frac{n_i}{\sum n_i}} \right )  \right ]  \\
+                   & = K \brackets{\log{\sum n_i} - \sum p_i \log{n_i}} \\
+                   & = K \brackets{\sum p_i \parens{\log{\sum n_i}} - \sum p_i \parens{\log{n_i}}} \quad \text{ because } \sum p_i = 1  \\
+                   & = K \brackets{\sum p_i \parens{\log{\sum n_i} -  \log{n_i}}}  \\
+                   & = K \brackets{\sum p_i \parens{- \log{\frac{n_i}{\sum n_i}}}}  \\
                    & = - K  \sum p_i \log{p_i }.  \\
 \eal
 
@@ -285,7 +285,7 @@ Examples to cover: [https://claude.ai/chat/0702d3b2-a181-4b5b-a572-e5464d9d24d5]
 
 \subsection{Example: Coin Flip}
 
-For a fair coin flip, $\mathcal{X} = \{h, t\}$ and $p(h) = p(t) = 0.5.$ Then, $I(h) = I(t) = - \log{(0.5)} = 1 \text{ bit},$ and
+For a fair coin flip, $\mathcal{X} = \set{h, t}$ and $p(h) = p(t) = 0.5.$ Then, $I(h) = I(t) = - \log{(0.5)} = 1 \text{ bit},$ and
 
 \[ H(X) = p(h) \cdot I(h) + p(t) \cdot I(t) = 0.5 \cdot 1 + 0.5 \cdot 1 = 1 \text{ bit}. \]
 
@@ -299,11 +299,11 @@ and for \@{entropy} of $X$ we get
 
 \subsection{Example: Six-Sided Die}
 
-For a fair six-sided die, $\mathcal{X} = \{1,2,3,4,5,6\}$ and $p(x) = 1/6$ for all $x.$ Then, $I(x) = - \log{(1/6)} = \log(6) \approx 2.58 \text{ bits},$ and
+For a fair six-sided die, $\mathcal{X} = \set{1,2,3,4,5,6}$ and $p(x) = 1/6$ for all $x.$ Then, $I(x) = - \log{(1/6)} = \log(6) \approx 2.58 \text{ bits},$ and
 
 \[ H(X) = 6 \cdot \frac{1}{6} \cdot I(x) = I(x) \approx 2.58 \text{ bits}. \]
 
-Let's say we have an unfair die and $p(1) = 0.5$ and $p(x) = 0.1$ for $x \in \{2,3,4,5,6\}.$ Then
+Let's say we have an unfair die and $p(1) = 0.5$ and $p(x) = 0.1$ for $x \in \set{2,3,4,5,6}.$ Then
 
 \[ I(1) = - \log{(0.5)} = 1 \text{ bit}, \quad I(x) = - \log{(0.1)} \approx 3.32 \text{ bits for } x \neq 1, \]
 
@@ -357,7 +357,7 @@ Suppose $H(p_1, \dots, p_n) = 0.$ Then, $0 = - \sum_{i=1}^n p_i \log{p_i}.$ Note
 
 which can also be expressed as
 
-	\[ H(X,Y) = - \mathbb{E} \left [ \log{p(X,Y)} \right ]. \]
+	\[ H(X,Y) = - \E \brackets{\log{p(X,Y)}}. \]
 
 \end{definition}
 
@@ -382,8 +382,8 @@ Now, summing across $X$ gives:
 
 \bal
 H(Y|X) & = \sum_{x} p(x) H(Y | X = x) \\
-       & = \sum_{x} p(x) \left [  -\sum_{y} p(y|x) \log{p(y|x)}  \right ]  \\
-       & = - \sum_{x} \sum_{y}\left [ p(x)  p(y|x) \log{p(y|x)}  \right ]  \\
+       & = \sum_{x} p(x) \brackets{-\sum_{y} p(y|x) \log{p(y|x)}}  \\
+       & = - \sum_{x} \sum_{y}\brackets{p(x)  p(y|x) \log{p(y|x)}}  \\
        & = - \sum_{x, y} p(x,y) \log{p(y|x)}. \\
 \eal
 \end{note}
@@ -405,7 +405,7 @@ H(Y | X) & = - \sum_{x, y} p(x,y) \log{\frac{p(x,y)}{p(x)}} \\
 The first term on the RHS is just $- \sum_{x, y} p(x,y) \log{p(x,y)} = H(X,Y).$ The second is
 
 \bal
-\sum_{x, y} p(x,y) \log{p(x)} & = \sum_{x} \left [ \sum_{y} p(x,y) \right ] \log{p(x)}  \\
+\sum_{x, y} p(x,y) \log{p(x)} & = \sum_{x} \brackets{\sum_{y} p(x,y)} \log{p(x)}  \\
                               & = \sum_{x} p(x) \log{p(x)}  \\
                               & = -H(X).
 \eal
@@ -423,7 +423,7 @@ Altogether, we have that $H(Y | X) = H(X,Y) - H(X),$ or
 \begin{proof}
 \bal
 	H(X, Y|Z) & = \sum_{z \in \mathcal{Z}} p(z) H(X,Y | Z = z) \\
-	          & = \sum_{z \in \mathcal{Z}} p(z) \left ( H(X | Z = z ) + H(Y|X,Z=z) \right ) \\
+	          & = \sum_{z \in \mathcal{Z}} p(z) \parens{H(X | Z = z ) + H(Y|X,Z=z)} \\
 	          & = \sum_{z \in \mathcal{Z}} p(z)  H(X | Z = z ) + \sum_{z \in \mathcal{Z}} p(z) H(Y|X,Z=z) \\
 		  & = H(X | Z) + H(Y | X, Z).
 \eal
@@ -438,9 +438,9 @@ Given two discrete probability distributions, $p$ and $q,$ that share a support 
 
 We can write it in \@{expectation} form as
 
-\[ H(p,q) = \mathbb{E}_p \left [- \log{q}  \right ], \]
+\[ H(p,q) = \E_p \brackets{- \log{q}}, \]
 
-where $\mathbb{E}_p$ is expectation under $p.$
+where $\E_p$ is expectation under $p.$
 \end{definition}
 
 Note that when $p = q,$ \@{cross-entropy} equals \@{entropy}. The symbol $H$ is overloaded: $H(p,q)$ with distributions as arguments means \@{cross-entropy}, while $H(X,Y)$ with \@{random-variables} as arguments means joint entropy.
@@ -452,13 +452,13 @@ Note that when $p = q,$ \@{cross-entropy} equals \@{entropy}. The symbol $H$ is 
 
 which is just \@{cross-entropy} minus \@{entropy}:
 
-\[ D(p \| q) = H(p,q) - H(p). \]
+\[ \D{p}{q} = H(p,q) - H(p). \]
 
 Note that we don't always use the $KL$ subscript where it's obvious from the context.
 
 We can also write it as
 
-\[ D(p \| q) = \mathbb{E}_p \left [ - \log{q} \right ] - \mathbb{E}_p \left [ - \log{p} \right ]  =  \mathbb{E}_p \left [ \log{\frac{p}{q}}  \right ], \]
+\[ \D{p}{q} = \E_p \brackets{- \log{q}} - \E_p \brackets{- \log{p}}  =  \E_p \brackets{\log{\frac{p}{q}}}, \]
 
 which makes it clear that it's the expected inefficiency in an encoding optimized for $q$ rather than $p.$
 \end{definition}
@@ -474,8 +474,8 @@ Another way to think about it is as a measure of how inefficient a coding scheme
 
 \bal
 	I(X; Y) & = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x,y) \log{\frac{p(x,y)}{p(x)p(y)}} \\
-	        & = D(p(x,y) \| p(x)p(y)) \\
-		& = \mathbb{E}_{p(x,y)} \log{\frac{p(X,Y)}{p(X)p(Y)}}.
+	        & = \D{p(x,y)}{p(x)p(y)} \\
+		& = \E_{p(x,y)} \log{\frac{p(X,Y)}{p(X)p(Y)}}.
 \eal
 
 \end{definition}
@@ -594,29 +594,29 @@ Then, from \@{chain-rule-for-entropy} and \@{chain-rule-for-conditional-joint-en
 \begin{definition}[Conditional Relative Entropy]
 	For \@{joint probability mass functions} $p(x,y)$ and $q(x,y),$ the \textbf{conditional relative entropy}
 
-	\[ D(p(y|x) \| q(y|x)) \]
+	\[ \D{p(y|x)}{q(y|x)} \]
 
 	is the \@{average} of the \@{relative-entropies} between the \@{conditional probability mass functions} $p(y|x)$ and $q(y|x)$ averaged over the \@{probability mass function} $p(x).$ More formally,
 
 \bal
-	D(p(y|x) \| q(y|x)) & = \sum_{x \in \mathcal{X}} p(x) \sum_{y \in \mathcal{Y}} p(y|x) \log{\frac{p(y|x)}{q(y|x)}} \\
+	\D{p(y|x)}{q(y|x)} & = \sum_{x \in \mathcal{X}} p(x) \sum_{y \in \mathcal{Y}} p(y|x) \log{\frac{p(y|x)}{q(y|x)}} \\
 	                    & = E_{p(x,y)} \log{\frac{p(Y|X)}{q(Y|X)}}.
 \eal
 
 \end{definition}
 
 \begin{theorem}[Chain Rule for Relative Entropy]
-	\[  D(p(x,y) \| q(x, y)) =  D(p(x) \| q(x)) + D(p(y|x) \| q(y|x)). \]
+	\[  \D{p(x,y)}{q(x, y)} =  \D{p(x)}{q(x)} + \D{p(y|x)}{q(y|x)}. \]
 \end{theorem}
 \begin{proof}
 	Using \@{relative-entropy}, \@{joint-is-marginal-times-conditional}, \@{product-rule-for-logarithms}, and \@{conditional-relative-entropy}:
 
 \bal
-	D(p(x,y) \| q(x, y)) & = \sum_{x} \sum_{y} p(x,y) \log{\frac{p(x,y)}{q(x,y)}} & & \text{defn. of relative entropy} \\
+	\D{p(x,y)}{q(x, y)} & = \sum_{x} \sum_{y} p(x,y) \log{\frac{p(x,y)}{q(x,y)}} & & \text{defn. of relative entropy} \\
 	                     & = \sum_{x} \sum_{y} p(x,y) \log{\frac{p(x)p(y|x)}{q(x) q(y|x)}} & & \text{multiplication rule} \\
 	                     & \text{by the product rule for logarithms:} \\
 	                     & = \sum_{x} \sum_{y} p(x,y) \log{\frac{p(x)}{q(x)}} + \sum_{x} \sum_{y} p(x,y) \log{\frac{p(y|x)}{q(y|x)}} \\
-	                     & = D(p(x) \| q(x)) + D(p(y|x) \| q(y|x)) & & \text{defns. of relative and conditional relative entropy}
+	                     & = \D{p(x)}{q(x)} + \D{p(y|x)}{q(y|x)} & & \text{defns. of relative and conditional relative entropy}
 \eal
 \end{proof}
 
@@ -625,7 +625,7 @@ Then, from \@{chain-rule-for-entropy} and \@{chain-rule-for-conditional-joint-en
 \begin{theorem}[Gibbs' Inequality]\label{gibbs-inequality}
 For discrete probability distributions $p$ and $q$ that share a support $\mathcal{X},$
 
-\[ D(p \| q) \geq 0, \]
+\[ \D{p}{q} \geq 0, \]
 
 with equality iff $p = q.$ Equivalently, \@{cross-entropy} is never less than \@{entropy}: $H(p,q) \geq H(p),$ with equality iff $q = p.$
 \end{theorem}
@@ -634,16 +634,16 @@ with equality iff $p = q.$ Equivalently, \@{cross-entropy} is never less than \@
 Because \@{log-is-concave}, by \@{jensens-inequality} we have that
 
 \bal
-\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] & \leq \log{ \left ( \mathbb{E}_p \left [ \frac{q_i}{p_i} \right ] \right ) }  \\
-                                                     & = \log{ \left ( \sum_i \left [ p_i \frac{q_i}{p_i} \right ] \right ) }  \\
-                                                     & = \log{ \left ( \sum_i q_i \right ) }  \\
+\E_p \brackets{\log{\frac{q_i}{p_i}}} & \leq \log{ \parens{\E_p \brackets{\frac{q_i}{p_i}}} }  \\
+                                                     & = \log{ \parens{\sum_i \brackets{p_i \frac{q_i}{p_i}}} }  \\
+                                                     & = \log{ \parens{\sum_i q_i} }  \\
                                                      & = \log{ 1 }  \\
                                                      & = 0.  \\
 \eal
 
-Then, since $\mathbb{E}_p \left [ \log{\frac{q_i}{p_i}}  \right ] = -D(p \| q),$ we have that $D(p \| q) \geq 0.$
+Then, since $\E_p \brackets{\log{\frac{q_i}{p_i}}} = -\D{p}{q},$ we have that $\D{p}{q} \geq 0.$
 
-Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p \| q) = 0.$ Conversely, suppose $D(p \| q) = 0.$ Since $\log$ is strictly \@{concave}, it is not \@{affine}, and \@{jensens-inequality} condition for equality gives us that $\frac{q_i}{p_i} = c.$ Now, $\sum_i q_i = \sum_i c p_i = 1,$ and since $p$ is a probability distribution, $c = 1,$ and therefore $p_i = q_i$ and $p = q.$
+Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $\D{p}{q} = 0.$ Conversely, suppose $\D{p}{q} = 0.$ Since $\log$ is strictly \@{concave}, it is not \@{affine}, and \@{jensens-inequality} condition for equality gives us that $\frac{q_i}{p_i} = c.$ Now, $\sum_i q_i = \sum_i c p_i = 1,$ and since $p$ is a probability distribution, $c = 1,$ and therefore $p_i = q_i$ and $p = q.$
 \end{proof}
 
 \begin{corollary}[Nonnegativity of Mutual Information]
@@ -654,7 +654,7 @@ Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p \| q) = 0.$ Conversely
 	\begin{proof}
 		Using the definition of \@{mutual information} and \@{gibbs-inequality}, we have
 \bal
-	I(X; Y) & = D(p(x,y) \| p(x)p(y)) \geq 0,
+	I(X; Y) & = \D{p(x,y)}{p(x)p(y)} \geq 0,
 \eal
 		with equality if and only if $p(x,y) = p(x)p(y),$ i.e. $X$ and $Y$ are \@{independent}.
 
@@ -663,7 +663,7 @@ Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p \| q) = 0.$ Conversely
 \end{corollary}
 
 \begin{corollary}[Nonnegativity of Conditional Relative Entropy]
-	\[ D(p(y|x)  \| q(y|x) \geq 0, \]
+	\[ \D{p(y|x)}{q(y|x)} \geq 0, \]
 
 	with equality if and only if $p(y|x) = q(y|x)$ for all $y$ and $x$ such that $p(x) > 0.$
 
@@ -672,8 +672,8 @@ Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p \| q) = 0.$ Conversely
 	From the definition of \@{conditional relative entropy} we have
 
 	\bal
-	D(p(y|x) \| q(y|x)) & = \sum_{x \in \mathcal{X}} p(x) \sum_{y \in \mathcal{Y}} p(y|x) \log{\frac{p(y|x)}{q(y|x)}} \\
-			    & = \sum_{x \in \mathcal{X}} p(x) D(p(\cdot|x) \| q(\cdot|x)). 
+	\D{p(y|x)}{q(y|x)} & = \sum_{x \in \mathcal{X}} p(x) \sum_{y \in \mathcal{Y}} p(y|x) \log{\frac{p(y|x)}{q(y|x)}} \\
+			    & = \sum_{x \in \mathcal{X}} p(x) \D{p(\cdot|x)}{q(\cdot|x)}. 
 	\eal
 
 	This is just the average of the \@{relative entropy} over distributions over $y$ for each fixed $x.$ For $p(x) > 0,$ each is $0$ if and only if $p(y|x) = q(y|x),$ by \@{gibbs-inequality}, and positive otherwise.
@@ -690,7 +690,7 @@ Now, note that if $p = q,$ $\frac{q_i}{p_i} = 1$ and $D(p \| q) = 0.$ Conversely
 
 	and for each fixed $z,$
 	
-	\[ I(X; Y | Z = z)  = D(p(x,y |z) \| p(x |z)p(y |z)) \geq 0 \].
+	\[ I(X; Y | Z = z)  = \D{p(x,y |z)}{p(x |z)p(y |z)} \geq 0 \].
 	
 	By \@{gibbs-inequality}, the quantity for each fixed $z$ is non-negative, so the sum weighted by the probability of each $z$ is also non-negative.
 
@@ -714,7 +714,7 @@ A \@{random-variable} has the most \@{entropy} when the \@{elements} of its alph
 \begin{proof}
 We will use a \@{Lagrangian} function of \@{entropy} to show this. Let
 
-\[ \mathcal{L}(\vec{p}, \lambda) = - \sum_i \left [ p_i \ln{p_i} \right ] - \lambda \left [ \left ( \sum_i p_i \right ) - 1 \right ]. \]
+\[ \mathcal{L}(\vec{p}, \lambda) = - \sum_i \brackets{p_i \ln{p_i}} - \lambda \brackets{\parens{\sum_i p_i} - 1}. \]
 
 Then, for any $p_i$ we want
 
@@ -759,7 +759,7 @@ The \@{entropy} of the joint event is
 
 \[ H(X,Y) = - \sum_{x,y} p(x,y) \log{p(x,y)}. \]
 
-This is just treating each possible pair of individual outcomes as its own outcome, i.e. we have $|\mathcal{X}| \times |\mathcal{Y}|$ possible outcomes. Writing $p(x) = \sum_{y'} p(x,y')$ and $p(y) = \sum_{x'} p(x',y)$ for the marginals (the argument names the distribution), we have
+This is just treating each possible pair of individual outcomes as its own outcome, i.e. we have $\abs{\mathcal{X}} \times \abs{\mathcal{Y}}$ possible outcomes. Writing $p(x) = \sum_{y'} p(x,y')$ and $p(y) = \sum_{x'} p(x',y)$ for the marginals (the argument names the distribution), we have
 
 \[ H(X) = - \sum_{x,y} p(x,y) \log{\sum_{y'}{p(x,y')}}, \quad H(Y) = - \sum_{x,y} p(x,y) \log{\sum_{x'}{p(x',y)}}. \]
 
@@ -767,30 +767,30 @@ So,
 
 \bal
 H(X) + H(Y) - H(X,Y) & = - \sum_{x,y} p(x,y) \log{\sum_{y'}{p(x,y')}} - \sum_{x,y} p(x,y) \log{\sum_{x'}{p(x',y)}} + \sum_{x,y} p(x,y) \log{p(x,y)} \\
-                    & = \sum_{x,y} p(x, y) \left ( \log{p(x,y)} - \log{\sum_{y'}{p(x,y')}} - \log{\sum_{x'}{p(x',y)}}  \right ) \\
-                    & = \sum_{x,y} p(x, y) \left ( \log{p(x,y)} - \log{p(x)} - \log{p(y)}  \right ) \\
-                    & = \sum_{x,y} p(x, y) \left ( \log{\frac{p(x,y)}{p(x)p(y)}}  \right ) \\
-                    & = - \sum_{x,y} p(x, y) \left ( \log{\frac{p(x)p(y)}{p(x,y)}}  \right ) 
+                    & = \sum_{x,y} p(x, y) \parens{\log{p(x,y)} - \log{\sum_{y'}{p(x,y')}} - \log{\sum_{x'}{p(x',y)}}} \\
+                    & = \sum_{x,y} p(x, y) \parens{\log{p(x,y)} - \log{p(x)} - \log{p(y)}} \\
+                    & = \sum_{x,y} p(x, y) \parens{\log{\frac{p(x,y)}{p(x)p(y)}}} \\
+                    & = - \sum_{x,y} p(x, y) \parens{\log{\frac{p(x)p(y)}{p(x,y)}}} 
 \eal
 
 Now, let's define a new random variable for convenience, $Z = \frac{p(X)p(Y)}{p(X,Y)}.$ We now have that
 
 \bal
-H(X) + H(Y) - H(X,Y) & = - \sum_{x,y} p(x, y) \left ( \log{\frac{p(x)p(y)}{p(x,y)}}  \right ) \\
-                     & = - \sum_{x,y} p(x, y) \left ( \log{Z}  \right ) \\
-                     & = -\mathbb{E}[\log{Z}]. \\
+H(X) + H(Y) - H(X,Y) & = - \sum_{x,y} p(x, y) \parens{\log{\frac{p(x)p(y)}{p(x,y)}}} \\
+                     & = - \sum_{x,y} p(x, y) \parens{\log{Z}} \\
+                     & = -\E[\log{Z}]. \\
 \eal
 
-Now, by \@{jensens-inequality}, because \@{log-is-concave}, we have that $\mathbb{E}[\log{Z}] \leq \log{\mathbb{E}[Z]}.$ Now,
+Now, by \@{jensens-inequality}, because \@{log-is-concave}, we have that $\E[\log{Z}] \leq \log{\E[Z]}.$ Now,
 
 \bal
-\mathbb{E}[Z] & = \sum_{x,y} p(x,y) \cdot \frac{p(x)p(y)}{p(x,y)} \\
+\E[Z] & = \sum_{x,y} p(x,y) \cdot \frac{p(x)p(y)}{p(x,y)} \\
      & = \sum_{x,y}p(x)p(y) \\
      & = \big ( \sum_{x}p(x) \big ) \big ( \sum_{y}p(y) \big )  \\
      & = 1 \cdot 1 \\
      & = 1. \\
 \eal
-Therefore $\log{\mathbb{E}[Z]} = \log{1} = 0,$ and we have that $\mathbb{E}[\log{Z}] \leq 0 \implies -\mathbb{E}[\log{Z}] \geq 0,$ and
+Therefore $\log{\E[Z]} = \log{1} = 0,$ and we have that $\E[\log{Z}] \leq 0 \implies -\E[\log{Z}] \geq 0,$ and
 
 \bal
 H(X) + H(Y) - H(X,Y) & \geq 0 \\
@@ -798,11 +798,11 @@ H(X) + H(Y) - H(X,Y) & \geq 0 \\
 H(X,Y) & \leq H(X) + H(Y). \\
 \eal
 
-Now, for the equality part. Suppose $H(X) + H(Y) = H(X,Y).$ Then, $\mathbb{E}[\log{Z}] = 0,$ and recalling that $\mathbb{E}[Z] = 1,$ $\mathbb{E}[\log{Z}] = \log{\mathbb{E}[Z]} = 0.$ In \@{jensens-inequality}, equality holds only if our function is \@{affine} or if $Z$ is constant; since $\log$ is \@{affine} on no interval, $Z$ must be constant, and since $\mathbb{E}[Z] = 1,$ $Z = \frac{p(x)p(y)}{p(x,y)} = 1 \implies p(x)p(y) = p(x,y).$ 
+Now, for the equality part. Suppose $H(X) + H(Y) = H(X,Y).$ Then, $\E[\log{Z}] = 0,$ and recalling that $\E[Z] = 1,$ $\E[\log{Z}] = \log{\E[Z]} = 0.$ In \@{jensens-inequality}, equality holds only if our function is \@{affine} or if $Z$ is constant; since $\log$ is \@{affine} on no interval, $Z$ must be constant, and since $\E[Z] = 1,$ $Z = \frac{p(x)p(y)}{p(x,y)} = 1 \implies p(x)p(y) = p(x,y).$ 
 
 Now, suppose $p(x)p(y) = p(x,y).$ Then $Z = 1$ and
 
-\[ H(X) + H(Y) - H(X,Y) = - \sum_{x,y} p(x, y) \left ( \log{1}  \right ) = 0, \]
+\[ H(X) + H(Y) - H(X,Y) = - \sum_{x,y} p(x, y) \parens{\log{1}} = 0, \]
 
 so $H(X) + H(Y) = H(X,Y).$
 \end{proof}
@@ -819,18 +819,18 @@ Note that $q_i = \sum_{j} A_{ij} p_j,$ by the definition of vector matrix multip
 Now we find the \@{relative-entropy} from $s$ to $r$:
 
 \bal
-D(r \| s) & = \sum_{i,j} r_{ij} \log{\frac{r_{ij}}{s_{ij}}} \\
+\D{r}{s} & = \sum_{i,j} r_{ij} \log{\frac{r_{ij}}{s_{ij}}} \\
           & = \sum_{i,j} A_{ij} p_j \log{\frac{A_{ij} p_j}{A_{ij} q_i }} \\
           & = \sum_{i,j} A_{ij} p_j \log{\frac{p_j}{q_i}} \\
-          & = \sum_{i,j} A_{ij} p_j \left ( \log{p_j} - \log{q_i} \right ) \\
+          & = \sum_{i,j} A_{ij} p_j \parens{\log{p_j} - \log{q_i}} \\
           & = \sum_{i,j} A_{ij} p_j \log{p_j} - \sum_{i,j} A_{ij} p_j \log{q_i} \\
 \eal
 
 Now, addressing the first term on the RHS of the last line:
 
 \bal
-\sum_{i,j} A_{ij} p_j \log{p_j} & = \sum_j \left [ p_j \log{p_j} \sum_{i} A_{ij} \right ] \\
-                                & = \sum_j \left [ p_j \log{p_j} \cdot 1 \right ] \\
+\sum_{i,j} A_{ij} p_j \log{p_j} & = \sum_j \brackets{p_j \log{p_j} \sum_{i} A_{ij}} \\
+                                & = \sum_j \brackets{p_j \log{p_j} \cdot 1} \\
                                 & = \sum_j  p_j \log{p_j} \\
                                 & = -H(p). \\
 \eal
@@ -838,16 +838,16 @@ Now, addressing the first term on the RHS of the last line:
 And the second term on the RHS of the last line:
 
 \bal
-\sum_{i,j} A_{ij} p_j \log{q_i} & = \sum_{i} \left [ \log{q_i} \sum_{j} A_{ij} p_j \right ] \\
-                                & = \sum_{i} \left [ \log{q_i} q_i \right ] \\
+\sum_{i,j} A_{ij} p_j \log{q_i} & = \sum_{i} \brackets{\log{q_i} \sum_{j} A_{ij} p_j} \\
+                                & = \sum_{i} \brackets{\log{q_i} q_i} \\
                                 & = -H(q).
 \eal
 
-So, we end up with $D(r \| s) = H(q) - H(p).$ Since $D(r \| s) \geq 0$ by \@{gibbs-inequality}, we have $H(q) - H(p) \geq 0,$ which implies that $H(q) \geq H(p),$ which is what we wanted to show.
+So, we end up with $\D{r}{s} = H(q) - H(p).$ Since $\D{r}{s} \geq 0$ by \@{gibbs-inequality}, we have $H(q) - H(p) \geq 0,$ which implies that $H(q) \geq H(p),$ which is what we wanted to show.
 
-Now, the equivalence case. If $q$ is just a rearrangement of $p,$ then obviously it has the same \@{entropy} as we can just re-index to recover $p.$ Now assume $H(p) = H(q).$ Then, $H(q) - H(p) = 0 \implies D(r \| s) = 0 \implies r = s \implies A_{ij} p_j = A_{ij} q_i \implies p_j = q_i$ whenever $A_{ij} > 0.$ Now, for each value $c$ appearing in $p$ or $q,$ let
+Now, the equivalence case. If $q$ is just a rearrangement of $p,$ then obviously it has the same \@{entropy} as we can just re-index to recover $p.$ Now assume $H(p) = H(q).$ Then, $H(q) - H(p) = 0 \implies \D{r}{s} = 0 \implies r = s \implies A_{ij} p_j = A_{ij} q_i \implies p_j = q_i$ whenever $A_{ij} > 0.$ Now, for each value $c$ appearing in $p$ or $q,$ let
 
-\[ J_c = \{j : p_j = c\}, \quad I_c = \{i : q_i = c\}, \]
+\[ J_c = \set{j : p_j = c}, \quad I_c = \set{i : q_i = c}, \]
 
 that is $J_c$ is the set of indices of $p$ where $p_j = c,$ and similarly with $I_c$ and $q.$ Now, consider row $i \in I_c.$ For any $A_{ij} > 0,$ we have $p_j = q_i,$ so $j \in J_c,$ i.e. every nonzero entry of row $i$ lies in a column of $J_c,$ so the columns $j \in J_c$ have the entire mass of row $i.$ Similarly, for column $j \in J_c,$ for nonzero $A_{ij},$ $q_i = p_j = c,$ so $i \in I_c,$ and the rows $I_c$ contain all of column $j$'s mass. Taking $\vec{1}_S$ as the \@{indicator-vector} of a set $S,$ we have that
 
@@ -856,14 +856,14 @@ that is $J_c$ is the set of indices of $p$ where $p_j = c,$ and similarly with $
 that is, rows in $I_c$ sum to $1$ over the columns $J_c,$ while rows outside $I_c$ have no mass in the columns $J_c$ at all. Now we count the mass:
 
 \bal
-|I_c| & = \vec{1}^\top \vec{1}_{I_c}  \qquad \text{count entries via dot product} \\
+\abs{I_c} & = \vec{1}^\top \vec{1}_{I_c}  \qquad \text{count entries via dot product} \\
       & = \vec{1}^\top (A \vec{1}_{J_c}) \qquad \text {identity from above} \\
       & = (\vec{1}^\top A) \vec{1}_{J_c} \qquad \text{associativity}  \\
       & = \vec{1}^\top \vec{1}_{J_c} \qquad \text{column-stochasticity}  \\
-      & = |J_c| \qquad \text{count entries via dot product}.
+      & = \abs{J_c} \qquad \text{count entries via dot product}.
 \eal
 
-Therefore, $|I_c| = |J_c|$ for all $c,$ so each $c$ appears equally often in $p$ and in $q,$ and $q$ is therefore a rearrangement of $p.$
+Therefore, $\abs{I_c} = \abs{J_c}$ for all $c,$ so each $c$ appears equally often in $p$ and in $q,$ and $q$ is therefore a rearrangement of $p.$
 \end{proof}
 
 \begin{intuition}
@@ -875,7 +875,7 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 \begin{theorem}[Log Sum Inequality]
 	For \@{non-negative} numbers, $a_1, a_2, \dots, a_n$ and $b_1, b_2, \dots, b_n,$
 
-	\[ \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} \geq \left ( \sum_{i=1}^{n} a_i \right ) \log{ \left ( \frac{\sum_{i=1}^n a_i }{ \sum_{i=1}^n b_i} \right ) }, \]
+	\[ \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} \geq \parens{\sum_{i=1}^{n} a_i} \log{ \parens{\frac{\sum_{i=1}^n a_i }{ \sum_{i=1}^n b_i}} }, \]
 
 	with equality if and only if $\frac{a_i}{b_i} = \text{const}.$
 
@@ -884,19 +884,19 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 \begin{proof}
 	We can assume without loss of generality, due to the $0$-handling conventions specified above, that $a_i > 0$ and $b_i > 0.$ Now, note that the function $f(t) = t \log{t}$ is \@{strictly convex}, since $f''(t) = \frac{1}{t} \log{e} > 0$ for all positive $t.$ Then, by \@{jensens-inequality} we have
 
-	\[ \sum \alpha_i f(t_i) \geq f \left ( \sum \alpha_i t_i \right ). \]
+	\[ \sum \alpha_i f(t_i) \geq f \parens{\sum \alpha_i t_i}. \]
 
 	as long as $\alpha_i > 0, \sum_i \alpha_i = 1,$ i.e. if the $\alpha_i$ form a \@{discrete probability distribution}.
 
 	If we let $\alpha_i = \frac{b_i}{\sum_{j=1}^n b_j}$, i.e. $\alpha_i$ is the \@{probability mass} assigned to index $i,$ then this condition is met. We can then pick $t_i = \frac{a_i}{b_i}$ and we get
 
 	\bal
-	\sum_{i=1}^n \alpha_i f(t_i) & \geq f \left ( \sum_{i=1}^n \alpha_i t_i \right ) \\ 
-	     \iff \sum_{i=1}^n \alpha_i t_i \log{t_i} & \geq \left ( \sum_{i=1}^n \alpha_i t_i \right ) \log{\left ( \sum_{i=1}^n \alpha_i t_i \right )} \\
-	     \iff \sum_{i=1}^n \frac{b_i}{\sum_{j=1}^n b_j} \frac{a_i}{b_i} \log{\frac{a_i}{b_i}} & \geq \left ( \sum_{i=1}^n \frac{b_i}{\sum_{j=1}^n b_j} \frac{a_i}{b_i} \right ) \log{\left ( \sum_{i=1}^n \frac{b_i}{\sum_{j=1}^n b_j} \frac{a_i}{b_i} \right )} \\
-	     \iff \sum_{i=1}^n \frac{a_i}{\sum_{j=1}^n b_j} \log{\frac{a_i}{b_i}} & \geq \left ( \sum_{i=1}^n \frac{a_i}{\sum_{j=1}^n b_j}  \right ) \log{\left ( \sum_{i=1}^n \frac{a_i}{\sum_{j=1}^n b_j} \right )} \\
-	     \iff \frac{1}{\sum_{j=1}^n b_j} \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} & \geq \frac{1}{\sum_{j=1}^n b_j} \left ( \sum_{i=1}^n a_i  \right ) \log{\left (  \frac{\sum_{i=1}^n a_i}{\sum_{i=1}^n b_j} \right )} \\
-	     \iff \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} & \geq  \left ( \sum_{i=1}^n a_i  \right ) \log{\left (  \frac{\sum_{i=1}^n a_i}{\sum_{i=1}^n b_j} \right )}.
+	\sum_{i=1}^n \alpha_i f(t_i) & \geq f \parens{\sum_{i=1}^n \alpha_i t_i} \\ 
+	     \iff \sum_{i=1}^n \alpha_i t_i \log{t_i} & \geq \parens{\sum_{i=1}^n \alpha_i t_i} \log{\parens{\sum_{i=1}^n \alpha_i t_i}} \\
+	     \iff \sum_{i=1}^n \frac{b_i}{\sum_{j=1}^n b_j} \frac{a_i}{b_i} \log{\frac{a_i}{b_i}} & \geq \parens{\sum_{i=1}^n \frac{b_i}{\sum_{j=1}^n b_j} \frac{a_i}{b_i}} \log{\parens{\sum_{i=1}^n \frac{b_i}{\sum_{j=1}^n b_j} \frac{a_i}{b_i}}} \\
+	     \iff \sum_{i=1}^n \frac{a_i}{\sum_{j=1}^n b_j} \log{\frac{a_i}{b_i}} & \geq \parens{\sum_{i=1}^n \frac{a_i}{\sum_{j=1}^n b_j}} \log{\parens{\sum_{i=1}^n \frac{a_i}{\sum_{j=1}^n b_j}}} \\
+	     \iff \frac{1}{\sum_{j=1}^n b_j} \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} & \geq \frac{1}{\sum_{j=1}^n b_j} \parens{\sum_{i=1}^n a_i} \log{\parens{\frac{\sum_{i=1}^n a_i}{\sum_{i=1}^n b_j}}} \\
+	     \iff \sum_{i=1}^n a_i \log{\frac{a_i}{b_i}} & \geq  \parens{\sum_{i=1}^n a_i} \log{\parens{\frac{\sum_{i=1}^n a_i}{\sum_{i=1}^n b_j}}}.
 	\eal
 
 \end{proof}
@@ -904,32 +904,32 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 \begin{theorem}[Nonnegativity of Relative Entropy]
 	For discrete probability distributions $p$ and $q$ that share a support $\mathcal{X},$
 
-	\[ D(p \| q) \geq 0, \]
+	\[ \D{p}{q} \geq 0, \]
 
 	with equality if and only if $p = q.$
 \end{theorem}
 \begin{proof}
 	This restates \@{gibbs-inequality}, which the \@{log-sum-inequality} proves more directly.
 	\bal
-	D(p \| q) & = \sum_{x \in \mathcal{X}} p(x) \log{\frac{p(x)}{q(x)}} \\
-		  & \geq \left ( \sum_{x \in \mathcal{X}} p(x) \right ) \log{\left ( \frac{\sum_x p(x)}{\sum_x q(x)} \right )} \\
-		  & = 1 \log{\left ( \frac{1}{1} \right )} \\
+	\D{p}{q} & = \sum_{x \in \mathcal{X}} p(x) \log{\frac{p(x)}{q(x)}} \\
+		  & \geq \parens{\sum_{x \in \mathcal{X}} p(x)} \log{\parens{\frac{\sum_x p(x)}{\sum_x q(x)}}} \\
+		  & = 1 \log{\parens{\frac{1}{1}}} \\
 		  & = 0,
 	\eal
 
-	with equality if and only if $\frac{p(x)}{q(x)} = c.$ Both $p$ and $q$ are \@{probability mass functions}, so $c = 1$ (otherwise they wouldn't both sum to 1) and hence we have $D(p \| q) = 0$ if and only if $p(x) = q(x)$ for all $x.$
+	with equality if and only if $\frac{p(x)}{q(x)} = c.$ Both $p$ and $q$ are \@{probability mass functions}, so $c = 1$ (otherwise they wouldn't both sum to 1) and hence we have $\D{p}{q} = 0$ if and only if $p(x) = q(x)$ for all $x.$
 
 \end{proof}
 
 \begin{theorem}[Convexity of Relative Entropy]
-	$D(p \| q)$ is \@{convex} in the pair $(p, q);$ that is, if $(p_1, q_1)$ and $(p_2, q_2)$ are two pairs of \@{probability mass functions}, then
+	$\D{p}{q}$ is \@{convex} in the pair $(p, q);$ that is, if $(p_1, q_1)$ and $(p_2, q_2)$ are two pairs of \@{probability mass functions}, then
 
-	\[ D(\lambda p_1 + (1 - \lambda) p_2 \| \lambda q_1 + (1 - \lambda) q_2) \leq \lambda D(p_1 \| q_1) + (1 - \lambda) D(p_2 \| q_2) \]
+	\[ \D{\lambda p_1 + (1 - \lambda) p_2}{\lambda q_1 + (1 - \lambda) q_2} \leq \lambda \D{p_1}{q_1} + (1 - \lambda) \D{p_2}{q_2} \]
 
 	for all $0 \leq \lambda \leq 1.$
 \end{theorem}
 \begin{proof}
-	First, note that the set of \@{probability mass functions} on $\mathcal{X}$ is the set of \@{probability vectors} in $\reals^n,$ where $n = |\mathcal{X}|,$ and thus \@[is a convex set]{probability-vectors-form-a-convex-compact-set}. $D$ takes a pair $(p, q) \in \reals^n \times \reals^n,$ which is \@[again convex]{product-of-convex-sets-is-convex}, so $D$ is defined on a \@{convex set}.
+	First, note that the set of \@{probability mass functions} on $\mathcal{X}$ is the set of \@{probability vectors} in $\reals^n,$ where $n = \abs{\mathcal{X}},$ and thus \@[is a convex set]{probability-vectors-form-a-convex-compact-set}. $D$ takes a pair $(p, q) \in \reals^n \times \reals^n,$ which is \@[again convex]{product-of-convex-sets-is-convex}, so $D$ is defined on a \@{convex set}.
 
 	Now we'll apply \@{log-sum-inequality} to the one term with a fixed $x$ left-hand side of the inequality in the theorem, but we'll do some replacements to make it more obvious what's happening.
 
@@ -942,8 +942,8 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 	Using those substitutions, with \@{log-sum-inequality}, we have
 
         \bal
-        \left ( \lambda p_1(x) + (1 - \lambda) p_2(x) \right ) \log{\frac{ \lambda p_1(x) + (1 - \lambda) p_2(x) }{ \lambda q_1(x) + (1 - \lambda) q_2(x) }} & =
-	\left ( a_1 + a_2 \right ) \log{\frac{ a_1 + a_2 }{ b_1 + b_2 }} \\
+        \parens{\lambda p_1(x) + (1 - \lambda) p_2(x)} \log{\frac{ \lambda p_1(x) + (1 - \lambda) p_2(x) }{ \lambda q_1(x) + (1 - \lambda) q_2(x) }} & =
+	\parens{a_1 + a_2} \log{\frac{ a_1 + a_2 }{ b_1 + b_2 }} \\
 	  & \leq a_1 \log{\frac{a_1}{b_1}} +   a_2 \log{\frac{a_2}{b_2}} \\
 	   & =  \lambda p_1(x) \log{\frac{\lambda p_1(x)}{\lambda q_1(x)}} +   (1 - \lambda)p_2(x) \log{\frac{(1 - \lambda)p_2(x)}{(1 - \lambda)q_2(x)}} \\
 	   & =  \lambda p_1(x) \log{\frac{p_1(x)}{q_1(x)}} +   (1 - \lambda)p_2(x) \log{\frac{p_2(x)}{q_2(x)}}
@@ -951,7 +951,7 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 
 	Summing both sides of this over $x \in \mathcal{X}$ gives us
 
-	\[ D(\lambda p_1 + (1 - \lambda) p_2 \| \lambda q_1 + (1 - \lambda) q_2) \leq \lambda D(p_1 \| q_1) + (1 - \lambda) D(p_2 \| q_2). \]
+	\[ \D{\lambda p_1 + (1 - \lambda) p_2}{\lambda q_1 + (1 - \lambda) q_2} \leq \lambda \D{p_1}{q_1} + (1 - \lambda) \D{p_2}{q_2}. \]
 \end{proof}
 \begin{intuition}
 	\@{relative entropy} is a \@{convex} \@{surface} over \@{pairs} $(p,q)$, with a flat-bottomed zero valley along $p=q$, rising as $p$ and $q$ differ.
@@ -966,23 +966,23 @@ Averaging (well, replacing each probability with a \@{convex-combination} of all
 $H(p)$ is a \@{concave function} of $p.$
 \end{theorem}
 \begin{proof}
-Let $u$ be the uniform distribution on $|\mathcal{X}|$ outcomes. Then from the definition of @{relative-entropy},
+Let $u$ be the uniform distribution on $\abs{\mathcal{X}}$ outcomes. Then from the definition of @{relative-entropy},
 
-	\[ D(P \| u) = H(p, u) - H(p) \iff H(p) = H(p, u) - D(p \| u). \]
+	\[ \D{P}{u} = H(p, u) - H(p) \iff H(p) = H(p, u) - \D{p}{u}. \]
         
 	Then, from the definition of \@{cross-entropy}
 
 	\bal
 	H(p, u) & = - \sum_{x \in \mathcal{X}} p(x) \log{u(x)} \\
-		& = - \sum_{x \in \mathcal{X}} p(x) \log{\frac{1}{|\mathcal{X}|}} \\ 
-		& = - \sum_{x \in \mathcal{X}} p(x) \left ( \log{1} - \log{|\mathcal{X}|} \right ) \\ 
-		& = \sum_{x \in \mathcal{X}} p(x) \log{|\mathcal{X}|} \\ 
-		& = \log{|\mathcal{X}|} \\ 
+		& = - \sum_{x \in \mathcal{X}} p(x) \log{\frac{1}{\abs{\mathcal{X}}}} \\ 
+		& = - \sum_{x \in \mathcal{X}} p(x) \parens{\log{1} - \log{\abs{\mathcal{X}}}} \\ 
+		& = \sum_{x \in \mathcal{X}} p(x) \log{\abs{\mathcal{X}}} \\ 
+		& = \log{\abs{\mathcal{X}}} \\ 
 	\eal
 
 	So,
 
-	\[ H(p) = \log{|\mathcal{X}|}  -  D(p \| u), \]
+	\[ H(p) = \log{\abs{\mathcal{X}}}  -  \D{p}{u}, \]
 
 	and by \@{convexity of relative entropy}, \@{entropy} is a \@{concave function}.
 \end{proof}
@@ -992,7 +992,7 @@ The intuition is that mixing distributions can never decrease uncertaintity.
 \includegraphics[alt={Convexity of Relative Entropy}]{concavity-of-entropy.png}
 The image above was generated using GPT-5.6 Sol.
 
-	We already proved \@{Uniform distribution maximizes entropy} using Lagrangian multipliers, but the proof above shows it in another way. If $p = u,$ then $D(p \| u) = 0,$ and since $\log{|\mathcal{X}|}$ is constant in $|\mathcal{X}|,$ $H$ is maximized by $u$.
+	We already proved \@{Uniform distribution maximizes entropy} using Lagrangian multipliers, but the proof above shows it in another way. If $p = u,$ then $\D{p}{u} = 0,$ and since $\log{\abs{\mathcal{X}}}$ is constant in $\abs{\mathcal{X}},$ $H$ is maximized by $u$.
 \end{intuition}
 
 \begin{theorem}[Concavity and Convexity of Mutual Information]
@@ -1027,7 +1027,7 @@ For the first part, first expand \@{mutual information}:
 
 	The mutual information is the \@{relative entropy} between the joint distribution and the product of the marginals, so
 
-	\[ I(X;Y) = D(p_\lambda(x,y) \| q_\lambda(x,y)), \]
+	\[ I(X;Y) = \D{p_\lambda(x,y)}{q_\lambda(x,y)}, \]
 
 	and relative entropy is a \@{convex function} of $(p, q),$ so the mutual information is a convex function of the conditional distribution.
 \end{proof}
@@ -1078,7 +1078,7 @@ For the first part, first expand \@{mutual information}:
 
 \begin{theorem}[Characterization of Sufficiency]
 	Let $X$ have \@{probability mass function} $f_\theta(x)$ from the family
-	$\{f_\theta(x)\}$, and let $T(X)$ be a \@{statistic} of $X$.
+	$\set{f_\theta(x)}$, and let $T(X)$ be a \@{statistic} of $X$.
 	Then $T(X)$ is a \@{sufficient statistic} for $\theta$ if and only if
 
 	\[
@@ -1108,7 +1108,7 @@ For the first part, first expand \@{mutual information}:
 \begin{theorem}[Fano's Inequality]
 	For any \@{estimator} $\hat{X}$ such that $X \to Y \to \hat{X},$ with $P_e = \Pr{(X \neq \hat{X})}$, we have
 
-	\[ H(P_e) + P_e \log{|\mathcal{X}|} \geq H(X|\hat{X}) \geq H(X|Y). \]
+	\[ H(P_e) + P_e \log{\abs{\mathcal{X}}} \geq H(X|\hat{X}) \geq H(X|Y). \]
 \end{theorem}
 
 \begin{remark}
@@ -1118,7 +1118,7 @@ For the first part, first expand \@{mutual information}:
 
 	So, $H(P_e)$ is the \@{entropy} of that distribution, i.e.
 
-	\[ H(P_e) = - \left (P_e \log{P_e} + (1 - P_e)\log{(1 - P_e)} \right ). \]
+	\[ H(P_e) = - \parens{P_e \log{P_e} + (1 - P_e)\log{(1 - P_e)}}. \]
 
 	Now, if $\hat{X} = g(Y),$ and $P_e = \Pr{(\hat{X} \neq X)} = 0,$ then if we know $Y,$ we know $X,$ so 
 	it follows that $P_e = 0$ implies $H(X|Y) = 0.$
@@ -1127,7 +1127,7 @@ For the first part, first expand \@{mutual information}:
 \begin{proof}
 First, we'll ignore the effect of $Y$ and prove the first inequality
 
-	\[ H(P_e) + P_e \log{|\mathcal{X}|} \geq H(X|\hat{X}). \]
+	\[ H(P_e) + P_e \log{\abs{\mathcal{X}}} \geq H(X|\hat{X}). \]
 
 	Let's define a \@{random variable} $E$ as
 
@@ -1145,7 +1145,7 @@ First, we'll ignore the effect of $Y$ and prove the first inequality
 
 	A few things to note:
 	\begin{itemize}
-		\item Because $H(E) = - \left (P_e \log{P_e} + (1 - P_e)\log{(1 - P_e)} \right ),$ we have that $H(E) = H(P_e).$
+		\item Because $H(E) = - \parens{P_e \log{P_e} + (1 - P_e)\log{(1 - P_e)}},$ we have that $H(E) = H(P_e).$
 		\item Since $E$ is a function of $X$ and $\hat{X},$ $H(E|X, \hat{X}) = 0.$
 		\item Because \@{conditioning reduces entropy}, $H(E | \hat{X}) \leq H(E) = H(P_e).$
 	\end{itemize}
@@ -1154,11 +1154,11 @@ First, we'll ignore the effect of $Y$ and prove the first inequality
 
 	\bal
 	H(X|E, \hat{X}) & = \Pr{(E = 0)}H(X | \hat{X}, E = 0) + \Pr{(E = 1)}H(X, \hat{X}, E= 1) \\
-                        & \leq (1 - P_e)0 + P_e \log{|\mathcal{X}|},
+                        & \leq (1 - P_e)0 + P_e \log{\abs{\mathcal{X}}},
 	\eal
 
 	because $E = 0 \implies X = \hat{X} \implies H(X|\hat{X}) = 0,$ and given $E = 1,$ we can upper bound
-	the conditional entropy as $H(X) \leq \log{|\mathcal{X}|}.$
+	the conditional entropy as $H(X) \leq \log{\abs{\mathcal{X}}}.$
 
 	Now, taking
 
@@ -1166,18 +1166,18 @@ First, we'll ignore the effect of $Y$ and prove the first inequality
 
 	and replacing the terms on the left with the upper bounds for them we found, we have
 
-	\[ H(P_e) + P_e \log{|\mathcal{X}|} \geq H(X|\hat{X}). \]
+	\[ H(P_e) + P_e \log{\abs{\mathcal{X}}} \geq H(X|\hat{X}). \]
 
 	Now, by the \@{data-processing inequality}, we have $I(X; \hat{X}) \leq I(X; Y)$ because
 	$X \to Y \to \hat{X}$ is a \@{markov chain}, and therefore $H(X|\hat{X}) \geq H(X|Y),$ and finally
 
-	\[ H(P_e) + P_e \log{|\mathcal{X}|} \geq H(X|\hat{X}) \geq H(X|Y). \]
+	\[ H(P_e) + P_e \log{\abs{\mathcal{X}}} \geq H(X|\hat{X}) \geq H(X|Y). \]
 \end{proof}
 
 \begin{corollary}[Weak Form of Fano's Inequality]
         Under the hypotheses of \@{fanos-inequality},
 
-	\[ 1 + P_e \log{|\mathcal{X}|} \geq H(X|Y) \]
+	\[ 1 + P_e \log{\abs{\mathcal{X}}} \geq H(X|Y) \]
 
 	or
 
@@ -1191,7 +1191,7 @@ This follows because $H(P_e) \leq 1.$
 Take $\hat{X} = Y$ in \@{fanos-inequality}.
 	For any two \@{random variables} $X$ and $Y,$ let $p = \Pr{(X \neq Y)}.$ Then
 
-	\[ H(p) + p \log{|\mathcal{X}|} \geq H(X|Y). \]
+	\[ H(p) + p \log{\abs{\mathcal{X}}} \geq H(X|Y). \]
 \end{corollary}
 \begin{proof}
 	Let $\hat{X} = Y$ in \@{fanos inequality}. 
@@ -1200,22 +1200,22 @@ Take $\hat{X} = Y$ in \@{fanos-inequality}.
 \begin{corollary}
 	Let $P_e = \Pr{(X \neq \hat{X})},$ and let $\hat{X} : \mathcal{Y} \to \mathcal{X};$ then
 
-	\[ H(P_e) + P_e \log{(|\mathcal{X}| - 1)} \geq H(X|Y). \]
+	\[ H(P_e) + P_e \log{(\abs{\mathcal{X}} - 1)} \geq H(X|Y). \]
 \end{corollary}
 
 \begin{proof}
 	If the \@{estimator} $g(Y)$ takes values in the set $\mathcal{X},$ then the number of possible values of $X$ when $X \neq Y$ is reduced by 1, so we can strengthen the inequality from \@{fanos-inequality} to
 
 
-	\[ H(P_e) + P_e \log{(|\mathcal{X}| - 1)} \geq H(X|Y). \]
+	\[ H(P_e) + P_e \log{(\abs{\mathcal{X}} - 1)} \geq H(X|Y). \]
 \end{proof}
 
 \begin{remark}
-	With no knowledge of $Y,$ let $X \in \{1, \ldots, m\}$ with $p_1 \geq p_2 \geq \cdots \geq p_m.$ The best guess is $\hat{X} = 1,$ so $P_e = 1 - p_1,$ and the previous corollary becomes
+	With no knowledge of $Y,$ let $X \in \set{1, \ldots, m}$ with $p_1 \geq p_2 \geq \cdots \geq p_m.$ The best guess is $\hat{X} = 1,$ so $P_e = 1 - p_1,$ and the previous corollary becomes
 
 	\[ H(P_e) + P_e \log{(m - 1)} \geq H(X). \]
 
-	The distribution $\left(1 - P_e, \frac{P_e}{m-1}, \ldots, \frac{P_e}{m-1}\right)$ achieves equality.
+	The distribution $\parens{1 - P_e, \frac{P_e}{m-1}, \ldots, \frac{P_e}{m-1}}$ achieves equality.
 
 	Thus, \@{Fano's inequality} is \@{sharp}, i.e., its bound cannot be improved.
 \end{remark}
@@ -1231,7 +1231,7 @@ TODO: Cover \& Thomas Lemma 2.10.1. Proof by Jensen.
 \begin{proof}
 	Suppose that $X \sim p(x).$ By \@{jensens inequality} we have
 
-	\[ 2^{\mathbb{E}[\log{p(X)}]} \leq \mathbb{E}[2^{\log{p(X)}}], \]
+	\[ 2^{\E[\log{p(X)}]} \leq \E[2^{\log{p(X)}}], \]
 
 	which implies that
 
@@ -1245,14 +1245,14 @@ TODO: Cover \& Thomas Lemma 2.10.1. Proof by Jensen.
 \begin{corollary}
 	Let $X, X'$ be \@{independent} with $X \sim p(x),$ $X' \sim r(x),$ $x, x' \in \mathcal{X}.$ Then
 
-	\[ \Pr{(X = X')} \geq 2^{-H(p) - D(p \| r)}, \]
-	\[ \Pr{(X = X')} \geq 2^{-H(r) - D(r \| p)}. \]
+	\[ \Pr{(X = X')} \geq 2^{-H(p) - \D{p}{r}}, \]
+	\[ \Pr{(X = X')} \geq 2^{-H(r) - \D{r}{p}}. \]
 \end{corollary}
 \begin{proof}
 	Note that
 
 	\bal
-	2^{-H(p) - D(p \| r)} & = 2^{\sum p(x) \log{p(x)} + \sum p(x) \log{\frac{r(x)}{p(x)}}} \\
+	2^{-H(p) - \D{p}{r}} & = 2^{\sum p(x) \log{p(x)} + \sum p(x) \log{\frac{r(x)}{p(x)}}} \\
 	                     & = 2^{\sum p(x) \log{r(x)}} \\
 			     & \leq \sum p(x) 2^{\log{r(x)}} \\
 			     & = \sum p(x) r(x) \\

@@ -41,26 +41,26 @@ We can denote a metric space on set $X$ with metric $d$ as the tuple $(X, d).$
 The most important metric spaces are the euclidean spaces $R^n$ together with a norm.
 
 \begin{theorem}\label{euclidean-space-is-metric-space}
-$(\reals^n, d : \reals^n \to \reals = | \vec{x} - \vec{y} |)$ is a \@{metric-space} for any $n \geq 0.$
+$(\reals^n, d : \reals^n \to \reals = \abs{\vec{x} - \vec{y}})$ is a \@{metric-space} for any $n \geq 0.$
 \end{theorem}
 
 \begin{proof}
 First, for $n = 0$, $\reals^0$ is just the empty set, so the metric axioms are vacuously satisfied for all points in the set. Now, for $n \geq 1,$
 
 \begin{itemize}
-\item Let $p, q \in R^n, p \neq q.$ Then $|p - q| < 0,$ so $d(p,q) > 0.$
+\item Let $p, q \in R^n, p \neq q.$ Then $\abs{p - q} < 0,$ so $d(p,q) > 0.$
 \end{itemize}
 
 \begin{itemize}
-\item Let $p \in R^n.$ Now, $p - p = 0,$ so $|p - p| = 0,$ so $d(p,p) = 0.$
+\item Let $p \in R^n.$ Now, $p - p = 0,$ so $\abs{p - p} = 0,$ so $d(p,p) = 0.$
 \end{itemize}
 
 \begin{itemize}
-\item Let $p, q \in R^n.$ $|p - q| = |q - p|,$ so $d(p,q) = d(q, p).$
+\item Let $p, q \in R^n.$ $\abs{p - q} = \abs{q - p},$ so $d(p,q) = d(q, p).$
 \end{itemize}
 
 \begin{itemize}
-\item Let $p, q, r \in R^n.$ $|p - q| \leq |p - r| + |r - p|,$ so $d(p,q) \leq d(p,r) + d(r, p).$
+\item Let $p, q, r \in R^n.$ $\abs{p - q} \leq \abs{p - r} + \abs{r - p},$ so $d(p,q) \leq d(p,r) + d(r, p).$
 \end{itemize}
 
 Therefore, $d$ is a metric on $R^n$ and $(R^n, d)$ is a \@{metric-space}.
@@ -69,7 +69,7 @@ Therefore, $d$ is a metric on $R^n$ and $(R^n, d)$ is a \@{metric-space}.
 \detach
 
 \begin{remark}\label{rn-vector-space-vs-metric-space}
-Note that $R^n$ by itself is just a \@{vector-space}, but together with a \@{norm} forms a \@{metric-space}. The proof above relies on the properties of norms without going into detail - norms are similar to distance metrics but they are even stricter because they require homogeneity - $a|x| = |ax|.$
+Note that $R^n$ by itself is just a \@{vector-space}, but together with a \@{norm} forms a \@{metric-space}. The proof above relies on the properties of norms without going into detail - norms are similar to distance metrics but they are even stricter because they require homogeneity - $a\abs{x} = \abs{ax}.$
 
 We could define other, non-norm metrics on $R^n,$ such as the \textbf{\@{discrete-metric},} which works for any set $X.$
 
@@ -110,7 +110,7 @@ Given $\vec{a}, \vec{b} \in \reals^k,$ if $\vec{a}_i < \vec{b}_i$ for all $i = 1
 \end{definition}
 
 \begin{definition}[Ball]
-Given $\vec{x} \in \reals^k, r > 0,$ the open or closed \textbf{ball} with center $\vec{x}$ and radius $r$ is defined as the set of points $\vec{y}$ such that $|\vec{x} - \vec{y}| < r$ or $|\vec{x} - \vec{y}| \leq r,$ respectively.
+Given $\vec{x} \in \reals^k, r > 0,$ the open or closed \textbf{ball} with center $\vec{x}$ and radius $r$ is defined as the set of points $\vec{y}$ such that $\abs{\vec{x} - \vec{y}} < r$ or $\abs{\vec{x} - \vec{y}} \leq r,$ respectively.
 \end{definition}
 
 \subsection{Convex Sets}
@@ -130,15 +130,15 @@ All \@{balls} are \@[convex]{convex-set}.
 \end{theorem}
 
 \begin{proof}
-Let $\vec{y}, \vec{z}$ be points in a \@{ball} with center $\vec{x}$ and radius $r$. Then, by definition, $|\vec{y} - \vec{x}| < r,$ and $|\vec{z} - \vec{x}| < r.$ Suppose $\vec{p} \in \{ \lambda \vec{y} + (1 - \lambda)\vec{z} | 0 < \lambda < 1 \}.$ We will show that $|\vec{x} - \vec{p}| < r.$
+Let $\vec{y}, \vec{z}$ be points in a \@{ball} with center $\vec{x}$ and radius $r$. Then, by definition, $\abs{\vec{y} - \vec{x}} < r,$ and $\abs{\vec{z} - \vec{x}} < r.$ Suppose $\vec{p} \in \set{\lambda \vec{y} + (1 - \lambda)\vec{z} | 0 < \lambda < 1}.$ We will show that $|\vec{x} - \vec{p}| < r.$
 
 \bal
-|\vec{x}-\vec{p}| &= |\vec{x} - (\lambda\vec{y} + (1-\lambda)\vec{z})| \quad(\text{substitute definition of } \vec{p})\\
-  &= |\vec{x} - \lambda\vec{y} - \vec{z} + \lambda\vec{z}| \quad(\text{expand})\\
+\abs{\vec{x}-\vec{p}} &= \abs{\vec{x} - (\lambda\vec{y} + (1-\lambda)\vec{z})} \quad(\text{substitute definition of } \vec{p})\\
+  &= \abs{\vec{x} - \lambda\vec{y} - \vec{z} + \lambda\vec{z}} \quad(\text{expand})\\
   &= |\vec{x} - \lambda\vec{y} - \vec{z} + \lambda\vec{z} + \lambda\vec{x} - \lambda\vec{x}| \quad(\text{add and subtract } \lambda\vec{x})\\
-  &= |\lambda(\vec{x}-\vec{y}) + (1-\lambda)(\vec{x}-\vec{z})| \quad(\text{factor } \lambda \text{ and } 1-\lambda)\\
-  &\le \lambda\,|\vec{x}-\vec{y}| + (1-\lambda)\,|\vec{x}-\vec{z}| \quad(\text{triangle inequality})\\
-  & < \lambda r + (1-\lambda)r \quad(\text{since } |\vec{x}-\vec{y}|,|\vec{x}-\vec{z}| < r)\\
+  &= \abs{\lambda(\vec{x}-\vec{y}) + (1-\lambda)(\vec{x}-\vec{z})} \quad(\text{factor } \lambda \text{ and } 1-\lambda)\\
+  &\le \lambda\,\abs{\vec{x}-\vec{y}} + (1-\lambda)\,\abs{\vec{x}-\vec{z}} \quad(\text{triangle inequality})\\
+  & < \lambda r + (1-\lambda)r \quad(\text{since } \abs{\vec{x}-\vec{y}},\abs{\vec{x}-\vec{z}} < r)\\
   &= r \quad(\text{because } \lambda + (1-\lambda)=1).
 \eal
 
@@ -225,7 +225,7 @@ If $p$ is a \@{limit-point} of a set $E,$ then every \@{neighborhood} of $p$ con
 \end{theorem}
 
 \begin{proof}
-Let $p$ be a \@{limit-point} of $E$ and let $N_r(p)$ be a \@{neighborhood} of $p.$ Suppose that $N_r(p)$ contains only finitely many points of $E.$ Since we have finitely many points, we can inspect each and find the minimum distance from $p$ to any point in $N_r(p) \bigcup E\setminus\{p\}$ and call it $s.$ Now, we can make a new neighborhood $N_s(p),$ which contains none of the points in $N_r(p) \bigcup E\setminus\{p\}$ since they're all at least $s$ away from $p,$ by construction. But then, $p$ is not a limit point of $E,$ since it has a neighborhood that contains no points of $E\setminus\{p\}$ Therefore, we have a contradiction, and $N_r(p)$ must therefore contain infinitely many points.
+Let $p$ be a \@{limit-point} of $E$ and let $N_r(p)$ be a \@{neighborhood} of $p.$ Suppose that $N_r(p)$ contains only finitely many points of $E.$ Since we have finitely many points, we can inspect each and find the minimum distance from $p$ to any point in $N_r(p) \bigcup E\setminus\set{p}$ and call it $s.$ Now, we can make a new neighborhood $N_s(p),$ which contains none of the points in $N_r(p) \bigcup E\setminus\set{p}$ since they're all at least $s$ away from $p,$ by construction. But then, $p$ is not a limit point of $E,$ since it has a neighborhood that contains no points of $E\setminus\set{p}$ Therefore, we have a contradiction, and $N_r(p)$ must therefore contain infinitely many points.
 \end{proof}
 
 \begin{corollary}\label{only-infinite-sets-have-limit-points}
@@ -235,11 +235,11 @@ From this, it's evident that a \@{finite} set of points has no \@{limit-points}.
 \begin{theorem}\label{complement-of-union-is-intersection-of-complements-general}
 Let ${E_\alpha}$ be a \@{collection} of sets. Then
 
-\[ \left ( \bigcup_{\alpha} E_\alpha \right )^c = \bigcap_{\alpha} \left ( E_{\alpha}^c \right ). \]
+\[ \parens{\bigcup_{\alpha} E_\alpha}^c = \bigcap_{\alpha} \parens{E_{\alpha}^c}. \]
 \end{theorem}
 
 \begin{proof}
-Suppose $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$ Then, $x \notin \bigcup_{\alpha} E_\alpha,$ so $x$ is not in any $E_\alpha.$ Therefore, for every $E_\alpha,$ $x \in E_\alpha^c,$ and thus $x \in \bigcap_{\alpha} \left ( E_{\alpha}^c \right ).$ Conversely, suppose $x \in \bigcap_{\alpha} \left ( E_{\alpha}^c \right ).$ Then, $x$ is in every $E_\alpha^c,$ that is, $x$ is not in any $E_\alpha.$ Therefore, $x \in \left ( \bigcup_{\alpha} E_\alpha \right )^c.$
+Suppose $x \in \parens{\bigcup_{\alpha} E_\alpha}^c.$ Then, $x \notin \bigcup_{\alpha} E_\alpha,$ so $x$ is not in any $E_\alpha.$ Therefore, for every $E_\alpha,$ $x \in E_\alpha^c,$ and thus $x \in \bigcap_{\alpha} \parens{E_{\alpha}^c}.$ Conversely, suppose $x \in \bigcap_{\alpha} \parens{E_{\alpha}^c}.$ Then, $x$ is in every $E_\alpha^c,$ that is, $x$ is not in any $E_\alpha.$ Therefore, $x \in \parens{\bigcup_{\alpha} E_\alpha}^c.$
 \end{proof}
 
 \begin{note}
@@ -267,9 +267,9 @@ For some intuition, consider $U = [0, 4], E = [0,3].$ Any point $x$ in $E$ has a
 \end{remark}
 
 \begin{theorem}\label{union-and-intersection-of-open-and-closed-sets}
-(a) - For any \@{collection} $\{G_a\}$ of \@{open} sets, $\bigcup_{\alpha} G_\alpha$ is open.
+(a) - For any \@{collection} $\set{G_a}$ of \@{open} sets, $\bigcup_{\alpha} G_\alpha$ is open.
 
-(b) - For any collection $\{F_a\}$ of \@{closed} sets, $\bigcap_{\alpha} F_\alpha$ is closed.
+(b) - For any collection $\set{F_a}$ of \@{closed} sets, $\bigcap_{\alpha} F_\alpha$ is closed.
 
 (c) - For any \@{finite} collection $G_1,\dots,G_n$ of open sets, $\bigcap_{i=1}^n G_i$ is open.
 
@@ -285,7 +285,7 @@ Note that
 
 and by (a) above, (e) is open. Then its \@[complement]{complement-of-a-set}, $\bigcap{\alpha} F_\alpha$ is \@{closed}, and we've shown (b).
 
-Now, let $x$ be in $G = \bigcap_{i=1}^n G_i,$ so $x$ is in every $G_i,$ and has a neighborhood $N_i$ in every $G_i$ with radius $r_i > 0.$ Let $r$ be $\min\{r_1, \dots, r_n\}.$ Then, $x$ has a neighborhood $N$ of radius $r$ in every $G_i,$ and thus in $G,$ so $x$ is an interior point of $G,$ and we've shown (c).
+Now, let $x$ be in $G = \bigcap_{i=1}^n G_i,$ so $x$ is in every $G_i,$ and has a neighborhood $N_i$ in every $G_i$ with radius $r_i > 0.$ Let $r$ be $\min\set{r_1, \dots, r_n}.$ Then, $x$ has a neighborhood $N$ of radius $r$ in every $G_i,$ and thus in $G,$ so $x$ is an interior point of $G,$ and we've shown (c).
 
  Now, $(\bigcup_{i=1}^n F_i)^c = \bigcap_{i=1}^n F_i^c$ is open by (c), so its complement, $\bigcup_{i=1}^n F_i$ is closed, and we've shown (d).
 \end{proof}
@@ -343,7 +343,7 @@ A set $E$ and its \@{limit-points} $E'$ do not necessarily have the same limit p
 \end{theorem}
 
 \begin{proof}
-Consider $P = \{\frac{1}{n} | n \in \naturals\}.$ Then $P$ has one \@{limit-point}, $0,$ but $P' = \{0\}$ has no limit points, since the only number that contains $0$ in all its \@{neighborhoods} is $0$ itself (see \@{only-infinite-sets-have-limit-points}.)
+Consider $P = \set{\frac{1}{n} | n \in \naturals}.$ Then $P$ has one \@{limit-point}, $0,$ but $P' = \set{0}$ has no limit points, since the only number that contains $0$ in all its \@{neighborhoods} is $0$ itself (see \@{only-infinite-sets-have-limit-points}.)
 \end{proof}
 
 \begin{theorem}\label{closure-distributes-over-finite-unions}

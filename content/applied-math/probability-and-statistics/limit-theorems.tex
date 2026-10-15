@@ -83,7 +83,7 @@ While \@{Markov's inequality} provides an upper bound of $75\%$, the actual \@{p
 \begin{theorem}[Chebyshev's Inequality]\label{chebyshevs-inequality}
 Suppose $t > 0$ and $X$ is a \@{random variable} with the finite mean $E[X]$ and \@{standard-deviation} $\sigma.$ Then
 
-\[ P(| X - E[X] | \geq t) \leq \frac{\sigma^2}{t^2}. \]
+\[ P(\abs{X - E[X]} \geq t) \leq \frac{\sigma^2}{t^2}. \]
 \end{theorem}
 
 \begin{note}
@@ -113,11 +113,11 @@ Since the variance of $X$ is $\sigma^2 = E[(X - E[X])^2]$, it follows that
 
 Note that
 
-\[ (X - E[X])^2 \ge t^2 \iff |X - E[X]| \ge t. \]
+\[ (X - E[X])^2 \ge t^2 \iff \abs{X - E[X]} \ge t. \]
 
 Thus,
 
-\[ P(|X - E[X]| \ge t) \le \frac{\sigma^2}{t^2}. \square \]
+\[ P(\abs{X - E[X]} \ge t) \le \frac{\sigma^2}{t^2}. \square \]
 \end{proof}
 
 \subsubsection{Example}
@@ -133,11 +133,11 @@ and \@{variance}
 
 \@{Chebyshevs-inequality} states that for any $t > 0$:
 
-\[ P(|X - \mu| \ge t) \le \frac{\sigma^2}{t^2} \]
+\[ P(\abs{X - \mu} \ge t) \le \frac{\sigma^2}{t^2} \]
 
 For $t = 4$ inches, the inequality becomes:
 
-\[ P(|X - 20| \ge 4) \le \frac{9}{16} \]
+\[ P(\abs{X - 20} \ge 4) \le \frac{9}{16} \]
 
 This tells us that the \@{probability} of a fish's length deviating from 20 inches by at least 4 inches is at most $\frac{9}{16}$.
 \end{example}
@@ -145,23 +145,23 @@ This tells us that the \@{probability} of a fish's length deviating from 20 inch
 \subsection{Law of Large Numbers}
 
 \begin{definition}[Pairwise Independence]\synonyms{"pairwise independent"}
-        \@{Random variables} $X_1, \dots, X_n$ are said to be \textbf{pairwise independent} if $X_i$ and $X_j$ are \@{independent} for every $\{i,j\} \in \binom{[n]}{2}$, that is, if
+        \@{Random variables} $X_1, \dots, X_n$ are said to be \textbf{pairwise independent} if $X_i$ and $X_j$ are \@{independent} for every $\set{i,j} \in \binom{[n]}{2}$, that is, if
         \[ F_{X_i, X_j}(x, y) = F_{X_i}(x) F_{X_j}(y) \]
-        for all $x, y \in \mathbb{R}$, where $F_{X_i, X_j}(x,y) = P(X_i \leq x, X_j \leq y)$ is the joint \@{cumulative distribution function} of the pair.
+        for all $x, y \in \reals$, where $F_{X_i, X_j}(x,y) = P(X_i \leq x, X_j \leq y)$ is the joint \@{cumulative distribution function} of the pair.
 
         \@{Events} $A_1, \dots, A_n$ are said to be \textbf{pairwise independent} if
         \[ P(A_i \cap A_j) = P(A_i) P(A_j) \]
-        for every $\{i,j\} \in \binom{[n]}{2}$.
+        for every $\set{i,j} \in \binom{[n]}{2}$.
 \end{definition}
 
 \begin{definition}[Mutual Independence]\synonyms{"mutually independent"}
         \@{Random variables} $X_1, \dots, X_n$ are said to be \textbf{mutually independent} if their joint \@{cumulative distribution function} factors as
         \[ F_{X_1, \dots, X_n}(x_1, \dots, x_n) = \prod_{i=1}^{n} F_{X_i}(x_i) \]
-        for all $x_1, \dots, x_n \in \mathbb{R}$, where $F_{X_i}(x) = P(X_i \leq x)$ is the cumulative distribution function of $X_i$.
+        for all $x_1, \dots, x_n \in \reals$, where $F_{X_i}(x) = P(X_i \leq x)$ is the cumulative distribution function of $X_i$.
 
         \@{Events} $A_1, \dots, A_n$ are said to be \textbf{mutually independent} if
-        \[ P\left( \bigcap_{i \in S} A_i \right) = \prod_{i \in S} P(A_i) \]
-        for every $S \subseteq [n]$ with $|S| \geq 2$, where $[n] = \{1, \dots, n\}$ and $|S|$ denotes the number of \@{elements} of $S$.
+        \[ P\parens{\bigcap_{i \in S} A_i} = \prod_{i \in S} P(A_i) \]
+        for every $S \subseteq [n]$ with $\abs{S} \geq 2$, where $[n] = \set{1, \dots, n}$ and $\abs{S}$ denotes the number of \@{elements} of $S$.
 
         An infinite collection is said to be mutually independent if every finite subfamily is.
 \end{definition}
@@ -187,7 +187,7 @@ This tells us that the \@{probability} of a fish's length deviating from 20 inch
 \begin{theorem}[Law of Large Numbers]\label{law-of-large-numbers}
 	Suppose $X_1, X_2, \dots$ are \@{independent and identically distributed} \@{random variables} with \@{finite} \@{mean} $\mu.$ Then for any $\epsilon > 0,$
 
-\[ \lim_{n \to \infty} P \left ( \left |\frac{X_1 + \cdots + X_n}{n} - \mu  \right | \geq \epsilon \right ) = 0. \]
+\[ \lim_{n \to \infty} P \parens{\abs{\frac{X_1 + \cdots + X_n}{n} - \mu} \geq \epsilon} = 0. \]
 \end{theorem}
 
 \begin{note}
@@ -197,15 +197,15 @@ Intuitively, this means that the more identically distributed \@{random variable
 \begin{proof}
 We assume that the \@{variance} of the \@{random variables} is also finite. Then, note that
 
-\[ E \left [ \frac{X_1 + \cdots X_n}{n} \right ] = \mu, \]
+\[ E \brackets{\frac{X_1 + \cdots X_n}{n}} = \mu, \]
 
 and
 
-\[ V \left [ \frac{X_1 + \cdots X_n}{n} \right ] = \frac{\sigma^2}{n}. \]
+\[ V \brackets{\frac{X_1 + \cdots X_n}{n}} = \frac{\sigma^2}{n}. \]
 
 Then, by \@{Chebyshevs-inequality}, we have
 
-\[ P \left ( \left |\frac{X_1 + \cdots + X_n}{n} - \mu  \right | \geq \epsilon \right ) \leq \frac{\sigma^2}{n \epsilon^2}. \]
+\[ P \parens{\abs{\frac{X_1 + \cdots + X_n}{n} - \mu} \geq \epsilon} \leq \frac{\sigma^2}{n \epsilon^2}. \]
 
 Now, as $n$ increases, the term on the right approaches $0$, which by the Squeeze Theorem implies the term on the left also approaches $0,$ and is $0$ at the limit. $\square$
 \end{proof}
@@ -254,19 +254,19 @@ M_{X+Y}(t) & = E[e^{t(X+Y)}] \\
 In essence, The Continuity Theorem For \@{Moment Generating Functions} says that if you have a \@{sequence} of \@{random variables} whose MGFs converge “nicely” (in a neighborhood of zero) to a limit \@{function}, then that limit function is the MGF of some random variable and the distributions of your sequence converge to the distribution of that random variable.
 
 \begin{theorem}[Continuity Theorem for Moment Generating Functions]\label{mgf-continuity-theorem}
-Let $\{X_n\}$ be a \@{sequence} of \@{random variables} with \@{moment generating functions} defined by
+Let $\set{X_n}$ be a \@{sequence} of \@{random variables} with \@{moment generating functions} defined by
 
 \[ M_{X_n}(t) = E[e^{tX_n}] \]
 
-for all $\|t\| < \epsilon$ for some $\epsilon > 0$.
+for all $\abs{t} < \epsilon$ for some $\epsilon > 0$.
 
-Suppose there exists a \@{function} $M(t)$, finite for $\|t\| < \epsilon$, such that
+Suppose there exists a \@{function} $M(t)$, finite for $\abs{t} < \epsilon$, such that
 
 \[ \lim_{n \to \infty} M_{X_n}(t) = M(t) \]
 
-for all $\|t\| < \epsilon$, and that $M(t)$ is the moment generating function of some random variable $X$.
+for all $\abs{t} < \epsilon$, and that $M(t)$ is the moment generating function of some random variable $X$.
 
-Then the distributions of $\{X_n\}$ converge in distribution to $X$, i.e.,
+Then the distributions of $\set{X_n}$ converge in distribution to $X$, i.e.,
 
 \[ X_n \xrightarrow{d} X. \]
 \end{theorem}

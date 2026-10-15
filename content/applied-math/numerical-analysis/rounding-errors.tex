@@ -10,9 +10,9 @@
 
 Given a \@{real-number} $p$ and an approximation for it $p*$, we can find how much error there is in the approximation.
 
-The \textbf{actual error} is $p - p*$, the \textbf{absolute error} is $\|p - p*\|,$ and the \textbf{relative error} is:
+The \textbf{actual error} is $p - p*$, the \textbf{absolute error} is $\abs{p - p*},$ and the \textbf{relative error} is:
 
-\[ \frac{|p - p*|}{|p|}. \]
+\[ \frac{\abs{p - p*}}{\abs{p}}. \]
 
 When using computers to do floating-point arithmetic, rounding errors will occur because floating-point numbers have finite precision.
 

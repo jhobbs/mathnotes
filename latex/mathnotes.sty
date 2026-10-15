@@ -106,9 +106,28 @@
 \newcommand{\Span}{\operatorname{Span}}
 \newcommand{\Cov}{\operatorname{Cov}}
 \newcommand{\proj}{\operatorname{proj}}
+\newcommand{\oproj}{\operatorname{oproj}}
+% Auto-sized delimiters: \parens{x}, \brackets{x}, \braces{x} (as in the homework template)
+\newcommand{\parens}[1]{\left(#1\right)}
+\newcommand{\brackets}[1]{\left[#1\right]}
+\newcommand{\braces}[1]{\left\{#1\right\}}
+% Inner product with auto-sized angle brackets: \inner{u}{v}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
 \newcommand{\comp}{\operatorname{comp}}
 \newcommand{\orth}{\operatorname{orth}}
-\newcommand{\norm}{\operatorname{norm}}
+% Norm with auto-sized double bars: \norm{x}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+% Absolute value with auto-sized bars: \abs{x}
+\newcommand{\abs}[1]{\left| #1 \right|}
+% KL divergence with auto-sized parentheses and bar: \D{p}{q}
+\newcommand{\D}[2]{D\left( #1 \,\middle\|\, #2 \right)}
+% Set braces with auto-sized braces: \set{x : x > 0}
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+% Floor and ceiling with auto-sized brackets
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+% Expectation: \E[X], \E_p[X]
+\newcommand{\E}{\mathbb{E}}
 \newcommand{\ord}{\operatorname{ord}}
 \newcommand{\sech}{\operatorname{sech}}
 \newcommand{\csch}{\operatorname{csch}}

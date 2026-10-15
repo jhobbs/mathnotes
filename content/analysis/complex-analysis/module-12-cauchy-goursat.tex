@@ -20,7 +20,7 @@ Let $f(z) = u(x,y) + i(v,y).$ By the definition of the \@{contour-integral}, we 
 
 Because $f$ is \@{analytic}, the \@{cauchy-riemann-equations} tell us that $u(x,y)$ and $v(x,y)$ have \@{continuous} first \@{partial-derivatives}, and therefore, we can apply \@{greens-theorem}. Now, we can take the first integral and transform it
 
-\[ \int_C ( u dx + (-vdy) ) = -\iint_R \left ( v_x + u_y \right) dxdy. \]
+\[ \int_C ( u dx + (-vdy) ) = -\iint_R \parens{v_x + u_y} dxdy. \]
 
 But, by \@{cauchy-riemann-equations}, $v_x = -u_y,$ so this integral evaluates to $0.$
 
@@ -64,7 +64,7 @@ Let $C$ be a simple, closed piecewise \@{smooth} curve, and $C_1$, $C_2$, $\dots
 
 This arms us with a method to find the following \@{contour-integral}:
 
-\[ \oint_C \frac{1}{z^2 - 1}, \quad C : |z| = 4. \]
+\[ \oint_C \frac{1}{z^2 - 1}, \quad C : \abs{z} = 4. \]
 
 Since $f(z) = \frac{1}{z^2 - 1}$ has \@{singularities} at $-1$ and $1$ that are completely encircled by $C$, it's not obvious whether or not $f$ has an antiderivative along $C$. However, we can apply the theorem above by encircling the singularities:
 
@@ -86,7 +86,7 @@ See \@{integral-of-one-over-z-around-unit-circle} and consider \@[path independe
 
 Now, via partial fraction decomposition we have
 
-\[ \oint_C \frac{1}{z^2 - 1} = \frac{1}{2} \oint_C \frac{1}{z-1} - \frac{1}{z+1} dz = \frac{1}{2}\left ( \oint_C \frac{1}{z - 1} dz - \oint_C \frac{1}{z + 1}dz \right ) = \frac{1}{2} \left ( 2 \pi i - 2 \pi i \right ) = 0. \] 
+\[ \oint_C \frac{1}{z^2 - 1} = \frac{1}{2} \oint_C \frac{1}{z-1} - \frac{1}{z+1} dz = \frac{1}{2}\parens{\oint_C \frac{1}{z - 1} dz - \oint_C \frac{1}{z + 1}dz} = \frac{1}{2} \parens{2 \pi i - 2 \pi i} = 0. \] 
 
 The following theorems illustrate the nice properties of simply connected \@{domains}, where we don't have to deal with singularities or holes:
 

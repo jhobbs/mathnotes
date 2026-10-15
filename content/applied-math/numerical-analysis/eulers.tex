@@ -23,20 +23,20 @@ Consider the IVP
 
 	Suppose that $\vec{f}: [0, T] \times \reals^d \to \reals^d$ is \@{continuous} in its \@{domain} and \@{Lipschitz continuous} in $\vec{u}$, i.e., there exists a constant $L > 0$ such that
 
-	\[ |\vec{f}(t, \vec{u}) - \vec{f}(t, \vec{v})| \leq L\|\vec{u} - \vec{v}\|, \forall(t, \vec{u}), (t, \vec{v}) \in [0, T] \times \reals^d. \]
+	\[ \abs{\vec{f}(t, \vec{u}) - \vec{f}(t, \vec{v})} \leq L\norm{\vec{u} - \vec{v}}, \forall(t, \vec{u}), (t, \vec{v}) \in [0, T] \times \reals^d. \]
 
 	Then it holds that:
 
 	\begin{enumerate}
 		\item \textbf{Existence and Uniqueness:} There exists a unique solution $\vec{u}(t)$ for any $\vec{u}_0 \in \reals^d.$
 		\item \textbf{Continuous Dependence on initial data and right hand side:} Suppose $\vec{r} : [0,T] \times \reals^d \to \reals^d$ is a bounded \@{perturbation} of $\vec{f},$ i.e. there exists a constant $M > 0$ such that
-			\[ \| \vec{r}(t, \vec{u}) \| \leq M, \quad \forall(t, \vec{u}) \in [0, T] \times \reals^d. \]
+			\[ \norm{\vec{r}(t, \vec{u})} \leq M, \quad \forall(t, \vec{u}) \in [0, T] \times \reals^d. \]
 			Further let $\vec{\hat{u}}(t)$ be the solution of the perturbed IVP
 
 			\[ \frac{d \vec{\hat{u}}}{dt} = \vec{f}(t, \vec{\hat{u}}) + \vec{r}(t, \vec{\hat{u}}), \quad \vec{\hat{u}}(0) = \vec{\hat{c}},  \]
 			which we assume exists and is unique. Then we have
 
-			\[ \|\vec{u}(t) - \vec{\hat{u}}(t) \| \leq e^{Lt} \| \vec{c} - \vec{\hat{c}} \| + \frac{M}{L}(e^{Lt} - 1), \quad \forall t \in [0, T]. \]
+			\[ \norm{\vec{u}(t) - \vec{\hat{u}}(t)} \leq e^{Lt} \norm{\vec{c} - \vec{\hat{c}}} + \frac{M}{L}(e^{Lt} - 1), \quad \forall t \in [0, T]. \]
 	\end{enumerate}
 
 \end{theorem}
@@ -44,7 +44,7 @@ Consider the IVP
 Now that we've established that IVPs are well posed, we can look at how to approximate our unknown function $u(t)$ at a discrete set of points in time. 
 
 \begin{definition}[discrete time points]\synonyms{"time mesh points", "time grid points"}
-	Consider a \@{partition} $0 = t_0 < t_1 < \cdots < t_N = T$ of the time interval $[0, T].$ We can call the points $t_n$ the \textbf{discrete time points}. Then our goal is to approximate the values $u(t_n)$ with a set of quantities $\{u_n\}_{n=0}^N,$ that is, $u_n \approx u(t_n)$ for $n = 0, 1, \dots, N.$ We can also write $\delta t_n = t_{n+1} - t_n$ to denote the \term[time step]{step size} between between consecutive points. For simplicity we often assume that $\delta t_n = \delta t$ for all $n = 0, 1, \dots, N-1,$ i.e. the time steps are constant. Such a mesh is called a \@{uniform mesh}.
+	Consider a \@{partition} $0 = t_0 < t_1 < \cdots < t_N = T$ of the time interval $[0, T].$ We can call the points $t_n$ the \textbf{discrete time points}. Then our goal is to approximate the values $u(t_n)$ with a set of quantities $\set{u_n}_{n=0}^N,$ that is, $u_n \approx u(t_n)$ for $n = 0, 1, \dots, N.$ We can also write $\delta t_n = t_{n+1} - t_n$ to denote the \term[time step]{step size} between between consecutive points. For simplicity we often assume that $\delta t_n = \delta t$ for all $n = 0, 1, \dots, N-1,$ i.e. the time steps are constant. Such a mesh is called a \@{uniform mesh}.
 \end{definition}
 
 \end{document}

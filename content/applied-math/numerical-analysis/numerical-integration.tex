@@ -12,7 +12,7 @@
 
 The basic method for approximating $\int_a^{b} f(x) dx$ is called \textbf{numerical quadrature} and uses the sum $\sum_{i=0}^n a_i f(x_i).$
 
-We'll cover quadrature methods based on interpolation polynomials. The idea is to select a set of distinct nodes $\{x_0, \dots, x_n\}$ from the \@{interval} $[a, b],$ use them to construct a Lagrange interpolating polynomial and its error term, and then integrate those over $[a,b].$
+We'll cover quadrature methods based on interpolation polynomials. The idea is to select a set of distinct nodes $\set{x_0, \dots, x_n}$ from the \@{interval} $[a, b],$ use them to construct a Lagrange interpolating polynomial and its error term, and then integrate those over $[a,b].$
 
 When we use equally spaced nodes, the approximations produced from first and second Lagrange polynomials are known as the \textbf{Trapezoidal rule} and \textbf{Simpson's rule.} These are commonly introduced in calculus courses.
 
@@ -30,7 +30,7 @@ where $x_0 = a, x_2 = b, x_1 = a + h, h = (b - a)/2,$ and $\xi$ is some value in
 
 Perhaps simpler to read:
 
-\[ \int_{a}^{b} f(x) dx \approx \frac{b - a}{6} \left [ f(a) + 4 f \left ( \frac{a + b}{2} \right ) + f(b) \right ] \]
+\[ \int_{a}^{b} f(x) dx \approx \frac{b - a}{6} \brackets{f(a) + 4 f \parens{\frac{a + b}{2}} + f(b)} \]
 
 In general, integrating Lagrange interpolating polynomials and there error terms give us \textbf{Newton-Cotes} formulas; the Trapezoidal rule and Simpson's rule are the first two examples of these.
 
@@ -44,7 +44,7 @@ For example, the \textbf{Composite Simpson's rule} breaks an interval down into 
 
 \emph{Theorem:} Let $f \in C^4[a,b], n$ be even, $h = (b - a)/n,$ and $x_j = a + jh,$ for each $j = 0, 1, \dots, n.$ There exists a $\mu \in (a, b)$ for which the Composite Simpson's rule for $n$ subintervals can be written with its error term as
 
-\[ \int_a^{b} f(x) dx = \frac{h}{3} \left [ f(a) + 2 \sum_{j=1}^{(n/2) - 1} f(x_{2j}) + 4 \sum_{j=1}^{n/2} f(x_{2j -1}) + f(b) \right ]  - \frac{b - a}{180}h^4 f^{(4)}(\mu). \]
+\[ \int_a^{b} f(x) dx = \frac{h}{3} \brackets{f(a) + 2 \sum_{j=1}^{(n/2) - 1} f(x_{2j}) + 4 \sum_{j=1}^{n/2} f(x_{2j -1}) + f(b)}  - \frac{b - a}{180}h^4 f^{(4)}(\mu). \]
 
 Here's psuedocode that uses the Composite Simpson's rule on $n$ subintervals. This is the most frequently used general-purpose quadrature algorithm.
 
@@ -77,7 +77,7 @@ We can use this approach for other Newton-Cotes formulas. The Trapezoidal rule r
 
 \emph{Theorem:} Let $f \in C^2[a,b], h = (b - a)/n,$ and $x_j = a + jh$ for each $j = 0, 1, \dots n.$ There exists a $\mu \in (a,b)$ for which the \textbf{Composite Trapezoidal rule} for $n$ subintervals can be written with its error term as
 
-\[ \int_a^{b} f(x) dx = \frac{h}{2} \left [ f(a) + 2 \sum_{j=1}^{n-1} f(x_j) + f(b) \right ] - \frac{b - a}{12} h^2 f''(\mu). \]
+\[ \int_a^{b} f(x) dx = \frac{h}{2} \brackets{f(a) + 2 \sum_{j=1}^{n-1} f(x_j) + f(b)} - \frac{b - a}{12} h^2 f''(\mu). \]
 
 For the \textbf{Composite Midpoint Rule} we again require even $n$.
 
@@ -131,7 +131,7 @@ which as degree of precision three, meaining it produces the exact result for ev
 
 There is an easier way to determine the nodes and coefficients for the formulas that give exact results for higher-degree polynomials.
 
-We will use a collection of orthogonal polynomials called the \textbf{Legendre Polynomials,} denoted here as $\{P_0(x), P_1(x), \dots, P_n(x)\}$ and having the properties
+We will use a collection of orthogonal polynomials called the \textbf{Legendre Polynomials,} denoted here as $\set{P_0(x), P_1(x), \dots, P_n(x)}$ and having the properties
 
 \begin{enumerate}
 \item For each $n$, $P_n(x)$ is a monic polynomial of degree $n.$

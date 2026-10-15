@@ -84,7 +84,7 @@
 \begin{definition}[Parametric Family]
         A \@{statistical model} $\mathcal{P}$ on a \@{measurable space} $(\Omega, \mathcal{F})$ is a
         \textbf{parametric family} if it has a \@{parameterization} $\theta \mapsto P_\theta$ whose
-        \@{parameter space} satisfies $\Theta \subseteq \mathbb{R}^d$ for some fixed positive
+        \@{parameter space} satisfies $\Theta \subseteq \reals^d$ for some fixed positive
         \@{integer} $d$.
 \end{definition}
 
@@ -139,7 +139,7 @@ TODO: define this.
 \end{definition}
 
 \begin{definition}[Bias]
-	In an estimation problem, the \term{bias} of an \@{estimator} $T(X)$ of a real-valued \@{parameter} $\vartheta$ of the unknown \@{population} is defined to be $b_T(P) = \mathbb{E}[T(X)] - \vartheta$ (which is denoted by $b_T(\theta)$ when $P$ is in a \@{parametric family} index by $\theta).$
+	In an estimation problem, the \term{bias} of an \@{estimator} $T(X)$ of a real-valued \@{parameter} $\vartheta$ of the unknown \@{population} is defined to be $b_T(P) = \E[T(X)] - \vartheta$ (which is denoted by $b_T(\theta)$ when $P$ is in a \@{parametric family} index by $\theta).$
 
 	An estimator is said to be an \term{unbiased estimator} for $\vartheta$ if and only if $b_T(P) = 0$ for any $P \in \mathcal{P}.$
 \end{definition}
@@ -147,11 +147,11 @@ TODO: define this.
 \subsection{Sufficient Statistics}
 
 \begin{definition}[Sufficient Statistic]
-	A \@{function} $T(X)$ is said to be a \textbf{sufficient statistic} relative to the family $\{f_\theta(x)\}$ if $X$ is \@{conditionally independent} of $\theta$ given $T(X)$ for any \@{probability distribution} on $\theta,$ that is, $\theta \to T(X) \to X$ forms a \@{Markov chain}.
+	A \@{function} $T(X)$ is said to be a \textbf{sufficient statistic} relative to the family $\set{f_\theta(x)}$ if $X$ is \@{conditionally independent} of $\theta$ given $T(X)$ for any \@{probability distribution} on $\theta,$ that is, $\theta \to T(X) \to X$ forms a \@{Markov chain}.
 \end{definition}
 
 \begin{definition}[Minimal Sufficient Statistic]
-	A \@{statistic} $T(X)$ is a \@{minimal sufficient statistic} relative to $\{f_\theta(x)\}$ if it is a \@{function} of every other \@{sufficient statistic} $U.$ 
+	A \@{statistic} $T(X)$ is a \@{minimal sufficient statistic} relative to $\set{f_\theta(x)}$ if it is a \@{function} of every other \@{sufficient statistic} $U.$ 
 \end{definition}
 \begin{note}
 	In terms of the \@{data-processing inequality}, this implies that

@@ -16,7 +16,7 @@ where $n$ is a nonnegative \@{integer} and $a_0,\dots,a_n$ are real constants, a
 
 \emph{Weierstrass Approximation Theorem:} Suppose $f$ is defined and \@{continuous} on $[a,b].$ For each $\epsilon > 0,$ there exists a polynomial $P(x),$ with the property that
 
-\[ |f(x) - P(x)| < \epsilon, \forall x \in [a,b]. \] 
+\[ \abs{f(x) - P(x)} < \epsilon, \forall x \in [a,b]. \] 
 
 In other words, for any \@{continuous} function, there is a polynomial that approximates the function as closely as desired.
 
@@ -168,7 +168,7 @@ Doing so requires either that the function we're approximating is on $[-1, 1]$ o
 
 Then, to make $P_n(x),$ we pick the nodes as the roots of the monic Chebyshev Polynomial $\tilde{T}_{n+1}.$ Those nodes are then given by
 
-\[ x_k = \bar{x}_{k+1} = \cos{\left ( \frac{2k + 1}{2(n+1)} \pi \right ).} \]
+\[ x_k = \bar{x}_{k+1} = \cos{\parens{\frac{2k + 1}{2(n+1)} \pi}.} \]
 
 We then proceed as usual using one of the above methods.
  

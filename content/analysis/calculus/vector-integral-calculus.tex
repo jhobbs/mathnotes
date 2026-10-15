@@ -53,7 +53,7 @@ We will be interested primarily in \@{manifolds} with \@{boundaries}.
 \begin{definition}[Boundary]
 The points on a \@{manifold} whose \@{neighborhoods} are \@{homeomorphic} to a \@{neighborhood} in a half $k$-ball form the \textbf{boundary} of the \@{manifold}. Formally,
 
-\[ \partial M = \{p \in M | \text{there exists a chart } (U, p) \text{ with } \varphi(p) \in \reals^{k-1} \times {0} \subset \mathbb{H}^k \}. \]
+\[ \partial M = \set{p \in M | \text{there exists a chart } (U, p) \text{ with } \varphi(p) \in \reals^{k-1} \times {0} \subset \mathbb{H}^k}. \]
 
 That is, $p$ is a boundary point, if, in local coordinates, it maps to the edge of the half-space model.
 \end{definition}
@@ -65,7 +65,7 @@ The \@{chart} $\varphi$ maps points on the manifold to local coordinates. For ex
 
 can be assigned coordinates via a chart (with $N$ representing the north pole) $(U = S^2 \setminus {N}, \varphi)$ with
 
-\[ \varphi(x,y,z) = \left ( \frac{x}{1 - z}, \frac{y}{1 - z} \right ). \]
+\[ \varphi(x,y,z) = \parens{\frac{x}{1 - z}, \frac{y}{1 - z}}. \]
 
 These local coordinates can then be used to refer to any point on the sphere. So, the definition of a \@{boundary} of a manifold above talks about the points that can be mapped to some $k$-vector that has a $0$ in its last dimension. Therefore, the boundary itself is of a dimension $k - 1.$
 
@@ -107,7 +107,7 @@ When a \@{line-integral} is required around a closed curve, and the line integra
 \begin{theorem}[Green's Theorem]\label{greens-theorem}
 Suppose $P(x,y)$ and $Q(x,y)$ have \@{continuous} first \@{partial-derivatives} in a \@{domain} containing a simple, closed, piecewise \@{smooth} curve $C$ and its interior $R.$ Then
 
-\[ \oint_C Pdx + Qdy = \iint_R \left ( \frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} \right ) dx dy. \]
+\[ \oint_C Pdx + Qdy = \iint_R \parens{\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}} dx dy. \]
 \end{theorem}
 
 \subsection{Surface Integrals}
@@ -121,7 +121,7 @@ with $u_0 \leq u < u_1$ and $v_0 \leq v \leq v_1$ (i.e. $u$ and $v$ vary over a 
 
 Now, $S$ has a \@{normal-vector} and \@{unit} \@{normal-vector}, respectively, as
 
-\[ \vec{N} = \vec{r}_u \times \vec{r}_v, \quad \vec{n} = \frac{1}{|\vec{N}|} \vec{N} \]
+\[ \vec{N} = \vec{r}_u \times \vec{r}_v, \quad \vec{n} = \frac{1}{\abs{\vec{N}}} \vec{N} \]
 
 at every point, except perhaps for some edges or cusps, such as for cubes and cones. For a given \@{vector-function} $\vec{F}$ we can now define the \textbf{surface integral} over $S$ by
 
@@ -166,9 +166,9 @@ Here $\vec{n}$ is a \@{unit} \@{normal-vector} of $S.$ $\vec{r'} = d \vec{r}/ds$
 
 In \@{components}, (2) becomes
 
-\[ \iint_R \left [ \left ( \frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z}\right ) N_1 +
-\left ( \frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x}\right ) N_2 +
- \left ( \frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y}\right ) N_3
+\[ \iint_R \left [ \parens{\frac{\partial F_3}{\partial y} - \frac{\partial F_2}{\partial z}} N_1 +
+\parens{\frac{\partial F_1}{\partial z} - \frac{\partial F_3}{\partial x}} N_2 +
+ \parens{\frac{\partial F_2}{\partial x} - \frac{\partial F_1}{\partial y}} N_3
 \right ] du dv \\
 = \oint_{\overline{C}} (F_1 dx + F_2 dy + F_3 dz). \]
 

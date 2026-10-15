@@ -21,17 +21,17 @@ We know that a \pagelink[field is a commutative division ring]{algebra/abstract/
 
 \begin{definition}[Natural Numbers]\synonyms{naturals}
 \notation{\naturals}{\mathbb{N}}
-The \textbf{natural numbers} $\naturals = \{1, 2, 3, \dots\}$ are the counting numbers.
+The \textbf{natural numbers} $\naturals = \set{1, 2, 3, \dots}$ are the counting numbers.
 \end{definition}
 
 \begin{definition}[Integers]
 \notation{\integers}{\mathbb{Z}}
-The \textbf{integers} $\integers = \{\dots, -2, -1, 0, 1, 2, \dots\}$ are the \@{natural-numbers} together with their negatives and zero.
+The \textbf{integers} $\integers = \set{\dots, -2, -1, 0, 1, 2, \dots}$ are the \@{natural-numbers} together with their negatives and zero.
 \end{definition}
 
 \begin{definition}[Rational Numbers]\synonyms{rationals}
 \notation{\rationals}{\mathbb{Q}}
-The \textbf{rational numbers} $\rationals = \{p/q : p, q \in \integers, q \neq 0\}$ are the ratios of \@{integers}.
+The \textbf{rational numbers} $\rationals = \set{p/q : p, q \in \integers, q \neq 0}$ are the ratios of \@{integers}.
 \end{definition}
 
 The \textbf{Order axiom} states that there exists a \@{subset} of $\reals^+$ of $\reals$ such that for all $a, b \in \reals^+,a + b \in \reals^+, a \cdot b \in \reals^+.$ and for all $a \in \reals$ exactly one of the following is true: (i) $a \in \reals^+$, (ii) $-a \in \reals^+$, or (iii) $a = 0$.
@@ -80,27 +80,27 @@ The \textbf{Completeness axiom} states that every nonempty \@{subset} $A$ of $\r
 
 One consequence of the Completeness axiom is that the \@{real-numbers} contain numbers that are not \@{rational}. For example, the subset of $\reals$ that is the finite decimal approximations of $\sqrt{5}$ is,
 
-\[ \{2, 2.2, 2.23, 2.236, \dots \}, \]
+\[ \set{2, 2.2, 2.23, 2.236, \dots}, \]
 
 must have a \@{supremum} due to the Completeness axiom. That supremum is $\sqrt{5}$, but $\sqrt{5}$ is not rational, therefore, the \@{reals} contain non-rational numbers.
 
 The \textbf{absolute value} of a \@{real-number} is defined as follows:
 
-\[ |x| = \begin{cases} x & \text{if } x \geq 0 \\ -x & \text{if } x < 0 \end{cases}. \]
+\[ \abs{x} = \begin{cases} x & \text{if } x \geq 0 \\ -x & \text{if } x < 0 \end{cases}. \]
 
-One fact that follow from this definition is that for $a, b \in \reals$, if $\|a\| < b$, then $-b < a < b$. \emph{Proof}: We have two cases to consider:
+One fact that follow from this definition is that for $a, b \in \reals$, if $\abs{a} < b$, then $-b < a < b$. \emph{Proof}: We have two cases to consider:
 
 \begin{itemize}
-\item If $a >= 0$, then $\|a\| = a$, so $a < b$. Since $a$ is positive, $b$ must also be positive, and therefore $-b$ must be negative, and so $-b < a < b$.
+\item If $a >= 0$, then $\abs{a} = a$, so $a < b$. Since $a$ is positive, $b$ must also be positive, and therefore $-b$ must be negative, and so $-b < a < b$.
 \end{itemize}
 
 \begin{itemize}
-\item If $a < 0$, then $\|a\| = -a$, so $-a < b$. Since $a$ is negative, $-a$ must be positive, so $b$ must also be positive, and therefore $a < b$. Now, $-a < b \iff a > -b \iff -b < a$, and therefore $-b < a < b.$ $\square$
+\item If $a < 0$, then $\abs{a} = -a$, so $-a < b$. Since $a$ is negative, $-a$ must be positive, so $b$ must also be positive, and therefore $a < b$. Now, $-a < b \iff a > -b \iff -b < a$, and therefore $-b < a < b.$ $\square$
 \end{itemize}
 
 Another fact is that the absolute value function is a \@{norm}, and thus satisfies the triangle inequality. For real $a, b$:
 
-\[ |a + b| \leq |a| + |b| \]
+\[ \abs{a + b} \leq \abs{a} + \abs{b} \]
 
 \begin{definition}[Archimedean]
 The Archimedean property is that given two positive numbers $x$ and $y,$ there is an \@{integer} $n$ such that $nx > y.$
@@ -115,7 +115,7 @@ The \@{rationals} are \@{dense} in the \@{reals}.
 \end{theorem}
 
 \begin{proof}
-Let $x \in \reals$ and $\epsilon > 0.$ Pick $n \in \naturals$ such that $1/n < \epsilon.$ Now, because \@[the reals are Archimedean]{reals-are-archimedean}, for some $m \in \integers$ we have that $m = \lfloor nx \rfloor.$ Then,
+Let $x \in \reals$ and $\epsilon > 0.$ Pick $n \in \naturals$ such that $1/n < \epsilon.$ Now, because \@[the reals are Archimedean]{reals-are-archimedean}, for some $m \in \integers$ we have that $m = \floor{nx}.$ Then,
 
 \[ m \leq nx \leq m+1, \quad \frac{m}{n} \leq x \leq \frac{m+1}{n}. \]
 
@@ -123,7 +123,7 @@ Now, if we let $q = \frac{m}{n},$ we have
 
 \[ 0 \leq x - q < \frac{1}{n} < \epsilon, \]
 
-so $|x - q| < \epsilon.$ Therefore, every \@{neighborhood} of $x$ contains some $q \in \rationals,$ and so $x$ is either a \@{limit-point} of $\rationals$ or else $x \in \rationals,$ and so the rationals are therefore \@{dense} in the reals.
+so $\abs{x - q} < \epsilon.$ Therefore, every \@{neighborhood} of $x$ contains some $q \in \rationals,$ and so $x$ is either a \@{limit-point} of $\rationals$ or else $x \in \rationals,$ and so the rationals are therefore \@{dense} in the reals.
 \end{proof}
 
 \begin{corollary}\label{rational-between-any-two-reals}

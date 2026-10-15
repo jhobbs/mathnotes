@@ -66,7 +66,7 @@ Let's call the radial direction $R$ and the transverse direction $T$. Also recog
 
 Let's assume the particle at $B(r_1, \theta_1)$ is moving in the direction of point $L(r_2, \theta_2)$, at velocity $v_0$. We can then say that the velocity \@{vector} for the particle is given as the vector $\vec{v} = \langle v_0, \theta - \rho \rangle$.
 
-Then, the component of $\vec{v}$ in the $R$ direction is the projection of $\vec{v}$ onto $R$, whose \@{magnitude} is given by $\|\|\vec{v_R}\|\| = v_0 \cos{(\theta - \rho)}$, and the component of $\vec{v}$ in the $T$ direction is the projection of $\vec{v}$ onto $T$, whose magnitude is given by $\|\|\vec{v_T}\|\| = v_0 \sin{(\theta - \rho)}$. The following image shows this geometrically:
+Then, the component of $\vec{v}$ in the $R$ direction is the projection of $\vec{v}$ onto $R$, whose \@{magnitude} is given by $\norm{\vec{v_R}} = v_0 \cos{(\theta - \rho)}$, and the component of $\vec{v}$ in the $T$ direction is the projection of $\vec{v}$ onto $T$, whose magnitude is given by $\norm{\vec{v_T}} = v_0 \sin{(\theta - \rho)}$. The following image shows this geometrically:
 
 \includegraphics[alt={Radial and Transverse Components}, title={Radial and Transverse Components}]{radial-and-transverse-components.jpg}
 
@@ -74,7 +74,7 @@ Here, you can see that we can sort of think of the $R$ direction as the $x$-axis
 
 We must also point out that $\vec{v_R}$ is moving in the negative $R$ direction here and so is reducing the radius. In vector component form it would be given as $\langle -v_0 \cos{(\theta - \rho)}, \theta \rangle$ and the derivative of the radius with respect to time would be given by $\frac{dr}{dt} = -v_0 \cos{(\theta - \rho)}$.
 
-Also, while $\|\|\vec{v_T}\|\| = v_0 \sin{(\theta - \rho)}$, this doesn't tell us the change in $\theta$ with respect to time, it only tells us the amount of linear movement in the tangential direction. The change in angle also depends on the radius - the further from the origin we are, the less the angle will change. The derivative of the angle $\theta$ with respect to time is then given by $\frac{d\theta}{dt} = \frac{v_0 \sin{(\theta - \rho)}}{r}$. \emph{Note}: The division by $r$ here needs better justification. It's intuitive that the bigger $r$, the less the change in angle, but it's not clear why it should be a linear factor.
+Also, while $\norm{\vec{v_T}} = v_0 \sin{(\theta - \rho)}$, this doesn't tell us the change in $\theta$ with respect to time, it only tells us the amount of linear movement in the tangential direction. The change in angle also depends on the radius - the further from the origin we are, the less the angle will change. The derivative of the angle $\theta$ with respect to time is then given by $\frac{d\theta}{dt} = \frac{v_0 \sin{(\theta - \rho)}}{r}$. \emph{Note}: The division by $r$ here needs better justification. It's intuitive that the bigger $r$, the less the change in angle, but it's not clear why it should be a linear factor.
 
 \subsection{Other Notes}
 I found the notes in \href{http://people.uncw.edu/hermanr/mat463/ODEBook/Book/Systems.pdf}{this document} on converting a system of rectangular differential equations to polar coordinates particularly helpful.
