@@ -174,4 +174,13 @@ First, note that for any $E \subset Y,$ we have $f^{-1}(E^c) = f^{-1}(E)^c,$ sin
 Now, as $V$ ranges over the \@{open} \@{subsets} of $Y,$ its \@[complement]{complement-of-a-set} $V^c$ ranges over the \@{closed} subsets of $Y,$ by \@{open-iff-complement-closed}. So, by \@{mapping-continuous-iff-inverse-images-of-open-sets-are-open}, $f$ is continuous on $X$ if and only if $f^{-1}(C^c)$ is \@{open} in $X$ for every closed set $C$ in $Y.$ By the observation above, $f^{-1}(C^c) = f^{-1}(C)^c,$ and this is open in $X$ if and only if $f^{-1}(C)$ is closed in $X,$ again by \@{open-iff-complement-closed}.
 \end{proof}
 
+\begin{definition}[Lipschitz Continuous]
+	Given two \@{metric spaces} $(X, d_X)$ and $(Y, d_Y)$, a \@{function} $f: X \to Y$ is called \term{Lipschitz continuous} if there exists a \@{real} constant $K \geq 0$ such that, for all $x_1, x_2 \in X,$
+
+	\[ d_Y(f(x_1),f(x_2)) \leq Kd_X(x_1, x_2). \]
+
+	Any such $K$ is referred to as a \term{Lipschitz constant} for the function $f$, and $f$ may also be referred to as \term{$K$-Lipschitz}. 
+\end{definition}
+
+
 \end{document}

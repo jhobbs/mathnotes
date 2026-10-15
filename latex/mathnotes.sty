@@ -80,12 +80,14 @@
 % Structural shorthands shared with the site: latex_processor.py parses the
 % section between the BEGIN/END PRE-EXPANSION MACROS markers and expands
 % each use textually before parsing content, so this file is the single
-% source of truth. Only parameterless \def{\name}{expansion} definitions
-% with single-line bodies belong inside the markers.
-% \bal ... \eal: shorthand for \[\begin{aligned} ... \end{aligned}\]
+% source of truth. Only single-line \def\name{expansion} definitions, or
+% TeX's delimited form \def\name#1\delim{...#1...}, belong inside the markers.
+% \bal ... \eal: shorthand for \begin{align*} ... \end{align*}, so \intertext
+% and \shortintertext work inside it. Delimited, because amsmath finds an
+% align* body by scanning for a literal \end{align*}, which a plain
+% \def\eal{\end{align*}} would hide.
 % BEGIN PRE-EXPANSION MACROS
-\def\bal{\[\begin{aligned}}
-\def\eal{\end{aligned}\]}
+\def\bal#1\eal{\begin{align*}#1\end{align*}}
 % END PRE-EXPANSION MACROS
 
 % Math macros shared with the site: mathjax-init.ts parses the section

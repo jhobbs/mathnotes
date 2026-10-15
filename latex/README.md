@@ -85,8 +85,8 @@ Highlights:
   interjection at the left margin that wraps, with the alignment preserved
   across it. The prose is ordinary prose: `\@{label}` references, `\emph`,
   `$...$` inline math and so on all work; block-level content there is a
-  build error. Not inside `aligned` (so not in `\bal ... \eal`), matching
-  LaTeX.
+  build error. `\bal ... \eal` is `align*`, so
+  they work there too; not inside `aligned`, matching LaTeX.
 - `\href{url}{text}` for external links — escape `%` and `#` in URLs as
   `\%` / `\#` (hyperref's own convention).
 - `\includegraphics[alt={...}, title={...}]{path}` for images; with
