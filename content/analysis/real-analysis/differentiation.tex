@@ -117,7 +117,7 @@ The endpoint $c$ can also be $\pm \infty.$
 	\[ L = \sup_{x \in [a,b]} \abs{f'(x)}. \]
 \end{theorem}
 \begin{proof}
-	Because $[a,b]$ is \@{compact} and $f'$ is \@{continuous}, by the \@{extreme value theorem} we have that $f'$ attains a minimum and a maximum on $[a,b],$ which gives us $L$ (actually a stronger condition: $L = \max_{x \in [a,b]} \abs{f'(x)} \leq \sup_{x \in [a,b]} \abs{f'(x)}$). By the \@{mean value theorem}, for any $(x_1, x_2) \subset [a,b],$ there exists some $c$ such that
+	Because $[a,b]$ is \@{compact} and $f'$ is \@{continuous}, by the \@{extreme value theorem} we have that $f'$ attains a minimum and a maximum on $[a,b],$ which gives us $L$ (actually a stronger condition: $L = \max_{x \in [a,b]} \abs{f'(x)} = \sup_{x \in [a,b]} \abs{f'(x)}$). By the \@{mean value theorem}, for any $(x_1, x_2) \subset [a,b],$ there exists some $c$ such that
 	\bal
 	f(x_2) - f(x_1) & = f'(c)(x_2 - x_1). \\
 	\shortintertext{The EVT implies that $\abs{f'(c)} \leq L$, so}
@@ -147,12 +147,12 @@ The endpoint $c$ can also be $\pm \infty.$
 \begin{theorem}[\@{Vector} Valued \@{Continuously Differentiable} implies \@{Lipschitz Continuous}]
 	Suppose $\vec{f} : [a,b] \to \reals^d$ is \@{continuously differentiable}. Then $f$ is \@{Lipschitz continuous} with a \@{Lipschitz constant}
 
-	\[ L \leq \sup_{x \in [a,b]} \norm{D \vec{f}(x)} \]
+	\[ L \leq \sup_{x \in [a,b]} \norm{\vec{f}'(x)} \]
 
-	where $D \vec{f}$ is the \@{Jacobian matrix} of $\vec{f}$ and $\norm{\cdot}$ denotes the matrix \@{norm} induced by the \@{euclidean inner product}.
+	where $\vec{f}'$ is the \@{Jacobian matrix} of $\vec{f}$ and $\norm{\cdot}$ denotes the matrix \@{norm} induced by the \@{euclidean inner product}.
 \end{theorem}
 \begin{proof}
-	Because $[a,b]$ is \@{compact} and $\norm{\vec{f}'}$ is \@{continuous} on it, by the \@{extreme value theorem} we have that $\norm{\vec{f}'}$ attains a minimum and a maximum on $[a,b]$; then let $L = \max_{x \in [a,b]} \norm{\vec{f}'(x)} \leq \sup_{x \in [a,b]} \norm{\vec{f}'(x)}$.
+	Because $[a,b]$ is \@{compact} and $\norm{\vec{f}'}$ is \@{continuous} on it, by the \@{extreme value theorem} we have that $\norm{\vec{f}'}$ attains a minimum and a maximum on $[a,b]$; then let $L = \max_{x \in [a,b]} \norm{\vec{f}'(x)} = \sup_{x \in [a,b]} \norm{\vec{f}'(x)}$.
 	Now, by \@{mean-value-inequality-for-vector-valued-functions}, for any $(x_1, x_2) \subset [a,b],$ there exists some $c \in (a,b)$ such that
 	\[ \norm{\vec{f}(x_2) - \vec{f}(x_1)} \leq (x_2 - x_1)\norm{\vec{f}'(c)}. \]
 	But $\norm{\vec{f}'(c)} \leq L$, so
