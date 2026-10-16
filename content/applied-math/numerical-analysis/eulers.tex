@@ -29,7 +29,7 @@ Consider the IVP
 	Then it holds that:
 
 	\begin{enumerate}
-		\item \textbf{Existence and Uniqueness:} There exists a unique solution $\vec{u}(t)$ for any $\vec{u}_0 \in \reals^d.$
+	        \item \textbf{Existence and Uniqueness:} There exists a unique solution $\vec{u}(t)$ for any $\vec{u}_0 \in \reals^d.$
 		\item \textbf{Continuous Dependence on initial data and right hand side:} Suppose $\vec{r} : [0,T] \times \reals^d \to \reals^d$ is a bounded \@{perturbation} of $\vec{f},$ i.e. there exists a constant $M > 0$ such that
 			\[ \norm{\vec{r}(t, \vec{u})} \leq M, \quad \forall(t, \vec{u}) \in [0, T] \times \reals^d. \]
 			Further let $\vec{\hat{u}}(t)$ be the solution of the perturbed IVP
@@ -130,6 +130,39 @@ For the \@{forward euler method}, we have from the definition of the \@{differen
 	     & = \vec{u}'(t_{n-1}) + \bigO{h_n} - \vec{u}'(t_{n-1}) \\
 	     & = \bigO{h_n}.
 \eal
+\end{proof}
+
+\section{Backward Euler}
+For the \@{forward euler method} we expanded $\vec{u}(t_n)$ at $t_{n-1}$ but we could have expanded it at another point and still had a valid Taylor expansion. We called it "forward" because we're taking the derivative at $t_{n-1}$ and using it to approximate the slope of $u$ moving forward to $t_{n}.$ Backward Euler is a related method that centers its \@{taylor expansion} at $t_n,$ which means we're using the tanget of a future point instead of a past point.
+
+\begin{definition}[Backward Euler method]\synonyms{"backward euler"}
+\textbf{Backward Euler} is just like \@{forward euler} except it uses an expansion centered at $t_n$ instead of $t_{n-1}$. It is given by the scheme
+	\[ \vec{u}_n = \vec{u}_{n-1} + h_n \vec{f}(t_n, \vec{u}_n). \]
+\end{definition}
+\begin{note}
+	\@{Backward euler} is an implicit method - notice that $\vec{u}_n$ is on both sides of the equation! This means we generally have to solve a nonlinear equation in order to use this method.
+\end{note}
+
+
+\begin{theorem}[The \@{backward euler method} is order $1$ \@{accurate}]
+\end{theorem}
+\begin{proof}
+	We'll need the expansion of $\vec{u}(t_{n-1})$ at $t_n$:
+	\[ \vec{u}(t_{n-1}) = \vec{u}(t_n) - h_{n-1}\vec{u}'(t_n) + O({h_{n-1}}^2). \]
+
+	Now we'll define our \@{difference operator} as
+	\[ \difference \vec{u}(t_n) \equiv \frac{\vec{u}(t_n) - \vec{u}(t_{n-1})}{h_{n-1}} - \vec{f}(t_n, \vec{u}_n). \]
+
+	Then
+	\bal
+	\vec{\tau}_n & = \difference \vec{u}(t_n) \\
+		     & = \frac{\vec{u}(t_n) - \vec{u}(t_{n-1})}{h_{n-1}} - \vec{f}(t_n, \vec{u}_n) \\
+	\shortintertext{Substituting in our expansion and $u'(t_n)$ for $\vec{f}(t_n, \vec{u}_n)$ gives}
+		     & = \frac{\vec{u}(t_n) -  \vec{u}(t_n) + h_{n-1}\vec{u}'(t_n) + O({h_{n-1}}^2)}{h_{n-1}} - \vec{u}'(t_n) \\
+		     & = \frac{h_{n-1}\vec{u}'(t_n) + O({h_{n-1}}^2)}{h_{n-1}} - u'(t_n) \\
+		     & = \vec{u}'(t_n) + O(h_{n-1})  - \vec{u}'(t_n) \\
+		     & = O(h_{n-1}). \\
+	\eal
 \end{proof}
 
 \end{document}
