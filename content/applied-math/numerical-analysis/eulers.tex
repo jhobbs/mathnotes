@@ -3,6 +3,7 @@
 
 \title{Euler's Method}
 \description{Euler's numerical methods for approximating solutions to initial value problems for ordinary differential equations.}
+\source{title={Computer Methods for Ordinary Differential Equations and Differential-Algebraic Equations}, author={Uri M. Ascher and Linda R. Petzold}, type=book, isbn={0-89871-412-5}, publisher={SIAM}, published={1998}}
 
 \begin{document}
 
@@ -46,5 +47,89 @@ Now that we've established that IVPs are well posed, we can look at how to appro
 \begin{definition}[discrete time points]\synonyms{"time mesh points", "time grid points"}
 	Consider a \@{partition} $0 = t_0 < t_1 < \cdots < t_N = T$ of the time interval $[0, T].$ We can call the points $t_n$ the \textbf{discrete time points}. Then our goal is to approximate the values $u(t_n)$ with a set of quantities $\set{u_n}_{n=0}^N,$ that is, $u_n \approx u(t_n)$ for $n = 0, 1, \dots, N.$ We can also write $\delta t_n = t_{n+1} - t_n$ to denote the \term[time step]{step size} between between consecutive points. For simplicity we often assume that $\delta t_n = \delta t$ for all $n = 0, 1, \dots, N-1,$ i.e. the time steps are constant. Such a mesh is called a \@{uniform mesh}.
 \end{definition}
+
+\begin{definition}[I.V.P. solution approximation]
+	Now we can talk about \textbf{I.V.P. solution approximations}
+\[ \vec{u}_0 (=\vec{c}), \vec{u}_1, \dots, \vec{u}_{N-1}, \vec{u}_N \]
+	where $\vec{u}_n$ is an intended \@{approximation} of $\vec{u}(t_n).$
+\end{definition}
+
+When we have an \@{I.V.P}, we know $\vec{u}_0 = \vec{c}$ and can integrate the ODE in steps, where on each step $n (1 \leq n \leq N)$ we know an approximation $\vec{u}_{n-1}$ at $t_{n-1}$ and we seek $\vec{u}_n$ at $t_n$. Thus, we don't need advanced knowledge of the entire \@{mesh} beyond it. Let's look at one such step, $n (\geq 1)$. But first, a little more on order.
+
+\begin{definition}[Big-O order]\synonyms{"big-O notation"}
+	\notation{\bigO}{\mathcal{O}\!\left(#1\right)}
+	Given a \@{step size} $h > 0$, we denote for a \@{vector} $\vec{d}$ depending on $h$
+	\[ \vec{d} = \bigO{h^p} \]
+	if there exist positive constants $p$ and $C$ such that for all $h > 0$ small enough,
+	\[ \norm{\vec{d}} \leq Ch^p. \]
+	We say $\vec{d}$ is \term{big-O of $h^p$}, written $\vec{d} = \bigO{h^p}$.
+\end{definition}
+
+\begin{definition}[Forward Euler Method]\synonyms{"forward euler method", "explicit euler", "explicit euler method", "euler's method"}
+	Given an \@{I.V.P}
+	
+	\[ \frac{d\vec{u}}{dt} = \vec{f}(t, \vec{u}), \quad \vec{u}(0) = \vec{c} \]
+
+	and a \@{time mesh} with step size $h_n,$ We'll construct a \@{discretization} method by considering the \@{Taylor expansion} of $\vec{u}(t_n)$ about $t_{n-1}$:
+\[ \vec{u}(t_n) =  \vec{u}(t_{n-1}) + h_n \vec{u}'(t_{n-1}) + \frac{1}{2}{h_n}^2 \vec{y}''(t_{n-1}) + \cdots \]
+which we can also use \@{big-O notation} to write as
+\[ \vec{u}(t_n) =  \vec{u}(t_{n-1}) + h_n \vec{u}'(t_{n-1}) + \bigO{{h_n}^2}. \]
+	The \textbf{forward Euler method} can be derived by dropping the rightmost term in this Taylor expansion and replacing $\vec{u}'$ with $\vec{f},$ yielding the scheme for \@{I.V.P. solution approximation}
+	\[ \vec{u}_n = \vec{u}_{n-1} + h_n \vec{f}(t_{n-1}, \vec{u}_{n-1}). \]
+\end{definition}
+\begin{intuition}
+	We're given the derivative of our solution ($\vec{f}$) as part of the $I.V.P.$; this method works by, starting at $u_{n-1},$ taking a step of length $h_n$ in the tangential direction (given by the $\vec{f}(t_{n-1}, u_{n-1})$ and hoping that with small enough $h_n$, we wind up somewhere near $\vec{u}(t_n)$. In the next session, we'll assess this hope.
+\end{intuition}
+
+\section{Convergence, Accuracy, Consistency and 0-Stability}
+
+We'll rewrite \@{euler's method} in a form compatible with our approximated ODE:
+
+\[ \frac{\vec{u}_n - \vec{u}_{n-1}}{h_n} - \vec{f}(t_{n-1}, \vec{y}_{n-1}) = \vec{0}. \]
+
+We'll formalize a bit with the following definition.
+
+\begin{definition}[Difference Operator]
+	\notation{\difference}{\mathscr{N}_h}
+	Define the \term{difference operator} $\difference$ by
+	\[ \difference \vec{v}(t_n) \equiv \frac{\vec{v}(t_n) - \vec{v}(t_{n-1})}{h_n} - \vec{f}(t_{n-1}, \vec{v}_{n-1}), \]
+	applied for $n = 1,2,\dots,N$ for any \@{function} $\vec{v}$ defined at \@{mesh points} with $\vec{v}(t_0)$ specified.
+\end{definition}
+
+Consider $\vec{u}_h$ to be a \@{mesh function} which takes on the value $\vec{h}_n$ at each $t_n.$  Then the numerical method is given by
+\[ \difference \vec{u}_h(t_n) = 0, \]
+with $\vec{u}_0 = \vec{c}.$
+
+Much of the study of numerical ODEs is concerned with the errors on each step that are due to difference approximation, and how they accumulate across steps. One measure of the error made on each step follows.
+
+\begin{definition}[Local truncation error]
+	The \@{residual} of the \@{difference operator} when it is applied to the exact solution $\vec{u}(t_n)$ is called the \textbf{local truncation error} and is given by
+	\[ \vec{\tau}_n = \difference \vec{u}(t_n). \]
+
+	This is a measure of how closely the \@{difference operator} approximates the \@{differential operator}, and applies to other discretization methods beyond \@{euler's method} as well, differing in the definition of the difference operator.
+\end{definition}
+
+\begin{definition}[order $n$ accurate]\synonyms{"order n consistent", "accurate", "consistent"}
+	The \@{difference method} (approximation scheme) is said to be \textbf{order} $p$ \textbf{accurate} if
+
+	\[ \vec{\tau}_n = \bigO{{h_n}^p} \]
+
+	for a positive integer $p$.
+\end{definition}
+
+\begin{theorem}[\@{forward euler method} is order $1$ \@{accurate}]
+\end{theorem}
+\begin{proof}
+For the \@{forward euler method}, we have from the definition of the \@{difference operator}
+\bal
+	\vec{\tau}_n & = \difference \vec{u}(t_n) \\
+	     & = \frac{\vec{u}(t_n) - \vec{u}(t_{n-1})}{h_n} - \vec{f}(t_{n-1}, \vec{u}_{n-1}). \\
+	\shortintertext{Now we replace $\vec{u}$ with our taylor expansion given above, and $\vec{f}(t_{n-1}, \vec{u}_{n-1})$ with $\vec{u}'(t_{n-1})$:}
+	     & = \frac{\vec{u}(t_{n-1}) + h_n \vec{u}'(t_{n-1}) + \bigO{{h_n}^2} - \vec{u}(t_{n-1})}{h_n} - \vec{u}'(t_{n-1}) \\
+	     & = \frac{h_n \vec{u}'(t_{n-1}) + \bigO{{h_n}^2}}{h_n} - \vec{u}'(t_{n-1}) \\
+	     & = \vec{u}'(t_{n-1}) + \bigO{h_n} - \vec{u}'(t_{n-1}) \\
+	     & = \bigO{h_n}.
+\eal
+\end{proof}
 
 \end{document}

@@ -33,15 +33,15 @@ Solved exactly, the solution is $x(t, \epsilon) = (1 - \epsilon^2)^{-1/2}e^{-st}
 
 Now, we can group terms according to powers of $\epsilon.$ We get
 
-\[ [\ddot{x}_0 + x_0] + \epsilon[\ddot{x_1} + 2 \dot{x}_0 + x_1] + O(\epsilon^2) = 0. \] 
+\[ [\ddot{x}_0 + x_0] + \epsilon[\ddot{x_1} + 2 \dot{x}_0 + x_1] + \bigO{\epsilon^2} = 0. \]
 
 We want this equation to hold for all sufficiently small $\epsilon,$ so the coefficients for each power of $\epsilon$ must vanish separately and we have
 
-\[ O(1): \ddot{x}_0 + x_0 = 0. \tag{d} \]
+\[ \bigO{1}: \ddot{x}_0 + x_0 = 0. \tag{d} \]
 
-\[ O(\epsilon): \ddot{x_1} + 2 \dot{x_0} + x_1 = 0. \tag{e} \]
+\[ \bigO{\epsilon}: \ddot{x_1} + 2 \dot{x_0} + x_1 = 0. \tag{e} \]
 
-We drop $O(\epsilon^2)$ and higher terms as we want an approximation that doesn't require them. Plugging the initial conditions from (c) into (b) we get
+We drop $\bigO{\epsilon^2}$ and higher terms as we want an approximation that doesn't require them. Plugging the initial conditions from (c) into (b) we get
 
 \[ x_0(0) = 0, \quad x_1(0) = 0, \]
 
@@ -63,7 +63,7 @@ Now this is the trouble, the $-2 \cos{t}$ term is a resonant forcing, and the so
 
 and our overall solution is 
 
-\[ x(t, \epsilon) = \sin{t} - \epsilon t \sin{t} + O(\epsilon^2). \]
+\[ x(t, \epsilon) = \sin{t} - \epsilon t \sin{t} + \bigO{\epsilon^2}. \]
 
 Compare this to the actual solution we gave above. While the actual solution decays over time, the solution perturbation theory gives blows up to infinity over time! This leads us to.. two timing!
 
@@ -74,7 +74,7 @@ Given the \@{weakly-nonlinear-oscillator}
 
 let $\tau = t$ be fast time and $T = \varepsilon t$ be slow time. Then
 
-\[ x(t, \varepsilon) = x_0(\tau,T) + \varepsilon x_1(\tau, T) + O(\varepsilon^2) \]
+\[ x(t, \varepsilon) = x_0(\tau,T) + \varepsilon x_1(\tau, T) + \bigO{\varepsilon^2} \]
 
 is a series expansion of a solution of (f). I like operator notation, so let
 
@@ -86,45 +86,45 @@ Now,
 
 so
 
-\[ \dot{x} = (D_\tau + \varepsilon D_T)(x_0 + \varepsilon x_1 + O(\varepsilon^2)) = D_\tau x_0 + \varepsilon D_\tau x_1 + \varepsilon D_T x_0 + O(\varepsilon^2) = D_\tau x_0 + \varepsilon ( D_\tau x_1 + D_T x_0) + O(\varepsilon^2), \]
+\[ \dot{x} = (D_\tau + \varepsilon D_T)(x_0 + \varepsilon x_1 + \bigO{\varepsilon^2}) = D_\tau x_0 + \varepsilon D_\tau x_1 + \varepsilon D_T x_0 + \bigO{\varepsilon^2} = D_\tau x_0 + \varepsilon ( D_\tau x_1 + D_T x_0) + \bigO{\varepsilon^2}, \]
 
 \bal
-	\ddot{x} & = (D_\tau^2 + 2 \varepsilon D_\tau D_T + \varepsilon^2 D_T^2)(x_0 + \varepsilon x_1 + O(\varepsilon^2)) \\
-	& = D_\tau^2 x_0 + \varepsilon D_\tau^2 x_1 + 2 \varepsilon D_\tau D_T x_0 + O(\varepsilon^2) \\
-	& = D_\tau^2 x_0 + \varepsilon( D_\tau^2 x_1 + 2 D_\tau D_T x_0) + O(\varepsilon^2).
+	\ddot{x} & = (D_\tau^2 + 2 \varepsilon D_\tau D_T + \varepsilon^2 D_T^2)(x_0 + \varepsilon x_1 + \bigO{\varepsilon^2}) \\
+	& = D_\tau^2 x_0 + \varepsilon D_\tau^2 x_1 + 2 \varepsilon D_\tau D_T x_0 + \bigO{\varepsilon^2} \\
+	& = D_\tau^2 x_0 + \varepsilon( D_\tau^2 x_1 + 2 D_\tau D_T x_0) + \bigO{\varepsilon^2}.
 \eal
 
-Now, we need to do some more expansion before plugging everything back into our original equation. First, if we look at $\dot{x}^3,$ any terms including $O(\varepsilon^2)$ will be combined so we leave it out for now, and then if we let $a = D_\tau x_0, b = \varepsilon ( D_\tau x_1 + D_T x_0),$ we can use the expansion $(a+b)^3 = a^3 + 3 a^2 b + 3 a b^2  + b^3.$ Any terms with $b^2$ or higher become part of $O(\varepsilon)^2,$ so we end up with
+Now, we need to do some more expansion before plugging everything back into our original equation. First, if we look at $\dot{x}^3,$ any terms including $\bigO{\varepsilon^2}$ will be combined so we leave it out for now, and then if we let $a = D_\tau x_0, b = \varepsilon ( D_\tau x_1 + D_T x_0),$ we can use the expansion $(a+b)^3 = a^3 + 3 a^2 b + 3 a b^2  + b^3.$ Any terms with $b^2$ or higher become part of $\bigO{\varepsilon^2},$ so we end up with
 
-\[ \dot{x}^3 = a^3 + 3a^2 b + O(\varepsilon^2) = (D_\tau x_0)^3 + 3 \varepsilon (D_\tau x_0)^2 (( D_\tau x_1 + D_T x_0)) + O(\varepsilon^2). \]
+\[ \dot{x}^3 = a^3 + 3a^2 b + \bigO{\varepsilon^2} = (D_\tau x_0)^3 + 3 \varepsilon (D_\tau x_0)^2 (( D_\tau x_1 + D_T x_0)) + \bigO{\varepsilon^2}. \]
 
 We'll leave it there without expanding more because all the $\varepsilon$ terms drop out here:
 
 \bal
-	\varepsilon(x^2 - 1)\dot{x}^3 & = (x^2 -1)(\varepsilon (D_\tau x_0)^3 + 3 \varepsilon^2 (D_\tau x_0)^2 (( D_\tau x_1 + D_T x_0)) + O(\varepsilon^3)) \\
-	& = (x^2 -1)(\varepsilon(D_\tau x_0)^3) + O(\varepsilon^2) \\
-	& = ((x_0 + \varepsilon x_1 + O(\varepsilon^2))^2 - 1)((\varepsilon(D_\tau x_0)^3) + O(\varepsilon^2)) \\
-	& = (x_0^2  + 2 \varepsilon x_0 x_1 -1 + O(\varepsilon^2))((\varepsilon(D_\tau x_0)^3) + O(\varepsilon^2)) \\
-	& = (x_0^2  + 2 \varepsilon x_0 x_1 -1)(\varepsilon(D_\tau x_0)^3) + O(\varepsilon^2) \\
-	& = \varepsilon (D_\tau x_0)^3 (x_0^2 - 1) + O(\varepsilon^2). \\
+	\varepsilon(x^2 - 1)\dot{x}^3 & = (x^2 -1)(\varepsilon (D_\tau x_0)^3 + 3 \varepsilon^2 (D_\tau x_0)^2 (( D_\tau x_1 + D_T x_0)) + \bigO{\varepsilon^3}) \\
+	& = (x^2 -1)(\varepsilon(D_\tau x_0)^3) + \bigO{\varepsilon^2} \\
+	& = ((x_0 + \varepsilon x_1 + \bigO{\varepsilon^2})^2 - 1)((\varepsilon(D_\tau x_0)^3) + \bigO{\varepsilon^2}) \\
+	& = (x_0^2  + 2 \varepsilon x_0 x_1 -1 + \bigO{\varepsilon^2})((\varepsilon(D_\tau x_0)^3) + \bigO{\varepsilon^2}) \\
+	& = (x_0^2  + 2 \varepsilon x_0 x_1 -1)(\varepsilon(D_\tau x_0)^3) + \bigO{\varepsilon^2} \\
+	& = \varepsilon (D_\tau x_0)^3 (x_0^2 - 1) + \bigO{\varepsilon^2}. \\
 \eal
 
 Finally we're ready to write out our expanded version of (f):
 
 \bal
 \ddot{x} + x + \varepsilon(x^2 - 1)\dot{x}^3 & = 0 \\
-	D_\tau^2 x_0 + \varepsilon( D_\tau^2 x_1 + 2 D_\tau D_T x_0) + x_0 + \varepsilon x_1 + \varepsilon (D_\tau x_0)^3 (x_0^2 - 1) + O(\varepsilon^2) & = 0 \\
-	D_\tau^2 x_0 + x_0 + \varepsilon( D_\tau^2 x_1 + 2 D_\tau D_T x_0 + x_1 + (D_\tau x_0)^3 (x_0^2 - 1)) + O(\varepsilon^2) & = 0.
+	D_\tau^2 x_0 + \varepsilon( D_\tau^2 x_1 + 2 D_\tau D_T x_0) + x_0 + \varepsilon x_1 + \varepsilon (D_\tau x_0)^3 (x_0^2 - 1) + \bigO{\varepsilon^2} & = 0 \\
+	D_\tau^2 x_0 + x_0 + \varepsilon( D_\tau^2 x_1 + 2 D_\tau D_T x_0 + x_1 + (D_\tau x_0)^3 (x_0^2 - 1)) + \bigO{\varepsilon^2} & = 0.
 \eal
 
 Collecting powers of $\varepsilon$ yields a pair of differential equations (with the second one separating $x_0$ and $x_1$ terms):
 
 \bal
-	O(1) & : D_\tau^2 x_0 + x_0 = 0 \\
-	O(\varepsilon) & : D_\tau^2 x_1 + x_1 = - 2 D_\tau D_T x_0 - (D_\tau x_0)^3 (x_0^2 - 1).
+	\bigO{1} & : D_\tau^2 x_0 + x_0 = 0 \\
+	\bigO{\varepsilon} & : D_\tau^2 x_1 + x_1 = - 2 D_\tau D_T x_0 - (D_\tau x_0)^3 (x_0^2 - 1).
 \eal
 
-The general solution for the $O(1)$ equation, whose eigenvalues are $\pm i,$ is $x_0 = c_1(T) e^{i\tau} + c_2(T) e^{-i \tau}, c_1, c_2 \in \complexes.$ But we have $x$ is real, so $c_1(T) = \overline{c_2(T)},$ and we can write our solution as
+The general solution for the $\bigO{1}$ equation, whose eigenvalues are $\pm i,$ is $x_0 = c_1(T) e^{i\tau} + c_2(T) e^{-i \tau}, c_1, c_2 \in \complexes.$ But we have $x$ is real, so $c_1(T) = \overline{c_2(T)},$ and we can write our solution as
 
 \[ x_0 = 2 \Re{(c(T) e^{i \tau})} = 2 \Re{(\rho(T) e^{i\phi(T)} e^{i\tau})} = 2 \rho(T) \Re{(e^{i(\tau + \phi(T))})} = 2 \rho(T) \cos{(\tau + \phi(T))}. \]
 
@@ -132,7 +132,7 @@ Letting $R(T) = 2 \rho(T)$ (and recalling that since $\rho$ is the modulus of a 
 
 \[ x_0(\tau, T) = R(T)\cos{(\tau + \phi(T))}. \]
 
-Now we substitute our solution for $x_0$ into the $O(\varepsilon)$ equation:
+Now we substitute our solution for $x_0$ into the $\bigO{\varepsilon}$ equation:
 
 \bal
 	D_\tau^2 x_1 + x_1 & = - 2 D_\tau D_T x_0 - (D_\tau x_0)^3 (x_0^2 - 1) \\
@@ -159,8 +159,8 @@ Isolating the derivatives gives us
 
 First consider the $R'$ equation. On the half-line $R \geq 0,$ we have that $R^* = 0$ is an unstable \@{fixed-point}, and $R^* = \sqrt{6}$ is a \@{stable} fixed point. Therefore, $R(T) \to \sqrt{6}$ as $T \to \infty.$ Now, $\phi' = 0$ implies $\phi(T) = \phi_0$ for some constant $\phi_0.$ Hence $x_0(\tau, T) \to \sqrt{6}\cos{(\tau + \phi_0)}$ and therefore
 
-\[ x(t) \to \sqrt{6}\cos{(t + \phi_0)} + O(\varepsilon) \]
+\[ x(t) \to \sqrt{6}\cos{(t + \phi_0)} + \bigO{\varepsilon} \]
 
-as $t \to \infty.$ Thus, all \@{trajectories} with $R_0 > 0$ approach an approximately circular \@{stable-limit-cycle} of radius $\sqrt{6} + O(\varepsilon)$ in the $(x, \dot{x})$ plane, traversed at a frequency of $1 + O(\varepsilon)$.
+as $t \to \infty.$ Thus, all \@{trajectories} with $R_0 > 0$ approach an approximately circular \@{stable-limit-cycle} of radius $\sqrt{6} + \bigO{\varepsilon}$ in the $(x, \dot{x})$ plane, traversed at a frequency of $1 + \bigO{\varepsilon}$.
 
 \end{document}

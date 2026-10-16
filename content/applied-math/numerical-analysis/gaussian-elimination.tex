@@ -48,7 +48,7 @@ A slight variation is \textbf{scaled partial pivoting.} Here, we account for the
 
 \subsection{LU Factorization}
 
-Solving linear systems of the form $A \vec{x} = \vec{b}$ can be computationally expensive - it requires $O(n^3/3)$ operations for a matrix with $n$ rows and $n$ columns. If we need to solve for multiple vectors $\vec{b},$ we can save computation by first factoring $A$ into the form $A = LU,$ (which is $O(n^3/3)$ operations) and then solving for $\vec{x}$ given any $\vec{b},$ which is now just $O(2n^2)$ operations. For even moderately large values of $n$ this leads to a giant reduction in cost.
+Solving linear systems of the form $A \vec{x} = \vec{b}$ can be computationally expensive - it requires $\bigO{n^3/3}$ operations for a matrix with $n$ rows and $n$ columns. If we need to solve for multiple vectors $\vec{b},$ we can save computation by first factoring $A$ into the form $A = LU,$ (which is $\bigO{n^3/3}$ operations) and then solving for $\vec{x}$ given any $\vec{b},$ which is now just $\bigO{2n^2}$ operations. For even moderately large values of $n$ this leads to a giant reduction in cost.
 
 When doing $LU$‑factorization, you write
 
