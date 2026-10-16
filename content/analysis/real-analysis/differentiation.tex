@@ -111,13 +111,13 @@ Then if $\lim_{x \to c}f(x) = \lim_{x \to c}g(x) = 0,$ $\lim_{x \to c}f(x) = \li
 The endpoint $c$ can also be $\pm \infty.$
 \end{theorem}
 
-\begin{theorem}[\@{Continuously Differentiable} implies \@{Lipschitz Continuous}]
+\begin{theorem}[Real Valued \@{Continuously Differentiable} implies \@{Lipschitz Continuous}]
 	Suppose $f : [a,b] \to \reals$ is \@{continuously differentiable}. Then $f$ is \@{Lipschitz continuous} with a \@{Lipschitz constant}
 
 	\[ L = \sup_{x \in [a,b]} \abs{f'(x)}. \]
 \end{theorem}
 \begin{proof}
-	Because $[a,b]$ is \@{compact} and $f'$ is \@{continuous}, by the \@{extreme value theorem} we have that $f'$ attains a minimum and a maximum on $[a,b],$ which gives us $L$ (actually a stronger condition: $L = \max_{x \in [a,b]} \abs{f'(x)}$). By the \@{mean value theorem}, for any $(x_1, x_2) \subset [a,b],$ there exists some $c$ such that
+	Because $[a,b]$ is \@{compact} and $f'$ is \@{continuous}, by the \@{extreme value theorem} we have that $f'$ attains a minimum and a maximum on $[a,b],$ which gives us $L$ (actually a stronger condition: $L = \max_{x \in [a,b]} \abs{f'(x)} \leq \sup_{x \in [a,b]} \abs{f'(x)}$). By the \@{mean value theorem}, for any $(x_1, x_2) \subset [a,b],$ there exists some $c$ such that
 	\bal
 	f(x_2) - f(x_1) & = f'(c)(x_2 - x_1). \\
 	\shortintertext{The EVT implies that $\abs{f'(c)} \leq L$, so}
@@ -126,5 +126,38 @@ The endpoint $c$ can also be $\pm \infty.$
 	which is what we wanted to show.
 \end{proof}
 
+\begin{theorem}[Mean Value Inequality for Vector Valued Functions]
+	Suppose $\vec{f}: [a,b] \to \reals^d$ is \@{continuous} on $[a,b]$ and \@{differentiable} on $(a,b).$ Then there exists $x \in (a,b)$ such that
+	\[ \norm{\vec{f}(b) - \vec{f}(a)} \leq (b - a)\norm{\vec{f}'(x)}. \]
+\end{theorem}
+\begin{proof}
+	Let $\vec{z} = \vec{f}(b) - \vec{f}(a),$ and define
+	\[ \varphi(t) = \inner{\vec{z}}{\vec{f}(t)}, \quad (a \leq t \leq b). \]
+	If $\vec{z} = \vec{0},$ then the result is trivial and we're done, so assume $\vec{z} \neq \vec{0}.$
+	Then $\varphi$ is a real valued \@{continuous} function on $[a,b]$ and is \@{differentiable} on $(a,b).$ By the \@{mean value theorem}, there is some $x \in (a,b)$ such that
+	\[ \varphi(b) - \varphi(a) = (b - a) \varphi'(x) = (b - a) \inner{\vec{z}}{\vec{f}'(x)}. \]
+	On the other hand,
+	\[ \varphi(b) - \varphi(a) = \inner{\vec{z}}{\vec{f}(b)} - \inner{\vec{z}}{\vec{f}(a)}
+	    = \inner{\vec{z}}{\vec{f}(b) - \vec{f}(a)} = \inner{\vec{z}}{\vec{z}} = \norm{\vec{z}}^2. \]
+	Now, by the \@{cauchy-schwarz inequality},
+	\[ \norm{\vec{z}}^2 = (b - a) \abs{\inner{\vec{z}}{\vec{f}'(x)}} \leq (b-a)\norm{\vec{z}}\norm{\vec{f}'(x)}. \]
+	Therefore, $\norm{\vec{z}} \leq (b - a)\norm{\vec{f}'(x)},$ which is what we wanted to show.
+\end{proof}
+
+\begin{theorem}[\@{Vector} Valued \@{Continuously Differentiable} implies \@{Lipschitz Continuous}]
+	Suppose $\vec{f} : [a,b] \to \reals^d$ is \@{continuously differentiable}. Then $f$ is \@{Lipschitz continuous} with a \@{Lipschitz constant}
+
+	\[ L \leq \sup_{x \in [a,b]} \norm{D \vec{f}(x)} \]
+
+	where $D \vec{f}$ is the \@{Jacobian matrix} of $\vec{f}$ and $\norm{\cdot}$ denotes the matrix \@{norm} induced by the \@{euclidean inner product}.
+\end{theorem}
+\begin{proof}
+	Because $[a,b]$ is \@{compact} and $\norm{\vec{f}'}$ is \@{continuous} on it, by the \@{extreme value theorem} we have that $\norm{\vec{f}'}$ attains a minimum and a maximum on $[a,b]$; then let $L = \max_{x \in [a,b]} \norm{\vec{f}'(x)} \leq \sup_{x \in [a,b]} \norm{\vec{f}'(x)}$.
+	Now, by \@{mean-value-inequality-for-vector-valued-functions}, for any $(x_1, x_2) \subset [a,b],$ there exists some $c \in (a,b)$ such that
+	\[ \norm{\vec{f}(x_2) - \vec{f}(x_1)} \leq (x_2 - x_1)\norm{\vec{f}'(c)}. \]
+	But $\norm{\vec{f}'(c)} \leq L$, so
+	\[ \norm{\vec{f}(x_2) - \vec{f}(x_1)} \leq L \abs{x_2 - x_1}, \]
+	which is what we wanted to show.
+\end{proof}
 
 \end{document}
